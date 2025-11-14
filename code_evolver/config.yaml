@@ -2,26 +2,46 @@
 
 # Ollama server settings
 ollama:
+  # Default base URL for all models (can be overridden per-model)
   base_url: "http://localhost:11434"
 
-  # Model assignments
+  # Model assignments with optional per-model endpoints
+  # Format 1: Simple string - uses base_url
+  # Format 2: Dict with 'model' and optional 'endpoint'
   models:
     # Overseer LLM - Plans approach and strategy (REQUIRED)
     # This model is consulted first to determine how to approach the task
     # Should be a strong reasoning model (e.g., llama3, mistral, mixtral)
-    overseer: "llama3"
+    overseer:
+      model: "llama3"
+      endpoint: null  # Uses base_url if null
+      # endpoint: "http://machine1:11434"  # Uncomment to use specific endpoint
 
     # Code generator - Writes actual Python code
     # Should be a code-specialized model (e.g., codellama, deepseek-coder)
-    generator: "codellama"
+    generator:
+      model: "codellama"
+      endpoint: null
+      # endpoint: "http://machine2:11434"  # Example: Use different machine
 
     # Evaluator - Comprehensive evaluation of results
     # Should be good at analysis (e.g., llama3, mistral)
-    evaluator: "llama3"
+    evaluator:
+      model: "llama3"
+      endpoint: null
+      # endpoint: "http://machine1:11434"
 
     # Triage - Quick pass/fail decisions
     # Can be a smaller, faster model (e.g., tiny, llama3)
-    triage: "tiny"
+    triage:
+      model: "tiny"
+      endpoint: null
+      # endpoint: "http://machine3:11434"
+
+    # Escalation - Higher-level LLM for fixing issues
+    escalation:
+      model: "llama3"
+      endpoint: null
 
 # Execution settings
 execution:
@@ -88,6 +108,54 @@ chat:
 
   # Auto-save
   auto_save_context: true
+
+# Tools registry (predefined tools with specialized endpoints)
+tools:
+  # Example tool definitions
+  # Each tool can specify which LLM to use and where it's hosted
+
+  # Example: Code reviewer tool
+  code_reviewer:
+    name: "Code Reviewer"
+    type: "llm"
+    description: "Reviews code for quality, bugs, and best practices"
+    llm:
+      model: "llama3"
+      endpoint: null  # Uses default endpoint if null
+      # endpoint: "http://review-machine:11434"
+    tags: ["review", "quality"]
+
+  # Example: Security auditor tool
+  security_auditor:
+    name: "Security Auditor"
+    type: "llm"
+    description: "Audits code for security vulnerabilities"
+    llm:
+      model: "llama3"
+      endpoint: null
+      # endpoint: "http://security-machine:11434"
+    tags: ["security", "audit"]
+
+  # Example: Performance optimizer tool
+  performance_optimizer:
+    name: "Performance Optimizer"
+    type: "llm"
+    description: "Suggests performance optimizations"
+    llm:
+      model: "codellama"
+      endpoint: null
+      # endpoint: "http://perf-machine:11434"
+    tags: ["performance", "optimization"]
+
+  # Example: Documentation generator tool
+  doc_generator:
+    name: "Documentation Generator"
+    type: "llm"
+    description: "Generates comprehensive code documentation"
+    llm:
+      model: "llama3"
+      endpoint: null
+    tags: ["documentation", "docs"]
 
 # Build settings (for executables)
 build:

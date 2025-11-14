@@ -118,22 +118,35 @@ Tags: {', '.join(self.tags)}{params_str}
 class ToolsManager:
     """Manages registry of reusable tools."""
 
-    def __init__(self, tools_path: str = "./tools"):
+    def __init__(
+        self,
+        tools_path: str = "./tools",
+        config_manager: Optional[Any] = None,
+        ollama_client: Optional[Any] = None
+    ):
         """
         Initialize tools manager.
 
         Args:
             tools_path: Path to tools storage directory
+            config_manager: Optional ConfigManager for loading tools from config
+            ollama_client: Optional OllamaClient for invoking LLM-based tools
         """
         self.tools_path = Path(tools_path)
         self.tools_path.mkdir(parents=True, exist_ok=True)
 
         self.index_path = self.tools_path / "index.json"
+        self.config_manager = config_manager
+        self.ollama_client = ollama_client
 
         # In-memory registry
         self.tools: Dict[str, Tool] = {}
 
         self._load_tools()
+
+        # Load tools from config if available
+        if config_manager:
+            self._load_tools_from_config()
 
     def _load_tools(self):
         """Load tools from disk into memory."""
@@ -172,6 +185,98 @@ class ToolsManager:
 
         except Exception as e:
             logger.error(f"Error saving tools index: {e}")
+
+    def _load_tools_from_config(self):
+        """Load tools defined in configuration."""
+        if not self.config_manager:
+            return
+
+        tools_config = self.config_manager.get("tools", {})
+
+        for tool_id, tool_def in tools_config.items():
+            if tool_id in self.tools:
+                continue  # Skip if already loaded
+
+            tool_type_str = tool_def.get("type", "custom")
+            try:
+                tool_type = ToolType(tool_type_str)
+            except ValueError:
+                tool_type = ToolType.CUSTOM
+
+            # Extract LLM configuration if present
+            llm_config = tool_def.get("llm", {})
+
+            tool = Tool(
+                tool_id=tool_id,
+                name=tool_def.get("name", tool_id),
+                tool_type=tool_type,
+                description=tool_def.get("description", ""),
+                tags=tool_def.get("tags", []),
+                implementation=llm_config if llm_config else None,
+                metadata={
+                    "from_config": True,
+                    "llm_model": llm_config.get("model"),
+                    "llm_endpoint": llm_config.get("endpoint")
+                }
+            )
+
+            self.tools[tool_id] = tool
+            logger.info(f"✓ Loaded tool from config: {tool_id}")
+
+    def invoke_llm_tool(
+        self,
+        tool_id: str,
+        prompt: str,
+        system_prompt: Optional[str] = None,
+        temperature: float = 0.7
+    ) -> str:
+        """
+        Invoke an LLM-based tool.
+
+        Args:
+            tool_id: Tool identifier
+            prompt: Prompt to send to the LLM
+            system_prompt: Optional system prompt
+            temperature: Sampling temperature
+
+        Returns:
+            LLM response
+        """
+        tool = self.get_tool(tool_id)
+
+        if not tool:
+            logger.error(f"Tool not found: {tool_id}")
+            return ""
+
+        if tool.tool_type != ToolType.LLM:
+            logger.error(f"Tool {tool_id} is not an LLM tool")
+            return ""
+
+        if not self.ollama_client:
+            logger.error("OllamaClient not configured")
+            return ""
+
+        # Extract LLM configuration
+        llm_config = tool.implementation or tool.metadata
+        model = llm_config.get("llm_model") or llm_config.get("model", "llama3")
+        endpoint = llm_config.get("llm_endpoint") or llm_config.get("endpoint")
+
+        # Increment usage counter
+        self.increment_usage(tool_id)
+
+        # Log tool invocation
+        logger.info(f"Invoking LLM tool '{tool.name}' (model: {model}, endpoint: {endpoint or 'default'})")
+
+        # Invoke the LLM
+        response = self.ollama_client.generate(
+            model=model,
+            prompt=prompt,
+            system=system_prompt,
+            temperature=temperature,
+            endpoint=endpoint
+        )
+
+        return response
 
     def register_function(
         self,

@@ -226,30 +226,80 @@ class ConfigManager:
         """Get Ollama base URL."""
         return self.get("ollama.base_url", "http://localhost:11434")
 
+    def _parse_model_config(self, model_key: str, default_model: str) -> tuple[str, str]:
+        """
+        Parse model configuration which can be either a string or a dict.
+
+        Args:
+            model_key: Key in ollama.models (e.g., "overseer")
+            default_model: Default model name if not found
+
+        Returns:
+            Tuple of (model_name, endpoint_url)
+        """
+        model_config = self.get(f"ollama.models.{model_key}")
+
+        # Handle dict format: {model: "name", endpoint: "url"}
+        if isinstance(model_config, dict):
+            model_name = model_config.get("model", default_model)
+            endpoint = model_config.get("endpoint")
+
+            # Use base_url if no endpoint specified
+            if not endpoint:
+                endpoint = self.ollama_url
+
+            return model_name, endpoint
+
+        # Handle string format: just the model name
+        elif isinstance(model_config, str):
+            return model_config, self.ollama_url
+
+        # Fallback to defaults
+        else:
+            return default_model, self.ollama_url
+
+    def get_model_endpoint(self, model_key: str) -> str:
+        """
+        Get the endpoint URL for a specific model.
+
+        Args:
+            model_key: Model key (e.g., "overseer", "generator")
+
+        Returns:
+            Endpoint URL for the model
+        """
+        _, endpoint = self._parse_model_config(model_key, "")
+        return endpoint
+
     @property
     def overseer_model(self) -> str:
         """Get overseer model name."""
-        return self.get("ollama.models.overseer", "llama3")
+        model, _ = self._parse_model_config("overseer", "llama3")
+        return model
 
     @property
     def generator_model(self) -> str:
         """Get code generator model name."""
-        return self.get("ollama.models.generator", "codellama")
+        model, _ = self._parse_model_config("generator", "codellama")
+        return model
 
     @property
     def evaluator_model(self) -> str:
         """Get evaluator model name."""
-        return self.get("ollama.models.evaluator", "llama3")
+        model, _ = self._parse_model_config("evaluator", "llama3")
+        return model
 
     @property
     def triage_model(self) -> str:
         """Get triage model name."""
-        return self.get("ollama.models.triage", "tiny")
+        model, _ = self._parse_model_config("triage", "tiny")
+        return model
 
     @property
     def escalation_model(self) -> str:
         """Get escalation model name for fixing issues."""
-        return self.get("ollama.models.escalation", "llama3")
+        model, _ = self._parse_model_config("escalation", "llama3")
+        return model
 
     @property
     def registry_path(self) -> str:
