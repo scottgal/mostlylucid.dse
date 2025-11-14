@@ -12,6 +12,7 @@ from .config_manager import ConfigManager
 from .solution_memory import SolutionMemory
 from .auto_evolver import AutoEvolver
 from .tools_manager import ToolsManager, Tool, ToolType
+from .rag_memory import RAGMemory, Artifact, ArtifactType
 
 __all__ = [
     "OllamaClient",
@@ -23,5 +24,8 @@ __all__ = [
     "AutoEvolver",
     "ToolsManager",
     "Tool",
-    "ToolType"
+    "ToolType",
+    "RAGMemory",
+    "Artifact",
+    "ArtifactType"
 ]
