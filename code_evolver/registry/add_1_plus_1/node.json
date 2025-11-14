@@ -1,0 +1,43 @@
+{
+  "node_id": "add_1_plus_1",
+  "title": "add 1 plus 1",
+  "version": "1.0.0",
+  "type": "processor",
+  "language": "python",
+  "tags": [
+    "generated",
+    "chat"
+  ],
+  "goals": {
+    "primary": [
+      "correctness",
+      "determinism"
+    ],
+    "secondary": [
+      "latency<200ms",
+      "memory<64MB"
+    ]
+  },
+  "inputs": {},
+  "outputs": {},
+  "constraints": {
+    "timeout_ms": 5000,
+    "max_memory_mb": 256
+  },
+  "lineage": {
+    "parent": null,
+    "derived_from": [],
+    "notes": "Initial version"
+  },
+  "fit": {
+    "domain": "general",
+    "scale": "small",
+    "risk": "low"
+  },
+  "model_prompts": {
+    "generator": "codellama",
+    "evaluator": "llama3",
+    "triage": "tiny"
+  },
+  "created_at": "2025-11-14T20:05:24.964681Z"
+}

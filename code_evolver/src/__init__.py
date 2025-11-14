@@ -20,6 +20,7 @@ from .overseer_llm import OverseerLlm, ExecutionPlan
 from .evaluator_llm import EvaluatorLlm, FitnessEvaluation
 from .hierarchical_evolver import HierarchicalEvolver, SharedPlanContext, NodeMetrics, NodeLearning
 from .rag_integrated_tools import RAGIntegratedTools, FunctionMetadata
+from .progress_display import ProgressDisplay, Stage, get_progress_display
 
 __all__ = [
     "OllamaClient",
@@ -46,5 +47,8 @@ __all__ = [
     "NodeMetrics",
     "NodeLearning",
     "RAGIntegratedTools",
-    "FunctionMetadata"
+    "FunctionMetadata",
+    "ProgressDisplay",
+    "Stage",
+    "get_progress_display"
 ]

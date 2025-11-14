@@ -9,14 +9,14 @@ import shutil
 from pathlib import Path
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from overseer_llm import OverseerLlm, ExecutionPlan
-from evaluator_llm import EvaluatorLlm, FitnessEvaluation
-from hierarchical_evolver import HierarchicalEvolver, SharedPlanContext, NodeMetrics
-from rag_integrated_tools import RAGIntegratedTools, FunctionMetadata
-from rag_memory import RAGMemory, ArtifactType
-from ollama_client import OllamaClient
+from src.overseer_llm import OverseerLlm, ExecutionPlan
+from src.evaluator_llm import EvaluatorLlm, FitnessEvaluation
+from src.hierarchical_evolver import HierarchicalEvolver, SharedPlanContext, NodeMetrics
+from src.rag_integrated_tools import RAGIntegratedTools, FunctionMetadata
+from src.rag_memory import RAGMemory, ArtifactType
+from src.ollama_client import OllamaClient
 
 
 class TestOverseerLlm(unittest.TestCase):

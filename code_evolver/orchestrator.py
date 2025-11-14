@@ -55,15 +55,40 @@ class Orchestrator:
         models = self.client.list_models()
         logger.info(f"Available models: {', '.join(models) if models else 'none'}")
 
-        required_models = ["codellama", "llama3", "tiny"]
-        missing_models = [m for m in required_models if m not in models]
+        # Required models (base names without tags)
+        required_models = ["codellama", "llama3", "tinyllama"]
+        optional_models = ["nomic-embed-text"]  # For RAG embeddings
 
-        if missing_models:
-            logger.warning(f"Missing models: {', '.join(missing_models)}")
+        # Check if each required model is available (allowing for tags like :latest)
+        missing_required = []
+        for required in required_models:
+            # Check if any available model starts with the required name
+            found = any(m.startswith(required) or m.startswith(f"{required}:")
+                       for m in models)
+            if not found:
+                missing_required.append(required)
+
+        # Check optional models
+        missing_optional = []
+        for optional in optional_models:
+            found = any(m.startswith(optional) or m.startswith(f"{optional}:")
+                       for m in models)
+            if not found:
+                missing_optional.append(optional)
+
+        if missing_required:
+            logger.warning(f"Missing required models: {', '.join(missing_required)}")
             logger.warning("Install with:")
-            for model in missing_models:
+            for model in missing_required:
                 logger.warning(f"  ollama pull {model}")
             return False
+
+        if missing_optional:
+            logger.warning(f"Missing optional models: {', '.join(missing_optional)}")
+            logger.warning("These are recommended for RAG embeddings:")
+            for model in missing_optional:
+                logger.warning(f"  ollama pull {model}")
+            logger.info("Note: System will work without optional models, but RAG features may be limited")
 
         logger.info("✓ Setup OK")
         return True

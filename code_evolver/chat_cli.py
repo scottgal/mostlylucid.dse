@@ -5,7 +5,6 @@ Provides a conversational interface for code generation and evolution.
 """
 import sys
 import json
-import readline
 from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
@@ -13,8 +12,17 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich import box
 
+# readline is Unix/Linux only - optional for history features
+try:
+    import readline
+    READLINE_AVAILABLE = True
+except ImportError:
+    READLINE_AVAILABLE = False
+
 from src import OllamaClient, Registry, NodeRunner, Evaluator
 from src.config_manager import ConfigManager
+from src.rag_memory import RAGMemory
+from src.tools_manager import ToolsManager, ToolType
 
 console = Console()
 
@@ -30,10 +38,23 @@ class ChatCLI:
             config_path: Path to configuration file
         """
         self.config = ConfigManager(config_path)
-        self.client = OllamaClient(self.config.ollama_url)
+        self.client = OllamaClient(self.config.ollama_url, config_manager=self.config)
         self.registry = Registry(self.config.registry_path)
         self.runner = NodeRunner(self.config.nodes_path)
         self.evaluator = Evaluator(self.client)
+
+        # Initialize RAG memory for tool selection
+        self.rag = RAGMemory(
+            memory_path=self.config.rag_memory_path,
+            ollama_client=self.client
+        )
+
+        # Initialize tools manager with RAG
+        self.tools_manager = ToolsManager(
+            config_manager=self.config,
+            ollama_client=self.client,
+            rag_memory=self.rag
+        )
 
         self.context = {}
         self.history = []
@@ -41,6 +62,9 @@ class ChatCLI:
 
     def _load_history(self):
         """Load command history from file."""
+        if not READLINE_AVAILABLE:
+            return
+
         history_file = self.config.get("chat.history_file", ".code_evolver_history")
         history_path = Path(history_file)
 
@@ -54,6 +78,9 @@ class ChatCLI:
 
     def _save_history(self):
         """Save command history to file."""
+        if not READLINE_AVAILABLE:
+            return
+
         history_file = self.config.get("chat.history_file", ".code_evolver_history")
         history_path = Path(history_file)
 
@@ -120,26 +147,42 @@ Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
             console.print("[red]Error: Please provide a description[/red]")
             return False
 
+        # Step 1: Find relevant tools using RAG semantic search
+        console.print(f"\n[cyan]Searching for relevant tools...[/cyan]")
+        available_tools = self.tools_manager.get_tools_for_prompt(
+            task_description=description,
+            max_tools=3,
+            filter_type=ToolType.LLM  # Focus on LLM tools for code generation
+        )
+
+        if "No specific tools" not in available_tools:
+            console.print(f"[dim]✓ Found {len(self.tools_manager.search(description, top_k=3))} relevant tools[/dim]")
+
+        # Step 2: Ask overseer for strategy WITH tool recommendations
         console.print(f"\n[cyan]Consulting overseer LLM ({self.config.overseer_model}) for approach...[/cyan]")
 
-        # Step 1: Ask overseer for strategy
         overseer_prompt = f"""You are an expert software architect. A user wants to create code with this goal:
 
 "{description}"
 
+{available_tools}
+
 Provide:
 1. A clear problem analysis
 2. Recommended approach and algorithm
-3. Key considerations (edge cases, performance, constraints)
-4. Suggested function signatures
-5. Test cases to validate correctness
+3. Which tool (if any) would be best suited for this task
+4. Key considerations (edge cases, performance, constraints)
+5. Suggested function signatures
+6. Test cases to validate correctness
 
+If a specialized tool is available and appropriate, recommend using it. Otherwise, use the standard generator.
 Be specific and technical. This will guide code generation."""
 
         strategy = self.client.generate(
             model=self.config.overseer_model,
             prompt=overseer_prompt,
-            temperature=0.7
+            temperature=0.7,
+            model_key="overseer"
         )
 
         if self.config.get("chat.show_thinking", False):
@@ -147,7 +190,18 @@ Be specific and technical. This will guide code generation."""
         else:
             console.print("[dim]✓ Strategy received[/dim]")
 
-        # Step 2: Generate node ID
+        # Step 2: Determine which tool/model to use for code generation
+        selected_tool = self.tools_manager.get_best_llm_for_task(description)
+        generator_to_use = self.config.generator_model
+        use_specialized_tool = False
+
+        if selected_tool:
+            console.print(f"[dim]✓ Selected specialized tool: {selected_tool.name}[/dim]")
+            use_specialized_tool = True
+        else:
+            console.print(f"[dim]Using standard generator: {generator_to_use}[/dim]")
+
+        # Step 3: Generate node ID
         import re
         node_id = re.sub(r'[^a-z0-9_]', '_', description.lower().split('.')[0][:30])
         node_id = re.sub(r'_+', '_', node_id).strip('_')
@@ -160,9 +214,7 @@ Be specific and technical. This will guide code generation."""
             import time
             node_id = f"{node_id}_{int(time.time())}"
 
-        console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
-
-        # Step 3: Generate code based on strategy
+        # Step 4: Generate code based on strategy
         code_prompt = f"""Based on this strategy:
 
 {strategy}
@@ -178,11 +230,22 @@ Write Python code that implements the solution. Requirements:
 
 Return ONLY the Python code, no explanations."""
 
-        code = self.client.generate(
-            model=self.config.generator_model,
-            prompt=code_prompt,
-            temperature=0.3
-        )
+        # Use specialized tool if available, otherwise use standard generator
+        if use_specialized_tool and selected_tool:
+            console.print(f"\n[cyan]Generating code with specialized tool: {selected_tool.name}...[/cyan]")
+            code = self.tools_manager.invoke_llm_tool(
+                tool_id=selected_tool.tool_id,
+                prompt=code_prompt,
+                temperature=0.3
+            )
+        else:
+            console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
+            code = self.client.generate(
+                model=self.config.generator_model,
+                prompt=code_prompt,
+                temperature=0.3,
+                model_key="generator"
+            )
 
         if not code or len(code) < 50:
             console.print("[red]Failed to generate valid code[/red]")
@@ -244,7 +307,8 @@ Return ONLY the test code, importable as a Python module."""
         test_code = self.client.generate(
             model=self.config.generator_model,
             prompt=test_prompt,
-            temperature=0.3
+            temperature=0.3,
+            model_key="generator"
         )
 
         # Save test code
@@ -295,7 +359,8 @@ Return ONLY the fixed Python code."""
             fixed_code = self.client.generate(
                 model=self.config.escalation_model,
                 prompt=fix_prompt,
-                temperature=0.3
+                temperature=0.3,
+                model_key="escalation"
             )
 
             if not fixed_code:

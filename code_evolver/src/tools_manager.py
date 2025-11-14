@@ -122,7 +122,8 @@ class ToolsManager:
         self,
         tools_path: str = "./tools",
         config_manager: Optional[Any] = None,
-        ollama_client: Optional[Any] = None
+        ollama_client: Optional[Any] = None,
+        rag_memory: Optional[Any] = None
     ):
         """
         Initialize tools manager.
@@ -131,6 +132,7 @@ class ToolsManager:
             tools_path: Path to tools storage directory
             config_manager: Optional ConfigManager for loading tools from config
             ollama_client: Optional OllamaClient for invoking LLM-based tools
+            rag_memory: Optional RAGMemory for semantic tool search
         """
         self.tools_path = Path(tools_path)
         self.tools_path.mkdir(parents=True, exist_ok=True)
@@ -138,6 +140,7 @@ class ToolsManager:
         self.index_path = self.tools_path / "index.json"
         self.config_manager = config_manager
         self.ollama_client = ollama_client
+        self.rag_memory = rag_memory
 
         # In-memory registry
         self.tools: Dict[str, Tool] = {}
@@ -147,6 +150,10 @@ class ToolsManager:
         # Load tools from config if available
         if config_manager:
             self._load_tools_from_config()
+
+        # Index tools in RAG if available
+        if rag_memory:
+            self._index_tools_in_rag()
 
     def _load_tools(self):
         """Load tools from disk into memory."""
@@ -222,6 +229,44 @@ class ToolsManager:
 
             self.tools[tool_id] = tool
             logger.info(f"✓ Loaded tool from config: {tool_id}")
+
+    def _index_tools_in_rag(self):
+        """Index all tools in RAG memory for semantic search."""
+        if not self.rag_memory:
+            return
+
+        try:
+            from .rag_memory import ArtifactType
+
+            for tool_id, tool in self.tools.items():
+                # Create a comprehensive description for embedding
+                tool_content = f"""Tool: {tool.name}
+Type: {tool.tool_type.value}
+Description: {tool.description}
+Tags: {', '.join(tool.tags)}
+
+{tool.to_prompt_format()}"""
+
+                # Store in RAG with type PATTERN (representing a reusable tool pattern)
+                self.rag_memory.store_artifact(
+                    artifact_id=f"tool_{tool_id}",
+                    artifact_type=ArtifactType.PATTERN,
+                    name=tool.name,
+                    description=tool.description,
+                    content=tool_content,
+                    tags=["tool", tool.tool_type.value] + tool.tags,
+                    metadata={
+                        "tool_id": tool_id,
+                        "tool_type": tool.tool_type.value,
+                        "is_tool": True
+                    },
+                    auto_embed=True
+                )
+
+            logger.info(f"✓ Indexed {len(self.tools)} tools in RAG memory")
+
+        except Exception as e:
+            logger.error(f"Error indexing tools in RAG: {e}")
 
     def invoke_llm_tool(
         self,
@@ -498,19 +543,45 @@ class ToolsManager:
         """
         return [tool for tool in self.tools.values() if tool.tool_type == tool_type]
 
-    def search(self, query: str) -> List[Tool]:
+    def search(self, query: str, top_k: int = 5, use_rag: bool = True) -> List[Tool]:
         """
-        Search tools by keyword (simple text search for now).
+        Search tools using semantic search (RAG) or keyword matching.
 
         Args:
             query: Search query
+            top_k: Maximum number of results to return
+            use_rag: Whether to use RAG semantic search (fallback to keyword if unavailable)
 
         Returns:
             List of matching tools
-
-        Note:
-            Future: Will use RAG/embeddings for semantic search
         """
+        # Try RAG semantic search first if available
+        if use_rag and self.rag_memory:
+            try:
+                from .rag_memory import ArtifactType
+
+                # Search for tools using semantic similarity
+                results = self.rag_memory.find_similar(
+                    query=query,
+                    artifact_type=ArtifactType.PATTERN,
+                    top_k=top_k * 2  # Get more results to filter
+                )
+
+                # Filter for actual tools and extract Tool objects
+                tool_matches = []
+                for artifact, similarity in results:
+                    if artifact.metadata.get("is_tool"):
+                        tool_id = artifact.metadata.get("tool_id")
+                        if tool_id and tool_id in self.tools:
+                            tool_matches.append(self.tools[tool_id])
+
+                # Return top_k tools
+                return tool_matches[:top_k]
+
+            except Exception as e:
+                logger.warning(f"RAG search failed, falling back to keyword search: {e}")
+
+        # Fallback to keyword-based search
         query_lower = query.lower()
         matches = []
 
@@ -521,26 +592,31 @@ class ToolsManager:
                 any(query_lower in tag.lower() for tag in tool.tags)):
                 matches.append(tool)
 
-        return sorted(matches, key=lambda t: t.usage_count, reverse=True)
+        return sorted(matches, key=lambda t: t.usage_count, reverse=True)[:top_k]
 
     def get_tools_for_prompt(
         self,
         task_description: str,
-        max_tools: int = 5
+        max_tools: int = 5,
+        filter_type: Optional[ToolType] = None
     ) -> str:
         """
-        Get relevant tools formatted for inclusion in a prompt.
+        Get relevant tools formatted for inclusion in a prompt using RAG semantic search.
 
         Args:
             task_description: Description of the task
             max_tools: Maximum number of tools to include
+            filter_type: Optional tool type filter (e.g., ToolType.LLM for code generation)
 
         Returns:
             Formatted string with tool descriptions
         """
-        # Simple keyword matching for now
-        # Future: Use RAG/embeddings for better matching
-        relevant_tools = self.search(task_description)[:max_tools]
+        # Use RAG-powered semantic search
+        relevant_tools = self.search(task_description, top_k=max_tools, use_rag=True)
+
+        # Apply type filter if specified
+        if filter_type:
+            relevant_tools = [t for t in relevant_tools if t.tool_type == filter_type][:max_tools]
 
         if not relevant_tools:
             return "No specific tools available for this task."
@@ -550,6 +626,21 @@ class ToolsManager:
             tools_text += f"{i}. {tool.to_prompt_format()}\n"
 
         return tools_text
+
+    def get_best_llm_for_task(self, task_description: str) -> Optional[Tool]:
+        """
+        Get the best LLM tool for a given task using RAG semantic search.
+
+        Args:
+            task_description: Description of the task
+
+        Returns:
+            Best matching LLM tool or None
+        """
+        llm_tools = self.search(task_description, top_k=3, use_rag=True)
+        llm_tools = [t for t in llm_tools if t.tool_type == ToolType.LLM]
+
+        return llm_tools[0] if llm_tools else None
 
     def increment_usage(self, tool_id: str):
         """Increment usage counter for a tool."""

@@ -24,9 +24,14 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 ### Pull Required Models
 ```bash
+# Main models for code generation (REQUIRED)
 ollama pull llama3
 ollama pull codellama
-ollama pull tiny
+ollama pull tinyllama
+
+# Embedding model for RAG memory (OPTIONAL but recommended)
+# Use this for semantic search in RAG memory
+ollama pull nomic-embed-text
 ```
 
 ## Step 2: Install Code Evolver
@@ -45,9 +50,17 @@ python orchestrator.py check
 You should see:
 ```
 ✓ Connected to Ollama server
-Available models: codellama, llama3, tiny
+Available models: codellama:latest, llama3:latest, tinyllama:latest, ...
 ✓ Setup OK
 ```
+
+If you see a warning about missing `nomic-embed-text`, that's fine - it's optional.
+
+The system uses:
+- **llama3**: Strategic planning (overseer) and evaluation
+- **codellama**: Code generation
+- **tinyllama**: Quick triage/testing
+- **nomic-embed-text** (optional): Semantic embeddings for RAG memory (small & efficient)
 
 ## Step 4: Try Your First Generation
 
@@ -236,7 +249,8 @@ Pull the missing models:
 ```bash
 ollama pull llama3
 ollama pull codellama
-ollama pull tiny
+ollama pull tinyllama
+ollama pull nomic-embed-text
 ```
 
 ### Code Generation is Slow

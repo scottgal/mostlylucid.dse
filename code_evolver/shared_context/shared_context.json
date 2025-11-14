@@ -1,0 +1,93 @@
+{
+  "learnings": {
+    "8024c70b7fa402c1": [
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code for better performance",
+        "quality_achieved": 0.8739999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.8739999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code for better performance and memory efficiency; Consider using more efficient algorithms or data structures",
+        "quality_achieved": 0.7689999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance and memory efficiency",
+        "confidence": 0.7689999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code for better performance; Consider increasing memory allocation if necessary",
+        "quality_achieved": 0.748,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.748,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "test_node",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize memory usage to meet target; Investigate performance optimization techniques to meet speed target",
+        "quality_achieved": 0.8319999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize memory usage to meet target",
+        "confidence": 0.8319999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      }
+    ],
+    "6ee389394d77cb9d": [
+      {
+        "node_id": "parent",
+        "context_signature": "6ee389394d77cb9d",
+        "lesson": "Optimize code for better performance; Consider adding logging or monitoring for enhanced quality",
+        "quality_achieved": 0.8739999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.8739999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      }
+    ]
+  },
+  "performance_stats": {},
+  "strategy_preferences": {
+    "8024c70b7fa402c1": [
+      {
+        "strategy": "Heuristic search with pruning",
+        "quality": 0.8739999999999999,
+        "speed": 1000,
+        "timestamp": "2025-11-14T19:31:04.832981Z"
+      },
+      {
+        "strategy": "Heuristic search with pruning, leveraging learnings from similar past plans (although none were found) and focusing on optimizing code for better performance",
+        "quality": 0.8319999999999999,
+        "speed": 1000,
+        "timestamp": "2025-11-14T19:31:44.378383Z"
+      },
+      {
+        "strategy": "Adapted Heuristic Search with Pruning",
+        "quality": 0.7689999999999999,
+        "speed": 1000,
+        "timestamp": "2025-11-14T19:31:13.410617Z"
+      },
+      {
+        "strategy": "Adapted Heuristic Search with Pruning",
+        "quality": 0.748,
+        "speed": 1000,
+        "timestamp": "2025-11-14T19:31:25.091104Z"
+      }
+    ]
+  },
+  "updated_at": "2025-11-14T19:31:44.378412Z"
+}

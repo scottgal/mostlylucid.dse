@@ -302,6 +302,55 @@ class ConfigManager:
         return model
 
     @property
+    def embedding_model(self) -> str:
+        """Get embedding model name."""
+        model, _ = self._parse_model_config("embedding", "nomic-embed-text")
+        return model
+
+    @property
+    def embedding_vector_size(self) -> int:
+        """Get embedding vector size."""
+        return self.get("ollama.embedding.vector_size", 768)
+
+    def get_context_window(self, model_name: str) -> int:
+        """
+        Get context window size for a specific model.
+
+        Args:
+            model_name: Name of the model
+
+        Returns:
+            Context window size in tokens
+        """
+        # Try to get specific model context window
+        size = self.get(f"ollama.context_windows.{model_name}")
+        if size:
+            return size
+
+        # Fall back to default
+        return self.get("ollama.context_windows.default", 4096)
+
+    @property
+    def rag_memory_path(self) -> str:
+        """Get RAG memory path."""
+        return self.get("rag_memory.path", "./rag_memory")
+
+    @property
+    def use_qdrant(self) -> bool:
+        """Check if Qdrant should be used for RAG memory."""
+        return self.get("rag_memory.use_qdrant", False)
+
+    @property
+    def qdrant_url(self) -> str:
+        """Get Qdrant server URL."""
+        return self.get("rag_memory.qdrant_url", "http://localhost:6333")
+
+    @property
+    def max_embedding_content_length(self) -> int:
+        """Get max content length for embeddings."""
+        return self.get("rag_memory.max_embedding_content_length", 1000)
+
+    @property
     def registry_path(self) -> str:
         """Get registry path."""
         return self.get("registry.path", "./registry")

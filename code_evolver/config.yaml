@@ -34,7 +34,7 @@ ollama:
     # Triage - Quick pass/fail decisions
     # Can be a smaller, faster model (e.g., tiny, llama3)
     triage:
-      model: "tiny"
+      model: "tinyllama"
       endpoint: null
       # endpoint: "http://machine3:11434"
 
@@ -42,6 +42,23 @@ ollama:
     escalation:
       model: "llama3"
       endpoint: null
+
+  # Embedding model for RAG/semantic search
+  # Use a small, efficient model like nomic-embed-text
+  embedding:
+    model: "nomic-embed-text"
+    endpoint: null  # Uses base_url if null
+    vector_size: 768  # Dimension of embedding vectors (nomic-embed-text is 768d)
+
+  # Context window sizes for each model (in tokens)
+  # Used for truncating prompts when they exceed limits
+  context_windows:
+    llama3: 8192
+    codellama: 16384
+    tinyllama: 2048
+    nomic-embed-text: 8192
+    # Default fallback for unknown models
+    default: 4096
 
 # Execution settings
 execution:
@@ -80,6 +97,18 @@ registry:
 nodes:
   path: "./nodes"
   artifacts_path: "./artifacts"
+
+# RAG Memory settings
+rag_memory:
+  path: "./rag_memory"
+  # Use Qdrant for scalable vector storage (requires qdrant-client and Qdrant server)
+  # Set to false to use simple NumPy-based storage
+  use_qdrant: false
+  qdrant_url: "http://localhost:6333"
+  collection_name: "code_evolver_artifacts"
+  # Embedding model from ollama.embedding section will be used
+  # Max content length for embeddings (longer content will be truncated)
+  max_embedding_content_length: 1000
 
 # Logging
 logging:

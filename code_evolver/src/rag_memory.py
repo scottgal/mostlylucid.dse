@@ -108,7 +108,8 @@ class RAGMemory:
         self,
         memory_path: str = "./rag_memory",
         ollama_client: Optional[Any] = None,
-        embedding_model: str = "llama3"
+        embedding_model: str = "nomic-embed-text",
+        max_content_length: int = 1000
     ):
         """
         Initialize RAG memory.
@@ -117,12 +118,14 @@ class RAGMemory:
             memory_path: Path to memory storage directory
             ollama_client: OllamaClient for generating embeddings
             embedding_model: Model to use for embeddings
+            max_content_length: Max content length for embedding generation
         """
         self.memory_path = Path(memory_path)
         self.memory_path.mkdir(parents=True, exist_ok=True)
 
         self.ollama_client = ollama_client
         self.embedding_model = embedding_model
+        self.max_content_length = max_content_length
 
         # Storage paths
         self.artifacts_path = self.memory_path / "artifacts"
@@ -289,7 +292,9 @@ class RAGMemory:
         # Generate embedding if requested
         embedding = None
         if auto_embed:
-            embed_text = f"{name}\n{description}\n{content[:500]}"  # Limit content length
+            # Truncate content to configured max length
+            truncated_content = content[:self.max_content_length] if len(content) > self.max_content_length else content
+            embed_text = f"{name}\n{description}\n{truncated_content}"
             embedding = self._generate_embedding(embed_text)
 
         # Create artifact

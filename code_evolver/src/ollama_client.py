@@ -74,6 +74,39 @@ class OllamaClient:
             logger.error(f"Error listing models from {url}: {e}")
             return []
 
+    def truncate_prompt(self, prompt: str, model: str, max_ratio: float = 0.8) -> str:
+        """
+        Truncate prompt if it exceeds the model's context window.
+
+        Args:
+            prompt: The prompt text
+            model: Model name
+            max_ratio: Use max_ratio of context window (default 0.8 to leave room for response)
+
+        Returns:
+            Truncated prompt if necessary
+        """
+        if not self.config_manager:
+            return prompt
+
+        # Get context window size for model
+        context_window = self.config_manager.get_context_window(model)
+
+        # Rough approximation: 4 chars per token (conservative estimate)
+        max_chars = int(context_window * max_ratio * 4)
+
+        if len(prompt) > max_chars:
+            logger.warning(
+                f"Prompt length ({len(prompt)} chars) exceeds max for {model} "
+                f"({max_chars} chars, ~{context_window * max_ratio:.0f} tokens). Truncating."
+            )
+            # Truncate and add note
+            truncated = prompt[:max_chars - 100]
+            truncated += "\n\n[... prompt truncated due to length ...]"
+            return truncated
+
+        return prompt
+
     def generate(
         self,
         model: str,
@@ -110,11 +143,14 @@ class OllamaClient:
         if not target_endpoint:
             target_endpoint = self.base_url
 
+        # Truncate prompt if necessary based on model's context window
+        truncated_prompt = self.truncate_prompt(prompt, model)
+
         generate_url = f"{target_endpoint}/api/generate"
 
         payload = {
             "model": model,
-            "prompt": prompt,
+            "prompt": truncated_prompt,
             "stream": stream,
             "options": {
                 "temperature": temperature
