@@ -1,0 +1,12 @@
+System: You are a precise code generator. Produce safe, deterministic Python code only. Return only code, no commentary or markdown.
+
+User:
+Write a Python module implementing:
+- Function: {function_signature}
+- Constraint: no external dependencies; deterministic; {constraints}
+- Performance: target latency {latency_target}ms for {input_size} on CPU; memory {memory_target}MB
+- Include minimal tests in __main__ that reads JSON from stdin and prints results as JSON
+- Return only code, no explanations or markdown formatting
+
+Additional requirements:
+{additional_requirements}

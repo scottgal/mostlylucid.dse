@@ -1,0 +1,112 @@
+# Code Evolver Configuration
+
+# Ollama server settings
+ollama:
+  base_url: "http://localhost:11434"
+
+  # Model assignments
+  models:
+    # Overseer LLM - Plans approach and strategy (REQUIRED)
+    # This model is consulted first to determine how to approach the task
+    # Should be a strong reasoning model (e.g., llama3, mistral, mixtral)
+    overseer: "llama3"
+
+    # Code generator - Writes actual Python code
+    # Should be a code-specialized model (e.g., codellama, deepseek-coder)
+    generator: "codellama"
+
+    # Evaluator - Comprehensive evaluation of results
+    # Should be good at analysis (e.g., llama3, mistral)
+    evaluator: "llama3"
+
+    # Triage - Quick pass/fail decisions
+    # Can be a smaller, faster model (e.g., tiny, llama3)
+    triage: "tiny"
+
+# Execution settings
+execution:
+  default_timeout_ms: 5000
+  max_memory_mb: 256
+  max_retries: 3
+
+  # Sandbox settings
+  sandbox:
+    allow_network: false
+    allow_file_write: false
+    temp_dir: "./temp"
+
+# Auto-evolution settings
+auto_evolution:
+  enabled: true
+
+  # Performance thresholds
+  performance_threshold: 0.15  # Trigger evolution if score improves/degrades by 15%
+  min_runs_before_evolution: 3
+  check_interval_minutes: 60
+
+  # Evolution strategy
+  max_versions_per_node: 10
+  keep_best_n_versions: 3
+  mutation_temperature: 0.7
+
+# Registry settings
+registry:
+  path: "./registry"
+  backup_enabled: true
+  backup_interval_hours: 24
+  max_backup_count: 7
+
+# Node storage
+nodes:
+  path: "./nodes"
+  artifacts_path: "./artifacts"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "code_evolver.log"
+  max_file_size_mb: 10
+  backup_count: 5
+
+  # Console output
+  console:
+    enabled: true
+    use_colors: true
+
+# Chat interface settings
+chat:
+  # Prompt style
+  prompt: "CodeEvolver> "
+
+  # History
+  history_file: ".code_evolver_history"
+  max_history: 1000
+
+  # Display settings
+  show_thinking: false  # Show overseer's reasoning
+  show_metrics: true
+
+  # Auto-save
+  auto_save_context: true
+
+# Build settings (for executables)
+build:
+  app_name: "CodeEvolver"
+  version: "0.1.0"
+  icon: null  # Path to icon file (optional)
+
+  # Include files
+  include_data:
+    - "prompts/*"
+    - "config.yaml"
+
+  # Platform-specific settings
+  windows:
+    console: false  # Hide console window
+    admin: false    # Don't require admin
+
+  linux:
+    create_desktop_file: true
+
+  macos:
+    bundle_identifier: "com.codeevolver.app"

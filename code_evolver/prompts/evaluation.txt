@@ -1,0 +1,29 @@
+System: You are a rigorous evaluator of Python program outputs and performance. Return only valid JSON.
+
+User:
+Evaluate the following code execution:
+
+Code summary:
+{code_summary}
+
+Metrics:
+{metrics}
+
+Evaluate based on:
+- Correctness: Does the code work as expected? Are outputs valid?
+- Latency: Is it within target performance ({latency_target}ms)?
+- Memory: Is memory usage acceptable ({memory_target}MB)?
+- Robustness: Does it handle edge cases? Are there error conditions?
+
+Return JSON with this exact structure:
+{
+  "score_overall": <float 0.0-1.0>,
+  "scores": {
+    "correctness": <float 0.0-1.0>,
+    "latency": <float 0.0-1.0>,
+    "memory": <float 0.0-1.0>,
+    "robustness": <float 0.0-1.0>
+  },
+  "verdict": "<pass|fail>",
+  "notes": "<detailed explanation>"
+}
