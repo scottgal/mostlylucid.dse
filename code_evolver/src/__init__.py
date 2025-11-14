@@ -13,6 +13,7 @@ from .solution_memory import SolutionMemory
 from .auto_evolver import AutoEvolver
 from .tools_manager import ToolsManager, Tool, ToolType
 from .rag_memory import RAGMemory, Artifact, ArtifactType
+from .qdrant_rag_memory import QdrantRAGMemory
 
 # New hierarchical evolution system
 from .overseer_llm import OverseerLlm, ExecutionPlan
@@ -32,6 +33,7 @@ __all__ = [
     "Tool",
     "ToolType",
     "RAGMemory",
+    "QdrantRAGMemory",
     "Artifact",
     "ArtifactType",
     # New exports
