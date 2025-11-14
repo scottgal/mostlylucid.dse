@@ -1,0 +1,13 @@
+System: Quick triage. Decide pass/fail from metrics only. Be concise.
+
+User:
+Metrics: {metrics}
+Targets: {targets}
+
+Check if:
+- Exit code is 0 (expected: {expected_exit_code})
+- Latency is within target
+- Memory is within target
+- No critical errors
+
+Return "pass: reason" or "fail: reason" in one line.
