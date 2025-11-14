@@ -41,10 +41,10 @@ class QdrantRAGMemory:
         self,
         memory_path: str = "./rag_memory",
         ollama_client: Optional[Any] = None,
-        embedding_model: str = "llama3",
+        embedding_model: str = "nomic-embed-text",
         qdrant_url: str = "http://localhost:6333",
         collection_name: str = "code_evolver_artifacts",
-        vector_size: int = 4096  # Default for llama3 embeddings
+        vector_size: int = 768  # Default for nomic-embed-text (768), llama3 is 4096
     ):
         """
         Initialize Qdrant RAG memory.

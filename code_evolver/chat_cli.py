@@ -19,9 +19,11 @@ try:
 except ImportError:
     READLINE_AVAILABLE = False
 
-from src import OllamaClient, Registry, NodeRunner, Evaluator
+from src import (
+    OllamaClient, Registry, NodeRunner, Evaluator,
+    create_rag_memory
+)
 from src.config_manager import ConfigManager
-from src.rag_memory import RAGMemory
 from src.tools_manager import ToolsManager, ToolType
 
 console = Console()
@@ -44,10 +46,14 @@ class ChatCLI:
         self.evaluator = Evaluator(self.client)
 
         # Initialize RAG memory for tool selection
-        self.rag = RAGMemory(
-            memory_path=self.config.rag_memory_path,
-            ollama_client=self.client
-        )
+        # Automatically uses Qdrant if configured, otherwise NumPy-based memory
+        self.rag = create_rag_memory(self.config, self.client)
+        if self.config.use_qdrant:
+            from src.qdrant_rag_memory import QDRANT_AVAILABLE
+            if QDRANT_AVAILABLE:
+                console.print("[dim]✓ Using Qdrant for RAG memory[/dim]")
+            else:
+                console.print("[yellow]⚠ Qdrant requested but not available, using NumPy-based RAG[/yellow]")
 
         # Initialize tools manager with RAG
         self.tools_manager = ToolsManager(

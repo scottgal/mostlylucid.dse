@@ -13,7 +13,43 @@ from .solution_memory import SolutionMemory
 from .auto_evolver import AutoEvolver
 from .tools_manager import ToolsManager, Tool, ToolType
 from .rag_memory import RAGMemory, Artifact, ArtifactType
-from .qdrant_rag_memory import QdrantRAGMemory
+from .qdrant_rag_memory import QdrantRAGMemory, QDRANT_AVAILABLE
+
+def create_rag_memory(config_manager, ollama_client):
+    """
+    Factory function to create appropriate RAG memory implementation.
+
+    Args:
+        config_manager: ConfigManager instance
+        ollama_client: OllamaClient instance
+
+    Returns:
+        RAGMemory or QdrantRAGMemory instance based on configuration
+    """
+    if config_manager.use_qdrant:
+        if not QDRANT_AVAILABLE:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("Qdrant requested but qdrant-client not installed. Falling back to NumPy-based RAG.")
+            return RAGMemory(
+                memory_path=config_manager.rag_memory_path,
+                ollama_client=ollama_client,
+                embedding_model=config_manager.embedding_model
+            )
+
+        return QdrantRAGMemory(
+            memory_path=config_manager.rag_memory_path,
+            ollama_client=ollama_client,
+            embedding_model=config_manager.embedding_model,
+            qdrant_url=config_manager.qdrant_url,
+            vector_size=config_manager.embedding_vector_size
+        )
+    else:
+        return RAGMemory(
+            memory_path=config_manager.rag_memory_path,
+            ollama_client=ollama_client,
+            embedding_model=config_manager.embedding_model
+        )
 
 # New hierarchical evolution system
 from .overseer_llm import OverseerLlm, ExecutionPlan
@@ -37,6 +73,7 @@ __all__ = [
     "QdrantRAGMemory",
     "Artifact",
     "ArtifactType",
+    "create_rag_memory",  # Factory function for RAG
     # New exports
     "OverseerLlm",
     "ExecutionPlan",
