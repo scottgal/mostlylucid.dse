@@ -33,7 +33,9 @@
       "Bash(then tail -200 /tmp/multi_step_workflow_test.log)",
       "Bash(else echo \"Log file not found\")",
       "Bash(fi)",
-      "Bash(timeout 5 bash -c 'echo \"\"test\"\" | python chat_cli.py 2>&1 | head -5')"
+      "Bash(timeout 5 bash -c 'echo \"\"test\"\" | python chat_cli.py 2>&1 | head -5')",
+      "Bash(timeout 90 python:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []

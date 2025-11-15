@@ -1,0 +1,345 @@
+# ============================================================================
+# Tools Registry
+# ============================================================================
+#
+# Defines all available tools ONCE. Tools reference abstract model ROLES
+# (fast, base, powerful) which get mapped to actual models in config files.
+#
+# This file is backend-agnostic - works with any LLM provider.
+#
+# ============================================================================
+
+tools:
+  # ========================================
+  # LLM-based Tools
+  # ========================================
+
+  # Fast code generator for simple tasks
+  fast_code_generator:
+    name: "Fast Code Generator"
+    type: "llm"
+    description: "Fast code generation for simple tasks. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic or multi-step workflows."
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+    max_output_length: "medium"
+    llm:
+      role: "fast"  # Uses fast model from config
+      system_prompt: "You are a fast code generator for SIMPLE tasks. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and focused\n- Proper error handling\n- Must work for the specific task\n- Follow Python best practices"
+    tags: ["fast", "simple", "basic", "code-generation"]
+
+  # General purpose content generator
+  content_generator:
+    name: "Content Generator"
+    type: "llm"
+    description: "General purpose content generation. Can generate jokes, stories, articles, essays, documentation, and creative writing."
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "long"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are a creative content generator. Generate engaging, high-quality content based on the user's request.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "{prompt}\n\nGenerate creative, engaging content that matches this request. Return ONLY the content itself, no explanations or meta-commentary."
+    tags: ["content", "generation", "creative", "writing"]
+
+  # General fallback code generator
+  general:
+    name: "General Code Generator"
+    type: "llm"
+    description: "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms."
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "very-long"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are an expert software engineer. Write clean, efficient, well-documented code following best practices.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool().\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nFor content generation tasks:\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it"
+    tags: ["general", "fallback", "code-generation", "any-task", "complex"]
+
+  # Quick feedback checker
+  quick_feedback:
+    name: "Quick Feedback Checker"
+    type: "llm"
+    description: "Fast spellcheck, grammar, and syntax error checker. Gives quick feedback on generated text/code."
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "basic"
+    max_output_length: "short"
+    llm:
+      role: "fast"  # Uses fast model from config
+      system_prompt: "You are a fast proofreader. Check for spelling errors, grammar mistakes, and syntax issues. Be concise.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Quick check this text for errors:\n\n{text}\n\nFind:\n- Spelling errors\n- Grammar mistakes\n- Syntax issues\n- Structure problems\n\nProvide a brief list of issues found. If no major issues, just say 'OK'."
+    tags: ["spellcheck", "grammar", "syntax", "quick-feedback", "fast", "proofreading"]
+
+  # Content summarizer
+  summarizer:
+    name: "Content Summarizer"
+    type: "llm"
+    description: "Summarizes long content, code, documentation, or conversations. Efficient for condensing information."
+    cost_tier: "low"
+    speed_tier: "fast"
+    quality_tier: "good"
+    max_output_length: "medium"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are an expert at creating concise, accurate summaries. Extract key points and present them clearly.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Summarize the following content:\n\n{content}\n\nSummary requirements:\n- Capture all key points\n- Be concise but complete\n- Prioritize most important information\n- Target length: {target_length}\n\nProvide a well-structured summary."
+    tags: ["summarization", "condensing", "analysis", "extraction", "efficient"]
+
+  # Code reviewer
+  code_reviewer:
+    name: "Code Reviewer"
+    type: "llm"
+    description: "Reviews code for quality, bugs, and best practices"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are an expert code reviewer with deep knowledge of software engineering best practices, design patterns, and common pitfalls."
+      prompt_template: "Review the following code:\n\n{code}\n\nProvide:\n1. Overall quality assessment (1-10)\n2. Specific issues found (bugs, security, performance)\n3. Best practice violations\n4. Improvement suggestions\n5. Positive aspects of the code"
+    tags: ["review", "quality"]
+
+  # Security auditor
+  security_auditor:
+    name: "Security Auditor"
+    type: "llm"
+    description: "Audits code for security vulnerabilities"
+    llm:
+      role: "powerful"  # Uses powerful model for security
+      system_prompt: "You are a security expert. Find vulnerabilities and security issues with thorough analysis."
+      prompt_template: "Audit this code for security vulnerabilities:\n\n{code}\n\nCheck for:\n- SQL injection\n- XSS vulnerabilities\n- Command injection\n- Path traversal\n- Authentication/authorization issues\n- Data exposure\n- Cryptography issues"
+    tags: ["security", "audit"]
+
+  # Performance optimizer
+  performance_optimizer:
+    name: "Performance Optimizer"
+    type: "llm"
+    description: "Suggests performance optimizations"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are a performance optimization expert."
+      prompt_template: "Analyze this code for performance improvements:\n\n{code}\n\nSuggest optimizations for:\n- Time complexity\n- Space complexity\n- Algorithm efficiency\n- Resource usage"
+    tags: ["performance", "optimization"]
+
+  # Documentation generator
+  doc_generator:
+    name: "Documentation Generator"
+    type: "llm"
+    description: "Generates comprehensive code documentation"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are a technical documentation expert."
+      prompt_template: "Generate documentation for this code:\n\n{code}\n\nInclude:\n- Overview\n- Function/class descriptions\n- Parameters and return values\n- Usage examples\n- Edge cases and limitations"
+    tags: ["documentation", "docs"]
+
+  # Technical writer
+  technical_writer:
+    name: "Technical Article Writer"
+    type: "llm"
+    description: "Writes comprehensive technical articles, tutorials, and blog posts on software development topics"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are an expert technical writer specializing in software development content.\n\nWorkflow pressure: {priority}\nQuality target: {quality_level}\nSpeed mode: {speed_requirement}"
+      prompt_template: "Write a technical article on:\n\n{topic}\n\nContext:\n- Priority: {priority}\n- Quality level: {quality_level}\n- Speed: {speed_requirement}\n- Target audience: {audience}\n- Length target: {length}"
+    tags: ["writing", "technical", "article", "blog", "tutorial"]
+
+  # Article analyzer
+  article_analyzer:
+    name: "Article Content Analyzer"
+    type: "llm"
+    description: "Analyzes blog posts and articles for clarity, technical accuracy, SEO, and readability"
+    llm:
+      role: "base"  # Uses base model from config
+    tags: ["analysis", "blog", "seo", "readability", "content"]
+
+  # Proofreader
+  proofreader:
+    name: "Technical Proofreader"
+    type: "llm"
+    description: "Proofreads technical content for grammar, style, consistency, and technical accuracy"
+    llm:
+      role: "base"  # Uses base model from config
+      system_prompt: "You are an expert proofreader specializing in technical content."
+      prompt_template: "Proofread this technical content:\n\n{content}\n\nCheck for:\n1. Grammar and spelling errors\n2. Technical accuracy\n3. Consistency in terminology\n4. Clarity and readability\n5. Code example correctness"
+    tags: ["proofreading", "grammar", "style", "editing", "quality"]
+
+  # Long-form content writer
+  long_form_writer:
+    name: "Long-Form Content Writer"
+    type: "llm"
+    description: "Specialized for writing long-form content (novels, books, long articles) using models with large context windows"
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "very-long"
+    llm:
+      role: "base"  # Uses base model (which should have large context)
+      system_prompt: "You are a creative writer specializing in long-form content. Write engaging, well-structured content that flows naturally.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "{prompt}\n\nPrevious context (if continuing):\n{context}\n\nGenerate the next section maintaining consistency."
+    tags: ["creative-writing", "novel", "story", "long-form", "article", "book", "large-context"]
+
+  # Translation quality checker
+  translation_quality_checker:
+    name: "Translation Quality Validator"
+    type: "llm"
+    description: "Fast quality check for translation output. Detects repeated characters, garbled text, encoding errors"
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "basic"
+    max_output_length: "short"
+    llm:
+      role: "fast"  # Uses fast model for quick validation
+      system_prompt: "You are a translation quality validator. Check translated text for errors. Be fast and concise.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Validate this translated text:\n\nOriginal: {original_text}\nTranslated: {translated_text}\n\nCheck for:\n1. Repeated characters\n2. Garbled text\n3. Untranslated portions\n4. Missing or corrupted text\n5. Translation failures\n\nRespond with:\n- 'OK' if translation looks good\n- 'ERROR: <description>' if issues found"
+    tags: ["translation", "validation", "quality-check", "error-detection", "fast"]
+
+  # Code translation validator
+  code_translation_validator:
+    name: "Code Translation Validator"
+    type: "llm"
+    description: "Ensures translation hasn't corrupted Python code blocks. Checks syntax remains valid"
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+    max_output_length: "short"
+    llm:
+      role: "fast"  # Uses fast model for syntax checking
+      system_prompt: "You are a code validator. Check that Python code remains syntactically valid after translation.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Validate this translated code:\n\n{translated_code}\n\nCheck:\n1. Python syntax is still valid\n2. Only comments were translated (not keywords)\n3. Code structure is unchanged\n4. No code keywords mistranslated\n\nRespond with:\n- 'OK' if code is valid\n- 'ERROR: <list of issues>' if problems found"
+    tags: ["code", "validation", "translation", "syntax-check", "fast"]
+
+  # ========================================
+  # Executable Tools (No LLM)
+  # ========================================
+
+  # File I/O tools
+  save_to_disk:
+    name: "Save to Disk"
+    type: "executable"
+    description: "Saves content to a file in the ./output/ directory"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    max_output_length: "unlimited"
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)}))"]
+    input_schema:
+      filename: "str - Name of file to save"
+      content: "str - Content to write"
+    output_schema:
+      status: "str - 'saved' if successful"
+      path: "str - Full path where file was saved"
+    tags: ["file-io", "save", "write", "disk", "output", "storage"]
+
+  load_from_disk:
+    name: "Load from Disk"
+    type: "executable"
+    description: "Loads content from any file path on disk"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    max_output_length: "unlimited"
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path(data['filepath']); content=path.read_text() if path.exists() else None; print(json.dumps({'status': 'loaded' if content else 'not_found', 'content': content, 'path': str(path)}))"]
+    input_schema:
+      filepath: "str - Full or relative path to file"
+    output_schema:
+      status: "str - 'loaded' or 'not_found'"
+      content: "str - Content of the file"
+      path: "str - Full path that was read"
+    tags: ["file-io", "load", "read", "disk", "input"]
+
+  # Python package installer
+  pip_install:
+    name: "Install Python Package"
+    type: "executable"
+    description: "Installs Python packages using pip"
+    cost_tier: "free"
+    speed_tier: "medium"
+    quality_tier: "excellent"
+    max_output_length: "short"
+    executable:
+      command: "python"
+      args: ["pip_install_tool.py"]
+    input_schema:
+      package: "str - Package name(s) to install"
+    output_schema:
+      status: "str - 'installed' or 'failed'"
+      package: "str - Package(s) that were installed"
+      error: "str - Error message if failed (optional)"
+    tags: ["dependencies", "pip", "install", "packages", "requirements"]
+    examples:
+      - input: {"package": "requests"}
+        output: {"status": "installed", "package": "requests"}
+      - input: {"package": "numpy pandas"}
+        output: {"status": "installed", "package": "numpy pandas"}
+
+  # HTTP Server
+  http_server:
+    name: "HTTP Server"
+    type: "custom"
+    description: "HTTP server that allows workflows to serve content via HTTP. Supports HTML and JSON/API responses."
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    max_output_length: "long"
+    custom:
+      module: "src.http_server_tool"
+      class: "HTTPServerTool"
+      config:
+        host: "0.0.0.0"
+        port: 8080
+        enable_cors: true
+    input_schema:
+      action: "str - Action: 'start', 'stop', 'add_route', 'list_routes', 'info'"
+      route_config: "dict - For 'add_route'"
+      blocking: "bool - For 'start': block until server stops"
+    output_schema:
+      status: "str - 'success' or 'error'"
+      message: "str - Status message"
+      data: "dict - Additional data"
+    tags: ["http", "server", "api", "web", "rest", "endpoint", "service"]
+
+  # Python code quality tools
+  pylint_checker:
+    name: "Pylint Code Quality Checker"
+    type: "executable"
+    description: "Runs pylint static analysis on Python code"
+    executable:
+      command: "pylint"
+      args: ["--output-format=text", "--score=yes", "{source_file}"]
+      install_command: "pip install pylint"
+    tags: ["python", "static-analysis", "quality", "linting", "pep8"]
+
+  flake8_linter:
+    name: "Flake8 Style Checker"
+    type: "executable"
+    description: "Runs flake8 to check Python code style (PEP 8)"
+    executable:
+      command: "flake8"
+      args: ["--max-line-length=120", "--statistics", "{source_file}"]
+      install_command: "pip install flake8"
+    tags: ["python", "linting", "pep8", "style", "quality"]
+
+  bandit_security:
+    name: "Bandit Security Scanner"
+    type: "executable"
+    description: "Runs bandit security scanner to find common security issues"
+    executable:
+      command: "bandit"
+      args: ["-r", "{source_file}"]
+      install_command: "pip install bandit"
+    tags: ["python", "security", "vulnerability", "scanning"]
+
+  pytest_runner:
+    name: "Pytest Test Runner"
+    type: "executable"
+    description: "Runs pytest unit tests"
+    executable:
+      command: "pytest"
+      args: ["-v", "--tb=short", "{test_file}"]
+      install_command: "pip install pytest"
+    tags: ["python", "testing", "pytest", "unit-tests"]

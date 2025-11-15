@@ -1,0 +1,48 @@
+# General Code Generator
+# Backend-agnostic tool that references the "base" model role
+
+name: "General Code Generator"
+type: "llm"
+description: "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+# LLM configuration
+llm:
+  role: "base"  # References base model from config (e.g., claude-sonnet, gpt-4o, codellama)
+
+  system_prompt: |
+    You are an expert software engineer. Write clean, efficient, well-documented code following best practices.
+
+    IMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool().
+
+    Priority: {priority}
+    Quality expectation: {quality_level}
+    Speed requirement: {speed_requirement}
+
+  prompt_template: |
+    Generate code for the following task:
+
+    {task}
+
+    Workflow Context:
+    - Priority: {priority} (determines speed vs quality tradeoff)
+    - Quality level: {quality_level} (draft/good/production/perfect)
+    - Speed: {speed_requirement} (fast/balanced/thorough)
+
+    For content generation tasks:
+    - Write a simple main() function that DIRECTLY creates the content
+    - DO NOT use call_tool() - that function doesn't exist in the runtime
+    - Just create the content as a string variable and output it
+
+# Tags for tool discovery
+tags:
+  - general
+  - fallback
+  - code-generation
+  - any-task
+  - complex

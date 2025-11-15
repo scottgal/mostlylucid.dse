@@ -1,0 +1,38 @@
+# Quick Feedback Checker
+# Backend-agnostic tool for fast proofreading and feedback
+
+name: "Quick Feedback Checker"
+type: "llm"
+description: "Fast proofreading and quick feedback for text. Uses fast model for speed."
+
+# Performance characteristics
+cost_tier: "low"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+
+# LLM configuration
+llm:
+  role: "fast"  # References fast model (claude-haiku, gpt-4o-mini, tinyllama)
+
+  system_prompt: |
+    You are a fast proofreader. Check for errors quickly and provide concise feedback.
+
+    Priority: {priority}
+    Quality expectation: {quality_level}
+    Speed requirement: {speed_requirement}
+
+  prompt_template: |
+    Quick check this text:
+
+    {text}
+
+    Find spelling, grammar, and syntax issues. Be brief and to the point.
+
+# Tags for tool discovery
+tags:
+  - spellcheck
+  - grammar
+  - quick-feedback
+  - proofreading
+  - fast

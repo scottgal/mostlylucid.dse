@@ -1,0 +1,37 @@
+# Content Generator
+# Backend-agnostic tool for creative content generation
+
+name: "Content Generator"
+type: "llm"
+description: "General purpose content generation for creative writing, articles, stories, and text content. Uses base model for quality output."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# LLM configuration
+llm:
+  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+
+  system_prompt: |
+    You are a creative content generator. Generate engaging, high-quality content that meets the user's requirements.
+
+    Priority: {priority}
+    Quality expectation: {quality_level}
+    Speed requirement: {speed_requirement}
+
+  prompt_template: |
+    {prompt}
+
+    Generate creative, engaging content. Return ONLY the content itself, without explanations or meta-commentary.
+
+# Tags for tool discovery
+tags:
+  - content
+  - generation
+  - creative
+  - writing
+  - articles
+  - stories

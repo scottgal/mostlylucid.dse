@@ -1,0 +1,33 @@
+# Save to Disk Tool
+# Executable tool (no LLM required)
+
+name: "Save to Disk"
+type: "executable"
+description: "Saves content to a file in the ./output/ directory. For safety, only saves to ./output/ to prevent accidental overwrites."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "unlimited"
+
+executable:
+  command: "python"
+  args:
+    - "-c"
+    - "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)})))"
+
+input_schema:
+  filename: "str - Name of file to save (will be saved in ./output/)"
+  content: "str - Content to write to file"
+
+output_schema:
+  status: "str - 'saved' if successful"
+  path: "str - Full path where file was saved"
+
+tags:
+  - file-io
+  - save
+  - write
+  - disk
+  - output
+  - storage

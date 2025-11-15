@@ -2523,11 +2523,29 @@ Return ONLY the JSON, no explanations."""
 
         Returns the test code that defines the expected interface.
         """
-        # CRITICAL: Detect if this is a content generation task
-        is_content_task = any(keyword in description.lower() for keyword in [
-            'write', 'create', 'generate', 'story', 'article', 'joke', 'poem', 'essay',
-            'translate', 'content', 'text', 'narrative'
-        ])
+        # CRITICAL: Use fast LLM to automatically detect task type
+        # (More accurate than keyword matching)
+        console.print(f"[dim]Classifying task type with {self.config.triage_model}...[/dim]")
+
+        classification_prompt = f"""Is this task about writing TEXT or writing CODE?
+
+Task: "{description}"
+
+If it's about writing stories, jokes, articles, poems, translations, essays, or other TEXT content, answer: TEXT
+If it's about writing algorithms, functions, APIs, data processing, calculations, or other CODE, answer: CODE
+
+Your answer (one word only):"""
+
+        classification = self.client.generate(
+            model=self.config.triage_model,
+            prompt=classification_prompt,
+            temperature=0.1,
+            model_key="triage"
+        ).strip().upper()
+
+        # Check if it's a text/content task
+        is_content_task = 'TEXT' in classification or any(word in description.lower() for word in ['joke', 'story', 'poem', 'haiku', 'essay', 'article'])
+        console.print(f"[dim]Task classified as: {'content' if is_content_task else 'code'} (LLM said: {classification[:20]})[/dim]")
 
         if is_content_task:
             # CONTENT GENERATION: Always use main() interface
@@ -2612,6 +2630,40 @@ Now generate the interface-defining tests for: {description}
 
 Output ONLY the Python test code (no markdown fences, no explanations):"""
 
+        # OPTIMIZATION: For content tasks, skip LLM and use cached template
+        # (The test is always identical - just checks main() exists)
+        if is_content_task:
+            console.print(f"\n[cyan]Using cached TDD template for content generation (no LLM call needed)...[/cyan]")
+
+            # Load template from file
+            import pathlib
+            template_path = pathlib.Path(__file__).parent / "templates" / "tdd_main_interface_test.py"
+
+            try:
+                test_code = template_path.read_text()
+                console.print(f"[dim green]Loaded cached template ({len(test_code)} chars) - saved LLM call![/dim green]")
+                return test_code
+            except FileNotFoundError:
+                # Fallback if template file missing
+                console.print(f"[yellow]Warning: Template not found, using inline fallback[/yellow]")
+                test_code = """import sys
+import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def test_main_interface():
+    \"\"\"Test that main() function exists and has correct interface\"\"\"
+    print("Testing main() interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK main() function exists")
+
+if __name__ == "__main__":
+    test_main_interface()
+"""
+                return test_code
+
+        # For non-content tasks, generate custom tests with LLM
         console.print(f"\n[cyan]Generating interface-defining tests first (TDD mode)...[/cyan]")
 
         try:
@@ -2628,9 +2680,8 @@ Output ONLY the Python test code (no markdown fences, no explanations):"""
             # Check if generation failed or returned empty
             if not test_code or len(test_code) < 50:
                 console.print(f"[yellow]Warning: Test generation returned {len(test_code)} chars, using fallback template[/yellow]")
-                # Use fallback based on detected type
-                if is_content_task:
-                    test_code = """import sys
+                # Use fallback template
+                test_code = """import sys
 import json
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -2644,23 +2695,6 @@ def test_main_interface():
 
 if __name__ == "__main__":
     test_main_interface()
-"""
-                else:
-                    # Fallback for non-content tasks
-                    test_code = f"""import sys
-import json
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-def test_interface():
-    \"\"\"Test that main() function exists\"\"\"
-    print("Testing interface...")
-    import main
-    assert hasattr(main, 'main'), "main() function must exist"
-    print("OK Interface test passed")
-
-if __name__ == "__main__":
-    test_interface()
 """
 
             console.print(f"[dim green]Generated interface tests ({len(test_code)} chars)[/dim green]")

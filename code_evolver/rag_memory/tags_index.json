@@ -34,7 +34,9 @@
     "invocation_general_1763236619473",
     "invocation_general_1763236977209",
     "invocation_general_1763237313021",
-    "invocation_general_1763237557005"
+    "invocation_general_1763237557005",
+    "invocation_general_1763241124754",
+    "invocation_general_1763241341265"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -116,7 +118,9 @@
     "invocation_general_1763236619473",
     "invocation_general_1763236977209",
     "invocation_general_1763237313021",
-    "invocation_general_1763237557005"
+    "invocation_general_1763237557005",
+    "invocation_general_1763241124754",
+    "invocation_general_1763241341265"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -198,7 +202,9 @@
     "invocation_general_1763236619473",
     "invocation_general_1763236977209",
     "invocation_general_1763237313021",
-    "invocation_general_1763237557005"
+    "invocation_general_1763237557005",
+    "invocation_general_1763241124754",
+    "invocation_general_1763241341265"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -257,7 +263,9 @@
     "invocation_general_1763236619473",
     "invocation_general_1763236977209",
     "invocation_general_1763237313021",
-    "invocation_general_1763237557005"
+    "invocation_general_1763237557005",
+    "invocation_general_1763241124754",
+    "invocation_general_1763241341265"
   ],
   "tool": [
     "tool_write_a_poem",
@@ -331,7 +339,10 @@
     "tool_http_content_fetcher",
     "tool_http_server",
     "tool_review_this_code_usr_bin_en",
-    "tool_install_python_package"
+    "tool_install_python_package",
+    "tool_model_selector",
+    "tool_write_a_poem_1763241023",
+    "tool_translate_the_poem_to_french"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
@@ -401,7 +412,8 @@
     "spec_write_a_short_story_about_ayrs",
     "spec_write_a_joke_1763230891",
     "spec_write_me_a_story_and_translate",
-    "spec_write_a_poem_1763237468"
+    "spec_write_a_poem_1763237468",
+    "spec_write_a_poem_1763241023"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -479,7 +491,11 @@
     "tool_review_this_code_usr_bin_en",
     "workflow_install_python_package",
     "tool_install_python_package",
-    "workflow_1763237229"
+    "workflow_1763237229",
+    "workflow_write_a_poem_1763241023",
+    "tool_write_a_poem_1763241023",
+    "tool_translate_the_poem_to_french",
+    "workflow_1763241398"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -594,7 +610,12 @@
     "spec_install_python_package",
     "spec_create_standalone_executable",
     "spec_support_windows_platform",
-    "spec_write_a_poem_1763237468"
+    "spec_write_a_poem_1763237468",
+    "spec_write_a_poem_1763241023",
+    "func_write_a_poem_1763241023",
+    "workflow_write_a_poem_1763241023",
+    "tool_write_a_poem_1763241023",
+    "spec_translate_the_poem_to_french"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -641,7 +662,10 @@
     "tool_accept_input_from_user",
     "func_save_input_to_database",
     "workflow_save_input_to_database",
-    "tool_save_input_to_database"
+    "tool_save_input_to_database",
+    "func_write_a_poem_1763241023",
+    "workflow_write_a_poem_1763241023",
+    "tool_write_a_poem_1763241023"
   ],
   "auto-generated": [
     "tool_write_a_poem",
@@ -679,7 +703,9 @@
     "tool_accept_input_from_user",
     "tool_save_input_to_database",
     "tool_review_this_code_usr_bin_en",
-    "tool_install_python_package"
+    "tool_install_python_package",
+    "tool_write_a_poem_1763241023",
+    "tool_translate_the_poem_to_french"
   ],
   "python": [
     "func_add_100_and_200",
@@ -796,7 +822,8 @@
     "workflow_accept_input_from_user",
     "workflow_save_input_to_database",
     "workflow_review_this_code_usr_bin_en",
-    "workflow_install_python_package"
+    "workflow_install_python_package",
+    "workflow_write_a_poem_1763241023"
   ],
   "fibonacci": [
     "func_write_me_code_to_do_a_fibonacc",
@@ -1078,7 +1105,9 @@
     "spec_install_python_package",
     "spec_create_standalone_executable",
     "spec_support_windows_platform",
-    "spec_write_a_poem_1763237468"
+    "spec_write_a_poem_1763237468",
+    "spec_write_a_poem_1763241023",
+    "spec_translate_the_poem_to_french"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1148,7 +1177,9 @@
     "spec_install_python_package",
     "spec_create_standalone_executable",
     "spec_support_windows_platform",
-    "spec_write_a_poem_1763237468"
+    "spec_write_a_poem_1763237468",
+    "spec_write_a_poem_1763241023",
+    "spec_translate_the_poem_to_french"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1218,7 +1249,9 @@
     "spec_install_python_package",
     "spec_create_standalone_executable",
     "spec_support_windows_platform",
-    "spec_write_a_poem_1763237468"
+    "spec_write_a_poem_1763237468",
+    "spec_write_a_poem_1763241023",
+    "spec_translate_the_poem_to_french"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1334,7 +1367,9 @@
     "invocation_content_generator_1763183386219"
   ],
   "poem": [
-    "func_write_me_a_poem_1763184221"
+    "func_write_me_a_poem_1763184221",
+    "tool_translate_the_poem_to_french",
+    "workflow_1763241398"
   ],
   "generative": [
     "func_write_me_a_poem_1763184485",
@@ -1358,7 +1393,9 @@
     "exec_invocation_flake8_linter_1763236191870",
     "exec_invocation_pylint_checker_1763236195314",
     "exec_invocation_flake8_linter_1763236747228",
-    "exec_invocation_pylint_checker_1763236751240"
+    "exec_invocation_pylint_checker_1763236751240",
+    "exec_invocation_flake8_linter_1763241163070",
+    "exec_invocation_pylint_checker_1763241164084"
   ],
   "tool_execution": [
     "exec_invocation_flake8_linter_1763185170161",
@@ -1378,7 +1415,9 @@
     "exec_invocation_flake8_linter_1763236191870",
     "exec_invocation_pylint_checker_1763236195314",
     "exec_invocation_flake8_linter_1763236747228",
-    "exec_invocation_pylint_checker_1763236751240"
+    "exec_invocation_pylint_checker_1763236751240",
+    "exec_invocation_flake8_linter_1763241163070",
+    "exec_invocation_pylint_checker_1763241164084"
   ],
   "flake8_linter": [
     "exec_invocation_flake8_linter_1763185170161",
@@ -1389,7 +1428,8 @@
     "exec_invocation_flake8_linter_1763233171061",
     "exec_invocation_flake8_linter_1763233536685",
     "exec_invocation_flake8_linter_1763236191870",
-    "exec_invocation_flake8_linter_1763236747228"
+    "exec_invocation_flake8_linter_1763236747228",
+    "exec_invocation_flake8_linter_1763241163070"
   ],
   "flake8": [
     "exec_invocation_flake8_linter_1763185170161",
@@ -1400,7 +1440,8 @@
     "exec_invocation_flake8_linter_1763233171061",
     "exec_invocation_flake8_linter_1763233536685",
     "exec_invocation_flake8_linter_1763236191870",
-    "exec_invocation_flake8_linter_1763236747228"
+    "exec_invocation_flake8_linter_1763236747228",
+    "exec_invocation_flake8_linter_1763241163070"
   ],
   "pylint_checker": [
     "exec_invocation_pylint_checker_1763185171351",
@@ -1411,7 +1452,8 @@
     "exec_invocation_pylint_checker_1763233172197",
     "exec_invocation_pylint_checker_1763233538913",
     "exec_invocation_pylint_checker_1763236195314",
-    "exec_invocation_pylint_checker_1763236751240"
+    "exec_invocation_pylint_checker_1763236751240",
+    "exec_invocation_pylint_checker_1763241164084"
   ],
   "pylint": [
     "exec_invocation_pylint_checker_1763185171351",
@@ -1422,7 +1464,8 @@
     "exec_invocation_pylint_checker_1763233172197",
     "exec_invocation_pylint_checker_1763233538913",
     "exec_invocation_pylint_checker_1763236195314",
-    "exec_invocation_pylint_checker_1763236751240"
+    "exec_invocation_pylint_checker_1763236751240",
+    "exec_invocation_pylint_checker_1763241164084"
   ],
   "ml": [
     "func_write_a_poem",
@@ -1450,7 +1493,8 @@
     "workflow_accept_input_from_user",
     "workflow_save_input_to_database",
     "workflow_review_this_code_usr_bin_en",
-    "workflow_install_python_package"
+    "workflow_install_python_package",
+    "workflow_write_a_poem_1763241023"
   ],
   "calculator": [
     "tool_calculat_1_1"
@@ -1502,7 +1546,8 @@
   "optimization": [
     "tool_performance_optimizer",
     "tool_seo_optimizer",
-    "tool_vulture_deadcode"
+    "tool_vulture_deadcode",
+    "tool_model_selector"
   ],
   "documentation": [
     "tool_doc_generator",
@@ -1573,7 +1618,8 @@
     "tool_outline_generator"
   ],
   "planning": [
-    "tool_outline_generator"
+    "tool_outline_generator",
+    "tool_model_selector"
   ],
   "organization": [
     "tool_outline_generator",
@@ -1721,7 +1767,8 @@
     "tool_nmt_translator",
     "tool_translation_quality_checker",
     "tool_code_translation_validator",
-    "tool_write_a_joke_and_translate_to_1763216276"
+    "tool_write_a_joke_and_translate_to_1763216276",
+    "tool_translate_the_poem_to_french"
   ],
   "nmt": [
     "tool_nmt_translator"
@@ -1787,7 +1834,8 @@
     "tool_save_to_disk",
     "workflow_1763216384",
     "workflow_1763217386",
-    "workflow_1763234819"
+    "workflow_1763234819",
+    "workflow_1763241398"
   ],
   "disk": [
     "tool_save_to_disk",
@@ -1840,13 +1888,15 @@
     "workflow_1763217386",
     "workflow_1763233548",
     "workflow_1763234819",
-    "workflow_1763237229"
+    "workflow_1763237229",
+    "workflow_1763241398"
   ],
   "a": [
     "workflow_1763216384",
     "workflow_1763217386",
     "workflow_1763233548",
-    "workflow_1763234819"
+    "workflow_1763234819",
+    "workflow_1763241398"
   ],
   "quick_feedback": [
     "invocation_quick_feedback_1763233098416"
@@ -1909,7 +1959,8 @@
     "tool_http_content_fetcher"
   ],
   "custom": [
-    "tool_http_server"
+    "tool_http_server",
+    "tool_model_selector"
   ],
   "server": [
     "tool_http_server"
@@ -1941,5 +1992,17 @@
   ],
   "for": [
     "workflow_1763237229"
+  ],
+  "selection": [
+    "tool_model_selector"
+  ],
+  "model-management": [
+    "tool_model_selector"
+  ],
+  "backend": [
+    "tool_model_selector"
+  ],
+  "French": [
+    "tool_translate_the_poem_to_french"
   ]
 }

@@ -1,0 +1,37 @@
+# Content Summarizer
+# Backend-agnostic tool for summarizing text content
+
+name: "Content Summarizer"
+type: "llm"
+description: "Summarizes content concisely while capturing all key points. Uses base model for quality."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+# LLM configuration
+llm:
+  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+
+  system_prompt: |
+    You are an expert at creating concise, accurate summaries that capture all essential information.
+
+    Priority: {priority}
+    Quality expectation: {quality_level}
+    Speed requirement: {speed_requirement}
+
+  prompt_template: |
+    Summarize the following content:
+
+    {content}
+
+    Capture all key points concisely. Maintain accuracy while being brief.
+
+# Tags for tool discovery
+tags:
+  - summarization
+  - analysis
+  - condensing
+  - key-points

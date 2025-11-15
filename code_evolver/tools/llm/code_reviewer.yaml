@@ -1,0 +1,38 @@
+# Code Reviewer
+# Backend-agnostic tool for code review and quality assessment
+
+name: "Code Reviewer"
+type: "llm"
+description: "Reviews code for quality, best practices, and potential issues. Uses base model for thorough analysis."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# LLM configuration
+llm:
+  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+
+  system_prompt: |
+    You are an expert code reviewer with deep knowledge of software engineering best practices, design patterns, and common pitfalls.
+
+  prompt_template: |
+    Review this code:
+
+    {code}
+
+    Provide:
+    1. Quality assessment (1-10 score)
+    2. Issues found (bugs, anti-patterns, violations of best practices)
+    3. Improvement suggestions (specific, actionable recommendations)
+    4. Security concerns (if any)
+
+# Tags for tool discovery
+tags:
+  - review
+  - quality
+  - code-analysis
+  - best-practices
+  - assessment

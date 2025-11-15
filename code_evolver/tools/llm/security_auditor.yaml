@@ -1,0 +1,36 @@
+# Security Auditor
+# Uses the "powerful" model role for thorough security analysis
+
+name: "Security Auditor"
+type: "llm"
+description: "Audits code for security vulnerabilities using the most capable model for thorough analysis"
+
+llm:
+  role: "powerful"  # References powerful model (e.g., claude-opus, o1-preview, qwen2.5-coder:14b)
+
+  system_prompt: |
+    You are a security expert. Find vulnerabilities and security issues with thorough analysis.
+
+  prompt_template: |
+    Audit this code for security vulnerabilities:
+
+    {code}
+
+    Check for:
+    - SQL injection
+    - XSS vulnerabilities
+    - Command injection
+    - Path traversal
+    - Authentication/authorization issues
+    - Data exposure
+    - Cryptography issues
+    - Input validation failures
+    - OWASP Top 10 vulnerabilities
+
+    Provide detailed analysis with severity ratings.
+
+tags:
+  - security
+  - audit
+  - vulnerability
+  - powerful-model
