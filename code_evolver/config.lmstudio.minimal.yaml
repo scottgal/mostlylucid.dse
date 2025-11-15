@@ -1,0 +1,179 @@
+# ============================================================================
+# Code Evolver - LM Studio Configuration (Minimal)
+# ============================================================================
+#
+# SETUP:
+# 1. Download and install LM Studio: https://lmstudio.ai/
+# 2. Load models in LM Studio (qwen2.5-coder recommended)
+# 3. Start LM Studio server (default: http://localhost:1234)
+# 4. python chat_cli.py --config config.lmstudio.minimal.yaml
+#
+# This config just selects backend and maps model roles.
+# All tool definitions come from tools/ directory.
+#
+# RECOMMENDED MODELS:
+# - Fast: phi-3-mini (3.8B) or qwen2.5-coder:3b
+# - Base: qwen2.5-coder:7b or codellama:7b
+# - Powerful: qwen2.5-coder:14b or deepseek-coder:6.7b
+#
+# ============================================================================
+
+# LLM Backend Selection & Role Mapping
+llm:
+  # Select backend
+  backend: "lmstudio"
+
+  # Map model roles to actual LM Studio models
+  # NOTE: Model names should match what you've loaded in LM Studio
+  model_roles:
+    fast: "phi-3-mini"                     # Fast & free for simple tasks (3.8B params, great for triage)
+    base: "qwen2.5-coder-7b"               # Balanced for most tasks - DEFAULT (good code generation)
+    powerful: "qwen2.5-coder-14b"          # Most capable for complex tasks (14B params)
+    embedding: "nomic-embed-text"          # Local embeddings (use Ollama fallback)
+
+  # LM Studio API settings
+  api_settings:
+    endpoint: "http://localhost:1234/v1"   # LM Studio default endpoint
+    timeout: 180                           # Longer timeout for local inference
+    max_tokens: 4096
+
+# Ollama Configuration (for embeddings fallback)
+ollama:
+  base_url: "http://localhost:11434"
+
+  # Embedding model (local/free)
+  embedding:
+    model: "nomic-embed-text"
+    vector_size: 768
+
+# ============================================================================
+# System Configuration (shared across all backends)
+# ============================================================================
+
+# Execution settings
+execution:
+  default_timeout_ms: 5000
+  max_memory_mb: 256
+  max_retries: 3
+  sandbox:
+    allow_network: false
+    allow_file_write: false
+    temp_dir: "./temp"
+
+# Auto-evolution
+auto_evolution:
+  enabled: true
+  performance_threshold: 0.15
+  min_runs_before_evolution: 3
+  check_interval_minutes: 60
+  max_versions_per_node: 10
+  keep_best_n_versions: 3
+  mutation_temperature: 0.7
+
+# Quality evaluation
+quality_evaluation:
+  enabled: true
+  evaluate_steps:
+    strategy: true
+    code: true
+    tests: true
+    final: true
+  thresholds:
+    strategy_min: 0.70
+    code_quality_min: 0.75
+    test_coverage_min: 0.80
+    final_min: 0.80
+    auto_adjust: true
+    adjustment_window: 100
+  max_iterations: 3
+  improvement_threshold: 0.05
+  feedback:
+    include_suggestions: true
+    include_examples: true
+    store_in_rag: true
+    learn_from_success: true
+
+# Storage paths
+registry:
+  path: "./registry"
+  backup_enabled: true
+  backup_interval_hours: 24
+  max_backup_count: 7
+
+nodes:
+  path: "./nodes"
+  artifacts_path: "./artifacts"
+
+rag_memory:
+  path: "./rag_memory"
+  use_qdrant: false
+  max_embedding_content_length: 1000
+
+# Logging
+logging:
+  level: "INFO"
+  file: "code_evolver.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  console:
+    enabled: true
+    use_colors: true
+
+# Chat interface
+chat:
+  prompt: "CodeEvolver> "
+  history_file: ".code_evolver_history"
+  max_history: 1000
+  show_thinking: false
+  show_metrics: true
+  show_workflow: true
+  auto_save_context: true
+  workflow_mode:
+    enabled: true
+    detect_keywords: ["and", "then", "translate", "convert"]
+    min_steps: 2
+    max_steps: 10
+  default_workflow_context:
+    priority: "medium"
+    quality_level: "production"
+    speed_requirement: "balanced"
+    max_iterations: 3
+    allow_escalation: true
+
+# Testing
+testing:
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6
+  test_driven_development: true
+  initial_optimization_iterations: 3
+  optimization_score_threshold: 0.1
+
+# Optimization (disabled for local - it's free!)
+optimization:
+  enabled: false
+
+optimization_pressure:
+  high:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.60
+    max_latency_ms: 1000
+  medium:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.75
+    max_latency_ms: 10000
+  low:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.80
+    max_latency_ms: null
+
+build:
+  app_name: "CodeEvolver"
+  version: "0.1.0"
+  icon: null
