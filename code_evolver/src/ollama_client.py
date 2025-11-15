@@ -173,6 +173,8 @@ class OllamaClient:
         # Model-specific timeouts (overrides tier)
         MODEL_TIMEOUTS = {
             "tinyllama": 30,
+            "gemma2:2b": 45,
+            "gemma3:4b": 60,
             "llama3": 120,
             "qwen2.5-coder:14b": 240,
             "codellama": 180,

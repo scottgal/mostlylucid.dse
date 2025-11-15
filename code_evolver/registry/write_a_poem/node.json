@@ -1,0 +1,45 @@
+{
+  "node_id": "write_a_poem",
+  "title": "Python code that generates a poem based on user-provided input (title, theme, and optional constrain",
+  "version": "1.0.0",
+  "type": "processor",
+  "language": "python",
+  "tags": [
+    "python",
+    "poem generation",
+    "natural language processing",
+    "machine learning"
+  ],
+  "goals": {
+    "primary": [
+      "correctness",
+      "determinism"
+    ],
+    "secondary": [
+      "latency<200ms",
+      "memory<64MB"
+    ]
+  },
+  "inputs": {},
+  "outputs": {},
+  "constraints": {
+    "timeout_ms": 5000,
+    "max_memory_mb": 256
+  },
+  "lineage": {
+    "parent": null,
+    "derived_from": [],
+    "notes": "Initial version"
+  },
+  "fit": {
+    "domain": "general",
+    "scale": "small",
+    "risk": "low"
+  },
+  "model_prompts": {
+    "generator": "codellama",
+    "evaluator": "llama3",
+    "triage": "tiny"
+  },
+  "created_at": "2025-11-15T05:58:19.085850Z"
+}

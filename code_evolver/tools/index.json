@@ -3,21 +3,28 @@
     "tool_id": "general",
     "name": "General Code Generator",
     "tool_type": "llm",
-    "description": "General purpose code generation for any programming task. Used as fallback when no specialized tool matches.",
+    "description": "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms.",
     "tags": [
       "general",
       "fallback",
       "code-generation",
-      "any-task"
+      "any-task",
+      "complex"
     ],
     "parameters": {},
     "metadata": {
       "from_config": true,
       "llm_model": "qwen2.5-coder:14b",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool() or try to orchestrate workflows.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality\n\nSPECIAL NOTE FOR CONTENT GENERATION:\nIf the task involves generating text content (stories, articles, jokes, etc.):\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it\n- Example: content = \"Once upon a time...\" then print(json.dumps({{\"result\": content}}))",
+      "cost_tier": "high",
+      "speed_tier": "medium",
+      "quality_tier": "excellent",
+      "max_output_length": "very-long"
     },
-    "created_at": "2025-11-14T22:34:36.564782Z",
-    "usage_count": 30
+    "created_at": "2025-11-15T06:14:04.759561Z",
+    "usage_count": 0
   },
   "code_reviewer": {
     "tool_id": "code_reviewer",
@@ -32,9 +39,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": "You are an expert code reviewer with deep knowledge of software engineering best practices, design patterns, and common pitfalls. Your role is to review code for quality, bugs, security issues, and maintainability.",
+      "prompt_template": "Review the following code:\n\n{code}\n\nProvide:\n1. Overall quality assessment (1-10)\n2. Specific issues found (bugs, security, performance)\n3. Best practice violations\n4. Improvement suggestions\n5. Positive aspects of the code",
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T22:34:36.564843Z",
+    "created_at": "2025-11-15T06:14:04.759575Z",
     "usage_count": 0
   },
   "security_auditor": {
@@ -50,9 +63,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T22:34:36.564908Z",
+    "created_at": "2025-11-15T06:14:04.759578Z",
     "usage_count": 0
   },
   "performance_optimizer": {
@@ -68,9 +87,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "codellama",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T22:34:36.564963Z",
+    "created_at": "2025-11-15T06:14:04.759581Z",
     "usage_count": 0
   },
   "doc_generator": {
@@ -86,9 +111,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T22:34:36.565034Z",
+    "created_at": "2025-11-15T06:14:04.759584Z",
     "usage_count": 0
   },
   "technical_writer": {
@@ -108,10 +139,16 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": "You are an expert technical writer specializing in software development content. You create clear, engaging, and accurate articles that explain complex programming concepts to developers. Your writing is well-structured, includes practical examples, and follows best practices for technical documentation.\n\nWorkflow pressure: {priority}\nQuality target: {quality_level}\nSpeed mode: {speed_requirement}",
+      "prompt_template": "Write a technical article on the following topic:\n\n{topic}\n\nWorkflow Context:\n- Priority: {priority} (high=fast draft, low=thorough research)\n- Quality level: {quality_level} (draft/good/publication/perfect)\n- Speed: {speed_requirement} (fast=outline+key points, thorough=full research)\n- Target audience: {audience}\n- Tone: Professional but accessible\n- Length target: {length}\n\nAdjust depth, examples, and polish based on quality_level:\n- draft: Key points, basic examples\n- good: Solid content, working examples\n- publication: Polished, multiple examples, thorough\n- perfect: Comprehensive, exceptional examples, fully researched",
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.345819Z",
-    "usage_count": 12
+    "created_at": "2025-11-15T06:14:04.759587Z",
+    "usage_count": 0
   },
   "article_analyzer": {
     "tool_id": "article_analyzer",
@@ -130,9 +167,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.345882Z",
+    "created_at": "2025-11-15T06:14:04.759590Z",
     "usage_count": 0
   },
   "seo_optimizer": {
@@ -151,9 +194,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.345959Z",
+    "created_at": "2025-11-15T06:14:04.759593Z",
     "usage_count": 0
   },
   "code_explainer": {
@@ -172,10 +221,16 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.346020Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T06:14:04.759597Z",
+    "usage_count": 0
   },
   "outline_generator": {
     "tool_id": "outline_generator",
@@ -193,10 +248,16 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.346071Z",
-    "usage_count": 2
+    "created_at": "2025-11-15T06:14:04.759600Z",
+    "usage_count": 0
   },
   "proofreader": {
     "tool_id": "proofreader",
@@ -214,9 +275,15 @@
     "metadata": {
       "from_config": true,
       "llm_model": "llama3",
-      "llm_endpoint": null
+      "llm_endpoint": null,
+      "system_prompt": "You are an expert proofreader specializing in technical content. You have a keen eye for grammar, style, consistency, and technical accuracy. You provide constructive feedback while preserving the author's voice and intent.",
+      "prompt_template": "Proofread the following technical content:\n\n{content}\n\nCheck for:\n1. Grammar and spelling errors\n2. Technical accuracy\n3. Consistency in terminology\n4. Clarity and readability\n5. Code example correctness\n\nProvide corrected version and list of changes made.",
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-14T23:09:31.346128Z",
+    "created_at": "2025-11-15T06:14:04.759604Z",
     "usage_count": 0
   },
   "write_a_technical_story_and_tr": {
@@ -315,7 +382,7 @@
       ],
       "install_command": "pip install pylint"
     },
-    "created_at": "2025-11-15T00:52:52.640733Z",
+    "created_at": "2025-11-15T06:14:04.759609Z",
     "usage_count": 0
   },
   "mypy_type_checker": {
@@ -340,7 +407,7 @@
       ],
       "install_command": "pip install mypy"
     },
-    "created_at": "2025-11-15T00:52:52.640756Z",
+    "created_at": "2025-11-15T06:14:04.759613Z",
     "usage_count": 0
   },
   "flake8_linter": {
@@ -366,7 +433,7 @@
       ],
       "install_command": "pip install flake8"
     },
-    "created_at": "2025-11-15T00:52:52.640771Z",
+    "created_at": "2025-11-15T06:14:04.759617Z",
     "usage_count": 0
   },
   "black_formatter": {
@@ -391,7 +458,7 @@
       ],
       "install_command": "pip install black"
     },
-    "created_at": "2025-11-15T00:52:52.640785Z",
+    "created_at": "2025-11-15T06:14:04.759621Z",
     "usage_count": 0
   },
   "bandit_security": {
@@ -415,7 +482,7 @@
       ],
       "install_command": "pip install bandit"
     },
-    "created_at": "2025-11-15T00:52:52.640798Z",
+    "created_at": "2025-11-15T06:14:04.759624Z",
     "usage_count": 0
   },
   "pytest_runner": {
@@ -440,7 +507,7 @@
       ],
       "install_command": "pip install pytest"
     },
-    "created_at": "2025-11-15T00:52:52.640810Z",
+    "created_at": "2025-11-15T06:14:04.759627Z",
     "usage_count": 0
   },
   "pytest_coverage": {
@@ -466,7 +533,7 @@
       ],
       "install_command": "pip install pytest pytest-cov"
     },
-    "created_at": "2025-11-15T00:52:52.640822Z",
+    "created_at": "2025-11-15T06:14:04.759631Z",
     "usage_count": 0
   },
   "radon_complexity": {
@@ -492,7 +559,7 @@
       ],
       "install_command": "pip install radon"
     },
-    "created_at": "2025-11-15T00:52:52.640834Z",
+    "created_at": "2025-11-15T06:14:04.759635Z",
     "usage_count": 0
   },
   "vulture_deadcode": {
@@ -515,7 +582,7 @@
       ],
       "install_command": "pip install vulture"
     },
-    "created_at": "2025-11-15T00:52:52.640847Z",
+    "created_at": "2025-11-15T06:14:04.759638Z",
     "usage_count": 0
   },
   "pydocstyle_checker": {
@@ -538,7 +605,7 @@
       ],
       "install_command": "pip install pydocstyle"
     },
-    "created_at": "2025-11-15T00:52:52.640858Z",
+    "created_at": "2025-11-15T06:14:04.759641Z",
     "usage_count": 0
   },
   "isort_import_checker": {
@@ -563,7 +630,7 @@
       ],
       "install_command": "pip install isort"
     },
-    "created_at": "2025-11-15T00:52:52.640869Z",
+    "created_at": "2025-11-15T06:14:04.759645Z",
     "usage_count": 0
   },
   "quick_feedback": {
@@ -592,7 +659,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T01:16:48.323677Z",
+    "created_at": "2025-11-15T06:14:04.759566Z",
     "usage_count": 0
   },
   "summarizer": {
@@ -619,8 +686,8 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T01:16:48.323700Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T06:14:04.759571Z",
+    "usage_count": 0
   },
   "nmt_translator": {
     "tool_id": "nmt_translator",
@@ -647,7 +714,7 @@
       "max_output_length": "long",
       "code_template": "# Example: How to use the NMT Translation Service\nimport requests\nimport json\n\ndef translate_text(text, source_lang=\"en\", target_lang=\"es\"):\n    \"\"\"\n    Translate text using the NMT service.\n\n    Args:\n        text: Text to translate\n        source_lang: Source language code (e.g., 'en', 'es', 'fr')\n        target_lang: Target language code\n\n    Returns:\n        Translated text\n    \"\"\"\n    url = \"http://localhost:8000/translate\"\n\n    payload = {\n        \"text\": text,\n        \"source_lang\": source_lang,\n        \"target_lang\": target_lang\n    }\n\n    response = requests.post(url, json=payload)\n    response.raise_for_status()\n\n    result = response.json()\n    return result.get(\"translated_text\", \"\")\n\n# Usage example:\n# translated = translate_text(\"Hello, world!\", source_lang=\"en\", target_lang=\"es\")\n# print(translated)  # Output: \"Hola, mundo!\"\n"
     },
-    "created_at": "2025-11-15T01:16:48.339394Z",
+    "created_at": "2025-11-15T06:14:04.777061Z",
     "usage_count": 0
   },
   "translation_quality_checker": {
@@ -674,7 +741,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T01:16:48.339435Z",
+    "created_at": "2025-11-15T06:14:04.777084Z",
     "usage_count": 0
   },
   "add_100_and_200": {
@@ -728,8 +795,8 @@
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
-    "created_at": "2025-11-15T01:43:41.502765Z",
-    "usage_count": 3
+    "created_at": "2025-11-15T06:14:04.777092Z",
+    "usage_count": 0
   },
   "write_me_code_to_do_a_fibonacc": {
     "tool_id": "write_me_code_to_do_a_fibonacc",
@@ -780,7 +847,7 @@
       "quality_tier": "good",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T01:58:07.166518Z",
+    "created_at": "2025-11-15T06:14:04.777097Z",
     "usage_count": 0
   },
   "add_10_and_20_1763173231": {
@@ -987,28 +1054,28 @@
     "tool_id": "fast_code_generator",
     "name": "Fast Code Generator",
     "tool_type": "llm",
-    "description": "Fast code generation for simple tasks using tinyllama. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms.",
+    "description": "Fast code generation for simple tasks using gemma3:4b. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms.",
     "tags": [
       "fast",
       "simple",
       "basic",
       "code-generation",
-      "tinyllama"
+      "gemma3"
     ],
     "parameters": {},
     "metadata": {
       "from_config": true,
-      "llm_model": "tinyllama",
+      "llm_model": "gemma3:4b",
       "llm_endpoint": null,
-      "system_prompt": "You are a fast code generator for SIMPLE tasks only. Your context window is small (2048 tokens), so keep code concise. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
-      "prompt_template": "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and concise (you have limited context)\n- Focus on correctness over sophistication\n- Basic error handling only\n- Must work for the specific task\n\nGenerate only the essential code needed.",
+      "system_prompt": "You are a fast code generator for SIMPLE tasks. You have a good context window. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and focused\n- Focus on correctness and clarity\n- Proper error handling\n- Must work for the specific task\n- Follow Python best practices\n\nGenerate clean, well-structured code.",
       "cost_tier": "free",
-      "speed_tier": "very-fast",
-      "quality_tier": "good",
-      "max_output_length": "short"
+      "speed_tier": "fast",
+      "quality_tier": "very-good",
+      "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T03:41:09.167211Z",
-    "usage_count": 2
+    "created_at": "2025-11-15T06:14:04.759548Z",
+    "usage_count": 1
   },
   "save_to_disk": {
     "tool_id": "save_to_disk",
@@ -1033,7 +1100,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T03:41:09.167243Z",
+    "created_at": "2025-11-15T06:14:04.777102Z",
     "usage_count": 0
   },
   "load_from_disk": {
@@ -1058,7 +1125,444 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T03:41:09.167262Z",
+    "created_at": "2025-11-15T06:14:04.777107Z",
+    "usage_count": 0
+  },
+  "calculate_15_plus_25": {
+    "tool_id": "calculate_15_plus_25",
+    "name": "calculate 15 plus 25",
+    "tool_type": "workflow",
+    "description": "calculate 15 plus 25",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_15_plus_25",
+      "quality_score": 1.1,
+      "latency_ms": 788,
+      "memory_mb_peak": 1.64,
+      "created_at": "2025-11-15T03:59:07.086267+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:59:07.086285Z",
+    "usage_count": 0
+  },
+  "write_code_to_do_one_plus_rand": {
+    "tool_id": "write_code_to_do_one_plus_rand",
+    "name": "write code to do one plus random number under 50",
+    "tool_type": "workflow",
+    "description": "write code to do one plus random number under 50",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_code_to_do_one_plus_rand",
+      "quality_score": 1.1,
+      "latency_ms": 685,
+      "memory_mb_peak": 1.62,
+      "created_at": "2025-11-15T04:08:37.271268+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T04:08:37.271301Z",
+    "usage_count": 0
+  },
+  "write_a_technical_article_on_n": {
+    "tool_id": "write_a_technical_article_on_n",
+    "name": "write a technical article on nodules",
+    "tool_type": "workflow",
+    "description": "write a technical article on nodules",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_technical_article_on_n",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 33,
+      "memory_mb_peak": 1.63,
+      "created_at": "2025-11-15T04:16:26.611391+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T04:16:26.611410Z",
+    "usage_count": 0
+  },
+  "pip_install": {
+    "tool_id": "pip_install",
+    "name": "Install Python Package",
+    "tool_type": "executable",
+    "description": "Installs Python packages using pip. Use when code requires external dependencies like requests, numpy, pandas, etc. Can install single packages or multiple packages at once. Supports version specifications (e.g., 'requests>=2.28.0'). Essential for code that imports third-party libraries.",
+    "tags": [
+      "dependencies",
+      "pip",
+      "install",
+      "packages",
+      "requirements",
+      "setup"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "python",
+      "args": [
+        "pip_install_tool.py"
+      ],
+      "install_command": null
+    },
+    "created_at": "2025-11-15T06:14:04.777112Z",
+    "usage_count": 0
+  },
+  "fast_content_writer": {
+    "tool_id": "fast_content_writer",
+    "name": "Fast Content Writer",
+    "tool_type": "llm",
+    "description": "Fast content generation using gemma3:4b. Best for stories, technical articles, essays, documentation, creative writing. Good balance of speed and quality for text generation tasks.",
+    "tags": [
+      "fast",
+      "content",
+      "writing",
+      "story",
+      "article",
+      "gemma3"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "gemma3:4b",
+      "llm_endpoint": null,
+      "system_prompt": "You are a skilled content writer using gemma3:4b. Generate engaging, well-structured content for stories, technical articles, essays, and documentation.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Generate content for this task:\n\n{task}\n\nRequirements:\n- Generate Python code that creates the requested content\n- Use print() or json.dumps() to output the content\n- Ensure the content is well-structured and engaging\n- Follow proper formatting and style\n- Include appropriate error handling\n\nGenerate clean, working code that produces the content.",
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "very-good",
+      "max_output_length": "long"
+    },
+    "created_at": "2025-11-15T04:29:01.140398Z",
+    "usage_count": 5
+  },
+  "write_a_joke": {
+    "tool_id": "write_a_joke",
+    "name": "Generates a short, humorous joke based on predefined topics and a random number.",
+    "tool_type": "workflow",
+    "description": "write a joke",
+    "tags": [
+      "joke generation",
+      "randomization",
+      "topic selection",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_joke",
+      "quality_score": 1.1,
+      "latency_ms": 1629,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T04:33:08.225914+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T04:33:08.225941Z",
+    "usage_count": 0
+  },
+  "wtie_mea_joke_about_the_welsh": {
+    "tool_id": "wtie_mea_joke_about_the_welsh",
+    "name": "wtie mea joke about the welsh and make up a random number.",
+    "tool_type": "workflow",
+    "description": "wtie mea joke about the welsh and make up a random number.",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "wtie_mea_joke_about_the_welsh",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 37,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T04:37:52.223348+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T04:37:52.223369Z",
+    "usage_count": 0
+  },
+  "write_a_joke_1763181926": {
+    "tool_id": "write_a_joke_1763181926",
+    "name": "Generates a joke based on user input (topic and optional setup)",
+    "tool_type": "workflow",
+    "description": "write a joke",
+    "tags": [
+      "joke",
+      "generation",
+      "nlp",
+      "content_creation",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_joke_1763181926",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 37,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T04:47:11.727841+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Generates a joke based on user input (topic and optional setup)"
+    },
+    "created_at": "2025-11-15T04:47:11.727855Z",
+    "usage_count": 0
+  },
+  "write_me_a_joke": {
+    "tool_id": "write_me_a_joke",
+    "name": "Generates a joke based on user input topic and tone.",
+    "tool_type": "workflow",
+    "description": "write me a joke",
+    "tags": [
+      "joke_generation",
+      "natural_language_processing",
+      "machine_learning",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_a_joke",
+      "quality_score": 1.1,
+      "latency_ms": 675,
+      "memory_mb_peak": 1.87,
+      "created_at": "2025-11-15T04:51:25.425866+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Generates a joke based on user input topic and tone."
+    },
+    "created_at": "2025-11-15T04:51:25.425885Z",
+    "usage_count": 0
+  },
+  "write_me_a_joke_1763182563": {
+    "tool_id": "write_me_a_joke_1763182563",
+    "name": "Generates a joke based on user input.",
+    "tool_type": "workflow",
+    "description": "write me a joke",
+    "tags": [
+      "joke",
+      "generation",
+      "nlp",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_a_joke_1763182563",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 33,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T04:56:34.138293+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Generates a joke based on user input."
+    },
+    "created_at": "2025-11-15T04:56:34.138310Z",
+    "usage_count": 0
+  },
+  "content_generator": {
+    "tool_id": "content_generator",
+    "name": "Content Generator",
+    "tool_type": "llm",
+    "description": "General purpose content generation tool. Can generate jokes, stories, articles, essays, documentation, and creative writing. Use this from code via call_tool() when you need LLM-generated content.",
+    "tags": [
+      "content",
+      "generation",
+      "creative",
+      "writing",
+      "llm-tool"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null,
+      "system_prompt": "You are a creative content generator. Generate engaging, high-quality content based on the user's request. Be creative, natural, and appropriate to the content type.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "{prompt}\n\nGenerate creative, engaging content that matches this request. Return ONLY the content itself, no explanations or meta-commentary.",
+      "cost_tier": "medium",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "long"
+    },
+    "created_at": "2025-11-15T06:14:04.759556Z",
+    "usage_count": 0
+  },
+  "add_5_and_3_1763184838": {
+    "tool_id": "add_5_and_3_1763184838",
+    "name": "add 5 and 3",
+    "tool_type": "workflow",
+    "description": "add 5 and 3",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_5_and_3_1763184838",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 33,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-15T05:34:25.206282+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "add 5 and 3"
+    },
+    "created_at": "2025-11-15T05:34:25.206297Z",
+    "usage_count": 0
+  },
+  "multiply_6_by_7": {
+    "tool_id": "multiply_6_by_7",
+    "name": "Multiply 6 by 7",
+    "tool_type": "workflow",
+    "description": "multiply 6 by 7",
+    "tags": [
+      "arithmetic",
+      "multiplication",
+      "basic",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "multiply_6_by_7",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 32,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T05:39:37.051514+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Multiply 6 by 7"
+    },
+    "created_at": "2025-11-15T05:39:37.051531Z",
+    "usage_count": 0
+  },
+  "write_a_poem": {
+    "tool_id": "write_a_poem",
+    "name": "Python code for generating a poem based on user input using a hybrid approach combining natural language processing (NLP) and machine learning (ML) techniques.",
+    "tool_type": "workflow",
+    "description": "write a poem",
+    "tags": [
+      "python",
+      "nlp",
+      "ml",
+      "poetry",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_poem",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 34,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T05:43:05.313568+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code for generating a poem based on user input using a hybrid approach combining natural language processing (NLP) and machine learning (ML) techniques."
+    },
+    "created_at": "2025-11-15T05:43:05.313587Z",
+    "usage_count": 0
+  },
+  "add_7_and_9": {
+    "tool_id": "add_7_and_9",
+    "name": "Calculates the sum of two integers.",
+    "tool_type": "workflow",
+    "description": "add 7 and 9",
+    "tags": [
+      "addition",
+      "arithmetic",
+      "integer",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_7_and_9",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 30,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T05:48:46.152613+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculates the sum of two integers."
+    },
+    "created_at": "2025-11-15T05:48:46.152626Z",
+    "usage_count": 0
+  },
+  "calculat_1_1": {
+    "tool_id": "calculat_1_1",
+    "name": "Calculates 1+1",
+    "tool_type": "workflow",
+    "description": "CALCULAT 1+1",
+    "tags": [
+      "arithmetic",
+      "addition",
+      "calculator",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculat_1_1",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 41,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T06:12:04.938106+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculates 1+1"
+    },
+    "created_at": "2025-11-15T06:12:04.938129Z",
+    "usage_count": 0
+  },
+  "calculate_5_plus_5": {
+    "tool_id": "calculate_5_plus_5",
+    "name": "Calculates 5 + 5 and prints the result as JSON.",
+    "tool_type": "workflow",
+    "description": "calculate 5 plus 5",
+    "tags": [
+      "arithmetic",
+      "addition",
+      "json",
+      "simple",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_5_plus_5",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 26,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T06:14:46.234003+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculates 5 + 5 and prints the result as JSON."
+    },
+    "created_at": "2025-11-15T06:14:46.234019Z",
     "usage_count": 0
   }
 }

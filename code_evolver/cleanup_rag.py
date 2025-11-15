@@ -129,7 +129,24 @@ def main():
     
     # Run cleanup
     orphaned_count = cleanup_orphaned_artifacts(dry_run=not args.delete)
-    
+
+    # After cleanup, re-index tools from config so they can be found
+    if args.delete and orphaned_count > 0:
+        print("\nRe-indexing tools from config...")
+        config = ConfigManager()
+        client = OllamaClient(config_manager=config)
+        rag = create_rag_memory(config_manager=config, ollama_client=client)
+
+        # Tools are automatically indexed when ToolsManager is created
+        from src.tools_manager import ToolsManager
+        tools_manager = ToolsManager(
+            config_manager=config,
+            ollama_client=client,
+            rag_memory=rag
+        )
+
+        print(f"OK Re-indexed {len(tools_manager.tools)} tools in RAG for semantic search")
+
     return 0 if orphaned_count == 0 else 1
 
 if __name__ == "__main__":

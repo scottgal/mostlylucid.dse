@@ -8,7 +8,6 @@
     "invocation_general_1763167054824",
     "invocation_general_1763167496894",
     "invocation_general_1763168007565",
-    "tool_general",
     "invocation_general_1763169441714",
     "invocation_general_1763171085265",
     "invocation_general_1763171980061",
@@ -22,7 +21,12 @@
     "invocation_general_1763176803567",
     "invocation_general_1763177244974",
     "invocation_general_1763177794797",
-    "invocation_general_1763178050511"
+    "invocation_general_1763178050511",
+    "invocation_general_1763180401337",
+    "invocation_general_1763181097018",
+    "invocation_general_1763181378428",
+    "invocation_general_1763182250701",
+    "tool_general"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -56,7 +60,40 @@
     "invocation_general_1763177244974",
     "invocation_general_1763177794797",
     "invocation_general_1763178050511",
-    "invocation_fast_code_generator_1763178201111"
+    "invocation_fast_code_generator_1763178201111",
+    "invocation_fast_code_generator_1763179084897",
+    "invocation_fast_code_generator_1763179179651",
+    "invocation_fast_code_generator_1763179325552",
+    "invocation_fast_code_generator_1763179688643",
+    "invocation_fast_code_generator_1763179885771",
+    "invocation_fast_code_generator_1763180128555",
+    "invocation_general_1763180401337",
+    "invocation_technical_writer_1763180675438",
+    "invocation_fast_code_generator_1763180705449",
+    "invocation_fast_code_generator_1763180959281",
+    "invocation_general_1763181097018",
+    "invocation_general_1763181378428",
+    "invocation_fast_content_writer_1763181525847",
+    "invocation_fast_content_writer_1763181935773",
+    "invocation_general_1763182250701",
+    "invocation_fast_content_writer_1763182570058",
+    "invocation_fast_content_writer_1763182755017",
+    "invocation_fast_content_writer_1763183051513",
+    "invocation_content_generator_1763183386219",
+    "invocation_fast_code_generator_1763184037548",
+    "invocation_fast_code_generator_1763184841038",
+    "invocation_fast_code_generator_1763184913380",
+    "invocation_fast_code_generator_1763185152694",
+    "invocation_fast_code_generator_1763185674328",
+    "invocation_fast_code_generator_1763186078026",
+    "invocation_fast_code_generator_1763186407141",
+    "invocation_fast_code_generator_1763186508893",
+    "invocation_fast_code_generator_1763186578820",
+    "invocation_fast_code_generator_1763186643155",
+    "invocation_fast_code_generator_1763186712829",
+    "invocation_fast_code_generator_1763186832406",
+    "invocation_fast_code_generator_1763187060168",
+    "invocation_fast_code_generator_1763187263755"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -90,7 +127,40 @@
     "invocation_general_1763177244974",
     "invocation_general_1763177794797",
     "invocation_general_1763178050511",
-    "invocation_fast_code_generator_1763178201111"
+    "invocation_fast_code_generator_1763178201111",
+    "invocation_fast_code_generator_1763179084897",
+    "invocation_fast_code_generator_1763179179651",
+    "invocation_fast_code_generator_1763179325552",
+    "invocation_fast_code_generator_1763179688643",
+    "invocation_fast_code_generator_1763179885771",
+    "invocation_fast_code_generator_1763180128555",
+    "invocation_general_1763180401337",
+    "invocation_technical_writer_1763180675438",
+    "invocation_fast_code_generator_1763180705449",
+    "invocation_fast_code_generator_1763180959281",
+    "invocation_general_1763181097018",
+    "invocation_general_1763181378428",
+    "invocation_fast_content_writer_1763181525847",
+    "invocation_fast_content_writer_1763181935773",
+    "invocation_general_1763182250701",
+    "invocation_fast_content_writer_1763182570058",
+    "invocation_fast_content_writer_1763182755017",
+    "invocation_fast_content_writer_1763183051513",
+    "invocation_content_generator_1763183386219",
+    "invocation_fast_code_generator_1763184037548",
+    "invocation_fast_code_generator_1763184841038",
+    "invocation_fast_code_generator_1763184913380",
+    "invocation_fast_code_generator_1763185152694",
+    "invocation_fast_code_generator_1763185674328",
+    "invocation_fast_code_generator_1763186078026",
+    "invocation_fast_code_generator_1763186407141",
+    "invocation_fast_code_generator_1763186508893",
+    "invocation_fast_code_generator_1763186578820",
+    "invocation_fast_code_generator_1763186643155",
+    "invocation_fast_code_generator_1763186712829",
+    "invocation_fast_code_generator_1763186832406",
+    "invocation_fast_code_generator_1763187060168",
+    "invocation_fast_code_generator_1763187263755"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -98,7 +168,8 @@
     "invocation_technical_writer_1763165689876",
     "invocation_technical_writer_1763166275826",
     "invocation_technical_writer_1763166537689",
-    "invocation_technical_writer_1763166802044"
+    "invocation_technical_writer_1763166802044",
+    "invocation_technical_writer_1763180675438"
   ],
   "llama3": [
     "invocation_technical_writer_1763164745044",
@@ -107,7 +178,9 @@
     "invocation_technical_writer_1763165689876",
     "invocation_technical_writer_1763166275826",
     "invocation_technical_writer_1763166537689",
-    "invocation_technical_writer_1763166802044"
+    "invocation_technical_writer_1763166802044",
+    "invocation_technical_writer_1763180675438",
+    "invocation_content_generator_1763183386219"
   ],
   "code_explainer": [
     "invocation_code_explainer_1763165010274"
@@ -134,9 +207,17 @@
     "invocation_general_1763176803567",
     "invocation_general_1763177244974",
     "invocation_general_1763177794797",
-    "invocation_general_1763178050511"
+    "invocation_general_1763178050511",
+    "invocation_general_1763180401337",
+    "invocation_general_1763181097018",
+    "invocation_general_1763181378428",
+    "invocation_general_1763182250701"
   ],
   "tool": [
+    "tool_add_5_and_3_1763184838",
+    "tool_multiply_6_by_7",
+    "tool_write_a_poem",
+    "tool_add_7_and_9",
     "tool_general",
     "tool_code_reviewer",
     "tool_security_auditor",
@@ -180,9 +261,25 @@
     "tool_tell_me_a_joke",
     "tool_fast_code_generator",
     "tool_save_to_disk",
-    "tool_load_from_disk"
+    "tool_load_from_disk",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_pip_install",
+    "tool_fast_content_writer",
+    "tool_write_a_joke",
+    "tool_wtie_mea_joke_about_the_welsh",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke",
+    "tool_write_me_a_joke_1763182563",
+    "tool_content_generator",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5"
   ],
   "llm": [
+    "func_write_me_a_joke_1763182748",
+    "func_write_me_a_joke_1763183202",
+    "func_write_me_a_joke_1763183469",
     "tool_general",
     "tool_code_reviewer",
     "tool_security_auditor",
@@ -199,7 +296,799 @@
     "tool_translation_quality_checker",
     "tool_long_form_writer",
     "tool_code_translation_validator",
+    "tool_fast_code_generator",
+    "tool_fast_content_writer",
+    "tool_content_generator"
+  ],
+  "writing": [
+    "spec_write_me_a_story",
+    "spec_write_a_technical_article_on_n",
+    "spec_write_a_poem_in_the_style_of_r",
+    "spec_write_me_a_story_1763180650",
+    "spec_write_a_technical_article_on_c_1763180671",
+    "spec_write_me_a_story_1763180751",
+    "spec_write_a_joke",
+    "spec_write_me_a_story_with_a_plot_a",
+    "spec_write_a_joke_1763181926",
+    "spec_write_me_a_story_with_a_plot_a_1763182054",
+    "spec_write_me_a_joke",
+    "spec_write_me_a_joke_1763182563",
+    "spec_write_me_a_joke_1763182748",
+    "spec_write_me_a_joke_1763183202",
+    "spec_write_me_a_joke_1763183469",
+    "spec_write_me_a_poem",
+    "spec_write_me_a_poem_1763184221",
+    "spec_write_me_a_poem_1763184485",
+    "spec_write_a_short_haiku_about_code",
+    "spec_write_a_poem",
+    "spec_write_me_a_poem_1763185774",
+    "spec_write_me_a_haiku",
+    "tool_technical_writer",
+    "tool_fast_content_writer",
+    "tool_content_generator",
+    "spec_write_a_haiku_about_code"
+  ],
+  "workflow": [
+    "workflow_add_100_and_200",
+    "workflow_write_me_code_to_do_a_fibonacc",
+    "workflow_add_10_and_20_1763173231",
+    "workflow_what_is_1_plus_1",
+    "workflow_calculate_the_fibonacci_sequen",
+    "workflow_sum_4_and_6",
+    "workflow_calculate_a_fibonaccie_sequenc",
+    "workflow_calculate_5_plus_10",
+    "workflow_write_the_most_optimal_code_to",
+    "workflow_tell_me_a_joke",
+    "workflow_tell_me_a_multi_part_joke_with",
+    "workflow_calculate_15_plus_25",
+    "workflow_write_a_simple_compression_alg",
+    "workflow_write_code_to_do_one_plus_rand",
+    "workflow_write_me_a_story",
+    "workflow_write_a_technical_article_on_n",
+    "workflow_write_a_joke",
+    "workflow_wtie_mea_joke_about_the_welsh",
+    "workflow_write_a_joke_1763181926",
+    "workflow_write_me_a_joke",
+    "workflow_write_me_a_joke_1763182563",
+    "workflow_write_me_a_poem",
+    "workflow_add_5_and_3",
+    "workflow_write_me_a_poem_1763184485",
+    "workflow_add_5_and_3_1763184838",
+    "tool_add_5_and_3_1763184838",
+    "workflow_add_8_and_12",
+    "workflow_multiply_6_by_7",
+    "tool_multiply_6_by_7",
+    "workflow_write_a_poem",
+    "tool_write_a_poem",
+    "tool_add_7_and_9",
+    "tool_write_a_technical_story_and_tr",
+    "tool_write_me_a_technical_article_1763166799",
+    "tool_add_5_and_8",
+    "tool_add_100_and_200",
+    "tool_write_me_code_to_do_a_fibonacc",
+    "tool_add_10_and_20_1763173231",
+    "tool_what_is_1_plus_1",
+    "tool_calculate_the_fibonacci_sequen",
+    "tool_sum_4_and_6",
+    "tool_calculate_a_fibonaccie_sequenc",
+    "tool_calculate_5_plus_10",
+    "tool_write_the_most_optimal_code_to",
+    "tool_tell_me_a_joke",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_write_a_joke",
+    "tool_wtie_mea_joke_about_the_welsh",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke",
+    "tool_write_me_a_joke_1763182563",
+    "workflow_write_a_haiku_about_code",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5"
+  ],
+  "generated": [
+    "func_write_a_story_about_the_sea",
+    "func_write_me_a_funny_story",
+    "func_sum_4_and_6",
+    "workflow_sum_4_and_6",
+    "func_calculate_15_plus_25",
+    "workflow_calculate_15_plus_25",
+    "func_calculate_15_plus_25_1763179174",
+    "func_write_a_simple_compression_alg",
+    "workflow_write_a_simple_compression_alg",
+    "func_write_code_to_do_one_plus_rand",
+    "workflow_write_code_to_do_one_plus_rand",
+    "spec_write_me_a_story",
+    "func_write_me_a_story",
+    "workflow_write_me_a_story",
+    "spec_write_a_technical_article_on_n",
+    "func_write_a_technical_article_on_n",
+    "workflow_write_a_technical_article_on_n",
+    "spec_write_a_poem_in_the_style_of_r",
+    "spec_write_me_a_story_1763180650",
+    "spec_write_a_technical_article_on_c_1763180671",
+    "func_write_a_technical_article_on_c_1763180671",
+    "spec_add_5_and_8",
+    "spec_write_me_a_story_1763180751",
+    "func_add_5_and_8",
+    "spec_write_a_joke",
+    "spec_wtie_mea_joke_about_the_welsh",
+    "func_wtie_mea_joke_about_the_welsh",
+    "workflow_wtie_mea_joke_about_the_welsh",
+    "spec_write_me_a_story_with_a_plot_a",
+    "func_write_me_a_story_with_a_plot_a",
+    "spec_write_a_joke_1763181926",
+    "spec_write_me_a_story_with_a_plot_a_1763182054",
+    "spec_write_me_a_joke",
+    "spec_write_me_a_joke_1763182563",
+    "spec_write_me_a_joke_1763182748",
+    "spec_write_me_a_joke_1763183202",
+    "spec_write_me_a_joke_1763183469",
+    "spec_write_me_a_poem",
+    "func_write_me_a_poem",
+    "workflow_write_me_a_poem",
+    "spec_add_5_and_3",
+    "func_add_5_and_3",
+    "workflow_add_5_and_3",
+    "spec_write_me_a_poem_1763184221",
+    "spec_write_me_a_poem_1763184485",
+    "spec_add_5_and_3_1763184838",
+    "func_add_5_and_3_1763184838",
+    "workflow_add_5_and_3_1763184838",
+    "tool_add_5_and_3_1763184838",
+    "spec_add_8_and_12",
+    "func_add_8_and_12",
+    "workflow_add_8_and_12",
+    "spec_write_a_short_haiku_about_code",
+    "func_write_a_short_haiku_about_code",
+    "spec_multiply_6_by_7",
+    "spec_write_a_poem",
+    "spec_add_7_and_9",
+    "spec_write_me_a_poem_1763185774",
+    "spec_write_me_a_haiku",
+    "spec_multiply_3_by_4",
+    "tool_write_a_technical_story_and_tr",
+    "tool_write_me_a_technical_article_1763166799",
+    "tool_sum_4_and_6",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_wtie_mea_joke_about_the_welsh",
+    "spec_add_11_and_22",
+    "spec_subtract_10_from_20",
+    "spec_divide_20_by_4",
+    "spec_add_7_and_8",
+    "spec_add_13_and_17",
+    "spec_add_14_and_16",
+    "spec_calculat_1_1",
+    "spec_write_a_haiku_about_code",
+    "spec_calculate_5_plus_5"
+  ],
+  "chat": [
+    "func_write_a_story_about_the_sea",
+    "func_write_me_a_funny_story",
+    "func_sum_4_and_6",
+    "workflow_sum_4_and_6",
+    "func_calculate_15_plus_25",
+    "workflow_calculate_15_plus_25",
+    "func_calculate_15_plus_25_1763179174",
+    "func_write_a_simple_compression_alg",
+    "workflow_write_a_simple_compression_alg",
+    "func_write_code_to_do_one_plus_rand",
+    "workflow_write_code_to_do_one_plus_rand",
+    "func_write_me_a_story",
+    "workflow_write_me_a_story",
+    "func_write_a_technical_article_on_n",
+    "workflow_write_a_technical_article_on_n",
+    "func_write_a_technical_article_on_c_1763180671",
+    "func_add_5_and_8",
+    "func_wtie_mea_joke_about_the_welsh",
+    "workflow_wtie_mea_joke_about_the_welsh",
+    "func_write_me_a_story_with_a_plot_a",
+    "func_write_me_a_poem",
+    "workflow_write_me_a_poem",
+    "func_add_5_and_3",
+    "workflow_add_5_and_3",
+    "func_add_5_and_3_1763184838",
+    "workflow_add_5_and_3_1763184838",
+    "tool_add_5_and_3_1763184838",
+    "func_add_8_and_12",
+    "workflow_add_8_and_12",
+    "func_write_a_short_haiku_about_code",
+    "tool_write_a_technical_story_and_tr",
+    "tool_write_me_a_technical_article_1763166799",
+    "tool_sum_4_and_6",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_wtie_mea_joke_about_the_welsh"
+  ],
+  "auto-generated": [
+    "tool_add_5_and_3_1763184838",
+    "tool_multiply_6_by_7",
+    "tool_write_a_poem",
+    "tool_add_7_and_9",
+    "tool_write_a_technical_story_and_tr",
+    "tool_write_me_a_technical_article_1763166799",
+    "tool_add_5_and_8",
+    "tool_add_100_and_200",
+    "tool_write_me_code_to_do_a_fibonacc",
+    "tool_add_10_and_20_1763173231",
+    "tool_what_is_1_plus_1",
+    "tool_calculate_the_fibonacci_sequen",
+    "tool_sum_4_and_6",
+    "tool_calculate_a_fibonaccie_sequenc",
+    "tool_calculate_5_plus_10",
+    "tool_write_the_most_optimal_code_to",
+    "tool_tell_me_a_joke",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_write_a_joke",
+    "tool_wtie_mea_joke_about_the_welsh",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke",
+    "tool_write_me_a_joke_1763182563",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5"
+  ],
+  "python": [
+    "func_add_100_and_200",
+    "workflow_add_100_and_200",
+    "func_write_me_code_to_do_a_fibonacc",
+    "workflow_write_me_code_to_do_a_fibonacc",
+    "func_add_10_and_20_1763173231",
+    "workflow_add_10_and_20_1763173231",
+    "func_what_is_1_plus_1",
+    "workflow_what_is_1_plus_1",
+    "func_multiply_6_by_7",
+    "func_calculate_a_fibonaccie_sequenc",
+    "workflow_calculate_a_fibonaccie_sequenc",
+    "func_write_me_a_story_with_a_plot_a_1763182054",
+    "func_write_me_a_joke_1763183202",
+    "func_write_me_a_joke_1763183469",
+    "func_write_me_a_poem_1763184221",
+    "func_write_me_a_poem_1763184485",
+    "workflow_write_me_a_poem_1763184485",
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem",
+    "tool_add_5_and_8",
+    "tool_pylint_checker",
+    "tool_mypy_type_checker",
+    "tool_flake8_linter",
+    "tool_black_formatter",
+    "tool_bandit_security",
+    "tool_pytest_runner",
+    "tool_pytest_coverage",
+    "tool_radon_complexity",
+    "tool_vulture_deadcode",
+    "tool_pydocstyle_checker",
+    "tool_isort_import_checker",
+    "tool_add_100_and_200",
+    "tool_write_me_code_to_do_a_fibonacc",
+    "tool_add_10_and_20_1763173231",
+    "tool_what_is_1_plus_1",
+    "tool_calculate_a_fibonaccie_sequenc",
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code"
+  ],
+  "addition": [
+    "func_add_100_and_200",
+    "workflow_add_100_and_200",
+    "func_add_10_and_20_1763173231",
+    "workflow_add_10_and_20_1763173231",
+    "func_what_is_1_plus_1",
+    "workflow_what_is_1_plus_1",
+    "tool_add_7_and_9",
+    "tool_add_5_and_8",
+    "tool_add_100_and_200",
+    "tool_add_10_and_20_1763173231",
+    "tool_what_is_1_plus_1",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5"
+  ],
+  "json": [
+    "func_add_100_and_200",
+    "workflow_add_100_and_200",
+    "func_write_me_a_joke",
+    "tool_add_100_and_200",
+    "tool_calculate_5_plus_5"
+  ],
+  "complete": [
+    "workflow_add_100_and_200",
+    "workflow_write_me_code_to_do_a_fibonacc",
+    "workflow_add_10_and_20_1763173231",
+    "workflow_what_is_1_plus_1",
+    "workflow_calculate_the_fibonacci_sequen",
+    "workflow_sum_4_and_6",
+    "workflow_calculate_a_fibonaccie_sequenc",
+    "workflow_calculate_5_plus_10",
+    "workflow_write_the_most_optimal_code_to",
+    "workflow_tell_me_a_joke",
+    "workflow_tell_me_a_multi_part_joke_with",
+    "workflow_calculate_15_plus_25",
+    "workflow_write_a_simple_compression_alg",
+    "workflow_write_code_to_do_one_plus_rand",
+    "workflow_write_me_a_story",
+    "workflow_write_a_technical_article_on_n",
+    "workflow_write_a_joke",
+    "workflow_wtie_mea_joke_about_the_welsh",
+    "workflow_write_a_joke_1763181926",
+    "workflow_write_me_a_joke",
+    "workflow_write_me_a_joke_1763182563",
+    "workflow_write_me_a_poem",
+    "workflow_add_5_and_3",
+    "workflow_write_me_a_poem_1763184485",
+    "workflow_add_5_and_3_1763184838",
+    "workflow_add_8_and_12",
+    "workflow_multiply_6_by_7",
+    "workflow_write_a_poem",
+    "workflow_write_a_haiku_about_code"
+  ],
+  "fibonacci": [
+    "func_write_me_code_to_do_a_fibonacc",
+    "workflow_write_me_code_to_do_a_fibonacc",
+    "func_calculate_the_fibonacci_sequen",
+    "workflow_calculate_the_fibonacci_sequen",
+    "func_calculate_a_fibonaccie_sequenc",
+    "workflow_calculate_a_fibonaccie_sequenc",
+    "func_write_the_most_optimal_code_to",
+    "workflow_write_the_most_optimal_code_to",
+    "tool_write_me_code_to_do_a_fibonacc",
+    "tool_calculate_the_fibonacci_sequen",
+    "tool_calculate_a_fibonaccie_sequenc",
+    "tool_write_the_most_optimal_code_to"
+  ],
+  "sequence": [
+    "func_write_me_code_to_do_a_fibonacc",
+    "workflow_write_me_code_to_do_a_fibonacc",
+    "func_calculate_a_fibonaccie_sequenc",
+    "workflow_calculate_a_fibonaccie_sequenc",
+    "func_write_the_most_optimal_code_to",
+    "workflow_write_the_most_optimal_code_to",
+    "tool_write_me_code_to_do_a_fibonacc",
+    "tool_calculate_a_fibonaccie_sequenc",
+    "tool_write_the_most_optimal_code_to"
+  ],
+  "story_generation": [
+    "func_write_me_a_story_1763171905"
+  ],
+  "LLM_tools": [
+    "func_write_me_a_story_1763171905"
+  ],
+  "Python": [
+    "func_write_me_a_story_1763171905"
+  ],
+  "input_validation": [
+    "func_add_10_and_20_1763173231",
+    "workflow_add_10_and_20_1763173231",
+    "tool_add_10_and_20_1763173231"
+  ],
+  "error_handling": [
+    "func_add_10_and_20_1763173231",
+    "workflow_add_10_and_20_1763173231",
+    "tool_add_10_and_20_1763173231"
+  ],
+  "arithmetic": [
+    "func_what_is_1_plus_1",
+    "workflow_what_is_1_plus_1",
+    "func_calculate_5_plus_10",
+    "workflow_calculate_5_plus_10",
+    "spec_add_5_and_8",
+    "spec_add_5_and_3",
+    "spec_add_5_and_3_1763184838",
+    "spec_add_8_and_12",
+    "spec_multiply_6_by_7",
+    "func_multiply_6_by_7",
+    "workflow_multiply_6_by_7",
+    "tool_multiply_6_by_7",
+    "spec_add_7_and_9",
+    "tool_add_7_and_9",
+    "spec_multiply_3_by_4",
+    "tool_what_is_1_plus_1",
+    "tool_calculate_5_plus_10",
+    "spec_add_11_and_22",
+    "spec_subtract_10_from_20",
+    "spec_divide_20_by_4",
+    "spec_add_7_and_8",
+    "spec_add_13_and_17",
+    "spec_add_14_and_16",
+    "tool_calculat_1_1",
+    "spec_calculate_5_plus_5",
+    "tool_calculate_5_plus_5"
+  ],
+  "long_form_writer": [
+    "invocation_long_form_writer_1763174017457",
+    "invocation_long_form_writer_1763175051267"
+  ],
+  "mistral-nemo": [
+    "invocation_long_form_writer_1763174017457",
+    "invocation_long_form_writer_1763175051267"
+  ],
+  "multiplication": [
+    "func_multiply_6_by_7",
+    "workflow_multiply_6_by_7",
+    "tool_multiply_6_by_7"
+  ],
+  "integer": [
+    "func_multiply_6_by_7",
+    "tool_add_7_and_9"
+  ],
+  "dynamic programming": [
+    "func_calculate_the_fibonacci_sequen",
+    "workflow_calculate_the_fibonacci_sequen",
+    "tool_calculate_the_fibonacci_sequen"
+  ],
+  "iterative": [
+    "func_calculate_the_fibonacci_sequen",
+    "workflow_calculate_the_fibonacci_sequen",
+    "tool_calculate_the_fibonacci_sequen"
+  ],
+  "calculation": [
+    "func_calculate_5_plus_10",
+    "workflow_calculate_5_plus_10",
+    "tool_calculate_5_plus_10"
+  ],
+  "sum": [
+    "func_calculate_5_plus_10",
+    "workflow_calculate_5_plus_10",
+    "tool_calculate_5_plus_10"
+  ],
+  "reverse": [
+    "func_write_the_most_optimal_code_to",
+    "workflow_write_the_most_optimal_code_to",
+    "tool_write_the_most_optimal_code_to"
+  ],
+  "joke generation": [
+    "func_tell_me_a_joke",
+    "workflow_tell_me_a_joke",
+    "func_write_a_joke",
+    "workflow_write_a_joke",
+    "func_write_me_a_joke_1763183469",
+    "tool_tell_me_a_joke",
+    "tool_write_a_joke"
+  ],
+  "NLP": [
+    "func_tell_me_a_joke",
+    "workflow_tell_me_a_joke",
+    "func_write_a_poem_in_the_style_of_r",
+    "tool_tell_me_a_joke"
+  ],
+  "ML": [
+    "func_tell_me_a_joke",
+    "workflow_tell_me_a_joke",
+    "tool_tell_me_a_joke"
+  ],
+  "joke_generation": [
+    "func_tell_me_a_multi_part_joke_with",
+    "workflow_tell_me_a_multi_part_joke_with",
+    "func_write_me_a_joke",
+    "workflow_write_me_a_joke",
+    "tool_write_me_a_joke"
+  ],
+  "storytelling": [
+    "func_tell_me_a_multi_part_joke_with",
+    "workflow_tell_me_a_multi_part_joke_with"
+  ],
+  "natural_language_processing": [
+    "func_tell_me_a_multi_part_joke_with",
+    "workflow_tell_me_a_multi_part_joke_with",
+    "func_write_me_a_joke",
+    "workflow_write_me_a_joke",
+    "tool_write_me_a_joke"
+  ],
+  "basic": [
+    "func_multiply_6_by_7",
+    "workflow_multiply_6_by_7",
+    "tool_multiply_6_by_7",
     "tool_fast_code_generator"
+  ],
+  "tinyllama": [
+    "tool_fast_code_generator",
+    "invocation_fast_code_generator_1763178201111",
+    "invocation_fast_code_generator_1763179084897",
+    "invocation_fast_code_generator_1763179179651",
+    "invocation_fast_code_generator_1763179325552",
+    "invocation_fast_code_generator_1763179688643",
+    "invocation_fast_code_generator_1763179885771",
+    "invocation_fast_code_generator_1763180128555",
+    "invocation_fast_code_generator_1763180705449",
+    "invocation_fast_code_generator_1763180959281",
+    "invocation_fast_code_generator_1763184037548",
+    "invocation_fast_code_generator_1763184841038",
+    "invocation_fast_code_generator_1763184913380"
+  ],
+  "fast_code_generator": [
+    "invocation_fast_code_generator_1763178201111",
+    "invocation_fast_code_generator_1763179084897",
+    "invocation_fast_code_generator_1763179179651",
+    "invocation_fast_code_generator_1763179325552",
+    "invocation_fast_code_generator_1763179688643",
+    "invocation_fast_code_generator_1763179885771",
+    "invocation_fast_code_generator_1763180128555",
+    "invocation_fast_code_generator_1763180705449",
+    "invocation_fast_code_generator_1763180959281",
+    "invocation_fast_code_generator_1763184037548",
+    "invocation_fast_code_generator_1763184841038",
+    "invocation_fast_code_generator_1763184913380",
+    "invocation_fast_code_generator_1763185152694",
+    "invocation_fast_code_generator_1763185674328",
+    "invocation_fast_code_generator_1763186078026",
+    "invocation_fast_code_generator_1763186407141",
+    "invocation_fast_code_generator_1763186508893",
+    "invocation_fast_code_generator_1763186578820",
+    "invocation_fast_code_generator_1763186643155",
+    "invocation_fast_code_generator_1763186712829",
+    "invocation_fast_code_generator_1763186832406",
+    "invocation_fast_code_generator_1763187060168",
+    "invocation_fast_code_generator_1763187263755"
+  ],
+  "specification": [
+    "spec_write_me_a_story",
+    "spec_write_a_technical_article_on_n",
+    "spec_write_a_poem_in_the_style_of_r",
+    "spec_write_me_a_story_1763180650",
+    "spec_write_a_technical_article_on_c_1763180671",
+    "spec_add_5_and_8",
+    "spec_write_me_a_story_1763180751",
+    "spec_write_a_joke",
+    "spec_wtie_mea_joke_about_the_welsh",
+    "spec_write_me_a_story_with_a_plot_a",
+    "spec_write_a_joke_1763181926",
+    "spec_write_me_a_story_with_a_plot_a_1763182054",
+    "spec_write_me_a_joke",
+    "spec_write_me_a_joke_1763182563",
+    "spec_write_me_a_joke_1763182748",
+    "spec_write_me_a_joke_1763183202",
+    "spec_write_me_a_joke_1763183469",
+    "spec_write_me_a_poem",
+    "spec_add_5_and_3",
+    "spec_write_me_a_poem_1763184221",
+    "spec_write_me_a_poem_1763184485",
+    "spec_add_5_and_3_1763184838",
+    "spec_add_8_and_12",
+    "spec_write_a_short_haiku_about_code",
+    "spec_multiply_6_by_7",
+    "spec_write_a_poem",
+    "spec_add_7_and_9",
+    "spec_write_me_a_poem_1763185774",
+    "spec_write_me_a_haiku",
+    "spec_multiply_3_by_4",
+    "spec_add_11_and_22",
+    "spec_subtract_10_from_20",
+    "spec_divide_20_by_4",
+    "spec_add_7_and_8",
+    "spec_add_13_and_17",
+    "spec_add_14_and_16",
+    "spec_calculat_1_1",
+    "spec_write_a_haiku_about_code",
+    "spec_calculate_5_plus_5"
+  ],
+  "plan": [
+    "spec_write_me_a_story",
+    "spec_write_a_technical_article_on_n",
+    "spec_write_a_poem_in_the_style_of_r",
+    "spec_write_me_a_story_1763180650",
+    "spec_write_a_technical_article_on_c_1763180671",
+    "spec_add_5_and_8",
+    "spec_write_me_a_story_1763180751",
+    "spec_write_a_joke",
+    "spec_wtie_mea_joke_about_the_welsh",
+    "spec_write_me_a_story_with_a_plot_a",
+    "spec_write_a_joke_1763181926",
+    "spec_write_me_a_story_with_a_plot_a_1763182054",
+    "spec_write_me_a_joke",
+    "spec_write_me_a_joke_1763182563",
+    "spec_write_me_a_joke_1763182748",
+    "spec_write_me_a_joke_1763183202",
+    "spec_write_me_a_joke_1763183469",
+    "spec_write_me_a_poem",
+    "spec_add_5_and_3",
+    "spec_write_me_a_poem_1763184221",
+    "spec_write_me_a_poem_1763184485",
+    "spec_add_5_and_3_1763184838",
+    "spec_add_8_and_12",
+    "spec_write_a_short_haiku_about_code",
+    "spec_multiply_6_by_7",
+    "spec_write_a_poem",
+    "spec_add_7_and_9",
+    "spec_write_me_a_poem_1763185774",
+    "spec_write_me_a_haiku",
+    "spec_multiply_3_by_4",
+    "spec_add_11_and_22",
+    "spec_subtract_10_from_20",
+    "spec_divide_20_by_4",
+    "spec_add_7_and_8",
+    "spec_add_13_and_17",
+    "spec_add_14_and_16",
+    "spec_calculat_1_1",
+    "spec_write_a_haiku_about_code",
+    "spec_calculate_5_plus_5"
+  ],
+  "overseer": [
+    "spec_write_me_a_story",
+    "spec_write_a_technical_article_on_n",
+    "spec_write_a_poem_in_the_style_of_r",
+    "spec_write_me_a_story_1763180650",
+    "spec_write_a_technical_article_on_c_1763180671",
+    "spec_add_5_and_8",
+    "spec_write_me_a_story_1763180751",
+    "spec_write_a_joke",
+    "spec_wtie_mea_joke_about_the_welsh",
+    "spec_write_me_a_story_with_a_plot_a",
+    "spec_write_a_joke_1763181926",
+    "spec_write_me_a_story_with_a_plot_a_1763182054",
+    "spec_write_me_a_joke",
+    "spec_write_me_a_joke_1763182563",
+    "spec_write_me_a_joke_1763182748",
+    "spec_write_me_a_joke_1763183202",
+    "spec_write_me_a_joke_1763183469",
+    "spec_write_me_a_poem",
+    "spec_add_5_and_3",
+    "spec_write_me_a_poem_1763184221",
+    "spec_write_me_a_poem_1763184485",
+    "spec_add_5_and_3_1763184838",
+    "spec_add_8_and_12",
+    "spec_write_a_short_haiku_about_code",
+    "spec_multiply_6_by_7",
+    "spec_write_a_poem",
+    "spec_add_7_and_9",
+    "spec_write_me_a_poem_1763185774",
+    "spec_write_me_a_haiku",
+    "spec_multiply_3_by_4",
+    "spec_add_11_and_22",
+    "spec_subtract_10_from_20",
+    "spec_divide_20_by_4",
+    "spec_add_7_and_8",
+    "spec_add_13_and_17",
+    "spec_add_14_and_16",
+    "spec_calculat_1_1",
+    "spec_write_a_haiku_about_code",
+    "spec_calculate_5_plus_5"
+  ],
+  "poetry": [
+    "func_write_a_poem_in_the_style_of_r",
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem"
+  ],
+  "robert burns": [
+    "func_write_a_poem_in_the_style_of_r"
+  ],
+  "randomization": [
+    "func_write_a_joke",
+    "workflow_write_a_joke",
+    "tool_write_a_joke"
+  ],
+  "topic selection": [
+    "func_write_a_joke",
+    "workflow_write_a_joke",
+    "tool_write_a_joke"
+  ],
+  "fast_content_writer": [
+    "invocation_fast_content_writer_1763181525847",
+    "invocation_fast_content_writer_1763181935773",
+    "invocation_fast_content_writer_1763182570058",
+    "invocation_fast_content_writer_1763182755017",
+    "invocation_fast_content_writer_1763183051513"
+  ],
+  "gemma3:4b": [
+    "invocation_fast_content_writer_1763181525847",
+    "invocation_fast_content_writer_1763181935773",
+    "invocation_fast_content_writer_1763182570058",
+    "invocation_fast_content_writer_1763182755017",
+    "invocation_fast_content_writer_1763183051513",
+    "invocation_fast_code_generator_1763185152694",
+    "invocation_fast_code_generator_1763185674328",
+    "invocation_fast_code_generator_1763186078026",
+    "invocation_fast_code_generator_1763186407141",
+    "invocation_fast_code_generator_1763186508893",
+    "invocation_fast_code_generator_1763186578820",
+    "invocation_fast_code_generator_1763186643155",
+    "invocation_fast_code_generator_1763186712829",
+    "invocation_fast_code_generator_1763186832406",
+    "invocation_fast_code_generator_1763187060168",
+    "invocation_fast_code_generator_1763187263755"
+  ],
+  "joke": [
+    "func_write_a_joke_1763181926",
+    "workflow_write_a_joke_1763181926",
+    "func_write_me_a_joke_1763182563",
+    "workflow_write_me_a_joke_1763182563",
+    "func_write_me_a_joke_1763182748",
+    "func_write_me_a_joke",
+    "func_write_me_a_joke_1763183202",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke_1763182563"
+  ],
+  "generation": [
+    "func_write_a_joke_1763181926",
+    "workflow_write_a_joke_1763181926",
+    "func_write_me_a_joke_1763182563",
+    "workflow_write_me_a_joke_1763182563",
+    "func_write_me_a_joke_1763183202",
+    "func_write_me_a_poem_1763184221",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke_1763182563",
+    "tool_content_generator"
+  ],
+  "nlp": [
+    "func_write_a_joke_1763181926",
+    "workflow_write_a_joke_1763181926",
+    "func_write_me_a_joke_1763182563",
+    "workflow_write_me_a_joke_1763182563",
+    "func_write_me_a_poem_1763184485",
+    "workflow_write_me_a_poem_1763184485",
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem",
+    "tool_write_a_joke_1763181926",
+    "tool_write_me_a_joke_1763182563"
+  ],
+  "content_creation": [
+    "func_write_a_joke_1763181926",
+    "workflow_write_a_joke_1763181926",
+    "tool_write_a_joke_1763181926"
+  ],
+  "code generation": [
+    "func_write_me_a_story_with_a_plot_a_1763182054"
+  ],
+  "LLM": [
+    "func_write_me_a_story_with_a_plot_a_1763182054",
+    "func_write_me_a_joke"
+  ],
+  "machine_learning": [
+    "func_write_me_a_joke",
+    "workflow_write_me_a_joke",
+    "tool_write_me_a_joke"
+  ],
+  "content_generation": [
+    "func_write_me_a_joke_1763182748",
+    "func_write_me_a_joke"
+  ],
+  "content_generator": [
+    "invocation_content_generator_1763183386219"
+  ],
+  "poem": [
+    "func_write_me_a_poem_1763184221"
+  ],
+  "generative": [
+    "func_write_me_a_poem_1763184485",
+    "workflow_write_me_a_poem_1763184485"
+  ],
+  "executable_invocation": [
+    "exec_invocation_flake8_linter_1763185170161",
+    "exec_invocation_pylint_checker_1763185171351",
+    "exec_invocation_flake8_linter_1763187172809",
+    "exec_invocation_pylint_checker_1763187173561"
+  ],
+  "tool_execution": [
+    "exec_invocation_flake8_linter_1763185170161",
+    "exec_invocation_pylint_checker_1763185171351",
+    "exec_invocation_flake8_linter_1763187172809",
+    "exec_invocation_pylint_checker_1763187173561"
+  ],
+  "flake8_linter": [
+    "exec_invocation_flake8_linter_1763185170161",
+    "exec_invocation_flake8_linter_1763187172809"
+  ],
+  "flake8": [
+    "exec_invocation_flake8_linter_1763185170161",
+    "exec_invocation_flake8_linter_1763187172809"
+  ],
+  "pylint_checker": [
+    "exec_invocation_pylint_checker_1763185171351",
+    "exec_invocation_pylint_checker_1763187173561"
+  ],
+  "pylint": [
+    "exec_invocation_pylint_checker_1763185171351",
+    "exec_invocation_pylint_checker_1763187173561"
+  ],
+  "ml": [
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem"
   ],
   "fallback": [
     "tool_general"
@@ -209,6 +1098,9 @@
     "tool_fast_code_generator"
   ],
   "any-task": [
+    "tool_general"
+  ],
+  "complex": [
     "tool_general"
   ],
   "review": [
@@ -244,16 +1136,14 @@
   "docs": [
     "tool_doc_generator"
   ],
-  "writing": [
-    "tool_technical_writer"
-  ],
   "technical": [
     "tool_technical_writer"
   ],
   "article": [
     "tool_technical_writer",
     "tool_outline_generator",
-    "tool_long_form_writer"
+    "tool_long_form_writer",
+    "tool_fast_content_writer"
   ],
   "blog": [
     "tool_technical_writer",
@@ -275,7 +1165,9 @@
     "tool_article_analyzer"
   ],
   "content": [
-    "tool_article_analyzer"
+    "tool_article_analyzer",
+    "tool_fast_content_writer",
+    "tool_content_generator"
   ],
   "keywords": [
     "tool_seo_optimizer"
@@ -328,107 +1220,6 @@
   "editing": [
     "tool_proofreader"
   ],
-  "workflow": [
-    "tool_write_a_technical_story_and_tr",
-    "tool_write_me_a_technical_article_1763166799",
-    "tool_add_5_and_8",
-    "workflow_add_100_and_200",
-    "tool_add_100_and_200",
-    "workflow_write_me_code_to_do_a_fibonacc",
-    "tool_write_me_code_to_do_a_fibonacc",
-    "workflow_add_10_and_20_1763173231",
-    "tool_add_10_and_20_1763173231",
-    "workflow_what_is_1_plus_1",
-    "tool_what_is_1_plus_1",
-    "workflow_calculate_the_fibonacci_sequen",
-    "tool_calculate_the_fibonacci_sequen",
-    "workflow_sum_4_and_6",
-    "tool_sum_4_and_6",
-    "workflow_calculate_a_fibonaccie_sequenc",
-    "tool_calculate_a_fibonaccie_sequenc",
-    "workflow_calculate_5_plus_10",
-    "tool_calculate_5_plus_10",
-    "workflow_write_the_most_optimal_code_to",
-    "tool_write_the_most_optimal_code_to",
-    "workflow_tell_me_a_joke",
-    "tool_tell_me_a_joke",
-    "workflow_tell_me_a_multi_part_joke_with"
-  ],
-  "generated": [
-    "tool_write_a_technical_story_and_tr",
-    "tool_write_me_a_technical_article_1763166799",
-    "func_write_a_story_about_the_sea",
-    "func_write_me_a_funny_story",
-    "func_sum_4_and_6",
-    "workflow_sum_4_and_6",
-    "tool_sum_4_and_6"
-  ],
-  "chat": [
-    "tool_write_a_technical_story_and_tr",
-    "tool_write_me_a_technical_article_1763166799",
-    "func_write_a_story_about_the_sea",
-    "func_write_me_a_funny_story",
-    "func_sum_4_and_6",
-    "workflow_sum_4_and_6",
-    "tool_sum_4_and_6"
-  ],
-  "auto-generated": [
-    "tool_write_a_technical_story_and_tr",
-    "tool_write_me_a_technical_article_1763166799",
-    "tool_add_5_and_8",
-    "tool_add_100_and_200",
-    "tool_write_me_code_to_do_a_fibonacc",
-    "tool_add_10_and_20_1763173231",
-    "tool_what_is_1_plus_1",
-    "tool_calculate_the_fibonacci_sequen",
-    "tool_sum_4_and_6",
-    "tool_calculate_a_fibonaccie_sequenc",
-    "tool_calculate_5_plus_10",
-    "tool_write_the_most_optimal_code_to",
-    "tool_tell_me_a_joke"
-  ],
-  "python": [
-    "tool_add_5_and_8",
-    "tool_pylint_checker",
-    "tool_mypy_type_checker",
-    "tool_flake8_linter",
-    "tool_black_formatter",
-    "tool_bandit_security",
-    "tool_pytest_runner",
-    "tool_pytest_coverage",
-    "tool_radon_complexity",
-    "tool_vulture_deadcode",
-    "tool_pydocstyle_checker",
-    "tool_isort_import_checker",
-    "func_add_100_and_200",
-    "workflow_add_100_and_200",
-    "tool_add_100_and_200",
-    "func_write_me_code_to_do_a_fibonacc",
-    "workflow_write_me_code_to_do_a_fibonacc",
-    "tool_write_me_code_to_do_a_fibonacc",
-    "func_add_10_and_20_1763173231",
-    "workflow_add_10_and_20_1763173231",
-    "tool_add_10_and_20_1763173231",
-    "func_what_is_1_plus_1",
-    "workflow_what_is_1_plus_1",
-    "tool_what_is_1_plus_1",
-    "func_multiply_6_by_7",
-    "func_calculate_a_fibonaccie_sequenc",
-    "workflow_calculate_a_fibonaccie_sequenc",
-    "tool_calculate_a_fibonaccie_sequenc"
-  ],
-  "addition": [
-    "tool_add_5_and_8",
-    "func_add_100_and_200",
-    "workflow_add_100_and_200",
-    "tool_add_100_and_200",
-    "func_add_10_and_20_1763173231",
-    "workflow_add_10_and_20_1763173231",
-    "tool_add_10_and_20_1763173231",
-    "func_what_is_1_plus_1",
-    "workflow_what_is_1_plus_1",
-    "tool_what_is_1_plus_1"
-  ],
   "default-values": [
     "tool_add_5_and_8"
   ],
@@ -445,7 +1236,8 @@
     "tool_pydocstyle_checker",
     "tool_isort_import_checker",
     "tool_save_to_disk",
-    "tool_load_from_disk"
+    "tool_load_from_disk",
+    "tool_pip_install"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -528,7 +1320,8 @@
     "tool_quick_feedback",
     "tool_translation_quality_checker",
     "tool_code_translation_validator",
-    "tool_fast_code_generator"
+    "tool_fast_code_generator",
+    "tool_fast_content_writer"
   ],
   "chunking": [
     "tool_quick_feedback"
@@ -575,24 +1368,6 @@
   "error-detection": [
     "tool_translation_quality_checker"
   ],
-  "json": [
-    "func_add_100_and_200",
-    "workflow_add_100_and_200",
-    "tool_add_100_and_200"
-  ],
-  "complete": [
-    "workflow_add_100_and_200",
-    "workflow_write_me_code_to_do_a_fibonacc",
-    "workflow_add_10_and_20_1763173231",
-    "workflow_what_is_1_plus_1",
-    "workflow_calculate_the_fibonacci_sequen",
-    "workflow_sum_4_and_6",
-    "workflow_calculate_a_fibonaccie_sequenc",
-    "workflow_calculate_5_plus_10",
-    "workflow_write_the_most_optimal_code_to",
-    "workflow_tell_me_a_joke",
-    "workflow_tell_me_a_multi_part_joke_with"
-  ],
   "creative-writing": [
     "tool_long_form_writer"
   ],
@@ -600,7 +1375,8 @@
     "tool_long_form_writer"
   ],
   "story": [
-    "tool_long_form_writer"
+    "tool_long_form_writer",
+    "tool_fast_content_writer"
   ],
   "long-form": [
     "tool_long_form_writer"
@@ -611,139 +1387,21 @@
   "large-context": [
     "tool_long_form_writer"
   ],
-  "fibonacci": [
-    "func_write_me_code_to_do_a_fibonacc",
-    "workflow_write_me_code_to_do_a_fibonacc",
-    "tool_write_me_code_to_do_a_fibonacc",
-    "func_calculate_the_fibonacci_sequen",
-    "workflow_calculate_the_fibonacci_sequen",
-    "tool_calculate_the_fibonacci_sequen",
-    "func_calculate_a_fibonaccie_sequenc",
-    "workflow_calculate_a_fibonaccie_sequenc",
-    "tool_calculate_a_fibonaccie_sequenc",
-    "func_write_the_most_optimal_code_to",
-    "workflow_write_the_most_optimal_code_to",
-    "tool_write_the_most_optimal_code_to"
-  ],
-  "sequence": [
-    "func_write_me_code_to_do_a_fibonacc",
-    "workflow_write_me_code_to_do_a_fibonacc",
-    "tool_write_me_code_to_do_a_fibonacc",
-    "func_calculate_a_fibonaccie_sequenc",
-    "workflow_calculate_a_fibonaccie_sequenc",
-    "tool_calculate_a_fibonaccie_sequenc",
-    "func_write_the_most_optimal_code_to",
-    "workflow_write_the_most_optimal_code_to",
-    "tool_write_the_most_optimal_code_to"
-  ],
   "code": [
-    "tool_code_translation_validator"
+    "tool_code_translation_validator",
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code"
   ],
   "syntax-check": [
     "tool_code_translation_validator"
   ],
-  "story_generation": [
-    "func_write_me_a_story_1763171905"
-  ],
-  "LLM_tools": [
-    "func_write_me_a_story_1763171905"
-  ],
-  "Python": [
-    "func_write_me_a_story_1763171905"
-  ],
-  "input_validation": [
-    "func_add_10_and_20_1763173231",
-    "workflow_add_10_and_20_1763173231",
-    "tool_add_10_and_20_1763173231"
-  ],
-  "error_handling": [
-    "func_add_10_and_20_1763173231",
-    "workflow_add_10_and_20_1763173231",
-    "tool_add_10_and_20_1763173231"
-  ],
-  "arithmetic": [
-    "func_what_is_1_plus_1",
-    "workflow_what_is_1_plus_1",
-    "tool_what_is_1_plus_1",
-    "func_calculate_5_plus_10",
-    "workflow_calculate_5_plus_10",
-    "tool_calculate_5_plus_10"
-  ],
-  "long_form_writer": [
-    "invocation_long_form_writer_1763174017457",
-    "invocation_long_form_writer_1763175051267"
-  ],
-  "mistral-nemo": [
-    "invocation_long_form_writer_1763174017457",
-    "invocation_long_form_writer_1763175051267"
-  ],
-  "multiplication": [
-    "func_multiply_6_by_7"
-  ],
-  "integer": [
-    "func_multiply_6_by_7"
-  ],
-  "dynamic programming": [
-    "func_calculate_the_fibonacci_sequen",
-    "workflow_calculate_the_fibonacci_sequen",
-    "tool_calculate_the_fibonacci_sequen"
-  ],
-  "iterative": [
-    "func_calculate_the_fibonacci_sequen",
-    "workflow_calculate_the_fibonacci_sequen",
-    "tool_calculate_the_fibonacci_sequen"
-  ],
-  "calculation": [
-    "func_calculate_5_plus_10",
-    "workflow_calculate_5_plus_10",
-    "tool_calculate_5_plus_10"
-  ],
-  "sum": [
-    "func_calculate_5_plus_10",
-    "workflow_calculate_5_plus_10",
-    "tool_calculate_5_plus_10"
-  ],
-  "reverse": [
-    "func_write_the_most_optimal_code_to",
-    "workflow_write_the_most_optimal_code_to",
-    "tool_write_the_most_optimal_code_to"
-  ],
-  "joke generation": [
-    "func_tell_me_a_joke",
-    "workflow_tell_me_a_joke",
-    "tool_tell_me_a_joke"
-  ],
-  "NLP": [
-    "func_tell_me_a_joke",
-    "workflow_tell_me_a_joke",
-    "tool_tell_me_a_joke"
-  ],
-  "ML": [
-    "func_tell_me_a_joke",
-    "workflow_tell_me_a_joke",
-    "tool_tell_me_a_joke"
-  ],
-  "joke_generation": [
-    "func_tell_me_a_multi_part_joke_with",
-    "workflow_tell_me_a_multi_part_joke_with"
-  ],
-  "storytelling": [
-    "func_tell_me_a_multi_part_joke_with",
-    "workflow_tell_me_a_multi_part_joke_with"
-  ],
-  "natural_language_processing": [
-    "func_tell_me_a_multi_part_joke_with",
-    "workflow_tell_me_a_multi_part_joke_with"
-  ],
   "simple": [
-    "tool_fast_code_generator"
-  ],
-  "basic": [
-    "tool_fast_code_generator"
-  ],
-  "tinyllama": [
     "tool_fast_code_generator",
-    "invocation_fast_code_generator_1763178201111"
+    "tool_calculate_5_plus_5"
+  ],
+  "gemma3": [
+    "tool_fast_code_generator",
+    "tool_fast_content_writer"
   ],
   "file-io": [
     "tool_save_to_disk",
@@ -774,7 +1432,38 @@
   "input": [
     "tool_load_from_disk"
   ],
-  "fast_code_generator": [
-    "invocation_fast_code_generator_1763178201111"
+  "dependencies": [
+    "tool_pip_install"
+  ],
+  "pip": [
+    "tool_pip_install"
+  ],
+  "install": [
+    "tool_pip_install"
+  ],
+  "packages": [
+    "tool_pip_install"
+  ],
+  "requirements": [
+    "tool_pip_install"
+  ],
+  "setup": [
+    "tool_pip_install"
+  ],
+  "creative": [
+    "tool_content_generator"
+  ],
+  "llm-tool": [
+    "tool_content_generator"
+  ],
+  "haiku": [
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code"
+  ],
+  "tested": [
+    "workflow_write_a_haiku_about_code"
+  ],
+  "calculator": [
+    "tool_calculat_1_1"
   ]
 }

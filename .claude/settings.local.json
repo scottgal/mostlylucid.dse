@@ -17,7 +17,11 @@
       "Bash(timeout 90 bash:*)",
       "Bash(timeout 10 bash:*)",
       "Bash(timeout 180 bash -c:*)",
-      "Bash(timeout 30 bash:*)"
+      "Bash(timeout 30 bash:*)",
+      "Bash(nul)",
+      "Bash(xargs:*)",
+      "Bash(flake8:*)",
+      "Bash(timeout 60 bash:*)"
     ],
     "deny": [],
     "ask": []

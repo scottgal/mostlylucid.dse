@@ -1,13 +1,13 @@
 {
-  "node_id": "tell_me_a_multi_part_joke_with",
-  "title": "Generates a multi-part joke with a plot based on the input prompt.",
+  "node_id": "calculat_1_1",
+  "title": "Calculates 1+1",
   "version": "1.0.0",
   "type": "processor",
   "language": "python",
   "tags": [
-    "joke_generation",
-    "storytelling",
-    "natural_language_processing"
+    "arithmetic",
+    "addition",
+    "calculator"
   ],
   "goals": {
     "primary": [
@@ -40,5 +40,5 @@
     "evaluator": "llama3",
     "triage": "tiny"
   },
-  "created_at": "2025-11-15T03:40:52.085810Z"
+  "created_at": "2025-11-15T06:11:01.248188Z"
 }

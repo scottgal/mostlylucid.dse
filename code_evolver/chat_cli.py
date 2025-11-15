@@ -706,9 +706,29 @@ Answer:"""
         # Get the actual tool objects to show their names
         found_tools = self.tools_manager.search(description, top_k=3)
         if found_tools and len(found_tools) > 0:
-            tool_names = [tool.name for tool in found_tools[:3]]
+            # Use full title from metadata if available, otherwise use name
+            tool_names = [
+                tool.metadata.get("full_title", tool.name) if hasattr(tool, 'metadata') else tool.name
+                for tool in found_tools[:3]
+            ]
             tools_str = ", ".join(tool_names)
-            self.display.complete_stage("Planning", f"Found {len(found_tools)} tools: {tools_str}")
+
+            # Check if the best match is being used as a template
+            best_tool = found_tools[0]
+            best_tool_name = best_tool.metadata.get("full_title", best_tool.name) if hasattr(best_tool, 'metadata') else best_tool.name
+
+            # Consider it a template reuse if it's a successfully tested workflow/function
+            is_template = (
+                hasattr(best_tool, 'metadata') and
+                best_tool.metadata.get('tests_passed', False) and
+                best_tool.metadata.get('node_id')
+            )
+
+            if is_template:
+                self.display.complete_stage("Planning", f"Found {len(found_tools)} tools - Using '{best_tool_name}' as template base")
+                console.print(f"[dim]   Adapting existing solution for current task[/dim]")
+            else:
+                self.display.complete_stage("Planning", f"Found {len(found_tools)} tools: {tools_str}")
         else:
             self.display.complete_stage("Planning", "Using general tools")
 
@@ -795,6 +815,8 @@ A user wants to create code with this goal:
 
 "{description}"
 
+{existing_spec_info}
+
 {template_info}
 
 {available_tools}
@@ -848,74 +870,89 @@ The code generator will follow this specification EXACTLY, so include ALL critic
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
 
         # Step 2A: Complexity triage - decide which code generator to use based on task complexity
-        workflow.add_step("complexity_triage", "llm", "Classify task complexity (simple vs complex)")
+        workflow.add_step("complexity_triage", "llm", "Classify task type and complexity")
         workflow.start_step("complexity_triage")
 
-        complexity_prompt = f"""Classify the complexity of this coding task:
+        # Use LLM for flexible, reliable classification
+        classification_prompt = f"""Classify this task into ONE of these categories:
 
-Task: {description}
+Task: "{description}"
 
-Complexity levels:
-- SIMPLE: Basic arithmetic, single function, straightforward logic (e.g., "add 10 and 20", "calculate square root")
-- COMPLEX: Multi-step workflows, sophisticated algorithms, class design, file I/O (e.g., "fibonacci sequence", "microservice architecture")
+Categories:
+1. ARITHMETIC - Simple math operations (add, subtract, multiply, divide)
+   Examples: "add 10 and 20", "multiply 5 by 7"
 
-Answer with ONLY ONE WORD: SIMPLE or COMPLEX
+2. SIMPLE_CONTENT - Short text generation (jokes, one-liners, brief summaries)
+   Examples: "write a joke", "create a pun", "write a riddle"
 
-Examples:
-- "add 10 and 20" → SIMPLE
-- "multiply 6 by 7" → SIMPLE
-- "calculate fibonacci sequence" → COMPLEX
-- "generate microservice architecture" → COMPLEX
-- "write a story" → COMPLEX
-- "sum three numbers" → SIMPLE
+3. COMPLEX_CONTENT - Long/detailed text (stories with plot, technical articles, essays)
+   Examples: "write a story about...", "write a technical article on...", "create a novel"
 
-Answer:"""
+4. ALGORITHM - Code with logic/algorithms (fibonacci, sorting, parsing, etc.)
+   Examples: "fibonacci sequence", "sort a list", "compression algorithm"
 
-        complexity_response = self.client.generate(
-            model=self.config.triage_model,
-            prompt=complexity_prompt,
+Answer with ONLY the category name and a brief reason.
+Format: CATEGORY: reason
+
+Example answers:
+ARITHMETIC: basic addition
+SIMPLE_CONTENT: short joke generation
+COMPLEX_CONTENT: story with plot and characters
+ALGORITHM: fibonacci computation"""
+
+        classification_response = self.client.generate(
+            model="llama3",  # Better at understanding complexity and nuance
+            prompt=classification_prompt,
             temperature=0.1,
             model_key="triage"
-        ).strip().upper()
+        ).strip()
 
-        is_simple_task = "SIMPLE" in complexity_response
+        # Parse response
+        is_simple_task = False
+        is_simple_content = False
+        is_complex_content = False
+        classification_reason = "unknown"
 
-        workflow.complete_step("complexity_triage", f"Task classified as: {'SIMPLE' if is_simple_task else 'COMPLEX'}")
+        if "ARITHMETIC" in classification_response.upper():
+            is_simple_task = True
+            classification_reason = "basic arithmetic operation"
+        elif "SIMPLE_CONTENT" in classification_response.upper():
+            is_simple_content = True
+            classification_reason = "simple content generation"
+        elif "COMPLEX_CONTENT" in classification_response.upper():
+            is_complex_content = True
+            classification_reason = "complex content generation"
+        elif "ALGORITHM" in classification_response.upper():
+            is_simple_task = False
+            classification_reason = "algorithm/complex logic"
+        else:
+            # Default to complex for safety
+            is_simple_task = False
+            classification_reason = "unknown pattern, defaulting to complex"
+
+        workflow.complete_step("complexity_triage", f"Task classified as: {classification_response}")
 
         if is_simple_task:
-            console.print(f"[cyan]Task classified as SIMPLE -> Using fast code generator[/cyan]")
+            console.print(f"[cyan]Task classified as SIMPLE ({classification_reason}) -> Using fast code generator[/cyan]")
         else:
-            console.print(f"[cyan]Task classified as COMPLEX -> Using powerful code generator[/cyan]")
-
-        # Store the specification in RAG for future reuse
-        spec_id = f"spec_{node_id}"
-        try:
-            self.rag.store_artifact(
-                artifact_id=spec_id,
-                artifact_type=ArtifactType.PLAN,
-                name=f"Specification: {description[:80]}",
-                description=f"Detailed implementation specification for: {description}",
-                content=specification,
-                tags=["specification", "plan", "overseer"] + code_tags,
-                metadata={
-                    "task_description": description,
-                    "overseer_model": self.config.overseer_model,
-                    "complexity": "SIMPLE" if is_simple_task else "COMPLEX"
-                },
-                auto_embed=True
-            )
-            console.print(f"[dim green]Saved specification to RAG for future reuse[/dim green]")
-        except Exception as e:
-            console.print(f"[dim yellow]Note: Could not save specification to RAG: {e}[/dim yellow]")
+            console.print(f"[cyan]Task classified as COMPLEX ({classification_reason}) -> Using powerful code generator[/cyan]")
 
         # Step 2B: Determine which tool/model to use for code generation
         # For simple tasks, prefer fast_code_generator if available
         if is_simple_task and 'fast_code_generator' in self.tools_manager.tools:
             selected_tool = self.tools_manager.tools['fast_code_generator']
             use_specialized_tool = True
-            self.display.show_tool_call(selected_tool.name, model="tinyllama", tool_type="Fast")
+            self.display.show_tool_call(selected_tool.name, model="gemma3:4b", tool_type="Fast")
+        # For ALL content generation (simple or complex), use powerful model
+        elif is_simple_content or is_complex_content:
+            # Don't search for tools - content needs fresh generation with powerful model
+            # Use general tool which has proper prompts for content generation
+            selected_tool = None
+            use_specialized_tool = False
+            console.print(f"[yellow]Using powerful model for content generation[/yellow]")
+            self.display.show_tool_call("General Code Generator", model=self.config.generator_model, tool_type="Content")
         else:
-            # For complex tasks or if no fast generator, use normal tool selection
+            # For other complex tasks or if no specialized tool, use normal tool selection
             selected_tool = self.tools_manager.get_best_llm_for_task(description)
             generator_to_use = self.config.generator_model
             use_specialized_tool = False
@@ -939,6 +976,37 @@ Answer:"""
             console.print(f"[yellow]Node '{node_id}' already exists. Using versioned name.[/yellow]")
             import time
             node_id = f"{node_id}_{int(time.time())}"
+
+        # Store the specification in RAG for future reuse (now that we have node_id)
+        spec_id = f"spec_{node_id}"
+        try:
+            # Infer tags from description for specification
+            spec_tags = ["specification", "plan", "overseer", "generated"]
+            if any(word in description.lower() for word in ["add", "sum", "calculate", "multiply", "divide", "subtract"]):
+                spec_tags.append("arithmetic")
+            if any(word in description.lower() for word in ["fibonacci", "prime", "factorial", "sequence"]):
+                spec_tags.append("algorithm")
+            if any(word in description.lower() for word in ["write", "story", "article", "content", "text"]):
+                spec_tags.append("writing")
+
+            self.rag.store_artifact(
+                artifact_id=spec_id,
+                artifact_type=ArtifactType.PLAN,
+                name=f"Specification: {description[:80]}",
+                description=f"Detailed implementation specification for: {description}",
+                content=specification,
+                tags=spec_tags,
+                metadata={
+                    "task_description": description,
+                    "overseer_model": self.config.overseer_model,
+                    "complexity": "SIMPLE" if is_simple_task else "COMPLEX",
+                    "node_id": node_id
+                },
+                auto_embed=True
+            )
+            console.print(f"[dim green]Saved specification to RAG for future reuse[/dim green]")
+        except Exception as e:
+            console.print(f"[dim yellow]Note: Could not save specification to RAG: {e}[/dim yellow]")
 
         # Step 4: Generate code based on specification
         # Build list of available tools for the prompt
@@ -980,15 +1048,38 @@ You MUST respond with ONLY a JSON object in this exact format:
   "tags": ["tag1", "tag2"]
 }}
 
+MANDATORY CODE STRUCTURE:
+```python
+import json
+import sys
+
+# Only include this if you need to call LLM tools:
+from node_runtime import call_tool
+
+def main():
+    # ALWAYS read input from stdin as JSON
+    input_data = json.load(sys.stdin)
+
+    # Your logic here
+    # For content: content = call_tool("content_generator", input_data.get("description"))
+    # For math: result = calculate(input_data.get("description"))
+
+    # ALWAYS print result as JSON
+    print(json.dumps({{"result": result}}))
+
+if __name__ == "__main__":
+    main()
+```
+
+IMPORTANT: DO NOT use sys.path.insert() - the runtime environment already has the correct path.
+```
+
 Code requirements:
-- ONLY import node_runtime if you need to call LLM tools (for text generation, writing, etc.)
+- MUST use json.load(sys.stdin) to read input - NO sys.argv or command-line arguments!
+- For content generation (stories, jokes, articles): Use call_tool() to invoke content generation LLM tools
 - For simple computational tasks (math, algorithms), implement directly without call_tool
-- Use: from node_runtime import call_tool (only if needed)
-- Chain multiple LLM tool calls if needed for complex tasks involving text/content generation
-- **CRITICAL**: ALWAYS pass output from one tool call to the next tool call
-- **CRITICAL**: Never ignore variables - if you create a variable, USE IT in the next step
 - Include proper error handling
-- Include a __main__ section that reads JSON from stdin and prints JSON to stdout
+- MUST print output as JSON using print(json.dumps(...))
 - Be production-ready and well-documented
 
 **INPUT DATA FORMAT**:
@@ -1005,12 +1096,12 @@ The code will receive input as a JSON object with these standard fields (interfa
 
 USAGE GUIDELINES:
 1. For simple computational tasks like "add 10 and 20", extract numbers from input_data["description"]
-2. For LLM tasks, pass input_data["description"], input_data["task"], or input_data["input"] to call_tool()
+2. For content generation tasks (stories, jokes, articles), use call_tool() to invoke LLM tools from the available tools list
 3. For complex data processing, use input_data["input"] as the main data field
 4. ALWAYS include these standard imports at the top:
    - import json
    - import sys
-   - from node_runtime import call_tool (if using LLM tools)
+   - from node_runtime import call_tool (if you need to use LLM tools for content generation)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -1031,46 +1122,22 @@ def main():
     print(json.dumps({{"result": result}}))
 ```
 
-Example code structure for calling tools (NOTICE HOW DATA FLOWS):
-```
+Example for content generation (use appropriate LLM tools from the available tools list):
+```python
 import json
 import sys
-from pathlib import Path
-
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
 from node_runtime import call_tool
 
 def main():
     input_data = json.load(sys.stdin)
 
-    # Step 1: Generate outline
-    outline = call_tool("outline_generator", "Create outline for: " + input_data["topic"])
+    # For content generation, call an appropriate LLM tool from the available tools list
+    content = call_tool("content_generator", input_data.get("description", "Generate content"))
 
-    # Step 2: Use the outline to write article (NOTICE: passing 'outline' variable)
-    article = call_tool("technical_writer", f"Write article based on this outline:\\n{{outline}}")
-
-    # Step 3: Use the article to proofread (NOTICE: passing 'article' variable)
-    final = call_tool("proofreader", f"Proofread this article:\\n{{article}}")
-
-    print(json.dumps({{"result": final}}))
+    print(json.dumps({{"result": content}}))
 
 if __name__ == "__main__":
     main()
-```
-
-WRONG EXAMPLE (DO NOT DO THIS):
-```
-outline = call_tool("outline_generator", "Create outline")
-# WRONG: Not passing outline to next step!
-article = call_tool("writer", "Write article")  # This ignores the outline!
-```
-
-CORRECT EXAMPLE (DO THIS):
-```
-outline = call_tool("outline_generator", "Create outline")
-# CORRECT: Passing outline to next step
-article = call_tool("writer", f"Write article using this outline:\\n{{outline}}")
 ```
 
 CRITICAL:
@@ -1079,7 +1146,7 @@ CRITICAL:
 - NO explanations mixed with code
 - Start with import statements
 - Must be immediately runnable
-- Use call_tool() to invoke LLM tools in chains
+- For content generation: Use call_tool() with an appropriate LLM tool from the available tools list
 
 Return ONLY the JSON object, nothing else."""
 
@@ -1096,13 +1163,26 @@ Return ONLY the JSON object, nothing else."""
                 temperature=0.3
             )
         else:
-            console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
-            response = self.client.generate(
-                model=self.config.generator_model,
-                prompt=code_prompt,
-                temperature=0.2,  # Lower temp for more structured output
-                model_key="generator"
-            )
+            # For complex content, use the general tool's model (qwen2.5-coder:14b)
+            # Otherwise use config generator_model (codellama)
+            if is_complex_content and 'general' in self.tools_manager.tools:
+                general_tool = self.tools_manager.tools['general']
+                model_to_use = general_tool.metadata.get('llm_model', self.config.generator_model)
+                console.print(f"\n[cyan]Generating code with {model_to_use} (general tool)...[/cyan]")
+                response = self.client.generate(
+                    model=model_to_use,
+                    prompt=code_prompt,
+                    temperature=0.2,
+                    model_key="generator"
+                )
+            else:
+                console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
+                response = self.client.generate(
+                    model=self.config.generator_model,
+                    prompt=code_prompt,
+                    temperature=0.2,  # Lower temp for more structured output
+                    model_key="generator"
+                )
         workflow.complete_step("code_generation", f"Generated {len(response)} chars", {"generator": generator_name})
 
         if not response or len(response) < 50:
@@ -1198,28 +1278,14 @@ Return ONLY the JSON object, nothing else."""
             else:
                 console.print(f"[red]Warning: Code still has issues: {error_msg}[/red]")
 
-        # Step 5: Store in RAG with metadata
-        if hasattr(self, 'rag'):
-            try:
-                from src.rag_memory import ArtifactType
-                self.rag.store_artifact(
-                    artifact_id=f"func_{node_id}",
-                    artifact_type=ArtifactType.FUNCTION,
-                    name=code_description,
-                    description=description,
-                    content=code,
-                    tags=code_tags,
-                    metadata={
-                        "node_id": node_id,
-                        "specification": specification[:200],
-                        "tools_available": available_tools if available_tools and "No specific tools" not in available_tools else None
-                    },
-                    auto_embed=True
-                )
-            except Exception as e:
-                console.print(f"[dim yellow]Note: Could not store in RAG: {e}[/dim yellow]")
+        # Step 5: Detect interface (inputs, outputs, operation type)
+        try:
+            interface_schema = self._detect_interface(code, description, specification)
+        except Exception as e:
+            console.print(f"[dim yellow]Could not detect interface: {e}, using fallback[/dim yellow]")
+            interface_schema = self._basic_interface_detection(code, description)
 
-        # Step 6: Create node in registry
+        # Step 5: Create node in registry (but don't store in RAG yet - wait for tests to pass)
         self.registry.create_node(
             node_id=node_id,
             title=code_description[:100],
@@ -1230,8 +1296,13 @@ Return ONLY the JSON object, nothing else."""
             }
         )
 
-        # Step 5: Save code
+        # Step 5: Save code with interface metadata
         self.runner.save_code(node_id, code)
+
+        # Save interface schema alongside the code
+        interface_path = self.runner.get_node_path(node_id).parent / "interface.json"
+        with open(interface_path, 'w') as f:
+            json.dump(interface_schema, f, indent=2)
 
         # Step 6: Display generated code
         syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
@@ -1243,7 +1314,13 @@ Return ONLY the JSON object, nothing else."""
             workflow.add_step("testing", "test", "Generate and run unit tests")
             workflow.start_step("testing")
             console.print(f"\n[cyan]Generating unit tests...[/cyan]")
-            test_success = self._generate_and_run_tests(node_id, description, specification, code)
+            try:
+                test_success = self._generate_and_run_tests(node_id, description, specification, code)
+            except Exception as e:
+                console.print(f"[red]Error in test generation: {e}[/red]")
+                import traceback
+                traceback.print_exc()
+                test_success = False
 
             if test_success:
                 workflow.complete_step("testing", "Tests passed")
@@ -1297,97 +1374,120 @@ Return ONLY the JSON object, nothing else."""
                 workflow.fail_step("static_analysis", f"All {analysis_results['total_count']} tools found issues")
                 console.print(f"[yellow]Static analysis found issues (not blocking execution)[/yellow]")
 
-        # Step 8: Store complete workflow in RAG for future reuse
-        try:
-            workflow_content = {
-                "description": description,
-                "specification": specification,
-                "tools_used": available_tools if "No specific tools" not in available_tools else "general",
-                "node_id": node_id,
-                "tags": code_tags,
-                "code_summary": code_description
-            }
+        # Step 8: Store in RAG ONLY if tests passed (don't pollute RAG with broken code)
+        if test_success and hasattr(self, 'rag'):
+            try:
+                from src.rag_memory import ArtifactType
 
-            self.rag.store_artifact(
-                artifact_id=f"workflow_{node_id}",
-                artifact_type=ArtifactType.WORKFLOW,
-                name=f"Workflow: {code_description}",
-                description=description,
-                content=json.dumps(workflow_content, indent=2),
-                tags=["workflow", "complete"] + code_tags,
-                metadata={
+                # Store the generated code as a function artifact
+                self.rag.store_artifact(
+                    artifact_id=f"func_{node_id}",
+                    artifact_type=ArtifactType.FUNCTION,
+                    name=code_description,
+                    description=description,
+                    content=code,
+                    tags=code_tags,
+                    metadata={
+                        "node_id": node_id,
+                        "specification": specification[:200],
+                        "tools_available": available_tools if available_tools and "No specific tools" not in available_tools else None,
+                        "tests_passed": True
+                    },
+                    auto_embed=True
+                )
+
+                # Store complete workflow for future reuse
+                workflow_content = {
+                    "description": description,
+                    "specification": specification,
+                    "tools_used": available_tools if "No specific tools" not in available_tools else "general",
                     "node_id": node_id,
-                    "question": description,
-                    "specification_hash": hash(specification[:200])
-                },
-                auto_embed=True
-            )
-            console.print(f"[dim]OK Workflow stored in RAG for future reuse[/dim]")
+                    "tags": code_tags,
+                    "code_summary": code_description
+                }
 
-            # Step 8.5: If this was a composed workflow, save it as a COMMUNITY tool for future reuse
-            if workflow_composition and workflow_composition.get("workflow_steps"):
-                try:
-                    # Create a committee/community tool from this successful workflow
-                    committee_id = f"committee_{node_id}"
-                    committee_description = f"Specialized workflow committee for: {description[:100]}"
+                self.rag.store_artifact(
+                    artifact_id=f"workflow_{node_id}",
+                    artifact_type=ArtifactType.WORKFLOW,
+                    name=f"Workflow: {code_description}",
+                    description=description,
+                    content=json.dumps(workflow_content, indent=2),
+                    tags=["workflow", "complete", "tested"] + code_tags,
+                    metadata={
+                        "node_id": node_id,
+                        "question": description,
+                        "specification_hash": hash(specification[:200]),
+                        "tests_passed": True
+                    },
+                    auto_embed=True
+                )
+                console.print(f"[dim]OK Code and workflow stored in RAG for future reuse[/dim]")
+            except Exception as e:
+                console.print(f"[dim yellow]Note: Could not store in RAG: {e}[/dim yellow]")
+        elif not test_success:
+            console.print(f"[dim yellow]Skipping RAG storage - tests did not pass[/dim yellow]")
 
-                    # Extract characteristics and tools from the composition
-                    characteristics = workflow_composition.get("characteristics", {})
-                    recommended_tools = workflow_composition.get("recommended_tools", [])
-                    workflow_steps = workflow_composition.get("workflow_steps", [])
+        # Step 8.5: If this was a composed workflow AND tests passed, save it as a COMMUNITY tool for future reuse
+        if test_success and workflow_composition and workflow_composition.get("workflow_steps"):
+            try:
+                # Create a committee/community tool from this successful workflow
+                committee_id = f"committee_{node_id}"
+                committee_description = f"Specialized workflow committee for: {description[:100]}"
 
-                    # Build community tool definition
-                    community_tool_def = {
-                        "name": f"Committee: {code_description[:50]}",
-                        "type": "community",  # Marks it as a community of agents
-                        "description": committee_description,
-                        "characteristics": characteristics,
-                        "tools_used": [t["tool_id"] for t in recommended_tools],
-                        "workflow_steps": workflow_steps,
-                        "rationale": workflow_composition.get("rationale", []),
-                        "node_id": node_id,  # Reference to the implemented node
-                        "success_metrics": {
-                            "test_success": test_success,
-                            "created": datetime.now().isoformat()
-                        }
+                # Extract characteristics and tools from the composition
+                characteristics = workflow_composition.get("characteristics", {})
+                recommended_tools = workflow_composition.get("recommended_tools", [])
+                workflow_steps = workflow_composition.get("workflow_steps", [])
+
+                # Build community tool definition
+                community_tool_def = {
+                    "name": f"Committee: {code_description[:50]}",
+                    "type": "community",  # Marks it as a community of agents
+                    "description": committee_description,
+                    "characteristics": characteristics,
+                    "tools_used": [t["tool_id"] for t in recommended_tools],
+                    "workflow_steps": workflow_steps,
+                    "rationale": workflow_composition.get("rationale", []),
+                    "node_id": node_id,  # Reference to the implemented node
+                    "success_metrics": {
+                        "test_success": test_success,
+                        "created": datetime.now().isoformat()
                     }
+                }
 
-                    # Register as a COMMUNITY tool in the tools manager
-                    self.tools_manager.register_tool(
-                        tool_id=committee_id,
-                        name=community_tool_def["name"],
-                        tool_type=ToolType.COMMUNITY,
-                        description=committee_description,
-                        tags=list(characteristics.keys()) + ["committee", "composite"] + code_tags,
-                        implementation=community_tool_def,
-                        metadata=community_tool_def
-                    )
+                # Register as a COMMUNITY tool in the tools manager
+                self.tools_manager.register_tool(
+                    tool_id=committee_id,
+                    name=community_tool_def["name"],
+                    tool_type=ToolType.COMMUNITY,
+                    description=committee_description,
+                    tags=list(characteristics.keys()) + ["committee", "composite"] + code_tags,
+                    implementation=community_tool_def,
+                    metadata=community_tool_def
+                )
 
-                    # Also store in RAG for semantic search
-                    self.rag.store_artifact(
-                        artifact_id=committee_id,
-                        artifact_type=ArtifactType.PATTERN,  # Communities are patterns
-                        name=community_tool_def["name"],
-                        description=committee_description,
-                        content=json.dumps(community_tool_def, indent=2),
-                        tags=["committee", "community", "composite-workflow"] + list(characteristics.keys()),
-                        metadata={
-                            "node_id": node_id,
-                            "characteristics": characteristics,
-                            "tools_count": len(recommended_tools),
-                            "steps_count": len(workflow_steps)
-                        },
-                        auto_embed=True
-                    )
+                # Also store in RAG for semantic search
+                self.rag.store_artifact(
+                    artifact_id=committee_id,
+                    artifact_type=ArtifactType.PATTERN,  # Communities are patterns
+                    name=community_tool_def["name"],
+                    description=committee_description,
+                    content=json.dumps(community_tool_def, indent=2),
+                    tags=["committee", "community", "composite-workflow"] + list(characteristics.keys()),
+                    metadata={
+                        "node_id": node_id,
+                        "characteristics": characteristics,
+                        "tools_count": len(recommended_tools),
+                        "steps_count": len(workflow_steps)
+                    },
+                    auto_embed=True
+                )
 
-                    console.print(f"[green]✨ Created reusable committee tool: {committee_id}[/green]")
-                    console.print(f"[dim]This workflow can now be reused for similar tasks![/dim]")
+                console.print(f"[green]✨ Created reusable committee tool: {committee_id}[/green]")
+                console.print(f"[dim]This workflow can now be reused for similar tasks![/dim]")
 
-                except Exception as e:
-                    console.print(f"[dim yellow]Note: Could not create committee tool: {e}[/dim yellow]")
-
-        except Exception as e:
-            console.print(f"[dim yellow]Note: Could not store workflow in RAG: {e}[/dim yellow]")
+            except Exception as e:
+                console.print(f"[dim yellow]Note: Could not create committee tool: {e}[/dim yellow]")
 
         console.print(f"\n[green]OK Node '{node_id}' created successfully![/green]")
 
@@ -1592,9 +1692,9 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
 
                 tool = Tool(
                     tool_id=node_id,
-                    name=code_description[:80],  # Use description as tool name
+                    name=code_description,  # Full description as tool name (no truncation)
                     tool_type=ToolType.WORKFLOW,
-                    description=description,
+                    description=description,  # Full description for semantic search
                     tags=code_tags + ["auto-generated", "workflow"],
                     implementation=None,  # Will be loaded from registry
                     metadata={
@@ -1604,7 +1704,8 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
                         "memory_mb_peak": metrics.get("memory_mb_peak", 0),
                         "created_at": __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),
                         "success_count": 1,
-                        "total_runs": 1
+                        "total_runs": 1,
+                        "full_title": code_description  # Preserve full title for display
                     }
                 )
 
@@ -1642,76 +1743,286 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
 
         return True
 
-    def _generate_and_run_tests(self, node_id: str, description: str, specification: str, code: str) -> bool:
-        """Generate and run unit tests for a node with comprehensive logging."""
-        test_prompt = f"""Generate pytest unit tests for this code:
+    def _detect_interface(self, code: str, description: str, specification: str) -> dict:
+        """
+        Detect the interface of generated code (inputs, outputs, operation type).
 
-Description: {description}
+        Returns a schema describing:
+        - inputs: List of expected input fields
+        - outputs: List of output fields
+        - operation_type: combiner, splitter, filter, transformer, generator, etc.
+        """
+        # Use LLM to analyze the code and extract interface
+        interface_prompt = f"""Analyze this Python code and extract its interface specification.
 
-Specification: {specification[:500]}
-
-Code:
+CODE:
 ```python
 {code}
 ```
 
-Create comprehensive unit tests that:
-1. Test normal cases with STRICT input/output validation
-2. Test edge cases (empty input, missing fields, etc.)
-3. Test error handling for invalid inputs
-4. Verify correctness with assertions
-5. LOG EVERYTHING during test execution using print() statements
+TASK DESCRIPTION: {description}
 
-IMPORTANT REQUIREMENTS:
-- Tests must be STRICT about inputs and outputs
-- Validate JSON structure, required fields, data types
-- Use print() statements to log test progress (e.g., "Testing normal case...", "Input: ...", "Output: ...")
-- Test must fail if code doesn't match expected behavior exactly
-- Each test should print what it's testing and what it expects
+Extract:
+1. **inputs**: List of input field names the code reads from input_data (e.g., ["a", "b", "text", "numbers"])
+2. **outputs**: List of output field names in the result (usually just ["result"])
+3. **operation_type**: One of:
+   - "generator": Creates content from scratch (uses call_tool, no real inputs needed)
+   - "transformer": Single input → transformed output (e.g., process text, calculate)
+   - "combiner": Multiple inputs → single output (e.g., add two numbers)
+   - "splitter": Single input → multiple outputs
+   - "filter": Input → filtered/validated output
 
-Example structure:
-```python
-import json
-import sys
+Return ONLY a JSON object with this structure:
+{{
+  "inputs": ["field1", "field2"],
+  "outputs": ["result"],
+  "operation_type": "combiner",
+  "description": "Brief description of what this code does"
+}}
 
-def test_normal_case():
-    print("Testing normal case...")
-    input_data = {{"key": "value"}}
-    print(f"Input: {{input_data}}")
+Return ONLY the JSON, no explanations."""
 
-    # Run code
-    result = main_function(input_data)
-    print(f"Output: {{result}}")
+        try:
+            response = self.client.generate(
+                model="llama3",
+                prompt=interface_prompt,
+                temperature=0.1,
+                model_key="overseer"
+            )
 
-    # Strict validation
-    assert "expected_field" in result, "Missing expected field"
-    assert isinstance(result["expected_field"], str), "Wrong type"
-    print("OK Normal case passed")
+            # Extract JSON from response
+            import re
+            json_match = re.search(r'\{.*\}', response, re.DOTALL)
+            if json_match:
+                interface_schema = json.loads(json_match.group(0))
+                return interface_schema
+            else:
+                # Fallback: basic detection
+                return self._basic_interface_detection(code, description)
+
+        except Exception as e:
+            console.print(f"[dim yellow]Could not detect interface via LLM: {e}[/dim yellow]")
+            return self._basic_interface_detection(code, description)
+
+    def _basic_interface_detection(self, code: str, description: str) -> dict:
+        """Fallback interface detection using simple pattern matching."""
+        inputs = []
+        outputs = ["result"]  # Default
+
+        # Find input_data.get(...) calls
+        import re
+        input_matches = re.findall(r'input_data\.get\(["\']([^"\']+)["\']', code)
+        inputs.extend(input_matches)
+
+        # Find input_data[...] accesses
+        bracket_matches = re.findall(r'input_data\[["\']([^"\']+)["\']\]', code)
+        inputs.extend(bracket_matches)
+
+        # Detect operation type
+        if 'call_tool' in code:
+            operation_type = "generator"
+        elif len(inputs) == 0:
+            operation_type = "generator"
+        elif len(inputs) == 1:
+            operation_type = "transformer"
+        elif len(inputs) >= 2:
+            operation_type = "combiner"
+        else:
+            operation_type = "transformer"
+
+        return {
+            "inputs": list(set(inputs)) if inputs else [],
+            "outputs": outputs,
+            "operation_type": operation_type,
+            "description": description[:200]
+        }
+
+    def _generate_and_run_tests(self, node_id: str, description: str, specification: str, code: str) -> bool:
+        """Generate and run unit tests for a node with comprehensive logging."""
+        # Check if code uses call_tool - if so, generate minimal smoke test
+        uses_call_tool = 'call_tool(' in code
+
+        if uses_call_tool:
+            # For code that uses external tools, just create a minimal smoke test
+            test_code = """import sys
+import os
+
+def test_structure():
+    print("Testing code structure...")
+    # Verify code can be imported without errors
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import main
+        print("OK Code structure is valid")
+        assert hasattr(main, 'main'), "main() function exists"
+        print("OK main() function found")
+    except Exception as e:
+        print("FAIL:", str(e))
+        raise
 
 if __name__ == "__main__":
-    test_normal_case()
-    # ... more tests
+    test_structure()
+"""
+            # Save and run this simple test
+            test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
+            with open(test_path, 'w') as f:
+                f.write(test_code)
+
+            console.print("[dim]OK Generated smoke test for external tool code[/dim]")
+
+        else:
+            # For regular code, generate comprehensive tests
+            test_prompt = f"""Generate unit tests for this code by analyzing what the code expects as input.
+
+TASK DESCRIPTION: {description}
+
+SPECIFICATION: {specification[:500]}
+
+CODE TO TEST:
+```python
+{code}
 ```
 
-CRITICAL - OUTPUT FORMAT:
-- Return ONLY valid, executable Python test code
-- NO markdown code fences (```python or ```)
-- NO explanations
-- Start with 'import' statements
-- Include print() logging throughout tests
-- Tests must be strict and comprehensive
+INSTRUCTIONS:
+1. Look at the code's main() function to see what fields it reads from input_data
+2. Create test cases that match those expected fields
+3. For arithmetic tasks like "add X and Y", create tests that call the functions directly with those numbers
+4. **CRITICAL**: For code using call_tool(), DO NOT import call_tool, DO NOT call it, just create a simple structure test
+5. Focus on testing the logic you CAN test, NOT external dependencies
+6. If code only calls external tools, create a minimal smoke test that imports main.py
 
-Return valid Python test code only."""
+WHAT NOT TO DO:
+- DO NOT write: from node_runtime import call_tool
+- DO NOT write: call_tool("anything", ...)
+- DO NOT try to test external LLM calls
+- DO NOT test things that require network/external services
 
-        test_code = self.client.generate(
-            model=self.config.generator_model,
-            prompt=test_prompt,
-            temperature=0.3,
-            model_key="generator"
-        )
+EXAMPLE FOR ARITHMETIC (if code defines testable functions):
+```python
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from main import add  # If main.py has an add() function
 
-        # Clean test code (remove markdown if present)
-        test_code = self._clean_code(test_code)
+def test_add():
+    print("Testing add function...")
+    result = add(5, 3)
+    assert result == 8, "Expected 8"
+    print("OK Test passed")
+
+if __name__ == "__main__":
+    test_add()
+```
+
+EXAMPLE FOR CONTENT GENERATION (code uses call_tool()):
+```python
+# For code that uses call_tool(), we can't test the external LLM call
+# Instead, just create a simple smoke test that verifies the structure
+def test_structure():
+    print("Testing code structure...")
+    # Just verify the code can be imported without errors
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import main
+        print("OK Code structure is valid")
+    except Exception as e:
+        print("FAIL:", str(e))
+        raise
+
+if __name__ == "__main__":
+    test_structure()
+```
+
+CRITICAL REQUIREMENTS:
+- Analyze the code structure to understand what it expects
+- If code defines functions (def add(), def process(), etc.), import and test them directly
+- If code uses call_tool(), you can mock it or just test the structure
+- DO NOT assume generic input like {{"input": "test"}} - look at what the code actually reads!
+- Use print() for logging
+- Return ONLY executable Python code
+- NO markdown fences
+- NO explanations WHATSOEVER
+- NO commentary like "These tests..." or "The test checks..."
+- EVERY LINE must be valid Python syntax
+
+The response must be PURE Python code that can be saved directly to a .py file and executed.
+If you include ANY explanatory text, the tests will fail with a syntax error.
+
+Return valid Python test code only - nothing else."""
+
+            try:
+                test_code = self.client.generate(
+                    model=self.config.generator_model,
+                    prompt=test_prompt,
+                    temperature=0.3,
+                    model_key="generator"
+                )
+            except Exception as e:
+                console.print(f"[red]Error generating tests: {e}[/red]")
+                return False
+
+            # Clean test code (remove markdown if present)
+            test_code = self._clean_code(test_code)
+
+            # Validate and clean test code - remove any explanatory text
+            lines = test_code.split('\n')
+            clean_lines = []
+            found_code = False
+
+            for line in lines:
+            # Skip empty lines before code starts
+            if not found_code and not line.strip():
+                continue
+
+            # Start collecting when we see imports or code
+            if line.strip().startswith(('import ', 'from ', 'def ', 'class ', '@')):
+                found_code = True
+
+            if found_code:
+                stripped = line.strip()
+
+                # CRITICAL: Remove any attempts to import or use call_tool in tests
+                if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
+                    console.print(f"[dim]Filtering out node_runtime import: {stripped[:60]}...[/dim]")
+                    continue
+                if 'call_tool(' in stripped:
+                    console.print(f"[dim]Filtering out call_tool usage: {stripped[:60]}...[/dim]")
+                    continue
+
+                # Also filter out problematic test patterns
+                if 'from main import' in stripped and stripped != 'from main import main':
+                    # Don't import specific functions, only import main() function
+                    console.print(f"[dim]Filtering out specific function import: {stripped[:60]}...[/dim]")
+                    continue
+
+                # Filter out explanatory text (lines that don't look like Python)
+                # Skip lines that are clearly explanatory text
+                if any(phrase in stripped.lower() for phrase in [
+                    'these tests', 'this test', 'the test checks', 'note that', 'by adding',
+                    'the code', 'we can see', 'this will', 'this should', 'the above',
+                    'as you can', 'for example', 'in this case', 'it is important'
+                ]):
+                    console.print(f"[dim]Filtering out explanatory line: {stripped[:60]}...[/dim]")
+                    continue
+
+                # Skip lines that don't start with valid Python syntax (unless they're indented continuations)
+                if stripped and not line.startswith((' ', '\t')) and not any(stripped.startswith(s) for s in [
+                    'import', 'from', 'def', 'class', '@', 'if', 'else', 'elif', 'for', 'while',
+                    'try', 'except', 'finally', 'with', 'return', 'raise', 'assert', 'print',
+                    '#', '"""', "'''", 'pass', 'break', 'continue', 'yield', 'async', 'await'
+                ]):
+                    # This line doesn't look like Python
+                    console.print(f"[dim]Filtering out non-Python line: {stripped[:60]}...[/dim]")
+                    continue
+
+                clean_lines.append(line)
+
+        if clean_lines:
+            test_code = '\n'.join(clean_lines)
+            if len(clean_lines) < len(lines):
+                console.print(f"[yellow]Cleaned test code: removed {len(lines) - len(clean_lines)} explanatory lines[/yellow]")
 
         # Save test code
         test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
@@ -1723,27 +2034,58 @@ Return valid Python test code only."""
         # Run tests and capture all output
         console.print("[cyan]Running tests with logging...[/cyan]")
 
-        # For now, just verify the code runs with sample input
-        sample_input = {"input": "test"}
-        stdout, stderr, metrics = self.runner.run_node(node_id, sample_input)
+        # Run the generated test file directly with Python
+        import subprocess
+        import os
+        from pathlib import Path
 
-        # Store test output for escalation context
-        test_output_log = f"STDOUT:\n{stdout}\n\nSTDERR:\n{stderr}\n\nMetrics: {metrics}"
-        self.context['last_test_output'] = test_output_log
+        node_dir = self.runner.get_node_path(node_id).parent
+        test_path = node_dir / "test_main.py"
 
-        if metrics["success"]:
-            console.print("[green]OK Tests passed[/green]")
-            if stdout:
-                console.print(f"[dim]Test log:\n{stdout[:500]}[/dim]")
-            return True
-        else:
-            console.print(f"[red]FAIL Tests failed[/red]")
-            console.print(f"[yellow]Error: {stderr[:300]}[/yellow]")
-            if stdout:
-                console.print(f"[dim]Test output before failure:\n{stdout[:500]}[/dim]")
-            # Store error for escalation
-            self.context['last_error'] = stderr
-            self.context['last_stdout'] = stdout
+        # Set PYTHONPATH so tests can import node_runtime
+        env = os.environ.copy()
+        code_evolver_dir = str(Path(__file__).parent.parent.absolute())
+        env['PYTHONPATH'] = code_evolver_dir + os.pathsep + env.get('PYTHONPATH', '')
+
+        try:
+            result = subprocess.run(
+                [sys.executable, "test_main.py"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd=str(node_dir),
+                env=env
+            )
+
+            stdout = result.stdout
+            stderr = result.stderr
+            success = result.returncode == 0
+
+            # Store test output for escalation context
+            test_output_log = f"STDOUT:\n{stdout}\n\nSTDERR:\n{stderr}\n\nReturn code: {result.returncode}"
+            self.context['last_test_output'] = test_output_log
+
+            if success:
+                console.print("[green]OK Tests passed[/green]")
+                if stdout:
+                    console.print(f"[dim]Test log:\n{stdout[:500]}[/dim]")
+                return True
+            else:
+                console.print(f"[red]FAIL Tests failed[/red]")
+                console.print(f"[yellow]Error: {stderr[:300]}[/yellow]")
+                if stdout:
+                    console.print(f"[dim]Test output before failure:\n{stdout[:500]}[/dim]")
+                # Store error for escalation
+                self.context['last_error'] = stderr
+                self.context['last_stdout'] = stdout
+                return False
+        except subprocess.TimeoutExpired:
+            console.print(f"[red]FAIL Tests timed out after 30 seconds[/red]")
+            self.context['last_error'] = "Test execution timed out"
+            return False
+        except Exception as e:
+            console.print(f"[red]FAIL Error running tests: {e}[/red]")
+            self.context['last_error'] = str(e)
             return False
 
     def _adaptive_escalate_and_fix(
@@ -1894,9 +2236,19 @@ Return ONLY the JSON object, nothing else."""
             # Clean the fixed code
             fixed_code = self._clean_code(fixed_code)
 
-            # Validate fixed code isn't empty
+            # Validate fixed code isn't empty or invalid
             if not fixed_code or len(fixed_code.strip()) < 20:
                 console.print(f"[yellow]Fixed code is empty or too short, skipping[/yellow]")
+                continue
+
+            # Validate it's actually Python code, not commentary
+            if not any(keyword in fixed_code for keyword in ["import", "def ", "class ", "if ", "print(", "return"]):
+                console.print(f"[yellow]Response doesn't look like Python code, skipping[/yellow]")
+                continue
+
+            # Reject responses that look like explanatory text
+            if any(phrase in fixed_code.lower() for phrase in ["it looks like", "you can use", "here are", "these are", "for example"]):
+                console.print(f"[yellow]Response contains explanatory text instead of code, skipping[/yellow]")
                 continue
 
             # Save fixed code

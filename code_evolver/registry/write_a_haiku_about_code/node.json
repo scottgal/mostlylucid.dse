@@ -1,0 +1,44 @@
+{
+  "node_id": "write_a_haiku_about_code",
+  "title": "Python code for generating a haiku about code using the Haiku Code Generation Specification",
+  "version": "1.0.0",
+  "type": "processor",
+  "language": "python",
+  "tags": [
+    "python",
+    "haiku",
+    "code"
+  ],
+  "goals": {
+    "primary": [
+      "correctness",
+      "determinism"
+    ],
+    "secondary": [
+      "latency<200ms",
+      "memory<64MB"
+    ]
+  },
+  "inputs": {},
+  "outputs": {},
+  "constraints": {
+    "timeout_ms": 5000,
+    "max_memory_mb": 256
+  },
+  "lineage": {
+    "parent": null,
+    "derived_from": [],
+    "notes": "Initial version"
+  },
+  "fit": {
+    "domain": "general",
+    "scale": "small",
+    "risk": "low"
+  },
+  "model_prompts": {
+    "generator": "codellama",
+    "evaluator": "llama3",
+    "triage": "tiny"
+  },
+  "created_at": "2025-11-15T06:12:30.774852Z"
+}

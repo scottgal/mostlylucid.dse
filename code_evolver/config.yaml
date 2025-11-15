@@ -220,22 +220,39 @@ testing:
 
 # Tools registry (predefined tools with specialized endpoints)
 tools:
-  # Fast code generator for simple tasks - uses tinyllama for speed
+  # Fast code generator for simple tasks - uses gemma3:4b for speed and quality
   fast_code_generator:
     name: "Fast Code Generator"
     type: "llm"
-    description: "Fast code generation for simple tasks using tinyllama. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms."
+    description: "Fast code generation for simple tasks using gemma3:4b. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms."
     # Performance/Cost characteristics for planner decision-making
-    cost_tier: "free"          # tinyllama is very cheap
-    speed_tier: "very-fast"    # tiny model, fast inference
-    quality_tier: "good"       # good enough for simple tasks
-    max_output_length: "short" # 2048 token context, keep it simple
+    cost_tier: "free"          # gemma3:4b is free and efficient
+    speed_tier: "fast"         # small 4B model, fast inference
+    quality_tier: "very-good"  # excellent quality for simple tasks
+    max_output_length: "medium" # larger context window than gemma2
     llm:
-      model: "tinyllama"
+      model: "gemma3:4b"
       endpoint: null
-      system_prompt: "You are a fast code generator for SIMPLE tasks only. Your context window is small (2048 tokens), so keep code concise. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
-      prompt_template: "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and concise (you have limited context)\n- Focus on correctness over sophistication\n- Basic error handling only\n- Must work for the specific task\n\nGenerate only the essential code needed."
-    tags: ["fast", "simple", "basic", "code-generation", "tinyllama"]
+      system_prompt: "You are a fast code generator for SIMPLE tasks. You have a good context window. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and focused\n- Focus on correctness and clarity\n- Proper error handling\n- Must work for the specific task\n- Follow Python best practices\n\nGenerate clean, well-structured code."
+    tags: ["fast", "simple", "basic", "code-generation", "gemma3"]
+
+  # Content generator tool - LLM tool that can be called to generate any content
+  content_generator:
+    name: "Content Generator"
+    type: "llm"
+    description: "General purpose content generation tool. Can generate jokes, stories, articles, essays, documentation, and creative writing. Use this from code via call_tool() when you need LLM-generated content."
+    # Performance/Cost characteristics for planner decision-making
+    cost_tier: "medium"        # llama3 is more resource intensive
+    speed_tier: "fast"         # reasonably fast
+    quality_tier: "excellent"  # high quality content
+    max_output_length: "long"  # can generate longer content
+    llm:
+      model: "llama3"
+      endpoint: null
+      system_prompt: "You are a creative content generator. Generate engaging, high-quality content based on the user's request. Be creative, natural, and appropriate to the content type.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "{prompt}\n\nGenerate creative, engaging content that matches this request. Return ONLY the content itself, no explanations or meta-commentary."
+    tags: ["content", "generation", "creative", "writing", "llm-tool"]
 
   # General fallback tool - used when no specialized tool matches the task
   general:
@@ -250,8 +267,8 @@ tools:
     llm:
       model: "qwen2.5-coder:14b"
       endpoint: null
-      system_prompt: "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
-      prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality"
+      system_prompt: "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool() or try to orchestrate workflows.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality\n\nSPECIAL NOTE FOR CONTENT GENERATION:\nIf the task involves generating text content (stories, articles, jokes, etc.):\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it\n- Example: content = \"Once upon a time...\" then print(json.dumps({{\"result\": content}}))"
     tags: ["general", "fallback", "code-generation", "any-task", "complex"]
 
   # Specialized tool definitions
@@ -653,6 +670,33 @@ tools:
       content: "str - Content of the file"
       path: "str - Full path that was read"
     tags: ["file-io", "load", "read", "disk", "input"]
+
+  pip_install:
+    name: "Install Python Package"
+    type: "executable"
+    description: "Installs Python packages using pip. Use when code requires external dependencies like requests, numpy, pandas, etc. Can install single packages or multiple packages at once. Supports version specifications (e.g., 'requests>=2.28.0'). Essential for code that imports third-party libraries."
+    # Performance/Cost characteristics
+    cost_tier: "free"           # No LLM inference, just pip
+    speed_tier: "medium"        # Network dependent, usually <30s per package
+    quality_tier: "excellent"   # Standard pip reliability
+    max_output_length: "short"  # Returns status only
+    executable:
+      command: "python"
+      args: ["pip_install_tool.py"]
+    input_schema:
+      package: "str - Package name(s) to install. Can be single package like 'requests' or multiple like 'requests pandas numpy'. Supports version specs like 'requests>=2.28.0'"
+    output_schema:
+      status: "str - 'installed' if successful, 'failed' if error"
+      package: "str - Package(s) that were installed"
+      error: "str - Error message if installation failed (optional)"
+    tags: ["dependencies", "pip", "install", "packages", "requirements", "setup"]
+    examples:
+      - input: {"package": "requests"}
+        output: {"status": "installed", "package": "requests"}
+      - input: {"package": "numpy pandas scikit-learn"}
+        output: {"status": "installed", "package": "numpy pandas scikit-learn"}
+      - input: {"package": "requests>=2.28.0"}
+        output: {"status": "installed", "package": "requests>=2.28.0"}
 
 # Build settings (for executables)
 build:

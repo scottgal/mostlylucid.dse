@@ -204,9 +204,6 @@ class ToolsManager:
         tools_config = self.config_manager.get("tools", {})
 
         for tool_id, tool_def in tools_config.items():
-            if tool_id in self.tools:
-                continue  # Skip if already loaded
-
             tool_type_str = tool_def.get("type", "custom")
             try:
                 tool_type = ToolType(tool_type_str)
