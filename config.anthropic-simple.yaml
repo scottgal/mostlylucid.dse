@@ -1,0 +1,154 @@
+# Simple "All Anthropic" Configuration
+# This configuration uses Anthropic Claude for all LLM operations
+# Ultra-minimal setup - just set your API key and go!
+
+# ============================================================================
+# LLM Backend Configuration - Using Anthropic for Everything
+# ============================================================================
+
+llm:
+  # Use Anthropic as the primary (and only) backend
+  backend: "anthropic"
+
+  # Global defaults - applies to ALL tools automatically
+  # This means you don't need to configure each tool individually!
+  global_defaults:
+    default_backend: "anthropic"
+    temperature: 0.7
+    max_tokens: 4096
+
+  # Anthropic configuration
+  anthropic:
+    # Set your API key here or via environment variable
+    # Get your key from: https://console.anthropic.com/
+    api_key: "${ANTHROPIC_API_KEY}"
+
+    # Base URL (no need to change this)
+    base_url: "https://api.anthropic.com"
+
+    # Model assignments for different roles
+    # Using Claude 3.5 Sonnet for most tasks (best balance)
+    # Using Claude 3 Haiku for quick/cheap tasks
+    models:
+      overseer: "claude-3-5-sonnet-20241022"      # Strategic planning
+      generator: "claude-3-5-sonnet-20241022"     # Code generation
+      evaluator: "claude-3-5-sonnet-20241022"     # Code evaluation
+      triage: "claude-3-haiku-20240307"           # Quick decisions
+      technical_writer: "claude-3-5-sonnet-20241022"  # Documentation
+
+    # All Claude 3 models have 200k token context window
+    context_windows:
+      "claude-3-5-sonnet-20241022": 200000
+      "claude-3-opus-20240229": 200000
+      "claude-3-haiku-20240307": 200000
+
+# ============================================================================
+# Tools Configuration - Automatically uses Anthropic!
+# ============================================================================
+# Because we set global_defaults.default_backend = "anthropic",
+# ALL tools automatically use Anthropic unless explicitly overridden.
+# No need to configure backend for each tool!
+
+tools:
+  # All these tools will automatically use the Anthropic backend
+  # defined in llm.global_defaults
+
+  technical_writer:
+    type: "llm"
+    name: "Technical Article Writer"
+    description: "Writes technical blog posts and tutorials"
+    llm:
+      model_key: "technical_writer"
+      system_prompt: |
+        You are an expert technical writer specializing in software development.
+        Write clear, engaging, and accurate technical content.
+      temperature: 0.7
+    cost_tier: "medium"
+    speed_tier: "medium"
+    quality_tier: "excellent"
+
+  code_generator:
+    type: "llm"
+    name: "Code Generator"
+    description: "Generates production-ready code"
+    llm:
+      model_key: "generator"
+      system_prompt: |
+        You are a precise code generator.
+        Produce safe, efficient, well-documented code.
+      temperature: 0.3
+    cost_tier: "medium"
+    speed_tier: "medium"
+    quality_tier: "excellent"
+
+  quick_triage:
+    type: "llm"
+    name: "Quick Triage"
+    description: "Fast pass/fail decisions"
+    llm:
+      model_key: "triage"
+      system_prompt: "Quick triage. Decide pass/fail. Be concise."
+      temperature: 0.1
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+
+# That's it! All tools now use Anthropic Claude automatically.
+# You can add as many tools as you want, and they'll all use Anthropic
+# unless you explicitly override the backend.
+
+# ============================================================================
+# Optional: Advanced Anthropic Configuration
+# ============================================================================
+# Uncomment these if you want more control
+
+# Use Claude Opus for the most demanding tasks (higher cost, best quality)
+# llm:
+#   anthropic:
+#     models:
+#       overseer: "claude-3-opus-20240229"
+#       generator: "claude-3-opus-20240229"
+#       evaluator: "claude-3-5-sonnet-20241022"
+#       triage: "claude-3-haiku-20240307"
+
+# ============================================================================
+# Embeddings - Using OpenAI for embeddings (Anthropic doesn't offer embeddings)
+# ============================================================================
+# Note: Anthropic doesn't provide embedding models yet.
+# For RAG/semantic search, use OpenAI or Ollama for embeddings
+# while keeping Anthropic for LLM tasks.
+
+# Option 1: OpenAI embeddings (recommended)
+embeddings:
+  backend: "openai"
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    model: "text-embedding-3-small"
+    dimensions: 1536
+
+# Option 2: Ollama local embeddings (free, but requires Ollama running)
+# embeddings:
+#   backend: "ollama"
+#   ollama:
+#     base_url: "http://localhost:11434"
+#     model: "nomic-embed-text"
+#     dimensions: 768
+
+# ============================================================================
+# Logging
+# ============================================================================
+
+logging:
+  level: "INFO"
+  log_llm_conversations: true
+
+# ============================================================================
+# That's all you need! Quick setup summary:
+# ============================================================================
+# 1. Set ANTHROPIC_API_KEY environment variable
+# 2. (Optional) Set OPENAI_API_KEY if you want to use embeddings
+# 3. Run: export ANTHROPIC_API_KEY="your-key-here"
+# 4. Start using the system!
+#
+# All tools will automatically use Anthropic Claude.
+# No per-tool configuration needed!
