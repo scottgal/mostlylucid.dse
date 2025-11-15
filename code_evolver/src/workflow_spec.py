@@ -85,6 +85,10 @@ class WorkflowStep:
     retry_on_failure: bool = False           # Retry if step fails
     max_retries: int = 3                     # Max retry attempts
 
+    # Parallel execution support
+    parallel_group: Optional[int] = None     # Steps with same group can run in parallel
+    depends_on: List[str] = field(default_factory=list)  # Step IDs this step depends on
+
     def to_dict(self) -> dict:
         """Convert to dictionary for JSON serialization"""
         result = {
@@ -117,6 +121,12 @@ class WorkflowStep:
             result["retry_on_failure"] = True
             result["max_retries"] = self.max_retries
 
+        # Parallel execution fields
+        if self.parallel_group is not None:
+            result["parallel_group"] = self.parallel_group
+        if self.depends_on:
+            result["depends_on"] = self.depends_on
+
         return result
 
     @classmethod
@@ -145,7 +155,9 @@ class WorkflowStep:
             output_name=data.get("output_name", "output"),
             timeout=data.get("timeout", 300),
             retry_on_failure=data.get("retry_on_failure", False),
-            max_retries=data.get("max_retries", 3)
+            max_retries=data.get("max_retries", 3),
+            parallel_group=data.get("parallel_group"),
+            depends_on=data.get("depends_on", [])
         )
 
 

@@ -377,26 +377,29 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
         workflow.add_step("workflow_decomposition", "llm", f"Decompose into workflow steps ({self.config.overseer_model})")
         workflow.start_step("workflow_decomposition")
 
-        workflow_prompt = f"""You are decomposing a task into workflow steps. Follow this EXACT process:
+        workflow_prompt = f"""You are decomposing a task into workflow steps. This is CRITICAL - you MUST create SEPARATE steps for EACH operation.
+
 {workflow_examples}
 
 TASK TO ANALYZE: "{description}"
 
 STEP 1: IDENTIFY OPERATIONS
 Look for these keywords that indicate multiple operations:
-- "and" → separate operations
-- "then" → sequential operations
-- "translate" → separate translation step
-- "convert" → separate conversion step
+- "and" → SEPARATE operations (create SEPARATE steps)
+- "then" → SEQUENTIAL operations (create SEPARATE steps)
+- "translate" → SEPARATE translation step
+- "convert" → SEPARATE conversion step
 
 Count how many distinct operations are in the task.
 
 STEP 2: SPLIT THE TASK
 For "{description}":
-- How many operations? [Count them]
-- What is operation 1? [Identify it]
-- What is operation 2? [If exists]
-- What is operation 3? [If exists]
+- How many operations? [Count them carefully]
+- What is operation 1? [Identify ONLY the first operation]
+- What is operation 2? [Identify ONLY the second operation - if exists]
+- What is operation 3? [Identify ONLY the third operation - if exists]
+
+CRITICAL RULE: Each operation gets its OWN step! Do NOT combine operations into one step!
 
 EXAMPLES:
 
@@ -418,31 +421,75 @@ Example 3: "calculate fibonacci then sort then display"
 - Operation 3: display data
 - Result: 3 steps
 
-STEP 3: CREATE JSON OUTPUT
+STEP 3: ANALYZE DEPENDENCIES AND PARALLEL OPPORTUNITIES
+
+For each operation, determine:
+- Which steps it DEPENDS on (must complete before this step starts)
+- Which steps can run IN PARALLEL (same parallel_group number)
+
+DEPENDENCY RULES:
+1. If step B uses output from step A → B depends_on: ["stepA"]
+2. If steps B and C are independent → they can run in parallel (same parallel_group)
+3. Avoid race conditions: steps that modify shared state cannot be parallel
+
+PARALLEL EXECUTION EXAMPLES:
+
+Example 1: "write a joke and translate to french and spanish"
+- Step 1: write joke (no dependencies, parallel_group: null)
+- Step 2: translate to french (depends_on: ["step1"], parallel_group: 1)
+- Step 3: translate to spanish (depends_on: ["step1"], parallel_group: 1)
+Result: Steps 2 and 3 run in PARALLEL after step 1 completes
+
+Example 2: "write 3 different jokes"
+- Step 1: write joke about cats (parallel_group: 1)
+- Step 2: write joke about dogs (parallel_group: 1)
+- Step 3: write joke about birds (parallel_group: 1)
+Result: All 3 steps run in PARALLEL (no dependencies)
+
+Example 3: "write a story then summarize it" (sequential)
+- Step 1: write story (no dependencies)
+- Step 2: summarize (depends_on: ["step1"])
+Result: Step 2 MUST wait for step 1 (no parallelism)
+
+STEP 4: CREATE JSON OUTPUT
 
 For each operation you identified, create a separate step in the JSON.
 
+CRITICAL: task_for_node must be a COMPLETE TASK DESCRIPTION, NOT a placeholder like [WRITE].
+
+CORRECT example for "write a joke and translate to french":
 {{
   "workflow_id": "task_workflow",
-  "description": "{description}",
+  "description": "write a joke and translate to french",
   "steps": [
     {{
       "step_id": "step1",
       "type": "llm_call",
-      "description": "[Operation 1 description]",
-      "task_for_node": "[ONLY operation 1, no other operations]",
+      "description": "Write a joke",
+      "task_for_node": "Write a joke",
       "tool": "content_generator",
-      "output_name": "step1_output"
+      "output_name": "step1_output",
+      "parallel_group": null,
+      "depends_on": []
     }},
     {{
       "step_id": "step2",
       "type": "llm_call",
-      "description": "[Operation 2 description]",
-      "task_for_node": "[ONLY operation 2, no other operations]",
+      "description": "Translate to French",
+      "task_for_node": "Translate the joke to French",
       "tool": "nmt_translator",
       "input_from_step": "step1",
-      "output_name": "step2_output"
+      "output_name": "step2_output",
+      "depends_on": ["step1"]
     }}
+  ]
+}}
+
+WRONG example (DO NOT DO THIS):
+{{
+  "steps": [
+    {{"task_for_node": "[WRITE]"}},  // WRONG - this is a placeholder
+    {{"task_for_node": "[TRANSLATE]"}}  // WRONG - this is a placeholder
   ]
 }}
 
@@ -489,6 +536,15 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
 
         workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps planned")
 
+        # Validate decomposition quality
+        multi_operation_keywords = ["and", "then", "translate", "convert"]
+        description_lower = description.lower()
+        has_multi_keywords = any(kw in description_lower for kw in multi_operation_keywords)
+
+        if has_multi_keywords and len(workflow_spec.steps) == 1:
+            console.print(f"[yellow]Warning: Task contains '{[kw for kw in multi_operation_keywords if kw in description_lower]}' but was decomposed into only 1 step.[/yellow]")
+            console.print(f"[yellow]This may indicate the task should be split into multiple steps.[/yellow]")
+
         # Show workflow plan to user
         console.print(f"\n[bold cyan]Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
         for i, step in enumerate(workflow_spec.steps, 1):
@@ -497,53 +553,89 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
                 console.print(f"     Node task: {step.task_for_node}")
         console.print()
 
-        # Step 2: Execute each workflow step, generating a node for each
+        # Step 2: Execute workflow steps (with parallel execution support)
         step_results = {}
+        completed_steps = set()
 
-        for step in workflow_spec.steps:
-            workflow.add_step(f"execute_{step.step_id}", "generate", f"Generate and execute: {step.description}")
-            workflow.start_step(f"execute_{step.step_id}")
+        # Organize steps into execution groups respecting dependencies
+        execution_groups = self._organize_parallel_execution(workflow_spec.steps)
 
-            # Determine the granular task for THIS node
-            node_task = getattr(step, 'task_for_node', step.description)
+        for group_idx, parallel_group in enumerate(execution_groups):
+            if len(parallel_group) > 1:
+                console.print(f"\n[bold cyan]Executing {len(parallel_group)} steps in parallel:[/bold cyan]")
+                for step in parallel_group:
+                    console.print(f"  - {step.description}")
 
-            console.print(f"\n[bold]Step: {step.description}[/bold]")
-            console.print(f"[dim]Generating node for: {node_task}[/dim]")
+            # Execute all steps in this group in parallel (if more than one)
+            import concurrent.futures
+            import threading
 
-            # Generate code for this step by recursively calling handle_generate
-            # but with the GRANULAR task, not the full description
-            # Save current context and set workflow mode flag
-            old_context = self.context.copy()
-            self.context.clear()
-            self.context['_in_workflow_mode'] = True  # Prevent re-detection of workflows
-            # Add workflow context so RAG knows this node is part of a workflow
-            self.context['_workflow_context'] = {
-                'parent_workflow': description,  # Full workflow task
-                'step_id': step.step_id,
-                'step_description': step.description,
-                'tool_used': step.tool_name,
-                'operation_type': self._infer_operation_type(step.tool_name, node_task)
-            }
+            def execute_step(step):
+                """Execute a single workflow step"""
+                workflow.add_step(f"execute_{step.step_id}", "generate", f"Generate and execute: {step.description}")
+                workflow.start_step(f"execute_{step.step_id}")
 
-            # Generate the node (this will go through the normal single-step flow)
-            success = self.handle_generate(node_task)
+                # Determine the granular task for THIS node
+                node_task = getattr(step, 'task_for_node', step.description)
 
-            if not success:
-                console.print(f"[red]Failed to generate step: {step.step_id}[/red]")
+                # Fallback: if task_for_node looks like a tool name, use description instead
+                if node_task and step.tool_name and node_task.lower().replace('_', '') == step.tool_name.lower().replace('_', ''):
+                    node_task = step.description
+
+                console.print(f"\n[bold]Step: {step.description}[/bold]")
+                console.print(f"[dim]Generating node for: {node_task}[/dim]")
+
+                # Save current context and set workflow mode flag
+                old_context = self.context.copy()
+                self.context.clear()
+                self.context['_in_workflow_mode'] = True
+                self.context['_workflow_context'] = {
+                    'parent_workflow': description,
+                    'step_id': step.step_id,
+                    'step_description': step.description,
+                    'tool_used': step.tool_name,
+                    'operation_type': self._infer_operation_type(step.tool_name, node_task)
+                }
+
+                # Generate the node
+                success = self.handle_generate(node_task)
+
+                # Restore context
                 self.context = old_context
-                return False
 
-            # Get the node_id of what was just generated (it's the last one in registry)
-            # For now, we'll need to track this better
-            # TODO: Modify handle_generate to return node_id
+                if not success:
+                    console.print(f"[red]Failed to generate step: {step.step_id}[/red]")
+                    workflow.fail_step(f"execute_{step.step_id}", "Generation failed")
+                    return step.step_id, False
 
-            # Restore context
-            self.context = old_context
+                workflow.complete_step(f"execute_{step.step_id}", "Node generated and executed")
+                return step.step_id, True
 
-            workflow.complete_step(f"execute_{step.step_id}", "Node generated and executed")
+            # Execute steps (in parallel if multiple in group)
+            if len(parallel_group) == 1:
+                # Single step - execute directly
+                step_id, success = execute_step(parallel_group[0])
+                if not success:
+                    return False
+                completed_steps.add(step_id)
+                step_results[step_id] = {"status": "completed"}
+            else:
+                # Multiple steps - execute in parallel using ThreadPoolExecutor
+                with concurrent.futures.ThreadPoolExecutor(max_workers=len(parallel_group)) as executor:
+                    futures = {executor.submit(execute_step, step): step for step in parallel_group}
 
-            # Store result (for now, mock this - we'll wire it properly)
-            step_results[step.step_id] = {"status": "completed"}
+                    for future in concurrent.futures.as_completed(futures):
+                        step = futures[future]
+                        try:
+                            step_id, success = future.result()
+                            if not success:
+                                console.print(f"[red]Workflow failed: step {step_id} did not complete[/red]")
+                                return False
+                            completed_steps.add(step_id)
+                            step_results[step_id] = {"status": "completed"}
+                        except Exception as e:
+                            console.print(f"[red]Exception in step {step.step_id}: {e}[/red]")
+                            return False
 
         console.print(f"\n[bold green]Workflow completed successfully![/bold green]")
 
@@ -562,6 +654,77 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
         )
 
         return True
+
+    def _organize_parallel_execution(self, steps: list) -> list:
+        """
+        Organize workflow steps into execution groups based on dependencies and parallel_group.
+
+        Returns a list of lists, where each inner list contains steps that can run in parallel.
+
+        Args:
+            steps: List of WorkflowStep objects
+
+        Returns:
+            List of parallel execution groups
+        """
+        from collections import defaultdict
+
+        # Group steps by parallel_group number
+        parallel_groups = defaultdict(list)
+        sequential_steps = []
+
+        for step in steps:
+            if step.parallel_group is not None:
+                parallel_groups[step.parallel_group].append(step)
+            else:
+                sequential_steps.append(step)
+
+        # Build dependency graph
+        step_by_id = {step.step_id: step for step in steps}
+
+        # Create execution order respecting dependencies
+        execution_groups = []
+        executed = set()
+
+        # Process all steps
+        remaining = list(steps)
+
+        while remaining:
+            # Find steps whose dependencies are all met
+            ready = []
+            for step in remaining:
+                deps = getattr(step, 'depends_on', [])
+                if all(dep in executed for dep in deps):
+                    ready.append(step)
+
+            if not ready:
+                # Circular dependency or missing dependency
+                console.print(f"[yellow]Warning: Circular dependency detected, executing remaining steps sequentially[/yellow]")
+                ready = remaining[:1]
+
+            # Group ready steps by parallel_group
+            if not ready:
+                break
+
+            # Separate into parallel groups
+            groups_in_batch = defaultdict(list)
+            for step in ready:
+                if step.parallel_group is not None:
+                    groups_in_batch[step.parallel_group].append(step)
+                else:
+                    # Steps without parallel_group run individually
+                    execution_groups.append([step])
+                    executed.add(step.step_id)
+                    remaining.remove(step)
+
+            # Add parallel groups as execution batches
+            for group_id, group_steps in groups_in_batch.items():
+                execution_groups.append(group_steps)
+                for step in group_steps:
+                    executed.add(step.step_id)
+                    remaining.remove(step)
+
+        return execution_groups
 
     def _infer_operation_type(self, tool_name: str, task_description: str) -> str:
         """
@@ -1049,15 +1212,36 @@ Answer:"""
         # Step 1.5: Check if this is a multi-step workflow task
         # Only detect workflows at the top level (not when called recursively from workflow handler)
         in_workflow_mode = self.context.get('_in_workflow_mode', False)
+        workflow_depth = self.context.get('_workflow_depth', 0)
 
-        if not in_workflow_mode:
+        # Prevent infinite recursion by limiting workflow decomposition depth
+        MAX_WORKFLOW_DEPTH = 3
+
+        if not in_workflow_mode and workflow_depth < MAX_WORKFLOW_DEPTH:
             workflow_keywords = self.config.get("chat.workflow_mode.detect_keywords", ["and", "then", "translate", "convert"])
-            is_multi_step = any(keyword in description.lower() for keyword in workflow_keywords)
+
+            # Smarter keyword detection - avoid false positives for arithmetic
+            is_multi_step = False
+            description_lower = description.lower()
+
+            # Exclude arithmetic operations
+            arithmetic_keywords = ["add", "subtract", "multiply", "divide", "calculate", "compute", "sum"]
+            is_arithmetic = any(kw in description_lower for kw in arithmetic_keywords)
+
+            if not is_arithmetic:
+                is_multi_step = any(keyword in description_lower for keyword in workflow_keywords)
 
             if is_multi_step and self.config.get("chat.workflow_mode.enabled", False):
                 # Multi-step workflow detected
                 console.print(f"[cyan]Multi-step workflow detected - decomposing into reusable nodes...[/cyan]")
-                return self._handle_workflow_generation(description, workflow, available_tools)
+                # Increment depth counter
+                self.context['_workflow_depth'] = workflow_depth + 1
+                result = self._handle_workflow_generation(description, workflow, available_tools)
+                # Reset depth counter after workflow completes
+                self.context['_workflow_depth'] = workflow_depth
+                return result
+        elif workflow_depth >= MAX_WORKFLOW_DEPTH:
+            console.print(f"[yellow]Warning: Maximum workflow depth ({MAX_WORKFLOW_DEPTH}) reached. Treating as simple generation.[/yellow]")
 
         # Step 2: Ask overseer for detailed specification WITH tool recommendations
         workflow.add_step("overseer_specification", "llm", f"Consult overseer ({self.config.overseer_model})")
@@ -1309,7 +1493,46 @@ ALGORITHM: fibonacci computation"""
         except Exception as e:
             console.print(f"[dim yellow]Note: Could not save specification to RAG: {e}[/dim yellow]")
 
-        # Step 4: Generate code based on specification
+        # Step 3.5: Test-Driven Development (TDD) - Generate interface tests BEFORE code
+        interface_tests = None
+        tdd_enabled = self.config.get("testing.test_driven_development", False)
+
+        if tdd_enabled and self.config.get("testing.enabled", True):
+            workflow.add_step("tdd_interface", "test", "Generate interface-defining tests (TDD)")
+            workflow.start_step("tdd_interface")
+
+            try:
+                interface_tests = self._generate_interface_tests_first(node_id, description, specification)
+
+                # Create node directory if it doesn't exist yet
+                node_dir = self.runner.get_node_path(node_id).parent
+                node_dir.mkdir(parents=True, exist_ok=True)
+
+                # Save the interface tests
+                test_path = node_dir / "test_main.py"
+                with open(test_path, 'w') as f:
+                    f.write(interface_tests)
+
+                console.print(f"[dim green]Saved interface-defining tests to {test_path.name}[/dim green]")
+
+                # Display the generated tests
+                test_syntax = Syntax(interface_tests, "python", theme="monokai", line_numbers=True)
+                console.print(Panel(
+                    test_syntax,
+                    title="[cyan]Interface-Defining Tests (TDD)[/cyan]",
+                    box=box.ROUNDED,
+                    expand=False
+                ))
+
+                workflow.complete_step("tdd_interface", f"Tests generated ({len(interface_tests)} chars)")
+
+            except Exception as e:
+                console.print(f"[yellow]Warning: Could not generate interface tests: {e}[/yellow]")
+                console.print("[yellow]Continuing with traditional code-first approach[/yellow]")
+                workflow.fail_step("tdd_interface", str(e))
+                interface_tests = None
+
+        # Step 4: Generate code based on specification (and tests if TDD enabled)
         # Build list of available tools for the prompt
         tools_list = "\n".join([
             f"- {t.tool_id}: {t.description}"
@@ -1324,12 +1547,29 @@ ALGORITHM: fibonacci computation"""
             console.print(f"[yellow]Note: Specification ({len(specification)} chars) exceeds context window, truncating to {max_spec_chars} chars[/yellow]")
             specification = specification[:max_spec_chars] + "\n\n[... specification truncated due to context limits ...]"
 
+        # Build TDD section if tests were generated
+        tdd_section = ""
+        if interface_tests:
+            tdd_section = f"""
+**TEST-DRIVEN DEVELOPMENT MODE**
+
+The following unit tests define the REQUIRED INTERFACE for your code.
+Your code MUST pass these tests:
+
+```python
+{interface_tests}
+```
+
+CRITICAL: Your code must satisfy the interface defined by these tests.
+Look at what functions the tests import and call - you MUST implement those exact functions.
+"""
+
         code_prompt = f"""You are implementing code based on this DETAILED SPECIFICATION:
 
 {specification}
 
 Task: {description}
-
+{tdd_section}
 Available LLM Tools you can call:
 {tools_list}
 
@@ -1337,7 +1577,7 @@ Follow the specification EXACTLY. Generate a Python implementation that:
 1. Matches the problem definition and requirements
 2. Implements the recommended algorithm/approach
 3. Uses the specified input/output interface
-4. Handles all edge cases mentioned
+4. {"PASSES THE INTERFACE TESTS ABOVE (TDD mode)" if interface_tests else "Handles all edge cases mentioned"}
 5. Includes proper error handling
 6. Follows the safety limits specified
 
@@ -1675,14 +1915,22 @@ Return ONLY the JSON object, nothing else."""
         syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
         console.print(Panel(syntax, title=f"[green]Generated Code: {node_id}[/green]", box=box.ROUNDED))
 
-        # Step 7: Generate and run unit tests if enabled
+        # Step 7: Run unit tests (already generated in TDD mode, or generate now)
         test_success = True
         if self.config.get("testing.enabled", True):
-            workflow.add_step("testing", "test", "Generate and run unit tests")
-            workflow.start_step("testing")
-            console.print(f"\n[cyan]Generating unit tests...[/cyan]")
+            if interface_tests:
+                # TDD mode: tests were already generated and saved, just run them
+                workflow.add_step("testing", "test", "Run interface tests (TDD)")
+                workflow.start_step("testing")
+                console.print(f"\n[cyan]Running interface tests (TDD mode)...[/cyan]")
+            else:
+                # Traditional mode: generate tests now
+                workflow.add_step("testing", "test", "Generate and run unit tests")
+                workflow.start_step("testing")
+                console.print(f"\n[cyan]Generating unit tests...[/cyan]")
+
             try:
-                test_success = self._generate_and_run_tests(node_id, description, specification, code)
+                test_success = self._generate_and_run_tests(node_id, description, specification, code, skip_generation=bool(interface_tests))
             except Exception as e:
                 console.print(f"[red]Error in test generation: {e}[/red]")
                 import traceback
@@ -2231,8 +2479,169 @@ Return ONLY the JSON, no explanations."""
             "description": description[:200]
         }
 
-    def _generate_and_run_tests(self, node_id: str, description: str, specification: str, code: str) -> bool:
-        """Generate and run unit tests for a node with comprehensive logging."""
+    def _generate_interface_tests_first(self, node_id: str, description: str, specification: str) -> str:
+        """
+        Generate interface-defining tests BEFORE code (TDD approach).
+
+        Returns the test code that defines the expected interface.
+        """
+        test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
+This is Test-Driven Development (TDD) - the tests come FIRST and define what the code should do.
+
+TASK DESCRIPTION: {description}
+
+SPECIFICATION: {specification[:800]}
+
+YOUR JOB:
+1. Analyze what inputs and outputs the code should have
+2. Define the interface through tests
+3. Create test cases that the future code must pass
+
+RULES:
+1. For arithmetic tasks (add, subtract, multiply):
+   - Define a function with clear parameters
+   - Test it with the specific numbers from the description
+   - Example: "add 5 and 3" → test that add(5, 3) returns 8
+
+2. For content generation tasks (write, generate, create):
+   - Tests should validate the structure (main() exists, returns JSON)
+   - Don't test the actual content (it's generated by LLM)
+   - Focus on interface: input format, output format
+
+3. For data processing tasks (sort, filter, transform):
+   - Define expected input/output formats
+   - Test with sample data
+   - Verify correct transformations
+
+EXAMPLE FOR ARITHMETIC:
+```python
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from main import add  # The code generator will create this function
+
+def test_add_specific_numbers():
+    \"\"\"Test that add(5, 3) returns 8\"\"\"
+    print("Testing add(5, 3)...")
+    result = add(5, 3)
+    assert result == 8, f"Expected 8 but got {{result}}"
+    print("OK Test passed: 5 + 3 = 8")
+
+def test_add_negative_numbers():
+    \"\"\"Test edge case: negative numbers\"\"\"
+    print("Testing add(-5, 3)...")
+    result = add(-5, 3)
+    assert result == -2, f"Expected -2 but got {{result}}"
+    print("OK Test passed: -5 + 3 = -2")
+
+if __name__ == "__main__":
+    test_add_specific_numbers()
+    test_add_negative_numbers()
+```
+
+EXAMPLE FOR CONTENT GENERATION:
+```python
+import sys
+import json
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def test_interface():
+    \"\"\"Test that main() function exists and returns valid JSON\"\"\"
+    print("Testing interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK main() function exists")
+
+if __name__ == "__main__":
+    test_interface()
+```
+
+Now generate the interface-defining tests for: {description}
+
+Output ONLY the Python test code (no markdown fences, no explanations):"""
+
+        console.print(f"\n[cyan]Generating interface-defining tests first (TDD mode)...[/cyan]")
+
+        test_code = self.client.generate(
+            model=self.config.generator_model,
+            prompt=test_prompt,
+            temperature=0.3,  # Lower temperature for test generation
+            model_key="generator"
+        )
+
+        # Clean the test code
+        test_code = self._clean_code(test_code)
+
+        console.print(f"[dim green]Generated interface tests ({len(test_code)} chars)[/dim green]")
+
+        return test_code
+
+    def _generate_and_run_tests(self, node_id: str, description: str, specification: str, code: str, skip_generation: bool = False) -> bool:
+        """Generate and run unit tests for a node with comprehensive logging.
+
+        Args:
+            skip_generation: If True, skip test generation (tests already exist from TDD mode)
+        """
+        # If TDD mode, tests already exist - just run them
+        if skip_generation:
+            console.print("[dim]Using pre-generated interface tests from TDD mode[/dim]")
+            console.print("[cyan]Running tests with logging...[/cyan]")
+
+            # Run the pre-generated test file
+            import subprocess
+            import os
+            from pathlib import Path
+
+            node_dir = self.runner.get_node_path(node_id).parent
+            test_path = node_dir / "test_main.py"
+
+            # Set PYTHONPATH so tests can import node_runtime
+            env = os.environ.copy()
+            code_evolver_dir = str(Path(__file__).parent.parent.absolute())
+            env['PYTHONPATH'] = code_evolver_dir + os.pathsep + env.get('PYTHONPATH', '')
+
+            try:
+                result = subprocess.run(
+                    [sys.executable, "test_main.py"],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    cwd=str(node_dir),
+                    env=env
+                )
+
+                stdout = result.stdout
+                stderr = result.stderr
+                success = result.returncode == 0
+
+                # Store test output for escalation context
+                test_output_log = f"STDOUT:\n{stdout}\n\nSTDERR:\n{stderr}\n\nReturn code: {result.returncode}"
+                self.context['last_test_output'] = test_output_log
+
+                if success:
+                    console.print("[green]OK Tests passed[/green]")
+                    if stdout:
+                        console.print(f"[dim]Test log:\n{stdout[:500]}[/dim]")
+                    return True
+                else:
+                    console.print(f"[red]FAIL Tests failed[/red]")
+                    console.print(f"[yellow]Error: {stderr[:300]}[/yellow]")
+                    if stdout:
+                        console.print(f"[dim]Test output before failure:\n{stdout[:500]}[/dim]")
+                    # Store error for escalation
+                    self.context['last_error'] = stderr
+                    self.context['last_stdout'] = stdout
+                    return False
+            except subprocess.TimeoutExpired:
+                console.print(f"[red]FAIL Tests timed out after 30 seconds[/red]")
+                self.context['last_error'] = "Test execution timed out"
+                return False
+            except Exception as e:
+                console.print(f"[red]FAIL Error running tests: {e}[/red]")
+                self.context['last_error'] = str(e)
+                return False
+
+        # Traditional mode: generate tests now
         # Check if code uses call_tool - if so, generate minimal smoke test
         uses_call_tool = 'call_tool(' in code
 

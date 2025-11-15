@@ -26,7 +26,7 @@ ollama:
       # endpoints: List of URLs for round-robin load balancing
       endpoints:
         - "http://localhost:11434"
-        - "http://192.168.0.56:11434"
+        - "http://192.168.0.56:11434"  # Remote endpoint (has codellama only)
       # Single endpoint (old format - still supported):
       # endpoint: null
 
@@ -50,15 +50,18 @@ ollama:
     # Can be a smaller, faster model (e.g., tiny, llama3)
     triage:
       model: "tinyllama"
-      endpoint: null
+      #endpoint: null
       # endpoint: "http://machine3:11434"
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
 
     # Escalation - Higher-level code model for fixing complex issues
     # MUST be a powerful code-specialized model (e.g., qwen2.5-coder:14b, deepseek-coder:33b)
     # NEVER use general chat models here - code debugging requires code-trained models
     escalation:
       model: "qwen2.5-coder:14b"
-      endpoint: null  # Uses base_url
+      endpoint: "http://localhost:11434"  # Only available on localhost, not remote
       # Can also use multiple endpoints for load balancing:
       # endpoints:
       #   - "http://localhost:11434"
@@ -220,6 +223,10 @@ testing:
   auto_escalate: true                  # Escalate to higher model if tests fail
   max_escalation_attempts: 3           # Max fix attempts during escalation
 
+  # Test-Driven Development (TDD) mode
+  # When enabled, generates unit tests BEFORE code to define the interface
+  test_driven_development: true        # Generate tests first, then code to pass them
+
   # Initial optimization loop
   # On first code generation, iteratively improve the code through feedback
   initial_optimization_iterations: 3   # Number of optimize iterations (0 to disable)
@@ -273,7 +280,7 @@ tools:
     max_output_length: "very-long" # short/medium/long/very-long (32K context)
     llm:
       model: "qwen2.5-coder:14b"
-      endpoint: null
+      endpoint: "http://localhost:11434"  # Only available on localhost, not remote
       system_prompt: "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool() or try to orchestrate workflows.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
       prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality\n\nSPECIAL NOTE FOR CONTENT GENERATION:\nIf the task involves generating text content (stories, articles, jokes, etc.):\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it\n- Example: content = \"Once upon a time...\" then print(json.dumps({{\"result\": content}}))"
     tags: ["general", "fallback", "code-generation", "any-task", "complex"]
@@ -293,7 +300,9 @@ tools:
     max_output_length: "short" # short/medium/long/very-long
     llm:
       model: "tinyllama"
-      endpoint: null
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
       system_prompt: "You are a fast proofreader. Check for spelling errors, grammar mistakes, and syntax issues. Be concise - your context window is small (2048 tokens). If you receive a chunk of text, check just that chunk and report issues found in it.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
       prompt_template: "Quick check this text for errors:\n\n{text}\n\nFind:\n- Spelling errors\n- Grammar mistakes  \n- Syntax issues\n- Structure problems\n\nProvide a brief list of issues found (keep under 400 tokens). If no major issues, just say 'OK'. NOTE: You may be seeing a chunk of larger text - just check this portion."
     tags: ["spellcheck", "grammar", "syntax", "quick-feedback", "fast", "proofreading", "chunking"]
@@ -346,7 +355,9 @@ tools:
     description: "Suggests performance optimizations"
     llm:
       model: "codellama"
-      endpoint: null
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
       # endpoint: "http://perf-machine:11434"
     tags: ["performance", "optimization"]
 
@@ -598,7 +609,9 @@ tools:
     max_output_length: "short" # Just returns OK or error description
     llm:
       model: "tinyllama"
-      endpoint: null
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
       system_prompt: "You are a translation quality validator. Check translated text for common errors. Be fast and concise - your context window is only 2048 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
       prompt_template: "Validate this translated text for quality issues:\n\nOriginal: {original_text}\nTranslated: {translated_text}\n\nCheck for:\n1. Repeated characters (e.g., 'aaaa', '||||')\n2. Garbled text (random symbols, encoding errors)\n3. Untranslated portions\n4. Missing or corrupted text\n5. Obvious translation failures\n\nRespond with ONLY:\n- 'OK' if translation looks good\n- 'ERROR: <brief description>' if issues found\n\nKeep response under 100 tokens."
     tags: ["translation", "validation", "quality-check", "error-detection", "fast"]
@@ -632,7 +645,9 @@ tools:
     max_output_length: "short"  # Just returns OK or error list
     llm:
       model: "tinyllama"
-      endpoint: null
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
       system_prompt: "You are a code validator. Check that Python code remains syntactically valid after translation. ONLY comments should be translated, never code itself.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
       prompt_template: "Validate this translated code:\n\n{translated_code}\n\nCheck:\n1. Python syntax is still valid\n2. Only comments were translated (not keywords, variables, functions)\n3. Code structure is unchanged\n4. No code keywords mistranslated (def, class, import, if, for, etc.)\n\nRespond with:\n- 'OK' if code is valid\n- 'ERROR: <list of issues>' if problems found\n\nBe concise (under 100 tokens)."
     tags: ["code", "validation", "translation", "syntax-check", "fast"]

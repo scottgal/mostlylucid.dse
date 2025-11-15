@@ -156,6 +156,63 @@ def call_llm(model: str, prompt: str, **kwargs) -> str:
     return runtime.call_llm(model, prompt, **kwargs)
 
 
+def call_tools_parallel(tool_calls: list) -> list:
+    """
+    Call multiple tools in parallel using concurrent execution.
+
+    Args:
+        tool_calls: List of tuples (tool_name, prompt, kwargs_dict)
+                   or dict with keys: 'tool', 'prompt', 'kwargs' (optional)
+
+    Returns:
+        List of results in the same order as tool_calls
+
+    Usage in generated nodes:
+        from node_runtime import call_tools_parallel
+
+        # Example 1: Translate to multiple languages in parallel
+        results = call_tools_parallel([
+            ("nmt_translator", "Translate to french: Hello", {"target_lang": "fr"}),
+            ("nmt_translator", "Translate to spanish: Hello", {"target_lang": "es"}),
+            ("nmt_translator", "Translate to german: Hello", {"target_lang": "de"})
+        ])
+        french, spanish, german = results
+
+        # Example 2: Generate multiple independent pieces of content
+        results = call_tools_parallel([
+            {"tool": "content_generator", "prompt": "Write a joke about cats"},
+            {"tool": "content_generator", "prompt": "Write a joke about dogs"},
+            {"tool": "content_generator", "prompt": "Write a joke about birds"}
+        ])
+    """
+    import concurrent.futures
+
+    runtime = NodeRuntime.get_instance()
+
+    def execute_tool_call(call_spec):
+        """Execute a single tool call from spec"""
+        if isinstance(call_spec, dict):
+            tool = call_spec['tool']
+            prompt = call_spec['prompt']
+            kwargs = call_spec.get('kwargs', {})
+        else:
+            # Tuple format: (tool, prompt) or (tool, prompt, kwargs)
+            if len(call_spec) == 2:
+                tool, prompt = call_spec
+                kwargs = {}
+            else:
+                tool, prompt, kwargs = call_spec
+
+        return runtime.call_tool(tool, prompt, **kwargs)
+
+    # Execute all tool calls in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(tool_calls)) as executor:
+        futures = [executor.submit(execute_tool_call, call) for call in tool_calls]
+        results = [future.result() for future in futures]
+
+    return results
+
+
 # Helper for chaining tool calls
 class ToolChain:
     """Chain multiple tool calls together."""

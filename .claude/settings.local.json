@@ -27,7 +27,8 @@
       "Bash(tee:*)",
       "Bash(pkill -f \"write a joke and translate\")",
       "Bash(pkill:*)",
-      "Bash(timeout 180 python:*)"
+      "Bash(timeout 180 python:*)",
+      "Bash(timeout 60 python:*)"
     ],
     "deny": [],
     "ask": []
