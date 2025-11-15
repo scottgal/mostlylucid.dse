@@ -214,10 +214,11 @@
     "invocation_general_1763182250701"
   ],
   "tool": [
-    "tool_add_5_and_3_1763184838",
-    "tool_multiply_6_by_7",
     "tool_write_a_poem",
-    "tool_add_7_and_9",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5",
+    "tool_write_then_translate_a_poen",
+    "tool_tell_a_joke",
     "tool_general",
     "tool_code_reviewer",
     "tool_security_auditor",
@@ -273,13 +274,17 @@
     "tool_write_me_a_joke",
     "tool_write_me_a_joke_1763182563",
     "tool_content_generator",
-    "tool_calculat_1_1",
-    "tool_calculate_5_plus_5"
+    "tool_add_5_and_3_1763184838",
+    "tool_multiply_6_by_7",
+    "tool_add_7_and_9"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
     "func_write_me_a_joke_1763183202",
     "func_write_me_a_joke_1763183469",
+    "func_tell_a_joke",
+    "workflow_tell_a_joke",
+    "tool_tell_a_joke",
     "tool_general",
     "tool_code_reviewer",
     "tool_security_auditor",
@@ -323,10 +328,12 @@
     "spec_write_a_poem",
     "spec_write_me_a_poem_1763185774",
     "spec_write_me_a_haiku",
+    "spec_write_a_haiku_about_code",
+    "spec_write_a_limerick",
+    "spec_write_then_translate_a_poen",
     "tool_technical_writer",
     "tool_fast_content_writer",
-    "tool_content_generator",
-    "spec_write_a_haiku_about_code"
+    "tool_content_generator"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -354,13 +361,16 @@
     "workflow_add_5_and_3",
     "workflow_write_me_a_poem_1763184485",
     "workflow_add_5_and_3_1763184838",
-    "tool_add_5_and_3_1763184838",
     "workflow_add_8_and_12",
     "workflow_multiply_6_by_7",
-    "tool_multiply_6_by_7",
     "workflow_write_a_poem",
     "tool_write_a_poem",
-    "tool_add_7_and_9",
+    "workflow_write_a_haiku_about_code",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5",
+    "tool_write_then_translate_a_poen",
+    "workflow_tell_a_joke",
+    "tool_tell_a_joke",
     "tool_write_a_technical_story_and_tr",
     "tool_write_me_a_technical_article_1763166799",
     "tool_add_5_and_8",
@@ -382,9 +392,9 @@
     "tool_write_a_joke_1763181926",
     "tool_write_me_a_joke",
     "tool_write_me_a_joke_1763182563",
-    "workflow_write_a_haiku_about_code",
-    "tool_calculat_1_1",
-    "tool_calculate_5_plus_5"
+    "tool_add_5_and_3_1763184838",
+    "tool_multiply_6_by_7",
+    "tool_add_7_and_9"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -435,7 +445,6 @@
     "spec_add_5_and_3_1763184838",
     "func_add_5_and_3_1763184838",
     "workflow_add_5_and_3_1763184838",
-    "tool_add_5_and_3_1763184838",
     "spec_add_8_and_12",
     "func_add_8_and_12",
     "workflow_add_8_and_12",
@@ -447,13 +456,6 @@
     "spec_write_me_a_poem_1763185774",
     "spec_write_me_a_haiku",
     "spec_multiply_3_by_4",
-    "tool_write_a_technical_story_and_tr",
-    "tool_write_me_a_technical_article_1763166799",
-    "tool_sum_4_and_6",
-    "tool_calculate_15_plus_25",
-    "tool_write_code_to_do_one_plus_rand",
-    "tool_write_a_technical_article_on_n",
-    "tool_wtie_mea_joke_about_the_welsh",
     "spec_add_11_and_22",
     "spec_subtract_10_from_20",
     "spec_divide_20_by_4",
@@ -462,7 +464,22 @@
     "spec_add_14_and_16",
     "spec_calculat_1_1",
     "spec_write_a_haiku_about_code",
-    "spec_calculate_5_plus_5"
+    "spec_calculate_5_plus_5",
+    "spec_write_a_limerick",
+    "spec_write_then_translate_a_poen",
+    "spec_tell_a_joke",
+    "tool_write_a_technical_story_and_tr",
+    "tool_write_me_a_technical_article_1763166799",
+    "tool_sum_4_and_6",
+    "tool_calculate_15_plus_25",
+    "tool_write_code_to_do_one_plus_rand",
+    "tool_write_a_technical_article_on_n",
+    "tool_wtie_mea_joke_about_the_welsh",
+    "tool_add_5_and_3_1763184838",
+    "spec_tell_me_a_joke",
+    "func_tell_me_a_joke",
+    "workflow_tell_me_a_joke",
+    "spec_tell_me_a_joke_1763210360"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -491,7 +508,6 @@
     "workflow_add_5_and_3",
     "func_add_5_and_3_1763184838",
     "workflow_add_5_and_3_1763184838",
-    "tool_add_5_and_3_1763184838",
     "func_add_8_and_12",
     "workflow_add_8_and_12",
     "func_write_a_short_haiku_about_code",
@@ -501,13 +517,17 @@
     "tool_calculate_15_plus_25",
     "tool_write_code_to_do_one_plus_rand",
     "tool_write_a_technical_article_on_n",
-    "tool_wtie_mea_joke_about_the_welsh"
+    "tool_wtie_mea_joke_about_the_welsh",
+    "tool_add_5_and_3_1763184838",
+    "func_tell_me_a_joke",
+    "workflow_tell_me_a_joke"
   ],
   "auto-generated": [
-    "tool_add_5_and_3_1763184838",
-    "tool_multiply_6_by_7",
     "tool_write_a_poem",
-    "tool_add_7_and_9",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5",
+    "tool_write_then_translate_a_poen",
+    "tool_tell_a_joke",
     "tool_write_a_technical_story_and_tr",
     "tool_write_me_a_technical_article_1763166799",
     "tool_add_5_and_8",
@@ -529,8 +549,9 @@
     "tool_write_a_joke_1763181926",
     "tool_write_me_a_joke",
     "tool_write_me_a_joke_1763182563",
-    "tool_calculat_1_1",
-    "tool_calculate_5_plus_5"
+    "tool_add_5_and_3_1763184838",
+    "tool_multiply_6_by_7",
+    "tool_add_7_and_9"
   ],
   "python": [
     "func_add_100_and_200",
@@ -553,6 +574,12 @@
     "func_write_a_poem",
     "workflow_write_a_poem",
     "tool_write_a_poem",
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code",
+    "tool_write_then_translate_a_poen",
+    "func_tell_a_joke",
+    "workflow_tell_a_joke",
+    "tool_tell_a_joke",
     "tool_add_5_and_8",
     "tool_pylint_checker",
     "tool_mypy_type_checker",
@@ -569,9 +596,7 @@
     "tool_write_me_code_to_do_a_fibonacc",
     "tool_add_10_and_20_1763173231",
     "tool_what_is_1_plus_1",
-    "tool_calculate_a_fibonaccie_sequenc",
-    "func_write_a_haiku_about_code",
-    "workflow_write_a_haiku_about_code"
+    "tool_calculate_a_fibonaccie_sequenc"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -580,20 +605,20 @@
     "workflow_add_10_and_20_1763173231",
     "func_what_is_1_plus_1",
     "workflow_what_is_1_plus_1",
-    "tool_add_7_and_9",
+    "tool_calculat_1_1",
+    "tool_calculate_5_plus_5",
     "tool_add_5_and_8",
     "tool_add_100_and_200",
     "tool_add_10_and_20_1763173231",
     "tool_what_is_1_plus_1",
-    "tool_calculat_1_1",
-    "tool_calculate_5_plus_5"
+    "tool_add_7_and_9"
   ],
   "json": [
     "func_add_100_and_200",
     "workflow_add_100_and_200",
     "func_write_me_a_joke",
-    "tool_add_100_and_200",
-    "tool_calculate_5_plus_5"
+    "tool_calculate_5_plus_5",
+    "tool_add_100_and_200"
   ],
   "complete": [
     "workflow_add_100_and_200",
@@ -624,7 +649,8 @@
     "workflow_add_8_and_12",
     "workflow_multiply_6_by_7",
     "workflow_write_a_poem",
-    "workflow_write_a_haiku_about_code"
+    "workflow_write_a_haiku_about_code",
+    "workflow_tell_a_joke"
   ],
   "fibonacci": [
     "func_write_me_code_to_do_a_fibonacc",
@@ -682,12 +708,8 @@
     "spec_multiply_6_by_7",
     "func_multiply_6_by_7",
     "workflow_multiply_6_by_7",
-    "tool_multiply_6_by_7",
     "spec_add_7_and_9",
-    "tool_add_7_and_9",
     "spec_multiply_3_by_4",
-    "tool_what_is_1_plus_1",
-    "tool_calculate_5_plus_10",
     "spec_add_11_and_22",
     "spec_subtract_10_from_20",
     "spec_divide_20_by_4",
@@ -696,7 +718,11 @@
     "spec_add_14_and_16",
     "tool_calculat_1_1",
     "spec_calculate_5_plus_5",
-    "tool_calculate_5_plus_5"
+    "tool_calculate_5_plus_5",
+    "tool_what_is_1_plus_1",
+    "tool_calculate_5_plus_10",
+    "tool_multiply_6_by_7",
+    "tool_add_7_and_9"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763174017457",
@@ -781,8 +807,8 @@
   "basic": [
     "func_multiply_6_by_7",
     "workflow_multiply_6_by_7",
-    "tool_multiply_6_by_7",
-    "tool_fast_code_generator"
+    "tool_fast_code_generator",
+    "tool_multiply_6_by_7"
   ],
   "tinyllama": [
     "tool_fast_code_generator",
@@ -863,7 +889,12 @@
     "spec_add_14_and_16",
     "spec_calculat_1_1",
     "spec_write_a_haiku_about_code",
-    "spec_calculate_5_plus_5"
+    "spec_calculate_5_plus_5",
+    "spec_write_a_limerick",
+    "spec_write_then_translate_a_poen",
+    "spec_tell_a_joke",
+    "spec_tell_me_a_joke",
+    "spec_tell_me_a_joke_1763210360"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -904,7 +935,12 @@
     "spec_add_14_and_16",
     "spec_calculat_1_1",
     "spec_write_a_haiku_about_code",
-    "spec_calculate_5_plus_5"
+    "spec_calculate_5_plus_5",
+    "spec_write_a_limerick",
+    "spec_write_then_translate_a_poen",
+    "spec_tell_a_joke",
+    "spec_tell_me_a_joke",
+    "spec_tell_me_a_joke_1763210360"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -945,7 +981,12 @@
     "spec_add_14_and_16",
     "spec_calculat_1_1",
     "spec_write_a_haiku_about_code",
-    "spec_calculate_5_plus_5"
+    "spec_calculate_5_plus_5",
+    "spec_write_a_limerick",
+    "spec_write_then_translate_a_poen",
+    "spec_tell_a_joke",
+    "spec_tell_me_a_joke",
+    "spec_tell_me_a_joke_1763210360"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1061,34 +1102,79 @@
     "exec_invocation_flake8_linter_1763185170161",
     "exec_invocation_pylint_checker_1763185171351",
     "exec_invocation_flake8_linter_1763187172809",
-    "exec_invocation_pylint_checker_1763187173561"
+    "exec_invocation_pylint_checker_1763187173561",
+    "exec_invocation_flake8_linter_1763187872720",
+    "exec_invocation_pylint_checker_1763187874676",
+    "exec_invocation_flake8_linter_1763209942000",
+    "exec_invocation_pylint_checker_1763209943166"
   ],
   "tool_execution": [
     "exec_invocation_flake8_linter_1763185170161",
     "exec_invocation_pylint_checker_1763185171351",
     "exec_invocation_flake8_linter_1763187172809",
-    "exec_invocation_pylint_checker_1763187173561"
+    "exec_invocation_pylint_checker_1763187173561",
+    "exec_invocation_flake8_linter_1763187872720",
+    "exec_invocation_pylint_checker_1763187874676",
+    "exec_invocation_flake8_linter_1763209942000",
+    "exec_invocation_pylint_checker_1763209943166"
   ],
   "flake8_linter": [
     "exec_invocation_flake8_linter_1763185170161",
-    "exec_invocation_flake8_linter_1763187172809"
+    "exec_invocation_flake8_linter_1763187172809",
+    "exec_invocation_flake8_linter_1763187872720",
+    "exec_invocation_flake8_linter_1763209942000"
   ],
   "flake8": [
     "exec_invocation_flake8_linter_1763185170161",
-    "exec_invocation_flake8_linter_1763187172809"
+    "exec_invocation_flake8_linter_1763187172809",
+    "exec_invocation_flake8_linter_1763187872720",
+    "exec_invocation_flake8_linter_1763209942000"
   ],
   "pylint_checker": [
     "exec_invocation_pylint_checker_1763185171351",
-    "exec_invocation_pylint_checker_1763187173561"
+    "exec_invocation_pylint_checker_1763187173561",
+    "exec_invocation_pylint_checker_1763187874676",
+    "exec_invocation_pylint_checker_1763209943166"
   ],
   "pylint": [
     "exec_invocation_pylint_checker_1763185171351",
-    "exec_invocation_pylint_checker_1763187173561"
+    "exec_invocation_pylint_checker_1763187173561",
+    "exec_invocation_pylint_checker_1763187874676",
+    "exec_invocation_pylint_checker_1763209943166"
   ],
   "ml": [
     "func_write_a_poem",
     "workflow_write_a_poem",
     "tool_write_a_poem"
+  ],
+  "code": [
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code",
+    "tool_code_translation_validator"
+  ],
+  "simple": [
+    "tool_calculate_5_plus_5",
+    "tool_fast_code_generator"
+  ],
+  "haiku": [
+    "func_write_a_haiku_about_code",
+    "workflow_write_a_haiku_about_code"
+  ],
+  "tested": [
+    "workflow_write_a_haiku_about_code",
+    "workflow_tell_a_joke",
+    "workflow_tell_me_a_joke"
+  ],
+  "calculator": [
+    "tool_calculat_1_1"
+  ],
+  "content generation": [
+    "tool_write_then_translate_a_poen"
+  ],
+  "jokes": [
+    "func_tell_a_joke",
+    "workflow_tell_a_joke",
+    "tool_tell_a_joke"
   ],
   "fallback": [
     "tool_general"
@@ -1387,17 +1473,8 @@
   "large-context": [
     "tool_long_form_writer"
   ],
-  "code": [
-    "tool_code_translation_validator",
-    "func_write_a_haiku_about_code",
-    "workflow_write_a_haiku_about_code"
-  ],
   "syntax-check": [
     "tool_code_translation_validator"
-  ],
-  "simple": [
-    "tool_fast_code_generator",
-    "tool_calculate_5_plus_5"
   ],
   "gemma3": [
     "tool_fast_code_generator",
@@ -1455,15 +1532,5 @@
   ],
   "llm-tool": [
     "tool_content_generator"
-  ],
-  "haiku": [
-    "func_write_a_haiku_about_code",
-    "workflow_write_a_haiku_about_code"
-  ],
-  "tested": [
-    "workflow_write_a_haiku_about_code"
-  ],
-  "calculator": [
-    "tool_calculat_1_1"
   ]
 }

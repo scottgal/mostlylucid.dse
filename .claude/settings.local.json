@@ -21,7 +21,9 @@
       "Bash(nul)",
       "Bash(xargs:*)",
       "Bash(flake8:*)",
-      "Bash(timeout 60 bash:*)"
+      "Bash(timeout 60 bash:*)",
+      "Bash(if exist nodestell_a_joke rmdir /s /q nodestell_a_joke)",
+      "Bash(del /q registrytell_a_jokenode.json 2)"
     ],
     "deny": [],
     "ask": []
