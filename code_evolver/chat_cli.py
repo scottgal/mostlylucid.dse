@@ -1689,8 +1689,21 @@ if __name__ == "__main__":
     main()
 ```
 
-IMPORTANT: DO NOT use sys.path.insert() - the runtime environment already has the correct path.
-```"""}
+CRITICAL PATH SETUP:
+Your generated code will run from nodes/<node_id>/ directory, but node_runtime.py is in the root code_evolver/ directory.
+You MUST add this BEFORE importing from node_runtime:
+
+```python
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # Add code_evolver root to path
+```
+
+Then you can import:
+```python
+from node_runtime import call_tool, call_llm, call_tools_parallel
+```
+"""}
 
 Code requirements:
 - MUST use json.load(sys.stdin) to read input - NO sys.argv or command-line arguments!
@@ -3222,7 +3235,12 @@ Requirements for "code" field:
   * NEVER remove call_tool() calls
   * NEVER create a mock or fake call_tool() function (def call_tool)
   * ALWAYS import call_tool from node_runtime: "from node_runtime import call_tool"
-  * If call_tool() is failing due to missing module, add the import statement
+  * If call_tool() import is failing with ModuleNotFoundError, FIX THE PATH:
+    Add these lines BEFORE the import:
+    from pathlib import Path
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    Then import: from node_runtime import call_tool
 - For content generation (jokes, stories, articles), always use call_tool("content_generator", prompt)
 
 Return ONLY the JSON object, nothing else."""
