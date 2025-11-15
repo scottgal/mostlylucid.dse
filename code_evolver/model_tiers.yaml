@@ -1,0 +1,212 @@
+# Model Tier System
+# Unified tiered architecture for all LLM usage
+#
+# Each tier has multiple model options with fallback capability
+# Higher tiers = more capable but slower/more expensive
+# Lower tiers = faster but less capable
+#
+# Escalation: Any tier can escalate to higher tier for complex decisions
+
+# Coding Task Tiers (for code generation, review, optimization)
+coding:
+  tier_1:  # Fast, simple coding tasks
+    name: "Fast Coding (Tier 1)"
+    description: "Simple functions, basic algorithms, straightforward code"
+    models:
+      primary: "gemma3:4b"
+      fallback: ["codellama", "qwen2.5-coder:3b"]
+    cost: "low"
+    speed: "very-fast"
+    quality: "good"
+    context_window: 8192
+    escalation_threshold: 0.65  # If confidence < 65%, escalate to tier_2
+
+  tier_2:  # Standard coding tasks
+    name: "Standard Coding (Tier 2)"
+    description: "Complex logic, multi-step workflows, moderate algorithms"
+    models:
+      primary: "codellama"
+      fallback: ["qwen2.5-coder:7b", "deepseek-coder:6.7b"]
+    cost: "medium"
+    speed: "fast"
+    quality: "excellent"
+    context_window: 16384
+    escalation_threshold: 0.70  # If confidence < 70%, escalate to tier_3
+
+  tier_3:  # Advanced coding (god-level)
+    name: "Advanced Coding (Tier 3)"
+    description: "Complex algorithms, system design, architectural decisions"
+    models:
+      primary: "qwen2.5-coder:14b"
+      fallback: ["deepseek-coder:33b", "codellama:34b"]
+    cost: "high"
+    speed: "slow"
+    quality: "exceptional"
+    context_window: 32768
+    escalation_threshold: null  # No further escalation (top tier)
+
+# Content Generation Tiers (for text, articles, creative writing)
+content:
+  tier_1:  # Quick content, drafts
+    name: "Quick Content (Tier 1)"
+    description: "Short snippets, simple descriptions, basic text"
+    models:
+      primary: "tinyllama"
+      fallback: ["gemma2:2b", "phi3:3.8b"]
+    cost: "low"
+    speed: "very-fast"
+    quality: "basic"
+    context_window: 2048
+    escalation_threshold: 0.60
+
+  tier_2:  # Standard content generation
+    name: "Standard Content (Tier 2)"
+    description: "Articles, documentation, technical writing"
+    models:
+      primary: "llama3"
+      fallback: ["mistral", "phi3"]
+    cost: "medium"
+    speed: "fast"
+    quality: "excellent"
+    context_window: 8192
+    escalation_threshold: 0.75
+
+  tier_3:  # Long-form, high-quality content
+    name: "Premium Content (Tier 3)"
+    description: "Novels, books, long articles, creative writing"
+    models:
+      primary: "mistral-nemo"
+      fallback: ["llama3:70b", "mixtral:8x7b"]
+    cost: "high"
+    speed: "slow"
+    quality: "exceptional"
+    context_window: 128000
+    escalation_threshold: null
+
+# Analysis/Reasoning Tiers (for planning, strategy, evaluation)
+analysis:
+  tier_1:  # Quick checks, triage
+    name: "Quick Analysis (Tier 1)"
+    description: "Pass/fail decisions, basic validation, quick checks"
+    models:
+      primary: "tinyllama"
+      fallback: ["gemma2:2b"]
+    cost: "low"
+    speed: "very-fast"
+    quality: "basic"
+    context_window: 2048
+    escalation_threshold: 0.55
+
+  tier_2:  # Standard analysis and planning
+    name: "Standard Analysis (Tier 2)"
+    description: "Strategy planning, evaluation, comprehensive reviews"
+    models:
+      primary: "llama3"
+      fallback: ["mistral", "phi3"]
+    cost: "medium"
+    speed: "fast"
+    quality: "excellent"
+    context_window: 8192
+    escalation_threshold: 0.70
+
+  tier_3:  # Deep analysis, complex reasoning
+    name: "Deep Analysis (Tier 3)"
+    description: "Complex reasoning, architectural planning, deep evaluation"
+    models:
+      primary: "llama3:70b"
+      fallback: ["mixtral:8x7b", "mistral-nemo"]
+    cost: "very-high"
+    speed: "slow"
+    quality: "exceptional"
+    context_window: 128000
+    escalation_threshold: null
+
+# Translation Tiers
+translation:
+  tier_1:  # Fast, basic translation
+    name: "Fast Translation (Tier 1)"
+    description: "Quick translation, may need validation"
+    models:
+      primary: "nmt-api"  # External API (fastest)
+      fallback: ["llama3"]
+    cost: "low"
+    speed: "very-fast"
+    quality: "good"
+    validation_required: true  # Always validate tier 1 translations
+
+  tier_2:  # Quality translation
+    name: "Quality Translation (Tier 2)"
+    description: "High-quality translation with context preservation"
+    models:
+      primary: "llama3"
+      fallback: ["mistral"]
+    cost: "medium"
+    speed: "fast"
+    quality: "excellent"
+    validation_required: false
+
+  tier_3:  # Expert translation (technical, literary)
+    name: "Expert Translation (Tier 3)"
+    description: "Professional-grade translation for technical/literary content"
+    models:
+      primary: "llama3:70b"
+      fallback: ["mistral-nemo"]
+    cost: "high"
+    speed: "slow"
+    quality: "exceptional"
+    validation_required: false
+
+# Embeddings (for RAG, semantic search)
+embeddings:
+  default:
+    name: "Standard Embeddings"
+    description: "Semantic search and RAG memory"
+    models:
+      primary: "nomic-embed-text"
+      fallback: ["all-minilm-l6-v2"]
+    cost: "low"
+    speed: "fast"
+    quality: "excellent"
+    vector_size: 768
+
+# Escalation Rules
+escalation:
+  enabled: true
+
+  # Automatic escalation triggers
+  triggers:
+    low_confidence: true      # Escalate if model reports low confidence
+    complexity_detected: true # Escalate if task seems too complex for tier
+    failure_detected: true    # Escalate if tier fails (errors, invalid output)
+    user_request: true        # Escalate if user explicitly requests higher quality
+
+  # Escalation strategy
+  strategy:
+    incremental: true         # Try tier+1 first, then tier+2, etc.
+    skip_tiers: false         # Don't skip tiers (maintain cost efficiency)
+    max_escalations: 2        # Maximum number of escalations per task
+
+  # Cost controls
+  cost_controls:
+    max_cost_per_task: 0.50   # Max $0.50 per task (prevents runaway escalation)
+    require_approval_above: 1.00  # Require user approval for tasks > $1.00
+
+# Model Aliases (backward compatibility with old "role" system)
+# These map old role names to new tiers
+aliases:
+  # Old roles → New tiers
+  fast: "coding.tier_1"
+  generator: "coding.tier_2"
+  escalation: "coding.tier_3"
+  powerful: "coding.tier_3"
+
+  overseer: "analysis.tier_2"
+  evaluator: "analysis.tier_2"
+  triage: "analysis.tier_1"
+
+  content_writer: "content.tier_2"
+  creative_writer: "content.tier_3"
+
+  translator: "translation.tier_2"
+  translator_fast: "translation.tier_1"
+  translator_expert: "translation.tier_3"
