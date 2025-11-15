@@ -2157,5 +2157,170 @@
     },
     "created_at": "2025-11-15T17:49:29.207608Z",
     "usage_count": 0
+  },
+  "http_content_fetcher": {
+    "tool_id": "http_content_fetcher",
+    "name": "HTTP Content Fetcher",
+    "tool_type": "api_connector",
+    "description": "Comprehensive HTTP client supporting all HTTP methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS), all body types (JSON, form-data, multipart, XML, text, binary), various authentication methods (Bearer, API Key, Basic, Digest), and flexible response handling. Designed for seamless integration with DSE workflow system. Can fetch content from any URL and return data in multiple formats.",
+    "tags": [
+      "http",
+      "fetch",
+      "content-fetching",
+      "web",
+      "api",
+      "rest",
+      "api-connector",
+      "http-client",
+      "download",
+      "upload",
+      "json",
+      "xml",
+      "form-data",
+      "authentication",
+      "bearer",
+      "api-key",
+      "workflow-integration"
+    ],
+    "parameters": {
+      "url": {
+        "type": "string",
+        "required": true,
+        "description": "Target URL to fetch content from"
+      },
+      "method": {
+        "type": "string",
+        "required": false,
+        "default": "GET",
+        "enum": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "PATCH",
+          "HEAD",
+          "OPTIONS",
+          "TRACE"
+        ],
+        "description": "HTTP method to use"
+      },
+      "headers": {
+        "type": "object",
+        "required": false,
+        "description": "Custom HTTP headers"
+      },
+      "body": {
+        "type": [
+          "object",
+          "string",
+          "bytes"
+        ],
+        "required": false,
+        "description": "Request body (dict, string, or bytes)"
+      },
+      "body_type": {
+        "type": "string",
+        "required": false,
+        "default": "json",
+        "enum": [
+          "json",
+          "form",
+          "multipart",
+          "xml",
+          "text",
+          "binary",
+          "custom"
+        ],
+        "description": "Body content type"
+      },
+      "params": {
+        "type": "object",
+        "required": false,
+        "description": "URL query parameters"
+      },
+      "auth": {
+        "type": "object",
+        "required": false,
+        "description": "Authentication configuration (bearer, api_key, basic, digest, custom)"
+      },
+      "timeout": {
+        "type": "integer",
+        "required": false,
+        "description": "Request timeout in seconds"
+      },
+      "response_format": {
+        "type": "string",
+        "required": false,
+        "default": "auto",
+        "enum": [
+          "auto",
+          "json",
+          "text",
+          "binary"
+        ],
+        "description": "Expected response format"
+      }
+    },
+    "metadata": {
+      "implementation_path": "src/http_content_fetcher.py",
+      "implementation_class": "HTTPContentFetcher",
+      "factory_function": "create_http_fetcher",
+      "supports_streaming": true,
+      "supports_file_upload": true,
+      "supports_file_download": true,
+      "max_retries": 3,
+      "retry_backoff_factor": 0.3,
+      "default_timeout": 30,
+      "supported_methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "HEAD",
+        "OPTIONS",
+        "TRACE"
+      ],
+      "supported_body_types": [
+        "json",
+        "form",
+        "multipart",
+        "xml",
+        "text",
+        "binary",
+        "custom"
+      ],
+      "supported_auth_types": [
+        "bearer",
+        "api_key",
+        "basic",
+        "digest",
+        "custom"
+      ],
+      "supported_response_formats": [
+        "auto",
+        "json",
+        "text",
+        "binary"
+      ],
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "reliability": "high",
+      "workflow_compatible": true
+    },
+    "constraints": {
+      "max_timeout": 300,
+      "max_retries": 10,
+      "verify_ssl": true
+    },
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-15T18:53:13.571571+00:00"
+    },
+    "created_at": "2025-11-15T18:53:13.571594+00:00",
+    "usage_count": 0
   }
 }

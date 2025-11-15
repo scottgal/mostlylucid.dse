@@ -668,7 +668,8 @@
     "func_write_me_a_joke",
     "tool_calculate_5_plus_5",
     "tool_add_100_and_200",
-    "tool_multiply_6_and_7_1763228888"
+    "tool_multiply_6_and_7_1763228888",
+    "tool_http_content_fetcher"
   ],
   "complete": [
     "workflow_add_100_and_200",
@@ -1566,7 +1567,8 @@
     "tool_nmt_translator"
   ],
   "api": [
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_http_content_fetcher"
   ],
   "validation": [
     "tool_translation_quality_checker",
@@ -1666,5 +1668,50 @@
   "a": [
     "workflow_1763216384",
     "workflow_1763217386"
+  ],
+  "http": [
+    "tool_http_content_fetcher"
+  ],
+  "fetch": [
+    "tool_http_content_fetcher"
+  ],
+  "content-fetching": [
+    "tool_http_content_fetcher"
+  ],
+  "web": [
+    "tool_http_content_fetcher"
+  ],
+  "rest": [
+    "tool_http_content_fetcher"
+  ],
+  "api-connector": [
+    "tool_http_content_fetcher"
+  ],
+  "http-client": [
+    "tool_http_content_fetcher"
+  ],
+  "download": [
+    "tool_http_content_fetcher"
+  ],
+  "upload": [
+    "tool_http_content_fetcher"
+  ],
+  "xml": [
+    "tool_http_content_fetcher"
+  ],
+  "form-data": [
+    "tool_http_content_fetcher"
+  ],
+  "authentication": [
+    "tool_http_content_fetcher"
+  ],
+  "bearer": [
+    "tool_http_content_fetcher"
+  ],
+  "api-key": [
+    "tool_http_content_fetcher"
+  ],
+  "workflow-integration": [
+    "tool_http_content_fetcher"
   ]
 }
