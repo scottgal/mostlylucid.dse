@@ -1,0 +1,20 @@
+# Debug Store Dependencies
+# Fast hybrid data store for request/response recording and analysis
+
+# Core database engines
+lmdb>=1.4.1              # Lightning Memory-Mapped Database (fast writes)
+duckdb>=0.10.0           # Embedded analytical database (fast queries)
+
+# Data serialization
+msgpack>=1.0.7           # Fast binary serialization (faster than JSON)
+
+# Token counting for LLM context optimization
+tiktoken>=0.6.0          # OpenAI's token counting library
+
+# Data analysis (likely already installed)
+pandas>=2.0.0            # DataFrames for analysis
+numpy>=1.24.0            # Numerical operations
+
+# Testing
+pytest>=7.4.0            # Test framework
+pytest-cov>=4.1.0        # Coverage reporting
