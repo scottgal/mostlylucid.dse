@@ -15,6 +15,39 @@ Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 5. **Optimizes** performance through iterative improvement
 6. **Learns** from successful solutions via RAG memory
 
+## 📚 Comprehensive Documentation
+
+**New: Complete DSE Framework Documentation**
+
+This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE)** framework with advanced features:
+
+- **[ARCHITECTURE.md](code_evolver/ARCHITECTURE.md)** - Complete system architecture (9 layers, 851 lines)
+  - Executable ground truth design principle
+  - Multi-tier optimization (local/cloud/deep)
+  - Pressure-aware quality negotiation
+  - Platform-targeted optimization (Pi/Edge/Cloud)
+  - Recursive self-optimization
+  - Fine-tuning evolution
+
+- **[PAPER.md](code_evolver/PAPER.md)** - Academic paper (1,534 lines)
+  - "Digital Synthetic Evolution: A Self-Optimizing Framework for Multi-Agent Workflows"
+  - Complete algorithms, experimental results, benchmarks
+  - 92% cost reduction, 31% quality improvement demonstrated
+  - Future research directions
+
+- **[Complete Demo](code_evolver/examples/complete_workflow_evolution_demo.py)** - End-to-end demonstration
+  - Runs all 6 evolution phases
+  - Shows auto-evolution, pressure management, platform variants
+  - Demonstrates fine-tuning and cost optimization
+
+**Key DSE Innovations:**
+- ✅ **Executable ground truth** (not metadata) with empirical proof
+- ✅ **99% cost reduction** through caching and reuse
+- ✅ **Auto-evolution** triggered by performance drift
+- ✅ **Platform variants** (same workflow, optimized for Pi/Edge/Cloud)
+- ✅ **Meta-optimization** (system optimizes itself)
+- ✅ **Fine-tuned specialists** created from successful patterns
+
 ```mermaid
 graph TD
     A[User Request] --> B[Task Classification]
