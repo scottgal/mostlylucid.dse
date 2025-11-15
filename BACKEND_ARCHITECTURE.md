@@ -59,10 +59,8 @@ ollama:
     
     generator:
       model: "codellama"
-      endpoints:  # Support for multiple endpoints (round-robin)
-        - "http://localhost:11434"
-        - "http://192.168.0.56:11434"
-    
+      endpoint: null  # Uses base_url
+
     evaluator:
       writing:
         model: "phi3:3.8b"

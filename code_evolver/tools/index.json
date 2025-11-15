@@ -28,10 +28,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563514Z"
+      "last_reset": "2025-11-15T20:09:54.692432Z"
     },
-    "created_at": "2025-11-15T19:28:23.563513Z",
-    "usage_count": 4
+    "created_at": "2025-11-15T20:09:54.692431Z",
+    "usage_count": 1
   },
   "code_reviewer": {
     "tool_id": "code_reviewer",
@@ -59,9 +59,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563531Z"
+      "last_reset": "2025-11-15T20:09:54.692449Z"
     },
-    "created_at": "2025-11-15T19:28:23.563530Z",
+    "created_at": "2025-11-15T20:09:54.692448Z",
     "usage_count": 0
   },
   "security_auditor": {
@@ -90,9 +90,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563536Z"
+      "last_reset": "2025-11-15T20:09:54.692454Z"
     },
-    "created_at": "2025-11-15T19:28:23.563535Z",
+    "created_at": "2025-11-15T20:09:54.692452Z",
     "usage_count": 0
   },
   "performance_optimizer": {
@@ -121,9 +121,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563541Z"
+      "last_reset": "2025-11-15T20:09:54.692459Z"
     },
-    "created_at": "2025-11-15T19:28:23.563540Z",
+    "created_at": "2025-11-15T20:09:54.692458Z",
     "usage_count": 0
   },
   "doc_generator": {
@@ -152,9 +152,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563546Z"
+      "last_reset": "2025-11-15T20:09:54.692464Z"
     },
-    "created_at": "2025-11-15T19:28:23.563545Z",
+    "created_at": "2025-11-15T20:09:54.692462Z",
     "usage_count": 0
   },
   "technical_writer": {
@@ -187,9 +187,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563551Z"
+      "last_reset": "2025-11-15T20:09:54.692469Z"
     },
-    "created_at": "2025-11-15T19:28:23.563550Z",
+    "created_at": "2025-11-15T20:09:54.692467Z",
     "usage_count": 0
   },
   "article_analyzer": {
@@ -222,9 +222,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563555Z"
+      "last_reset": "2025-11-15T20:09:54.692474Z"
     },
-    "created_at": "2025-11-15T19:28:23.563554Z",
+    "created_at": "2025-11-15T20:09:54.692473Z",
     "usage_count": 0
   },
   "seo_optimizer": {
@@ -256,9 +256,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563560Z"
+      "last_reset": "2025-11-15T20:09:54.692479Z"
     },
-    "created_at": "2025-11-15T19:28:23.563558Z",
+    "created_at": "2025-11-15T20:09:54.692478Z",
     "usage_count": 0
   },
   "code_explainer": {
@@ -290,9 +290,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563565Z"
+      "last_reset": "2025-11-15T20:09:54.692484Z"
     },
-    "created_at": "2025-11-15T19:28:23.563564Z",
+    "created_at": "2025-11-15T20:09:54.692483Z",
     "usage_count": 0
   },
   "outline_generator": {
@@ -324,9 +324,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563570Z"
+      "last_reset": "2025-11-15T20:09:54.692489Z"
     },
-    "created_at": "2025-11-15T19:28:23.563569Z",
+    "created_at": "2025-11-15T20:09:54.692488Z",
     "usage_count": 0
   },
   "proofreader": {
@@ -358,9 +358,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563574Z"
+      "last_reset": "2025-11-15T20:09:54.692494Z"
     },
-    "created_at": "2025-11-15T19:28:23.563573Z",
+    "created_at": "2025-11-15T20:09:54.692492Z",
     "usage_count": 0
   },
   "write_a_technical_story_and_tr": {
@@ -389,7 +389,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563279Z"
+      "last_reset": "2025-11-15T20:09:54.692114Z"
     },
     "created_at": "2025-11-15T00:29:22.122018Z",
     "usage_count": 0
@@ -420,7 +420,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563282Z"
+      "last_reset": "2025-11-15T20:09:54.692118Z"
     },
     "created_at": "2025-11-15T00:33:43.019137Z",
     "usage_count": 0
@@ -452,7 +452,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563286Z"
+      "last_reset": "2025-11-15T20:09:54.692122Z"
     },
     "created_at": "2025-11-15T00:45:30.312391Z",
     "usage_count": 0
@@ -485,10 +485,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563581Z"
+      "last_reset": "2025-11-15T20:09:54.692500Z"
     },
-    "created_at": "2025-11-15T19:28:23.563579Z",
-    "usage_count": 2
+    "created_at": "2025-11-15T20:09:54.692498Z",
+    "usage_count": 0
   },
   "mypy_type_checker": {
     "tool_id": "mypy_type_checker",
@@ -517,9 +517,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563587Z"
+      "last_reset": "2025-11-15T20:09:54.692505Z"
     },
-    "created_at": "2025-11-15T19:28:23.563585Z",
+    "created_at": "2025-11-15T20:09:54.692504Z",
     "usage_count": 0
   },
   "flake8_linter": {
@@ -550,10 +550,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563592Z"
+      "last_reset": "2025-11-15T20:09:54.692511Z"
     },
-    "created_at": "2025-11-15T19:28:23.563591Z",
-    "usage_count": 2
+    "created_at": "2025-11-15T20:09:54.692509Z",
+    "usage_count": 0
   },
   "black_formatter": {
     "tool_id": "black_formatter",
@@ -582,9 +582,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563597Z"
+      "last_reset": "2025-11-15T20:09:54.692515Z"
     },
-    "created_at": "2025-11-15T19:28:23.563596Z",
+    "created_at": "2025-11-15T20:09:54.692514Z",
     "usage_count": 0
   },
   "bandit_security": {
@@ -613,9 +613,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563602Z"
+      "last_reset": "2025-11-15T20:09:54.692520Z"
     },
-    "created_at": "2025-11-15T19:28:23.563601Z",
+    "created_at": "2025-11-15T20:09:54.692519Z",
     "usage_count": 0
   },
   "pytest_runner": {
@@ -645,9 +645,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563606Z"
+      "last_reset": "2025-11-15T20:09:54.692525Z"
     },
-    "created_at": "2025-11-15T19:28:23.563604Z",
+    "created_at": "2025-11-15T20:09:54.692524Z",
     "usage_count": 0
   },
   "pytest_coverage": {
@@ -678,9 +678,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563610Z"
+      "last_reset": "2025-11-15T20:09:54.692530Z"
     },
-    "created_at": "2025-11-15T19:28:23.563609Z",
+    "created_at": "2025-11-15T20:09:54.692528Z",
     "usage_count": 0
   },
   "radon_complexity": {
@@ -711,9 +711,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563615Z"
+      "last_reset": "2025-11-15T20:09:54.692535Z"
     },
-    "created_at": "2025-11-15T19:28:23.563613Z",
+    "created_at": "2025-11-15T20:09:54.692533Z",
     "usage_count": 0
   },
   "vulture_deadcode": {
@@ -741,9 +741,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563619Z"
+      "last_reset": "2025-11-15T20:09:54.692539Z"
     },
-    "created_at": "2025-11-15T19:28:23.563618Z",
+    "created_at": "2025-11-15T20:09:54.692538Z",
     "usage_count": 0
   },
   "pydocstyle_checker": {
@@ -771,9 +771,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563624Z"
+      "last_reset": "2025-11-15T20:09:54.692543Z"
     },
-    "created_at": "2025-11-15T19:28:23.563622Z",
+    "created_at": "2025-11-15T20:09:54.692542Z",
     "usage_count": 0
   },
   "isort_import_checker": {
@@ -803,9 +803,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563628Z"
+      "last_reset": "2025-11-15T20:09:54.692548Z"
     },
-    "created_at": "2025-11-15T19:28:23.563626Z",
+    "created_at": "2025-11-15T20:09:54.692547Z",
     "usage_count": 0
   },
   "quick_feedback": {
@@ -839,9 +839,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563520Z"
+      "last_reset": "2025-11-15T20:09:54.692437Z"
     },
-    "created_at": "2025-11-15T19:28:23.563518Z",
+    "created_at": "2025-11-15T20:09:54.692436Z",
     "usage_count": 0
   },
   "summarizer": {
@@ -873,9 +873,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563526Z"
+      "last_reset": "2025-11-15T20:09:54.692443Z"
     },
-    "created_at": "2025-11-15T19:28:23.563525Z",
+    "created_at": "2025-11-15T20:09:54.692442Z",
     "usage_count": 0
   },
   "nmt_translator": {
@@ -908,9 +908,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576946Z"
+      "last_reset": "2025-11-15T20:09:54.729976Z"
     },
-    "created_at": "2025-11-15T19:28:23.576938Z",
+    "created_at": "2025-11-15T20:09:54.729967Z",
     "usage_count": 0
   },
   "translation_quality_checker": {
@@ -942,9 +942,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576966Z"
+      "last_reset": "2025-11-15T20:09:54.729993Z"
     },
-    "created_at": "2025-11-15T19:28:23.576965Z",
+    "created_at": "2025-11-15T20:09:54.729991Z",
     "usage_count": 0
   },
   "add_100_and_200": {
@@ -974,7 +974,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563338Z"
+      "last_reset": "2025-11-15T20:09:54.692215Z"
     },
     "created_at": "2025-11-15T01:17:53.285112Z",
     "usage_count": 0
@@ -1010,9 +1010,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576974Z"
+      "last_reset": "2025-11-15T20:09:54.730001Z"
     },
-    "created_at": "2025-11-15T19:28:23.576973Z",
+    "created_at": "2025-11-15T20:09:54.730000Z",
     "usage_count": 0
   },
   "write_me_code_to_do_a_fibonacc": {
@@ -1042,7 +1042,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563345Z"
+      "last_reset": "2025-11-15T20:09:54.692221Z"
     },
     "created_at": "2025-11-15T01:45:38.026107Z",
     "usage_count": 0
@@ -1076,9 +1076,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576981Z"
+      "last_reset": "2025-11-15T20:09:54.730008Z"
     },
-    "created_at": "2025-11-15T19:28:23.576980Z",
+    "created_at": "2025-11-15T20:09:54.730006Z",
     "usage_count": 0
   },
   "add_10_and_20_1763173231": {
@@ -1109,7 +1109,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563353Z"
+      "last_reset": "2025-11-15T20:09:54.692230Z"
     },
     "created_at": "2025-11-15T02:21:46.594132Z",
     "usage_count": 0
@@ -1141,7 +1141,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563357Z"
+      "last_reset": "2025-11-15T20:09:54.692234Z"
     },
     "created_at": "2025-11-15T02:30:39.242608Z",
     "usage_count": 0
@@ -1173,7 +1173,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563360Z"
+      "last_reset": "2025-11-15T20:09:54.692237Z"
     },
     "created_at": "2025-11-15T03:01:26.867706Z",
     "usage_count": 0
@@ -1204,7 +1204,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563363Z"
+      "last_reset": "2025-11-15T20:09:54.692240Z"
     },
     "created_at": "2025-11-15T03:43:47.333782Z",
     "usage_count": 0
@@ -1236,7 +1236,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563367Z"
+      "last_reset": "2025-11-15T20:09:54.692244Z"
     },
     "created_at": "2025-11-15T03:10:01.000404Z",
     "usage_count": 0
@@ -1268,7 +1268,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563370Z"
+      "last_reset": "2025-11-15T20:09:54.692248Z"
     },
     "created_at": "2025-11-15T03:20:30.324266Z",
     "usage_count": 0
@@ -1300,7 +1300,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563373Z"
+      "last_reset": "2025-11-15T20:09:54.692251Z"
     },
     "created_at": "2025-11-15T03:27:58.781005Z",
     "usage_count": 0
@@ -1332,7 +1332,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563376Z"
+      "last_reset": "2025-11-15T20:09:54.692255Z"
     },
     "created_at": "2025-11-15T03:37:23.056616Z",
     "usage_count": 0
@@ -1366,10 +1366,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563497Z"
+      "last_reset": "2025-11-15T20:09:54.692417Z"
     },
-    "created_at": "2025-11-15T19:28:23.563496Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T20:09:54.692416Z",
+    "usage_count": 0
   },
   "save_to_disk": {
     "tool_id": "save_to_disk",
@@ -1399,9 +1399,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576988Z"
+      "last_reset": "2025-11-15T20:09:54.730014Z"
     },
-    "created_at": "2025-11-15T19:28:23.576987Z",
+    "created_at": "2025-11-15T20:09:54.730013Z",
     "usage_count": 0
   },
   "load_from_disk": {
@@ -1431,9 +1431,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.576995Z"
+      "last_reset": "2025-11-15T20:09:54.730021Z"
     },
-    "created_at": "2025-11-15T19:28:23.576994Z",
+    "created_at": "2025-11-15T20:09:54.730020Z",
     "usage_count": 0
   },
   "calculate_15_plus_25": {
@@ -1462,7 +1462,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563389Z"
+      "last_reset": "2025-11-15T20:09:54.692270Z"
     },
     "created_at": "2025-11-15T03:59:07.086285Z",
     "usage_count": 0
@@ -1493,7 +1493,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563392Z"
+      "last_reset": "2025-11-15T20:09:54.692273Z"
     },
     "created_at": "2025-11-15T04:08:37.271301Z",
     "usage_count": 0
@@ -1524,7 +1524,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563395Z"
+      "last_reset": "2025-11-15T20:09:54.692276Z"
     },
     "created_at": "2025-11-15T04:16:26.611410Z",
     "usage_count": 0
@@ -1556,9 +1556,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.577002Z"
+      "last_reset": "2025-11-15T20:09:54.730027Z"
     },
-    "created_at": "2025-11-15T19:28:23.577000Z",
+    "created_at": "2025-11-15T20:09:54.730026Z",
     "usage_count": 0
   },
   "fast_content_writer": {
@@ -1591,7 +1591,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563401Z"
+      "last_reset": "2025-11-15T20:09:54.692283Z"
     },
     "created_at": "2025-11-15T04:29:01.140398Z",
     "usage_count": 5
@@ -1623,7 +1623,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563405Z"
+      "last_reset": "2025-11-15T20:09:54.692287Z"
     },
     "created_at": "2025-11-15T04:33:08.225941Z",
     "usage_count": 0
@@ -1654,7 +1654,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563408Z"
+      "last_reset": "2025-11-15T20:09:54.692290Z"
     },
     "created_at": "2025-11-15T04:37:52.223369Z",
     "usage_count": 0
@@ -1688,7 +1688,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563411Z"
+      "last_reset": "2025-11-15T20:09:54.692294Z"
     },
     "created_at": "2025-11-15T04:47:11.727855Z",
     "usage_count": 0
@@ -1721,7 +1721,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563415Z"
+      "last_reset": "2025-11-15T20:09:54.692297Z"
     },
     "created_at": "2025-11-15T04:51:25.425885Z",
     "usage_count": 0
@@ -1754,7 +1754,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563418Z"
+      "last_reset": "2025-11-15T20:09:54.692302Z"
     },
     "created_at": "2025-11-15T04:56:34.138310Z",
     "usage_count": 0
@@ -1788,9 +1788,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563507Z"
+      "last_reset": "2025-11-15T20:09:54.692426Z"
     },
-    "created_at": "2025-11-15T19:28:23.563505Z",
+    "created_at": "2025-11-15T20:09:54.692424Z",
     "usage_count": 0
   },
   "add_5_and_3_1763184838": {
@@ -1820,7 +1820,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563426Z"
+      "last_reset": "2025-11-15T20:09:54.692310Z"
     },
     "created_at": "2025-11-15T05:34:25.206297Z",
     "usage_count": 0
@@ -1853,7 +1853,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563429Z"
+      "last_reset": "2025-11-15T20:09:54.692313Z"
     },
     "created_at": "2025-11-15T05:39:37.051531Z",
     "usage_count": 0
@@ -1887,7 +1887,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563432Z"
+      "last_reset": "2025-11-15T20:09:54.692317Z"
     },
     "created_at": "2025-11-15T05:43:05.313587Z",
     "usage_count": 0
@@ -1920,7 +1920,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563435Z"
+      "last_reset": "2025-11-15T20:09:54.692321Z"
     },
     "created_at": "2025-11-15T05:48:46.152626Z",
     "usage_count": 0
@@ -1953,7 +1953,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563438Z"
+      "last_reset": "2025-11-15T20:09:54.692325Z"
     },
     "created_at": "2025-11-15T06:12:04.938129Z",
     "usage_count": 0
@@ -1987,7 +1987,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563442Z"
+      "last_reset": "2025-11-15T20:09:54.692328Z"
     },
     "created_at": "2025-11-15T06:14:46.234019Z",
     "usage_count": 0
@@ -2019,7 +2019,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563445Z"
+      "last_reset": "2025-11-15T20:09:54.692331Z"
     },
     "created_at": "2025-11-15T06:22:10.129256Z",
     "usage_count": 0
@@ -2052,7 +2052,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563448Z"
+      "last_reset": "2025-11-15T20:09:54.692335Z"
     },
     "created_at": "2025-11-15T06:24:41.879945Z",
     "usage_count": 0
@@ -2085,7 +2085,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563451Z"
+      "last_reset": "2025-11-15T20:09:54.692338Z"
     },
     "created_at": "2025-11-15T12:52:01.973353Z",
     "usage_count": 0
@@ -2119,7 +2119,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563455Z"
+      "last_reset": "2025-11-15T20:09:54.692342Z"
     },
     "created_at": "2025-11-15T14:19:42.965761Z",
     "usage_count": 0
@@ -2153,7 +2153,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563458Z"
+      "last_reset": "2025-11-15T20:09:54.692345Z"
     },
     "created_at": "2025-11-15T17:49:29.207608Z",
     "usage_count": 0
@@ -2314,7 +2314,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563461Z"
+      "last_reset": "2025-11-15T20:09:54.692349Z"
     },
     "created_at": "2025-11-15T18:53:13.571594+00:00",
     "usage_count": 0
@@ -2346,7 +2346,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563465Z"
+      "last_reset": "2025-11-15T20:09:54.692353Z"
     },
     "created_at": "2025-11-15T19:00:00.330968Z",
     "usage_count": 0
@@ -2378,7 +2378,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.563468Z"
+      "last_reset": "2025-11-15T20:09:54.692356Z"
     },
     "created_at": "2025-11-15T19:05:48.796125Z",
     "usage_count": 0
@@ -2416,9 +2416,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:28:23.577009Z"
+      "last_reset": "2025-11-15T20:09:54.730033Z"
     },
-    "created_at": "2025-11-15T19:28:23.577008Z",
+    "created_at": "2025-11-15T20:09:54.730032Z",
     "usage_count": 0
   },
   "review_this_code_usr_bin_en": {
@@ -2449,7 +2449,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:50:03.317129Z"
+      "last_reset": "2025-11-15T20:09:54.692363Z"
     },
     "created_at": "2025-11-15T19:50:03.317127Z",
     "usage_count": 0
@@ -2482,9 +2482,60 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T19:59:19.151828Z"
+      "last_reset": "2025-11-15T20:09:54.692366Z"
     },
     "created_at": "2025-11-15T19:59:19.151824Z",
+    "usage_count": 0
+  },
+  "model_selector": {
+    "tool_id": "model_selector",
+    "name": "Model Selector",
+    "tool_type": "custom",
+    "description": "Intelligently select the best backend and model for a given task. Supports natural language selection like 'use GPT-4' or 'use Claude'. Considers speed, cost, quality, and context window requirements. Available backends: Ollama, OpenAI, Anthropic, Azure, LM Studio.",
+    "tags": [
+      "selection",
+      "optimization",
+      "model-management",
+      "planning",
+      "backend"
+    ],
+    "parameters": {
+      "task_description": {
+        "type": "string",
+        "description": "Description of the task to perform"
+      },
+      "constraints": {
+        "type": "object",
+        "description": "Optional constraints like max_cost, min_speed"
+      },
+      "backend_preference": {
+        "type": "string",
+        "description": "Preferred backend (openai, anthropic, azure, etc.)"
+      },
+      "model_preference": {
+        "type": "string",
+        "description": "Preferred specific model name"
+      },
+      "top_k": {
+        "type": "number",
+        "description": "Number of recommendations to return (default: 3)"
+      }
+    },
+    "metadata": {
+      "speed_tier": "very-fast",
+      "cost_tier": "free",
+      "quality_tier": "excellent",
+      "latency_ms": 50,
+      "capability": "Model and backend selection with multi-backend support"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-15T20:10:02.136757Z"
+    },
+    "created_at": "2025-11-15T20:10:02.136749Z",
     "usage_count": 0
   }
 }

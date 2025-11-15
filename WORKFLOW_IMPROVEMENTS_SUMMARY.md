@@ -225,13 +225,11 @@ escalation:
 # Generator - load balanced across endpoints
 generator:
   model: "codellama"
-  endpoints:
-    - "http://localhost:11434"
-    - "http://192.168.0.56:11434"  # Remote (has codellama only)
+  endpoint: null  # Uses base_url
 ```
 
 ### Files Modified
-- `code_evolver/config.yaml:27-29`: Re-enabled remote endpoint for load balancing
+- `code_evolver/config.yaml`: Updated generator to use single endpoint
 - `code_evolver/config.yaml:59-61`: Fixed escalation model endpoint
 - `code_evolver/config.yaml:274-276`: Fixed general code generator endpoint
 

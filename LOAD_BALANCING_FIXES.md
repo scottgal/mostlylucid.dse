@@ -27,14 +27,14 @@ generator:
   model: "codellama"
   endpoints:
     - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+    - "http://server2:11434"  # Example second server
 ```
 
 **How It Works:**
 - Request 1 → localhost:11434
-- Request 2 → 192.168.0.56:11434
+- Request 2 → server2:11434
 - Request 3 → localhost:11434
-- Request 4 → 192.168.0.56:11434
+- Request 4 → server2:11434
 - (continues alternating)
 
 ### 3. **Critical: System Using llama3 Instead of codellama** ✅ FIXED
@@ -113,8 +113,8 @@ ollama:
       model: "codellama"
       endpoints:
         - "http://localhost:11434"
-        - "http://192.168.0.56:11434"
-        - "http://another-server:11434"  # Add more as needed
+        - "http://server2:11434"
+        - "http://server3:11434"  # Add more as needed
 ```
 
 ### Backward Compatible
@@ -137,7 +137,7 @@ client._endpoint_counters = {
 ```
 Request 1: generator
   ↓
-endpoints = ["http://localhost:11434", "http://192.168.0.56:11434"]
+endpoints = ["http://localhost:11434", "http://server2:11434"]
 counter = 0
 index = 0 % 2 = 0
   ↓
@@ -149,7 +149,7 @@ Request 2: generator
 counter = 1
 index = 1 % 2 = 1
   ↓
-Use: 192.168.0.56:11434
+Use: server2:11434
 counter → 2
 
 Request 3: generator
@@ -195,11 +195,11 @@ print(client._endpoint_counters)
 
 # Endpoints were used:
 # Request 1: localhost:11434
-# Request 2: 192.168.0.56:11434
+# Request 2: server2:11434
 # Request 3: localhost:11434
-# Request 4: 192.168.0.56:11434
+# Request 4: server2:11434
 # Request 5: localhost:11434
-# Request 6: 192.168.0.56:11434
+# Request 6: server2:11434
 ```
 
 ### Test Code Generation Now Uses codellama
@@ -223,8 +223,7 @@ INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:114
 ✓ Generated code
 
 Generating unit tests...
-INFO:src.ollama_client:Generating with model 'codellama' at http://192.168.0.56:11434...
-(alternates between endpoints!)
+INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:11434...
 ```
 
 ## Benefits
@@ -252,7 +251,7 @@ generator:
   model: "codellama"
   endpoints:
     - "http://localhost:11434"      # Local machine
-    - "http://192.168.0.56:11434"   # Remote server
+    - "http://server2:11434"        # Remote server
 ```
 
 ### Example 2: Three Powerful Servers
@@ -275,7 +274,7 @@ generator:
   model: "codellama"
   endpoints:  # Multiple endpoints
     - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+    - "http://server2:11434"
 
 evaluator:
   model: "llama3"
@@ -294,8 +293,8 @@ The logs now show which endpoint handled each request:
 INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:11434...
 INFO:src.ollama_client:✓ Generated 1234 characters from http://localhost:11434
 
-INFO:src.ollama_client:Generating with model 'codellama' at http://192.168.0.56:11434...
-INFO:src.ollama_client:✓ Generated 5678 characters from http://192.168.0.56:11434
+INFO:src.ollama_client:Generating with model 'codellama' at http://server2:11434...
+INFO:src.ollama_client:✓ Generated 5678 characters from http://server2:11434
 ```
 
 ### Check Round-Robin State
@@ -327,14 +326,14 @@ generator:
   model: "codellama"
   endpoints:
     - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+    - "http://server2:11434"
 ```
 
 ### Issue: Connection Refused to Second Endpoint
 
 **Verify endpoint is accessible:**
 ```bash
-curl http://192.168.0.56:11434/api/tags
+curl http://server2:11434/api/tags
 ```
 
 **Check Ollama is running on remote server:**

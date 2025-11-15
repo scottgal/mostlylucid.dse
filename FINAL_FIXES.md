@@ -307,9 +307,9 @@ def test():
 ollama pull qwen2.5-coder:14b
 ```
 
-✅ Verify remote endpoint accessible:
+✅ Verify Ollama endpoint accessible:
 ```bash
-curl http://192.168.0.56:11434/api/tags
+curl http://localhost:11434/api/tags
 ```
 
 ✅ Check config has correct models:
@@ -347,8 +347,7 @@ INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:114
 INFO:src.node_runner:✓ Saved code for 'fibonacci_calculator_1763157123'
 
 Generating unit tests...
-INFO:src.ollama_client:Generating with model 'codellama' at http://192.168.0.56:11434...
-(Notice: different endpoint - round-robin working!)
+INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:11434...
 ✓ Tests generated
 Running tests...
 ✓ Tests passed

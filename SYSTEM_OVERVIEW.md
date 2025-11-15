@@ -40,7 +40,7 @@ The system uses specialized LLMs for different tasks:
 | Model | Purpose | Endpoint(s) |
 |-------|---------|-------------|
 | **llama3** | Overseer - Strategic planning | localhost:11434 |
-| **codellama** | Generator - Code writing | localhost:11434 + 192.168.0.56:11434 (round-robin) |
+| **codellama** | Generator - Code writing | localhost:11434 |
 | **qwen2.5-coder:14b** | Escalation - Bug fixing | localhost:11434 |
 | **llama3** | Evaluator - Quality analysis | localhost:11434 |
 | **tinyllama** | Triage - Quick decisions | localhost:11434 |
@@ -131,18 +131,12 @@ User Request: "generate add 1 plus 1"
 ```yaml
 generator:
   model: "codellama"
-  endpoints:
-    - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+  endpoint: null  # Uses base_url (http://localhost:11434)
 ```
 
-**Behavior**:
-- Request 1 → localhost:11434
-- Request 2 → 192.168.0.56:11434
-- Request 3 → localhost:11434
-- Pattern repeats
+**Note**: The system supports multiple endpoints for load balancing. Use `endpoints:` (plural) with a list of URLs to distribute load across multiple servers.
 
-**Per-model tracking**: Each model has independent round-robin counter
+**Per-model tracking**: Each model can have independent endpoints configured
 
 ### 3. General Fallback Tool
 
@@ -327,9 +321,7 @@ overseer:
 ```yaml
 generator:
   model: "codellama"
-  endpoints:
-    - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+  endpoint: null  # Uses base_url
 ```
 
 ### Context Windows
@@ -405,7 +397,7 @@ ollama list | grep qwen
 
 **Test connectivity**:
 ```bash
-curl http://192.168.0.56:11434/api/tags
+curl http://localhost:11434/api/tags
 ```
 
 **Should return**: JSON list of available models
