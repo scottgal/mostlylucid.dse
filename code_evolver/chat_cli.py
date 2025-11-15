@@ -1679,8 +1679,12 @@ if __name__ == "__main__":
 ```""" if interface_tests else """```python
 import json
 import sys
+from pathlib import Path
 
-# Only include this if you need to call LLM tools:
+# CRITICAL: Add code_evolver root to path BEFORE importing node_runtime
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# Now you can import from node_runtime (only if you need to call LLM tools):
 from node_runtime import call_tool
 
 def main():
@@ -1698,20 +1702,14 @@ if __name__ == "__main__":
     main()
 ```
 
-CRITICAL PATH SETUP:
-Your generated code will run from nodes/<node_id>/ directory, but node_runtime.py is in the root code_evolver/ directory.
-You MUST add this BEFORE importing from node_runtime:
-
+CRITICAL: The above example shows the REQUIRED path setup.
+Every file that imports from node_runtime MUST include:
 ```python
 from pathlib import Path
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # Add code_evolver root to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 ```
-
-Then you can import:
-```python
-from node_runtime import call_tool, call_llm, call_tools_parallel
-```
+BEFORE the import statement
 """}
 
 Code requirements:
@@ -1769,6 +1767,10 @@ Example for content generation tasks (jokes, stories, articles, poems):
 ```python
 import json
 import sys
+from pathlib import Path
+
+# CRITICAL: Add path setup BEFORE node_runtime import
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from node_runtime import call_tool
 
 def main():
@@ -1794,6 +1796,10 @@ Example for joke generation specifically:
 ```python
 import json
 import sys
+from pathlib import Path
+
+# CRITICAL: Add path setup BEFORE node_runtime import
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from node_runtime import call_tool
 
 def main():
