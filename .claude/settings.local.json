@@ -23,7 +23,11 @@
       "Bash(flake8:*)",
       "Bash(timeout 60 bash:*)",
       "Bash(if exist nodestell_a_joke rmdir /s /q nodestell_a_joke)",
-      "Bash(del /q registrytell_a_jokenode.json 2)"
+      "Bash(del /q registrytell_a_jokenode.json 2)",
+      "Bash(tee:*)",
+      "Bash(pkill -f \"write a joke and translate\")",
+      "Bash(pkill:*)",
+      "Bash(timeout 180 python:*)"
     ],
     "deny": [],
     "ask": []

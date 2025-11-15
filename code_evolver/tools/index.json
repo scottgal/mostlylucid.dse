@@ -23,7 +23,7 @@
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
-    "created_at": "2025-11-15T06:20:30.792963Z",
+    "created_at": "2025-11-15T14:17:32.125783Z",
     "usage_count": 0
   },
   "code_reviewer": {
@@ -47,7 +47,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792976Z",
+    "created_at": "2025-11-15T14:17:32.125800Z",
     "usage_count": 0
   },
   "security_auditor": {
@@ -71,7 +71,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792979Z",
+    "created_at": "2025-11-15T14:17:32.125805Z",
     "usage_count": 0
   },
   "performance_optimizer": {
@@ -95,7 +95,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792982Z",
+    "created_at": "2025-11-15T14:17:32.125810Z",
     "usage_count": 0
   },
   "doc_generator": {
@@ -119,7 +119,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792986Z",
+    "created_at": "2025-11-15T14:17:32.125814Z",
     "usage_count": 0
   },
   "technical_writer": {
@@ -147,7 +147,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792989Z",
+    "created_at": "2025-11-15T14:17:32.125819Z",
     "usage_count": 0
   },
   "article_analyzer": {
@@ -175,7 +175,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792992Z",
+    "created_at": "2025-11-15T14:17:32.125826Z",
     "usage_count": 0
   },
   "seo_optimizer": {
@@ -202,7 +202,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792995Z",
+    "created_at": "2025-11-15T14:17:32.125831Z",
     "usage_count": 0
   },
   "code_explainer": {
@@ -229,7 +229,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792998Z",
+    "created_at": "2025-11-15T14:17:32.125835Z",
     "usage_count": 0
   },
   "outline_generator": {
@@ -256,7 +256,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.793001Z",
+    "created_at": "2025-11-15T14:17:32.125840Z",
     "usage_count": 0
   },
   "proofreader": {
@@ -283,7 +283,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.793004Z",
+    "created_at": "2025-11-15T14:17:32.125846Z",
     "usage_count": 0
   },
   "write_a_technical_story_and_tr": {
@@ -382,8 +382,8 @@
       ],
       "install_command": "pip install pylint"
     },
-    "created_at": "2025-11-15T06:20:30.793008Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T14:17:32.125853Z",
+    "usage_count": 0
   },
   "mypy_type_checker": {
     "tool_id": "mypy_type_checker",
@@ -407,7 +407,7 @@
       ],
       "install_command": "pip install mypy"
     },
-    "created_at": "2025-11-15T06:20:30.793013Z",
+    "created_at": "2025-11-15T14:17:32.125859Z",
     "usage_count": 0
   },
   "flake8_linter": {
@@ -433,8 +433,8 @@
       ],
       "install_command": "pip install flake8"
     },
-    "created_at": "2025-11-15T06:20:30.793016Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T14:17:32.125864Z",
+    "usage_count": 0
   },
   "black_formatter": {
     "tool_id": "black_formatter",
@@ -458,7 +458,7 @@
       ],
       "install_command": "pip install black"
     },
-    "created_at": "2025-11-15T06:20:30.793019Z",
+    "created_at": "2025-11-15T14:17:32.125869Z",
     "usage_count": 0
   },
   "bandit_security": {
@@ -482,7 +482,7 @@
       ],
       "install_command": "pip install bandit"
     },
-    "created_at": "2025-11-15T06:20:30.793022Z",
+    "created_at": "2025-11-15T14:17:32.125873Z",
     "usage_count": 0
   },
   "pytest_runner": {
@@ -507,7 +507,7 @@
       ],
       "install_command": "pip install pytest"
     },
-    "created_at": "2025-11-15T06:20:30.793025Z",
+    "created_at": "2025-11-15T14:17:32.125878Z",
     "usage_count": 0
   },
   "pytest_coverage": {
@@ -533,7 +533,7 @@
       ],
       "install_command": "pip install pytest pytest-cov"
     },
-    "created_at": "2025-11-15T06:20:30.793028Z",
+    "created_at": "2025-11-15T14:17:32.125882Z",
     "usage_count": 0
   },
   "radon_complexity": {
@@ -559,7 +559,7 @@
       ],
       "install_command": "pip install radon"
     },
-    "created_at": "2025-11-15T06:20:30.793031Z",
+    "created_at": "2025-11-15T14:17:32.125887Z",
     "usage_count": 0
   },
   "vulture_deadcode": {
@@ -582,7 +582,7 @@
       ],
       "install_command": "pip install vulture"
     },
-    "created_at": "2025-11-15T06:20:30.793034Z",
+    "created_at": "2025-11-15T14:17:32.125891Z",
     "usage_count": 0
   },
   "pydocstyle_checker": {
@@ -605,7 +605,7 @@
       ],
       "install_command": "pip install pydocstyle"
     },
-    "created_at": "2025-11-15T06:20:30.793037Z",
+    "created_at": "2025-11-15T14:17:32.125896Z",
     "usage_count": 0
   },
   "isort_import_checker": {
@@ -630,7 +630,7 @@
       ],
       "install_command": "pip install isort"
     },
-    "created_at": "2025-11-15T06:20:30.793040Z",
+    "created_at": "2025-11-15T14:17:32.125901Z",
     "usage_count": 0
   },
   "quick_feedback": {
@@ -659,7 +659,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:20:30.792967Z",
+    "created_at": "2025-11-15T14:17:32.125789Z",
     "usage_count": 0
   },
   "summarizer": {
@@ -686,7 +686,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792972Z",
+    "created_at": "2025-11-15T14:17:32.125795Z",
     "usage_count": 0
   },
   "nmt_translator": {
@@ -714,7 +714,7 @@
       "max_output_length": "long",
       "code_template": "# Example: How to use the NMT Translation Service\nimport requests\nimport json\n\ndef translate_text(text, source_lang=\"en\", target_lang=\"es\"):\n    \"\"\"\n    Translate text using the NMT service.\n\n    Args:\n        text: Text to translate\n        source_lang: Source language code (e.g., 'en', 'es', 'fr')\n        target_lang: Target language code\n\n    Returns:\n        Translated text\n    \"\"\"\n    url = \"http://localhost:8000/translate\"\n\n    payload = {\n        \"text\": text,\n        \"source_lang\": source_lang,\n        \"target_lang\": target_lang\n    }\n\n    response = requests.post(url, json=payload)\n    response.raise_for_status()\n\n    result = response.json()\n    return result.get(\"translated_text\", \"\")\n\n# Usage example:\n# translated = translate_text(\"Hello, world!\", source_lang=\"en\", target_lang=\"es\")\n# print(translated)  # Output: \"Hola, mundo!\"\n"
     },
-    "created_at": "2025-11-15T06:20:30.808450Z",
+    "created_at": "2025-11-15T14:17:32.210429Z",
     "usage_count": 0
   },
   "translation_quality_checker": {
@@ -741,7 +741,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:20:30.808470Z",
+    "created_at": "2025-11-15T14:17:32.210451Z",
     "usage_count": 0
   },
   "add_100_and_200": {
@@ -795,7 +795,7 @@
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
-    "created_at": "2025-11-15T06:20:30.808477Z",
+    "created_at": "2025-11-15T14:17:32.210458Z",
     "usage_count": 0
   },
   "write_me_code_to_do_a_fibonacc": {
@@ -847,7 +847,7 @@
       "quality_tier": "good",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:20:30.808482Z",
+    "created_at": "2025-11-15T14:17:32.210463Z",
     "usage_count": 0
   },
   "add_10_and_20_1763173231": {
@@ -1074,7 +1074,7 @@
       "quality_tier": "very-good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:20:30.792951Z",
+    "created_at": "2025-11-15T14:17:32.125766Z",
     "usage_count": 0
   },
   "save_to_disk": {
@@ -1100,7 +1100,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:20:30.808488Z",
+    "created_at": "2025-11-15T14:17:32.210468Z",
     "usage_count": 0
   },
   "load_from_disk": {
@@ -1125,7 +1125,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:20:30.808493Z",
+    "created_at": "2025-11-15T14:17:32.210473Z",
     "usage_count": 0
   },
   "calculate_15_plus_25": {
@@ -1222,7 +1222,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:20:30.808497Z",
+    "created_at": "2025-11-15T14:17:32.210478Z",
     "usage_count": 0
   },
   "fast_content_writer": {
@@ -1405,7 +1405,7 @@
       "quality_tier": "excellent",
       "max_output_length": "long"
     },
-    "created_at": "2025-11-15T06:20:30.792958Z",
+    "created_at": "2025-11-15T14:17:32.125775Z",
     "usage_count": 0
   },
   "add_5_and_3_1763184838": {
@@ -1614,6 +1614,59 @@
       "full_title": "Python code for generating jokes based on user-provided topics using LLM tools."
     },
     "created_at": "2025-11-15T06:24:41.879945Z",
+    "usage_count": 0
+  },
+  "tell_me_a_joke_about_programmi": {
+    "tool_id": "tell_me_a_joke_about_programmi",
+    "name": "Python code to generate a joke about programming using the content generation LLM tool.",
+    "tool_type": "workflow",
+    "description": "tell me a joke about programming",
+    "tags": [
+      "python",
+      "llm",
+      "content generation",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "tell_me_a_joke_about_programmi",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 34,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-15T12:52:01.973335+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code to generate a joke about programming using the content generation LLM tool."
+    },
+    "created_at": "2025-11-15T12:52:01.973353Z",
+    "usage_count": 0
+  },
+  "write_a_joke_and_translate_to_1763216276": {
+    "tool_id": "write_a_joke_and_translate_to_1763216276",
+    "name": "Python code for generating a joke in French based on an English input.",
+    "tool_type": "workflow",
+    "description": "write a joke and translate to french",
+    "tags": [
+      "python",
+      "code generation",
+      "joke",
+      "translation",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_joke_and_translate_to_1763216276",
+      "quality_score": 1.1,
+      "latency_ms": 1011,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T14:19:42.965735+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code for generating a joke in French based on an English input."
+    },
+    "created_at": "2025-11-15T14:19:42.965761Z",
     "usage_count": 0
   }
 }

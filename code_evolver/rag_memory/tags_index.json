@@ -276,7 +276,9 @@
     "tool_content_generator",
     "tool_add_5_and_3_1763184838",
     "tool_multiply_6_by_7",
-    "tool_add_7_and_9"
+    "tool_add_7_and_9",
+    "tool_tell_me_a_joke_about_programmi",
+    "tool_write_a_joke_and_translate_to_1763216276"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
@@ -303,7 +305,10 @@
     "tool_code_translation_validator",
     "tool_fast_code_generator",
     "tool_fast_content_writer",
-    "tool_content_generator"
+    "tool_content_generator",
+    "func_tell_me_a_joke_about_programmi",
+    "workflow_tell_me_a_joke_about_programmi",
+    "tool_tell_me_a_joke_about_programmi"
   ],
   "writing": [
     "spec_write_me_a_story",
@@ -333,7 +338,12 @@
     "spec_write_then_translate_a_poen",
     "tool_technical_writer",
     "tool_fast_content_writer",
-    "tool_content_generator"
+    "tool_content_generator",
+    "spec_write_me_a_poem_and_translate",
+    "spec_write_a_joke_and_translate_to",
+    "spec_write_a_joke_and_translate_to_1763216276",
+    "spec_write_a_joke_and_translate_to_1763217286",
+    "spec_content_generator"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -394,7 +404,12 @@
     "tool_write_me_a_joke_1763182563",
     "tool_add_5_and_3_1763184838",
     "tool_multiply_6_by_7",
-    "tool_add_7_and_9"
+    "tool_add_7_and_9",
+    "workflow_tell_me_a_joke_about_programmi",
+    "tool_tell_me_a_joke_about_programmi",
+    "tool_write_a_joke_and_translate_to_1763216276",
+    "workflow_1763216384",
+    "workflow_1763217386"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -479,7 +494,13 @@
     "spec_tell_me_a_joke",
     "func_tell_me_a_joke",
     "workflow_tell_me_a_joke",
-    "spec_tell_me_a_joke_1763210360"
+    "spec_tell_me_a_joke_1763210360",
+    "spec_tell_me_a_joke_about_programmi",
+    "spec_write_me_a_poem_and_translate",
+    "spec_write_a_joke_and_translate_to",
+    "spec_write_a_joke_and_translate_to_1763216276",
+    "spec_write_a_joke_and_translate_to_1763217286",
+    "spec_content_generator"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -551,7 +572,9 @@
     "tool_write_me_a_joke_1763182563",
     "tool_add_5_and_3_1763184838",
     "tool_multiply_6_by_7",
-    "tool_add_7_and_9"
+    "tool_add_7_and_9",
+    "tool_tell_me_a_joke_about_programmi",
+    "tool_write_a_joke_and_translate_to_1763216276"
   ],
   "python": [
     "func_add_100_and_200",
@@ -596,7 +619,11 @@
     "tool_write_me_code_to_do_a_fibonacc",
     "tool_add_10_and_20_1763173231",
     "tool_what_is_1_plus_1",
-    "tool_calculate_a_fibonaccie_sequenc"
+    "tool_calculate_a_fibonaccie_sequenc",
+    "func_tell_me_a_joke_about_programmi",
+    "workflow_tell_me_a_joke_about_programmi",
+    "tool_tell_me_a_joke_about_programmi",
+    "tool_write_a_joke_and_translate_to_1763216276"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -650,7 +677,8 @@
     "workflow_multiply_6_by_7",
     "workflow_write_a_poem",
     "workflow_write_a_haiku_about_code",
-    "workflow_tell_a_joke"
+    "workflow_tell_a_joke",
+    "workflow_tell_me_a_joke_about_programmi"
   ],
   "fibonacci": [
     "func_write_me_code_to_do_a_fibonacc",
@@ -894,7 +922,13 @@
     "spec_write_then_translate_a_poen",
     "spec_tell_a_joke",
     "spec_tell_me_a_joke",
-    "spec_tell_me_a_joke_1763210360"
+    "spec_tell_me_a_joke_1763210360",
+    "spec_tell_me_a_joke_about_programmi",
+    "spec_write_me_a_poem_and_translate",
+    "spec_write_a_joke_and_translate_to",
+    "spec_write_a_joke_and_translate_to_1763216276",
+    "spec_write_a_joke_and_translate_to_1763217286",
+    "spec_content_generator"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -940,7 +974,13 @@
     "spec_write_then_translate_a_poen",
     "spec_tell_a_joke",
     "spec_tell_me_a_joke",
-    "spec_tell_me_a_joke_1763210360"
+    "spec_tell_me_a_joke_1763210360",
+    "spec_tell_me_a_joke_about_programmi",
+    "spec_write_me_a_poem_and_translate",
+    "spec_write_a_joke_and_translate_to",
+    "spec_write_a_joke_and_translate_to_1763216276",
+    "spec_write_a_joke_and_translate_to_1763217286",
+    "spec_content_generator"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -986,7 +1026,13 @@
     "spec_write_then_translate_a_poen",
     "spec_tell_a_joke",
     "spec_tell_me_a_joke",
-    "spec_tell_me_a_joke_1763210360"
+    "spec_tell_me_a_joke_1763210360",
+    "spec_tell_me_a_joke_about_programmi",
+    "spec_write_me_a_poem_and_translate",
+    "spec_write_a_joke_and_translate_to",
+    "spec_write_a_joke_and_translate_to_1763216276",
+    "spec_write_a_joke_and_translate_to_1763217286",
+    "spec_content_generator"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1041,7 +1087,10 @@
     "func_write_me_a_joke",
     "func_write_me_a_joke_1763183202",
     "tool_write_a_joke_1763181926",
-    "tool_write_me_a_joke_1763182563"
+    "tool_write_me_a_joke_1763182563",
+    "tool_write_a_joke_and_translate_to_1763216276",
+    "workflow_1763216384",
+    "workflow_1763217386"
   ],
   "generation": [
     "func_write_a_joke_1763181926",
@@ -1073,7 +1122,8 @@
     "tool_write_a_joke_1763181926"
   ],
   "code generation": [
-    "func_write_me_a_story_with_a_plot_a_1763182054"
+    "func_write_me_a_story_with_a_plot_a_1763182054",
+    "tool_write_a_joke_and_translate_to_1763216276"
   ],
   "LLM": [
     "func_write_me_a_story_with_a_plot_a_1763182054",
@@ -1106,7 +1156,9 @@
     "exec_invocation_flake8_linter_1763187872720",
     "exec_invocation_pylint_checker_1763187874676",
     "exec_invocation_flake8_linter_1763209942000",
-    "exec_invocation_pylint_checker_1763209943166"
+    "exec_invocation_pylint_checker_1763209943166",
+    "exec_invocation_flake8_linter_1763211113036",
+    "exec_invocation_pylint_checker_1763211114824"
   ],
   "tool_execution": [
     "exec_invocation_flake8_linter_1763185170161",
@@ -1116,31 +1168,37 @@
     "exec_invocation_flake8_linter_1763187872720",
     "exec_invocation_pylint_checker_1763187874676",
     "exec_invocation_flake8_linter_1763209942000",
-    "exec_invocation_pylint_checker_1763209943166"
+    "exec_invocation_pylint_checker_1763209943166",
+    "exec_invocation_flake8_linter_1763211113036",
+    "exec_invocation_pylint_checker_1763211114824"
   ],
   "flake8_linter": [
     "exec_invocation_flake8_linter_1763185170161",
     "exec_invocation_flake8_linter_1763187172809",
     "exec_invocation_flake8_linter_1763187872720",
-    "exec_invocation_flake8_linter_1763209942000"
+    "exec_invocation_flake8_linter_1763209942000",
+    "exec_invocation_flake8_linter_1763211113036"
   ],
   "flake8": [
     "exec_invocation_flake8_linter_1763185170161",
     "exec_invocation_flake8_linter_1763187172809",
     "exec_invocation_flake8_linter_1763187872720",
-    "exec_invocation_flake8_linter_1763209942000"
+    "exec_invocation_flake8_linter_1763209942000",
+    "exec_invocation_flake8_linter_1763211113036"
   ],
   "pylint_checker": [
     "exec_invocation_pylint_checker_1763185171351",
     "exec_invocation_pylint_checker_1763187173561",
     "exec_invocation_pylint_checker_1763187874676",
-    "exec_invocation_pylint_checker_1763209943166"
+    "exec_invocation_pylint_checker_1763209943166",
+    "exec_invocation_pylint_checker_1763211114824"
   ],
   "pylint": [
     "exec_invocation_pylint_checker_1763185171351",
     "exec_invocation_pylint_checker_1763187173561",
     "exec_invocation_pylint_checker_1763187874676",
-    "exec_invocation_pylint_checker_1763209943166"
+    "exec_invocation_pylint_checker_1763209943166",
+    "exec_invocation_pylint_checker_1763211114824"
   ],
   "ml": [
     "func_write_a_poem",
@@ -1163,13 +1221,17 @@
   "tested": [
     "workflow_write_a_haiku_about_code",
     "workflow_tell_a_joke",
-    "workflow_tell_me_a_joke"
+    "workflow_tell_me_a_joke",
+    "workflow_tell_me_a_joke_about_programmi"
   ],
   "calculator": [
     "tool_calculat_1_1"
   ],
   "content generation": [
-    "tool_write_then_translate_a_poen"
+    "tool_write_then_translate_a_poen",
+    "func_tell_me_a_joke_about_programmi",
+    "workflow_tell_me_a_joke_about_programmi",
+    "tool_tell_me_a_joke_about_programmi"
   ],
   "jokes": [
     "func_tell_a_joke",
@@ -1430,7 +1492,8 @@
   "translation": [
     "tool_nmt_translator",
     "tool_translation_quality_checker",
-    "tool_code_translation_validator"
+    "tool_code_translation_validator",
+    "tool_write_a_joke_and_translate_to_1763216276"
   ],
   "nmt": [
     "tool_nmt_translator"
@@ -1488,7 +1551,9 @@
     "tool_save_to_disk"
   ],
   "write": [
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "workflow_1763216384",
+    "workflow_1763217386"
   ],
   "disk": [
     "tool_save_to_disk",
@@ -1532,5 +1597,13 @@
   ],
   "llm-tool": [
     "tool_content_generator"
+  ],
+  "multi-step": [
+    "workflow_1763216384",
+    "workflow_1763217386"
+  ],
+  "a": [
+    "workflow_1763216384",
+    "workflow_1763217386"
   ]
 }

@@ -59,7 +59,13 @@ from .hierarchical_evolver import HierarchicalEvolver, SharedPlanContext, NodeMe
 from .rag_integrated_tools import RAGIntegratedTools, FunctionMetadata
 from .progress_display import ProgressDisplay, Stage, get_progress_display
 from .quality_evaluator import QualityEvaluator, EvaluationResult, EvaluationStep
-from .workflow_tracker import WorkflowTracker, WorkflowStep, StepStatus
+from .workflow_tracker import WorkflowTracker, WorkflowStep as WorkflowTrackerStep, StepStatus
+from .workflow_spec import (
+    WorkflowSpec, WorkflowStep as WorkflowStepSpec, WorkflowInput, WorkflowOutput,
+    ToolDefinition, StepType, OperationType,
+    create_simple_workflow
+)
+from .workflow_builder import WorkflowBuilder
 
 __all__ = [
     "OllamaClient",
@@ -96,8 +102,18 @@ __all__ = [
     "QualityEvaluator",
     "EvaluationResult",
     "EvaluationStep",
-    # Workflow tracking
+    # Workflow tracking (runtime)
     "WorkflowTracker",
-    "WorkflowStep",
-    "StepStatus"
+    "WorkflowTrackerStep",
+    "StepStatus",
+    # Workflow specification
+    "WorkflowSpec",
+    "WorkflowStepSpec",
+    "WorkflowInput",
+    "WorkflowOutput",
+    "ToolDefinition",
+    "StepType",
+    "OperationType",
+    "create_simple_workflow",
+    "WorkflowBuilder"
 ]

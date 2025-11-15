@@ -198,6 +198,13 @@ chat:
   # Auto-save
   auto_save_context: true
 
+  # Workflow mode (experimental)
+  workflow_mode:
+    enabled: true  # Enable multi-step workflow decomposition
+    detect_keywords: ["and", "then", "translate", "convert"]  # Keywords that suggest multi-step
+    min_steps: 2   # Minimum steps to create a workflow (vs single code file)
+    max_steps: 10  # Maximum steps in a workflow
+
   # Default workflow pressure/quality settings
   # These are passed to all tool invocations and can be overridden per-task
   default_workflow_context:

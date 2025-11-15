@@ -329,6 +329,294 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
 
         return fixed
 
+    def _handle_workflow_generation(self, description: str, workflow: 'WorkflowTracker', available_tools: str) -> bool:
+        """
+        Handle multi-step workflow generation.
+
+        Decomposes task into steps, generates code for each step as a reusable node,
+        and executes them in sequence.
+
+        Args:
+            description: User's full task description
+            workflow: Workflow tracker instance
+            available_tools: Available tools string from parent method
+
+        Returns:
+            True if successful
+        """
+        from src.workflow_builder import WorkflowBuilder
+        from src.rag_memory import ArtifactType
+        import time
+
+        # Step 1: Search RAG for similar workflows to use as examples
+        from src.rag_memory import ArtifactType
+
+        similar_workflows = self.rag.find_similar(
+            description,
+            artifact_type=ArtifactType.WORKFLOW,
+            top_k=3
+        )
+
+        workflow_examples = ""
+        if similar_workflows:
+            workflow_examples = "\n\nSIMILAR WORKFLOWS FROM MEMORY (use as templates):\n"
+            for wf_artifact, similarity in similar_workflows:
+                if similarity > 0.6:  # Only show reasonably similar workflows
+                    workflow_examples += f"\nWorkflow (similarity: {similarity:.0%}): {wf_artifact.description}\n"
+                    # Include the workflow structure as an example
+                    try:
+                        import json
+                        wf_data = json.loads(wf_artifact.content)
+                        workflow_examples += f"Steps: {len(wf_data.get('steps', []))} steps\n"
+                        for step in wf_data.get('steps', [])[:3]:  # Show first 3 steps
+                            workflow_examples += f"  - {step.get('description', 'N/A')} (tool: {step.get('tool', 'N/A')})\n"
+                    except:
+                        pass
+
+        # Step 2: Ask overseer to decompose into workflow steps
+        workflow.add_step("workflow_decomposition", "llm", f"Decompose into workflow steps ({self.config.overseer_model})")
+        workflow.start_step("workflow_decomposition")
+
+        workflow_prompt = f"""You are decomposing a task into workflow steps. Follow this EXACT process:
+{workflow_examples}
+
+TASK TO ANALYZE: "{description}"
+
+STEP 1: IDENTIFY OPERATIONS
+Look for these keywords that indicate multiple operations:
+- "and" → separate operations
+- "then" → sequential operations
+- "translate" → separate translation step
+- "convert" → separate conversion step
+
+Count how many distinct operations are in the task.
+
+STEP 2: SPLIT THE TASK
+For "{description}":
+- How many operations? [Count them]
+- What is operation 1? [Identify it]
+- What is operation 2? [If exists]
+- What is operation 3? [If exists]
+
+EXAMPLES:
+
+Example 1: "write a joke and translate to french"
+- Count: 2 operations (write AND translate)
+- Operation 1: write a joke
+- Operation 2: translate to french
+- Result: 2 steps
+
+Example 2: "write a story"
+- Count: 1 operation (just write)
+- Operation 1: write a story
+- Result: 1 step
+
+Example 3: "calculate fibonacci then sort then display"
+- Count: 3 operations (calculate, sort, display)
+- Operation 1: calculate fibonacci
+- Operation 2: sort results
+- Operation 3: display data
+- Result: 3 steps
+
+STEP 3: CREATE JSON OUTPUT
+
+For each operation you identified, create a separate step in the JSON.
+
+{{
+  "workflow_id": "task_workflow",
+  "description": "{description}",
+  "steps": [
+    {{
+      "step_id": "step1",
+      "type": "llm_call",
+      "description": "[Operation 1 description]",
+      "task_for_node": "[ONLY operation 1, no other operations]",
+      "tool": "content_generator",
+      "output_name": "step1_output"
+    }},
+    {{
+      "step_id": "step2",
+      "type": "llm_call",
+      "description": "[Operation 2 description]",
+      "task_for_node": "[ONLY operation 2, no other operations]",
+      "tool": "nmt_translator",
+      "input_from_step": "step1",
+      "output_name": "step2_output"
+    }}
+  ]
+}}
+
+IMPORTANT RULES:
+- If you counted 2 operations, you MUST have 2 steps in the JSON
+- If you counted 3 operations, you MUST have 3 steps in the JSON
+- Each "task_for_node" should contain ONLY ONE operation
+- Use "input_from_step" to link steps that depend on previous output
+
+CRITICAL DESIGN PRINCIPLE:
+- Do NOT call multiple LLM tools in the same step (except for code generation)
+- Prefer REUSABLE sub-steps over large monolithic tasks
+- Each step should be small enough to reuse in other workflows
+- Example: Don't create "write_and_translate" - create "write" and "translate" separately
+
+AVAILABLE TOOLS (use these EXACT names in your JSON):
+{available_tools}
+
+CRITICAL: Use the EXACT tool names listed above, not generic placeholder names.
+- For translation tasks: look for "nmt_translator" or similar translation tools
+- For content generation: use "content_generator"
+- Match the tool name to the operation type
+
+NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
+
+        with self.display.start_stage("Planning", f"Decomposing workflow"):
+            workflow_json_response = self.client.generate(
+                model=self.config.overseer_model,
+                prompt=workflow_prompt,
+                temperature=0.7,
+                model_key="overseer"
+            )
+
+        self.display.complete_stage("Planning", "Workflow decomposed")
+
+        # Parse the workflow JSON
+        builder = WorkflowBuilder(tools_manager=self.tools_manager)
+        try:
+            workflow_spec = builder.build_from_text(description, workflow_json_response)
+        except Exception as e:
+            console.print(f"[red]Failed to parse workflow: {e}[/red]")
+            console.print(f"[yellow]Overseer response:[/yellow]\n{workflow_json_response}")
+            return False
+
+        workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps planned")
+
+        # Show workflow plan to user
+        console.print(f"\n[bold cyan]Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
+        for i, step in enumerate(workflow_spec.steps, 1):
+            console.print(f"  {i}. [yellow]{step.description}[/yellow]")
+            if hasattr(step, 'task_for_node'):
+                console.print(f"     Node task: {step.task_for_node}")
+        console.print()
+
+        # Step 2: Execute each workflow step, generating a node for each
+        step_results = {}
+
+        for step in workflow_spec.steps:
+            workflow.add_step(f"execute_{step.step_id}", "generate", f"Generate and execute: {step.description}")
+            workflow.start_step(f"execute_{step.step_id}")
+
+            # Determine the granular task for THIS node
+            node_task = getattr(step, 'task_for_node', step.description)
+
+            console.print(f"\n[bold]Step: {step.description}[/bold]")
+            console.print(f"[dim]Generating node for: {node_task}[/dim]")
+
+            # Generate code for this step by recursively calling handle_generate
+            # but with the GRANULAR task, not the full description
+            # Save current context and set workflow mode flag
+            old_context = self.context.copy()
+            self.context.clear()
+            self.context['_in_workflow_mode'] = True  # Prevent re-detection of workflows
+            # Add workflow context so RAG knows this node is part of a workflow
+            self.context['_workflow_context'] = {
+                'parent_workflow': description,  # Full workflow task
+                'step_id': step.step_id,
+                'step_description': step.description,
+                'tool_used': step.tool_name,
+                'operation_type': self._infer_operation_type(step.tool_name, node_task)
+            }
+
+            # Generate the node (this will go through the normal single-step flow)
+            success = self.handle_generate(node_task)
+
+            if not success:
+                console.print(f"[red]Failed to generate step: {step.step_id}[/red]")
+                self.context = old_context
+                return False
+
+            # Get the node_id of what was just generated (it's the last one in registry)
+            # For now, we'll need to track this better
+            # TODO: Modify handle_generate to return node_id
+
+            # Restore context
+            self.context = old_context
+
+            workflow.complete_step(f"execute_{step.step_id}", "Node generated and executed")
+
+            # Store result (for now, mock this - we'll wire it properly)
+            step_results[step.step_id] = {"status": "completed"}
+
+        console.print(f"\n[bold green]Workflow completed successfully![/bold green]")
+
+        # Store the workflow in RAG
+        self.rag.store_artifact(
+            artifact_id=f"workflow_{int(time.time())}",
+            artifact_type=ArtifactType.WORKFLOW,
+            name=f"Workflow: {description}",
+            description=description,
+            content=workflow_spec.to_json(),
+            tags=["workflow", "multi-step"] + description.lower().split()[:3],
+            metadata={
+                "steps": len(workflow_spec.steps),
+                "workflow_id": workflow_spec.workflow_id
+            }
+        )
+
+        return True
+
+    def _infer_operation_type(self, tool_name: str, task_description: str) -> str:
+        """
+        Infer the operation type based on tool name and task description.
+        This helps with hierarchical RAG matching.
+
+        Args:
+            tool_name: Name of the tool being used
+            task_description: Description of the task
+
+        Returns:
+            Operation type: generator, transformer, validator, combiner, splitter, or filter
+        """
+        task_lower = task_description.lower()
+        tool_lower = tool_name.lower() if tool_name else ""
+
+        # Generator: Creates new content
+        if any(word in task_lower or word in tool_lower for word in [
+            "write", "generate", "create", "compose", "produce", "make", "build", "draft"
+        ]):
+            return "generator"
+
+        # Transformer: Modifies or converts existing content
+        if any(word in task_lower or word in tool_lower for word in [
+            "translate", "convert", "transform", "format", "reformat", "change", "modify", "adapt"
+        ]):
+            return "transformer"
+
+        # Validator: Checks or validates content
+        if any(word in task_lower or word in tool_lower for word in [
+            "validate", "check", "verify", "test", "review", "evaluate", "assess"
+        ]):
+            return "validator"
+
+        # Combiner: Combines multiple inputs
+        if any(word in task_lower or word in tool_lower for word in [
+            "combine", "merge", "join", "concat", "aggregate", "summarize", "consolidate"
+        ]):
+            return "combiner"
+
+        # Splitter: Splits content
+        if any(word in task_lower or word in tool_lower for word in [
+            "split", "separate", "divide", "extract", "parse", "break"
+        ]):
+            return "splitter"
+
+        # Filter: Filters or selects content
+        if any(word in task_lower or word in tool_lower for word in [
+            "filter", "select", "find", "search", "match", "choose"
+        ]):
+            return "filter"
+
+        # Default to generator if unclear
+        return "generator"
+
     def print_welcome(self):
         """Print welcome message."""
         welcome = """
@@ -757,6 +1045,19 @@ Answer:"""
             for tool_info in workflow_composition["recommended_tools"][:3]:
                 composition_summary += f"- {tool_info['name']}: {tool_info.get('model', 'N/A')} ({tool_info.get('cost_tier')}/{tool_info.get('speed_tier')}/{tool_info.get('quality_tier')})\n"
             available_tools = composition_summary + "\n" + available_tools
+
+        # Step 1.5: Check if this is a multi-step workflow task
+        # Only detect workflows at the top level (not when called recursively from workflow handler)
+        in_workflow_mode = self.context.get('_in_workflow_mode', False)
+
+        if not in_workflow_mode:
+            workflow_keywords = self.config.get("chat.workflow_mode.detect_keywords", ["and", "then", "translate", "convert"])
+            is_multi_step = any(keyword in description.lower() for keyword in workflow_keywords)
+
+            if is_multi_step and self.config.get("chat.workflow_mode.enabled", False):
+                # Multi-step workflow detected
+                console.print(f"[cyan]Multi-step workflow detected - decomposing into reusable nodes...[/cyan]")
+                return self._handle_workflow_generation(description, workflow, available_tools)
 
         # Step 2: Ask overseer for detailed specification WITH tool recommendations
         workflow.add_step("overseer_specification", "llm", f"Consult overseer ({self.config.overseer_model})")
@@ -1445,6 +1746,38 @@ Return ONLY the JSON object, nothing else."""
             try:
                 from src.rag_memory import ArtifactType
 
+                # Build callable instruction from interface schema for semantic matching
+                # Example: "translate(content, language)" or "add_numbers(a, b)"
+                callable_instruction = None
+                if interface_schema:
+                    inputs = interface_schema.get("inputs", [])
+                    if inputs:
+                        params = ", ".join(inputs)
+                        callable_instruction = f"{node_id}({params})"
+                    else:
+                        callable_instruction = f"{node_id}()"
+
+                # Prepare metadata with interface and workflow context
+                func_metadata = {
+                    "node_id": node_id,
+                    "specification": specification[:200],
+                    "tools_available": available_tools if available_tools and "No specific tools" not in available_tools else None,
+                    "tests_passed": True,
+                    "interface": interface_schema,  # Store complete interface schema
+                    "callable_instruction": callable_instruction  # For semantic matching
+                }
+
+                # Add workflow context if this node is part of a workflow
+                workflow_context = self.context.get('_workflow_context')
+                if workflow_context:
+                    func_metadata['workflow_context'] = {
+                        'parent_workflow': workflow_context.get('parent_workflow'),
+                        'step_id': workflow_context.get('step_id'),
+                        'step_description': workflow_context.get('step_description'),
+                        'tool_used': workflow_context.get('tool_used'),
+                        'operation_type': workflow_context.get('operation_type')
+                    }
+
                 # Store the generated code as a function artifact
                 self.rag.store_artifact(
                     artifact_id=f"func_{node_id}",
@@ -1453,12 +1786,7 @@ Return ONLY the JSON object, nothing else."""
                     description=description,
                     content=code,
                     tags=code_tags,
-                    metadata={
-                        "node_id": node_id,
-                        "specification": specification[:200],
-                        "tools_available": available_tools if available_tools and "No specific tools" not in available_tools else None,
-                        "tests_passed": True
-                    },
+                    metadata=func_metadata,
                     auto_embed=True
                 )
 
@@ -2243,6 +2571,13 @@ Requirements for "code" field:
 - Must fix ALL errors shown above
 - Must be immediately runnable
 - Learn from previous failed attempts listed above
+- CRITICAL: If the original code uses call_tool(), the fixed code MUST also use call_tool()
+  * NEVER replace call_tool() with hardcoded data, dictionaries, or lists
+  * NEVER remove call_tool() calls
+  * NEVER create a mock or fake call_tool() function (def call_tool)
+  * ALWAYS import call_tool from node_runtime: "from node_runtime import call_tool"
+  * If call_tool() is failing due to missing module, add the import statement
+- For content generation (jokes, stories, articles), always use call_tool("content_generator", prompt)
 
 Return ONLY the JSON object, nothing else."""
 

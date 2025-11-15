@@ -1,0 +1,94 @@
+﻿{
+  "workflow_id": "article_writer_portable",
+  "version": "1.0.0",
+  "description": "Write and translate article - fully portable",
+  "portable": true,
+  "created_by": "code_evolver",
+  "created_at": "2025-11-15T13:00:00Z",
+  "tags": [
+    "writing",
+    "translation",
+    "portable"
+  ],
+  "inputs": {
+    "topic": {
+      "type": "string",
+      "required": true,
+      "description": "Article topic"
+    },
+    "target_language": {
+      "type": "string",
+      "required": false,
+      "default": "Spanish",
+      "description": "Language to translate to"
+    }
+  },
+  "outputs": {
+    "translated_article": {
+      "type": "string",
+      "description": "Final translated article",
+      "source_reference": "steps.translate.output"
+    }
+  },
+  "steps": [
+    {
+      "step_id": "create_outline",
+      "type": "llm_call",
+      "description": "Create article outline",
+      "tool": "content_generator",
+      "prompt_template": "Create an outline for an article about {topic}",
+      "input_mapping": {
+        "topic": "inputs.topic"
+      },
+      "output_name": "outline"
+    },
+    {
+      "step_id": "write_article",
+      "type": "llm_call",
+      "description": "Write full article",
+      "tool": "content_generator",
+      "prompt_template": "Write a detailed article based on this outline:\n\n{outline}",
+      "input_mapping": {
+        "outline": "steps.create_outline.outline"
+      },
+      "output_name": "article"
+    },
+    {
+      "step_id": "translate",
+      "type": "llm_call",
+      "description": "Translate to target language",
+      "tool": "translator",
+      "prompt_template": "Translate the following text to {target_language}:\n\n{text}",
+      "input_mapping": {
+        "text": "steps.write_article.article",
+        "target_language": "inputs.target_language"
+      },
+      "output_name": "output"
+    }
+  ],
+  "tools": {
+    "content_generator": {
+      "tool_id": "content_generator",
+      "name": "Content Generator",
+      "description": "General-purpose LLM for content generation",
+      "type": "llm",
+      "model": "llama3",
+      "system_prompt": "You are an expert technical writer. Create clear, detailed, and engaging content.",
+      "temperature": 0.7,
+      "endpoint": "http://localhost:11434",
+      "timeout": 120
+    },
+    "translator": {
+      "tool_id": "translator",
+      "name": "Language Translator",
+      "description": "Translates text between languages",
+      "type": "llm",
+      "model": "llama3",
+      "system_prompt": "You are an expert translator. Translate text accurately while preserving meaning and style.",
+      "temperature": 0.3,
+      "endpoint": "http://localhost:11434",
+      "timeout": 120,
+      "fallback_tool": "content_generator"
+    }
+  }
+}

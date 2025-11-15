@@ -320,4 +320,10 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+# Code Evolver generated content
 /code_evolver/nodes/
+/code_evolver/registry/
+/code_evolver/rag_memory/
+/code_evolver/output/
+/code_evolver/test_export/
+/code_evolver/shared_context/
