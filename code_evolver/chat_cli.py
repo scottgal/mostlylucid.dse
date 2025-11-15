@@ -822,28 +822,29 @@ Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
 
     def print_help(self):
         """Print help message."""
-        table = Table(title="Available Commands", box=box.ROUNDED)
+        table = Table(title="Available Commands (all commands must start with /)", box=box.ROUNDED)
         table.add_column("Command", style="cyan", no_wrap=True)
         table.add_column("Description")
 
         commands = [
-            ("generate <description>", "Generate a new node from natural language description"),
-            ("run <node_id> [input]", "Run an existing node with optional input"),
-            ("test <node_id>", "Run unit tests for a node"),
-            ("evaluate <node_id>", "Evaluate a node's performance"),
-            ("list", "List all nodes in registry"),
-            ("tools", "List all available tools (LLM, code, and community tools)"),
-            ("workflow <node_id>", "Display the complete workflow for a node"),
-            ("show <node_id>", "Show detailed information about a node"),
-            ("delete <node_id>", "Delete a node"),
-            ("evolve <node_id>", "Manually trigger evolution for a node"),
-            ("auto on|off", "Enable/disable auto-evolution"),
-            ("config [key] [value]", "Show or update configuration"),
-            ("status", "Show system status"),
-            ("clear", "Clear the screen"),
-            ("clear_rag", "Clear RAG memory and reset test data (WARNING: destructive!)"),
-            ("help", "Show this help message"),
-            ("exit, quit", "Exit the CLI")
+            ("/generate <description>", "Generate a new node from natural language description"),
+            ("/run <node_id> [input]", "Run an existing node with optional input"),
+            ("/test <node_id>", "Run unit tests for a node"),
+            ("/evaluate <node_id>", "Evaluate a node's performance"),
+            ("/list", "List all nodes in registry"),
+            ("/tools", "List all available tools (LLM, code, and community tools)"),
+            ("/mutate tool <tool_id> <instructions>", "Improve a tool based on instructions"),
+            ("/workflow <node_id>", "Display the complete workflow for a node"),
+            ("/show <node_id>", "Show detailed information about a node"),
+            ("/delete <node_id>", "Delete a node"),
+            ("/evolve <node_id>", "Manually trigger evolution for a node"),
+            ("/auto on|off", "Enable/disable auto-evolution"),
+            ("/config [key] [value]", "Show or update configuration"),
+            ("/status", "Show system status"),
+            ("/clear", "Clear the screen"),
+            ("/clear_rag", "Clear RAG memory and reset test data (WARNING: destructive!)"),
+            ("/help", "Show this help message"),
+            ("/exit, /quit", "Exit the CLI")
         ]
 
         for cmd, desc in commands:
@@ -3084,6 +3085,19 @@ Since previous attempts failed, ADD comprehensive debug logging to help identify
   * In exception handlers: logging.exception("Error details")
 - This logging will help us understand WHERE the failure occurs"""
 
+            # Build conditional sections separately to avoid f-string issues
+            test_log_section = ""
+            if test_output:
+                test_log_section = f"TEST EXECUTION LOG:\n{test_output[:1000]}"
+
+            stdout_section = ""
+            if stdout_output:
+                stdout_section = f"STDOUT: {stdout_output[:500]}"
+
+            test_req_section = ""
+            if original_test:
+                test_req_section = f"ORIGINAL TEST REQUIREMENTS:\n{original_test[:500]}"
+
             # Build comprehensive fix prompt with all context
             fix_prompt = f"""You are an expert code debugger. The following code FAILED its tests.
 
@@ -3103,13 +3117,13 @@ CURRENT CODE (has errors):
 TEST ERROR OUTPUT:
 {error_output}
 
-{f'TEST EXECUTION LOG:\n{test_output[:1000]}' if test_output else ''}
+{test_log_section}
 
-{f'STDOUT: {stdout_output[:500]}' if stdout_output else ''}
+{stdout_section}
 
 {previous_attempts_summary}
 
-{f'ORIGINAL TEST REQUIREMENTS:\n{original_test[:500]}' if original_test else ''}
+{test_req_section}
 
 {logging_instruction}
 
@@ -3810,6 +3824,207 @@ Return ONLY the JSON object, nothing else."""
 
         return True
 
+    def handle_mutate_tool(self, args: str) -> bool:
+        """
+        Handle mutate tool command - improve a tool based on instructions.
+
+        Args:
+            args: String containing "<tool_id> <instructions>"
+
+        Returns:
+            True if successful
+        """
+        # Parse arguments
+        parts = args.split(None, 1)  # Split on first whitespace
+
+        if len(parts) < 2:
+            console.print("[red]Error: Please provide both tool ID and instructions[/red]")
+            console.print("[dim]Usage: /mutate tool <tool_id> <instructions>[/dim]")
+            console.print("[dim]Example: /mutate tool my_tool make it more generic[/dim]")
+            return False
+
+        tool_id = parts[0]
+        instructions = parts[1]
+
+        console.print(f"\n[bold cyan]Mutating tool: {tool_id}[/bold cyan]\n")
+        console.print(f"[dim]Instructions: {instructions}[/dim]\n")
+
+        # Get the tool
+        tool = self.tools_manager.get_tool(tool_id)
+
+        if not tool:
+            console.print(f"[red]Error: Tool '{tool_id}' not found[/red]")
+            console.print("[dim]Use /tools to see available tools[/dim]")
+            return False
+
+        # Display current tool info
+        console.print(f"[green]Current tool:[/green]")
+        console.print(f"  Name: {tool.name}")
+        console.print(f"  Type: {tool.tool_type.value}")
+        console.print(f"  Description: {tool.description}")
+        if tool.tags:
+            console.print(f"  Tags: {', '.join(tool.tags)}")
+        console.print()
+
+        # Load implementation if it exists
+        implementation_code = None
+        if hasattr(tool, 'implementation') and tool.implementation:
+            implementation_code = tool.implementation
+        elif "implementation_file" in tool.metadata:
+            impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
+            if impl_file.exists():
+                with open(impl_file, 'r', encoding='utf-8') as f:
+                    implementation_code = f.read()
+
+        # Build implementation section separately to avoid f-string issues
+        if implementation_code:
+            impl_section = f"""Current Implementation:
+```python
+{implementation_code}
+```
+"""
+        else:
+            impl_section = "No implementation code available."
+
+        # Create prompt for LLM to improve the tool
+        mutation_prompt = f"""You are an expert at improving and refining tool definitions and implementations.
+
+Current Tool:
+- ID: {tool.tool_id}
+- Name: {tool.name}
+- Type: {tool.tool_type.value}
+- Description: {tool.description}
+- Tags: {', '.join(tool.tags) if tool.tags else 'none'}
+
+{impl_section}
+
+Parameters:
+{json.dumps(tool.parameters, indent=2) if tool.parameters else 'None'}
+
+Metadata:
+{json.dumps(tool.metadata, indent=2) if tool.metadata else 'None'}
+
+User Instructions: {instructions}
+
+Please improve this tool based on the user's instructions. Provide your response in the following JSON format:
+
+{{
+  "name": "improved tool name",
+  "description": "improved description",
+  "tags": ["tag1", "tag2"],
+  "parameters": {{"param_name": {{"type": "string", "description": "param description"}}}},
+  "implementation": "improved implementation code if applicable (or null if not code-based)",
+  "reasoning": "brief explanation of what you changed and why"
+}}
+
+Make sure the improvements align with the user's instructions while maintaining compatibility with the tool type and existing functionality.
+Return ONLY the JSON, no other text."""
+
+        # Show that we're processing
+        with console.status("[bold cyan]Improving tool with LLM...", spinner="dots"):
+            try:
+                # Call LLM to improve the tool
+                response = self.client.generate(
+                    model=self.config.get("llm.model", "llama3"),
+                    prompt=mutation_prompt,
+                    temperature=0.3,  # Lower temperature for more consistent output
+                    model_key="tool_mutation"
+                )
+            except Exception as e:
+                console.print(f"[red]Error calling LLM: {e}[/red]")
+                return False
+
+        # Parse the response
+        try:
+            # Extract JSON from response (handle cases where LLM adds extra text)
+            import re
+            json_match = re.search(r'\{.*\}', response, re.DOTALL)
+            if json_match:
+                improved_data = json.loads(json_match.group())
+            else:
+                console.print("[red]Error: Could not parse LLM response as JSON[/red]")
+                console.print(f"[dim]Response: {response[:500]}[/dim]")
+                return False
+        except json.JSONDecodeError as e:
+            console.print(f"[red]Error parsing JSON: {e}[/red]")
+            console.print(f"[dim]Response: {response[:500]}[/dim]")
+            return False
+
+        # Display improvements
+        console.print("\n[bold green]Proposed Improvements:[/bold green]\n")
+        console.print(f"[cyan]Reasoning:[/cyan] {improved_data.get('reasoning', 'No reasoning provided')}\n")
+
+        # Show what changed
+        changes_table = Table(title="Changes", box=box.ROUNDED)
+        changes_table.add_column("Field", style="cyan")
+        changes_table.add_column("Before", style="yellow")
+        changes_table.add_column("After", style="green")
+
+        if improved_data.get('name') != tool.name:
+            changes_table.add_row("Name", tool.name, improved_data.get('name', tool.name))
+
+        if improved_data.get('description') != tool.description:
+            before_desc = tool.description[:50] + "..." if len(tool.description) > 50 else tool.description
+            after_desc = improved_data.get('description', '')[:50] + "..." if len(improved_data.get('description', '')) > 50 else improved_data.get('description', '')
+            changes_table.add_row("Description", before_desc, after_desc)
+
+        if improved_data.get('tags') != tool.tags:
+            changes_table.add_row("Tags", ', '.join(tool.tags), ', '.join(improved_data.get('tags', [])))
+
+        if improved_data.get('implementation') and improved_data.get('implementation') != implementation_code:
+            changes_table.add_row("Implementation", "Updated", "Updated (see below)")
+
+        console.print(changes_table)
+        console.print()
+
+        # Show new implementation if it changed
+        if improved_data.get('implementation') and improved_data.get('implementation') != implementation_code:
+            console.print(Panel(
+                improved_data['implementation'],
+                title="[bold green]Improved Implementation[/bold green]",
+                box=box.ROUNDED
+            ))
+            console.print()
+
+        # Ask for confirmation
+        confirm = console.input("[bold yellow]Apply these changes? (yes/no): [/bold yellow]").strip().lower()
+
+        if confirm not in ['yes', 'y']:
+            console.print("[yellow]Changes discarded[/yellow]")
+            return False
+
+        # Apply the improvements
+        tool.name = improved_data.get('name', tool.name)
+        tool.description = improved_data.get('description', tool.description)
+        tool.tags = improved_data.get('tags', tool.tags)
+        tool.parameters = improved_data.get('parameters', tool.parameters)
+
+        # Update implementation if provided
+        if improved_data.get('implementation'):
+            tool.implementation = improved_data['implementation']
+
+            # Save to file if it's a file-based tool
+            if "implementation_file" in tool.metadata:
+                impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
+                with open(impl_file, 'w', encoding='utf-8') as f:
+                    f.write(improved_data['implementation'])
+                console.print(f"[green]✓ Saved implementation to {impl_file}[/green]")
+            else:
+                # Create a new implementation file
+                impl_filename = f"{tool_id}.py"
+                impl_file = Path(self.tools_manager.tools_path) / impl_filename
+                with open(impl_file, 'w', encoding='utf-8') as f:
+                    f.write(improved_data['implementation'])
+                tool.metadata["implementation_file"] = impl_filename
+                console.print(f"[green]✓ Created implementation file: {impl_file}[/green]")
+
+        # Save the updated tool
+        self.tools_manager.register_tool(tool)
+
+        console.print(f"\n[bold green]✓ Tool '{tool_id}' successfully updated![/bold green]\n")
+
+        return True
+
     def handle_workflow(self, node_id: str) -> bool:
         """Handle workflow command - display the complete workflow for a node."""
         if not node_id:
@@ -3986,54 +4201,64 @@ Return ONLY the JSON object, nothing else."""
 
                 self.history.append(user_input)
 
-                # Parse command
-                if user_input.lower() in ['exit', 'quit', 'q']:
+                # All commands must start with '/'
+                if not user_input.startswith('/'):
+                    console.print("[red]Error: All commands must start with '/'[/red]")
+                    console.print("[dim]Type /help to see available commands[/dim]")
+                    continue
+
+                # Parse command (remove the '/' prefix)
+                cmd = user_input[1:].strip()
+
+                if cmd.lower() in ['exit', 'quit', 'q']:
                     console.print("[cyan]Goodbye![/cyan]")
                     break
 
-                elif user_input.lower() in ['help', '?']:
+                elif cmd.lower() in ['help', '?']:
                     self.print_help()
 
-                elif user_input.lower() == 'clear':
+                elif cmd.lower() == 'clear':
                     console.clear()
 
-                elif user_input.lower() == 'clear_rag':
+                elif cmd.lower() == 'clear_rag':
                     self.handle_clear_rag()
 
-                elif user_input.lower() == 'status':
+                elif cmd.lower() == 'status':
                     self.handle_status()
 
-                elif user_input.lower() == 'list':
+                elif cmd.lower() == 'list':
                     self.handle_list()
 
-                elif user_input.lower() == 'tools':
+                elif cmd.lower() == 'tools':
                     self.handle_tools()
 
-                elif user_input.startswith('workflow '):
-                    node_id = user_input[9:].strip()
+                elif cmd.startswith('workflow '):
+                    node_id = cmd[9:].strip()
                     self.handle_workflow(node_id)
 
-                elif user_input.startswith('generate '):
-                    description = user_input[9:].strip()
+                elif cmd.startswith('generate '):
+                    description = cmd[9:].strip()
                     self.handle_generate(description)
 
-                elif user_input.startswith('run '):
-                    args = user_input[4:].strip()
+                elif cmd.startswith('run '):
+                    args = cmd[4:].strip()
                     self.handle_run(args)
 
-                elif user_input.startswith('auto '):
-                    state = user_input[5:].strip().lower()
+                elif cmd.startswith('auto '):
+                    state = cmd[5:].strip().lower()
                     if state in ['on', 'off']:
                         self.config.set("auto_evolution.enabled", state == 'on')
                         console.print(f"[green]Auto-evolution {state}[/green]")
                     else:
-                        console.print("[red]Usage: auto on|off[/red]")
+                        console.print("[red]Usage: /auto on|off[/red]")
+
+                elif cmd.startswith('mutate tool '):
+                    args = cmd[12:].strip()
+                    self.handle_mutate_tool(args)
 
                 else:
-                    # Default behavior: treat as generation request
-                    # Anything not recognized as a command is assumed to be a code generation request
-                    console.print(f"[dim]Interpreting as: generate {user_input}[/dim]")
-                    self.handle_generate(user_input)
+                    console.print(f"[red]Unknown command: /{cmd}[/red]")
+                    console.print("[dim]Type /help to see available commands[/dim]")
 
             except KeyboardInterrupt:
                 console.print("\n[dim]Use 'exit' to quit[/dim]")
