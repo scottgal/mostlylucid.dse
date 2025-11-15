@@ -29,6 +29,7 @@ class OperationCluster:
     suggested_tool_name: str
     suggested_parameters: List[str]
     example_operations: List[str]
+    optimization_potential: float = 0.0
 
 
 class PatternClusterer:
@@ -54,15 +55,34 @@ class PatternClusterer:
         self.min_cluster_size = min_cluster_size
         self.similarity_threshold = similarity_threshold
 
-    def analyze_patterns(self) -> List[OperationCluster]:
+    def analyze_patterns(self, target_filter: Optional[str] = None) -> List[OperationCluster]:
         """
         Analyze all artifacts in RAG to find optimization opportunities.
+
+        Args:
+            target_filter: Optional target function/code to focus optimization pressure on.
+                         Only artifacts containing this string will be analyzed.
 
         Returns:
             List of operation clusters with optimization suggestions
         """
         # Get all artifacts with embeddings
         all_artifacts = self.rag.get_all_artifacts()
+
+        # Apply target filter if specified (optimization pressure)
+        if target_filter:
+            filtered_artifacts = []
+            for artifact in all_artifacts:
+                # Check if artifact description or content contains the target
+                description = artifact.description.lower() if hasattr(artifact, 'description') else ""
+                content = artifact.content.lower() if hasattr(artifact, 'content') else ""
+
+                if target_filter.lower() in description or target_filter.lower() in content:
+                    filtered_artifacts.append(artifact)
+
+            all_artifacts = filtered_artifacts
+            print(f"🎯 Applying optimization pressure to '{target_filter}'")
+            print(f"   Filtered to {len(all_artifacts)} relevant artifacts\n")
 
         if len(all_artifacts) < self.min_cluster_size:
             print(f"Not enough artifacts ({len(all_artifacts)}) for clustering (need {self.min_cluster_size})")
@@ -283,6 +303,9 @@ class PatternClusterer:
         # Update cluster with suggestions
         cluster.suggested_tool_name = tool_name
         cluster.suggested_parameters = parameters
+
+        # Calculate optimization potential
+        cluster.optimization_potential = self._calculate_optimization_potential(cluster)
 
         return cluster
 
