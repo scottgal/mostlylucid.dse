@@ -705,6 +705,48 @@ tools:
       - input: {"package": "requests>=2.28.0"}
         output: {"status": "installed", "package": "requests>=2.28.0"}
 
+# Multi-tier optimization settings
+optimization:
+  enabled: true
+
+  # Cloud optimization (expensive but high quality)
+  cloud_optimization:
+    enabled: true
+
+    # Triggers for cloud optimization
+    triggers:
+      offline_batch: true           # Batch optimize overnight
+      quality_threshold: 0.65       # Score < 0.65 gets cloud review
+      reuse_threshold: 10           # reuse_count > 10 gets optimized
+      explicit_request: true        # User asks for optimization
+
+    # What to optimize
+    targets:
+      workflows: true               # Optimize complete workflows
+      tools: true                   # Optimize individual tools
+      code: true                    # Optimize generated code
+      system: true                  # Optimize the system itself!
+
+    # Optimization levels
+    levels:
+      local_only: false             # Use only local models
+      cloud_deep_dive: true         # Use cloud for deep analysis
+      recursive: true               # Optimize at ALL levels
+
+    # Cost controls
+    max_cost_per_day: 50.00         # Max $50/day on cloud optimization
+    max_tokens_per_optimization: 100000
+
+# Fine-tuning settings
+fine_tuning:
+  enabled: false  # Disabled by default (requires setup)
+  min_training_examples: 50
+  min_quality_score: 0.85
+  backends:
+    - ollama      # Local Ollama fine-tuning
+    # - openai    # OpenAI fine-tuning API
+    # - anthropic # Claude fine-tuning (future)
+
 # Build settings (for executables)
 build:
   app_name: "CodeEvolver"

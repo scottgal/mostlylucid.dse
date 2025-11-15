@@ -28,6 +28,19 @@ class ToolType(Enum):
     EXECUTABLE = "executable"         # Executable command-line tool
     CUSTOM = "custom"                    # Custom tool type
 
+    # Storage & Data Nodes
+    DATABASE = "database"             # SQL/NoSQL database connections
+    FILE_SYSTEM = "file_system"       # Persistent file storage
+    VECTOR_STORE = "vector_store"     # RAG/embedding storage (Qdrant, Pinecone, etc.)
+    API_CONNECTOR = "api_connector"   # External data sources (REST APIs, etc.)
+    CACHE = "cache"                   # In-memory/Redis cache
+    MESSAGE_QUEUE = "message_queue"   # Kafka/RabbitMQ for streaming
+
+    # Optimization & Fine-tuning
+    FINE_TUNED_LLM = "fine_tuned_llm" # Fine-tuned specialist model
+    TRAINING_PIPELINE = "training_pipeline"  # Model training/fine-tuning pipeline
+    OPTIMIZER = "optimizer"           # Code/workflow optimizer
+
 
 class Tool:
     """Represents a reusable tool."""

@@ -352,10 +352,43 @@ def main():
     parser.add_argument("workflow", help="Path to workflow.json")
     parser.add_argument("--output", "-o", default="./exported_workflow",
                         help="Output directory (default: ./exported_workflow)")
+    parser.add_argument("--platform", "-p", choices=["cloud", "edge", "embedded", "wasm"],
+                        default="edge",
+                        help="Target platform (default: edge)")
 
     args = parser.parse_args()
 
-    export_workflow(args.workflow, args.output)
+    # Use new workflow_distributor if platform is specified
+    if args.platform and args.platform != "edge":
+        try:
+            from code_evolver.src.workflow_distributor import WorkflowDistributor
+            from code_evolver.src.config_manager import ConfigManager
+
+            # Load config
+            config = ConfigManager()
+
+            # Create distributor
+            distributor = WorkflowDistributor(config)
+
+            # Load workflow
+            with open(args.workflow) as f:
+                workflow = json.load(f)
+
+            # Export for platform
+            output_path = distributor.export_for_platform(
+                workflow,
+                platform=args.platform,
+                output_dir=args.output
+            )
+
+            print(f"OK Exported for {args.platform} platform to: {output_path}")
+
+        except ImportError:
+            print("WARNING: workflow_distributor not available, using legacy export")
+            export_workflow(args.workflow, args.output)
+    else:
+        # Use legacy export
+        export_workflow(args.workflow, args.output)
 
 
 if __name__ == "__main__":
