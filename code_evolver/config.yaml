@@ -737,6 +737,86 @@ optimization:
     max_cost_per_day: 50.00         # Max $50/day on cloud optimization
     max_tokens_per_optimization: 100000
 
+# Pressure-based optimization strategy
+# Adjusts optimization behavior based on context (urgency, load, time)
+optimization_pressure:
+
+  # High pressure (urgent, real-time, high load)
+  high:
+    optimization_level: "none"        # Skip optimization, use cached
+    max_cost: 0.00                    # Zero spend
+    allow_cloud: false                # Local only
+    use_specialists: true             # Use fine-tuned models if available
+    cache_only: true                  # Only execute cached workflows
+    store_executions: false           # Don't track (too slow)
+
+    # Quality constraints
+    min_quality_threshold: 0.60       # Accept quality >= 0.60 (60%)
+    max_latency_ms: 1000              # Must complete in 1 second
+    can_reject: true                  # Can refuse if quality too low
+    fallback_pressure: "medium"       # Suggest this if quality too low
+
+  # Medium pressure (normal operation)
+  medium:
+    optimization_level: "local"       # Quick local optimization
+    max_cost: 1.00                    # Small budget per optimization
+    allow_cloud: false                # Still local only
+    use_specialists: true             # Prefer specialists
+    cache_first: true                 # Check cache before generating
+    store_executions: true            # Track for later optimization
+
+    # Quality constraints
+    min_quality_threshold: 0.75       # Accept quality >= 0.75 (75%)
+    max_latency_ms: 10000             # Must complete in 10 seconds
+    can_reject: true                  # Can refuse if quality too low
+    fallback_pressure: "low"          # Suggest this if quality too low
+
+  # Low pressure (batch jobs, overnight, scheduled)
+  low:
+    optimization_level: "cloud"       # Expensive cloud optimization
+    max_cost: 50.00                   # Full daily budget
+    allow_cloud: true                 # Use GPT-4/Claude
+    recursive: true                   # Full recursive optimization
+    meta_optimization: true           # System can optimize itself
+    store_executions: true            # Track everything
+    cluster_similar: true             # Group similar executions
+
+    # Quality constraints
+    min_quality_threshold: 0.85       # Accept quality >= 0.85 (85%)
+    max_latency_ms: null              # No time limit
+    can_reject: false                 # Never refuse (will wait/optimize)
+    fallback_pressure: null           # No fallback (this is best effort)
+
+  # Training mode (data collection for fine-tuning)
+  training:
+    optimization_level: "none"        # Don't optimize yet
+    max_cost: 0.00                    # No spend during training
+    allow_cloud: false                # Local only
+    store_all_executions: true        # Track EVERYTHING
+    cluster_similar: true             # Group similar patterns
+    generate_test_data: true          # Create synthetic test cases
+    prepare_fine_tuning: true         # Build training datasets
+
+    # Quality constraints
+    min_quality_threshold: 0.50       # Accept any quality (training data)
+    max_latency_ms: null              # No time limit
+    can_reject: false                 # Never refuse (collecting data)
+    fallback_pressure: null           # No fallback
+
+  # Auto pressure (system decides based on context)
+  auto:
+    enabled: true
+    rules:
+      - condition: "hour >= 22 or hour <= 6"  # Night time (10pm-6am)
+        pressure: "low"                       # Use expensive optimization
+      - condition: "system_load > 0.8"        # High system load
+        pressure: "high"                      # Fast execution only
+      - condition: "user_request"             # Direct user request
+        pressure: "medium"                    # Balance speed/quality
+      - condition: "scheduled_task"           # Scheduled background task
+        pressure: "low"                       # Full optimization
+    default: "medium"
+
 # Fine-tuning settings
 fine_tuning:
   enabled: false  # Disabled by default (requires setup)
