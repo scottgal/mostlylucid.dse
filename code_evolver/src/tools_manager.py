@@ -54,7 +54,8 @@ class Tool:
         tags: List[str],
         implementation: Any = None,
         parameters: Optional[Dict[str, Any]] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
+        constraints: Optional[Dict[str, Any]] = None
     ):
         """
         Initialize a tool.
@@ -68,6 +69,12 @@ class Tool:
             implementation: The actual implementation (function, code, config, etc.)
             parameters: Parameter schema
             metadata: Additional metadata
+            constraints: Platform/resource constraints
+                Examples:
+                - max_db_size_mb: 100 (for Raspberry Pi SQLite)
+                - max_memory_mb: 512
+                - max_calls_per_hour: 1000
+                - device_type: "raspberry_pi" (platform constraint)
         """
         self.tool_id = tool_id
         self.name = name
@@ -77,8 +84,87 @@ class Tool:
         self.implementation = implementation
         self.parameters = parameters or {}
         self.metadata = metadata or {}
+        self.constraints = constraints or {}
         self.created_at = datetime.utcnow().isoformat() + "Z"
         self.usage_count = 0
+
+        # Current usage tracking (for constraint checking)
+        self.current_usage = {
+            "storage_mb": 0.0,
+            "memory_mb": 0.0,
+            "calls_count": 0,
+            "last_reset": datetime.utcnow().isoformat() + "Z"
+        }
+
+    def check_constraints(self, proposed_usage: Optional[Dict[str, float]] = None) -> tuple[bool, Optional[str]]:
+        """
+        Check if tool constraints are satisfied.
+
+        Args:
+            proposed_usage: Proposed additional usage (optional)
+
+        Returns:
+            (is_valid, violation_message) tuple
+
+        Example:
+            >>> tool = Tool(..., constraints={"max_db_size_mb": 100})
+            >>> tool.current_usage["storage_mb"] = 95
+            >>> is_valid, msg = tool.check_constraints({"storage_mb": 10})
+            >>> print(is_valid)  # False
+            >>> print(msg)  # "Storage would exceed max_db_size_mb: 105 > 100"
+        """
+        if not self.constraints:
+            return True, None  # No constraints
+
+        # Calculate total usage (current + proposed)
+        total_usage = self.current_usage.copy()
+        if proposed_usage:
+            for key, value in proposed_usage.items():
+                total_usage[key] = total_usage.get(key, 0) + value
+
+        # Check each constraint
+        if "max_db_size_mb" in self.constraints:
+            max_size = self.constraints["max_db_size_mb"]
+            current_size = total_usage.get("storage_mb", 0)
+            if current_size > max_size:
+                return False, (
+                    f"Storage would exceed max_db_size_mb constraint: "
+                    f"{current_size:.1f}MB > {max_size}MB. "
+                    f"Consider pruning data, compression, or upgrading to cloud storage."
+                )
+
+        if "max_memory_mb" in self.constraints:
+            max_mem = self.constraints["max_memory_mb"]
+            current_mem = total_usage.get("memory_mb", 0)
+            if current_mem > max_mem:
+                return False, (
+                    f"Memory would exceed max_memory_mb constraint: "
+                    f"{current_mem:.1f}MB > {max_mem}MB"
+                )
+
+        if "max_calls_per_hour" in self.constraints:
+            max_calls = self.constraints["max_calls_per_hour"]
+            current_calls = total_usage.get("calls_count", 0)
+            if current_calls > max_calls:
+                return False, (
+                    f"Calls would exceed max_calls_per_hour constraint: "
+                    f"{current_calls} > {max_calls}"
+                )
+
+        return True, None
+
+    def update_usage(self, usage: Dict[str, float]):
+        """
+        Update current usage metrics.
+
+        Args:
+            usage: Usage update dict (e.g., {"storage_mb": 5.2, "calls_count": 1})
+        """
+        for key, value in usage.items():
+            if key in self.current_usage:
+                self.current_usage[key] += value
+            else:
+                self.current_usage[key] = value
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert tool to dictionary (for serialization)."""
@@ -90,6 +176,8 @@ class Tool:
             "tags": self.tags,
             "parameters": self.parameters,
             "metadata": self.metadata,
+            "constraints": self.constraints,
+            "current_usage": self.current_usage,
             "created_at": self.created_at,
             "usage_count": self.usage_count
         }
