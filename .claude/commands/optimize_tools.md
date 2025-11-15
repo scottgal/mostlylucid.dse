@@ -2,14 +2,21 @@
 
 Analyze RAG memory patterns and suggest tool optimizations using the pattern clusterer.
 
+## Usage
+
+- `/optimize_tools` - Analyze all RAG artifacts for optimization opportunities
+- `/optimize_tools <target>` - Apply optimization pressure to a specific function/code area
+
 ## Task
 
 Use the pattern clusterer to:
-1. Analyze all RAG artifacts for recurring patterns
+1. Analyze RAG artifacts for recurring patterns (optionally filtered by target)
 2. Identify clusters of similar operations
 3. Suggest new parameterized tools that could optimize these patterns
 4. Generate tool definitions for the most promising clusters
 5. Provide an optimization report with potential savings
+
+When a target is specified (e.g., `/optimize_tools monitor_api_and_sendemail`), the analysis will focus on artifacts related to that specific function or code area, applying evolutionary pressure to optimize those constraints.
 
 ## Steps
 
@@ -98,16 +105,22 @@ from pattern_clusterer import PatternClusterer
 from rag_memory import RAGMemory
 import json
 
+# Parse arguments - get target filter if provided
+# Arguments are passed after the command name (e.g., /optimize_tools monitor_api)
+args = sys.argv[1:] if len(sys.argv) > 1 else []
+target_filter = args[0] if args else None
+
 # Initialize RAG and clusterer
 rag = RAGMemory()
 clusterer = PatternClusterer(rag)
 
 # Run analysis
-print("🔍 Analyzing RAG patterns for optimization opportunities...\n")
-clusters = clusterer.analyze_patterns(
-    min_cluster_size=3,
-    similarity_threshold=0.7
-)
+if target_filter:
+    print(f"🔍 Analyzing RAG patterns with optimization pressure on '{target_filter}'...\n")
+else:
+    print("🔍 Analyzing RAG patterns for optimization opportunities...\n")
+
+clusters = clusterer.analyze_patterns(target_filter=target_filter)
 
 # Sort by optimization potential
 sorted_clusters = sorted(
