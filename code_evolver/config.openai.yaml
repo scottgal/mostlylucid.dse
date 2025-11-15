@@ -46,57 +46,13 @@ llm:
     max_tokens: 4096
     timeout: 120
 
-# Ollama server settings (for local fallback/embeddings)
-ollama:
-  base_url: "http://localhost:11434"
-
-  models:
-    # Overseer - Strategic planning
-    overseer:
-      model: "gpt-4o"
-      backend: "openai"
-
-    # Code generator - Uses base OpenAI model
-    generator:
-      model: "gpt-4o"
-      backend: "openai"
-
-    # Evaluator - Quality analysis
-    evaluator:
-      writing:
-        model: "gpt-4o-mini"  # Fast model for evaluation
-        backend: "openai"
-      code:
-        model: "gpt-4o"
-        backend: "openai"
-      default:
-        model: "gpt-4o"
-        backend: "openai"
-
-    # Triage - Quick decisions (use fast model)
-    triage:
-      model: "gpt-4o-mini"
-      backend: "openai"
-
-    # Escalation - Complex bug fixing (use powerful model)
-    escalation:
-      model: "gpt-4o"
-      backend: "openai"
-
-  # Embedding model (OpenAI has native embeddings)
-  embedding:
-    model: "text-embedding-3-small"
-    backend: "openai"
-    vector_size: 1536
-
-  # Context window sizes
-  context_windows:
-    "gpt-4o": 128000
-    "gpt-4o-mini": 128000
-    "o1-preview": 128000
-    "text-embedding-3-small": 8191
-    nomic-embed-text: 8192
-    default: 128000
+# Context window sizes for OpenAI models
+context_windows:
+  "gpt-4o": 128000
+  "gpt-4o-mini": 128000
+  "o1-preview": 128000
+  "text-embedding-3-small": 8191
+  default: 128000
 
 # Execution settings
 execution:

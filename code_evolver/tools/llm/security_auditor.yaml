@@ -5,8 +5,15 @@ name: "Security Auditor"
 type: "llm"
 description: "Audits code for security vulnerabilities using the most capable model for thorough analysis"
 
+# Performance characteristics
+cost_tier: "high"
+speed_tier: "slow"
+quality_tier: "excellent"
+max_output_length: "long"
+
 llm:
-  role: "powerful"  # References powerful model (e.g., claude-opus, o1-preview, qwen2.5-coder:14b)
+  tier: "coding.tier_3"  # Tiered system (preferred) - advanced/god-level coding for security
+  role: "powerful"       # Legacy role system (fallback)
 
   system_prompt: |
     You are a security expert. Find vulnerabilities and security issues with thorough analysis.

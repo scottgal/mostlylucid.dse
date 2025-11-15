@@ -11,7 +11,8 @@ quality_tier: "good"
 max_output_length: "medium"
 
 llm:
-  role: "fast"  # References fast model (e.g., claude-haiku, gpt-4o-mini, tinyllama)
+  tier: "coding.tier_1"  # Tiered system (preferred) - fast, simple coding tasks
+  role: "fast"           # Legacy role system (fallback)
 
   system_prompt: |
     You are a fast code generator for SIMPLE tasks. Generate clean, working Python code for basic tasks.

@@ -57,56 +57,13 @@ llm:
     max_tokens: 4096
     timeout: 120
 
-# Ollama server settings (for local fallback if needed)
-ollama:
-  base_url: "http://localhost:11434"
-
-  models:
-    # Overseer - Strategic planning
-    overseer:
-      model: "gpt-4o"  # Azure deployment name
-      backend: "azure"
-
-    # Code generator - Uses base Azure deployment
-    generator:
-      model: "gpt-4o"  # Azure deployment name
-      backend: "azure"
-
-    # Evaluator - Quality analysis
-    evaluator:
-      writing:
-        model: "gpt-4o-mini"  # Azure deployment name (fast)
-        backend: "azure"
-      code:
-        model: "gpt-4o"  # Azure deployment name
-        backend: "azure"
-      default:
-        model: "gpt-4o"  # Azure deployment name
-        backend: "azure"
-
-    # Triage - Quick decisions (use fast deployment)
-    triage:
-      model: "gpt-4o-mini"  # Azure deployment name
-      backend: "azure"
-
-    # Escalation - Complex bug fixing (use powerful deployment)
-    escalation:
-      model: "gpt-4"  # Azure deployment name
-      backend: "azure"
-
-  # Embedding model (Azure native embeddings)
-  embedding:
-    model: "text-embedding-3-small"  # Azure deployment name
-    backend: "azure"
-    vector_size: 1536
-
-  # Context window sizes (based on underlying models)
-  context_windows:
-    "gpt-4o": 128000
-    "gpt-4o-mini": 128000
-    "gpt-4": 128000
-    "text-embedding-3-small": 8191
-    default: 128000
+# Context window sizes (based on underlying models)
+context_windows:
+  "gpt-4o": 128000
+  "gpt-4o-mini": 128000
+  "gpt-4": 128000
+  "text-embedding-3-small": 8191
+  default: 128000
 
 # Execution settings
 execution:
