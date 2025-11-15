@@ -90,12 +90,19 @@ class NodeRunner:
 
         try:
             # Execute the node code
+            # Add code_evolver directory to PYTHONPATH so node_runtime can be imported
+            import os
+            env = os.environ.copy()
+            code_evolver_dir = str(Path(__file__).parent.parent.absolute())
+            env['PYTHONPATH'] = code_evolver_dir + os.pathsep + env.get('PYTHONPATH', '')
+
             process = subprocess.Popen(
                 ["python", str(code_path)],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
+                env=env  # Pass modified environment
             )
 
             # Monitor process for memory usage

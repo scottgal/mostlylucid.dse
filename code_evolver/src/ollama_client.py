@@ -6,12 +6,16 @@ Supports multi-endpoint configuration for distributed inference.
 import requests
 import json
 import logging
+import os
 from typing import Optional, Dict, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .config_manager import ConfigManager
 
-logging.basicConfig(level=logging.INFO)
+# Enable DEBUG logging by default (shows full LLM conversations)
+# Set CODE_EVOLVER_DEBUG=0 to disable debug output
+log_level = logging.INFO if os.getenv("CODE_EVOLVER_DEBUG") == "0" else logging.DEBUG
+logging.basicConfig(level=log_level)
 logger = logging.getLogger(__name__)
 
 
@@ -32,6 +36,9 @@ class OllamaClient:
         """
         self.base_url = base_url
         self.config_manager = config_manager
+
+        # Round-robin endpoint tracking per model_key
+        self._endpoint_counters: Dict[str, int] = {}
 
     def check_connection(self, endpoint: Optional[str] = None) -> bool:
         """
@@ -107,6 +114,94 @@ class OllamaClient:
 
         return prompt
 
+    def _get_next_endpoint(self, model_key: str, endpoints: list) -> str:
+        """
+        Get next endpoint using round-robin for load balancing.
+
+        Args:
+            model_key: Model key for tracking (e.g., "generator", "overseer")
+            endpoints: List of endpoint URLs
+
+        Returns:
+            Next endpoint URL from the list
+        """
+        if not endpoints:
+            return self.base_url
+
+        if len(endpoints) == 1:
+            return endpoints[0]
+
+        # Initialize counter for this model_key if not exists
+        if model_key not in self._endpoint_counters:
+            self._endpoint_counters[model_key] = 0
+
+        # Get next endpoint using round-robin
+        index = self._endpoint_counters[model_key] % len(endpoints)
+        endpoint = endpoints[index]
+
+        # Increment counter for next time
+        self._endpoint_counters[model_key] += 1
+
+        return endpoint
+
+    def calculate_timeout(
+        self,
+        model: str,
+        model_key: Optional[str] = None,
+        speed_tier: Optional[str] = None
+    ) -> int:
+        """
+        Calculate dynamic timeout based on model speed and characteristics.
+
+        Args:
+            model: Model name
+            model_key: Optional model key for config lookup
+            speed_tier: Optional speed tier (from tool metadata)
+
+        Returns:
+            Timeout in seconds
+        """
+        # Base timeouts by speed tier (in seconds)
+        TIER_TIMEOUTS = {
+            "very-fast": 30,    # tinyllama, small models
+            "fast": 60,          # efficient models
+            "medium": 120,       # llama3, mid-size
+            "slow": 240,         # qwen2.5-coder:14b, large models
+            "very-slow": 480     # huge models, complex tasks
+        }
+
+        # Model-specific timeouts (overrides tier)
+        MODEL_TIMEOUTS = {
+            "tinyllama": 30,
+            "llama3": 120,
+            "qwen2.5-coder:14b": 240,
+            "codellama": 180,
+            "mistral-nemo": 60,
+            "nemotron-mini": 60,
+        }
+
+        # If we have a model-specific timeout, use it
+        if model in MODEL_TIMEOUTS:
+            timeout = MODEL_TIMEOUTS[model]
+        # If we have a speed tier from tool metadata, use that
+        elif speed_tier and speed_tier in TIER_TIMEOUTS:
+            timeout = TIER_TIMEOUTS[speed_tier]
+        # If we have a model_key, try to get config info
+        elif model_key and self.config_manager:
+            # Try to get the tool info from config
+            try:
+                tool_config = self.config_manager.config.get("tools", {}).get(model_key, {})
+                tier = tool_config.get("speed_tier", "medium")
+                timeout = TIER_TIMEOUTS.get(tier, 120)
+            except:
+                timeout = 120  # Default fallback
+        else:
+            # Default to medium
+            timeout = 120
+
+        logger.debug(f"Calculated timeout for model '{model}' (key: {model_key}, tier: {speed_tier}): {timeout}s")
+        return timeout
+
     def generate(
         self,
         model: str,
@@ -115,10 +210,12 @@ class OllamaClient:
         temperature: float = 0.7,
         stream: bool = False,
         endpoint: Optional[str] = None,
-        model_key: Optional[str] = None
+        model_key: Optional[str] = None,
+        speed_tier: Optional[str] = None
     ) -> str:
         """
         Generate text using specified Ollama model.
+        Supports round-robin load balancing across multiple endpoints.
 
         Args:
             model: Model name (e.g., 'codellama', 'llama3', 'tiny')
@@ -126,8 +223,9 @@ class OllamaClient:
             system: Optional system prompt
             temperature: Sampling temperature (0.0 to 1.0)
             stream: Whether to stream response (default: False)
-            endpoint: Optional specific endpoint URL (overrides config)
+            endpoint: Optional specific endpoint URL (overrides config and round-robin)
             model_key: Optional model key for config lookup (e.g., "overseer", "generator")
+            speed_tier: Optional speed tier for timeout calculation
 
         Returns:
             Generated text response
@@ -137,7 +235,12 @@ class OllamaClient:
 
         # If no endpoint specified but we have a config_manager and model_key
         if not target_endpoint and self.config_manager and model_key:
-            target_endpoint = self.config_manager.get_model_endpoint(model_key)
+            # Get endpoints (can be single or multiple)
+            endpoints = self.config_manager.get_model_endpoints(model_key)
+            if endpoints:
+                target_endpoint = self._get_next_endpoint(model_key, endpoints)
+            else:
+                target_endpoint = self.base_url
 
         # Fall back to base_url
         if not target_endpoint:
@@ -161,16 +264,34 @@ class OllamaClient:
             payload["system"] = system
 
         try:
-            logger.info(f"Generating with model '{model}' at {target_endpoint}...")
+            # Calculate dynamic timeout based on model and speed tier
+            timeout = self.calculate_timeout(model, model_key, speed_tier)
+
+            logger.info(f"Generating with model '{model}' at {target_endpoint} (timeout: {timeout}s)...")
+
+            # Debug logging: Log the request (full content, not truncated)
+            logger.debug(f"Request to {target_endpoint}:")
+            logger.debug(f"  Model: {model}")
+            logger.debug(f"  Prompt: {truncated_prompt}")
+            logger.debug(f"  Temperature: {temperature}")
+            if system:
+                logger.debug(f"  System prompt: {system}")
+
             response = requests.post(
                 generate_url,
                 json=payload,
-                timeout=300  # 5 minute timeout for code generation
+                timeout=timeout
             )
             response.raise_for_status()
             data = response.json()
 
             result = data.get("response", "")
+
+            # Debug logging: Log the response (full content, not truncated)
+            logger.debug(f"Response from {target_endpoint}:")
+            logger.debug(f"  Length: {len(result)} characters")
+            logger.debug(f"  Full response: {result}")
+
             logger.info(f"✓ Generated {len(result)} characters from {target_endpoint}")
             return result
 

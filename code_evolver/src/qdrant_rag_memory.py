@@ -264,6 +264,9 @@ class QdrantRAGMemory:
         # Store vector in Qdrant
         if embedding:
             try:
+                # Extract fitness dimensions from metadata for indexing
+                meta = metadata or {}
+
                 point = PointStruct(
                     id=hash(artifact_id) & 0x7FFFFFFFFFFFFFFF,  # Convert to positive int
                     vector=embedding,
@@ -272,9 +275,27 @@ class QdrantRAGMemory:
                         "artifact_type": artifact_type.value,
                         "name": name,
                         "description": description,
+                        "content": content,  # Store actual content in Qdrant
                         "tags": tags,
                         "quality_score": artifact.quality_score,
-                        "created_at": artifact.created_at
+                        "created_at": artifact.created_at,
+                        "metadata": meta,
+
+                        # FITNESS DIMENSIONS (indexed for fast filtering/search)
+                        # These enable queries like "find fast, cheap tools for this task"
+                        "speed_tier": meta.get("speed_tier", "medium"),
+                        "cost_tier": meta.get("cost_tier", "medium"),
+                        "quality_tier": meta.get("quality_tier", "good"),
+                        "latency_ms": float(meta.get("latency_ms", 0)),
+                        "memory_mb_peak": float(meta.get("memory_mb_peak", 0)),
+                        "success_count": int(meta.get("success_count", 0)),
+                        "total_runs": int(meta.get("total_runs", 0)),
+                        "success_rate": float(meta.get("success_count", 0)) / max(float(meta.get("total_runs", 1)), 1.0),
+
+                        # Tool characteristics for filtering
+                        "is_tool": bool(meta.get("is_tool", False)),
+                        "tool_id": str(meta.get("tool_id", "")),
+                        "max_output_length": meta.get("max_output_length", "medium"),
                     }
                 )
 
@@ -353,10 +374,51 @@ class QdrantRAGMemory:
             results = []
             for hit in search_results:
                 artifact_id = hit.payload.get("artifact_id")
+
+                # Try to get from local cache first
                 if artifact_id in self.artifacts:
                     artifact = self.artifacts[artifact_id]
                     similarity = hit.score
                     results.append((artifact, similarity))
+                else:
+                    # Fallback: reconstruct from Qdrant payload
+                    # This allows retrieval even if local JSON is missing
+                    try:
+                        # Reconstruct metadata including fitness dimensions
+                        metadata = hit.payload.get("metadata", {})
+
+                        # Add fitness dimensions to metadata if not already present
+                        if "speed_tier" not in metadata:
+                            metadata.update({
+                                "speed_tier": hit.payload.get("speed_tier", "medium"),
+                                "cost_tier": hit.payload.get("cost_tier", "medium"),
+                                "quality_tier": hit.payload.get("quality_tier", "good"),
+                                "latency_ms": hit.payload.get("latency_ms", 0),
+                                "memory_mb_peak": hit.payload.get("memory_mb_peak", 0),
+                                "success_count": hit.payload.get("success_count", 0),
+                                "total_runs": hit.payload.get("total_runs", 0),
+                                "success_rate": hit.payload.get("success_rate", 0),
+                                "is_tool": hit.payload.get("is_tool", False),
+                                "tool_id": hit.payload.get("tool_id", ""),
+                                "max_output_length": hit.payload.get("max_output_length", "medium"),
+                            })
+
+                        artifact = Artifact(
+                            artifact_id=artifact_id,
+                            artifact_type=ArtifactType(hit.payload.get("artifact_type")),
+                            name=hit.payload.get("name", ""),
+                            description=hit.payload.get("description", ""),
+                            content=hit.payload.get("content", ""),
+                            tags=hit.payload.get("tags", []),
+                            metadata=metadata,
+                            quality_score=hit.payload.get("quality_score", 0.0),
+                            created_at=hit.payload.get("created_at"),
+                            embedding=None  # Don't need embedding for retrieval
+                        )
+                        similarity = hit.score
+                        results.append((artifact, similarity))
+                    except Exception as e:
+                        logger.warning(f"Could not reconstruct artifact {artifact_id} from Qdrant payload: {e}")
 
             logger.info(f"✓ Found {len(results)} similar artifacts via Qdrant")
             return results

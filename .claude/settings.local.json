@@ -5,7 +5,19 @@
       "Bash(python:*)",
       "Bash(taskkill:*)",
       "Bash(git restore:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(curl:*)",
+      "Bash(PYTHONPATH=\"D:\\Source\\mostlylucid.dse\\code_evolver\" echo '{\"\"\"\"input\"\"\"\": \"\"\"\"test\"\"\"\"}')",
+      "Bash(export PYTHONPATH=\"$PWD\":*)",
+      "Bash(timeout 90 bash -c 'echo \"\"write a short haiku about code\"\" | python chat_cli.py 2>&1 | grep -A 100 \"\"WORKFLOW\"\"')",
+      "Bash(cat:*)",
+      "Bash(timeout 90 python chat_cli.py:*)",
+      "Bash(timeout 120 bash:*)",
+      "Bash(timeout 120 python:*)",
+      "Bash(timeout 90 bash:*)",
+      "Bash(timeout 10 bash:*)",
+      "Bash(timeout 180 bash -c:*)",
+      "Bash(timeout 30 bash:*)"
     ],
     "deny": [],
     "ask": []

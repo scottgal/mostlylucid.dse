@@ -1,1 +1,1064 @@
-{}
+{
+  "general": {
+    "tool_id": "general",
+    "name": "General Code Generator",
+    "tool_type": "llm",
+    "description": "General purpose code generation for any programming task. Used as fallback when no specialized tool matches.",
+    "tags": [
+      "general",
+      "fallback",
+      "code-generation",
+      "any-task"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "qwen2.5-coder:14b",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T22:34:36.564782Z",
+    "usage_count": 30
+  },
+  "code_reviewer": {
+    "tool_id": "code_reviewer",
+    "name": "Code Reviewer",
+    "tool_type": "llm",
+    "description": "Reviews code for quality, bugs, and best practices",
+    "tags": [
+      "review",
+      "quality"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T22:34:36.564843Z",
+    "usage_count": 0
+  },
+  "security_auditor": {
+    "tool_id": "security_auditor",
+    "name": "Security Auditor",
+    "tool_type": "llm",
+    "description": "Audits code for security vulnerabilities",
+    "tags": [
+      "security",
+      "audit"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T22:34:36.564908Z",
+    "usage_count": 0
+  },
+  "performance_optimizer": {
+    "tool_id": "performance_optimizer",
+    "name": "Performance Optimizer",
+    "tool_type": "llm",
+    "description": "Suggests performance optimizations",
+    "tags": [
+      "performance",
+      "optimization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "codellama",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T22:34:36.564963Z",
+    "usage_count": 0
+  },
+  "doc_generator": {
+    "tool_id": "doc_generator",
+    "name": "Documentation Generator",
+    "tool_type": "llm",
+    "description": "Generates comprehensive code documentation",
+    "tags": [
+      "documentation",
+      "docs"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T22:34:36.565034Z",
+    "usage_count": 0
+  },
+  "technical_writer": {
+    "tool_id": "technical_writer",
+    "name": "Technical Article Writer",
+    "tool_type": "llm",
+    "description": "Writes comprehensive technical articles, tutorials, and blog posts on software development topics",
+    "tags": [
+      "writing",
+      "technical",
+      "article",
+      "blog",
+      "tutorial",
+      "documentation"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.345819Z",
+    "usage_count": 12
+  },
+  "article_analyzer": {
+    "tool_id": "article_analyzer",
+    "name": "Article Content Analyzer",
+    "tool_type": "llm",
+    "description": "Analyzes blog posts and articles for clarity, technical accuracy, SEO, and readability. Provides improvement suggestions.",
+    "tags": [
+      "analysis",
+      "blog",
+      "seo",
+      "readability",
+      "content",
+      "review"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.345882Z",
+    "usage_count": 0
+  },
+  "seo_optimizer": {
+    "tool_id": "seo_optimizer",
+    "name": "SEO Optimizer",
+    "tool_type": "llm",
+    "description": "Optimizes technical content for search engines, suggests keywords, meta descriptions, and structure improvements",
+    "tags": [
+      "seo",
+      "keywords",
+      "optimization",
+      "search",
+      "metadata"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.345959Z",
+    "usage_count": 0
+  },
+  "code_explainer": {
+    "tool_id": "code_explainer",
+    "name": "Code Concept Explainer",
+    "tool_type": "llm",
+    "description": "Explains complex programming concepts in simple terms for blog articles and tutorials. Creates analogies and examples.",
+    "tags": [
+      "explanation",
+      "tutorial",
+      "teaching",
+      "concepts",
+      "examples"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.346020Z",
+    "usage_count": 1
+  },
+  "outline_generator": {
+    "tool_id": "outline_generator",
+    "name": "Article Outline Generator",
+    "tool_type": "llm",
+    "description": "Creates detailed outlines for technical articles based on topics. Structures content logically.",
+    "tags": [
+      "outline",
+      "structure",
+      "planning",
+      "article",
+      "organization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.346071Z",
+    "usage_count": 2
+  },
+  "proofreader": {
+    "tool_id": "proofreader",
+    "name": "Technical Proofreader",
+    "tool_type": "llm",
+    "description": "Proofreads technical content for grammar, style, consistency, and technical accuracy",
+    "tags": [
+      "proofreading",
+      "grammar",
+      "style",
+      "editing",
+      "quality"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "llama3",
+      "llm_endpoint": null
+    },
+    "created_at": "2025-11-14T23:09:31.346128Z",
+    "usage_count": 0
+  },
+  "write_a_technical_story_and_tr": {
+    "tool_id": "write_a_technical_story_and_tr",
+    "name": "write a technical story and translate it into french",
+    "tool_type": "workflow",
+    "description": "write a technical story and translate it into french",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_technical_story_and_tr",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 21,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T00:29:22.121997+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T00:29:22.122018Z",
+    "usage_count": 0
+  },
+  "write_me_a_technical_article_1763166799": {
+    "tool_id": "write_me_a_technical_article_1763166799",
+    "name": "write me a technical article",
+    "tool_type": "workflow",
+    "description": "write me a technical article",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_a_technical_article_1763166799",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 21,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T00:33:43.019118+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T00:33:43.019137Z",
+    "usage_count": 0
+  },
+  "add_5_and_8": {
+    "tool_id": "add_5_and_8",
+    "name": "Python function to add two numbers with default values of 5 and 8",
+    "tool_type": "workflow",
+    "description": "add 5 and 8",
+    "tags": [
+      "python",
+      "addition",
+      "default-values",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_5_and_8",
+      "quality_score": 1.1,
+      "latency_ms": 700,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T00:45:30.312376+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T00:45:30.312391Z",
+    "usage_count": 0
+  },
+  "pylint_checker": {
+    "tool_id": "pylint_checker",
+    "name": "Pylint Code Quality Checker",
+    "tool_type": "executable",
+    "description": "Runs pylint static analysis on Python code to check for errors, code style, and potential bugs",
+    "tags": [
+      "python",
+      "static-analysis",
+      "quality",
+      "linting",
+      "pep8"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "pylint",
+      "args": [
+        "--output-format=text",
+        "--score=yes",
+        "{source_file}"
+      ],
+      "install_command": "pip install pylint"
+    },
+    "created_at": "2025-11-15T00:52:52.640733Z",
+    "usage_count": 0
+  },
+  "mypy_type_checker": {
+    "tool_id": "mypy_type_checker",
+    "name": "MyPy Type Checker",
+    "tool_type": "executable",
+    "description": "Runs mypy type checking on Python code to find type errors before runtime",
+    "tags": [
+      "python",
+      "type-checking",
+      "static-analysis",
+      "types"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "mypy",
+      "args": [
+        "--strict",
+        "--show-error-codes",
+        "{source_file}"
+      ],
+      "install_command": "pip install mypy"
+    },
+    "created_at": "2025-11-15T00:52:52.640756Z",
+    "usage_count": 0
+  },
+  "flake8_linter": {
+    "tool_id": "flake8_linter",
+    "name": "Flake8 Style Checker",
+    "tool_type": "executable",
+    "description": "Runs flake8 to check Python code style (PEP 8) and detect common errors",
+    "tags": [
+      "python",
+      "linting",
+      "pep8",
+      "style",
+      "quality"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "flake8",
+      "args": [
+        "--max-line-length=120",
+        "--statistics",
+        "{source_file}"
+      ],
+      "install_command": "pip install flake8"
+    },
+    "created_at": "2025-11-15T00:52:52.640771Z",
+    "usage_count": 0
+  },
+  "black_formatter": {
+    "tool_id": "black_formatter",
+    "name": "Black Code Formatter",
+    "tool_type": "executable",
+    "description": "Runs black formatter to check if Python code follows black style (with --check flag)",
+    "tags": [
+      "python",
+      "formatting",
+      "style",
+      "black"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "black",
+      "args": [
+        "--check",
+        "--diff",
+        "{source_file}"
+      ],
+      "install_command": "pip install black"
+    },
+    "created_at": "2025-11-15T00:52:52.640785Z",
+    "usage_count": 0
+  },
+  "bandit_security": {
+    "tool_id": "bandit_security",
+    "name": "Bandit Security Scanner",
+    "tool_type": "executable",
+    "description": "Runs bandit security scanner to find common security issues in Python code",
+    "tags": [
+      "python",
+      "security",
+      "vulnerability",
+      "scanning"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "bandit",
+      "args": [
+        "-r",
+        "{source_file}"
+      ],
+      "install_command": "pip install bandit"
+    },
+    "created_at": "2025-11-15T00:52:52.640798Z",
+    "usage_count": 0
+  },
+  "pytest_runner": {
+    "tool_id": "pytest_runner",
+    "name": "Pytest Test Runner",
+    "tool_type": "executable",
+    "description": "Runs pytest unit tests with coverage reporting",
+    "tags": [
+      "python",
+      "testing",
+      "pytest",
+      "unit-tests"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "pytest",
+      "args": [
+        "-v",
+        "--tb=short",
+        "{test_file}"
+      ],
+      "install_command": "pip install pytest"
+    },
+    "created_at": "2025-11-15T00:52:52.640810Z",
+    "usage_count": 0
+  },
+  "pytest_coverage": {
+    "tool_id": "pytest_coverage",
+    "name": "Pytest with Coverage",
+    "tool_type": "executable",
+    "description": "Runs pytest with code coverage analysis",
+    "tags": [
+      "python",
+      "testing",
+      "coverage",
+      "pytest"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "pytest",
+      "args": [
+        "--cov={source_module}",
+        "--cov-report=term-missing",
+        "-v",
+        "{test_file}"
+      ],
+      "install_command": "pip install pytest pytest-cov"
+    },
+    "created_at": "2025-11-15T00:52:52.640822Z",
+    "usage_count": 0
+  },
+  "radon_complexity": {
+    "tool_id": "radon_complexity",
+    "name": "Radon Complexity Analyzer",
+    "tool_type": "executable",
+    "description": "Analyzes code complexity metrics (cyclomatic complexity, maintainability index)",
+    "tags": [
+      "python",
+      "complexity",
+      "metrics",
+      "maintainability"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "radon",
+      "args": [
+        "cc",
+        "-s",
+        "-a",
+        "{source_file}"
+      ],
+      "install_command": "pip install radon"
+    },
+    "created_at": "2025-11-15T00:52:52.640834Z",
+    "usage_count": 0
+  },
+  "vulture_deadcode": {
+    "tool_id": "vulture_deadcode",
+    "name": "Vulture Dead Code Finder",
+    "tool_type": "executable",
+    "description": "Finds unused code (dead code) in Python projects",
+    "tags": [
+      "python",
+      "dead-code",
+      "optimization",
+      "cleanup"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "vulture",
+      "args": [
+        "{source_file}"
+      ],
+      "install_command": "pip install vulture"
+    },
+    "created_at": "2025-11-15T00:52:52.640847Z",
+    "usage_count": 0
+  },
+  "pydocstyle_checker": {
+    "tool_id": "pydocstyle_checker",
+    "name": "Pydocstyle Docstring Checker",
+    "tool_type": "executable",
+    "description": "Checks docstring style and completeness according to PEP 257",
+    "tags": [
+      "python",
+      "documentation",
+      "docstrings",
+      "pep257"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "pydocstyle",
+      "args": [
+        "{source_file}"
+      ],
+      "install_command": "pip install pydocstyle"
+    },
+    "created_at": "2025-11-15T00:52:52.640858Z",
+    "usage_count": 0
+  },
+  "isort_import_checker": {
+    "tool_id": "isort_import_checker",
+    "name": "Isort Import Checker",
+    "tool_type": "executable",
+    "description": "Checks if Python imports are sorted correctly",
+    "tags": [
+      "python",
+      "imports",
+      "style",
+      "organization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "isort",
+      "args": [
+        "--check-only",
+        "--diff",
+        "{source_file}"
+      ],
+      "install_command": "pip install isort"
+    },
+    "created_at": "2025-11-15T00:52:52.640869Z",
+    "usage_count": 0
+  },
+  "quick_feedback": {
+    "tool_id": "quick_feedback",
+    "name": "Quick Feedback Checker",
+    "tool_type": "llm",
+    "description": "Fast spellcheck, grammar, and syntax error checker using tinyllama (2048 token context). Automatically chunks large text into logical segments. Gives quick feedback on generated text/code so generators can fix issues rapidly.",
+    "tags": [
+      "spellcheck",
+      "grammar",
+      "syntax",
+      "quick-feedback",
+      "fast",
+      "proofreading",
+      "chunking"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "tinyllama",
+      "llm_endpoint": null,
+      "system_prompt": "You are a fast proofreader. Check for spelling errors, grammar mistakes, and syntax issues. Be concise - your context window is small (2048 tokens). If you receive a chunk of text, check just that chunk and report issues found in it.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Quick check this text for errors:\n\n{text}\n\nFind:\n- Spelling errors\n- Grammar mistakes  \n- Syntax issues\n- Structure problems\n\nProvide a brief list of issues found (keep under 400 tokens). If no major issues, just say 'OK'. NOTE: You may be seeing a chunk of larger text - just check this portion.",
+      "cost_tier": "low",
+      "speed_tier": "very-fast",
+      "quality_tier": "basic",
+      "max_output_length": "short"
+    },
+    "created_at": "2025-11-15T01:16:48.323677Z",
+    "usage_count": 0
+  },
+  "summarizer": {
+    "tool_id": "summarizer",
+    "name": "Content Summarizer",
+    "tool_type": "llm",
+    "description": "Summarizes long content, code, documentation, or conversations using Gemma2:2b model with 8192 token context window. Efficient for condensing information.",
+    "tags": [
+      "summarization",
+      "condensing",
+      "analysis",
+      "extraction",
+      "efficient"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "gemma2:2b",
+      "llm_endpoint": null,
+      "system_prompt": "You are an expert at creating concise, accurate summaries. Extract key points and present them clearly. Your context window is 8192 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Summarize the following content:\n\n{content}\n\nSummary requirements:\n- Capture all key points\n- Be concise but complete\n- Prioritize most important information\n- Target length: {target_length}\n\nProvide a well-structured summary.",
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "good",
+      "max_output_length": "medium"
+    },
+    "created_at": "2025-11-15T01:16:48.323700Z",
+    "usage_count": 1
+  },
+  "nmt_translator": {
+    "tool_id": "nmt_translator",
+    "name": "NMT Translation Service",
+    "tool_type": "openapi",
+    "description": "Neural Machine Translation service for translating text between languages. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses OpenAPI spec from http://localhost:8000/openapi.json.",
+    "tags": [
+      "translation",
+      "nmt",
+      "neural",
+      "languages",
+      "openapi",
+      "api"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "api_base_url": "http://localhost:8000",
+      "operations_count": 18,
+      "capabilities": "API: NMT Translation Service\nBase URL: http://localhost:8000\n\nAvailable Operations (18):\n\n- root_redirect__get:\n  Method: GET /\n  Summary: Root Redirect\n  Description: Redirects to the interactive demo UI\n\n- healthz_healthz_get:\n  Method: GET /healthz\n  Summary: Health Check\n  Description: Returns health status\n\n- readyz_readyz_get:\n  Method: GET /readyz\n  Summary: Readiness Check\n  Description: Returns readiness status with device and queue info\n\n- cache_status_cache_get:\n  Method: GET /cache\n  Summary: Cache Status\n  Description: Returns the currently cached translation pipelines and queue info\n\n- model_name_model_name_get:\n  Method: GET /model_name\n  Summary: Model Name\n  Description: Returns the name of the loaded model and configuration snapshot\n\n- discover_opus_mt_discover_opus_mt_get:\n  Method: GET /discover/opus-mt\n  Summary: Discover Opus-MT Pairs\n  Description: Discovers all available Opus-MT language pairs from Hugging Face. Results are cached for 1 hour.\n  Parameters: force_refresh (query)\n\n- discover_mbart50_discover_mbart50_get:\n  Method: GET /discover/mbart50\n  Summary: Discover mBART50 Pairs\n  Description: Returns all available mBART50 language pairs (all-to-all for 50 languages).\n\n- discover_m2m100_discover_m2m100_get:\n  Method: GET /discover/m2m100\n  Summary: Discover M2M100 Pairs\n  Description: Returns all available M2M100 language pairs (all-to-all for 100 languages).\n\n- discover_all_discover_all_get:\n  Method: GET /discover/all\n  Summary: Discover All Models\n  Description: Discovers all available language pairs for all model families.\n  Parameters: force_refresh (query)\n\n- clear_discovery_cache_discover_clear_cache_post:\n  Method: POST /discover/clear-cache\n  Summary: Clear Discovery Cache\n  Description: Clears the model discovery cache. Next discovery request will fetch fresh data.\n\n- lang_pairs_lang_pairs_get:\n  Method: GET /lang_pairs\n  Summary: Lang Pairs\n  Description: Returns the language pairs from the model\n:return:\n\n- get_languages_get_languages_get:\n  Method: GET /get_languages\n  Summary: Get Languages\n  Description: Returns the languages the model supports\n:param source_lang: Optional. Only return languages with this language as source\n:param target_lang: Optional. Only return languages with this language as target\n:return:\n  Parameters: source_lang (query), target_lang (query)\n\n- compat_translate_get_endpoint_compat_translate_get:\n  Method: GET /compat/translate\n  Summary: EasyNMT GET /translate (compat)\n  Parameters: target_lang (query) (required), text (query), source_lang (query), beam_size (query), perform_sentence_splitting (query)\n\n- compat_translate_post_endpoint_compat_translate_post:\n  Method: POST /compat/translate\n  Summary: EasyNMT POST /translate (compat)\n\n- translate_get_endpoint_translate_get:\n  Method: GET /translate\n  Summary: Translate\n  Description: Translates the text to the given target language.\n:param text: Text that should be translated\n:param target_lang: Target language\n:param source_lang: Language of text. Optional, if empty: Automatic language detection\n:param beam_size: Beam size. Optional\n:param perform_sentence_splitting: Split longer documents into individual sentences for translation. Optional\n:return: Returns a json with the translated text\n  Parameters: target_lang (query) (required), text (query), source_lang (query), beam_size (query), perform_sentence_splitting (query)\n\n- translate_post_endpoint_translate_post:\n  Method: POST /translate\n  Summary: Translate Post\n  Description: Post method for translation\n:return:\n\n- language_detection_get_endpoint_language_detection_get:\n  Method: GET /language_detection\n  Summary: Language Detection\n  Description: Detects the language for the provided text\n:param text: A single text for which we want to know the language\n:return: The detected language\n  Parameters: text (query) (required)\n\n- language_detection_post_endpoint_language_detection_post:\n  Method: POST /language_detection\n  Summary: Language Detection Post\n  Description: Pass a json that has a 'text' key. The 'text' element can either be a string, a list of strings, or\na dict.\n:return: Languages detected",
+      "cost_tier": "low",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "long",
+      "code_template": "# Example: How to use the NMT Translation Service\nimport requests\nimport json\n\ndef translate_text(text, source_lang=\"en\", target_lang=\"es\"):\n    \"\"\"\n    Translate text using the NMT service.\n\n    Args:\n        text: Text to translate\n        source_lang: Source language code (e.g., 'en', 'es', 'fr')\n        target_lang: Target language code\n\n    Returns:\n        Translated text\n    \"\"\"\n    url = \"http://localhost:8000/translate\"\n\n    payload = {\n        \"text\": text,\n        \"source_lang\": source_lang,\n        \"target_lang\": target_lang\n    }\n\n    response = requests.post(url, json=payload)\n    response.raise_for_status()\n\n    result = response.json()\n    return result.get(\"translated_text\", \"\")\n\n# Usage example:\n# translated = translate_text(\"Hello, world!\", source_lang=\"en\", target_lang=\"es\")\n# print(translated)  # Output: \"Hola, mundo!\"\n"
+    },
+    "created_at": "2025-11-15T01:16:48.339394Z",
+    "usage_count": 0
+  },
+  "translation_quality_checker": {
+    "tool_id": "translation_quality_checker",
+    "name": "Translation Quality Validator",
+    "tool_type": "llm",
+    "description": "Fast quality check for translation output using tinyllama. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality.",
+    "tags": [
+      "translation",
+      "validation",
+      "quality-check",
+      "error-detection",
+      "fast"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "tinyllama",
+      "llm_endpoint": null,
+      "system_prompt": "You are a translation quality validator. Check translated text for common errors. Be fast and concise - your context window is only 2048 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Validate this translated text for quality issues:\n\nOriginal: {original_text}\nTranslated: {translated_text}\n\nCheck for:\n1. Repeated characters (e.g., 'aaaa', '||||')\n2. Garbled text (random symbols, encoding errors)\n3. Untranslated portions\n4. Missing or corrupted text\n5. Obvious translation failures\n\nRespond with ONLY:\n- 'OK' if translation looks good\n- 'ERROR: <brief description>' if issues found\n\nKeep response under 100 tokens.",
+      "cost_tier": "low",
+      "speed_tier": "very-fast",
+      "quality_tier": "basic",
+      "max_output_length": "short"
+    },
+    "created_at": "2025-11-15T01:16:48.339435Z",
+    "usage_count": 0
+  },
+  "add_100_and_200": {
+    "tool_id": "add_100_and_200",
+    "name": "Python function to add two numbers with JSON input/output",
+    "tool_type": "workflow",
+    "description": "add 100 and 200",
+    "tags": [
+      "python",
+      "addition",
+      "json",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_100_and_200",
+      "quality_score": 1.1,
+      "latency_ms": 1025,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T01:17:53.285092+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T01:17:53.285112Z",
+    "usage_count": 0
+  },
+  "long_form_writer": {
+    "tool_id": "long_form_writer",
+    "name": "Long-Form Content Writer",
+    "tool_type": "llm",
+    "description": "Specialized for writing long-form content (novels, books, long articles) using mistral-nemo's massive 128K context window. Best for creative writing, story generation, and content that requires maintaining continuity over many pages. Use with summarizer for ultra-long content.",
+    "tags": [
+      "creative-writing",
+      "novel",
+      "story",
+      "long-form",
+      "article",
+      "book",
+      "large-context"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "mistral-nemo",
+      "llm_endpoint": null,
+      "system_prompt": "You are a creative writer specializing in long-form content. You have a massive 128K token context window, allowing you to maintain consistency and continuity across very long texts. Write engaging, well-structured content that flows naturally.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "{prompt}\n\nPrevious context (if continuing):\n{context}\n\nGenerate the next section maintaining consistency with previous content.",
+      "cost_tier": "high",
+      "speed_tier": "slow",
+      "quality_tier": "excellent",
+      "max_output_length": "very-long"
+    },
+    "created_at": "2025-11-15T01:43:41.502765Z",
+    "usage_count": 3
+  },
+  "write_me_code_to_do_a_fibonacc": {
+    "tool_id": "write_me_code_to_do_a_fibonacc",
+    "name": "Python implementation to generate Fibonacci sequence",
+    "tool_type": "workflow",
+    "description": "write me code to do a fibonacci sequanece",
+    "tags": [
+      "fibonacci",
+      "sequence",
+      "python",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_code_to_do_a_fibonacc",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 23,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T01:45:38.026091+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T01:45:38.026107Z",
+    "usage_count": 0
+  },
+  "code_translation_validator": {
+    "tool_id": "code_translation_validator",
+    "name": "Code Translation Validator",
+    "tool_type": "llm",
+    "description": "Fast validator that ensures translation hasn't corrupted Python code blocks. Checks that code syntax remains valid, only comments are translated, and no code keywords were mistranslated. Use AFTER translating documents containing code.",
+    "tags": [
+      "code",
+      "validation",
+      "translation",
+      "syntax-check",
+      "fast"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "tinyllama",
+      "llm_endpoint": null,
+      "system_prompt": "You are a code validator. Check that Python code remains syntactically valid after translation. ONLY comments should be translated, never code itself.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Validate this translated code:\n\n{translated_code}\n\nCheck:\n1. Python syntax is still valid\n2. Only comments were translated (not keywords, variables, functions)\n3. Code structure is unchanged\n4. No code keywords mistranslated (def, class, import, if, for, etc.)\n\nRespond with:\n- 'OK' if code is valid\n- 'ERROR: <list of issues>' if problems found\n\nBe concise (under 100 tokens).",
+      "cost_tier": "low",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "short"
+    },
+    "created_at": "2025-11-15T01:58:07.166518Z",
+    "usage_count": 0
+  },
+  "add_10_and_20_1763173231": {
+    "tool_id": "add_10_and_20_1763173231",
+    "name": "Python function to add two integers with input validation and error handling.",
+    "tool_type": "workflow",
+    "description": "add 10 and 20",
+    "tags": [
+      "python",
+      "addition",
+      "input_validation",
+      "error_handling",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_10_and_20_1763173231",
+      "quality_score": 1.1,
+      "latency_ms": 897,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T02:21:46.594116+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T02:21:46.594132Z",
+    "usage_count": 0
+  },
+  "what_is_1_plus_1": {
+    "tool_id": "what_is_1_plus_1",
+    "name": "A simple Python function to add two integers.",
+    "tool_type": "workflow",
+    "description": "what is 1 plus 1",
+    "tags": [
+      "arithmetic",
+      "addition",
+      "python",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "what_is_1_plus_1",
+      "quality_score": 1.1,
+      "latency_ms": 670,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T02:30:39.242591+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T02:30:39.242608Z",
+    "usage_count": 0
+  },
+  "calculate_the_fibonacci_sequen": {
+    "tool_id": "calculate_the_fibonacci_sequen",
+    "name": "Efficient Fibonacci sequence generator",
+    "tool_type": "workflow",
+    "description": "calculate the fibonacci sequence.",
+    "tags": [
+      "fibonacci",
+      "dynamic programming",
+      "iterative",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_the_fibonacci_sequen",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 25,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T03:01:26.867688+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:01:26.867706Z",
+    "usage_count": 0
+  },
+  "sum_4_and_6": {
+    "tool_id": "sum_4_and_6",
+    "name": "sum 4 and 6",
+    "tool_type": "workflow",
+    "description": "sum 4 and 6",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "sum_4_and_6",
+      "quality_score": 1.1,
+      "latency_ms": 679,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-15T03:43:47.333768+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:43:47.333782Z",
+    "usage_count": 0
+  },
+  "calculate_a_fibonaccie_sequenc": {
+    "tool_id": "calculate_a_fibonaccie_sequenc",
+    "name": "Calculate a Fibonacci sequence up to a specified length.",
+    "tool_type": "workflow",
+    "description": "calculate a fibonaccie sequence and output the result.",
+    "tags": [
+      "fibonacci",
+      "sequence",
+      "python",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_a_fibonaccie_sequenc",
+      "quality_score": 1.1,
+      "latency_ms": 695,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T03:10:01.000384+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:10:01.000404Z",
+    "usage_count": 0
+  },
+  "calculate_5_plus_10": {
+    "tool_id": "calculate_5_plus_10",
+    "name": "Python implementation to calculate the sum of 5 and 10",
+    "tool_type": "workflow",
+    "description": "calculate 5 plus 10",
+    "tags": [
+      "arithmetic",
+      "calculation",
+      "sum",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_5_plus_10",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 30,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-15T03:20:30.324251+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:20:30.324266Z",
+    "usage_count": 0
+  },
+  "write_the_most_optimal_code_to": {
+    "tool_id": "write_the_most_optimal_code_to",
+    "name": "Generates and prints the Fibonacci sequence in reverse order starting from 50.",
+    "tool_type": "workflow",
+    "description": "write the most optimal code to output the fibonacci sequence backwards from 50",
+    "tags": [
+      "fibonacci",
+      "reverse",
+      "sequence",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_the_most_optimal_code_to",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 34,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T03:27:58.780987+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:27:58.781005Z",
+    "usage_count": 0
+  },
+  "tell_me_a_joke": {
+    "tool_id": "tell_me_a_joke",
+    "name": "Generates a joke based on the input theme or a default joke if no theme is provi",
+    "tool_type": "workflow",
+    "description": "tell me a joke",
+    "tags": [
+      "joke generation",
+      "NLP",
+      "ML",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "tell_me_a_joke",
+      "quality_score": 1.1,
+      "latency_ms": 688,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-15T03:37:23.056574+00:00",
+      "success_count": 1,
+      "total_runs": 1
+    },
+    "created_at": "2025-11-15T03:37:23.056616Z",
+    "usage_count": 0
+  },
+  "fast_code_generator": {
+    "tool_id": "fast_code_generator",
+    "name": "Fast Code Generator",
+    "tool_type": "llm",
+    "description": "Fast code generation for simple tasks using tinyllama. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms.",
+    "tags": [
+      "fast",
+      "simple",
+      "basic",
+      "code-generation",
+      "tinyllama"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "llm_model": "tinyllama",
+      "llm_endpoint": null,
+      "system_prompt": "You are a fast code generator for SIMPLE tasks only. Your context window is small (2048 tokens), so keep code concise. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
+      "prompt_template": "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and concise (you have limited context)\n- Focus on correctness over sophistication\n- Basic error handling only\n- Must work for the specific task\n\nGenerate only the essential code needed.",
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "short"
+    },
+    "created_at": "2025-11-15T03:41:09.167211Z",
+    "usage_count": 2
+  },
+  "save_to_disk": {
+    "tool_id": "save_to_disk",
+    "name": "Save to Disk",
+    "tool_type": "executable",
+    "description": "Saves content to a file in the ./output/ directory (for safety). Use for saving stories, specifications, code, documentation, or any generated content. CRITICAL: Only saves to ./output/ directory to prevent accidental overwrites.",
+    "tags": [
+      "file-io",
+      "save",
+      "write",
+      "disk",
+      "output",
+      "storage"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "python",
+      "args": [
+        "-c",
+        "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)}))"
+      ],
+      "install_command": null
+    },
+    "created_at": "2025-11-15T03:41:09.167243Z",
+    "usage_count": 0
+  },
+  "load_from_disk": {
+    "tool_id": "load_from_disk",
+    "name": "Load from Disk",
+    "tool_type": "executable",
+    "description": "Loads content from any file path on disk. Use for reading specifications, code, documentation, or configuration files. Can read from anywhere on the filesystem (not restricted to ./output/). Useful for self-optimization tasks where the system reads its own code.",
+    "tags": [
+      "file-io",
+      "load",
+      "read",
+      "disk",
+      "input"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_config": true,
+      "command": "python",
+      "args": [
+        "-c",
+        "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path(data['filepath']); content=path.read_text() if path.exists() else None; print(json.dumps({'status': 'loaded' if content else 'not_found', 'content': content, 'path': str(path)}))"
+      ],
+      "install_command": null
+    },
+    "created_at": "2025-11-15T03:41:09.167262Z",
+    "usage_count": 0
+  }
+}

@@ -14,6 +14,7 @@ from .auto_evolver import AutoEvolver
 from .tools_manager import ToolsManager, Tool, ToolType
 from .rag_memory import RAGMemory, Artifact, ArtifactType
 from .qdrant_rag_memory import QdrantRAGMemory, QDRANT_AVAILABLE
+from .openapi_tool import OpenAPITool
 
 def create_rag_memory(config_manager, ollama_client):
     """
@@ -57,6 +58,8 @@ from .evaluator_llm import EvaluatorLlm, FitnessEvaluation
 from .hierarchical_evolver import HierarchicalEvolver, SharedPlanContext, NodeMetrics, NodeLearning
 from .rag_integrated_tools import RAGIntegratedTools, FunctionMetadata
 from .progress_display import ProgressDisplay, Stage, get_progress_display
+from .quality_evaluator import QualityEvaluator, EvaluationResult, EvaluationStep
+from .workflow_tracker import WorkflowTracker, WorkflowStep, StepStatus
 
 __all__ = [
     "OllamaClient",
@@ -73,6 +76,7 @@ __all__ = [
     "QdrantRAGMemory",
     "Artifact",
     "ArtifactType",
+    "OpenAPITool",
     "create_rag_memory",  # Factory function for RAG
     # New exports
     "OverseerLlm",
@@ -87,5 +91,13 @@ __all__ = [
     "FunctionMetadata",
     "ProgressDisplay",
     "Stage",
-    "get_progress_display"
+    "get_progress_display",
+    # Quality evaluation
+    "QualityEvaluator",
+    "EvaluationResult",
+    "EvaluationStep",
+    # Workflow tracking
+    "WorkflowTracker",
+    "WorkflowStep",
+    "StepStatus"
 ]

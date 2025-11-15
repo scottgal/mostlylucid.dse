@@ -22,7 +22,7 @@ class ConfigManager:
                 "generator": "codellama",
                 "evaluator": "llama3",
                 "triage": "tiny",
-                "escalation": "llama3"  # Higher-level LLM for fixing issues
+                "escalation": "qwen2.5-coder:14b"  # Higher-level code model for fixing issues
             }
         },
         "execution": {
@@ -96,6 +96,7 @@ class ConfigManager:
         """
         self.config_path = Path(config_path)
         self.config = self._load_config()
+        self._validate_code_models()
 
     def _load_config(self) -> Dict[str, Any]:
         """
@@ -148,10 +149,23 @@ class ConfigManager:
         """
         Save current configuration to file.
 
+        IMPORTANT: This should ONLY be used to create new config files.
+        The original config.yaml should remain immutable and never be modified by code.
+
         Args:
-            config_path: Path to save to (uses current path if None)
+            config_path: Path to save to (must be explicitly provided, not the loaded config)
         """
-        path = Path(config_path) if config_path else self.config_path
+        if config_path is None:
+            logger.warning("Refusing to save config: config_path must be explicitly provided to prevent overwriting config.yaml")
+            return
+
+        path = Path(config_path)
+
+        # Safety check: never overwrite the original config.yaml
+        if path.resolve() == self.config_path.resolve():
+            logger.warning(f"Refusing to overwrite original config file: {self.config_path}")
+            logger.info("Config changes are kept in memory only. Edit config.yaml manually if needed.")
+            return
 
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -261,6 +275,7 @@ class ConfigManager:
     def get_model_endpoint(self, model_key: str) -> str:
         """
         Get the endpoint URL for a specific model.
+        If multiple endpoints configured, returns the first one.
 
         Args:
             model_key: Model key (e.g., "overseer", "generator")
@@ -268,8 +283,37 @@ class ConfigManager:
         Returns:
             Endpoint URL for the model
         """
-        _, endpoint = self._parse_model_config(model_key, "")
-        return endpoint
+        endpoints = self.get_model_endpoints(model_key)
+        return endpoints[0] if endpoints else self.ollama_url
+
+    def get_model_endpoints(self, model_key: str) -> list:
+        """
+        Get all endpoint URLs for a specific model (supports round-robin).
+
+        Args:
+            model_key: Model key (e.g., "overseer", "generator")
+
+        Returns:
+            List of endpoint URLs for the model
+        """
+        model_config = self.get(f"ollama.models.{model_key}")
+
+        # Handle dict format with potential endpoints list
+        if isinstance(model_config, dict):
+            # Check for 'endpoints' (plural) first - this is the new format
+            endpoints = model_config.get("endpoints")
+            if isinstance(endpoints, list):
+                return [ep if ep else self.ollama_url for ep in endpoints]
+
+            # Fall back to single 'endpoint' (singular)
+            endpoint = model_config.get("endpoint")
+            if endpoint:
+                return [endpoint]
+            else:
+                return [self.ollama_url]
+
+        # String format - single endpoint (base_url)
+        return [self.ollama_url]
 
     @property
     def overseer_model(self) -> str:
@@ -298,7 +342,7 @@ class ConfigManager:
     @property
     def escalation_model(self) -> str:
         """Get escalation model name for fixing issues."""
-        model, _ = self._parse_model_config("escalation", "llama3")
+        model, _ = self._parse_model_config("escalation", "qwen2.5-coder:14b")
         return model
 
     @property
@@ -312,6 +356,61 @@ class ConfigManager:
         """Get embedding vector size."""
         return self.get("ollama.embedding.vector_size", 768)
 
+    def _validate_code_models(self):
+        """
+        Validate that code-generation roles use code-specialized models.
+
+        Warns if general chat models (llama3, mistral, etc.) are configured
+        for code generation or escalation, which would produce poor quality code.
+        """
+        # List of known general chat models (not code-specialized)
+        general_chat_models = [
+            'llama3', 'llama2', 'mistral', 'mixtral', 'phi3', 'gemma',
+            'neural-chat', 'vicuna', 'orca', 'tinyllama'
+        ]
+
+        # List of known code-specialized models
+        code_models = [
+            'codellama', 'qwen', 'coder', 'deepseek-coder', 'starcoder',
+            'wizardcoder', 'phind-codellama', 'sqlcoder'
+        ]
+
+        def is_code_model(model_name: str) -> bool:
+            """Check if a model name appears to be code-specialized."""
+            model_lower = model_name.lower()
+            # Check if it contains any code model indicators
+            if any(code_marker in model_lower for code_marker in code_models):
+                return True
+            # Check if it's a known general model
+            if any(model_lower.startswith(general) for general in general_chat_models):
+                return False
+            # Unknown model - assume it might be okay but warn
+            return None  # Uncertain
+
+        # Check generator model
+        generator_model = self.generator_model
+        is_code = is_code_model(generator_model)
+        if is_code is False:
+            logger.warning(
+                f"⚠️  WARNING: Generator model '{generator_model}' appears to be a general chat model.\n"
+                f"   Code generation requires code-specialized models like codellama, qwen2.5-coder, etc.\n"
+                f"   Please update config.yaml -> ollama.models.generator to use a code model."
+            )
+        elif is_code is None:
+            logger.info(f"ℹ️  Using generator model '{generator_model}' (unable to verify if code-specialized)")
+
+        # Check escalation model
+        escalation_model = self.escalation_model
+        is_code = is_code_model(escalation_model)
+        if is_code is False:
+            logger.warning(
+                f"⚠️  WARNING: Escalation model '{escalation_model}' appears to be a general chat model.\n"
+                f"   Code debugging requires code-specialized models like qwen2.5-coder:14b, deepseek-coder:33b, etc.\n"
+                f"   Please update config.yaml -> ollama.models.escalation to use a powerful code model."
+            )
+        elif is_code is None:
+            logger.info(f"ℹ️  Using escalation model '{escalation_model}' (unable to verify if code-specialized)")
+
     def get_context_window(self, model_name: str) -> int:
         """
         Get context window size for a specific model.
@@ -322,13 +421,15 @@ class ConfigManager:
         Returns:
             Context window size in tokens
         """
-        # Try to get specific model context window
-        size = self.get(f"ollama.context_windows.{model_name}")
-        if size:
-            return size
+        # Get the context_windows dictionary directly to handle model names with special chars (e.g., colons)
+        context_windows = self.get("ollama.context_windows", {})
+
+        # Try direct lookup in dictionary (handles colons in model names like "qwen2.5-coder:14b")
+        if model_name in context_windows:
+            return context_windows[model_name]
 
         # Fall back to default
-        return self.get("ollama.context_windows.default", 4096)
+        return context_windows.get("default", 4096)
 
     @property
     def rag_memory_path(self) -> str:

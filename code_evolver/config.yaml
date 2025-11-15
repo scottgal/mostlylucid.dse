@@ -18,18 +18,33 @@ ollama:
       # endpoint: "http://machine1:11434"  # Uncomment to use specific endpoint
 
     # Code generator - Writes actual Python code
-    # Should be a code-specialized model (e.g., codellama, deepseek-coder)
+    # MUST be a code-specialized model (e.g., codellama, qwen2.5-coder, deepseek-coder, starcoder)
+    # NEVER use general chat models (llama3, mistral, etc.) for code generation
+    # Supports multiple endpoints for round-robin load balancing
     generator:
       model: "codellama"
-      endpoint: null
-      # endpoint: "http://machine2:11434"  # Example: Use different machine
+      # endpoints: List of URLs for round-robin load balancing
+      endpoints:
+        - "http://localhost:11434"
+        - "http://192.168.0.56:11434"
+      # Single endpoint (old format - still supported):
+      # endpoint: null
 
     # Evaluator - Comprehensive evaluation of results
-    # Should be good at analysis (e.g., llama3, mistral)
+    # Different models for different evaluation types
     evaluator:
-      model: "llama3"
-      endpoint: null
-      # endpoint: "http://machine1:11434"
+      # For technical writing evaluation (blog posts, articles, documentation)
+      writing:
+        model: "phi3:3.8b"
+        endpoint: null
+      # For code evaluation (different model can be used)
+      code:
+        model: "llama3"  # Or codellama, qwen, etc.
+        endpoint: null
+      # Default fallback
+      default:
+        model: "llama3"
+        endpoint: null
 
     # Triage - Quick pass/fail decisions
     # Can be a smaller, faster model (e.g., tiny, llama3)
@@ -38,10 +53,16 @@ ollama:
       endpoint: null
       # endpoint: "http://machine3:11434"
 
-    # Escalation - Higher-level LLM for fixing issues
+    # Escalation - Higher-level code model for fixing complex issues
+    # MUST be a powerful code-specialized model (e.g., qwen2.5-coder:14b, deepseek-coder:33b)
+    # NEVER use general chat models here - code debugging requires code-trained models
     escalation:
-      model: "llama3"
-      endpoint: null
+      model: "qwen2.5-coder:14b"
+      endpoint: null  # Uses base_url
+      # Can also use multiple endpoints for load balancing:
+      # endpoints:
+      #   - "http://localhost:11434"
+      #   - "http://powerful-server:11434"
 
   # Embedding model for RAG/semantic search
   # Use a small, efficient model like nomic-embed-text
@@ -57,6 +78,10 @@ ollama:
     codellama: 16384
     tinyllama: 2048
     nomic-embed-text: 8192
+    qwen2.5-coder:14b: 32768
+    gemma2:2b: 8192
+    phi3: 4096
+    mistral-nemo: 128000
     # Default fallback for unknown models
     default: 4096
 
@@ -86,6 +111,40 @@ auto_evolution:
   keep_best_n_versions: 3
   mutation_temperature: 0.7
 
+# Quality evaluation settings (phi3:3.8b evaluator)
+quality_evaluation:
+  enabled: true
+
+  # Evaluation at each workflow step
+  evaluate_steps:
+    strategy: true       # Evaluate overseer's strategy
+    code: true          # Evaluate generated code
+    tests: true         # Evaluate test quality
+    final: true         # Final comprehensive evaluation
+
+  # Automatic quality thresholds
+  thresholds:
+    # Minimum acceptable scores (0.0-1.0)
+    strategy_min: 0.70      # Strategy must score 70%+
+    code_quality_min: 0.75  # Code quality must be 75%+
+    test_coverage_min: 0.80 # Test coverage must be 80%+
+    final_min: 0.80         # Final overall score must be 80%+
+
+    # Thresholds are auto-adjusted based on historical performance
+    auto_adjust: true
+    adjustment_window: 100  # Use last 100 evaluations for adjustment
+
+  # Iterative improvement
+  max_iterations: 3         # Max attempts to improve based on feedback
+  improvement_threshold: 0.05  # Stop if improvement < 5%
+
+  # Feedback loop settings
+  feedback:
+    include_suggestions: true    # Include specific improvement suggestions
+    include_examples: true       # Include example improvements
+    store_in_rag: true          # Store feedback patterns in RAG
+    learn_from_success: true    # Learn from high-scoring outputs
+
 # Registry settings
 registry:
   path: "./registry"
@@ -103,8 +162,8 @@ rag_memory:
   path: "./rag_memory"
   # Use Qdrant for scalable vector storage (requires qdrant-client and Qdrant server)
   # Set to false to use simple NumPy-based storage
-  use_qdrant: false
-  qdrant_url: "http://localhost:6333"
+  use_qdrant: true
+  qdrant_url: "http://192.168.0.76:6333"
   collection_name: "code_evolver_artifacts"
   # Embedding model from ollama.embedding section will be used
   # Max content length for embeddings (longer content will be truncated)
@@ -134,14 +193,103 @@ chat:
   # Display settings
   show_thinking: false  # Show overseer's reasoning
   show_metrics: true
+  show_workflow: true   # Show multi-step workflow visualization
 
   # Auto-save
   auto_save_context: true
 
+  # Default workflow pressure/quality settings
+  # These are passed to all tool invocations and can be overridden per-task
+  default_workflow_context:
+    priority: "medium"           # low/medium/high (low=thorough, high=fast)
+    quality_level: "production"  # draft/good/production/perfect
+    speed_requirement: "balanced" # fast/balanced/thorough
+    max_iterations: 3            # Maximum refinement iterations
+    allow_escalation: true       # Allow escalation to higher-quality models
+
+# Testing and code quality
+testing:
+  enabled: true                        # Generate and run unit tests
+  auto_escalate: true                  # Escalate to higher model if tests fail
+  max_escalation_attempts: 3           # Max fix attempts during escalation
+
+  # Initial optimization loop
+  # On first code generation, iteratively improve the code through feedback
+  initial_optimization_iterations: 3   # Number of optimize iterations (0 to disable)
+  optimization_score_threshold: 0.1    # Stop if no improvement >= 10%
+
 # Tools registry (predefined tools with specialized endpoints)
 tools:
-  # Example tool definitions
+  # Fast code generator for simple tasks - uses tinyllama for speed
+  fast_code_generator:
+    name: "Fast Code Generator"
+    type: "llm"
+    description: "Fast code generation for simple tasks using tinyllama. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic, multi-step workflows, or sophisticated algorithms."
+    # Performance/Cost characteristics for planner decision-making
+    cost_tier: "free"          # tinyllama is very cheap
+    speed_tier: "very-fast"    # tiny model, fast inference
+    quality_tier: "good"       # good enough for simple tasks
+    max_output_length: "short" # 2048 token context, keep it simple
+    llm:
+      model: "tinyllama"
+      endpoint: null
+      system_prompt: "You are a fast code generator for SIMPLE tasks only. Your context window is small (2048 tokens), so keep code concise. Generate clean, working Python code for basic tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate Python code for this SIMPLE task:\n\n{task}\n\nRequirements:\n- Keep code simple and concise (you have limited context)\n- Focus on correctness over sophistication\n- Basic error handling only\n- Must work for the specific task\n\nGenerate only the essential code needed."
+    tags: ["fast", "simple", "basic", "code-generation", "tinyllama"]
+
+  # General fallback tool - used when no specialized tool matches the task
+  general:
+    name: "General Code Generator"
+    type: "llm"
+    description: "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms."
+    # Performance/Cost characteristics for planner decision-making
+    cost_tier: "high"          # low/medium/high/very-high (14B model is costly)
+    speed_tier: "medium"       # very-fast/fast/medium/slow
+    quality_tier: "excellent"  # basic/good/high/excellent
+    max_output_length: "very-long" # short/medium/long/very-long (32K context)
+    llm:
+      model: "qwen2.5-coder:14b"
+      endpoint: null
+      system_prompt: "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality"
+    tags: ["general", "fallback", "code-generation", "any-task", "complex"]
+
+  # Specialized tool definitions
   # Each tool can specify which LLM to use and where it's hosted
+
+  # Quick feedback tool - fast spellcheck, grammar, syntax checker for generated text
+  quick_feedback:
+    name: "Quick Feedback Checker"
+    type: "llm"
+    description: "Fast spellcheck, grammar, and syntax error checker using tinyllama (2048 token context). Automatically chunks large text into logical segments. Gives quick feedback on generated text/code so generators can fix issues rapidly."
+    # Performance/Cost characteristics for planner decision-making
+    cost_tier: "low"           # low/medium/high/very-high (inference cost)
+    speed_tier: "very-fast"    # very-fast/fast/medium/slow
+    quality_tier: "basic"      # basic/good/high/excellent
+    max_output_length: "short" # short/medium/long/very-long
+    llm:
+      model: "tinyllama"
+      endpoint: null
+      system_prompt: "You are a fast proofreader. Check for spelling errors, grammar mistakes, and syntax issues. Be concise - your context window is small (2048 tokens). If you receive a chunk of text, check just that chunk and report issues found in it.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Quick check this text for errors:\n\n{text}\n\nFind:\n- Spelling errors\n- Grammar mistakes  \n- Syntax issues\n- Structure problems\n\nProvide a brief list of issues found (keep under 400 tokens). If no major issues, just say 'OK'. NOTE: You may be seeing a chunk of larger text - just check this portion."
+    tags: ["spellcheck", "grammar", "syntax", "quick-feedback", "fast", "proofreading", "chunking"]
+
+  # Summarizer tool - uses efficient small model for summarization
+  summarizer:
+    name: "Content Summarizer"
+    type: "llm"
+    description: "Summarizes long content, code, documentation, or conversations using Gemma2:2b model with 8192 token context window. Efficient for condensing information."
+    # Performance/Cost characteristics for planner decision-making
+    cost_tier: "low"           # low/medium/high/very-high (inference cost)
+    speed_tier: "fast"         # very-fast/fast/medium/slow
+    quality_tier: "good"       # basic/good/high/excellent
+    max_output_length: "medium" # short/medium/long/very-long
+    llm:
+      model: "gemma2:2b"
+      endpoint: null
+      system_prompt: "You are an expert at creating concise, accurate summaries. Extract key points and present them clearly. Your context window is 8192 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Summarize the following content:\n\n{content}\n\nSummary requirements:\n- Capture all key points\n- Be concise but complete\n- Prioritize most important information\n- Target length: {target_length}\n\nProvide a well-structured summary."
+    tags: ["summarization", "condensing", "analysis", "extraction", "efficient"]
 
   # Example: Code reviewer tool
   code_reviewer:
@@ -152,6 +300,8 @@ tools:
       model: "llama3"
       endpoint: null  # Uses default endpoint if null
       # endpoint: "http://review-machine:11434"
+      system_prompt: "You are an expert code reviewer with deep knowledge of software engineering best practices, design patterns, and common pitfalls. Your role is to review code for quality, bugs, security issues, and maintainability."
+      prompt_template: "Review the following code:\n\n{code}\n\nProvide:\n1. Overall quality assessment (1-10)\n2. Specific issues found (bugs, security, performance)\n3. Best practice violations\n4. Improvement suggestions\n5. Positive aspects of the code"
     tags: ["review", "quality"]
 
   # Example: Security auditor tool
@@ -185,6 +335,324 @@ tools:
       model: "llama3"
       endpoint: null
     tags: ["documentation", "docs"]
+
+  # Technical writing tools for blog content creation and analysis
+  technical_writer:
+    name: "Technical Article Writer"
+    type: "llm"
+    description: "Writes comprehensive technical articles, tutorials, and blog posts on software development topics"
+    llm:
+      model: "llama3"
+      endpoint: null
+      system_prompt: "You are an expert technical writer specializing in software development content. You create clear, engaging, and accurate articles that explain complex programming concepts to developers. Your writing is well-structured, includes practical examples, and follows best practices for technical documentation.\n\nWorkflow pressure: {priority}\nQuality target: {quality_level}\nSpeed mode: {speed_requirement}"
+      prompt_template: "Write a technical article on the following topic:\n\n{topic}\n\nWorkflow Context:\n- Priority: {priority} (high=fast draft, low=thorough research)\n- Quality level: {quality_level} (draft/good/publication/perfect)\n- Speed: {speed_requirement} (fast=outline+key points, thorough=full research)\n- Target audience: {audience}\n- Tone: Professional but accessible\n- Length target: {length}\n\nAdjust depth, examples, and polish based on quality_level:\n- draft: Key points, basic examples\n- good: Solid content, working examples\n- publication: Polished, multiple examples, thorough\n- perfect: Comprehensive, exceptional examples, fully researched"
+    tags: ["writing", "technical", "article", "blog", "tutorial", "documentation"]
+
+  article_analyzer:
+    name: "Article Content Analyzer"
+    type: "llm"
+    description: "Analyzes blog posts and articles for clarity, technical accuracy, SEO, and readability. Provides improvement suggestions."
+    llm:
+      model: "llama3"
+      endpoint: null
+    tags: ["analysis", "blog", "seo", "readability", "content", "review"]
+
+  seo_optimizer:
+    name: "SEO Optimizer"
+    type: "llm"
+    description: "Optimizes technical content for search engines, suggests keywords, meta descriptions, and structure improvements"
+    llm:
+      model: "llama3"
+      endpoint: null
+    tags: ["seo", "keywords", "optimization", "search", "metadata"]
+
+  code_explainer:
+    name: "Code Concept Explainer"
+    type: "llm"
+    description: "Explains complex programming concepts in simple terms for blog articles and tutorials. Creates analogies and examples."
+    llm:
+      model: "llama3"
+      endpoint: null
+    tags: ["explanation", "tutorial", "teaching", "concepts", "examples"]
+
+  outline_generator:
+    name: "Article Outline Generator"
+    type: "llm"
+    description: "Creates detailed outlines for technical articles based on topics. Structures content logically."
+    llm:
+      model: "llama3"
+      endpoint: null
+    tags: ["outline", "structure", "planning", "article", "organization"]
+
+  proofreader:
+    name: "Technical Proofreader"
+    type: "llm"
+    description: "Proofreads technical content for grammar, style, consistency, and technical accuracy"
+    llm:
+      model: "llama3"
+      endpoint: null
+      system_prompt: "You are an expert proofreader specializing in technical content. You have a keen eye for grammar, style, consistency, and technical accuracy. You provide constructive feedback while preserving the author's voice and intent."
+      prompt_template: "Proofread the following technical content:\n\n{content}\n\nCheck for:\n1. Grammar and spelling errors\n2. Technical accuracy\n3. Consistency in terminology\n4. Clarity and readability\n5. Code example correctness\n\nProvide corrected version and list of changes made."
+    tags: ["proofreading", "grammar", "style", "editing", "quality"]
+
+  # Python code quality and testing tools (executable/script-based)
+
+  pylint_checker:
+    name: "Pylint Code Quality Checker"
+    type: "executable"
+    description: "Runs pylint static analysis on Python code to check for errors, code style, and potential bugs"
+    executable:
+      command: "pylint"
+      args: ["--output-format=text", "--score=yes", "{source_file}"]
+      install_command: "pip install pylint"
+    tags: ["python", "static-analysis", "quality", "linting", "pep8"]
+
+  mypy_type_checker:
+    name: "MyPy Type Checker"
+    type: "executable"
+    description: "Runs mypy type checking on Python code to find type errors before runtime"
+    executable:
+      command: "mypy"
+      args: ["--strict", "--show-error-codes", "{source_file}"]
+      install_command: "pip install mypy"
+    tags: ["python", "type-checking", "static-analysis", "types"]
+
+  flake8_linter:
+    name: "Flake8 Style Checker"
+    type: "executable"
+    description: "Runs flake8 to check Python code style (PEP 8) and detect common errors"
+    executable:
+      command: "flake8"
+      args: ["--max-line-length=120", "--statistics", "{source_file}"]
+      install_command: "pip install flake8"
+    tags: ["python", "linting", "pep8", "style", "quality"]
+
+  black_formatter:
+    name: "Black Code Formatter"
+    type: "executable"
+    description: "Runs black formatter to check if Python code follows black style (with --check flag)"
+    executable:
+      command: "black"
+      args: ["--check", "--diff", "{source_file}"]
+      install_command: "pip install black"
+    tags: ["python", "formatting", "style", "black"]
+
+  bandit_security:
+    name: "Bandit Security Scanner"
+    type: "executable"
+    description: "Runs bandit security scanner to find common security issues in Python code"
+    executable:
+      command: "bandit"
+      args: ["-r", "{source_file}"]
+      install_command: "pip install bandit"
+    tags: ["python", "security", "vulnerability", "scanning"]
+
+  pytest_runner:
+    name: "Pytest Test Runner"
+    type: "executable"
+    description: "Runs pytest unit tests with coverage reporting"
+    executable:
+      command: "pytest"
+      args: ["-v", "--tb=short", "{test_file}"]
+      install_command: "pip install pytest"
+    tags: ["python", "testing", "pytest", "unit-tests"]
+
+  pytest_coverage:
+    name: "Pytest with Coverage"
+    type: "executable"
+    description: "Runs pytest with code coverage analysis"
+    executable:
+      command: "pytest"
+      args: ["--cov={source_module}", "--cov-report=term-missing", "-v", "{test_file}"]
+      install_command: "pip install pytest pytest-cov"
+    tags: ["python", "testing", "coverage", "pytest"]
+
+  radon_complexity:
+    name: "Radon Complexity Analyzer"
+    type: "executable"
+    description: "Analyzes code complexity metrics (cyclomatic complexity, maintainability index)"
+    executable:
+      command: "radon"
+      args: ["cc", "-s", "-a", "{source_file}"]
+      install_command: "pip install radon"
+    tags: ["python", "complexity", "metrics", "maintainability"]
+
+  vulture_deadcode:
+    name: "Vulture Dead Code Finder"
+    type: "executable"
+    description: "Finds unused code (dead code) in Python projects"
+    executable:
+      command: "vulture"
+      args: ["{source_file}"]
+      install_command: "pip install vulture"
+    tags: ["python", "dead-code", "optimization", "cleanup"]
+
+  pydocstyle_checker:
+    name: "Pydocstyle Docstring Checker"
+    type: "executable"
+    description: "Checks docstring style and completeness according to PEP 257"
+    executable:
+      command: "pydocstyle"
+      args: ["{source_file}"]
+      install_command: "pip install pydocstyle"
+    tags: ["python", "documentation", "docstrings", "pep257"]
+
+  isort_import_checker:
+    name: "Isort Import Checker"
+    type: "executable"
+    description: "Checks if Python imports are sorted correctly"
+    executable:
+      command: "isort"
+      args: ["--check-only", "--diff", "{source_file}"]
+      install_command: "pip install isort"
+    tags: ["python", "imports", "style", "organization"]
+
+  # NMT Translation Service - OpenAPI integration
+  nmt_translator:
+    name: "NMT Translation Service"
+    type: "openapi"
+    description: "Neural Machine Translation service for translating text between languages. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses OpenAPI spec from http://localhost:8000/openapi.json."
+    # Performance/Cost characteristics
+    cost_tier: "low"           # Fast local API
+    speed_tier: "very-fast"    # Fastest translation option (preferred)
+    quality_tier: "good"       # Good but needs validation (can have errors)
+    max_output_length: "long"  # Can handle long texts
+    # IMPORTANT: Requires quality checking with translation_quality_checker after use
+    openapi:
+      spec_url: "http://localhost:8000/openapi.json"
+      base_url: "http://localhost:8000"
+      # Optional authentication (if needed)
+      # auth:
+      #   type: "bearer"
+      #   token: "your-api-key-here"
+    # Python code template for using this tool
+    code_template: |
+      # Example: How to use the NMT Translation Service
+      import requests
+      import json
+
+      def translate_text(text, source_lang="en", target_lang="es"):
+          """
+          Translate text using the NMT service.
+
+          Args:
+              text: Text to translate
+              source_lang: Source language code (e.g., 'en', 'es', 'fr')
+              target_lang: Target language code
+
+          Returns:
+              Translated text
+          """
+          url = "http://localhost:8000/translate"
+
+          payload = {
+              "text": text,
+              "source_lang": source_lang,
+              "target_lang": target_lang
+          }
+
+          response = requests.post(url, json=payload)
+          response.raise_for_status()
+
+          result = response.json()
+          return result.get("translated_text", "")
+
+      # Usage example:
+      # translated = translate_text("Hello, world!", source_lang="en", target_lang="es")
+      # print(translated)  # Output: "Hola, mundo!"
+    tags: ["translation", "nmt", "neural", "languages", "openapi", "api"]
+
+  # Translation Quality Checker - validates NMT output
+  translation_quality_checker:
+    name: "Translation Quality Validator"
+    type: "llm"
+    description: "Fast quality check for translation output using tinyllama. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality."
+    # Performance/Cost characteristics
+    cost_tier: "low"           # Tiny model, very cheap
+    speed_tier: "very-fast"    # 2K context, fast inference
+    quality_tier: "basic"      # Simple validation (good enough for error detection)
+    max_output_length: "short" # Just returns OK or error description
+    llm:
+      model: "tinyllama"
+      endpoint: null
+      system_prompt: "You are a translation quality validator. Check translated text for common errors. Be fast and concise - your context window is only 2048 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Validate this translated text for quality issues:\n\nOriginal: {original_text}\nTranslated: {translated_text}\n\nCheck for:\n1. Repeated characters (e.g., 'aaaa', '||||')\n2. Garbled text (random symbols, encoding errors)\n3. Untranslated portions\n4. Missing or corrupted text\n5. Obvious translation failures\n\nRespond with ONLY:\n- 'OK' if translation looks good\n- 'ERROR: <brief description>' if issues found\n\nKeep response under 100 tokens."
+    tags: ["translation", "validation", "quality-check", "error-detection", "fast"]
+
+  # Long-Form Content Writer - for novels, articles, essays
+  long_form_writer:
+    name: "Long-Form Content Writer"
+    type: "llm"
+    description: "Specialized for writing long-form content (novels, books, long articles) using mistral-nemo's massive 128K context window. Best for creative writing, story generation, and content that requires maintaining continuity over many pages. Use with summarizer for ultra-long content."
+    # Performance/Cost characteristics
+    cost_tier: "high"           # Large model, expensive to run
+    speed_tier: "slow"          # Large context, slower inference
+    quality_tier: "excellent"   # High quality creative writing
+    max_output_length: "very-long"  # 128K context allows very long outputs
+    llm:
+      model: "mistral-nemo"
+      endpoint: null
+      system_prompt: "You are a creative writer specializing in long-form content. You have a massive 128K token context window, allowing you to maintain consistency and continuity across very long texts. Write engaging, well-structured content that flows naturally.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "{prompt}\n\nPrevious context (if continuing):\n{context}\n\nGenerate the next section maintaining consistency with previous content."
+    tags: ["creative-writing", "novel", "story", "long-form", "article", "book", "large-context"]
+
+  # Code Translation Validator - ensures code blocks aren't translated
+  code_translation_validator:
+    name: "Code Translation Validator"
+    type: "llm"
+    description: "Fast validator that ensures translation hasn't corrupted Python code blocks. Checks that code syntax remains valid, only comments are translated, and no code keywords were mistranslated. Use AFTER translating documents containing code."
+    # Performance/Cost characteristics
+    cost_tier: "low"            # Tiny model, very cheap
+    speed_tier: "very-fast"     # Fast validation
+    quality_tier: "good"        # Good enough for syntax checking
+    max_output_length: "short"  # Just returns OK or error list
+    llm:
+      model: "tinyllama"
+      endpoint: null
+      system_prompt: "You are a code validator. Check that Python code remains syntactically valid after translation. ONLY comments should be translated, never code itself.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Validate this translated code:\n\n{translated_code}\n\nCheck:\n1. Python syntax is still valid\n2. Only comments were translated (not keywords, variables, functions)\n3. Code structure is unchanged\n4. No code keywords mistranslated (def, class, import, if, for, etc.)\n\nRespond with:\n- 'OK' if code is valid\n- 'ERROR: <list of issues>' if problems found\n\nBe concise (under 100 tokens)."
+    tags: ["code", "validation", "translation", "syntax-check", "fast"]
+
+  # File I/O Tools - for saving and loading files
+  save_to_disk:
+    name: "Save to Disk"
+    type: "executable"
+    description: "Saves content to a file in the ./output/ directory (for safety). Use for saving stories, specifications, code, documentation, or any generated content. CRITICAL: Only saves to ./output/ directory to prevent accidental overwrites."
+    # Performance/Cost characteristics
+    cost_tier: "free"           # No LLM inference
+    speed_tier: "very-fast"     # Direct file write
+    quality_tier: "excellent"   # Reliable file I/O
+    max_output_length: "unlimited"  # Can save any size
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)}))"]
+    input_schema:
+      filename: "str - Name of file to save (will be saved in ./output/)"
+      content: "str - Content to write to file"
+    output_schema:
+      status: "str - 'saved' if successful"
+      path: "str - Full path where file was saved"
+    tags: ["file-io", "save", "write", "disk", "output", "storage"]
+
+  load_from_disk:
+    name: "Load from Disk"
+    type: "executable"
+    description: "Loads content from any file path on disk. Use for reading specifications, code, documentation, or configuration files. Can read from anywhere on the filesystem (not restricted to ./output/). Useful for self-optimization tasks where the system reads its own code."
+    # Performance/Cost characteristics
+    cost_tier: "free"           # No LLM inference
+    speed_tier: "very-fast"     # Direct file read
+    quality_tier: "excellent"   # Reliable file I/O
+    max_output_length: "unlimited"  # Can load any size file
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path(data['filepath']); content=path.read_text() if path.exists() else None; print(json.dumps({'status': 'loaded' if content else 'not_found', 'content': content, 'path': str(path)}))"]
+    input_schema:
+      filepath: "str - Full or relative path to file to load"
+    output_schema:
+      status: "str - 'loaded' if successful, 'not_found' if file doesn't exist"
+      content: "str - Content of the file"
+      path: "str - Full path that was read"
+    tags: ["file-io", "load", "read", "disk", "input"]
 
 # Build settings (for executables)
 build:

@@ -1,25 +1,98 @@
 # Code Evolver
 
-A Python-based system for evolving code through AI-assisted generation, execution, and evaluation using local Ollama models.
+An intelligent AI-powered system for evolving code through specification-based generation, semantic search, fitness-based tool selection, and continuous optimization using local Ollama models.
 
 ## Overview
 
-Code Evolver is a minimal, buildable system for code-evolving nodes with execution, evaluation, and a shared registry. It uses local Ollama models (tiny, llama3, codellama) to:
+Code Evolver is an advanced self-improving code generation system that uses multiple AI models working together. The system features:
 
-- Generate code from natural language prompts
-- Execute code in sandboxed environments with metrics collection
-- Evaluate performance using AI models
-- Store and track node evolution in a file-based registry
-- Auto-evolve code based on performance metrics
+- **Specification-Based Generation**: Overseer model creates detailed specs, specialized code models implement them
+- **Semantic Code Reuse**: Intelligent SAME/RELATED/DIFFERENT classification prevents regenerating similar code
+- **Fitness-Based Tool Selection**: Multi-dimensional scoring (similarity + speed + cost + quality) chooses the best tool
+- **RAG Memory System**: Stores and retrieves successful solutions with Qdrant vector database
+- **Template Modification**: Reuses existing code as templates for related tasks instead of generating from scratch
+- **Auto-Evolution**: Continuously monitors and improves code based on performance metrics
+
+## Key Innovations
+
+### 🎯 Specification-Based Planning
+The **Overseer (llama3)** creates comprehensive specifications including:
+- Problem definition with exact inputs/outputs
+- Requirements & constraints (performance, safety limits)
+- Implementation plan with algorithms and data structures
+- Input/output interface specification
+- Test cases and edge case handling
+
+The **Code Generator (codellama)** then implements this specification exactly, ensuring:
+- Consistent interfaces across all generated code
+- Proper error handling and safety limits
+- No hallucinations or missing requirements
+
+### 🧠 Semantic Task Classification
+Uses **tinyllama** triage model to classify task relationships:
+- **SAME**: Identical tasks (ignore typos/wording) → Reuse as-is
+  - "fibonacci sequence" vs "fibonaccie sequence and output" → SAME
+- **RELATED**: Same domain, different variation → Use as template and modify
+  - "fibonacci sequence" vs "fibonacci backwards" → RELATED
+- **DIFFERENT**: Completely different tasks → Generate from scratch
+  - "fibonacci" vs "write a story" → DIFFERENT
+
+### 🎯 Fitness-Based Tool Selection
+Multi-dimensional fitness function considers:
+- **Semantic similarity** (0-100): How well it matches the task
+- **Speed tier**: Fast tools get +20 bonus, slow get -20 penalty
+- **Cost tier**: Free/low-cost tools get +15 bonus
+- **Quality tier**: Excellent quality gets +15 bonus
+- **Success rate**: Historical performance adds 0-10 bonus
+- **Latency**: <100ms gets +15, >5s gets -10
+- **Effort bonus**: Reusing existing code (>90% match) gets +30
+
+Result: **Always picks the best tool for the job**, never uses wrong model for wrong task.
+
+### 🔄 Intelligent Code Reuse
+1. **Search RAG** for similar solutions
+2. **Classify relationship** (SAME/RELATED/DIFFERENT)
+3. **If SAME**: Execute existing code with new input
+4. **If RELATED**: Use as template, modify for variation
+5. **If DIFFERENT**: Generate from scratch
+
+Example: "fibonacci backwards" finds "fibonacci forward" (77% similar) → Classified as RELATED → Uses forward code as template and adds reversal logic.
+
+### 📊 Clean ChatGPT-Style Interface
+- No debug logs cluttering output
+- **Prominent result display**: `RESULT: 15` in bold green
+- Extracts results from JSON: `result`, `output`, `answer`, `content`
+- Shows workflow sequence and tool names
+- Progress indicators without Unicode issues (ASCII-only)
+
+### 🛡️ Demo Safety Limits
+All generated code includes sensible limits:
+- Fibonacci: First 20 numbers (max 100)
+- Prime numbers: First 100 primes
+- Iterations: Max 1000
+- File sizes: Max 10MB
+- List lengths: Max 10,000 items
+
+### 📦 Context-Aware Specification Truncation
+Respects model context windows:
+```python
+max_spec_chars = context_window(generator_model) * 2  # ~2 chars/token
+if len(specification) > max_spec_chars:
+    specification = specification[:max_spec_chars] + "[... truncated ...]"
+```
 
 ## Features
 
-- **AI-Powered Code Generation**: Uses Ollama's codellama model to generate Python code
+- **Specification-Based Code Generation**: Overseer creates detailed specs, generator implements them exactly
+- **Semantic Code Reuse**: SAME/RELATED/DIFFERENT classification for intelligent workflow reuse
+- **Fitness-Based Tool Selection**: Multi-dimensional scoring always picks the right tool for the job
+- **RAG Memory with Qdrant**: Vector database for semantic search and fitness-indexed retrieval
+- **Template Modification**: Reuses and modifies existing code instead of regenerating
 - **Sandboxed Execution**: Safe code execution with timeout and memory limits
 - **Multi-Model Evaluation**: Fast triage with tiny model, comprehensive evaluation with llama3
 - **Performance Tracking**: Automatic metrics collection (latency, memory, CPU usage)
-- **Registry System**: File-based storage of nodes, metrics, and evaluations
-- **Interactive CLI**: Chat-based interface for natural interaction
+- **Prominent Result Display**: ChatGPT-style clean output with bold results
+- **Interactive CLI**: Modern chat interface with workflow visualization
 - **Auto-Evolution**: Monitors performance and triggers improvements automatically
 - **Cross-Platform**: Builds to standalone executables for Windows, Linux, and macOS
 
@@ -119,10 +192,148 @@ python orchestrator.py evaluate compress_text_v1
 
 ### Interactive CLI Chat Interface
 
-Launch the interactive chat interface:
+Launch the modern chat interface with intelligent code generation:
 
 ```bash
 python chat_cli.py
+```
+
+## Example Workflows
+
+### Simple Calculation (First Time)
+```
+CodeEvolver> calculate 5 plus 10
+
+> Searching for relevant tools...
+OK Planning: Using general tools
+
+> Consulting llama3...
+OK Thinking: Specification complete
+
+Generating code with specialized tool: General Code Generator...
+OK Generated Code: calculate_5_plus_10
+OK Tests passed
+OK Optimization complete (best score: 1.20)
+
+Running workflow...
+
+RESULT: 15
+```
+
+### Same Task Again (Intelligent Reuse)
+```
+CodeEvolver> sum 5 and 10
+
+OK Search RAG: Found calculator (95% match)
+Note: Tasks are SAME (ignoring wording differences)
+
+> Running workflow...
+RESULT: 15
+```
+✅ **Instantly reuses** existing code without regenerating!
+
+### Related Task (Template Modification)
+```
+CodeEvolver> calculate fibonacci sequence backwards
+
+OK Search RAG: Found Fibonacci generator (77% match)
+Note: Tasks are RELATED (same algorithm, different variation)
+Using existing code as template and modifying...
+
+> Consulting llama3...
+OK Thinking: Specification complete (modification plan)
+
+Generating code with template modifications...
+OK Generated Code: fibonacci_backwards
+OK Tests passed
+
+RESULT: [89, 55, 34, 21, 13, 8, 5, 3, 2, 1, 1, 0]
+```
+✅ **Reuses forward Fibonacci** as template, adds reversal logic!
+
+### Different Task (Generate from Scratch)
+```
+CodeEvolver> write a technical article about Python
+
+OK Search RAG: Found code generators (60% match)
+Note: Tasks are DIFFERENT (code vs writing)
+Generating new solution from scratch...
+
+Generating code with specialized tool: Long-Form Content Writer...
+```
+✅ **Correctly selects writing tool** for writing tasks!
+
+### File I/O - Save Generated Content
+```
+CodeEvolver> generate a funny story about a programmer and save it to disk
+
+> Consulting llama3...
+OK Thinking: Specification complete
+
+Generating content with specialized tool: Long-Form Content Writer...
+OK Generated story (1,247 chars)
+
+Saving to disk...
+OK Saved to: ./output/programmer_story.txt
+
+RESULT: Story saved successfully!
+```
+✅ **Safely saves to ./output/** directory only!
+
+### File I/O - Load and Optimize
+```
+CodeEvolver> load src/ollama_client.py and suggest optimizations
+
+Loading from disk...
+OK Loaded: src/ollama_client.py (15,234 chars)
+
+> Consulting llama3...
+OK Thinking: Analyzing code for optimizations
+
+Generating optimizations...
+OK Found 5 optimization opportunities
+
+Saving optimized version...
+OK Saved to: ./output/ollama_client_optimized.py
+
+RESULT: Optimizations saved!
+```
+✅ **Can load from anywhere** for self-optimization!
+
+### Multi-File Generation
+```
+CodeEvolver> generate a microservice architecture with API gateway and user service
+
+> Consulting llama3...
+OK Thinking: Multi-file architecture specification
+
+Generating api_gateway.py...
+OK Saved to: ./output/api_gateway.py
+
+Generating user_service.py...
+OK Saved to: ./output/user_service.py
+
+Generating docker-compose.yml...
+OK Saved to: ./output/docker-compose.yml
+
+RESULT: Microservice architecture generated in ./output/
+```
+✅ **Generates entire project structures**!
+
+### Clear RAG Memory (Reset Test Data)
+```
+CodeEvolver> clear_rag
+
+WARNING: This will clear all RAG memory and test data!
+Type 'yes' to confirm: yes
+
+OK RAG memory cleared
+
+Also clear registry and generated nodes?
+Type 'yes' to also delete all nodes: yes
+
+OK Cleared nodes directory
+OK Cleared registry
 ```
 
 Commands in chat mode:
@@ -130,10 +341,29 @@ Commands in chat mode:
 - `run <node_id>` - Run an existing node
 - `list` - List all nodes in registry
 - `evaluate <node_id>` - Evaluate a node
+- `clear_rag` - Clear RAG memory and optionally registry/nodes (for testing)
 - `config` - Show current configuration
 - `auto on/off` - Enable/disable auto-evolution
 - `help` - Show available commands
 - `exit` or `quit` - Exit the chat
+
+**💡 Tip**: Just type natural language! The system will interpret it as a generate command automatically.
+Examples: `calculate fibonacci`, `write a story`, `add 10 and 20`
+
+---
+
+## 🚀 How It Works
+
+For a deep dive into the advanced features, see **[ADVANCED_FEATURES.md](ADVANCED_FEATURES.md)**:
+- Specification-Based Code Generation (Overseer → Generator pattern)
+- Semantic Task Classification (SAME/RELATED/DIFFERENT)
+- Fitness-Based Tool Selection (multi-dimensional scoring)
+- RAG Memory System with Qdrant
+- Template Modification for related tasks
+- Context-aware specification truncation
+- Demo safety limits
+
+---
 
 ### Python API
 
@@ -436,21 +666,32 @@ execution:
 
 ## Roadmap
 
-### v0.2
-- ✅ Interactive CLI chat interface
-- ✅ Configuration management
-- ✅ Auto-evolution engine
-- ✅ Executable builds
+### v0.2 ✅ COMPLETED
+- ✅ Interactive CLI chat interface with ChatGPT-style UX
+- ✅ Configuration management with immutable config.yaml
+- ✅ Auto-evolution engine with performance monitoring
+- ✅ Executable builds for cross-platform deployment
+- ✅ **Specification-based code generation** (Overseer → Generator pattern)
+- ✅ **Semantic task classification** (SAME/RELATED/DIFFERENT)
+- ✅ **Fitness-based tool selection** (multi-dimensional scoring)
+- ✅ **RAG memory with Qdrant** vector database
+- ✅ **Template modification** for code reuse
+- ✅ **Context-aware truncation** for large specifications
+- ✅ **Demo safety limits** for resource-intensive tasks
+- ✅ **Prominent result display** with JSON extraction
+- ✅ **clear_rag command** for test data cleanup
 
 ### v1.0
-- [ ] Distributed registry with consensus
+- [ ] Frontier model support (Claude, GPT-4, Gemini as backends)
 - [ ] Multi-language support (JavaScript, Go, Rust)
-- [ ] Web UI dashboard
+- [ ] Web UI dashboard with workflow visualization
 - [ ] Docker container support
 - [ ] Advanced sandboxing (cgroups, namespaces)
+- [ ] Distributed registry with consensus
 - [ ] Fine-tuned specialist evaluator models
 - [ ] Storage and evaluator node types
 - [ ] Git integration for version control
+- [ ] Self-improvement: Code Evolver evolving itself
 
 ## Contributing
 
@@ -469,16 +710,36 @@ MIT License - See LICENSE file for details
 ## Acknowledgments
 
 - Built on [Ollama](https://ollama.com) for local LLM inference
+- **Qdrant** vector database for semantic search and fitness indexing
 - Inspired by genetic algorithms and code evolution research
 - Uses Python's subprocess for sandboxed execution
+
+### Development Credits
+
+The advanced features in v0.2 were designed and implemented through collaboration:
+
+**System Architecture & Direction**: Human-directed design decisions including:
+- Specification-based planning architecture
+- Semantic task classification (SAME/RELATED/DIFFERENT)
+- Fitness-based tool selection concept
+- Template modification workflow
+- Input interface standardization
+- Demo safety requirements
+- Clean ChatGPT-style UX vision
+
+**Implementation & Code**: Claude (Anthropic) - Implementation of features based on specifications and architectural guidance
+
+This collaborative approach demonstrates the power of human insight combined with AI implementation capabilities.
 
 ## Support
 
 For issues, questions, or suggestions:
 - Open an issue on GitHub
-- Check existing documentation
+- Check existing documentation in `ADVANCED_FEATURES.md`
 - Review example scripts
 
 ---
 
 **Happy Code Evolving! 🧬🤖**
+
+*"The best code is code that writes itself... and then improves itself."*

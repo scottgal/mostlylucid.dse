@@ -1,6 +1,6 @@
 {
-  "node_id": "add_1_plus_1_1763154461",
-  "title": "add 1 plus 1",
+  "node_id": "sum_4_and_6",
+  "title": "sum 4 and 6",
   "version": "1.0.0",
   "type": "processor",
   "language": "python",
@@ -39,5 +39,5 @@
     "evaluator": "llama3",
     "triage": "tiny"
   },
-  "created_at": "2025-11-14T21:07:45.468567Z"
+  "created_at": "2025-11-15T03:43:21.239102Z"
 }

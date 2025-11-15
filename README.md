@@ -1,4 +1,25 @@
-# Code Evolver
+# Code Evolver : En Experiment in Directed Synthetic Evolution
+
+> NOTE: This is an experiment accompanying my blog series on [Directed Synthetic Evolution](https://www.mostlylucid.net/blog/category/Emergent%20Intelligence).
+A rather simple idea which just uses code generating llms to generate Python scripts and multi-agent, multistep plans to accomplish aribrary wokrflows.
+
+It's a vibe coded project to experiment with the idea I had in the thought experiment around self optimizing multi-llm workflows.
+
+It's not a production ready system and it's slow (but it gets faster, that's the kind of odd thing!
+
+Right now it can do the generate part but it needs:
+1. Ann offline 'big bad model' optimization step to enable the self optimization to use accumulated real data to improve the Python node script's performance on tasks.
+2. Inter-layer communication (through the shared context) allowing dynamic quality assesment anf 'hints between layers to optimize overall workflow.
+3. Lots more tools. As more are added it is able to more accurately asses things like performance, security, and code quality.
+4. The ability (and templates to reduce boilerplate though thos may emerge as par tof optimization) allowing storage node tools to build additonal capabilities. 
+5. It is NOT secure / good code or antyhing else again **I AM NOT A PYTHON DEVELOPER**
+
+It would as well be called: 
+
+# Self Assembling, Self Optimising Workflows with a multillm, multistep, multimodel approach.
+
+Not as catchy though. But that's basically the elevator pitch it;s an ENTIRELY vibe coded experiment into how that might work.
+
 
 **AI-Powered Code Evolution System with RAG Memory and Intelligent Tool Selection**
 
@@ -6,7 +27,7 @@ A Python-based system for evolving code through AI-assisted generation, executio
 
 ---
 
-## 🌟 What's New in Latest Version
+##  What's New in Latest Version
 
 ### RAG-Powered Semantic Tool Selection
 - **Intelligent Tool Discovery**: Uses RAG (Retrieval-Augmented Generation) to find the best tools for your task
