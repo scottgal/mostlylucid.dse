@@ -23,7 +23,7 @@
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
-    "created_at": "2025-11-15T06:14:04.759561Z",
+    "created_at": "2025-11-15T06:20:30.792963Z",
     "usage_count": 0
   },
   "code_reviewer": {
@@ -47,7 +47,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759575Z",
+    "created_at": "2025-11-15T06:20:30.792976Z",
     "usage_count": 0
   },
   "security_auditor": {
@@ -71,7 +71,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759578Z",
+    "created_at": "2025-11-15T06:20:30.792979Z",
     "usage_count": 0
   },
   "performance_optimizer": {
@@ -95,7 +95,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759581Z",
+    "created_at": "2025-11-15T06:20:30.792982Z",
     "usage_count": 0
   },
   "doc_generator": {
@@ -119,7 +119,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759584Z",
+    "created_at": "2025-11-15T06:20:30.792986Z",
     "usage_count": 0
   },
   "technical_writer": {
@@ -147,7 +147,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759587Z",
+    "created_at": "2025-11-15T06:20:30.792989Z",
     "usage_count": 0
   },
   "article_analyzer": {
@@ -175,7 +175,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759590Z",
+    "created_at": "2025-11-15T06:20:30.792992Z",
     "usage_count": 0
   },
   "seo_optimizer": {
@@ -202,7 +202,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759593Z",
+    "created_at": "2025-11-15T06:20:30.792995Z",
     "usage_count": 0
   },
   "code_explainer": {
@@ -229,7 +229,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759597Z",
+    "created_at": "2025-11-15T06:20:30.792998Z",
     "usage_count": 0
   },
   "outline_generator": {
@@ -256,7 +256,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759600Z",
+    "created_at": "2025-11-15T06:20:30.793001Z",
     "usage_count": 0
   },
   "proofreader": {
@@ -283,7 +283,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759604Z",
+    "created_at": "2025-11-15T06:20:30.793004Z",
     "usage_count": 0
   },
   "write_a_technical_story_and_tr": {
@@ -382,8 +382,8 @@
       ],
       "install_command": "pip install pylint"
     },
-    "created_at": "2025-11-15T06:14:04.759609Z",
-    "usage_count": 0
+    "created_at": "2025-11-15T06:20:30.793008Z",
+    "usage_count": 1
   },
   "mypy_type_checker": {
     "tool_id": "mypy_type_checker",
@@ -407,7 +407,7 @@
       ],
       "install_command": "pip install mypy"
     },
-    "created_at": "2025-11-15T06:14:04.759613Z",
+    "created_at": "2025-11-15T06:20:30.793013Z",
     "usage_count": 0
   },
   "flake8_linter": {
@@ -433,8 +433,8 @@
       ],
       "install_command": "pip install flake8"
     },
-    "created_at": "2025-11-15T06:14:04.759617Z",
-    "usage_count": 0
+    "created_at": "2025-11-15T06:20:30.793016Z",
+    "usage_count": 1
   },
   "black_formatter": {
     "tool_id": "black_formatter",
@@ -458,7 +458,7 @@
       ],
       "install_command": "pip install black"
     },
-    "created_at": "2025-11-15T06:14:04.759621Z",
+    "created_at": "2025-11-15T06:20:30.793019Z",
     "usage_count": 0
   },
   "bandit_security": {
@@ -482,7 +482,7 @@
       ],
       "install_command": "pip install bandit"
     },
-    "created_at": "2025-11-15T06:14:04.759624Z",
+    "created_at": "2025-11-15T06:20:30.793022Z",
     "usage_count": 0
   },
   "pytest_runner": {
@@ -507,7 +507,7 @@
       ],
       "install_command": "pip install pytest"
     },
-    "created_at": "2025-11-15T06:14:04.759627Z",
+    "created_at": "2025-11-15T06:20:30.793025Z",
     "usage_count": 0
   },
   "pytest_coverage": {
@@ -533,7 +533,7 @@
       ],
       "install_command": "pip install pytest pytest-cov"
     },
-    "created_at": "2025-11-15T06:14:04.759631Z",
+    "created_at": "2025-11-15T06:20:30.793028Z",
     "usage_count": 0
   },
   "radon_complexity": {
@@ -559,7 +559,7 @@
       ],
       "install_command": "pip install radon"
     },
-    "created_at": "2025-11-15T06:14:04.759635Z",
+    "created_at": "2025-11-15T06:20:30.793031Z",
     "usage_count": 0
   },
   "vulture_deadcode": {
@@ -582,7 +582,7 @@
       ],
       "install_command": "pip install vulture"
     },
-    "created_at": "2025-11-15T06:14:04.759638Z",
+    "created_at": "2025-11-15T06:20:30.793034Z",
     "usage_count": 0
   },
   "pydocstyle_checker": {
@@ -605,7 +605,7 @@
       ],
       "install_command": "pip install pydocstyle"
     },
-    "created_at": "2025-11-15T06:14:04.759641Z",
+    "created_at": "2025-11-15T06:20:30.793037Z",
     "usage_count": 0
   },
   "isort_import_checker": {
@@ -630,7 +630,7 @@
       ],
       "install_command": "pip install isort"
     },
-    "created_at": "2025-11-15T06:14:04.759645Z",
+    "created_at": "2025-11-15T06:20:30.793040Z",
     "usage_count": 0
   },
   "quick_feedback": {
@@ -659,7 +659,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:14:04.759566Z",
+    "created_at": "2025-11-15T06:20:30.792967Z",
     "usage_count": 0
   },
   "summarizer": {
@@ -686,7 +686,7 @@
       "quality_tier": "good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759571Z",
+    "created_at": "2025-11-15T06:20:30.792972Z",
     "usage_count": 0
   },
   "nmt_translator": {
@@ -714,7 +714,7 @@
       "max_output_length": "long",
       "code_template": "# Example: How to use the NMT Translation Service\nimport requests\nimport json\n\ndef translate_text(text, source_lang=\"en\", target_lang=\"es\"):\n    \"\"\"\n    Translate text using the NMT service.\n\n    Args:\n        text: Text to translate\n        source_lang: Source language code (e.g., 'en', 'es', 'fr')\n        target_lang: Target language code\n\n    Returns:\n        Translated text\n    \"\"\"\n    url = \"http://localhost:8000/translate\"\n\n    payload = {\n        \"text\": text,\n        \"source_lang\": source_lang,\n        \"target_lang\": target_lang\n    }\n\n    response = requests.post(url, json=payload)\n    response.raise_for_status()\n\n    result = response.json()\n    return result.get(\"translated_text\", \"\")\n\n# Usage example:\n# translated = translate_text(\"Hello, world!\", source_lang=\"en\", target_lang=\"es\")\n# print(translated)  # Output: \"Hola, mundo!\"\n"
     },
-    "created_at": "2025-11-15T06:14:04.777061Z",
+    "created_at": "2025-11-15T06:20:30.808450Z",
     "usage_count": 0
   },
   "translation_quality_checker": {
@@ -741,7 +741,7 @@
       "quality_tier": "basic",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:14:04.777084Z",
+    "created_at": "2025-11-15T06:20:30.808470Z",
     "usage_count": 0
   },
   "add_100_and_200": {
@@ -795,7 +795,7 @@
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
-    "created_at": "2025-11-15T06:14:04.777092Z",
+    "created_at": "2025-11-15T06:20:30.808477Z",
     "usage_count": 0
   },
   "write_me_code_to_do_a_fibonacc": {
@@ -847,7 +847,7 @@
       "quality_tier": "good",
       "max_output_length": "short"
     },
-    "created_at": "2025-11-15T06:14:04.777097Z",
+    "created_at": "2025-11-15T06:20:30.808482Z",
     "usage_count": 0
   },
   "add_10_and_20_1763173231": {
@@ -1074,8 +1074,8 @@
       "quality_tier": "very-good",
       "max_output_length": "medium"
     },
-    "created_at": "2025-11-15T06:14:04.759548Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T06:20:30.792951Z",
+    "usage_count": 0
   },
   "save_to_disk": {
     "tool_id": "save_to_disk",
@@ -1100,7 +1100,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:14:04.777102Z",
+    "created_at": "2025-11-15T06:20:30.808488Z",
     "usage_count": 0
   },
   "load_from_disk": {
@@ -1125,7 +1125,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:14:04.777107Z",
+    "created_at": "2025-11-15T06:20:30.808493Z",
     "usage_count": 0
   },
   "calculate_15_plus_25": {
@@ -1222,7 +1222,7 @@
       ],
       "install_command": null
     },
-    "created_at": "2025-11-15T06:14:04.777112Z",
+    "created_at": "2025-11-15T06:20:30.808497Z",
     "usage_count": 0
   },
   "fast_content_writer": {
@@ -1405,7 +1405,7 @@
       "quality_tier": "excellent",
       "max_output_length": "long"
     },
-    "created_at": "2025-11-15T06:14:04.759556Z",
+    "created_at": "2025-11-15T06:20:30.792958Z",
     "usage_count": 0
   },
   "add_5_and_3_1763184838": {
@@ -1563,6 +1563,57 @@
       "full_title": "Calculates 5 + 5 and prints the result as JSON."
     },
     "created_at": "2025-11-15T06:14:46.234019Z",
+    "usage_count": 0
+  },
+  "write_then_translate_a_poen": {
+    "tool_id": "write_then_translate_a_poen",
+    "name": "Python code that generates a piece of content using the provided workflow composition and tools.",
+    "tool_type": "workflow",
+    "description": "write then translate a poen",
+    "tags": [
+      "python",
+      "content generation",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_then_translate_a_poen",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 29,
+      "memory_mb_peak": 1.88,
+      "created_at": "2025-11-15T06:22:10.129240+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code that generates a piece of content using the provided workflow composition and tools."
+    },
+    "created_at": "2025-11-15T06:22:10.129256Z",
+    "usage_count": 0
+  },
+  "tell_a_joke": {
+    "tool_id": "tell_a_joke",
+    "name": "Python code for generating jokes based on user-provided topics using LLM tools.",
+    "tool_type": "workflow",
+    "description": "tell a joke",
+    "tags": [
+      "python",
+      "llm",
+      "jokes",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "tell_a_joke",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 33,
+      "memory_mb_peak": 1.87,
+      "created_at": "2025-11-15T06:24:41.879927+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code for generating jokes based on user-provided topics using LLM tools."
+    },
+    "created_at": "2025-11-15T06:24:41.879945Z",
     "usage_count": 0
   }
 }

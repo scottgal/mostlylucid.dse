@@ -1096,12 +1096,15 @@ The code will receive input as a JSON object with these standard fields (interfa
 
 USAGE GUIDELINES:
 1. For simple computational tasks like "add 10 and 20", extract numbers from input_data["description"]
-2. For content generation tasks (stories, jokes, articles), use call_tool() to invoke LLM tools from the available tools list
+2. For ALL content generation tasks (stories, jokes, articles, poems, essays, creative writing), you MUST use call_tool() to invoke LLM tools
+   - NEVER generate hardcoded content (no hardcoded jokes, stories, or text)
+   - ALWAYS use: content = call_tool("content_generator", prompt_describing_what_to_generate)
+   - The system will handle invoking the appropriate LLM model
 3. For complex data processing, use input_data["input"] as the main data field
 4. ALWAYS include these standard imports at the top:
    - import json
    - import sys
-   - from node_runtime import call_tool (if you need to use LLM tools for content generation)
+   - from node_runtime import call_tool (REQUIRED for any content generation task)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -1122,7 +1125,7 @@ def main():
     print(json.dumps({{"result": result}}))
 ```
 
-Example for content generation (use appropriate LLM tools from the available tools list):
+Example for content generation tasks (jokes, stories, articles, poems):
 ```python
 import json
 import sys
@@ -1131,8 +1134,15 @@ from node_runtime import call_tool
 def main():
     input_data = json.load(sys.stdin)
 
-    # For content generation, call an appropriate LLM tool from the available tools list
-    content = call_tool("content_generator", input_data.get("description", "Generate content"))
+    # Extract user's request description
+    task_description = input_data.get("description", "")
+
+    # Build a detailed prompt for the LLM based on the task
+    # Example: If task is "tell a joke about cats", prompt could be "Write a funny joke about cats"
+    prompt = f"Generate content for: {{task_description}}"
+
+    # CRITICAL: Always use call_tool() for content generation - NEVER hardcode content
+    content = call_tool("content_generator", prompt)
 
     print(json.dumps({{"result": content}}))
 
@@ -1140,13 +1150,45 @@ if __name__ == "__main__":
     main()
 ```
 
-CRITICAL:
+Example for joke generation specifically:
+```python
+import json
+import sys
+from node_runtime import call_tool
+
+def main():
+    input_data = json.load(sys.stdin)
+
+    # Get the topic from input, or extract it from description
+    topic = input_data.get("topic", "")
+    if not topic:
+        # If no topic specified, use description or default
+        description = input_data.get("description", "")
+        topic = description if description else "general humor"
+
+    # Build prompt for joke generation
+    joke_prompt = f"Tell a funny joke about {{topic}}"
+
+    # Call LLM tool to generate the joke (NEVER use hardcoded jokes!)
+    joke = call_tool("content_generator", joke_prompt)
+
+    print(json.dumps({{"result": joke}}))
+
+if __name__ == "__main__":
+    main()
+```
+
+CRITICAL REQUIREMENTS:
 - The "code" field must contain ONLY executable Python code
 - NO markdown fences (no ```python)
 - NO explanations mixed with code
-- Start with import statements
-- Must be immediately runnable
-- For content generation: Use call_tool() with an appropriate LLM tool from the available tools list
+- ALWAYS start with ALL required import statements:
+  * import json (REQUIRED)
+  * import sys (REQUIRED)
+  * from node_runtime import call_tool (REQUIRED if using content generation)
+- Must be immediately runnable without errors
+- For content generation: MUST use call_tool("content_generator", prompt)
+- Verify all imports are present before generating code
 
 Return ONLY the JSON object, nothing else."""
 
@@ -1261,6 +1303,30 @@ Return ONLY the JSON object, nothing else."""
 
         # Clean the code (remove any remaining markdown)
         code = self._clean_code(code)
+
+        # Check for required imports and add if missing
+        required_imports = []
+        if 'json.load' in code or 'json.dump' in code:
+            required_imports.append('import json')
+        if 'sys.stdin' in code or 'sys.stdout' in code or 'sys.stderr' in code:
+            required_imports.append('import sys')
+        if 'call_tool(' in code:
+            required_imports.append('from node_runtime import call_tool')
+
+        # Add missing imports at the top
+        for required in required_imports:
+            if required.split()[-1] not in code.split('\n')[0]:  # Simple check
+                # More robust check
+                if required.startswith('from'):
+                    module = required.split()[-1]
+                    if f'import {module}' not in code and f'from node_runtime import {module}' not in code:
+                        code = required + '\n' + code
+                        console.print(f"[dim yellow]Added missing import: {required}[/dim yellow]")
+                else:
+                    module = required.split()[-1]
+                    if f'import {module}' not in code:
+                        code = required + '\n' + code
+                        console.print(f"[dim yellow]Added missing import: {required}[/dim yellow]")
 
         # Validate and fix code if needed
         is_valid, error_msg = self._validate_python_code(code)
@@ -1844,13 +1910,10 @@ Return ONLY the JSON, no explanations."""
 
         if uses_call_tool:
             # For code that uses external tools, just create a minimal smoke test
-            test_code = """import sys
-import os
-
-def test_structure():
+            # PYTHONPATH is already set by the test runner, so no need to manipulate sys.path
+            test_code = """def test_structure():
     print("Testing code structure...")
-    # Verify code can be imported without errors
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    # Verify code can be imported without errors (PYTHONPATH is set by runner)
     try:
         import main
         print("OK Code structure is valid")
@@ -1972,64 +2035,64 @@ Return valid Python test code only - nothing else."""
             found_code = False
 
             for line in lines:
-            # Skip empty lines before code starts
-            if not found_code and not line.strip():
-                continue
-
-            # Start collecting when we see imports or code
-            if line.strip().startswith(('import ', 'from ', 'def ', 'class ', '@')):
-                found_code = True
-
-            if found_code:
-                stripped = line.strip()
-
-                # CRITICAL: Remove any attempts to import or use call_tool in tests
-                if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
-                    console.print(f"[dim]Filtering out node_runtime import: {stripped[:60]}...[/dim]")
-                    continue
-                if 'call_tool(' in stripped:
-                    console.print(f"[dim]Filtering out call_tool usage: {stripped[:60]}...[/dim]")
+                # Skip empty lines before code starts
+                if not found_code and not line.strip():
                     continue
 
-                # Also filter out problematic test patterns
-                if 'from main import' in stripped and stripped != 'from main import main':
-                    # Don't import specific functions, only import main() function
-                    console.print(f"[dim]Filtering out specific function import: {stripped[:60]}...[/dim]")
-                    continue
+                # Start collecting when we see imports or code
+                if line.strip().startswith(('import ', 'from ', 'def ', 'class ', '@')):
+                    found_code = True
 
-                # Filter out explanatory text (lines that don't look like Python)
-                # Skip lines that are clearly explanatory text
-                if any(phrase in stripped.lower() for phrase in [
-                    'these tests', 'this test', 'the test checks', 'note that', 'by adding',
-                    'the code', 'we can see', 'this will', 'this should', 'the above',
-                    'as you can', 'for example', 'in this case', 'it is important'
-                ]):
-                    console.print(f"[dim]Filtering out explanatory line: {stripped[:60]}...[/dim]")
-                    continue
+                if found_code:
+                    stripped = line.strip()
 
-                # Skip lines that don't start with valid Python syntax (unless they're indented continuations)
-                if stripped and not line.startswith((' ', '\t')) and not any(stripped.startswith(s) for s in [
-                    'import', 'from', 'def', 'class', '@', 'if', 'else', 'elif', 'for', 'while',
-                    'try', 'except', 'finally', 'with', 'return', 'raise', 'assert', 'print',
-                    '#', '"""', "'''", 'pass', 'break', 'continue', 'yield', 'async', 'await'
-                ]):
-                    # This line doesn't look like Python
-                    console.print(f"[dim]Filtering out non-Python line: {stripped[:60]}...[/dim]")
-                    continue
+                    # CRITICAL: Remove any attempts to import or use call_tool in tests
+                    if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
+                        console.print(f"[dim]Filtering out node_runtime import: {stripped[:60]}...[/dim]")
+                        continue
+                    if 'call_tool(' in stripped:
+                        console.print(f"[dim]Filtering out call_tool usage: {stripped[:60]}...[/dim]")
+                        continue
 
-                clean_lines.append(line)
+                    # Also filter out problematic test patterns
+                    if 'from main import' in stripped and stripped != 'from main import main':
+                        # Don't import specific functions, only import main() function
+                        console.print(f"[dim]Filtering out specific function import: {stripped[:60]}...[/dim]")
+                        continue
 
-        if clean_lines:
-            test_code = '\n'.join(clean_lines)
-            if len(clean_lines) < len(lines):
-                console.print(f"[yellow]Cleaned test code: removed {len(lines) - len(clean_lines)} explanatory lines[/yellow]")
+                    # Filter out explanatory text (lines that don't look like Python)
+                    # Skip lines that are clearly explanatory text
+                    if any(phrase in stripped.lower() for phrase in [
+                        'these tests', 'this test', 'the test checks', 'note that', 'by adding',
+                        'the code', 'we can see', 'this will', 'this should', 'the above',
+                        'as you can', 'for example', 'in this case', 'it is important'
+                    ]):
+                        console.print(f"[dim]Filtering out explanatory line: {stripped[:60]}...[/dim]")
+                        continue
 
-        # Save test code
-        test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
-        with open(test_path, 'w') as f:
-            f.write(test_code)
+                    # Skip lines that don't start with valid Python syntax (unless they're indented continuations)
+                    if stripped and not line.startswith((' ', '\t')) and not any(stripped.startswith(s) for s in [
+                        'import', 'from', 'def', 'class', '@', 'if', 'else', 'elif', 'for', 'while',
+                        'try', 'except', 'finally', 'with', 'return', 'raise', 'assert', 'print',
+                        '#', '"""', "'''", 'pass', 'break', 'continue', 'yield', 'async', 'await'
+                    ]):
+                        # This line doesn't look like Python
+                        console.print(f"[dim]Filtering out non-Python line: {stripped[:60]}...[/dim]")
+                        continue
 
-        console.print("[dim]OK Tests generated (with comprehensive logging)[/dim]")
+                    clean_lines.append(line)
+
+            if clean_lines:
+                test_code = '\n'.join(clean_lines)
+                if len(clean_lines) < len(lines):
+                    console.print(f"[yellow]Cleaned test code: removed {len(lines) - len(clean_lines)} explanatory lines[/yellow]")
+
+            # Save test code
+            test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
+            with open(test_path, 'w') as f:
+                f.write(test_code)
+
+            console.print("[dim]OK Tests generated (with comprehensive logging)[/dim]")
 
         # Run tests and capture all output
         console.print("[cyan]Running tests with logging...[/cyan]")
