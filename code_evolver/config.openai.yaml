@@ -1,0 +1,411 @@
+# ============================================================================
+# Code Evolver - OpenAI (GPT) Configuration
+# ============================================================================
+#
+# This configuration uses OpenAI's GPT models for all LLM tasks.
+#
+# SETUP:
+# 1. Get API key from https://platform.openai.com/api-keys
+# 2. Set environment variable:
+#    export OPENAI_API_KEY='sk-...'
+# 3. Run with: python chat_cli.py --config config.openai.yaml
+#
+# COST ESTIMATE:
+# - GPT-4o: ~$2.50 per million input tokens, ~$10 per million output
+# - GPT-4o-mini: ~$0.15 per million input tokens, ~$0.60 per million output
+# - Average workflow: ~50k tokens = $0.01-$0.50 per generation
+#
+# MODELS:
+# - gpt-4o: Best balance (recommended for most tasks) - THIS IS THE BASE
+# - gpt-4o-mini: Fast & cheap (good for simple tasks)
+# - o1-preview: Advanced reasoning (expensive, use sparingly)
+#
+# ============================================================================
+
+# LLM Backend Configuration
+llm:
+  # Primary backend
+  backend: "openai"
+
+  # OpenAI API settings
+  openai:
+    api_key: "${OPENAI_API_KEY}"  # Set via environment variable
+
+    # Model mappings for different roles
+    models:
+      # Fast model for simple tasks (4o-mini)
+      fast: "gpt-4o-mini"
+
+      # Balanced model for most tasks (4o) - THIS IS THE BASE
+      base: "gpt-4o"
+
+      # Powerful model for complex reasoning (o1-preview)
+      powerful: "o1-preview"
+
+    # API settings
+    max_tokens: 4096
+    timeout: 120
+
+# Ollama server settings (for local fallback/embeddings)
+ollama:
+  base_url: "http://localhost:11434"
+
+  models:
+    # Overseer - Strategic planning
+    overseer:
+      model: "gpt-4o"
+      backend: "openai"
+
+    # Code generator - Uses base OpenAI model
+    generator:
+      model: "gpt-4o"
+      backend: "openai"
+
+    # Evaluator - Quality analysis
+    evaluator:
+      writing:
+        model: "gpt-4o-mini"  # Fast model for evaluation
+        backend: "openai"
+      code:
+        model: "gpt-4o"
+        backend: "openai"
+      default:
+        model: "gpt-4o"
+        backend: "openai"
+
+    # Triage - Quick decisions (use fast model)
+    triage:
+      model: "gpt-4o-mini"
+      backend: "openai"
+
+    # Escalation - Complex bug fixing (use powerful model)
+    escalation:
+      model: "gpt-4o"
+      backend: "openai"
+
+  # Embedding model (OpenAI has native embeddings)
+  embedding:
+    model: "text-embedding-3-small"
+    backend: "openai"
+    vector_size: 1536
+
+  # Context window sizes
+  context_windows:
+    "gpt-4o": 128000
+    "gpt-4o-mini": 128000
+    "o1-preview": 128000
+    "text-embedding-3-small": 8191
+    nomic-embed-text: 8192
+    default: 128000
+
+# Execution settings
+execution:
+  default_timeout_ms: 5000
+  max_memory_mb: 256
+  max_retries: 3
+
+  sandbox:
+    allow_network: false
+    allow_file_write: false
+    temp_dir: "./temp"
+
+# Auto-evolution settings
+auto_evolution:
+  enabled: true
+  performance_threshold: 0.15
+  min_runs_before_evolution: 3
+  check_interval_minutes: 60
+  max_versions_per_node: 10
+  keep_best_n_versions: 3
+  mutation_temperature: 0.7
+
+# Quality evaluation
+quality_evaluation:
+  enabled: true
+  evaluate_steps:
+    strategy: true
+    code: true
+    tests: true
+    final: true
+  thresholds:
+    strategy_min: 0.70
+    code_quality_min: 0.75
+    test_coverage_min: 0.80
+    final_min: 0.80
+    auto_adjust: true
+    adjustment_window: 100
+  max_iterations: 3
+  improvement_threshold: 0.05
+  feedback:
+    include_suggestions: true
+    include_examples: true
+    store_in_rag: true
+    learn_from_success: true
+
+# Registry settings
+registry:
+  path: "./registry"
+  backup_enabled: true
+  backup_interval_hours: 24
+  max_backup_count: 7
+
+# Node storage
+nodes:
+  path: "./nodes"
+  artifacts_path: "./artifacts"
+
+# RAG Memory settings
+rag_memory:
+  path: "./rag_memory"
+  use_qdrant: true
+  qdrant_url: "http://192.168.0.76:6333"
+  collection_name: "code_evolver_artifacts"
+  max_embedding_content_length: 1000
+
+# Logging
+logging:
+  level: "INFO"
+  file: "code_evolver.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  console:
+    enabled: true
+    use_colors: true
+
+# Chat interface
+chat:
+  prompt: "CodeEvolver> "
+  history_file: ".code_evolver_history"
+  max_history: 1000
+  show_thinking: false
+  show_metrics: true
+  show_workflow: true
+  auto_save_context: true
+  workflow_mode:
+    enabled: true
+    detect_keywords: ["and", "then", "translate", "convert"]
+    min_steps: 2
+    max_steps: 10
+  default_workflow_context:
+    priority: "medium"
+    quality_level: "production"
+    speed_requirement: "balanced"
+    max_iterations: 3
+    allow_escalation: true
+
+# Testing and code quality
+testing:
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6
+  test_driven_development: true
+  initial_optimization_iterations: 3
+  optimization_score_threshold: 0.1
+
+# ============================================================================
+# TOOLS REGISTRY - All tools use OpenAI as base provider
+# ============================================================================
+tools:
+  # Fast code generator - uses 4o-mini for speed
+  fast_code_generator:
+    name: "Fast Code Generator"
+    type: "llm"
+    description: "Fast code generation using GPT-4o-mini for simple tasks"
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "very-good"
+    max_output_length: "medium"
+    llm:
+      backend: "openai"
+      model: "gpt-4o-mini"
+      system_prompt: "You are a fast code generator. Generate clean, working Python code for simple tasks.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate Python code for this task:\n\n{task}\n\nRequirements:\n- Keep code simple and focused\n- Proper error handling\n- Follow Python best practices"
+    tags: ["fast", "simple", "code-generation", "gpt-4o-mini"]
+
+  # Content generator - uses base GPT-4o model
+  content_generator:
+    name: "Content Generator"
+    type: "llm"
+    description: "General purpose content generation using GPT-4o"
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "long"
+    llm:
+      backend: "openai"
+      model: "gpt-4o"  # BASE MODEL
+      system_prompt: "You are a creative content generator. Generate engaging, high-quality content.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "{prompt}\n\nGenerate creative, engaging content. Return ONLY the content itself."
+    tags: ["content", "generation", "creative", "writing", "gpt-4o"]
+
+  # General code generator - uses base GPT-4o model
+  general:
+    name: "General Code Generator"
+    type: "llm"
+    description: "General purpose code generation using GPT-4o (base model)"
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "very-long"
+    llm:
+      backend: "openai"
+      model: "gpt-4o"  # BASE MODEL
+      system_prompt: "You are an expert software engineer. Write clean, efficient, well-documented code.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Generate code for:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority}\n- Quality level: {quality_level}\n- Speed: {speed_requirement}\n\nFor content generation tasks, write Python code that DIRECTLY creates the content in main()."
+    tags: ["general", "fallback", "code-generation", "gpt-4o"]
+
+  # Quick feedback - uses 4o-mini for speed
+  quick_feedback:
+    name: "Quick Feedback Checker"
+    type: "llm"
+    description: "Fast proofreading using GPT-4o-mini"
+    cost_tier: "low"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+    max_output_length: "short"
+    llm:
+      backend: "openai"
+      model: "gpt-4o-mini"
+      system_prompt: "You are a fast proofreader. Check for errors quickly.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Quick check this text:\n\n{text}\n\nFind spelling, grammar, and syntax issues. Be brief."
+    tags: ["spellcheck", "grammar", "quick-feedback", "gpt-4o-mini"]
+
+  # Summarizer - uses base GPT-4o
+  summarizer:
+    name: "Content Summarizer"
+    type: "llm"
+    description: "Summarizes content using GPT-4o"
+    cost_tier: "medium"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    max_output_length: "medium"
+    llm:
+      backend: "openai"
+      model: "gpt-4o"  # BASE MODEL
+      system_prompt: "You are an expert at creating concise summaries.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+      prompt_template: "Summarize:\n\n{content}\n\nCapture all key points concisely."
+    tags: ["summarization", "analysis", "gpt-4o"]
+
+  # Code reviewer - uses base GPT-4o
+  code_reviewer:
+    name: "Code Reviewer"
+    type: "llm"
+    description: "Reviews code using GPT-4o"
+    llm:
+      backend: "openai"
+      model: "gpt-4o"  # BASE MODEL
+      system_prompt: "You are an expert code reviewer with deep knowledge of best practices."
+      prompt_template: "Review this code:\n\n{code}\n\nProvide:\n1. Quality assessment (1-10)\n2. Issues found\n3. Improvement suggestions"
+    tags: ["review", "quality", "gpt-4o"]
+
+  # Security auditor - uses o1-preview for deep reasoning
+  security_auditor:
+    name: "Security Auditor"
+    type: "llm"
+    description: "Audits code for vulnerabilities using o1-preview"
+    llm:
+      backend: "openai"
+      model: "o1-preview"  # POWERFUL MODEL for security
+      system_prompt: "You are a security expert. Find vulnerabilities and security issues."
+      prompt_template: "Audit this code for security issues:\n\n{code}"
+    tags: ["security", "audit", "o1-preview"]
+
+  # Performance optimizer - uses GPT-4o
+  performance_optimizer:
+    name: "Performance Optimizer"
+    type: "llm"
+    description: "Suggests performance optimizations using GPT-4o"
+    llm:
+      backend: "openai"
+      model: "gpt-4o"  # BASE MODEL
+      system_prompt: "You are a performance optimization expert."
+      prompt_template: "Analyze this code for performance improvements:\n\n{code}"
+    tags: ["performance", "optimization", "gpt-4o"]
+
+  # All other tools (file I/O, HTTP server, etc.) remain the same...
+
+  save_to_disk:
+    name: "Save to Disk"
+    type: "executable"
+    description: "Saves content to ./output/ directory"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    max_output_length: "unlimited"
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)}))"]
+    input_schema:
+      filename: "str - Name of file"
+      content: "str - Content to write"
+    output_schema:
+      status: "str - 'saved' if successful"
+      path: "str - Full path"
+    tags: ["file-io", "save", "write"]
+
+  load_from_disk:
+    name: "Load from Disk"
+    type: "executable"
+    description: "Loads content from any file path"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    max_output_length: "unlimited"
+    executable:
+      command: "python"
+      args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path(data['filepath']); content=path.read_text() if path.exists() else None; print(json.dumps({'status': 'loaded' if content else 'not_found', 'content': content, 'path': str(path)}))"]
+    input_schema:
+      filepath: "str - Path to file"
+    output_schema:
+      status: "str - 'loaded' or 'not_found'"
+      content: "str - File content"
+      path: "str - Full path"
+    tags: ["file-io", "load", "read"]
+
+# Optimization settings
+optimization:
+  enabled: true
+  cloud_optimization:
+    enabled: true
+    triggers:
+      offline_batch: true
+      quality_threshold: 0.65
+      reuse_threshold: 10
+      explicit_request: true
+    targets:
+      workflows: true
+      tools: true
+      code: true
+      system: true
+    levels:
+      local_only: false
+      cloud_deep_dive: true
+      recursive: true
+    max_cost_per_day: 50.00
+    max_tokens_per_optimization: 100000
+
+optimization_pressure:
+  high:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.60
+    max_latency_ms: 1000
+  medium:
+    optimization_level: "cloud"
+    max_cost: 2.00
+    allow_cloud: true
+    min_quality_threshold: 0.75
+    max_latency_ms: 30000
+  low:
+    optimization_level: "cloud"
+    max_cost: 50.00
+    allow_cloud: true
+    recursive: true
+    min_quality_threshold: 0.85
+    max_latency_ms: null
+
+build:
+  app_name: "CodeEvolver"
+  version: "0.1.0"
+  icon: null

@@ -32,7 +32,9 @@
     "invocation_general_1763236155325",
     "invocation_general_1763236354294",
     "invocation_general_1763236619473",
-    "invocation_general_1763236977209"
+    "invocation_general_1763236977209",
+    "invocation_general_1763237313021",
+    "invocation_general_1763237557005"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -112,7 +114,9 @@
     "invocation_general_1763236155325",
     "invocation_general_1763236354294",
     "invocation_general_1763236619473",
-    "invocation_general_1763236977209"
+    "invocation_general_1763236977209",
+    "invocation_general_1763237313021",
+    "invocation_general_1763237557005"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -192,7 +196,9 @@
     "invocation_general_1763236155325",
     "invocation_general_1763236354294",
     "invocation_general_1763236619473",
-    "invocation_general_1763236977209"
+    "invocation_general_1763236977209",
+    "invocation_general_1763237313021",
+    "invocation_general_1763237557005"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -249,7 +255,9 @@
     "invocation_general_1763236155325",
     "invocation_general_1763236354294",
     "invocation_general_1763236619473",
-    "invocation_general_1763236977209"
+    "invocation_general_1763236977209",
+    "invocation_general_1763237313021",
+    "invocation_general_1763237557005"
   ],
   "tool": [
     "tool_write_a_poem",
@@ -392,7 +400,8 @@
     "spec_write",
     "spec_write_a_short_story_about_ayrs",
     "spec_write_a_joke_1763230891",
-    "spec_write_me_a_story_and_translate"
+    "spec_write_me_a_story_and_translate",
+    "spec_write_a_poem_1763237468"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -469,7 +478,8 @@
     "workflow_review_this_code_usr_bin_en",
     "tool_review_this_code_usr_bin_en",
     "workflow_install_python_package",
-    "tool_install_python_package"
+    "tool_install_python_package",
+    "workflow_1763237229"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -582,7 +592,9 @@
     "spec_review_this_code_usr_bin_en",
     "spec_generated_node",
     "spec_install_python_package",
-    "spec_create_standalone_executable"
+    "spec_create_standalone_executable",
+    "spec_support_windows_platform",
+    "spec_write_a_poem_1763237468"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -1064,7 +1076,9 @@
     "spec_review_this_code_usr_bin_en",
     "spec_generated_node",
     "spec_install_python_package",
-    "spec_create_standalone_executable"
+    "spec_create_standalone_executable",
+    "spec_support_windows_platform",
+    "spec_write_a_poem_1763237468"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1132,7 +1146,9 @@
     "spec_review_this_code_usr_bin_en",
     "spec_generated_node",
     "spec_install_python_package",
-    "spec_create_standalone_executable"
+    "spec_create_standalone_executable",
+    "spec_support_windows_platform",
+    "spec_write_a_poem_1763237468"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1200,7 +1216,9 @@
     "spec_review_this_code_usr_bin_en",
     "spec_generated_node",
     "spec_install_python_package",
-    "spec_create_standalone_executable"
+    "spec_create_standalone_executable",
+    "spec_support_windows_platform",
+    "spec_write_a_poem_1763237468"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1821,7 +1839,8 @@
     "workflow_1763216384",
     "workflow_1763217386",
     "workflow_1763233548",
-    "workflow_1763234819"
+    "workflow_1763234819",
+    "workflow_1763237229"
   ],
   "a": [
     "workflow_1763216384",
@@ -1913,5 +1932,14 @@
     "func_install_python_package",
     "workflow_install_python_package",
     "tool_install_python_package"
+  ],
+  "build": [
+    "workflow_1763237229"
+  ],
+  "script": [
+    "workflow_1763237229"
+  ],
+  "for": [
+    "workflow_1763237229"
   ]
 }

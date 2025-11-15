@@ -833,6 +833,7 @@ Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
             ("evaluate <node_id>", "Evaluate a node's performance"),
             ("list", "List all nodes in registry"),
             ("tools", "List all available tools (LLM, code, and community tools)"),
+            ("backends [--test]", "Check status of all LLM backends (API keys, connectivity)"),
             ("workflow <node_id>", "Display the complete workflow for a node"),
             ("show <node_id>", "Show detailed information about a node"),
             ("delete <node_id>", "Delete a node"),
@@ -3750,6 +3751,97 @@ Return ONLY the JSON object, nothing else."""
         console.print(table)
         return True
 
+    def handle_backends(self, test_connection: bool = False) -> bool:
+        """Handle backends command - check status of all LLM backends."""
+        console.print("\n[bold cyan]LLM Backend Status[/bold cyan]\n")
+
+        try:
+            from src.backend_config_checker import BackendConfigChecker, BackendStatus
+
+            checker = BackendConfigChecker(self.config)
+            results = checker.check_all_backends(test_connection=test_connection)
+
+            # Get primary backend
+            primary_backend = checker.get_primary_backend()
+
+            # Create status table
+            table = Table(
+                title="Backend Configuration Status",
+                box=box.ROUNDED,
+                show_header=True,
+                header_style="bold magenta"
+            )
+            table.add_column("Backend", style="cyan", no_wrap=True)
+            table.add_column("Status", justify="center")
+            table.add_column("Details")
+            table.add_column("Ready", justify="center")
+
+            for backend, result in sorted(results.items()):
+                # Status color
+                if result.status == BackendStatus.READY:
+                    status_str = "[green]OK READY[/green]"
+                    ready_str = "[green]YES[/green]"
+                elif result.status == BackendStatus.MISSING_API_KEY:
+                    status_str = "[yellow]WARN NO API KEY[/yellow]"
+                    ready_str = "[red]NO[/red]"
+                elif result.status == BackendStatus.MISSING_CONFIG:
+                    status_str = "[dim]- NOT CONFIGURED[/dim]"
+                    ready_str = "[dim]NO[/dim]"
+                elif result.status == BackendStatus.UNAVAILABLE:
+                    status_str = "[red]FAIL UNAVAILABLE[/red]"
+                    ready_str = "[red]NO[/red]"
+                else:
+                    status_str = "[yellow]WARN INVALID[/yellow]"
+                    ready_str = "[red]NO[/red]"
+
+                # Add primary marker
+                backend_display = backend
+                if primary_backend and backend.lower() == primary_backend.lower():
+                    backend_display = f"{backend} (primary)"
+
+                # Details
+                details = result.message
+                if test_connection and "connection_test" in result.details:
+                    test_result = result.details["connection_test"]
+                    details += f" (connection: {test_result})"
+
+                table.add_row(backend_display, status_str, details, ready_str)
+
+            console.print(table)
+
+            # Summary and suggestions
+            ready_backends = [b for b, r in results.items() if r.ready]
+            not_ready = [b for b, r in results.items() if not r.ready and r.status != BackendStatus.MISSING_CONFIG]
+
+            console.print()
+            if primary_backend:
+                primary_result = results.get(primary_backend)
+                if primary_result and primary_result.ready:
+                    console.print(f"[green]✓ Primary backend ({primary_backend}) is ready[/green]")
+                else:
+                    console.print(f"[yellow]⚠ Primary backend ({primary_backend}) is NOT ready[/yellow]")
+
+            console.print(f"\n[bold]Summary:[/bold] {len(ready_backends)}/{len(results)} backends ready")
+
+            if not_ready:
+                console.print(f"\n[yellow]Backends needing attention:[/yellow]")
+                for backend in not_ready:
+                    result = results[backend]
+                    console.print(f"  • {backend}: {result.message}")
+
+                    # Show setup suggestions
+                    suggestions = checker.suggest_setup_commands(backend)
+                    if suggestions:
+                        console.print(f"    [dim]{suggestions[0]}[/dim]")
+
+            console.print()
+            return True
+
+        except ImportError as e:
+            console.print(f"[red]Backend checker not available: {e}[/red]")
+            console.print("[dim]Multi-backend support may not be installed[/dim]")
+            return False
+
     def handle_tools(self) -> bool:
         """Handle tools command - list all available tools."""
         console.print("\n[bold cyan]Available Tools[/bold cyan]\n")
@@ -4008,6 +4100,10 @@ Return ONLY the JSON object, nothing else."""
 
                 elif user_input.lower() == 'tools':
                     self.handle_tools()
+
+                elif user_input.lower() == 'backends' or user_input.lower().startswith('backends '):
+                    test_connection = '--test' in user_input.lower()
+                    self.handle_backends(test_connection=test_connection)
 
                 elif user_input.startswith('workflow '):
                     node_id = user_input[9:].strip()

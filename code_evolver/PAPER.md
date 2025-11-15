@@ -1,4 +1,5 @@
 # Digital Synthetic Evolution: A Self-Optimizing Framework for Multi-Agent Workflows Through Executable Ground Truth and Recursive Improvement
+by Scott Galloway (mostlylucid) - scott.galloway@gmail.com
 
 ## Abstract
 

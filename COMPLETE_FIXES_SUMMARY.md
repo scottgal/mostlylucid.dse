@@ -20,17 +20,11 @@
 ```yaml
 generator:
   model: "codellama"
-  endpoints:
-    - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+  endpoint: null  # Uses base_url (http://localhost:11434)
 ```
 
 **Result:**
-- Request 1 → localhost
-- Request 2 → 192.168.0.56
-- Request 3 → localhost
-- Request 4 → 192.168.0.56
-- (continues alternating)
+- All requests → localhost:11434
 
 **Implementation:**
 - `OllamaClient._get_next_endpoint()` - Round-robin selection
@@ -50,11 +44,9 @@ ollama:
       model: "llama3"
       endpoint: null
 
-    generator:  # Codellama with round-robin
+    generator:
       model: "codellama"
-      endpoints:
-        - "http://localhost:11434"
-        - "http://192.168.0.56:11434"
+      endpoint: null  # Uses base_url
 
     evaluator:
       model: "llama3"
@@ -211,16 +203,15 @@ ollama:
 
     generator:
       model: "codellama"
-      endpoints:  # Multiple endpoints for load balancing
-        - "http://localhost:11434"
-        - "http://192.168.0.56:11434"
-        - "http://gpu-server:11434"
+      endpoint: null  # Uses base_url
+      # For distributed setup, you can use multiple endpoints:
+      # endpoints:
+      #   - "http://localhost:11434"
+      #   - "http://gpu-server:11434"
 
     escalation:
       model: "qwen2.5-coder:14b"
-      endpoints:  # Can also load balance escalation
-        - "http://localhost:11434"
-        - "http://powerful-server:11434"
+      endpoint: null  # Uses base_url
 ```
 
 ### Production Setup (Distributed)
@@ -282,8 +273,7 @@ INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:114
 ✓ Generated code
 
 Generating unit tests...
-INFO:src.ollama_client:Generating with model 'codellama' at http://192.168.0.56:11434...
-(alternates!)
+INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:11434...
 ```
 
 ### Test Escalation
@@ -360,9 +350,6 @@ print(client._endpoint_counters)
 INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:11434...
 INFO:src.ollama_client:✓ Generated 1234 characters from http://localhost:11434
 
-INFO:src.ollama_client:Generating with model 'codellama' at http://192.168.0.56:11434...
-INFO:src.ollama_client:✓ Generated 5678 characters from http://192.168.0.56:11434
-
 INFO:src.ollama_client:Generating with model 'qwen2.5-coder:14b' at http://localhost:11434...
 INFO:src.ollama_client:✓ Generated 3456 characters from http://localhost:11434
 ```
@@ -378,33 +365,25 @@ INFO:src.ollama_client:✓ Generated 3456 characters from http://localhost:11434
 ollama pull qwen2.5-coder:14b
 ```
 
-### Issue: Can't connect to 192.168.0.56:11434
+### Issue: Can't connect to Ollama
 
 **Check Ollama running:**
 ```bash
-curl http://192.168.0.56:11434/api/tags
+curl http://localhost:11434/api/tags
 ```
 
-**Check firewall:**
+**Start Ollama if needed:**
 ```bash
-# On 192.168.0.56
-sudo ufw allow 11434/tcp
+ollama serve
 ```
 
-**Test from local machine:**
-```bash
-curl http://192.168.0.56:11434/api/tags
-```
-
-### Issue: Still seeing llama3 for code generation
+### Issue: Still seeing wrong model for code generation
 
 **Check config has:**
 ```yaml
 generator:
   model: "codellama"  # Not llama3!
-  endpoints:  # Plural!
-    - "http://localhost:11434"
-    - "http://192.168.0.56:11434"
+  endpoint: null  # Uses base_url
 ```
 
 **Reload config:**
