@@ -834,6 +834,7 @@ Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
             ("/list", "List all nodes in registry"),
             ("/tools", "List all available tools (LLM, code, and community tools)"),
             ("/mutate tool <tool_id> <instructions>", "Improve a tool based on instructions"),
+            ("/optimize tool <tool_id> [target]", "Optimize a tool for performance/quality/memory (iterative)"),
             ("/workflow <node_id>", "Display the complete workflow for a node"),
             ("/show <node_id>", "Show detailed information about a node"),
             ("/delete <node_id>", "Delete a node"),
@@ -4025,6 +4026,511 @@ Return ONLY the JSON, no other text."""
 
         return True
 
+    def handle_optimize_tool(self, args: str) -> bool:
+        """
+        Handle optimize tool command - iteratively optimize a tool for performance/quality.
+
+        Args:
+            args: String containing "<tool_id> [optimization_target]"
+                  optimization_target can be: performance, quality, memory, latency (default: performance)
+
+        Returns:
+            True if successful
+        """
+        # Parse arguments
+        parts = args.split(None, 1)
+
+        if len(parts) < 1:
+            console.print("[red]Error: Please provide a tool ID[/red]")
+            console.print("[dim]Usage: /optimize tool <tool_id> [target][/dim]")
+            console.print("[dim]Targets: performance (default), quality, memory, latency[/dim]")
+            console.print("[dim]Example: /optimize tool my_tool performance[/dim]")
+            return False
+
+        tool_id = parts[0]
+        optimization_target = parts[1] if len(parts) > 1 else "performance"
+
+        # Validate optimization target
+        valid_targets = ["performance", "quality", "memory", "latency", "all"]
+        if optimization_target not in valid_targets:
+            console.print(f"[red]Error: Invalid optimization target '{optimization_target}'[/red]")
+            console.print(f"[dim]Valid targets: {', '.join(valid_targets)}[/dim]")
+            return False
+
+        console.print(f"\n[bold cyan]Optimizing tool: {tool_id}[/bold cyan]")
+        console.print(f"[cyan]Target: {optimization_target}[/cyan]\n")
+
+        # Get the tool
+        tool = self.tools_manager.get_tool(tool_id)
+
+        if not tool:
+            console.print(f"[red]Error: Tool '{tool_id}' not found[/red]")
+            console.print("[dim]Use /tools to see available tools[/dim]")
+            return False
+
+        # Only optimize tools with implementations
+        if tool.tool_type not in [ToolType.FUNCTION, ToolType.EXECUTABLE]:
+            console.print(f"[yellow]Warning: Tool type '{tool.tool_type.value}' cannot be optimized[/yellow]")
+            console.print("[dim]Only FUNCTION and EXECUTABLE tools can be optimized[/dim]")
+            return False
+
+        # Load implementation
+        implementation_code = None
+        if hasattr(tool, 'implementation') and tool.implementation:
+            implementation_code = tool.implementation
+        elif "implementation_file" in tool.metadata:
+            impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
+            if impl_file.exists():
+                with open(impl_file, 'r', encoding='utf-8') as f:
+                    implementation_code = f.read()
+
+        if not implementation_code:
+            console.print("[red]Error: Tool has no implementation to optimize[/red]")
+            return False
+
+        # Display current tool info
+        console.print("[green]Current tool:[/green]")
+        console.print(f"  Name: {tool.name}")
+        console.print(f"  Type: {tool.tool_type.value}")
+        console.print(f"  Description: {tool.description}")
+        console.print(f"  Implementation: {len(implementation_code)} characters\n")
+
+        # Get the most powerful code model from config
+        powerful_model = self.config.get("llm.optimization_model", "qwen2.5-coder:14b")
+        console.print(f"[dim]Using optimization model: {powerful_model}[/dim]\n")
+
+        # Create a temporary test node for benchmarking
+        test_node_id = f"_opt_test_{tool_id}_{int(__import__('time').time())}"
+        test_node_path = self.runner.nodes_dir / test_node_id
+        test_node_path.mkdir(parents=True, exist_ok=True)
+
+        # Save current implementation as test node
+        test_code_path = test_node_path / "main.py"
+        with open(test_code_path, 'w', encoding='utf-8') as f:
+            f.write(implementation_code)
+
+        # Generate unit tests for the tool
+        console.print("[cyan]Generating unit tests...[/cyan]")
+
+        test_prompt = f"""Generate comprehensive unit tests for this Python code.
+
+Code:
+```python
+{implementation_code}
+```
+
+Tool Description: {tool.description}
+
+Requirements:
+- Generate pytest-compatible unit tests
+- Test normal cases, edge cases, and error handling
+- Include performance benchmarks where appropriate
+- Tests should be self-contained and runnable
+- Return ONLY the test code, no explanations
+
+Format as Python code with pytest."""
+
+        try:
+            test_code = self.client.generate(
+                model=powerful_model,
+                prompt=test_prompt,
+                temperature=0.2,
+                model_key="test_generator"
+            )
+
+            # Clean up test code
+            import re
+            # Extract code from markdown if present
+            code_match = re.search(r'```python\n(.*?)\n```', test_code, re.DOTALL)
+            if code_match:
+                test_code = code_match.group(1)
+
+            # Save tests
+            test_file_path = test_node_path / "test_main.py"
+            with open(test_file_path, 'w', encoding='utf-8') as f:
+                f.write(test_code)
+
+            console.print(f"[green]✓ Generated {len(test_code)} chars of tests[/green]\n")
+
+        except Exception as e:
+            console.print(f"[yellow]Warning: Could not generate tests: {e}[/yellow]")
+            test_code = None
+
+        # Get baseline metrics by running the current implementation
+        console.print("[cyan]Measuring baseline performance...[/cyan]")
+
+        baseline_metrics = None
+        try:
+            # Create a simple test input
+            test_input = {"input": "test"}
+            stdout, stderr, metrics = self.runner.run_node(
+                test_node_id,
+                test_input,
+                timeout_ms=10000
+            )
+
+            if metrics.get("exit_code") == 0:
+                baseline_metrics = metrics
+                console.print(f"[green]✓ Baseline metrics collected[/green]")
+                console.print(f"  Latency: {metrics.get('latency_ms', 0):.2f}ms")
+                console.print(f"  Memory: {metrics.get('memory_mb_peak', 0):.2f}MB")
+                console.print(f"  CPU: {metrics.get('cpu_percent', 0):.1f}%\n")
+            else:
+                console.print(f"[yellow]Warning: Baseline run failed, continuing without metrics[/yellow]\n")
+
+        except Exception as e:
+            console.print(f"[yellow]Warning: Could not measure baseline: {e}[/yellow]\n")
+
+        # Optimization loop
+        console.print(f"[bold cyan]Starting optimization loop (target: {optimization_target})[/bold cyan]\n")
+
+        max_iterations = 5
+        improvement_threshold = 0.05  # 5% improvement threshold
+        current_code = implementation_code
+        current_metrics = baseline_metrics
+        iteration_history = []
+
+        for iteration in range(1, max_iterations + 1):
+            console.print(f"[cyan]Iteration {iteration}/{max_iterations}[/cyan]")
+
+            # Build optimization-specific guidance
+            if optimization_target == "performance" or optimization_target == "latency":
+                target_guidance = """Focus on:
+- Algorithm efficiency (reduce time complexity)
+- Minimize redundant operations
+- Use efficient data structures
+- Optimize loops and iterations
+- Cache results where appropriate"""
+            elif optimization_target == "memory":
+                target_guidance = """Focus on:
+- Reduce memory allocations
+- Use generators instead of lists where possible
+- Clean up resources properly
+- Minimize data copying
+- Use memory-efficient data structures"""
+            elif optimization_target == "quality":
+                target_guidance = """Focus on:
+- Code readability and maintainability
+- Better error handling
+- Input validation
+- Documentation and type hints
+- Following best practices"""
+            else:  # all
+                target_guidance = """Focus on:
+- Overall performance improvements
+- Memory efficiency
+- Code quality and readability
+- Error handling
+- Best practices"""
+
+            # Add previous iteration context if available
+            previous_context = ""
+            if iteration_history:
+                last = iteration_history[-1]
+                previous_context = f"""
+
+Previous Iteration Results:
+- Latency: {last['metrics'].get('latency_ms', 0):.2f}ms
+- Memory: {last['metrics'].get('memory_mb_peak', 0):.2f}MB
+- Improvements made: {', '.join(last.get('improvements', ['none']))}"""
+
+            # Build optimization prompt
+            optimization_prompt = f"""You are an expert at optimizing Python code for {optimization_target}.
+
+Current Code:
+```python
+{current_code}
+```
+
+Tool Description: {tool.description}
+
+Optimization Target: {optimization_target}
+
+{target_guidance}
+
+{previous_context}
+
+Current Metrics (if available):
+{f"- Latency: {current_metrics.get('latency_ms', 0):.2f}ms" if current_metrics else "- No metrics available"}
+{f"- Memory: {current_metrics.get('memory_mb_peak', 0):.2f}MB" if current_metrics else ""}
+{f"- CPU: {current_metrics.get('cpu_percent', 0):.1f}%" if current_metrics else ""}
+
+Provide an optimized version of this code. Return ONLY a JSON object:
+
+{{
+  "code": "optimized Python code",
+  "improvements": ["improvement 1", "improvement 2"],
+  "expected_impact": "description of expected performance impact"
+}}
+
+Requirements:
+- Maintain the same functionality and interface
+- Code must be production-ready and well-tested
+- Keep or improve error handling
+- Preserve any important comments or documentation
+- Focus on measurable improvements
+
+Return ONLY the JSON, no other text."""
+
+            # Call LLM for optimization
+            with console.status(f"[cyan]Optimizing (iteration {iteration})...", spinner="dots"):
+                try:
+                    response = self.client.generate(
+                        model=powerful_model,
+                        prompt=optimization_prompt,
+                        temperature=0.3,
+                        model_key="optimizer"
+                    )
+
+                    # Parse response
+                    import re
+                    json_match = re.search(r'\{.*\}', response, re.DOTALL)
+                    if json_match:
+                        optimization_data = json.loads(json_match.group())
+                    else:
+                        console.print("[red]Failed to parse optimization response[/red]")
+                        break
+
+                except Exception as e:
+                    console.print(f"[red]Error during optimization: {e}[/red]")
+                    break
+
+            # Extract optimized code
+            optimized_code = optimization_data.get('code', '')
+            improvements = optimization_data.get('improvements', [])
+            expected_impact = optimization_data.get('expected_impact', '')
+
+            console.print(f"[green]✓ Generated optimized version[/green]")
+            console.print(f"[dim]Expected impact: {expected_impact}[/dim]")
+
+            # Save and test optimized version
+            with open(test_code_path, 'w', encoding='utf-8') as f:
+                f.write(optimized_code)
+
+            # Run tests if available
+            tests_passed = True
+            if test_code:
+                console.print("[dim]Running unit tests...[/dim]")
+                try:
+                    import subprocess
+                    result = subprocess.run(
+                        ["python", "-m", "pytest", str(test_file_path), "-v"],
+                        capture_output=True,
+                        text=True,
+                        timeout=30,
+                        cwd=str(test_node_path)
+                    )
+                    tests_passed = result.returncode == 0
+
+                    if tests_passed:
+                        console.print("[green]✓ All tests passed[/green]")
+                    else:
+                        console.print("[yellow]⚠ Some tests failed[/yellow]")
+                        console.print(f"[dim]{result.stdout[:200]}[/dim]")
+
+                except Exception as e:
+                    console.print(f"[yellow]Warning: Could not run tests: {e}[/yellow]")
+
+            # Measure new metrics
+            try:
+                stdout, stderr, new_metrics = self.runner.run_node(
+                    test_node_id,
+                    test_input,
+                    timeout_ms=10000
+                )
+
+                if new_metrics.get("exit_code") == 0:
+                    console.print(f"[green]✓ New metrics collected[/green]")
+                    console.print(f"  Latency: {new_metrics.get('latency_ms', 0):.2f}ms")
+                    console.print(f"  Memory: {new_metrics.get('memory_mb_peak', 0):.2f}MB")
+                    console.print(f"  CPU: {new_metrics.get('cpu_percent', 0):.1f}%")
+
+                    # Calculate improvement
+                    if current_metrics:
+                        if optimization_target == "latency" or optimization_target == "performance":
+                            old_val = current_metrics.get('latency_ms', 1)
+                            new_val = new_metrics.get('latency_ms', 1)
+                            improvement = (old_val - new_val) / old_val if old_val > 0 else 0
+                            console.print(f"  [cyan]Latency improvement: {improvement*100:.1f}%[/cyan]")
+                        elif optimization_target == "memory":
+                            old_val = current_metrics.get('memory_mb_peak', 1)
+                            new_val = new_metrics.get('memory_mb_peak', 1)
+                            improvement = (old_val - new_val) / old_val if old_val > 0 else 0
+                            console.print(f"  [cyan]Memory improvement: {improvement*100:.1f}%[/cyan]")
+                        else:
+                            # For quality or all, calculate composite improvement
+                            lat_improve = (current_metrics.get('latency_ms', 1) - new_metrics.get('latency_ms', 1)) / current_metrics.get('latency_ms', 1)
+                            mem_improve = (current_metrics.get('memory_mb_peak', 1) - new_metrics.get('memory_mb_peak', 1)) / current_metrics.get('memory_mb_peak', 1)
+                            improvement = (lat_improve + mem_improve) / 2
+                            console.print(f"  [cyan]Overall improvement: {improvement*100:.1f}%[/cyan]")
+
+                        # Store iteration history
+                        iteration_history.append({
+                            'iteration': iteration,
+                            'code': optimized_code,
+                            'metrics': new_metrics,
+                            'improvements': improvements,
+                            'improvement_pct': improvement,
+                            'tests_passed': tests_passed
+                        })
+
+                        # Check if improvement is below threshold
+                        if improvement < improvement_threshold:
+                            console.print(f"\n[yellow]Improvement below threshold ({improvement*100:.1f}% < {improvement_threshold*100:.0f}%)[/yellow]")
+                            console.print("[yellow]Stopping optimization loop[/yellow]\n")
+                            break
+
+                        # Update current for next iteration
+                        current_code = optimized_code
+                        current_metrics = new_metrics
+                    else:
+                        # No baseline to compare
+                        iteration_history.append({
+                            'iteration': iteration,
+                            'code': optimized_code,
+                            'metrics': new_metrics,
+                            'improvements': improvements,
+                            'tests_passed': tests_passed
+                        })
+                        current_code = optimized_code
+                        current_metrics = new_metrics
+                else:
+                    console.print("[red]✗ Optimized code failed to execute[/red]")
+                    console.print(f"[dim]{stderr[:200]}[/dim]")
+
+            except Exception as e:
+                console.print(f"[red]Error measuring performance: {e}[/red]")
+
+            console.print()  # Blank line between iterations
+
+        # Display optimization summary
+        console.print("\n[bold green]Optimization Complete![/bold green]\n")
+
+        if iteration_history:
+            # Use the best iteration
+            best_iteration = max(iteration_history, key=lambda x: x.get('improvement_pct', 0))
+
+            # Display comparison table
+            comparison_table = Table(title="Optimization Results", box=box.ROUNDED)
+            comparison_table.add_column("Metric", style="cyan")
+            comparison_table.add_column("Original", style="yellow")
+            comparison_table.add_column("Optimized", style="green")
+            comparison_table.add_column("Improvement", style="magenta")
+
+            if baseline_metrics and best_iteration.get('metrics'):
+                orig_lat = baseline_metrics.get('latency_ms', 0)
+                opt_lat = best_iteration['metrics'].get('latency_ms', 0)
+                lat_improve = ((orig_lat - opt_lat) / orig_lat * 100) if orig_lat > 0 else 0
+                comparison_table.add_row(
+                    "Latency",
+                    f"{orig_lat:.2f}ms",
+                    f"{opt_lat:.2f}ms",
+                    f"{lat_improve:+.1f}%"
+                )
+
+                orig_mem = baseline_metrics.get('memory_mb_peak', 0)
+                opt_mem = best_iteration['metrics'].get('memory_mb_peak', 0)
+                mem_improve = ((orig_mem - opt_mem) / orig_mem * 100) if orig_mem > 0 else 0
+                comparison_table.add_row(
+                    "Memory",
+                    f"{orig_mem:.2f}MB",
+                    f"{opt_mem:.2f}MB",
+                    f"{mem_improve:+.1f}%"
+                )
+
+                comparison_table.add_row(
+                    "Code Size",
+                    f"{len(implementation_code)} chars",
+                    f"{len(best_iteration['code'])} chars",
+                    f"{((len(implementation_code) - len(best_iteration['code'])) / len(implementation_code) * 100):+.1f}%"
+                )
+
+            console.print(comparison_table)
+            console.print()
+
+            # Show improvements made
+            console.print("[cyan]Improvements Applied:[/cyan]")
+            for imp in best_iteration.get('improvements', []):
+                console.print(f"  • {imp}")
+            console.print()
+
+            # Display optimized code
+            console.print(Panel(
+                best_iteration['code'],
+                title="[bold green]Optimized Code[/bold green]",
+                box=box.ROUNDED
+            ))
+            console.print()
+
+            # Ask for confirmation
+            confirm = console.input("[bold yellow]Save optimized version? (yes/no): [/bold yellow]").strip().lower()
+
+            if confirm in ['yes', 'y']:
+                # Update tool with optimized code
+                tool.implementation = best_iteration['code']
+
+                # Save to file
+                if "implementation_file" in tool.metadata:
+                    impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
+                    with open(impl_file, 'w', encoding='utf-8') as f:
+                        f.write(best_iteration['code'])
+                    console.print(f"[green]✓ Saved to {impl_file}[/green]")
+                else:
+                    impl_filename = f"{tool_id}.py"
+                    impl_file = Path(self.tools_manager.tools_path) / impl_filename
+                    with open(impl_file, 'w', encoding='utf-8') as f:
+                        f.write(best_iteration['code'])
+                    tool.metadata["implementation_file"] = impl_filename
+                    console.print(f"[green]✓ Created {impl_file}[/green]")
+
+                # Update tool metadata with optimization info
+                tool.metadata["optimized"] = True
+                tool.metadata["optimization_target"] = optimization_target
+                tool.metadata["optimization_date"] = datetime.utcnow().isoformat() + "Z"
+                if baseline_metrics and best_iteration.get('metrics'):
+                    tool.metadata["optimization_improvement"] = {
+                        "latency_pct": lat_improve,
+                        "memory_pct": mem_improve
+                    }
+
+                # Save to registry
+                self.tools_manager.register_tool(tool)
+                console.print(f"[green]✓ Updated tool registry[/green]")
+
+                # Index in RAG if available
+                if self.rag:
+                    try:
+                        from src import ArtifactType
+                        self.rag.index_artifact(
+                            artifact_id=f"tool_{tool_id}_optimized",
+                            artifact_type=ArtifactType.FUNCTION,
+                            content=best_iteration['code'],
+                            metadata={
+                                "tool_id": tool_id,
+                                "description": tool.description,
+                                "optimized": True,
+                                "optimization_target": optimization_target
+                            }
+                        )
+                        console.print(f"[green]✓ Indexed in RAG memory[/green]")
+                    except Exception as e:
+                        console.print(f"[yellow]Warning: Could not index in RAG: {e}[/yellow]")
+
+                console.print(f"\n[bold green]✓ Tool '{tool_id}' successfully optimized![/bold green]\n")
+            else:
+                console.print("[yellow]Optimization discarded[/yellow]\n")
+        else:
+            console.print("[yellow]No successful optimizations produced[/yellow]\n")
+
+        # Cleanup test node
+        try:
+            import shutil
+            shutil.rmtree(test_node_path)
+        except Exception:
+            pass
+
+        return True
+
     def handle_workflow(self, node_id: str) -> bool:
         """Handle workflow command - display the complete workflow for a node."""
         if not node_id:
@@ -4255,6 +4761,10 @@ Return ONLY the JSON, no other text."""
                 elif cmd.startswith('mutate tool '):
                     args = cmd[12:].strip()
                     self.handle_mutate_tool(args)
+
+                elif cmd.startswith('optimize tool '):
+                    args = cmd[14:].strip()
+                    self.handle_optimize_tool(args)
 
                 else:
                     console.print(f"[red]Unknown command: /{cmd}[/red]")
