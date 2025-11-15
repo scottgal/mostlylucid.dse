@@ -13,7 +13,8 @@ max_output_length: "medium"
 
 # LLM configuration
 llm:
-  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+  tier: "quality.tier_1"  # Tiered system (preferred) - basic quality for summarization
+  role: "base"            # Legacy role system (fallback)
 
   system_prompt: |
     You are an expert at creating concise, accurate summaries that capture all essential information.

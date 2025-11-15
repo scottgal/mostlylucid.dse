@@ -14,12 +14,12 @@
     "parameters": {},
     "metadata": {
       "from_config": true,
-      "llm_model": "qwen2.5-coder:14b",
-      "llm_endpoint": "http://localhost:11434",
+      "llm_model": "codellama",
+      "llm_endpoint": null,
       "system_prompt": "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool() or try to orchestrate workflows.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}",
       "prompt_template": "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality\n\nSPECIAL NOTE FOR CONTENT GENERATION:\nIf the task involves generating text content (stories, articles, jokes, etc.):\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it\n- Example: content = \"Once upon a time...\" then print(json.dumps({{\"result\": content}}))",
-      "cost_tier": "high",
-      "speed_tier": "medium",
+      "cost_tier": "medium",
+      "speed_tier": "fast",
       "quality_tier": "excellent",
       "max_output_length": "very-long"
     },
@@ -28,10 +28,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122796Z"
+      "last_reset": "2025-11-15T22:31:05.528069Z"
     },
-    "created_at": "2025-11-15T21:06:03.122794Z",
-    "usage_count": 2
+    "created_at": "2025-11-15T22:31:05.528068Z",
+    "usage_count": 0
   },
   "code_reviewer": {
     "tool_id": "code_reviewer",
@@ -59,9 +59,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122815Z"
+      "last_reset": "2025-11-15T22:31:05.528092Z"
     },
-    "created_at": "2025-11-15T21:06:03.122813Z",
+    "created_at": "2025-11-15T22:31:05.528090Z",
     "usage_count": 0
   },
   "security_auditor": {
@@ -90,9 +90,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122821Z"
+      "last_reset": "2025-11-15T22:31:05.528099Z"
     },
-    "created_at": "2025-11-15T21:06:03.122819Z",
+    "created_at": "2025-11-15T22:31:05.528097Z",
     "usage_count": 0
   },
   "performance_optimizer": {
@@ -121,9 +121,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122827Z"
+      "last_reset": "2025-11-15T22:31:05.528105Z"
     },
-    "created_at": "2025-11-15T21:06:03.122825Z",
+    "created_at": "2025-11-15T22:31:05.528103Z",
     "usage_count": 0
   },
   "doc_generator": {
@@ -152,9 +152,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122832Z"
+      "last_reset": "2025-11-15T22:31:05.528112Z"
     },
-    "created_at": "2025-11-15T21:06:03.122830Z",
+    "created_at": "2025-11-15T22:31:05.528110Z",
     "usage_count": 0
   },
   "technical_writer": {
@@ -187,9 +187,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122838Z"
+      "last_reset": "2025-11-15T22:31:05.528119Z"
     },
-    "created_at": "2025-11-15T21:06:03.122836Z",
+    "created_at": "2025-11-15T22:31:05.528117Z",
     "usage_count": 0
   },
   "article_analyzer": {
@@ -222,9 +222,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122843Z"
+      "last_reset": "2025-11-15T22:31:05.528125Z"
     },
-    "created_at": "2025-11-15T21:06:03.122841Z",
+    "created_at": "2025-11-15T22:31:05.528124Z",
     "usage_count": 0
   },
   "seo_optimizer": {
@@ -256,9 +256,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122848Z"
+      "last_reset": "2025-11-15T22:31:05.528132Z"
     },
-    "created_at": "2025-11-15T21:06:03.122847Z",
+    "created_at": "2025-11-15T22:31:05.528130Z",
     "usage_count": 0
   },
   "code_explainer": {
@@ -290,9 +290,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122853Z"
+      "last_reset": "2025-11-15T22:31:05.528139Z"
     },
-    "created_at": "2025-11-15T21:06:03.122852Z",
+    "created_at": "2025-11-15T22:31:05.528137Z",
     "usage_count": 0
   },
   "outline_generator": {
@@ -324,9 +324,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122858Z"
+      "last_reset": "2025-11-15T22:31:05.528146Z"
     },
-    "created_at": "2025-11-15T21:06:03.122857Z",
+    "created_at": "2025-11-15T22:31:05.528144Z",
     "usage_count": 0
   },
   "proofreader": {
@@ -358,9 +358,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122864Z"
+      "last_reset": "2025-11-15T22:31:05.528153Z"
     },
-    "created_at": "2025-11-15T21:06:03.122862Z",
+    "created_at": "2025-11-15T22:31:05.528151Z",
     "usage_count": 0
   },
   "write_a_technical_story_and_tr": {
@@ -382,14 +382,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T00:29:22.121997+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122498Z"
+      "last_reset": "2025-11-15T22:31:05.527703Z"
     },
     "created_at": "2025-11-15T00:29:22.122018Z",
     "usage_count": 0
@@ -413,14 +414,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T00:33:43.019118+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122502Z"
+      "last_reset": "2025-11-15T22:31:05.527708Z"
     },
     "created_at": "2025-11-15T00:33:43.019137Z",
     "usage_count": 0
@@ -445,14 +447,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T00:45:30.312376+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122506Z"
+      "last_reset": "2025-11-15T22:31:05.527713Z"
     },
     "created_at": "2025-11-15T00:45:30.312391Z",
     "usage_count": 0
@@ -485,10 +488,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122870Z"
+      "last_reset": "2025-11-15T22:31:05.528160Z"
     },
-    "created_at": "2025-11-15T21:06:03.122868Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T22:31:05.528158Z",
+    "usage_count": 0
   },
   "mypy_type_checker": {
     "tool_id": "mypy_type_checker",
@@ -517,9 +520,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122876Z"
+      "last_reset": "2025-11-15T22:31:05.528168Z"
     },
-    "created_at": "2025-11-15T21:06:03.122874Z",
+    "created_at": "2025-11-15T22:31:05.528166Z",
     "usage_count": 0
   },
   "flake8_linter": {
@@ -550,10 +553,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122881Z"
+      "last_reset": "2025-11-15T22:31:05.528175Z"
     },
-    "created_at": "2025-11-15T21:06:03.122880Z",
-    "usage_count": 1
+    "created_at": "2025-11-15T22:31:05.528173Z",
+    "usage_count": 0
   },
   "black_formatter": {
     "tool_id": "black_formatter",
@@ -582,9 +585,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122888Z"
+      "last_reset": "2025-11-15T22:31:05.528181Z"
     },
-    "created_at": "2025-11-15T21:06:03.122886Z",
+    "created_at": "2025-11-15T22:31:05.528179Z",
     "usage_count": 0
   },
   "bandit_security": {
@@ -613,9 +616,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122893Z"
+      "last_reset": "2025-11-15T22:31:05.528187Z"
     },
-    "created_at": "2025-11-15T21:06:03.122891Z",
+    "created_at": "2025-11-15T22:31:05.528185Z",
     "usage_count": 0
   },
   "pytest_runner": {
@@ -645,9 +648,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122898Z"
+      "last_reset": "2025-11-15T22:31:05.528193Z"
     },
-    "created_at": "2025-11-15T21:06:03.122896Z",
+    "created_at": "2025-11-15T22:31:05.528191Z",
     "usage_count": 0
   },
   "pytest_coverage": {
@@ -678,9 +681,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122903Z"
+      "last_reset": "2025-11-15T22:31:05.528200Z"
     },
-    "created_at": "2025-11-15T21:06:03.122902Z",
+    "created_at": "2025-11-15T22:31:05.528198Z",
     "usage_count": 0
   },
   "radon_complexity": {
@@ -711,9 +714,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122908Z"
+      "last_reset": "2025-11-15T22:31:05.528206Z"
     },
-    "created_at": "2025-11-15T21:06:03.122907Z",
+    "created_at": "2025-11-15T22:31:05.528204Z",
     "usage_count": 0
   },
   "vulture_deadcode": {
@@ -741,9 +744,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122913Z"
+      "last_reset": "2025-11-15T22:31:05.528212Z"
     },
-    "created_at": "2025-11-15T21:06:03.122912Z",
+    "created_at": "2025-11-15T22:31:05.528211Z",
     "usage_count": 0
   },
   "pydocstyle_checker": {
@@ -771,9 +774,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122919Z"
+      "last_reset": "2025-11-15T22:31:05.528219Z"
     },
-    "created_at": "2025-11-15T21:06:03.122917Z",
+    "created_at": "2025-11-15T22:31:05.528217Z",
     "usage_count": 0
   },
   "isort_import_checker": {
@@ -803,9 +806,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122924Z"
+      "last_reset": "2025-11-15T22:31:05.528225Z"
     },
-    "created_at": "2025-11-15T21:06:03.122922Z",
+    "created_at": "2025-11-15T22:31:05.528223Z",
     "usage_count": 0
   },
   "quick_feedback": {
@@ -839,9 +842,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122803Z"
+      "last_reset": "2025-11-15T22:31:05.528077Z"
     },
-    "created_at": "2025-11-15T21:06:03.122801Z",
+    "created_at": "2025-11-15T22:31:05.528075Z",
     "usage_count": 0
   },
   "summarizer": {
@@ -873,9 +876,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122809Z"
+      "last_reset": "2025-11-15T22:31:05.528085Z"
     },
-    "created_at": "2025-11-15T21:06:03.122807Z",
+    "created_at": "2025-11-15T22:31:05.528083Z",
     "usage_count": 0
   },
   "nmt_translator": {
@@ -908,9 +911,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163247Z"
+      "last_reset": "2025-11-15T22:31:05.544203Z"
     },
-    "created_at": "2025-11-15T21:06:03.163237Z",
+    "created_at": "2025-11-15T22:31:05.544198Z",
     "usage_count": 0
   },
   "translation_quality_checker": {
@@ -942,9 +945,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163266Z"
+      "last_reset": "2025-11-15T22:31:05.544218Z"
     },
-    "created_at": "2025-11-15T21:06:03.163264Z",
+    "created_at": "2025-11-15T22:31:05.544216Z",
     "usage_count": 0
   },
   "add_100_and_200": {
@@ -967,14 +970,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T01:17:53.285092+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122572Z"
+      "last_reset": "2025-11-15T22:31:05.527793Z"
     },
     "created_at": "2025-11-15T01:17:53.285112Z",
     "usage_count": 0
@@ -1010,9 +1014,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163275Z"
+      "last_reset": "2025-11-15T22:31:05.544227Z"
     },
-    "created_at": "2025-11-15T21:06:03.163273Z",
+    "created_at": "2025-11-15T22:31:05.544225Z",
     "usage_count": 0
   },
   "write_me_code_to_do_a_fibonacc": {
@@ -1035,14 +1039,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T01:45:38.026091+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122580Z"
+      "last_reset": "2025-11-15T22:31:05.527802Z"
     },
     "created_at": "2025-11-15T01:45:38.026107Z",
     "usage_count": 0
@@ -1076,9 +1081,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163283Z"
+      "last_reset": "2025-11-15T22:31:05.544235Z"
     },
-    "created_at": "2025-11-15T21:06:03.163281Z",
+    "created_at": "2025-11-15T22:31:05.544233Z",
     "usage_count": 0
   },
   "add_10_and_20_1763173231": {
@@ -1102,14 +1107,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T02:21:46.594116+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122589Z"
+      "last_reset": "2025-11-15T22:31:05.527812Z"
     },
     "created_at": "2025-11-15T02:21:46.594132Z",
     "usage_count": 0
@@ -1134,14 +1140,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T02:30:39.242591+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122594Z"
+      "last_reset": "2025-11-15T22:31:05.527817Z"
     },
     "created_at": "2025-11-15T02:30:39.242608Z",
     "usage_count": 0
@@ -1166,14 +1173,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T03:01:26.867688+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122598Z"
+      "last_reset": "2025-11-15T22:31:05.527821Z"
     },
     "created_at": "2025-11-15T03:01:26.867706Z",
     "usage_count": 0
@@ -1197,14 +1205,15 @@
       "memory_mb_peak": 1.92,
       "created_at": "2025-11-15T03:43:47.333768+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122602Z"
+      "last_reset": "2025-11-15T22:31:05.527827Z"
     },
     "created_at": "2025-11-15T03:43:47.333782Z",
     "usage_count": 0
@@ -1229,14 +1238,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T03:10:01.000384+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122606Z"
+      "last_reset": "2025-11-15T22:31:05.527832Z"
     },
     "created_at": "2025-11-15T03:10:01.000404Z",
     "usage_count": 0
@@ -1261,14 +1271,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T03:20:30.324251+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122609Z"
+      "last_reset": "2025-11-15T22:31:05.527838Z"
     },
     "created_at": "2025-11-15T03:20:30.324266Z",
     "usage_count": 0
@@ -1293,14 +1304,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T03:27:58.780987+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122613Z"
+      "last_reset": "2025-11-15T22:31:05.527843Z"
     },
     "created_at": "2025-11-15T03:27:58.781005Z",
     "usage_count": 0
@@ -1325,14 +1337,15 @@
       "memory_mb_peak": 1.9,
       "created_at": "2025-11-15T03:37:23.056574+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122617Z"
+      "last_reset": "2025-11-15T22:31:05.527847Z"
     },
     "created_at": "2025-11-15T03:37:23.056616Z",
     "usage_count": 0
@@ -1366,9 +1379,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122779Z"
+      "last_reset": "2025-11-15T22:31:05.528050Z"
     },
-    "created_at": "2025-11-15T21:06:03.122777Z",
+    "created_at": "2025-11-15T22:31:05.528048Z",
     "usage_count": 0
   },
   "save_to_disk": {
@@ -1399,9 +1412,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163296Z"
+      "last_reset": "2025-11-15T22:31:05.544242Z"
     },
-    "created_at": "2025-11-15T21:06:03.163294Z",
+    "created_at": "2025-11-15T22:31:05.544240Z",
     "usage_count": 0
   },
   "load_from_disk": {
@@ -1431,9 +1444,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163303Z"
+      "last_reset": "2025-11-15T22:31:05.544249Z"
     },
-    "created_at": "2025-11-15T21:06:03.163302Z",
+    "created_at": "2025-11-15T22:31:05.544247Z",
     "usage_count": 0
   },
   "calculate_15_plus_25": {
@@ -1455,14 +1468,15 @@
       "memory_mb_peak": 1.64,
       "created_at": "2025-11-15T03:59:07.086267+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122635Z"
+      "last_reset": "2025-11-15T22:31:05.527867Z"
     },
     "created_at": "2025-11-15T03:59:07.086285Z",
     "usage_count": 0
@@ -1486,14 +1500,15 @@
       "memory_mb_peak": 1.62,
       "created_at": "2025-11-15T04:08:37.271268+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122639Z"
+      "last_reset": "2025-11-15T22:31:05.527871Z"
     },
     "created_at": "2025-11-15T04:08:37.271301Z",
     "usage_count": 0
@@ -1517,14 +1532,15 @@
       "memory_mb_peak": 1.63,
       "created_at": "2025-11-15T04:16:26.611391+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122643Z"
+      "last_reset": "2025-11-15T22:31:05.527876Z"
     },
     "created_at": "2025-11-15T04:16:26.611410Z",
     "usage_count": 0
@@ -1556,9 +1572,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163311Z"
+      "last_reset": "2025-11-15T22:31:05.544256Z"
     },
-    "created_at": "2025-11-15T21:06:03.163309Z",
+    "created_at": "2025-11-15T22:31:05.544254Z",
     "usage_count": 0
   },
   "fast_content_writer": {
@@ -1591,7 +1607,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122651Z"
+      "last_reset": "2025-11-15T22:31:05.527887Z"
     },
     "created_at": "2025-11-15T04:29:01.140398Z",
     "usage_count": 5
@@ -1616,14 +1632,15 @@
       "memory_mb_peak": 1.91,
       "created_at": "2025-11-15T04:33:08.225914+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122655Z"
+      "last_reset": "2025-11-15T22:31:05.527891Z"
     },
     "created_at": "2025-11-15T04:33:08.225941Z",
     "usage_count": 0
@@ -1647,14 +1664,15 @@
       "memory_mb_peak": 1.88,
       "created_at": "2025-11-15T04:37:52.223348+00:00",
       "success_count": 1,
-      "total_runs": 1
+      "total_runs": 1,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122659Z"
+      "last_reset": "2025-11-15T22:31:05.527896Z"
     },
     "created_at": "2025-11-15T04:37:52.223369Z",
     "usage_count": 0
@@ -1681,14 +1699,15 @@
       "created_at": "2025-11-15T04:47:11.727841+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Generates a joke based on user input (topic and optional setup)"
+      "full_title": "Generates a joke based on user input (topic and optional setup)",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122663Z"
+      "last_reset": "2025-11-15T22:31:05.527901Z"
     },
     "created_at": "2025-11-15T04:47:11.727855Z",
     "usage_count": 0
@@ -1714,14 +1733,15 @@
       "created_at": "2025-11-15T04:51:25.425866+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Generates a joke based on user input topic and tone."
+      "full_title": "Generates a joke based on user input topic and tone.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122667Z"
+      "last_reset": "2025-11-15T22:31:05.527906Z"
     },
     "created_at": "2025-11-15T04:51:25.425885Z",
     "usage_count": 0
@@ -1747,14 +1767,15 @@
       "created_at": "2025-11-15T04:56:34.138293+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Generates a joke based on user input."
+      "full_title": "Generates a joke based on user input.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122671Z"
+      "last_reset": "2025-11-15T22:31:05.527911Z"
     },
     "created_at": "2025-11-15T04:56:34.138310Z",
     "usage_count": 0
@@ -1788,9 +1809,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122788Z"
+      "last_reset": "2025-11-15T22:31:05.528061Z"
     },
-    "created_at": "2025-11-15T21:06:03.122786Z",
+    "created_at": "2025-11-15T22:31:05.528060Z",
     "usage_count": 0
   },
   "add_5_and_3_1763184838": {
@@ -1813,14 +1834,15 @@
       "created_at": "2025-11-15T05:34:25.206282+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "add 5 and 3"
+      "full_title": "add 5 and 3",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122680Z"
+      "last_reset": "2025-11-15T22:31:05.527920Z"
     },
     "created_at": "2025-11-15T05:34:25.206297Z",
     "usage_count": 0
@@ -1846,14 +1868,15 @@
       "created_at": "2025-11-15T05:39:37.051514+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Multiply 6 by 7"
+      "full_title": "Multiply 6 by 7",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122684Z"
+      "last_reset": "2025-11-15T22:31:05.527925Z"
     },
     "created_at": "2025-11-15T05:39:37.051531Z",
     "usage_count": 0
@@ -1880,14 +1903,15 @@
       "created_at": "2025-11-15T05:43:05.313568+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code for generating a poem based on user input using a hybrid approach combining natural language processing (NLP) and machine learning (ML) techniques."
+      "full_title": "Python code for generating a poem based on user input using a hybrid approach combining natural language processing (NLP) and machine learning (ML) techniques.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122689Z"
+      "last_reset": "2025-11-15T22:31:05.527930Z"
     },
     "created_at": "2025-11-15T05:43:05.313587Z",
     "usage_count": 0
@@ -1913,14 +1937,15 @@
       "created_at": "2025-11-15T05:48:46.152613+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Calculates the sum of two integers."
+      "full_title": "Calculates the sum of two integers.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122693Z"
+      "last_reset": "2025-11-15T22:31:05.527935Z"
     },
     "created_at": "2025-11-15T05:48:46.152626Z",
     "usage_count": 0
@@ -1946,14 +1971,15 @@
       "created_at": "2025-11-15T06:12:04.938106+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Calculates 1+1"
+      "full_title": "Calculates 1+1",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122697Z"
+      "last_reset": "2025-11-15T22:31:05.527940Z"
     },
     "created_at": "2025-11-15T06:12:04.938129Z",
     "usage_count": 0
@@ -1980,14 +2006,15 @@
       "created_at": "2025-11-15T06:14:46.234003+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Calculates 5 + 5 and prints the result as JSON."
+      "full_title": "Calculates 5 + 5 and prints the result as JSON.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122701Z"
+      "last_reset": "2025-11-15T22:31:05.527945Z"
     },
     "created_at": "2025-11-15T06:14:46.234019Z",
     "usage_count": 0
@@ -2012,14 +2039,15 @@
       "created_at": "2025-11-15T06:22:10.129240+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code that generates a piece of content using the provided workflow composition and tools."
+      "full_title": "Python code that generates a piece of content using the provided workflow composition and tools.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122705Z"
+      "last_reset": "2025-11-15T22:31:05.527950Z"
     },
     "created_at": "2025-11-15T06:22:10.129256Z",
     "usage_count": 0
@@ -2045,14 +2073,15 @@
       "created_at": "2025-11-15T06:24:41.879927+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code for generating jokes based on user-provided topics using LLM tools."
+      "full_title": "Python code for generating jokes based on user-provided topics using LLM tools.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122709Z"
+      "last_reset": "2025-11-15T22:31:05.527955Z"
     },
     "created_at": "2025-11-15T06:24:41.879945Z",
     "usage_count": 0
@@ -2078,14 +2107,15 @@
       "created_at": "2025-11-15T12:52:01.973335+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code to generate a joke about programming using the content generation LLM tool."
+      "full_title": "Python code to generate a joke about programming using the content generation LLM tool.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122713Z"
+      "last_reset": "2025-11-15T22:31:05.527960Z"
     },
     "created_at": "2025-11-15T12:52:01.973353Z",
     "usage_count": 0
@@ -2112,14 +2142,15 @@
       "created_at": "2025-11-15T14:19:42.965735+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code for generating a joke in French based on an English input."
+      "full_title": "Python code for generating a joke in French based on an English input.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122717Z"
+      "last_reset": "2025-11-15T22:31:05.527965Z"
     },
     "created_at": "2025-11-15T14:19:42.965761Z",
     "usage_count": 0
@@ -2146,14 +2177,15 @@
       "created_at": "2025-11-15T17:49:29.207589+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Calculates the product of 6 and 7 and prints the result as JSON."
+      "full_title": "Calculates the product of 6 and 7 and prints the result as JSON.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122721Z"
+      "last_reset": "2025-11-15T22:31:05.527970Z"
     },
     "created_at": "2025-11-15T17:49:29.207608Z",
     "usage_count": 0
@@ -2307,14 +2339,15 @@
       "speed_tier": "fast",
       "quality_tier": "excellent",
       "reliability": "high",
-      "workflow_compatible": true
+      "workflow_compatible": true,
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122726Z"
+      "last_reset": "2025-11-15T22:31:05.527975Z"
     },
     "created_at": "2025-11-15T18:53:13.571594+00:00",
     "usage_count": 0
@@ -2339,14 +2372,15 @@
       "created_at": "2025-11-15T19:00:00.330949+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Accept input from user"
+      "full_title": "Accept input from user",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122730Z"
+      "last_reset": "2025-11-15T22:31:05.527980Z"
     },
     "created_at": "2025-11-15T19:00:00.330968Z",
     "usage_count": 0
@@ -2371,14 +2405,15 @@
       "created_at": "2025-11-15T19:05:48.796106+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Save input to database"
+      "full_title": "Save input to database",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122734Z"
+      "last_reset": "2025-11-15T22:31:05.527986Z"
     },
     "created_at": "2025-11-15T19:05:48.796125Z",
     "usage_count": 0
@@ -2416,9 +2451,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.163319Z"
+      "last_reset": "2025-11-15T22:31:05.544264Z"
     },
-    "created_at": "2025-11-15T21:06:03.163318Z",
+    "created_at": "2025-11-15T22:31:05.544263Z",
     "usage_count": 0
   },
   "review_this_code_usr_bin_en": {
@@ -2442,14 +2477,15 @@
       "created_at": "2025-11-15T19:50:03.317107+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python script to review and validate shebang lines for Python interpreters."
+      "full_title": "Python script to review and validate shebang lines for Python interpreters.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122743Z"
+      "last_reset": "2025-11-15T22:31:05.527996Z"
     },
     "created_at": "2025-11-15T19:50:03.317127Z",
     "usage_count": 0
@@ -2475,14 +2511,15 @@
       "created_at": "2025-11-15T19:59:19.151802+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Installs Python packages based on JSON input and reports installation status."
+      "full_title": "Installs Python packages based on JSON input and reports installation status.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:03.122747Z"
+      "last_reset": "2025-11-15T22:31:05.528001Z"
     },
     "created_at": "2025-11-15T19:59:19.151824Z",
     "usage_count": 0
@@ -2533,9 +2570,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:06:09.891919Z"
+      "last_reset": "2025-11-15T22:31:13.291728Z"
     },
-    "created_at": "2025-11-15T21:06:09.891909Z",
+    "created_at": "2025-11-15T22:31:13.291722Z",
     "usage_count": 0
   },
   "write_a_poem_1763241023": {
@@ -2558,14 +2595,15 @@
       "created_at": "2025-11-15T21:13:03.025254+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Write a poem"
+      "full_title": "Write a poem",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:13:03.025277Z"
+      "last_reset": "2025-11-15T22:31:05.528011Z"
     },
     "created_at": "2025-11-15T21:13:03.025275Z",
     "usage_count": 0
@@ -2591,16 +2629,52 @@
       "created_at": "2025-11-15T21:16:36.803438+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Translates an English poem to French while preserving meaning and tone."
+      "full_title": "Translates an English poem to French while preserving meaning and tone.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T21:16:36.803468Z"
+      "last_reset": "2025-11-15T22:31:05.528015Z"
     },
     "created_at": "2025-11-15T21:16:36.803465Z",
+    "usage_count": 0
+  },
+  "add_1_5": {
+    "tool_id": "add_1_5",
+    "name": "Adds two integers or generates a joke about cats",
+    "tool_type": "workflow",
+    "description": "add 1 + 5",
+    "tags": [
+      "addition",
+      "arithmetic",
+      "joke",
+      "content_generation",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "add_1_5",
+      "quality_score": 1.1,
+      "latency_ms": 1071,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-15T22:28:13.519027+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Adds two integers or generates a joke about cats",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-15T22:31:05.528020Z"
+    },
+    "created_at": "2025-11-15T22:28:13.519050Z",
     "usage_count": 0
   }
 }

@@ -255,6 +255,13 @@ class ToolsManager:
         if config_manager:
             self._load_tools_from_config()
 
+        # Load tools from YAML files in tools/ directory
+        self._load_tools_from_yaml_files()
+
+        # Load tools from RAG memory
+        if rag_memory:
+            self._load_tools_from_rag()
+
         # Index tools in RAG if available
         if rag_memory:
             self._index_tools_in_rag()
@@ -279,6 +286,11 @@ class ToolsManager:
                             implementation = f.read()
 
                 tool = Tool.from_dict(tool_data, implementation)
+
+                # Mark as loaded from index if not already marked from other source
+                if "from_config" not in tool.metadata and "from_yaml" not in tool.metadata and "from_rag" not in tool.metadata:
+                    tool.metadata["from_index"] = True
+
                 self.tools[tool_id] = tool
 
             logger.info(f"✓ Loaded {len(self.tools)} tools")
@@ -296,6 +308,174 @@ class ToolsManager:
 
         except Exception as e:
             logger.error(f"Error saving tools index: {e}")
+
+    def _load_tools_from_yaml_files(self):
+        """Load tools from YAML files in the tools/ directory."""
+        import yaml
+
+        # Scan for YAML files in tools subdirectories
+        yaml_files = list(self.tools_path.glob("**/*.yaml"))
+
+        if not yaml_files:
+            logger.debug("No YAML tool files found in tools/ directory")
+            return
+
+        for yaml_file in yaml_files:
+            try:
+                with open(yaml_file, 'r', encoding='utf-8') as f:
+                    tool_def = yaml.safe_load(f)
+
+                # Generate tool_id from filename (without extension)
+                tool_id = yaml_file.stem
+
+                # Skip if already loaded
+                if tool_id in self.tools:
+                    logger.debug(f"Tool {tool_id} already loaded, skipping YAML file")
+                    continue
+
+                # Parse tool type
+                tool_type_str = tool_def.get("type", "custom")
+                try:
+                    tool_type = ToolType(tool_type_str)
+                except ValueError:
+                    tool_type = ToolType.CUSTOM
+
+                # Handle LLM tools
+                if tool_type == ToolType.LLM:
+                    llm_config = tool_def.get("llm", {})
+
+                    metadata = {
+                        "from_yaml": True,
+                        "yaml_file": str(yaml_file.relative_to(self.tools_path)),
+                        "llm_tier": llm_config.get("tier"),
+                        "llm_role": llm_config.get("role"),
+                        "system_prompt": llm_config.get("system_prompt"),
+                        "prompt_template": llm_config.get("prompt_template"),
+                        "cost_tier": tool_def.get("cost_tier", "medium"),
+                        "speed_tier": tool_def.get("speed_tier", "medium"),
+                        "quality_tier": tool_def.get("quality_tier", "good"),
+                        "max_output_length": tool_def.get("max_output_length", "medium")
+                    }
+
+                    tool = Tool(
+                        tool_id=tool_id,
+                        name=tool_def.get("name", tool_id),
+                        tool_type=tool_type,
+                        description=tool_def.get("description", ""),
+                        tags=tool_def.get("tags", []),
+                        implementation=llm_config,
+                        metadata=metadata
+                    )
+                    self.tools[tool_id] = tool
+                    logger.info(f"✓ Loaded LLM tool from YAML: {tool_id}")
+
+                # Handle Executable tools
+                elif tool_type == ToolType.EXECUTABLE:
+                    executable_config = tool_def.get("executable", {})
+
+                    tool = Tool(
+                        tool_id=tool_id,
+                        name=tool_def.get("name", tool_id),
+                        tool_type=tool_type,
+                        description=tool_def.get("description", ""),
+                        tags=tool_def.get("tags", []),
+                        implementation=executable_config,
+                        metadata={
+                            "from_yaml": True,
+                            "yaml_file": str(yaml_file.relative_to(self.tools_path)),
+                            "command": executable_config.get("command"),
+                            "args": executable_config.get("args", []),
+                            "input_schema": tool_def.get("input_schema"),
+                            "output_schema": tool_def.get("output_schema"),
+                            "cost_tier": tool_def.get("cost_tier", "free"),
+                            "speed_tier": tool_def.get("speed_tier", "medium"),
+                            "quality_tier": tool_def.get("quality_tier", "good")
+                        }
+                    )
+                    self.tools[tool_id] = tool
+                    logger.info(f"✓ Loaded executable tool from YAML: {tool_id}")
+
+                # Handle other tool types
+                else:
+                    tool = Tool(
+                        tool_id=tool_id,
+                        name=tool_def.get("name", tool_id),
+                        tool_type=tool_type,
+                        description=tool_def.get("description", ""),
+                        tags=tool_def.get("tags", []),
+                        implementation=tool_def,
+                        metadata={
+                            "from_yaml": True,
+                            "yaml_file": str(yaml_file.relative_to(self.tools_path))
+                        }
+                    )
+                    self.tools[tool_id] = tool
+                    logger.info(f"✓ Loaded {tool_type.value} tool from YAML: {tool_id}")
+
+            except Exception as e:
+                logger.error(f"Error loading tool from {yaml_file}: {e}")
+
+        logger.info(f"✓ Loaded {len(yaml_files)} tool(s) from YAML files")
+
+    def _load_tools_from_rag(self):
+        """Load tools stored in RAG memory."""
+        if not self.rag_memory:
+            return
+
+        try:
+            from .rag_memory import ArtifactType
+
+            # Search for all tools in RAG (artifacts with is_tool=True metadata)
+            # We'll query for PATTERN type artifacts that have the "tool" tag
+            all_patterns = self.rag_memory.find_by_tags(["tool"])
+
+            for artifact in all_patterns:
+                # Check if this is actually a tool
+                if not artifact.metadata.get("is_tool"):
+                    continue
+
+                tool_id = artifact.metadata.get("tool_id")
+                if not tool_id:
+                    continue
+
+                # Skip if already loaded from index.json, config, or YAML
+                if tool_id in self.tools:
+                    logger.debug(f"Tool {tool_id} already loaded, skipping RAG version")
+                    continue
+
+                # Parse tool type from metadata
+                tool_type_str = artifact.metadata.get("tool_type", "custom")
+                try:
+                    tool_type = ToolType(tool_type_str)
+                except ValueError:
+                    tool_type = ToolType.CUSTOM
+
+                # Reconstruct tool from RAG artifact
+                # The content field contains the full tool description
+                tool = Tool(
+                    tool_id=tool_id,
+                    name=artifact.name,
+                    tool_type=tool_type,
+                    description=artifact.description,
+                    tags=[tag for tag in artifact.tags if tag not in ["tool", tool_type_str]],
+                    implementation=None,  # RAG doesn't store implementation
+                    metadata={
+                        "from_rag": True,
+                        "quality_score": artifact.quality_score,
+                        "usage_count": artifact.usage_count
+                    }
+                )
+
+                # Restore usage count and quality from RAG
+                tool.usage_count = artifact.usage_count
+
+                self.tools[tool_id] = tool
+                logger.info(f"✓ Loaded tool from RAG: {tool_id} (quality: {artifact.quality_score:.2f})")
+
+            logger.info(f"✓ Checked RAG memory for tools")
+
+        except Exception as e:
+            logger.error(f"Error loading tools from RAG: {e}")
 
     def _load_tools_from_config(self):
         """Load tools defined in configuration."""

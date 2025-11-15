@@ -13,7 +13,8 @@ max_output_length: "short"
 
 # LLM configuration
 llm:
-  role: "fast"  # References fast model (claude-haiku, gpt-4o-mini, tinyllama)
+  tier: "validation.tier_1"  # Tiered system (preferred) - very fast validation
+  role: "fast"               # Legacy role system (fallback)
 
   system_prompt: |
     You are a fast proofreader. Check for errors quickly and provide concise feedback.

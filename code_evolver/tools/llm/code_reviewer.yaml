@@ -13,7 +13,8 @@ max_output_length: "long"
 
 # LLM configuration
 llm:
-  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+  tier: "quality.tier_2"  # Tiered system (preferred) - comprehensive quality review
+  role: "base"            # Legacy role system (fallback)
 
   system_prompt: |
     You are an expert code reviewer with deep knowledge of software engineering best practices, design patterns, and common pitfalls.

@@ -174,11 +174,14 @@ class OllamaClient:
         # Model-specific timeouts (overrides tier)
         MODEL_TIMEOUTS = {
             "tinyllama": 30,
+            "phi3:mini": 60,
             "gemma2:2b": 45,
             "gemma3:4b": 60,
             "llama3": 120,
-            "qwen2.5-coder:14b": 240,
-            "codellama": 180,
+            "codellama": 120,              # Fast general purpose coding (2 minutes)
+            "qwen2.5-coder:7b": 180,       # Medium coding model (3 minutes)
+            "qwen2.5-coder:14b": 600,      # LARGE model - LONG timeout (10 minutes!)
+            "deepseek-coder:33b": 900,     # VERY LARGE model - VERY LONG timeout (15 minutes!)
             "mistral-nemo": 60,
             "nemotron-mini": 60,
         }

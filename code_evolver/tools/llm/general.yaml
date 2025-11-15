@@ -13,7 +13,9 @@ max_output_length: "very-long"
 
 # LLM configuration
 llm:
-  role: "base"  # References base model from config (e.g., claude-sonnet, gpt-4o, codellama)
+  # Can use either tier-based or role-based (for backward compatibility)
+  tier: "coding.tier_2"  # Tiered system (preferred)
+  role: "base"           # Legacy role system (fallback)
 
   system_prompt: |
     You are an expert software engineer. Write clean, efficient, well-documented code following best practices.

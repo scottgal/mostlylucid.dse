@@ -264,13 +264,13 @@ tools:
     type: "llm"
     description: "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms."
     # Performance/Cost characteristics for planner decision-making
-    cost_tier: "high"          # low/medium/high/very-high (14B model is costly)
-    speed_tier: "medium"       # very-fast/fast/medium/slow
+    cost_tier: "medium"        # low/medium/high/very-high (codellama is efficient)
+    speed_tier: "fast"         # very-fast/fast/medium/slow
     quality_tier: "excellent"  # basic/good/high/excellent
-    max_output_length: "very-long" # short/medium/long/very-long (32K context)
+    max_output_length: "very-long" # short/medium/long/very-long (16K context)
     llm:
-      model: "qwen2.5-coder:14b"
-      endpoint: "http://localhost:11434"  # Only available on localhost, not remote
+      model: "codellama"       # General purpose coding - ONLY use qwen2.5-coder:14b for escalation!
+      endpoint: null           # Uses base_url
       system_prompt: "You are an expert software engineer proficient in python and paradigms. You write clean, efficient, well factored and, well-documented code following best practices. Your code is production-ready with proper error handling and testing considerations.\n\nIMPORTANT: For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function. DO NOT use call_tool() or try to orchestrate workflows.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
       prompt_template: "Generate code for the following task:\n\n{task}\n\nWorkflow Context:\n- Priority: {priority} (determines speed vs quality tradeoff)\n- Quality level: {quality_level} (draft/good/production/perfect)\n- Speed: {speed_requirement} (fast/balanced/thorough)\n\nRequirements:\n- Match the quality level specified above\n- Adjust detail/documentation based on priority\n- Proper error handling (depth based on quality level)\n- Follow language best practices\n- Include type hints/annotations for production+ quality\n\nSPECIAL NOTE FOR CONTENT GENERATION:\nIf the task involves generating text content (stories, articles, jokes, etc.):\n- Write a simple main() function that DIRECTLY creates the content\n- DO NOT use call_tool() - that function doesn't exist in the runtime\n- Just create the content as a string variable and output it\n- Example: content = \"Once upon a time...\" then print(json.dumps({{\"result\": content}}))"
     tags: ["general", "fallback", "code-generation", "any-task", "complex"]

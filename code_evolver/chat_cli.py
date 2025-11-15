@@ -4,6 +4,7 @@ Interactive CLI chat interface for Code Evolver.
 Provides a conversational interface for code generation and evolution.
 """
 import sys
+import signal
 import json
 import logging
 from pathlib import Path
@@ -814,20 +815,30 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
         """Print welcome message."""
         welcome = """
 [bold cyan]Code Evolver - Interactive CLI[/bold cyan]
-[dim]AI-powered code generation and evolution using Ollama[/dim]
+[dim]AI-powered code generation and evolution[/dim]
 
-Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
+Just type what you want to create - it will generate and run automatically!
+Type [bold]/help[/bold] for special commands, or [bold]/exit[/bold] to quit.
+
+[dim]Examples:[/dim]
+  write a haiku about coding
+  implement binary search
+  /list                    [dim](special command)[/dim]
         """
         console.print(Panel(welcome, box=box.ROUNDED))
 
     def print_help(self):
         """Print help message."""
-        table = Table(title="Available Commands (all commands must start with /)", box=box.ROUNDED)
+        console.print("\n[bold cyan]Usage:[/bold cyan]")
+        console.print("  [bold]Just type what you want![/bold] - Automatically generates and runs code")
+        console.print("  [dim]Example: write a joke about AI[/dim]\n")
+
+        table = Table(title="Special Commands (prefix with /)", box=box.ROUNDED)
         table.add_column("Command", style="cyan", no_wrap=True)
         table.add_column("Description")
 
         commands = [
-            ("/generate <description>", "Generate a new node from natural language description"),
+            ("/generate <description>", "Explicitly generate (same as typing without /)"),
             ("/run <node_id> [input]", "Run an existing node with optional input"),
             ("/test <node_id>", "Run unit tests for a node"),
             ("/evaluate <node_id>", "Evaluate a node's performance"),
@@ -1384,8 +1395,11 @@ The code generator will follow this specification EXACTLY, so include ALL critic
             )
 
         self.display.complete_stage("Thinking", "Specification complete")
-        if self.config.get("chat.show_thinking", False):
-            console.print(Panel(specification, title="[yellow]Detailed Specification[/yellow]", box=box.ROUNDED))
+
+        # Always show the specification to the user
+        console.print(f"\n[bold cyan]📋 Technical Specification ({len(specification)} chars):[/bold cyan]")
+        console.print(Panel(specification, title="Specification from Overseer", border_style="cyan", box=box.ROUNDED))
+        console.print()
 
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
 
@@ -1627,8 +1641,33 @@ You MUST respond with ONLY a JSON object in this exact format:
   "tags": ["tag1", "tag2"]
 }}
 
-MANDATORY CODE STRUCTURE:
+{"CRITICAL TDD MODE INSTRUCTIONS:" if interface_tests else "MANDATORY CODE STRUCTURE:"}
+
+{"""CRITICAL: You are in TEST-DRIVEN DEVELOPMENT mode.
+The tests above DEFINE THE INTERFACE - your code MUST implement EXACTLY those functions.
+
+Look at the import statement in the tests:
+- If tests do: `from main import binary_search` → you MUST create `def binary_search(...)`
+- If tests do: `from main import add` → you MUST create `def add(...)`
+- If tests call specific functions, you MUST implement those exact functions with matching signatures
+
+DO NOT create a generic main() function - implement the SPECIFIC functions the tests expect!
+
+Example structure (if tests expect binary_search):
 ```python
+def binary_search(arr, target):
+    # Implementation here
+    ...
+    return result
+
+# Optional main for testing:
+if __name__ == "__main__":
+    import json
+    import sys
+    input_data = json.load(sys.stdin)
+    result = binary_search(input_data["arr"], input_data["target"])
+    print(json.dumps({{"result": result}}))
+```""" if interface_tests else """```python
 import json
 import sys
 
@@ -1651,7 +1690,7 @@ if __name__ == "__main__":
 ```
 
 IMPORTANT: DO NOT use sys.path.insert() - the runtime environment already has the correct path.
-```
+```"""}
 
 Code requirements:
 - MUST use json.load(sys.stdin) to read input - NO sys.argv or command-line arguments!
@@ -3921,12 +3960,26 @@ Return ONLY the JSON object, nothing else."""
             table.add_column("Tool ID", style="cyan", no_wrap=True)
             table.add_column("Name", style="green")
             table.add_column("Description")
+            table.add_column("Source", style="yellow", no_wrap=True)
             table.add_column("Model/Tags", style="dim")
 
             for tool in tools:
                 tool_id = tool.tool_id
                 name = getattr(tool, 'name', tool_id)
                 description = tool.description[:60] + "..." if len(tool.description) > 60 else tool.description
+
+                # Determine source
+                metadata = tool.metadata or {}
+                if metadata.get("from_yaml"):
+                    source = "YAML"
+                elif metadata.get("from_config"):
+                    source = "config"
+                elif metadata.get("from_rag"):
+                    source = "RAG"
+                elif metadata.get("from_index"):
+                    source = "index"
+                else:
+                    source = "unknown"
 
                 # Get model or tags
                 if tool_type == "llm":
@@ -3940,7 +3993,7 @@ Return ONLY the JSON object, nothing else."""
                 else:
                     model_info = ", ".join(tool.tags[:2]) if tool.tags else "code"
 
-                table.add_row(tool_id, name, description, model_info)
+                table.add_row(tool_id, name, description, source, model_info)
 
             console.print(table)
             console.print()  # Blank line between tables
@@ -4815,6 +4868,13 @@ Return ONLY the JSON, no other text."""
 
     def run(self):
         """Run the interactive CLI."""
+        # Set up signal handler for Ctrl-C (immediate exit)
+        def signal_handler(sig, frame):
+            console.print("\n[yellow]Interrupted! Exiting...[/yellow]")
+            sys.exit(0)
+
+        signal.signal(signal.SIGINT, signal_handler)
+
         self.print_welcome()
 
         # Check status first
@@ -4833,10 +4893,10 @@ Return ONLY the JSON, no other text."""
 
                 self.history.append(user_input)
 
-                # All commands must start with '/'
+                # Check if this is a special command (starts with '/')
                 if not user_input.startswith('/'):
-                    console.print("[red]Error: All commands must start with '/'[/red]")
-                    console.print("[dim]Type /help to see available commands[/dim]")
+                    # Default behavior: generate and run the request
+                    self.handle_generate(user_input)
                     continue
 
                 # Parse command (remove the '/' prefix)
@@ -4901,8 +4961,9 @@ Return ONLY the JSON, no other text."""
                     console.print("[dim]Type /help to see available commands[/dim]")
 
             except KeyboardInterrupt:
-                console.print("\n[dim]Use 'exit' to quit[/dim]")
-                continue
+                # Ctrl-C should immediately stop
+                console.print("\n[yellow]Interrupted! Exiting...[/yellow]")
+                break
 
             except EOFError:
                 break

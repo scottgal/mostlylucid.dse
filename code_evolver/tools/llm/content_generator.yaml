@@ -13,7 +13,8 @@ max_output_length: "long"
 
 # LLM configuration
 llm:
-  role: "base"  # References base model (claude-sonnet, gpt-4o, codellama)
+  tier: "content.tier_2"  # Tiered system (preferred) - quality content generation
+  role: "base"            # Legacy role system (fallback)
 
   system_prompt: |
     You are a creative content generator. Generate engaging, high-quality content that meets the user's requirements.

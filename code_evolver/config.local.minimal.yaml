@@ -19,15 +19,22 @@ llm:
   # Map model roles to actual Ollama models
   model_roles:
     fast: "phi3:mini"                      # Fast & free for simple tasks (3.8B params, great for triage)
-    base: "qwen2.5-coder:7b"               # Balanced for most tasks - DEFAULT (good code generation)
-    powerful: "qwen2.5-coder:14b"          # Most capable for complex tasks (14B params)
+    base: "codellama"                      # General purpose coding - DEFAULT (good code generation, fast)
+    powerful: "qwen2.5-coder:14b"          # Most capable for complex tasks (14B params, LONG timeout needed)
     god_level: "deepseek-coder:33b"        # Last resort for very hard problems
     embedding: "nomic-embed-text"          # Local embeddings (free, 768-dim)
 
   # API settings (optional overrides)
   api_settings:
     endpoint: "http://localhost:11434"
-    timeout: 240  # Longer timeout for local models
+    timeout: 240  # Default timeout for most models
+
+  # Per-model timeout overrides (in seconds)
+  model_timeouts:
+    "qwen2.5-coder:14b": 600               # 10 minutes - large model needs time
+    "deepseek-coder:33b": 900              # 15 minutes - very large model
+    "codellama": 120                       # 2 minutes - fast enough
+    "phi3:mini": 60                        # 1 minute - very fast
 
 # ============================================================================
 # System Configuration (shared across all backends)

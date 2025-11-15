@@ -1,0 +1,336 @@
+# ============================================================================
+# Code Evolver - Tiered Model Configuration
+# ============================================================================
+#
+# This configuration uses a TIERED MODEL SYSTEM for clean, hierarchical
+# model selection with automatic escalation and context management.
+#
+# CONCEPT:
+# - Define tiers by purpose (coding, content, validation, quality)
+# - Each tier has appropriate model, context, timeout
+# - Automatic escalation path with increasing context
+# - Tools reference tiers, not specific models
+#
+# USAGE:
+# python chat_cli.py --config config.tiered.yaml
+#
+# ============================================================================
+
+# Backend configuration
+llm:
+  backend: "ollama"
+  base_url: "http://localhost:11434"
+
+# ============================================================================
+# MODEL TIERS - Define hierarchical model selection by purpose
+# ============================================================================
+
+model_tiers:
+
+  # CODING TIERS - For code generation, debugging, refactoring
+  coding:
+    tier_1:
+      name: "Simple Coding"
+      model: "phi3:mini"
+      context_window: 4096
+      timeout: 60
+      cost_tier: "low"
+      speed_tier: "very-fast"
+      quality_tier: "good"
+      use_for: ["simple", "basic", "quick", "triage"]
+      escalates_to: "tier_2"
+      description: "Fast model for simple coding tasks and triage"
+
+    tier_2:
+      name: "General Coding"
+      model: "codellama"
+      context_window: 16384
+      timeout: 120
+      cost_tier: "medium"
+      speed_tier: "fast"
+      quality_tier: "excellent"
+      use_for: ["general", "moderate", "standard", "default"]
+      escalates_to: "tier_3"
+      description: "General purpose coding model - DEFAULT for most tasks"
+
+    tier_3:
+      name: "Advanced Coding"
+      model: "qwen2.5-coder:14b"
+      context_window: 32768
+      timeout: 600  # 10 minutes for large model
+      cost_tier: "high"
+      speed_tier: "slow"
+      quality_tier: "excellent"
+      use_for: ["complex", "advanced", "escalation", "hard"]
+      escalates_to: "tier_4"
+      description: "Powerful 14B model for complex coding (LONG timeout)"
+
+    tier_4:
+      name: "God-Level Coding"
+      model: "deepseek-coder:33b"
+      context_window: 65536
+      timeout: 900  # 15 minutes for very large model
+      cost_tier: "very-high"
+      speed_tier: "very-slow"
+      quality_tier: "excellent"
+      use_for: ["god-level", "last-resort", "impossible"]
+      escalates_to: null
+      description: "Most powerful 33B model - last resort only"
+
+  # CONTENT TIERS - For creative writing, articles, stories, content generation
+  content:
+    tier_1:
+      name: "Quick Content"
+      model: "phi3:mini"
+      context_window: 4096
+      timeout: 60
+      cost_tier: "low"
+      speed_tier: "very-fast"
+      quality_tier: "good"
+      use_for: ["quick", "simple", "short"]
+      escalates_to: "tier_2"
+      description: "Fast content generation for simple tasks"
+
+    tier_2:
+      name: "Quality Content"
+      model: "llama3"
+      context_window: 8192
+      timeout: 120
+      cost_tier: "medium"
+      speed_tier: "fast"
+      quality_tier: "excellent"
+      use_for: ["general", "default", "standard"]
+      escalates_to: "tier_3"
+      description: "High-quality content generation - DEFAULT"
+
+    tier_3:
+      name: "Long-Form Content"
+      model: "mistral-nemo"
+      context_window: 128000  # Massive context for novels/books
+      timeout: 240
+      cost_tier: "high"
+      speed_tier: "medium"
+      quality_tier: "excellent"
+      use_for: ["long-form", "novel", "book", "article", "essay"]
+      escalates_to: null
+      description: "128K context for novels and long-form writing"
+
+  # VALIDATION TIERS - For quick checks, syntax validation, error detection
+  validation:
+    tier_1:
+      name: "Fast Validation"
+      model: "tinyllama"
+      context_window: 2048
+      timeout: 30
+      cost_tier: "low"
+      speed_tier: "very-fast"
+      quality_tier: "basic"
+      use_for: ["quick", "simple", "fast", "syntax"]
+      escalates_to: "tier_2"
+      description: "Very fast validation for simple checks"
+
+    tier_2:
+      name: "Thorough Validation"
+      model: "phi3:mini"
+      context_window: 4096
+      timeout: 60
+      cost_tier: "low"
+      speed_tier: "fast"
+      quality_tier: "good"
+      use_for: ["thorough", "detailed", "semantic"]
+      escalates_to: null
+      description: "More thorough validation with semantic understanding"
+
+  # QUALITY TIERS - For evaluation, assessment, scoring
+  quality:
+    tier_1:
+      name: "Basic Quality"
+      model: "gemma2:2b"
+      context_window: 8192
+      timeout: 45
+      cost_tier: "low"
+      speed_tier: "fast"
+      quality_tier: "good"
+      use_for: ["basic", "quick", "simple"]
+      escalates_to: "tier_2"
+      description: "Quick quality assessment"
+
+    tier_2:
+      name: "Comprehensive Quality"
+      model: "llama3"
+      context_window: 8192
+      timeout: 120
+      cost_tier: "medium"
+      speed_tier: "medium"
+      quality_tier: "excellent"
+      use_for: ["comprehensive", "detailed", "thorough"]
+      escalates_to: null
+      description: "Comprehensive quality evaluation"
+
+  # PLANNING TIERS - For strategy, planning, task decomposition
+  planning:
+    tier_1:
+      name: "Quick Planning"
+      model: "phi3:mini"
+      context_window: 4096
+      timeout: 60
+      cost_tier: "low"
+      speed_tier: "fast"
+      quality_tier: "good"
+      use_for: ["quick", "simple"]
+      escalates_to: "tier_2"
+      description: "Fast planning for simple tasks"
+
+    tier_2:
+      name: "Strategic Planning"
+      model: "llama3"
+      context_window: 8192
+      timeout: 120
+      cost_tier: "medium"
+      speed_tier: "medium"
+      quality_tier: "excellent"
+      use_for: ["general", "default", "strategic"]
+      escalates_to: null
+      description: "Strategic planning and task decomposition - DEFAULT"
+
+# Map legacy role system to tiers (for backward compatibility)
+role_to_tier_mapping:
+  fast: "coding.tier_1"
+  base: "coding.tier_2"
+  powerful: "coding.tier_3"
+  god_level: "coding.tier_4"
+  triage: "validation.tier_1"
+  overseer: "planning.tier_2"
+  evaluator: "quality.tier_2"
+
+# Embedding configuration
+embedding:
+  model: "nomic-embed-text"
+  context_window: 8192
+  vector_size: 768
+
+# ============================================================================
+# System Configuration
+# ============================================================================
+
+execution:
+  default_timeout_ms: 5000
+  max_memory_mb: 256
+  max_retries: 3
+  sandbox:
+    allow_network: false
+    allow_file_write: false
+    temp_dir: "./temp"
+
+auto_evolution:
+  enabled: true
+  performance_threshold: 0.15
+  min_runs_before_evolution: 3
+  check_interval_minutes: 60
+  max_versions_per_node: 10
+  keep_best_n_versions: 3
+  mutation_temperature: 0.7
+
+quality_evaluation:
+  enabled: true
+  evaluate_steps:
+    strategy: true
+    code: true
+    tests: true
+    final: true
+  thresholds:
+    strategy_min: 0.70
+    code_quality_min: 0.75
+    test_coverage_min: 0.80
+    final_min: 0.80
+    auto_adjust: true
+    adjustment_window: 100
+  max_iterations: 3
+  improvement_threshold: 0.05
+  feedback:
+    include_suggestions: true
+    include_examples: true
+    store_in_rag: true
+    learn_from_success: true
+
+registry:
+  path: "./registry"
+  backup_enabled: true
+  backup_interval_hours: 24
+  max_backup_count: 7
+
+nodes:
+  path: "./nodes"
+  artifacts_path: "./artifacts"
+
+rag_memory:
+  path: "./rag_memory"
+  use_qdrant: false
+  max_embedding_content_length: 1000
+
+logging:
+  level: "INFO"
+  file: "code_evolver.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  console:
+    enabled: true
+    use_colors: true
+
+chat:
+  prompt: "CodeEvolver> "
+  history_file: ".code_evolver_history"
+  max_history: 1000
+  show_thinking: false
+  show_metrics: true
+  show_workflow: true
+  auto_save_context: true
+  workflow_mode:
+    enabled: true
+    detect_keywords: ["and", "then", "translate", "convert"]
+    min_steps: 2
+    max_steps: 10
+  default_workflow_context:
+    priority: "medium"
+    quality_level: "production"
+    speed_requirement: "balanced"
+    max_iterations: 3
+    allow_escalation: true
+
+testing:
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6  # tier_1 → tier_2 → tier_3 → tier_4 (up to 4 escalations, 6 total attempts)
+  test_driven_development: true
+  initial_optimization_iterations: 3
+  optimization_score_threshold: 0.1
+  # On escalation, pass FULL context to next tier
+  escalation_context_mode: "full"  # "full" = all previous attempts, "incremental" = just errors
+
+optimization:
+  enabled: false  # Disabled for local
+
+optimization_pressure:
+  high:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.60
+    max_latency_ms: 1000
+  medium:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.75
+    max_latency_ms: 10000
+  low:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.80
+    max_latency_ms: null
+
+build:
+  app_name: "CodeEvolver"
+  version: "0.1.0"
+  icon: null
