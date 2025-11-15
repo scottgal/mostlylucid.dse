@@ -1,0 +1,7 @@
+name: "Article Content Analyzer"
+type: "llm"
+description: "Analyzes blog posts and articles for clarity, technical accuracy, SEO, and readability. Provides improvement suggestions."
+llm:
+  model: "llama3"
+  endpoint: null
+tags: ["analysis", "blog", "seo", "readability", "content", "review"]

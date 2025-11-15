@@ -1,0 +1,13 @@
+name: "Long-Form Content Writer"
+type: "llm"
+description: "Specialized for writing long-form content (novels, books, long articles) using mistral-nemo's massive 128K context window. Best for creative writing, story generation, and content that requires maintaining continuity over many pages. Use with summarizer for ultra-long content."
+cost_tier: "high"
+speed_tier: "slow"
+quality_tier: "excellent"
+max_output_length: "very-long"
+llm:
+  model: "mistral-nemo"
+  endpoint: null
+  system_prompt: "You are a creative writer specializing in long-form content. You have a massive 128K token context window, allowing you to maintain consistency and continuity across very long texts. Write engaging, well-structured content that flows naturally.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+  prompt_template: "{prompt}\n\nPrevious context (if continuing):\n{context}\n\nGenerate the next section maintaining consistency with previous content."
+tags: ["creative-writing", "novel", "story", "long-form", "article", "book", "large-context"]

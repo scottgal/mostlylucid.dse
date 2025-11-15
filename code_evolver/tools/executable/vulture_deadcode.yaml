@@ -1,0 +1,8 @@
+name: "Vulture Dead Code Finder"
+type: "executable"
+description: "Finds unused code (dead code) in Python projects"
+executable:
+  command: "vulture"
+  args: ["{source_file}"]
+  install_command: "pip install vulture"
+tags: ["python", "dead-code", "optimization", "cleanup"]

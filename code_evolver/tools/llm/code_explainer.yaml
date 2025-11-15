@@ -1,0 +1,7 @@
+name: "Code Concept Explainer"
+type: "llm"
+description: "Explains complex programming concepts in simple terms for blog articles and tutorials. Creates analogies and examples."
+llm:
+  model: "llama3"
+  endpoint: null
+tags: ["explanation", "tutorial", "teaching", "concepts", "examples"]

@@ -1,0 +1,9 @@
+name: "Technical Proofreader"
+type: "llm"
+description: "Proofreads technical content for grammar, style, consistency, and technical accuracy"
+llm:
+  model: "llama3"
+  endpoint: null
+  system_prompt: "You are an expert proofreader specializing in technical content. You have a keen eye for grammar, style, consistency, and technical accuracy. You provide constructive feedback while preserving the author's voice and intent."
+  prompt_template: "Proofread the following technical content:\n\n{content}\n\nCheck for:\n1. Grammar and spelling errors\n2. Technical accuracy\n3. Consistency in terminology\n4. Clarity and readability\n5. Code example correctness\n\nProvide corrected version and list of changes made."
+tags: ["proofreading", "grammar", "style", "editing", "quality"]

@@ -1,0 +1,45 @@
+name: "NMT Translation Service"
+type: "openapi"
+description: "Neural Machine Translation service for translating text between languages. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses OpenAPI spec from http://localhost:8000/openapi.json."
+cost_tier: "low"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "long"
+openapi:
+  spec_url: "http://localhost:8000/openapi.json"
+  base_url: "http://localhost:8000"
+code_template: |
+  # Example: How to use the NMT Translation Service
+  import requests
+  import json
+
+  def translate_text(text, source_lang="en", target_lang="es"):
+      """
+      Translate text using the NMT service.
+
+      Args:
+          text: Text to translate
+          source_lang: Source language code (e.g., 'en', 'es', 'fr')
+          target_lang: Target language code
+
+      Returns:
+          Translated text
+      """
+      url = "http://localhost:8000/translate"
+
+      payload = {
+          "text": text,
+          "source_lang": source_lang,
+          "target_lang": target_lang
+      }
+
+      response = requests.post(url, json=payload)
+      response.raise_for_status()
+
+      result = response.json()
+      return result.get("translated_text", "")
+
+  # Usage example:
+  # translated = translate_text("Hello, world!", source_lang="en", target_lang="es")
+  # print(translated)  # Output: "Hola, mundo!"
+tags: ["translation", "nmt", "neural", "languages", "openapi", "api"]

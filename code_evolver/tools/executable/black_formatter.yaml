@@ -1,0 +1,8 @@
+name: "Black Code Formatter"
+type: "executable"
+description: "Runs black formatter to check if Python code follows black style (with --check flag)"
+executable:
+  command: "black"
+  args: ["--check", "--diff", "{source_file}"]
+  install_command: "pip install black"
+tags: ["python", "formatting", "style", "black"]

@@ -1,0 +1,30 @@
+name: "HTTP Server"
+type: "custom"
+description: "HTTP server that allows workflows to serve content via HTTP. Supports both HTML and JSON/API responses. Enable workflows to be exposed as web services or REST APIs. Can register endpoints, handle requests, and return formatted responses."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.http_server_tool"
+  class: "HTTPServerTool"
+  config:
+    host: "0.0.0.0"
+    port: 8080
+    enable_cors: true
+input_schema:
+  action: "str - Action to perform: 'start', 'stop', 'add_route', 'list_routes', 'info'"
+  route_config: "dict - For 'add_route': {path: str, methods: list, response_type: str (json/html), handler: callable}"
+  blocking: "bool - For 'start': whether to block until server stops (default: false)"
+output_schema:
+  status: "str - 'success' or 'error'"
+  message: "str - Status message"
+  data: "dict - Additional data (routes, server info, etc.)"
+tags: ["http", "server", "api", "web", "rest", "endpoint", "service", "html", "json"]
+examples:
+  - input: {"action": "start", "blocking": false}
+    output: {"status": "success", "message": "Server started", "data": {"url": "http://0.0.0.0:8080"}}
+  - input: {"action": "list_routes"}
+    output: {"status": "success", "data": {"routes": []}}
+  - input: {"action": "info"}
+    output: {"status": "success", "data": {"host": "0.0.0.0", "port": 8080, "is_running": true}}

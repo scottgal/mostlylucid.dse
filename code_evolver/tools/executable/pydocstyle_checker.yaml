@@ -1,0 +1,8 @@
+name: "Pydocstyle Docstring Checker"
+type: "executable"
+description: "Checks docstring style and completeness according to PEP 257"
+executable:
+  command: "pydocstyle"
+  args: ["{source_file}"]
+  install_command: "pip install pydocstyle"
+tags: ["python", "documentation", "docstrings", "pep257"]

@@ -35,7 +35,15 @@
       "Bash(fi)",
       "Bash(timeout 5 bash -c 'echo \"\"test\"\" | python chat_cli.py 2>&1 | head -5')",
       "Bash(timeout 90 python:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git rm:*)",
+      "Bash(find:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(git mv:*)",
+      "Bash(git fetch:*)",
+      "Bash(git stash:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

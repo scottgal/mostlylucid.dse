@@ -1,0 +1,13 @@
+name: "Code Translation Validator"
+type: "llm"
+description: "Fast validator that ensures translation hasn't corrupted Python code blocks. Checks that code syntax remains valid, only comments are translated, and no code keywords were mistranslated. Use AFTER translating documents containing code."
+cost_tier: "low"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+llm:
+  model: "tinyllama"
+  endpoint: null
+  system_prompt: "You are a code validator. Check that Python code remains syntactically valid after translation. ONLY comments should be translated, never code itself.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
+  prompt_template: "Validate this translated code:\n\n{translated_code}\n\nCheck:\n1. Python syntax is still valid\n2. Only comments were translated (not keywords, variables, functions)\n3. Code structure is unchanged\n4. No code keywords mistranslated (def, class, import, if, for, etc.)\n\nRespond with:\n- 'OK' if code is valid\n- 'ERROR: <list of issues>' if problems found\n\nBe concise (under 100 tokens)."
+tags: ["code", "validation", "translation", "syntax-check", "fast"]

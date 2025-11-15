@@ -1,0 +1,8 @@
+name: "Pylint Code Quality Checker"
+type: "executable"
+description: "Runs pylint static analysis on Python code to check for errors, code style, and potential bugs"
+executable:
+  command: "pylint"
+  args: ["--output-format=text", "--score=yes", "{source_file}"]
+  install_command: "pip install pylint"
+tags: ["python", "static-analysis", "quality", "linting", "pep8"]

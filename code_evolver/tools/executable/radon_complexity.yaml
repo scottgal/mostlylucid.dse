@@ -1,0 +1,8 @@
+name: "Radon Complexity Analyzer"
+type: "executable"
+description: "Analyzes code complexity metrics (cyclomatic complexity, maintainability index)"
+executable:
+  command: "radon"
+  args: ["cc", "-s", "-a", "{source_file}"]
+  install_command: "pip install radon"
+tags: ["python", "complexity", "metrics", "maintainability"]

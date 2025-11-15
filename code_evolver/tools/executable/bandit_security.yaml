@@ -1,0 +1,8 @@
+name: "Bandit Security Scanner"
+type: "executable"
+description: "Runs bandit security scanner to find common security issues in Python code"
+executable:
+  command: "bandit"
+  args: ["-r", "{source_file}"]
+  install_command: "pip install bandit"
+tags: ["python", "security", "vulnerability", "scanning"]

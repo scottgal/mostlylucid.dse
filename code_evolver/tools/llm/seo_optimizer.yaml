@@ -1,0 +1,7 @@
+name: "SEO Optimizer"
+type: "llm"
+description: "Optimizes technical content for search engines, suggests keywords, meta descriptions, and structure improvements"
+llm:
+  model: "llama3"
+  endpoint: null
+tags: ["seo", "keywords", "optimization", "search", "metadata"]

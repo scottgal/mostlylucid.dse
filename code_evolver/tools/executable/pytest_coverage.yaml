@@ -1,0 +1,8 @@
+name: "Pytest with Coverage"
+type: "executable"
+description: "Runs pytest with code coverage analysis"
+executable:
+  command: "pytest"
+  args: ["--cov={source_module}", "--cov-report=term-missing", "-v", "{test_file}"]
+  install_command: "pip install pytest pytest-cov"
+tags: ["python", "testing", "coverage", "pytest"]

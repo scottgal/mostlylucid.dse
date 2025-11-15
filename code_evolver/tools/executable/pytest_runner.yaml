@@ -1,0 +1,8 @@
+name: "Pytest Test Runner"
+type: "executable"
+description: "Runs pytest unit tests with coverage reporting"
+executable:
+  command: "pytest"
+  args: ["-v", "--tb=short", "{test_file}"]
+  install_command: "pip install pytest"
+tags: ["python", "testing", "pytest", "unit-tests"]

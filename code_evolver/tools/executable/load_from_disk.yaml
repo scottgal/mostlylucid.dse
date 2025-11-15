@@ -1,0 +1,17 @@
+name: "Load from Disk"
+type: "executable"
+description: "Loads content from any file path on disk. Use for reading specifications, code, documentation, or configuration files. Can read from anywhere on the filesystem (not restricted to ./output/). Useful for self-optimization tasks where the system reads its own code."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "unlimited"
+executable:
+  command: "python"
+  args: ["-c", "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path(data['filepath']); content=path.read_text() if path.exists() else None; print(json.dumps({'status': 'loaded' if content else 'not_found', 'content': content, 'path': str(path)}))"]
+input_schema:
+  filepath: "str - Full or relative path to file to load"
+output_schema:
+  status: "str - 'loaded' if successful, 'not_found' if file doesn't exist"
+  content: "str - Content of the file"
+  path: "str - Full path that was read"
+tags: ["file-io", "load", "read", "disk", "input"]

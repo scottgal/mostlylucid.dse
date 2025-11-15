@@ -36,7 +36,8 @@
     "invocation_general_1763237313021",
     "invocation_general_1763237557005",
     "invocation_general_1763241124754",
-    "invocation_general_1763241341265"
+    "invocation_general_1763241341265",
+    "invocation_general_1763248069168"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -122,7 +123,8 @@
     "invocation_general_1763241124754",
     "invocation_general_1763241341265",
     "invocation_seo_optimizer_1763244445429",
-    "invocation_fast_code_generator_1763245268273"
+    "invocation_fast_code_generator_1763245268273",
+    "invocation_general_1763248069168"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -208,7 +210,8 @@
     "invocation_general_1763241124754",
     "invocation_general_1763241341265",
     "invocation_seo_optimizer_1763244445429",
-    "invocation_fast_code_generator_1763245268273"
+    "invocation_fast_code_generator_1763245268273",
+    "invocation_general_1763248069168"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -419,7 +422,8 @@
     "spec_write_a_joke_1763230891",
     "spec_write_me_a_story_and_translate",
     "spec_write_a_poem_1763237468",
-    "spec_write_a_poem_1763241023"
+    "spec_write_a_poem_1763241023",
+    "spec_write_a_haiku"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -626,7 +630,8 @@
     "spec_translate_the_poem_to_french",
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
-    "spec_add_1_5"
+    "spec_add_1_5",
+    "spec_write_a_haiku"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -1131,7 +1136,8 @@
     "spec_translate_the_poem_to_french",
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
-    "spec_add_1_5"
+    "spec_add_1_5",
+    "spec_write_a_haiku"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1206,7 +1212,8 @@
     "spec_translate_the_poem_to_french",
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
-    "spec_add_1_5"
+    "spec_add_1_5",
+    "spec_write_a_haiku"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1281,7 +1288,8 @@
     "spec_translate_the_poem_to_french",
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
-    "spec_add_1_5"
+    "spec_add_1_5",
+    "spec_write_a_haiku"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -2053,5 +2061,8 @@
   ],
   "seo_optimizer": [
     "invocation_seo_optimizer_1763244445429"
+  ],
+  "codellama": [
+    "invocation_general_1763248069168"
   ]
 }

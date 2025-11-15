@@ -1,0 +1,7 @@
+name: "Documentation Generator"
+type: "llm"
+description: "Generates comprehensive code documentation"
+llm:
+  model: "llama3"
+  endpoint: null
+tags: ["documentation", "docs"]

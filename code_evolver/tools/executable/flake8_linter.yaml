@@ -1,0 +1,8 @@
+name: "Flake8 Style Checker"
+type: "executable"
+description: "Runs flake8 to check Python code style (PEP 8) and detect common errors"
+executable:
+  command: "flake8"
+  args: ["--max-line-length=120", "--statistics", "{source_file}"]
+  install_command: "pip install flake8"
+tags: ["python", "linting", "pep8", "style", "quality"]

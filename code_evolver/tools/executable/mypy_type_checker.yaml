@@ -1,0 +1,8 @@
+name: "MyPy Type Checker"
+type: "executable"
+description: "Runs mypy type checking on Python code to find type errors before runtime"
+executable:
+  command: "mypy"
+  args: ["--strict", "--show-error-codes", "{source_file}"]
+  install_command: "pip install mypy"
+tags: ["python", "type-checking", "static-analysis", "types"]
