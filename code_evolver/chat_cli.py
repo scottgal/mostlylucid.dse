@@ -1266,7 +1266,7 @@ Answer:"""
         if not in_workflow_mode and workflow_depth < MAX_WORKFLOW_DEPTH:
             workflow_keywords = self.config.get("chat.workflow_mode.detect_keywords", ["and", "then", "translate", "convert"])
 
-            # Smarter keyword detection - avoid false positives for arithmetic
+            # Smarter keyword detection - avoid false positives
             is_multi_step = False
             description_lower = description.lower()
 
@@ -1274,7 +1274,16 @@ Answer:"""
             arithmetic_keywords = ["add", "subtract", "multiply", "divide", "calculate", "compute", "sum"]
             is_arithmetic = any(kw in description_lower for kw in arithmetic_keywords)
 
-            if not is_arithmetic:
+            # Check for explicit multi-step keywords first (and, then)
+            explicit_multi_step = any(kw in description_lower for kw in ["and", "then"])
+
+            # Exclude simple translations ONLY if there's no explicit multi-step keyword
+            # "translate X to Y" is ONE step, but "write a story AND translate it" is multi-step
+            import re
+            simple_translation_pattern = r'^\s*translate\s+(?:the\s+)?(?:word|phrase|sentence|text)?\s*[\w\s]+\s+to\s+\w+\s*$'
+            is_simple_translation = bool(re.search(simple_translation_pattern, description_lower)) and not explicit_multi_step
+
+            if not is_arithmetic and not is_simple_translation:
                 is_multi_step = any(keyword in description_lower for keyword in workflow_keywords)
 
             if is_multi_step and self.config.get("chat.workflow_mode.enabled", False):
