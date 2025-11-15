@@ -4,7 +4,7 @@
 
 An AI-powered system that generates, executes, evaluates, and optimizes Python code using multiple LLM models. Features intelligent task classification, RAG-powered tool selection, automatic code generation, and self-optimization through iterative improvement.
 
-## 🎯 What It Does
+##  What It Does
 
 Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 
@@ -15,7 +15,7 @@ Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 5. **Optimizes** performance through iterative improvement
 6. **Learns** from successful solutions via RAG memory
 
-## 📚 Comprehensive Documentation
+##  Comprehensive Documentation
 
 **New: Complete DSE Framework Documentation**
 
@@ -41,12 +41,12 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
   - Demonstrates fine-tuning and cost optimization
 
 **Key DSE Innovations:**
-- ✅ **Executable ground truth** (not metadata) with empirical proof
-- ✅ **99% cost reduction** through caching and reuse
-- ✅ **Auto-evolution** triggered by performance drift
-- ✅ **Platform variants** (same workflow, optimized for Pi/Edge/Cloud)
-- ✅ **Meta-optimization** (system optimizes itself)
-- ✅ **Fine-tuned specialists** created from successful patterns
+-  **Executable ground truth** (not metadata) with empirical proof
+-  **99% cost reduction** through caching and reuse
+-  **Auto-evolution** triggered by performance drift
+-  **Platform variants** (same workflow, optimized for Pi/Edge/Cloud)
+-  **Meta-optimization** (system optimizes itself)
+-  **Fine-tuned specialists** created from successful patterns
 
 ```mermaid
 graph TD
@@ -70,13 +70,9 @@ graph TD
     L --> M[RAG Storage]
     M --> N[Executable Node]
 
-    style B fill:#e1f5ff
-    style G fill:#ffe1e1
-    style L fill:#e1ffe1
-    style M fill:#fff3e1
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Installation
 
@@ -115,7 +111,7 @@ CodeEvolver> add 10 and 20
 RESULT: 30
 ```
 
-## 📊 System Architecture
+##  System Architecture
 
 ### High-Level Flow
 
@@ -170,13 +166,9 @@ graph LR
     G --> H[Creative Output:<br/>Why did the computer...?]
     H --> I[User receives joke]
 
-    style B fill:#e1f5ff
-    style E fill:#ffe1e1
-    style G fill:#e1ffe1
-    style H fill:#fff3e1
 ```
 
-## 💡 Examples
+##  Examples
 
 ### Example 1: Simple Arithmetic
 
@@ -302,7 +294,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## 🔄 Optimization System
+##  Optimization System
 
 ### How Optimization Works
 
@@ -330,11 +322,7 @@ graph TD
     P --> Q[Store in RAG]
     Q --> R[Available for reuse]
 
-    style A fill:#ffe1e1
-    style I fill:#e1ffe1
-    style M fill:#e1ffe1
-    style P fill:#e1f5ff
-    style Q fill:#fff3e1
+
 ```
 
 ### Optimization Example
@@ -372,7 +360,7 @@ def process_data(data):
 # Memory: 2.8MB
 ```
 
-## 🧠 RAG Memory System
+##  RAG Memory System
 
 ### What Gets Stored
 
@@ -394,9 +382,6 @@ graph TB
     H --> I[Future Tasks]
     I --> J[Reuse & Adapt]
 
-    style G fill:#e1f5ff
-    style H fill:#e1ffe1
-    style J fill:#fff3e1
 ```
 
 ### RAG Workflow Reuse
@@ -422,7 +407,7 @@ sequenceDiagram
     Generator-->>User: Optimized code (faster)<br/>Based on previous success
 ```
 
-## 🛠️ Configuration
+## ️ Configuration
 
 ### Multi-Endpoint Setup
 
@@ -649,7 +634,7 @@ tools:
 
 These tools are automatically invoked during code generation and optimization to ensure high-quality, secure, and well-tested code.
 
-## 📈 Performance Metrics
+##  Performance Metrics
 
 ### Tracked Metrics
 
@@ -676,7 +661,7 @@ Optimization Results:
 Best version selected: Iteration 3
 ```
 
-## 🔧 Advanced Features
+##  Advanced Features
 
 ### Adaptive Escalation
 
@@ -705,10 +690,6 @@ graph LR
     E --> F[optimize: 3 iterations]
     F --> G[run: execute]
 
-    style A fill:#e1f5ff
-    style B fill:#ffe1e1
-    style D fill:#ffe1e1
-    style F fill:#e1ffe1
 ```
 
 ## 🎓 Use Cases
@@ -728,7 +709,7 @@ Create stories, jokes, articles, and other creative content via LLM tools.
 ### 5. Algorithm Optimization
 Let the system iteratively improve your algorithms for better performance.
 
-## 📝 API Reference
+##  API Reference
 
 ### Command-Line Interface
 
@@ -766,7 +747,7 @@ stdout, stderr, metrics = cli.runner.run_node(
 )
 ```
 
-## 🔍 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -795,7 +776,7 @@ pip install -r requirements.txt
 pip install flake8 pylint mypy black
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 This is an experimental project. Contributions welcome!
 
@@ -808,11 +789,11 @@ This is an experimental project. Contributions welcome!
 - [ ] Distributed execution across machines
 - [ ] More comprehensive test coverage
 
-## 📄 License
+##  License
 
 MIT License - See LICENSE file
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 Built with:
 - [Ollama](https://ollama.ai) - Local LLM inference

@@ -545,6 +545,14 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
             console.print(f"[yellow]Warning: Task contains '{[kw for kw in multi_operation_keywords if kw in description_lower]}' but was decomposed into only 1 step.[/yellow]")
             console.print(f"[yellow]This may indicate the task should be split into multiple steps.[/yellow]")
 
+            # Additional protection: if the single step has the same description as the original task,
+            # it will trigger infinite recursion. Prevent this by forcing _in_workflow_mode for the step.
+            step = workflow_spec.steps[0]
+            step_desc_lower = getattr(step, 'task_for_node', step.description).lower()
+            if description_lower.strip() == step_desc_lower.strip():
+                console.print(f"[yellow]Single step matches original task - preventing recursive decomposition.[/yellow]")
+                # This will be handled in the step execution by setting _in_workflow_mode
+
         # Show workflow plan to user
         console.print(f"\n[bold cyan]Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
         for i, step in enumerate(workflow_spec.steps, 1):
@@ -587,8 +595,11 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
 
                 # Save current context and set workflow mode flag
                 old_context = self.context.copy()
+                # Preserve workflow_depth to prevent infinite recursion
+                workflow_depth = self.context.get('_workflow_depth', 0)
                 self.context.clear()
                 self.context['_in_workflow_mode'] = True
+                self.context['_workflow_depth'] = workflow_depth  # Preserve depth counter
                 self.context['_workflow_context'] = {
                     'parent_workflow': description,
                     'step_id': step.step_id,
