@@ -1,0 +1,66 @@
+{
+  "workflow_id": "api_server_workflow",
+  "name": "HTTP API Server Workflow",
+  "description": "A workflow that exposes DSE capabilities via HTTP API endpoints. Demonstrates how to create a web service that processes requests through workflows.",
+  "version": "1.0",
+  "priority": "medium",
+  "quality_level": "production",
+  "tags": ["api", "http", "web-service", "rest", "endpoint"],
+
+  "steps": [
+    {
+      "step_id": "initialize_server",
+      "tool": "http_server",
+      "description": "Initialize HTTP server for API endpoints",
+      "input": {
+        "action": "start",
+        "blocking": false
+      },
+      "output_key": "server_info"
+    },
+    {
+      "step_id": "register_health_check",
+      "tool": "http_server",
+      "description": "Add health check endpoint",
+      "input": {
+        "action": "add_route",
+        "route_config": {
+          "path": "/health",
+          "methods": ["GET"],
+          "response_type": "json"
+        }
+      },
+      "output_key": "health_route"
+    },
+    {
+      "step_id": "register_api_endpoints",
+      "tool": "http_server",
+      "description": "Register workflow API endpoints",
+      "input": {
+        "action": "add_route",
+        "route_config": {
+          "path": "/api/v1/process",
+          "methods": ["POST"],
+          "response_type": "json"
+        }
+      },
+      "output_key": "api_route"
+    }
+  ],
+
+  "metadata": {
+    "author": "DSE System",
+    "created_at": "2025-01-15",
+    "category": "infrastructure",
+    "use_cases": [
+      "Expose workflows as REST APIs",
+      "Web service integration",
+      "HTTP endpoint creation",
+      "API gateway"
+    ],
+    "dependencies": ["flask"],
+    "cost_tier": "free",
+    "speed_tier": "very-fast",
+    "quality_tier": "excellent"
+  }
+}
