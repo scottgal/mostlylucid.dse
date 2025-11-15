@@ -122,7 +122,17 @@ class ChatCLI:
             config_path: Path to configuration file
         """
         self.config = ConfigManager(config_path)
-        self.client = OllamaClient(self.config.ollama_url, config_manager=self.config)
+
+        # Use LLM client factory if backend is configured, otherwise default to Ollama
+        try:
+            from src.llm_client_factory import LLMClientFactory
+            backend = self.config.config.get("llm", {}).get("backend", "ollama")
+            self.client = LLMClientFactory.create_from_config(self.config, backend)
+            console.print(f"[dim]Using {backend} backend for LLM[/dim]")
+        except (ImportError, KeyError, ValueError) as e:
+            # Fall back to Ollama if factory not available or config incomplete
+            console.print(f"[yellow]Falling back to Ollama backend: {e}[/yellow]")
+            self.client = OllamaClient(self.config.ollama_url, config_manager=self.config)
         self.registry = Registry(self.config.registry_path)
         self.runner = NodeRunner(self.config.nodes_path)
         self.evaluator = Evaluator(self.client)
@@ -143,6 +153,15 @@ class ChatCLI:
             ollama_client=self.client,
             rag_memory=self.rag
         )
+
+        # Register model selector tool if multi-backend support is enabled
+        try:
+            from src.model_selector_tool import create_model_selector_tool
+            if self.config.config.get("model_selector", {}).get("enabled", True):
+                create_model_selector_tool(self.config, self.tools_manager)
+                console.print("[dim]Registered model selector tool[/dim]")
+        except (ImportError, Exception) as e:
+            console.print(f"[dim]Model selector not available: {e}[/dim]")
 
         self.context = {}
         self.history = []
