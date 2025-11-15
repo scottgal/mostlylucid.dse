@@ -28,7 +28,12 @@
       "Bash(pkill -f \"write a joke and translate\")",
       "Bash(pkill:*)",
       "Bash(timeout 180 python:*)",
-      "Bash(timeout 60 python:*)"
+      "Bash(timeout 60 python:*)",
+      "Bash(if [ -f /tmp/multi_step_workflow_test.log ])",
+      "Bash(then tail -200 /tmp/multi_step_workflow_test.log)",
+      "Bash(else echo \"Log file not found\")",
+      "Bash(fi)",
+      "Bash(timeout 5 bash -c 'echo \"\"test\"\" | python chat_cli.py 2>&1 | head -5')"
     ],
     "deny": [],
     "ask": []

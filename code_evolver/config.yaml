@@ -221,7 +221,7 @@ chat:
 testing:
   enabled: true                        # Generate and run unit tests
   auto_escalate: true                  # Escalate to higher model if tests fail
-  max_escalation_attempts: 3           # Max fix attempts during escalation
+  max_escalation_attempts: 6           # Max fix attempts (1-2: normal, 3-4: +logging, 5-6: powerful model, then god-level)
 
   # Test-Driven Development (TDD) mode
   # When enabled, generates unit tests BEFORE code to define the interface

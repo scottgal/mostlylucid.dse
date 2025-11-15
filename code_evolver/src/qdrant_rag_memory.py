@@ -188,7 +188,7 @@ class QdrantRAGMemory:
                     "model": self.embedding_model,
                     "prompt": text
                 },
-                timeout=30
+                timeout=90  # Increased from 30s to allow for busy Ollama instances
             )
 
             response.raise_for_status()

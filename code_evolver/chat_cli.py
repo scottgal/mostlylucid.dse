@@ -832,6 +832,8 @@ Type [bold]help[/bold] for available commands, or [bold]exit[/bold] to quit.
             ("test <node_id>", "Run unit tests for a node"),
             ("evaluate <node_id>", "Evaluate a node's performance"),
             ("list", "List all nodes in registry"),
+            ("tools", "List all available tools (LLM, code, and community tools)"),
+            ("workflow <node_id>", "Display the complete workflow for a node"),
             ("show <node_id>", "Show detailed information about a node"),
             ("delete <node_id>", "Delete a node"),
             ("evolve <node_id>", "Manually trigger evolution for a node"),
@@ -1180,8 +1182,8 @@ Answer:"""
         with self.display.start_stage("Planning", "Searching for relevant tools"):
             available_tools = self.tools_manager.get_tools_for_prompt(
                 task_description=description,
-                max_tools=3,
-                filter_type=ToolType.LLM  # Focus on LLM tools for code generation
+                max_tools=3,  # Keep small for context efficiency
+                filter_type=None  # Allow all tool types - fitness function picks best matches
             )
 
         # Get the actual tool objects to show their names
@@ -1534,6 +1536,9 @@ ALGORITHM: fibonacci computation"""
             try:
                 interface_tests = self._generate_interface_tests_first(node_id, description, specification)
 
+                # Store original test in context for god-level escalation
+                self.context['original_interface_test'] = interface_tests
+
                 # Create node directory if it doesn't exist yet
                 node_dir = self.runner.get_node_path(node_id).parent
                 node_dir.mkdir(parents=True, exist_ok=True)
@@ -1776,17 +1781,17 @@ Return ONLY the JSON object, nothing else."""
                 temperature=0.3
             )
         else:
-            # For complex content, use the general tool's model (qwen2.5-coder:14b)
+            # For ANY content generation (simple or complex), use the general tool (respects tool-specific endpoint)
             # Otherwise use config generator_model (codellama)
-            if is_complex_content and 'general' in self.tools_manager.tools:
+            if (is_simple_content or is_complex_content) and 'general' in self.tools_manager.tools:
                 general_tool = self.tools_manager.tools['general']
                 model_to_use = general_tool.metadata.get('llm_model', self.config.generator_model)
                 console.print(f"\n[cyan]Generating code with {model_to_use} (general tool)...[/cyan]")
-                response = self.client.generate(
-                    model=model_to_use,
+                # Use invoke_llm_tool to respect tool-specific endpoint configuration
+                response = self.tools_manager.invoke_llm_tool(
+                    tool_id='general',
                     prompt=code_prompt,
-                    temperature=0.2,
-                    model_key="generator"
+                    temperature=0.2
                 )
             else:
                 console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
@@ -2515,7 +2520,43 @@ Return ONLY the JSON, no explanations."""
 
         Returns the test code that defines the expected interface.
         """
-        test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
+        # CRITICAL: Detect if this is a content generation task
+        is_content_task = any(keyword in description.lower() for keyword in [
+            'write', 'create', 'generate', 'story', 'article', 'joke', 'poem', 'essay',
+            'translate', 'content', 'text', 'narrative'
+        ])
+
+        if is_content_task:
+            # CONTENT GENERATION: Always use main() interface
+            test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
+
+TASK DESCRIPTION: {description}
+
+CRITICAL: This is a CONTENT GENERATION task. The code will use main() as the entry point.
+
+Generate ONLY this test structure:
+
+```python
+import sys
+import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def test_main_interface():
+    \"\"\"Test that main() function exists and has correct interface\"\"\"
+    print("Testing main() interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK main() function exists")
+
+if __name__ == "__main__":
+    test_main_interface()
+```
+
+Output ONLY the Python test code above (no modifications, no markdown fences, no explanations):"""
+        else:
+            # ARITHMETIC/DATA PROCESSING: Can use specific functions
+            test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
 This is Test-Driven Development (TDD) - the tests come FIRST and define what the code should do.
 
 TASK DESCRIPTION: {description}
@@ -2533,12 +2574,7 @@ RULES:
    - Test it with the specific numbers from the description
    - Example: "add 5 and 3" → test that add(5, 3) returns 8
 
-2. For content generation tasks (write, generate, create):
-   - Tests should validate the structure (main() exists, returns JSON)
-   - Don't test the actual content (it's generated by LLM)
-   - Focus on interface: input format, output format
-
-3. For data processing tasks (sort, filter, transform):
+2. For data processing tasks (sort, filter, transform):
    - Define expected input/output formats
    - Test with sample data
    - Verify correct transformations
@@ -2569,42 +2605,85 @@ if __name__ == "__main__":
     test_add_negative_numbers()
 ```
 
-EXAMPLE FOR CONTENT GENERATION:
-```python
-import sys
-import json
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-def test_interface():
-    \"\"\"Test that main() function exists and returns valid JSON\"\"\"
-    print("Testing interface...")
-    import main
-    assert hasattr(main, 'main'), "main() function must exist"
-    print("OK main() function exists")
-
-if __name__ == "__main__":
-    test_interface()
-```
-
 Now generate the interface-defining tests for: {description}
 
 Output ONLY the Python test code (no markdown fences, no explanations):"""
 
         console.print(f"\n[cyan]Generating interface-defining tests first (TDD mode)...[/cyan]")
 
-        test_code = self.client.generate(
-            model=self.config.generator_model,
-            prompt=test_prompt,
-            temperature=0.3,  # Lower temperature for test generation
-            model_key="generator"
-        )
+        try:
+            test_code = self.client.generate(
+                model=self.config.generator_model,
+                prompt=test_prompt,
+                temperature=0.3,  # Lower temperature for test generation
+                model_key="generator"
+            )
 
-        # Clean the test code
-        test_code = self._clean_code(test_code)
+            # Clean the test code
+            test_code = self._clean_code(test_code) if test_code else ""
 
-        console.print(f"[dim green]Generated interface tests ({len(test_code)} chars)[/dim green]")
+            # Check if generation failed or returned empty
+            if not test_code or len(test_code) < 50:
+                console.print(f"[yellow]Warning: Test generation returned {len(test_code)} chars, using fallback template[/yellow]")
+                # Use fallback based on detected type
+                if is_content_task:
+                    test_code = """import sys
+import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-        return test_code
+def test_main_interface():
+    \"\"\"Test that main() function exists and has correct interface\"\"\"
+    print("Testing main() interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK main() function exists")
+
+if __name__ == "__main__":
+    test_main_interface()
+"""
+                else:
+                    # Fallback for non-content tasks
+                    test_code = f"""import sys
+import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def test_interface():
+    \"\"\"Test that main() function exists\"\"\"
+    print("Testing interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK Interface test passed")
+
+if __name__ == "__main__":
+    test_interface()
+"""
+
+            console.print(f"[dim green]Generated interface tests ({len(test_code)} chars)[/dim green]")
+
+            return test_code
+
+        except Exception as e:
+            console.print(f"[red]ERROR generating tests: {e}[/red]")
+            console.print(f"[yellow]Using fallback test template[/yellow]")
+
+            # Return minimal fallback test
+            return """import sys
+import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+def test_main_interface():
+    \"\"\"Test that main() function exists\"\"\"
+    print("Testing main() interface...")
+    import main
+    assert hasattr(main, 'main'), "main() function must exist"
+    print("OK main() function exists")
+
+if __name__ == "__main__":
+    test_main_interface()
+"""
 
     def _generate_and_run_tests(self, node_id: str, description: str, specification: str, code: str, skip_generation: bool = False) -> bool:
         """Generate and run unit tests for a node with comprehensive logging.
@@ -2927,48 +3006,83 @@ Return valid Python test code only - nothing else."""
         available_tools: str = ""
     ) -> bool:
         """
-        Adaptive escalation with two-tier model strategy:
-        1. Try fast codellama model first (3 attempts with increasing temperature)
-        2. If all fail, escalate to powerful qwen2.5-coder model
+        Multi-stage adaptive escalation with logging injection:
 
-        Tracks previous fixes to provide context for next iteration.
+        Stage 1 (Attempts 1-2): Normal fixing with fast model
+        Stage 2 (Attempts 3-4): Add debug logging, continue with fast model
+        Stage 3 (Attempts 5-6): Continue with logging, escalate to powerful model
+        Stage 4 (If passed): Auto-remove logging to clean code
+        Stage 5 (If 6 failures): Escalate to god-level tool (deepseek-coder)
+
+        Tracks all attempts to provide full context to god-level tool.
         """
-        max_attempts = self.config.get("testing.max_escalation_attempts", 3)
+        max_attempts = 6  # Extended to 6 attempts
 
-        # Two-tier model strategy: fast model first, then powerful model
+        # Three-tier model strategy
         fast_model = "codellama"
         powerful_model = self.config.escalation_model  # qwen2.5-coder:14b
+        god_level_model = "deepseek-coder:6.7b"  # Final boss on localhost
 
-        # Temperature progression: start low (focused), increase if needed (creative)
-        temperature_schedule = [0.1, 0.3, 0.5]
+        # Temperature progression: start low, gradually increase
+        temperature_schedule = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 
         # Get error details from context
         error_output = self.context.get('last_error', 'Unknown error')
         stdout_output = self.context.get('last_stdout', '')
         test_output = self.context.get('last_test_output', '')
+        original_test = self.context.get('original_interface_test', '')
 
-        # Track previous fix attempts
-        previous_fixes = []
+        # Track ALL attempts for god-level tool
+        all_attempts = []
+
+        # Track if logging was added
+        logging_added = False
 
         for attempt in range(max_attempts):
-            # Use fast model for first attempts, escalate to powerful model on last attempt
-            current_model = fast_model if attempt < max_attempts - 1 else powerful_model
-            model_label = "fast" if current_model == fast_model else "powerful"
+            # Determine model based on attempt
+            if attempt < 2:
+                current_model = fast_model
+                stage = "Normal Fixing"
+            elif attempt < 4:
+                current_model = fast_model
+                stage = "With Debug Logging"
+                logging_added = True
+            else:
+                current_model = powerful_model
+                stage = "Powerful Model + Logging"
+                logging_added = True
 
             # Adjust temperature based on attempt
-            temperature = temperature_schedule[min(attempt, len(temperature_schedule) - 1)]
+            temperature = temperature_schedule[attempt]
 
-            console.print(f"[cyan]Adaptive attempt {attempt + 1}/{max_attempts} ({model_label} model, temp: {temperature})...[/cyan]")
+            console.print(f"[cyan]Attempt {attempt + 1}/{max_attempts} - {stage} ({current_model}, temp: {temperature})...[/cyan]")
 
-            # Build summary of previous attempts
+            # Build summary of ALL previous attempts for context
             previous_attempts_summary = ""
-            if previous_fixes:
-                previous_attempts_summary = "\nPREVIOUS FIX ATTEMPTS (that didn't work):\n"
-                for i, prev_fix in enumerate(previous_fixes, 1):
-                    previous_attempts_summary += f"\nAttempt {i}:\n"
-                    previous_attempts_summary += f"  Fixes tried: {', '.join(prev_fix['fixes'])}\n"
-                    previous_attempts_summary += f"  Analysis: {prev_fix['analysis']}\n"
-                    previous_attempts_summary += f"  Still failed with: {prev_fix['error'][:200]}\n"
+            if all_attempts:
+                previous_attempts_summary = "\nPREVIOUS FIX ATTEMPTS (all failed):\n"
+                for i, prev in enumerate(all_attempts, 1):
+                    previous_attempts_summary += f"\n=== Attempt {i} ({prev['model']}, temp: {prev['temp']}) ===\n"
+                    previous_attempts_summary += f"Fixes tried: {', '.join(prev.get('fixes', []))}\n"
+                    previous_attempts_summary += f"Analysis: {prev.get('analysis', 'N/A')}\n"
+                    previous_attempts_summary += f"Error: {prev['error'][:150]}...\n"
+
+            # Add logging requirement for attempts 3+
+            logging_instruction = ""
+            if attempt >= 2:  # Attempts 3-6
+                logging_instruction = """
+
+**LOGGING REQUIREMENT** (Attempts 3-6):
+Since previous attempts failed, ADD comprehensive debug logging to help identify the issue:
+- Add `import logging` at the top
+- Add `logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')`
+- Add logging.debug() statements at EVERY critical point:
+  * Before reading input: logging.debug(f"Input data: {{input_data}}")
+  * Before calling tools: logging.debug(f"Calling tool: {{tool_name}} with {{args}}")
+  * After tool calls: logging.debug(f"Tool result: {{result[:100]}}")
+  * Before file operations: logging.debug(f"Writing to {{filename}}")
+  * In exception handlers: logging.exception("Error details")
+- This logging will help us understand WHERE the failure occurs"""
 
             # Build comprehensive fix prompt with all context
             fix_prompt = f"""You are an expert code debugger. The following code FAILED its tests.
@@ -2977,7 +3091,7 @@ ORIGINAL GOAL:
 {description}
 
 OVERSEER STRATEGY:
-{specification}
+{specification[:1000]}
 
 {available_tools if available_tools and "No specific tools" not in available_tools else ""}
 
@@ -2989,11 +3103,15 @@ CURRENT CODE (has errors):
 TEST ERROR OUTPUT:
 {error_output}
 
-{f'TEST EXECUTION LOG:\n{test_output}' if test_output else ''}
+{f'TEST EXECUTION LOG:\n{test_output[:1000]}' if test_output else ''}
 
-{f'STDOUT: {stdout_output}' if stdout_output else ''}
+{f'STDOUT: {stdout_output[:500]}' if stdout_output else ''}
 
 {previous_attempts_summary}
+
+{f'ORIGINAL TEST REQUIREMENTS:\n{original_test[:500]}' if original_test else ''}
+
+{logging_instruction}
 
 You MUST respond with ONLY a JSON object in this exact format:
 
@@ -3098,36 +3216,293 @@ Return ONLY the JSON object, nothing else."""
             stdout, stderr, metrics = self.runner.run_node(node_id, sample_input)
 
             if metrics["success"]:
-                console.print(f"[green]OK Fixed successfully on attempt {attempt + 1} ({model_label} model, temp: {temperature})[/green]")
-                return True
+                console.print(f"[green]OK Fixed successfully on attempt {attempt + 1} ({stage})[/green]")
+
+                # If logging was added, auto-remove it to clean the code
+                if logging_added:
+                    console.print(f"[cyan]Removing debug logging to clean code...[/cyan]")
+                    cleaned_code = self._remove_debug_logging(fixed_code)
+
+                    # Save cleaned code
+                    self.runner.save_code(node_id, cleaned_code)
+
+                    # Re-run tests to verify cleaned code still works
+                    console.print(f"[dim]Verifying cleaned code still passes tests...[/dim]")
+                    stdout, stderr, metrics = self.runner.run_node(node_id, sample_input)
+
+                    if metrics["success"]:
+                        console.print(f"[green]OK Cleaned code passes tests![/green]")
+                        return True
+                    else:
+                        console.print(f"[yellow]Warning: Cleaned code failed, keeping version with logging[/yellow]")
+                        # Restore code with logging
+                        self.runner.save_code(node_id, fixed_code)
+                        return True
+                else:
+                    return True
             else:
-                # Track this failed fix attempt
-                previous_fixes.append({
+                # Track this failed attempt with ALL details
+                all_attempts.append({
+                    'attempt_num': attempt + 1,
+                    'model': current_model,
+                    'temp': temperature,
+                    'stage': stage,
                     'fixes': fixes if 'fixes' in locals() else [],
                     'analysis': analysis if 'analysis' in locals() else '',
                     'error': stderr,
-                    'model': current_model,
-                    'temperature': temperature
+                    'code_attempted': fixed_code[:500] if fixed_code else ''
                 })
 
                 # Update error for next iteration
                 self.context['last_error'] = stderr
                 self.context['last_stdout'] = stdout
 
-                next_step = ""
-                if attempt < max_attempts - 2:
-                    next_step = "trying with higher temperature on fast model"
-                elif attempt == max_attempts - 2:
+                # Describe next step
+                if attempt < 1:
+                    next_step = "retrying with higher temperature"
+                elif attempt == 1:
+                    next_step = "adding debug logging for attempts 3-4"
+                elif attempt < 4:
+                    next_step = "continuing with logging"
+                elif attempt == 4:
                     next_step = "escalating to powerful model"
                 else:
-                    next_step = "no more attempts"
+                    next_step = "preparing god-level escalation"
 
                 console.print(f"[yellow]Still has errors, {next_step}...[/yellow]")
 
             code = fixed_code  # Try to fix this version next
 
-        console.print(f"[red]FAIL Could not fix after {max_attempts} adaptive attempts (fast model x{max_attempts-1}, powerful model x1)[/red]")
-        return False
+        # After 6 failed attempts, escalate to GOD-LEVEL tool
+        console.print(f"\n[bold red]All 6 attempts failed. Escalating to GOD-LEVEL tool ({god_level_model})...[/bold red]")
+        return self._god_level_fix(
+            node_id=node_id,
+            code=code,
+            description=description,
+            specification=specification,
+            all_attempts=all_attempts,
+            original_test=original_test,
+            error_output=error_output,
+            god_model=god_level_model
+        )
+
+    def _remove_debug_logging(self, code: str) -> str:
+        """
+        Remove debug logging statements added during escalation attempts 3-6.
+
+        Removes:
+        - import logging
+        - logging.basicConfig(...)
+        - logging.debug(...), logging.info(...), logging.exception(...) calls
+        - Empty lines left behind
+
+        Returns cleaned code.
+        """
+        import re
+
+        lines = code.split('\n')
+        cleaned_lines = []
+        skip_next_blank = False
+
+        for line in lines:
+            stripped = line.strip()
+
+            # Skip logging imports
+            if stripped.startswith('import logging') or stripped.startswith('from logging import'):
+                skip_next_blank = True
+                continue
+
+            # Skip logging configuration
+            if 'logging.basicConfig' in stripped:
+                skip_next_blank = True
+                continue
+
+            # Skip logging calls
+            if re.match(r'\s*logging\.(debug|info|warning|error|exception|critical)\(', stripped):
+                skip_next_blank = True
+                continue
+
+            # Skip blank line after removed logging (for cleanliness)
+            if not stripped and skip_next_blank:
+                skip_next_blank = False
+                continue
+
+            cleaned_lines.append(line)
+            skip_next_blank = False
+
+        return '\n'.join(cleaned_lines)
+
+    def _god_level_fix(
+        self,
+        node_id: str,
+        code: str,
+        description: str,
+        specification: str,
+        all_attempts: list,
+        original_test: str,
+        error_output: str,
+        god_model: str
+    ) -> bool:
+        """
+        The FINAL BOSS - God-level tool (deepseek-coder:6.7b on localhost).
+
+        This is the last resort after 6 failed attempts. It receives:
+        - Complete history of all 6 attempts
+        - Original test requirements
+        - Full specification
+        - All errors encountered
+
+        The god-level tool must succeed or the task is considered impossible.
+        """
+        console.print(f"\n[bold magenta]╔═══════════════════════════════════════╗[/bold magenta]")
+        console.print(f"[bold magenta]║   GOD-LEVEL ESCALATION ACTIVATED     ║[/bold magenta]")
+        console.print(f"[bold magenta]║   Model: {god_model:25s} ║[/bold magenta]")
+        console.print(f"[bold magenta]║   This is the FINAL BOSS attempt    ║[/bold magenta]")
+        console.print(f"[bold magenta]╔═══════════════════════════════════════╗[/bold magenta]\n")
+
+        # Build comprehensive history summary
+        history_summary = "\n=== COMPLETE FAILURE HISTORY ===\n"
+        for attempt in all_attempts:
+            history_summary += f"\nAttempt {attempt['attempt_num']} - {attempt['stage']} ({attempt['model']}, temp={attempt['temp']}):\n"
+            history_summary += f"  Fixes attempted: {', '.join(attempt.get('fixes', ['none']))}\n"
+            history_summary += f"  Analysis: {attempt.get('analysis', 'N/A')}\n"
+            history_summary += f"  Error: {attempt['error'][:200]}...\n"
+            if attempt.get('code_attempted'):
+                history_summary += f"  Code sample: {attempt['code_attempted'][:100]}...\n"
+
+        # Build god-level prompt with MAXIMUM context
+        god_prompt = f"""You are the GOD-LEVEL CODE FIXER - the most powerful debugging AI.
+
+CRITICAL CONTEXT: 6 previous attempts by other models ALL FAILED. You are the LAST HOPE.
+
+Your job: FIX THIS CODE so it passes the tests. This is MANDATORY - failure is not an option.
+
+════════════════════════════════════════════════════════════════════════
+
+ORIGINAL USER REQUEST:
+{description}
+
+ORIGINAL SPECIFICATION FROM OVERSEER:
+{specification[:1500]}
+
+CURRENT CODE (BROKEN after 6 failed fixes):
+```python
+{code}
+```
+
+ORIGINAL TEST THAT MUST PASS:
+```python
+{original_test if original_test else 'Test not available'}
+```
+
+CURRENT ERROR:
+{error_output[:500]}
+
+{history_summary}
+
+════════════════════════════════════════════════════════════════════════
+
+YOUR MISSION:
+1. ANALYZE: Review all 6 failed attempts - what did they miss?
+2. UNDERSTAND: What does the test ACTUALLY require?
+3. FIX: Generate working code that WILL pass the test
+4. VERIFY: Mentally trace through the code to ensure correctness
+
+CRITICAL INSIGHTS FROM FAILURES:
+- 6 models couldn't fix this - there's likely a SUBTLE issue
+- The error might be in: imports, string formatting, function names, interface mismatch
+- Check if code matches test expectations EXACTLY
+- Verify all imports are present
+- Ensure function/interface matches what tests import
+
+RESPONSE FORMAT:
+Return ONLY a JSON object:
+
+{{
+  "root_cause_analysis": "What was the ACTUAL problem that 6 models missed?",
+  "fix_strategy": "Your strategy to fix it",
+  "code": "The FIXED Python code as a string",
+  "confidence": "Why this will work when others failed"
+}}
+
+Requirements:
+- Code must be IMMEDIATELY runnable
+- Code must PASS THE TESTS
+- NO markdown fences in "code" field
+- Learn from ALL 6 failed attempts
+- This is your ONLY chance - make it count
+
+Return ONLY the JSON object."""
+
+        # Call god-level model on localhost:11434
+        console.print(f"[cyan]Consulting god-level model ({god_model})...[/cyan]")
+
+        try:
+            response = self.client.generate(
+                model=god_model,
+                prompt=god_prompt,
+                temperature=0.1,  # Ultra-focused for final attempt
+                model_key="generator"  # Use generator endpoint (localhost)
+            )
+
+            if not response:
+                console.print(f"[red]ERROR: God-level model returned no response[/red]")
+                return False
+
+            # Parse JSON response
+            import json
+            response = response.strip()
+            if response.startswith('```json'):
+                response = response.split('```json')[1].split('```')[0].strip()
+            elif response.startswith('```'):
+                response = response.split('```')[1].split('```')[0].strip()
+
+            result = json.loads(response)
+
+            root_cause = result.get("root_cause_analysis", "N/A")
+            strategy = result.get("fix_strategy", "N/A")
+            fixed_code = result.get("code", "")
+            confidence = result.get("confidence", "N/A")
+
+            console.print(f"\n[bold cyan]God-Level Analysis:[/bold cyan]")
+            console.print(f"[yellow]Root Cause:[/yellow] {root_cause}")
+            console.print(f"[yellow]Strategy:[/yellow] {strategy}")
+            console.print(f"[yellow]Confidence:[/yellow] {confidence}\n")
+
+            if not fixed_code:
+                console.print(f"[red]ERROR: No code in god-level response[/red]")
+                return False
+
+            # Clean the code
+            fixed_code = self._clean_code(fixed_code)
+
+            # Save and test
+            self.runner.save_code(node_id, fixed_code)
+
+            console.print(f"[cyan]Testing god-level fix...[/cyan]")
+            sample_input = {"input": "test", "task": "test", "description": "test",
+                          "query": "test", "topic": "test", "prompt": "test"}
+            stdout, stderr, metrics = self.runner.run_node(node_id, sample_input)
+
+            if metrics["success"]:
+                console.print(f"\n[bold green]╔═══════════════════════════════════════╗[/bold green]")
+                console.print(f"[bold green]║   GOD-LEVEL FIX SUCCESSFUL! 🎉       ║[/bold green]")
+                console.print(f"[bold green]║   The final boss has spoken.        ║[/bold green]")
+                console.print(f"[bold green]╚═══════════════════════════════════════╝[/bold green]\n")
+                return True
+            else:
+                console.print(f"\n[bold red]╔═══════════════════════════════════════╗[/bold red]")
+                console.print(f"[bold red]║   EVEN GOD-LEVEL FAILED              ║[/bold red]")
+                console.print(f"[bold red]║   This task may be impossible        ║[/bold red]")
+                console.print(f"[bold red]╚═══════════════════════════════════════╝[/bold red]")
+                console.print(f"\n[red]Final error:[/red] {stderr[:300]}")
+                return False
+
+        except Exception as e:
+            console.print(f"[red]ERROR in god-level escalation: {e}[/red]")
+            import traceback
+            traceback.print_exc()
+            return False
 
     def _escalate_and_fix(
         self,
@@ -3375,6 +3750,162 @@ Return ONLY the JSON object, nothing else."""
         console.print(table)
         return True
 
+    def handle_tools(self) -> bool:
+        """Handle tools command - list all available tools."""
+        console.print("\n[bold cyan]Available Tools[/bold cyan]\n")
+
+        all_tools = self.tools_manager.get_all_tools()
+
+        if not all_tools:
+            console.print("[yellow]No tools available[/yellow]")
+            return True
+
+        # Group tools by type
+        from collections import defaultdict
+        tools_by_type = defaultdict(list)
+
+        for tool in all_tools:
+            tools_by_type[tool.tool_type.value].append(tool)
+
+        # Display each type separately
+        for tool_type in sorted(tools_by_type.keys()):
+            tools = tools_by_type[tool_type]
+
+            table = Table(
+                title=f"{tool_type.upper()} Tools ({len(tools)})",
+                box=box.ROUNDED,
+                show_header=True,
+                header_style="bold magenta"
+            )
+            table.add_column("Tool ID", style="cyan", no_wrap=True)
+            table.add_column("Name", style="green")
+            table.add_column("Description")
+            table.add_column("Model/Tags", style="dim")
+
+            for tool in tools:
+                tool_id = tool.tool_id
+                name = getattr(tool, 'name', tool_id)
+                description = tool.description[:60] + "..." if len(tool.description) > 60 else tool.description
+
+                # Get model or tags
+                if tool_type == "llm":
+                    impl = getattr(tool, 'implementation', {})
+                    llm_config = impl.get('llm', {}) if isinstance(impl, dict) else {}
+                    model_info = llm_config.get('model', 'unknown') if isinstance(llm_config, dict) else 'unknown'
+                elif tool_type == "community":
+                    impl = getattr(tool, 'implementation', {})
+                    tools_list = impl.get('tools', []) if isinstance(impl, dict) else []
+                    model_info = f"{len(tools_list)} tools" if tools_list else "composite"
+                else:
+                    model_info = ", ".join(tool.tags[:2]) if tool.tags else "code"
+
+                table.add_row(tool_id, name, description, model_info)
+
+            console.print(table)
+            console.print()  # Blank line between tables
+
+        # Summary
+        total_tools = len(all_tools)
+        console.print(f"[dim]Total: {total_tools} tools available[/dim]\n")
+
+        return True
+
+    def handle_workflow(self, node_id: str) -> bool:
+        """Handle workflow command - display the complete workflow for a node."""
+        if not node_id:
+            console.print("[red]Error: Please specify a node ID[/red]")
+            console.print("[dim]Usage: workflow <node_id>[/dim]")
+            return False
+
+        console.print(f"\n[bold cyan]Workflow for: {node_id}[/bold cyan]\n")
+
+        # Get node info from registry
+        node_info = self.registry.get_node(node_id)
+
+        if not node_info:
+            console.print(f"[red]Error: Node '{node_id}' not found in registry[/red]")
+            return False
+
+        # Try to load the node's code to analyze it
+        node_path = self.runner.get_node_path(node_id)
+
+        if not node_path.exists():
+            console.print(f"[red]Error: Node file not found: {node_path}[/red]")
+            return False
+
+        # Read the code
+        with open(node_path, 'r') as f:
+            code = f.read()
+
+        # Analyze code to extract workflow steps
+        import re
+
+        # Find call_tool() invocations
+        tool_pattern = re.compile(r'call_tool\s*\(\s*[\'"]([^\'"]+)[\'"]')
+        tools_called = tool_pattern.findall(code)
+
+        # Find function definitions
+        func_pattern = re.compile(r'def\s+(\w+)\s*\(')
+        functions = func_pattern.findall(code)
+
+        # Create workflow visualization
+        table = Table(title=f"Workflow Steps for {node_id}", box=box.ROUNDED)
+        table.add_column("Step", justify="right", style="cyan", no_wrap=True)
+        table.add_column("Type", style="magenta")
+        table.add_column("Operation", style="green")
+        table.add_column("Details", style="dim")
+
+        step_num = 1
+
+        # Add function definitions
+        for func in functions:
+            table.add_row(
+                str(step_num),
+                "Function",
+                func,
+                "Local function" if func != "main" else "Entry point"
+            )
+            step_num += 1
+
+        # Add tool calls
+        for i, tool in enumerate(tools_called, 1):
+            # Try to find the tool in tools manager
+            tool_obj = next((t for t in self.tools_manager.get_all_tools() if t.tool_id == tool), None)
+
+            if tool_obj:
+                tool_desc = tool_obj.description[:50] + "..." if len(tool_obj.description) > 50 else tool_obj.description
+                tool_type = tool_obj.tool_type.value
+            else:
+                tool_desc = "Unknown tool"
+                tool_type = "external"
+
+            table.add_row(
+                str(step_num),
+                f"Tool Call ({tool_type})",
+                tool,
+                tool_desc
+            )
+            step_num += 1
+
+        console.print(table)
+
+        # Show node metadata
+        meta_table = Table(title="Node Metadata", box=box.SIMPLE)
+        meta_table.add_column("Property", style="cyan")
+        meta_table.add_column("Value", style="green")
+
+        meta_table.add_row("Version", node_info.get("version", "unknown"))
+        meta_table.add_row("Score", f"{node_info.get('score_overall', 0):.2f}")
+        meta_table.add_row("Tags", ", ".join(node_info.get("tags", [])))
+        meta_table.add_row("Functions Found", str(len(functions)))
+        meta_table.add_row("Tools Used", str(len(set(tools_called))))
+
+        console.print()
+        console.print(meta_table)
+        console.print()
+
+        return True
+
     def handle_clear_rag(self) -> bool:
         """
         Handle clear_rag command - clears RAG memory and optionally registry/nodes.
@@ -3474,6 +4005,13 @@ Return ONLY the JSON object, nothing else."""
 
                 elif user_input.lower() == 'list':
                     self.handle_list()
+
+                elif user_input.lower() == 'tools':
+                    self.handle_tools()
+
+                elif user_input.startswith('workflow '):
+                    node_id = user_input[9:].strip()
+                    self.handle_workflow(node_id)
 
                 elif user_input.startswith('generate '):
                     description = user_input[9:].strip()

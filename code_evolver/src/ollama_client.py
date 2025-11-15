@@ -36,6 +36,7 @@ class OllamaClient:
         """
         self.base_url = base_url
         self.config_manager = config_manager
+        self.backend_type = "ollama"  # Add backend_type for multi-backend compatibility
 
         # Round-robin endpoint tracking per model_key
         self._endpoint_counters: Dict[str, int] = {}
