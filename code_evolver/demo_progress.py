@@ -14,7 +14,7 @@ def demo_progress_display():
     config = ConfigManager()
 
     # Start the task
-    progress.start("Generate Email Validator Function")
+    progress.start("Generate Email Validator Function.")
 
     try:
         # Stage 1: Initialization
