@@ -431,6 +431,191 @@ tools:
     tags: ["content", "creative", "writing"]
 ```
 
+### OpenAPI-Based Tools
+
+Code Evolver supports **OpenAPI/REST API integration**, allowing you to seamlessly integrate external APIs into your workflows. This powerful feature enables:
+
+- **Automatic API discovery** from OpenAPI/Swagger specifications
+- **Type-safe API calls** with parameter validation
+- **Authentication support** (Bearer, API Key, Basic Auth)
+- **Code generation templates** for easy integration
+- **RAG-powered learning** from successful API interactions
+
+#### Configuring OpenAPI Tools
+
+```yaml
+tools:
+  nmt_translator:
+    name: "NMT Translation Service"
+    type: "openapi"
+    description: "Neural Machine Translation service for translating text between languages"
+
+    # Performance/cost metadata for intelligent tool selection
+    cost_tier: "low"           # Helps planner choose appropriate tools
+    speed_tier: "very-fast"    # Fast local API
+    quality_tier: "good"       # Good but needs validation
+    max_output_length: "long"  # Can handle long texts
+
+    # OpenAPI configuration
+    openapi:
+      # Load spec from URL (or use spec_path for local files)
+      spec_url: "http://localhost:8000/openapi.json"
+      base_url: "http://localhost:8000"
+
+      # Optional authentication
+      auth:
+        type: "bearer"         # bearer | api_key | basic
+        token: "your-api-key-here"
+        # For API key auth:
+        # api_key_name: "X-API-Key"
+        # For basic auth:
+        # username: "user"
+        # password: "pass"
+
+    # Python code template for using this API
+    code_template: |
+      import requests
+      import json
+
+      def translate_text(text, source_lang="en", target_lang="es"):
+          url = "http://localhost:8000/translate"
+          payload = {"text": text, "source_lang": source_lang, "target_lang": target_lang}
+          response = requests.post(url, json=payload)
+          response.raise_for_status()
+          return response.json().get("translated_text", "")
+
+    tags: ["translation", "nmt", "neural", "languages", "openapi", "api"]
+```
+
+#### How OpenAPI Tools Work
+
+1. **Automatic Discovery**: The system loads the OpenAPI spec and parses all available endpoints
+2. **Intelligent Selection**: RAG-powered search finds the right API based on task description
+3. **Code Generation**: LLM generates Python code using the API with proper error handling
+4. **Execution**: Generated code calls the API and processes responses
+5. **Learning**: Successful API interactions are stored in RAG for future reuse
+
+#### Example: Using Translation API
+
+```bash
+CodeEvolver> translate "Hello, world!" to Spanish
+
+> Task classified as API_CALL
+> Found tool: NMT Translation Service
+> Generating integration code...
+✓ Code generated with API client
+✓ Tests passed
+✓ Translation complete
+
+RESULT: "¡Hola, mundo!"
+```
+
+**Generated Code:**
+```python
+import json
+import sys
+import requests
+
+def main():
+    input_data = json.load(sys.stdin)
+    text = input_data.get("text", "Hello, world!")
+    target_lang = input_data.get("target_lang", "es")
+
+    # Call translation API
+    url = "http://localhost:8000/translate"
+    payload = {
+        "text": text,
+        "source_lang": "en",
+        "target_lang": target_lang
+    }
+
+    response = requests.post(url, json=payload)
+    response.raise_for_status()
+
+    result = response.json()
+    translated = result.get("translated_text", "")
+
+    print(json.dumps({"result": translated}))
+
+if __name__ == "__main__":
+    main()
+```
+
+#### OpenAPI Features
+
+- **Multiple spec formats**: JSON, YAML, or loaded from URL
+- **Authentication**: Automatic header injection for Bearer, API Key, or Basic Auth
+- **Parameter handling**: Path, query, header, and body parameters
+- **Error handling**: Proper HTTP status code handling and error reporting
+- **Code templates**: Provide examples to guide LLM code generation
+- **Metadata enrichment**: Cost, speed, and quality tiers for intelligent tool selection
+
+### Python Testing & Code Quality Tools
+
+Code Evolver includes **executable tools** for Python code analysis and testing:
+
+```yaml
+tools:
+  # Static analysis
+  pylint_checker:
+    name: "Pylint Code Quality Checker"
+    type: "executable"
+    description: "Runs pylint static analysis on Python code"
+    executable:
+      command: "pylint"
+      args: ["--output-format=text", "--score=yes", "{source_file}"]
+      install_command: "pip install pylint"
+    tags: ["python", "static-analysis", "quality", "linting"]
+
+  # Type checking
+  mypy_type_checker:
+    name: "MyPy Type Checker"
+    type: "executable"
+    description: "Runs mypy type checking on Python code"
+    executable:
+      command: "mypy"
+      args: ["--strict", "--show-error-codes", "{source_file}"]
+      install_command: "pip install mypy"
+    tags: ["python", "type-checking", "static-analysis"]
+
+  # Security scanning
+  bandit_security:
+    name: "Bandit Security Scanner"
+    type: "executable"
+    description: "Finds common security issues in Python code"
+    executable:
+      command: "bandit"
+      args: ["-r", "{source_file}"]
+      install_command: "pip install bandit"
+    tags: ["python", "security", "vulnerability"]
+
+  # Unit testing
+  pytest_runner:
+    name: "Pytest Test Runner"
+    type: "executable"
+    description: "Runs pytest unit tests with coverage"
+    executable:
+      command: "pytest"
+      args: ["-v", "--tb=short", "{test_file}"]
+      install_command: "pip install pytest"
+    tags: ["python", "testing", "pytest"]
+```
+
+**Available Testing Tools:**
+
+- **pylint** - PEP 8 style checking and code quality analysis
+- **mypy** - Static type checking
+- **flake8** - Style checking and error detection
+- **black** - Code formatting validation
+- **bandit** - Security vulnerability scanning
+- **pytest** - Unit test execution with coverage
+- **radon** - Complexity analysis (cyclomatic complexity, maintainability index)
+- **vulture** - Dead code detection
+- **pydocstyle** - Docstring validation (PEP 257)
+- **isort** - Import statement organization
+
+These tools are automatically invoked during code generation and optimization to ensure high-quality, secure, and well-tested code.
+
 ## 📈 Performance Metrics
 
 ### Tracked Metrics
