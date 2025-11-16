@@ -24,6 +24,9 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
+# Import profiling utilities
+from .profiling import ProfileContext, get_global_registry
+
 logger = logging.getLogger(__name__)
 
 
@@ -96,27 +99,36 @@ class OptimizationPipeline:
         Returns:
             OptimizationResult with optimized content and metrics
         """
-        if not self.enabled:
-            logger.info("Optimization disabled in config")
-            return None
+        # Profile optimization overhead (cost/benefit analysis)
+        profile_name = f"OptimizationPipeline.optimize_artifact.{level}"
+        profile_metadata = {
+            "artifact_id": getattr(artifact, 'artifact_id', 'unknown'),
+            "optimization_level": level,
+            "artifact_type": getattr(artifact, 'artifact_type', 'unknown')
+        }
 
-        level_enum = OptimizationLevel(level)
+        with ProfileContext(profile_name, metadata=profile_metadata):
+            if not self.enabled:
+                logger.info("Optimization disabled in config")
+                return None
 
-        # Check cost limits for cloud/deep optimizations
-        if level_enum in [OptimizationLevel.CLOUD, OptimizationLevel.DEEP]:
-            if self.total_cost_today >= self.max_cost_per_day:
-                logger.warning(f"Daily cost limit reached (${self.max_cost_per_day}), falling back to local")
-                level_enum = OptimizationLevel.LOCAL
+            level_enum = OptimizationLevel(level)
 
-        logger.info(f"Optimizing {artifact.artifact_id} at {level_enum.value} level")
+            # Check cost limits for cloud/deep optimizations
+            if level_enum in [OptimizationLevel.CLOUD, OptimizationLevel.DEEP]:
+                if self.total_cost_today >= self.max_cost_per_day:
+                    logger.warning(f"Daily cost limit reached (${self.max_cost_per_day}), falling back to local")
+                    level_enum = OptimizationLevel.LOCAL
 
-        # Route to appropriate optimizer
-        if level_enum == OptimizationLevel.LOCAL:
-            return self._local_optimization(artifact, context)
-        elif level_enum == OptimizationLevel.CLOUD:
-            return self._cloud_optimization(artifact, context)
-        elif level_enum == OptimizationLevel.DEEP:
-            return self._deep_system_analysis(artifact, context)
+            logger.info(f"Optimizing {artifact.artifact_id} at {level_enum.value} level")
+
+            # Route to appropriate optimizer
+            if level_enum == OptimizationLevel.LOCAL:
+                return self._local_optimization(artifact, context)
+            elif level_enum == OptimizationLevel.CLOUD:
+                return self._cloud_optimization(artifact, context)
+            elif level_enum == OptimizationLevel.DEEP:
+                return self._deep_system_analysis(artifact, context)
 
     def _local_optimization(
         self,
