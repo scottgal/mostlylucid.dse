@@ -1,0 +1,99 @@
+# ============================================================================
+# Loki Configuration for Code Evolver BugCatcher
+# ============================================================================
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+# Schema configuration
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+# Storage configuration
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/boltdb-shipper-active
+    cache_location: /loki/boltdb-shipper-cache
+    cache_ttl: 24h
+    shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks
+
+# Compactor configuration
+compactor:
+  working_directory: /loki/boltdb-shipper-compactor
+  shared_store: filesystem
+
+# Limits configuration
+limits_config:
+  # Retention period (7 days)
+  retention_period: 168h
+
+  # Ingestion limits
+  ingestion_rate_mb: 10
+  ingestion_burst_size_mb: 20
+
+  # Query limits
+  max_query_length: 721h  # 30 days
+  max_query_parallelism: 32
+  max_streams_per_user: 10000
+  max_global_streams_per_user: 50000
+
+  # Enforce metric name
+  enforce_metric_name: false
+
+  # Per-stream rate limits
+  per_stream_rate_limit: 3MB
+  per_stream_rate_limit_burst: 15MB
+
+# Chunk store configuration
+chunk_store_config:
+  max_look_back_period: 0s
+
+# Table manager configuration
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 168h
+
+# Query range configuration
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+# Ruler configuration (for alerting)
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /loki/rules-temp
+  alertmanager_url: http://localhost:9093
+  ring:
+    kvstore:
+      store: inmemory
+  enable_api: true
