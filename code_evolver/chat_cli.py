@@ -1405,8 +1405,20 @@ Create a comprehensive specification that will guide the code generator. Include
    - At least 3 test cases with inputs and expected outputs
    - Edge cases to handle (empty input, zero, negative, etc.)
 
-6. **Tool Recommendation**
-   {'Since you have a template, specify exactly what needs to be modified/added/removed.' if template_info else 'If a specialized LLM tool is available and appropriate for text generation, recommend using it. Otherwise, recommend direct implementation.'}
+6. **Tool Recommendation** (CRITICAL - Check Available Tools First!)
+   {'Since you have a template, specify exactly what needs to be modified/added/removed.' if template_info else '''BEFORE recommending custom code, CHECK IF AN EXISTING TOOL CAN SOLVE THIS:
+
+   Review the available tools list above. If ANY tool matches the task:
+   - STRONGLY RECOMMEND using that tool via call_tool()
+   - Example: If task is translation and quick_translator exists → USE IT!
+   - Example: If task is content generation and content_generator exists → USE IT!
+
+   ONLY recommend custom implementation if:
+   - NO existing tool matches the task
+   - Task is simple enough for direct code (math, lookups, basic logic)
+
+   Strategy: Build a library of reusable tools. Prefer tools over custom code.
+   Later we'll consolidate similar tools into generic implementations.'''}
 
 Be VERY specific and technical. Think of this as writing requirements for another developer.
 The code generator will follow this specification EXACTLY, so include ALL critical details."""

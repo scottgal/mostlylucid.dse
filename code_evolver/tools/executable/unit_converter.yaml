@@ -1,0 +1,36 @@
+name: "Unit Converter"
+type: "executable"
+description: "Fast unit conversions (length, weight, temperature, time). Direct Python execution. Supports common units like meters/feet, kg/lbs, celsius/fahrenheit, etc."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+executable:
+  command: "python"
+  args: ["-c", "import sys, json; data=json.load(sys.stdin); conversions={'m_to_ft': lambda x: x*3.28084, 'ft_to_m': lambda x: x/3.28084, 'kg_to_lbs': lambda x: x*2.20462, 'lbs_to_kg': lambda x: x/2.20462, 'c_to_f': lambda x: x*9/5+32, 'f_to_c': lambda x: (x-32)*5/9, 'km_to_mi': lambda x: x*0.621371, 'mi_to_km': lambda x: x/0.621371}; conv=data.get('conversion', 'm_to_ft'); result=conversions.get(conv, conversions['m_to_ft'])(data.get('value', 0)); print(json.dumps({'result': result, 'conversion': conv, 'original_value': data.get('value', 0)}))"]
+
+input_schema:
+  conversion: "str - Conversion type: 'm_to_ft', 'ft_to_m', 'kg_to_lbs', 'lbs_to_kg', 'c_to_f', 'f_to_c', 'km_to_mi', 'mi_to_km'"
+  value: "number - Value to convert"
+
+output_schema:
+  result: "number - Converted value"
+  conversion: "str - Conversion performed"
+  original_value: "number - Original value"
+
+tags:
+  - conversion
+  - units
+  - measurement
+  - fast
+  - deterministic
+
+examples:
+  - input: {"conversion": "m_to_ft", "value": 10}
+    output: {"result": 32.8084, "conversion": "m_to_ft", "original_value": 10}
+  - input: {"conversion": "c_to_f", "value": 100}
+    output: {"result": 212.0, "conversion": "c_to_f", "original_value": 100}
+  - input: {"conversion": "kg_to_lbs", "value": 70}
+    output: {"result": 154.3234, "conversion": "kg_to_lbs", "original_value": 70}

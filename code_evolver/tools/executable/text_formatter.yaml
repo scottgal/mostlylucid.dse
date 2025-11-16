@@ -1,0 +1,36 @@
+name: "Text Formatter"
+type: "executable"
+description: "Fast text formatting operations (uppercase, lowercase, title case, reverse, trim, etc.). Direct Python execution - instant results."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+executable:
+  command: "python"
+  args: ["-c", "import sys, json; data=json.load(sys.stdin); text=data.get('text', ''); ops={'upper': str.upper, 'lower': str.lower, 'title': str.title, 'capitalize': str.capitalize, 'reverse': lambda s: s[::-1], 'trim': str.strip, 'remove_spaces': lambda s: s.replace(' ', '')}; result=ops.get(data.get('operation', 'lower'), ops['lower'])(text); print(json.dumps({'result': result, 'operation': data.get('operation', 'lower'), 'original': text}))"]
+
+input_schema:
+  text: "str - Text to format"
+  operation: "str - Operation: 'upper', 'lower', 'title', 'capitalize', 'reverse', 'trim', 'remove_spaces'"
+
+output_schema:
+  result: "str - Formatted text"
+  operation: "str - Operation performed"
+  original: "str - Original text"
+
+tags:
+  - text
+  - formatting
+  - string
+  - fast
+  - deterministic
+
+examples:
+  - input: {"text": "hello world", "operation": "upper"}
+    output: {"result": "HELLO WORLD", "operation": "upper", "original": "hello world"}
+  - input: {"text": "hello world", "operation": "title"}
+    output: {"result": "Hello World", "operation": "title", "original": "hello world"}
+  - input: {"text": "stressed", "operation": "reverse"}
+    output: {"result": "desserts", "operation": "reverse", "original": "stressed"}

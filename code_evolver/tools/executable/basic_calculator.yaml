@@ -1,0 +1,36 @@
+name: "Basic Calculator"
+type: "executable"
+description: "Fast arithmetic operations (add, subtract, multiply, divide, power, modulo). Direct Python execution - no LLM needed. Use for simple math."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+executable:
+  command: "python"
+  args: ["-c", "import sys, json; data=json.load(sys.stdin); ops={'add': lambda a,b: a+b, 'subtract': lambda a,b: a-b, 'multiply': lambda a,b: a*b, 'divide': lambda a,b: a/b if b!=0 else float('inf'), 'power': lambda a,b: a**b, 'modulo': lambda a,b: a%b if b!=0 else 0}; result=ops.get(data['operation'], ops['add'])(data.get('a', 0), data.get('b', 0)); print(json.dumps({'result': result, 'operation': data.get('operation', 'add')}))"]
+
+input_schema:
+  operation: "str - Operation: 'add', 'subtract', 'multiply', 'divide', 'power', 'modulo'"
+  a: "number - First operand"
+  b: "number - Second operand"
+
+output_schema:
+  result: "number - Result of the operation"
+  operation: "str - Operation performed"
+
+tags:
+  - math
+  - arithmetic
+  - calculator
+  - fast
+  - deterministic
+
+examples:
+  - input: {"operation": "add", "a": 5, "b": 3}
+    output: {"result": 8, "operation": "add"}
+  - input: {"operation": "multiply", "a": 7, "b": 6}
+    output: {"result": 42, "operation": "multiply"}
+  - input: {"operation": "divide", "a": 10, "b": 2}
+    output: {"result": 5.0, "operation": "divide"}
