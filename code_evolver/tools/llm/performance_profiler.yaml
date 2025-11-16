@@ -1,0 +1,159 @@
+name: "Performance Profiler"
+type: "llm"
+version: "1.0.0"
+description: "Analyzes code performance using PyInstrument profiling and provides detailed performance metrics, bottleneck identification, and optimization recommendations. Use this when asked to profile code, find performance issues, or analyze execution time."
+llm:
+  model: "qwen2.5-coder:14b"
+  endpoint: null
+  system_prompt: |
+    You are a performance profiling expert. When given code to analyze:
+
+    1. EXECUTION: Run the code with PyInstrument profiling enabled
+    2. ANALYSIS: Analyze the profiling data to identify:
+       - Total execution time
+       - Hotspots (functions taking most time)
+       - Call stack depth and patterns
+       - I/O vs CPU time breakdown
+       - Memory allocation patterns
+
+    3. BOTTLENECK IDENTIFICATION:
+       - List top 5 slowest operations
+       - Identify unnecessary loops or recursion
+       - Spot inefficient algorithms (O(n²) when O(n) possible)
+       - Find blocking I/O operations
+       - Detect redundant computations
+
+    4. RECOMMENDATIONS:
+       - Specific optimization suggestions
+       - Alternative algorithms or approaches
+       - Caching opportunities
+       - Parallelization possibilities
+       - Tool version upgrades if applicable
+
+    5. OUTPUT FORMAT:
+       ```
+       ## Performance Profile
+
+       **Total Time**: X.XXs
+       **Samples**: N
+
+       ### Top Bottlenecks
+       1. function_name (XX.X%) - X.XXs
+          Location: file.py:line
+          Issue: [description]
+          Fix: [suggestion]
+
+       2. ...
+
+       ### Breakdown
+       - CPU Time: XX%
+       - I/O Time: XX%
+       - Memory: XX MB peak
+
+       ### Optimization Opportunities
+       1. [High Impact] ...
+       2. [Medium Impact] ...
+
+       ### Recommended Actions
+       - [ ] Action 1
+       - [ ] Action 2
+       ```
+
+    Use the profiling.py module to actually profile the code.
+    Return actionable insights, not just data.
+
+  temperature: 0.4
+
+tags: ["performance", "profiling", "optimization", "analysis", "pyinstrument"]
+
+constraints:
+  max_memory_mb: 1024
+  max_execution_time_ms: 300000  # 5 minutes for complex profiling
+
+metadata:
+  speed_tier: "slow"  # Profiling is inherently slower
+  cost_tier: "free"
+  reliability: "high"
+  use_cases:
+    - "Profile Python code performance"
+    - "Identify performance bottlenecks"
+    - "Compare function execution times"
+    - "Analyze algorithm efficiency"
+    - "Generate optimization recommendations"
+    - "Measure I/O vs CPU time"
+    - "Find memory leaks or excessive allocation"
+
+  example_prompts:
+    - "Profile this code and tell me where it's slow"
+    - "Get performance metrics for this function"
+    - "Why is this code taking so long?"
+    - "What's the bottleneck in this script?"
+    - "Profile the LLM generation function"
+    - "Analyze performance of the node runner"
+    - "Compare performance before and after optimization"
+
+  integration:
+    profiling_module: "src/profiling.py"
+    profiler_class: "Profiler"
+    registry_class: "ProfileRegistry"
+    environment_var: "CODE_EVOLVER_PROFILE=1"
+
+  output_formats:
+    - name: "summary"
+      description: "High-level performance summary"
+    - name: "detailed"
+      description: "Full profiling report with call tree"
+    - name: "comparison"
+      description: "Side-by-side version comparison"
+    - name: "recommendations"
+      description: "Actionable optimization suggestions"
+
+workflow:
+  steps:
+    - action: "validate_code"
+      description: "Ensure code is valid Python"
+
+    - action: "setup_profiling"
+      description: "Enable CODE_EVOLVER_PROFILE=1"
+      code: |
+        import os
+        os.environ["CODE_EVOLVER_PROFILE"] = "1"
+
+    - action: "run_profiler"
+      description: "Execute code with profiling"
+      code: |
+        from src.profiling import Profiler, ProfileContext
+
+        profiler = Profiler(name="user_code", metadata={"source": "chat"})
+        profiler.start()
+
+        # Execute user's code
+        exec(user_code)
+
+        profile_data = profiler.stop()
+
+    - action: "analyze_results"
+      description: "Parse profiling data and identify bottlenecks"
+      code: |
+        # Extract hotspots from profile_text
+        # Calculate time percentages
+        # Identify optimization opportunities
+
+    - action: "generate_report"
+      description: "Format findings as actionable report"
+
+    - action: "suggest_optimizations"
+      description: "Provide specific code improvements"
+
+optimization:
+  triggers:
+    - "User mentions 'slow', 'performance', 'optimize'"
+    - "User asks 'why is this taking so long?'"
+    - "User requests profiling or metrics"
+    - "Code execution exceeds expected time"
+
+  auto_profile_threshold_ms: 5000  # Auto-profile if execution > 5s
+
+  comparison_enabled: true  # Allow version comparisons
+
+  save_profiles: true  # Save for historical analysis
