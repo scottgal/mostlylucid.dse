@@ -3,9 +3,12 @@ Workflow tracking and visualization for multi-step AI workflows.
 Tracks tool invocations, timing, and displays progress in real-time.
 """
 import time
+import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class StepStatus(Enum):
@@ -100,6 +103,9 @@ class WorkflowTracker:
         self.end_time: Optional[float] = None
         self.current_step: Optional[WorkflowStep] = None
 
+        # Track workflow start in BugCatcher
+        self._track_workflow_start()
+
     def add_step(
         self,
         step_id: str,
@@ -110,6 +116,10 @@ class WorkflowTracker:
         """Add a new step to the workflow."""
         step = WorkflowStep(step_id, tool_name, description, inputs)
         self.steps.append(step)
+
+        # Track step addition in BugCatcher
+        self._track_step_added(step)
+
         return step
 
     def start_step(self, step_id: str) -> WorkflowStep:
@@ -118,6 +128,10 @@ class WorkflowTracker:
         if step:
             step.start()
             self.current_step = step
+
+            # Track step start in BugCatcher
+            self._track_step_start(step)
+
         return step
 
     def complete_step(
@@ -133,6 +147,9 @@ class WorkflowTracker:
             if self.current_step == step:
                 self.current_step = None
 
+            # Track step completion in BugCatcher
+            self._track_step_complete(step)
+
     def fail_step(self, step_id: str, error: str):
         """Mark a step as failed."""
         step = self.get_step(step_id)
@@ -140,6 +157,9 @@ class WorkflowTracker:
             step.fail(error)
             if self.current_step == step:
                 self.current_step = None
+
+            # Track step failure in BugCatcher
+            self._track_step_failure(step)
 
     def get_step(self, step_id: str) -> Optional[WorkflowStep]:
         """Get a step by ID."""
@@ -253,3 +273,100 @@ class WorkflowTracker:
         lines.append(f"\nTotal time: {self.total_duration_ms}ms")
 
         return "\n".join(lines)
+
+    # =========================================================================
+    # BugCatcher Integration Methods
+    # =========================================================================
+
+    def _get_bugcatcher(self):
+        """Get BugCatcher instance if available."""
+        try:
+            from .bugcatcher import get_bugcatcher
+            return get_bugcatcher()
+        except (ImportError, Exception) as e:
+            # BugCatcher not available or disabled
+            logger.debug(f"BugCatcher not available: {e}")
+            return None
+
+    def _track_workflow_start(self):
+        """Track workflow start in BugCatcher."""
+        bugcatcher = self._get_bugcatcher()
+        if bugcatcher:
+            bugcatcher.track_request(
+                self.workflow_id,
+                {
+                    'workflow_id': self.workflow_id,
+                    'description': self.description,
+                    'context': self.context,
+                    'event': 'workflow_start',
+                    'timestamp': datetime.now().isoformat()
+                }
+            )
+
+    def _track_step_added(self, step: WorkflowStep):
+        """Track step addition in BugCatcher."""
+        bugcatcher = self._get_bugcatcher()
+        if bugcatcher:
+            request_id = f"{self.workflow_id}:{step.step_id}"
+            bugcatcher.track_request(
+                request_id,
+                {
+                    'workflow_id': self.workflow_id,
+                    'step_id': step.step_id,
+                    'tool_name': step.tool_name,
+                    'description': step.description,
+                    'event': 'step_added',
+                    'timestamp': datetime.now().isoformat()
+                }
+            )
+
+    def _track_step_start(self, step: WorkflowStep):
+        """Track step start in BugCatcher."""
+        bugcatcher = self._get_bugcatcher()
+        if bugcatcher:
+            request_id = f"{self.workflow_id}:{step.step_id}"
+            bugcatcher.track_request(
+                request_id,
+                {
+                    'workflow_id': self.workflow_id,
+                    'step_id': step.step_id,
+                    'tool_name': step.tool_name,
+                    'description': step.description,
+                    'event': 'step_start',
+                    'timestamp': datetime.now().isoformat()
+                }
+            )
+
+    def _track_step_complete(self, step: WorkflowStep):
+        """Track step completion in BugCatcher."""
+        # Track output for correlation with future exceptions
+        bugcatcher = self._get_bugcatcher()
+        if bugcatcher and step.output:
+            request_id = f"{self.workflow_id}:{step.step_id}"
+            bugcatcher.track_output(
+                request_id,
+                step.output,
+                output_type='step_output'
+            )
+
+    def _track_step_failure(self, step: WorkflowStep):
+        """Track step failure in BugCatcher."""
+        bugcatcher = self._get_bugcatcher()
+        if bugcatcher and step.error:
+            # Create a synthetic exception for the failure
+            try:
+                raise RuntimeError(step.error)
+            except RuntimeError as e:
+                request_id = f"{self.workflow_id}:{step.step_id}"
+                bugcatcher.capture_exception(
+                    e,
+                    request_id=request_id,
+                    additional_context={
+                        'workflow_id': self.workflow_id,
+                        'step_id': step.step_id,
+                        'tool_name': step.tool_name,
+                        'description': step.description,
+                        'duration_ms': step.duration_ms,
+                        'event': 'step_failure'
+                    }
+                )

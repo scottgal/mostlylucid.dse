@@ -271,6 +271,35 @@ logging:
     enabled: true
     use_colors: true
 
+# BugCatcher - Global Exception Monitoring
+bugcatcher:
+  enabled: true
+  # Loki configuration
+  loki:
+    url: "http://localhost:3100"
+    enabled: true
+    batch_size: 10
+    timeout: 5
+  # Request context cache
+  cache:
+    max_size: 100
+  # File logging
+  file_logging:
+    enabled: true
+    file: "bugcatcher.log"
+  # What to track
+  tracking:
+    exceptions: true
+    logged_errors: true
+    workflow_failures: true
+    tool_failures: true
+    llm_errors: true
+    outputs: false  # Log all outputs to Loki (not just exceptions) - can be verbose
+  # Severity levels to capture (WARNING and above)
+  min_severity: "WARNING"
+  # Auto-install exception hooks
+  auto_install_hooks: true
+
 chat:
   prompt: "CodeEvolver> "
   history_file: ".code_evolver_history"

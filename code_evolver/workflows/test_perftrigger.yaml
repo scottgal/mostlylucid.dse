@@ -1,0 +1,141 @@
+# Test PerfTrigger Workflow - Validates PerfCatcher functionality
+#
+# This workflow triggers performance variances and validates they are captured by PerfCatcher.
+# Run with: /test perftrigger or python cli.py --workflow workflows/test_perftrigger.yaml
+
+workflow_id: "test_perftrigger"
+description: "Test PerfCatcher by triggering performance variances and validating capture"
+priority: "medium"
+quality_level: "testing"
+
+steps:
+  # Step 1: Validate Loki is running
+  - step_id: "validate_loki"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_loki_connection"
+    description: "Validate Loki connection"
+    inputs: {}
+    validation:
+      required: true
+      error_action: "fail"
+
+  # Step 2: Establish baseline (fast execution)
+  - step_id: "establish_baseline"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_random_variance"
+    description: "Establish performance baseline with consistent execution"
+    inputs:
+      base_ms: 50
+      max_variance: 0.1  # Low variance for baseline
+    repeat: 15  # Need min_samples for PerfCatcher
+
+  # Step 3: Trigger variance scenario
+  - step_id: "trigger_variance"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_variance"
+    description: "Trigger performance variance (alternating fast/slow)"
+    inputs:
+      base_ms: 50
+      variance_factor: 3.0  # 300% variance
+    repeat: 10
+
+  # Step 4: Validate variance was captured
+  - step_id: "validate_variance"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_performance_captured"
+    description: "Validate performance variance was captured"
+    inputs:
+      tool_name: "perf_trigger"
+      min_variance: 0.2  # 20% threshold
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+  # Step 5: Reset and establish new baseline
+  - step_id: "reset_baseline"
+    tool_type: "python"
+    tool_name: "perf_trigger.reset"
+    description: "Reset for spike test"
+    inputs: {}
+
+  - step_id: "establish_baseline_2"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_random_variance"
+    description: "Establish baseline for spike test"
+    inputs:
+      base_ms: 50
+      max_variance: 0.1
+    repeat: 15
+
+  # Step 6: Trigger spike scenario
+  - step_id: "trigger_spikes"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_spike"
+    description: "Trigger occasional performance spikes"
+    inputs:
+      base_ms: 50
+      spike_ms: 500  # 10x spike
+      spike_frequency: 5  # Every 5 calls
+    repeat: 20  # Will include 4 spikes
+
+  # Step 7: Validate spikes were captured
+  - step_id: "validate_spikes"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_performance_captured"
+    description: "Validate performance spikes were captured"
+    inputs:
+      tool_name: "perf_trigger"
+      min_variance: 0.5  # 50% variance
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+  # Step 8: Reset and test gradual degradation
+  - step_id: "reset_degradation"
+    tool_type: "python"
+    tool_name: "perf_trigger.reset"
+    description: "Reset for degradation test"
+    inputs: {}
+
+  - step_id: "establish_baseline_3"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_random_variance"
+    description: "Establish baseline for degradation test"
+    inputs:
+      base_ms: 50
+      max_variance: 0.1
+    repeat: 15
+
+  # Step 9: Trigger gradual degradation
+  - step_id: "trigger_degradation"
+    tool_type: "python"
+    tool_name: "perf_trigger.trigger_gradual_degradation"
+    description: "Trigger gradual performance degradation"
+    inputs:
+      initial_ms: 50
+      degradation_rate: 1.15  # 15% slower each call
+    repeat: 10  # Will degrade significantly
+
+  # Step 10: Validate degradation was captured
+  - step_id: "validate_degradation"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_performance_captured"
+    description: "Validate performance degradation was captured"
+    inputs:
+      tool_name: "perf_trigger"
+      min_variance: 0.3  # 30% variance
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+success_criteria:
+  all_steps_complete: true
+  min_steps_success: 9  # All validation steps must pass
+
+outputs:
+  - "All performance variance scenarios were captured by PerfCatcher"
+  - "Validation passed for: variance, spikes, degradation"
+  - "PerfCatcher correctly detected variances above threshold"
