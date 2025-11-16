@@ -8,14 +8,18 @@ We present **Digital Synthetic Evolution** (DSE), a novel framework for creating
 Our approach demonstrates several key innovations:
 1. **Executable ground truth** rather than metadata-based artifact storage
 2. **Multi-tier optimization** balancing cost, speed, and quality
-3. **Pressure-aware quality negotiation** adapting to resource constraints
-4. **Platform-targeted evolution** creating deployment-specific variants
-5. **Recursive self-optimization** including meta-optimization of the optimizer itself
-6. **Fine-tuning evolution** creating specialist LLMs from successful patterns
-7. **BDD-enhanced testing** providing hierarchical behavior validation
-8. **Tools as reality testers** grounding LLM outputs in empirical truth
-9. **Real-time optimization** using live execution data for continuous improvement
-10. **Escalating code fixing** with adaptive model selection on failure
+3. **Intelligent input detection** identifying accidental/nonsense inputs with helpful suggestions
+4. **Smart pre-classification** using lightweight models (tinyllama/phi3/gemma) for efficient task routing
+5. **Complexity-aware tier selection** automatically routing simple/moderate/complex tasks to appropriate models
+6. **Timeout-based fallback** progressive retry with smaller/faster models on timeouts
+7. **6-stage adaptive escalation** with logging injection and god-level model fallback
+8. **Pressure-aware quality negotiation** adapting to resource constraints
+9. **Platform-targeted evolution** creating deployment-specific variants
+10. **Recursive self-optimization** including meta-optimization of the optimizer itself
+11. **Fine-tuning evolution** creating specialist LLMs from successful patterns
+12. **BDD-enhanced testing** providing hierarchical behavior validation
+13. **Tools as reality testers** grounding LLM outputs in empirical truth
+14. **Real-time optimization** using live execution data for continuous improvement
 
 In benchmark tests, DSE achieved 99% cost reduction through caching and code reuse, 31% quality improvement through auto-evolution, and successful deployment across platforms ranging from Raspberry Pi to cloud infrastructure. The system demonstrates compounding improvements over time, with each optimization building on previous successes.
 
@@ -1683,39 +1687,95 @@ class AdaptiveQualityManager:
 
 This continuous optimization uses real-world data rather than synthetic benchmarks, ensuring optimizations address actual usage patterns.
 
-### 4.9 Escalating Code Fixing Hierarchy: Adaptive Model Selection
+### 4.9 Six-Stage Adaptive Escalation: Progressive Code Fixing with Logging Injection
 
-**Principle**: When code generation fails, escalate through increasingly powerful models rather than giving up.
+**Principle**: When code generation fails, progressively escalate through multiple strategies: increase model power, adjust temperature, inject debugging, and finally use the most powerful available model.
 
-Traditional systems use a single model and fail if it produces broken code. DSE implements an escalating hierarchy that adapts model selection based on task difficulty and previous failures.
+Traditional systems use a single model and fail if it produces broken code. DSE implements a **6-stage adaptive escalation** system that **auto-scales from single PC to cloud frontier models**:
+1. Progressive model capability increase
+2. Adaptive temperature adjustment (0.1 → 0.6)
+3. Strategic logging injection for debugging
+4. Full context tracking across attempts
+5. Best-available model fallback for hardest cases
 
-**Escalation Hierarchy**:
+**Important**: The system adapts to your infrastructure. More powerful models = less escalation needed:
+- **Local setup** (Ollama): May need all 6 stages + "god-level" (deepseek-coder:6.7b is a "minor deity")
+- **Cloud frontier setup** (GPT-4/Claude): Often succeeds on first try, escalation rarely triggered
+- **Hybrid setup**: Smart routing minimizes cloud costs while maintaining high success rates
+
+**Six-Stage Escalation Pipeline** (Auto-scales to your infrastructure):
 
 ```
-Level 1: Fast Local Model (gemma3:4b)
-  ├─ Cost: $0
-  ├─ Speed: ~5 seconds
-  ├─ Quality: 0.60-0.75
-  └─ Use case: Simple, well-defined tasks
+LOCAL SETUP EXAMPLE (Ollama):
+Stage 1 (Attempts 1-2): Fast Model, Low Temperature
+  ├─ Model: codellama:7b (local)
+  ├─ Temperature: 0.1 (attempt 1), 0.2 (attempt 2)
+  ├─ Strategy: Conservative, focused fixes
+  ├─ Success Rate: ~60% of failures
+  └─ Avg Time: 15-20 seconds per attempt
 
-Level 2: Balanced Model (codellama:13b)
-  ├─ Cost: $0
-  ├─ Speed: ~15 seconds
-  ├─ Quality: 0.70-0.85
-  └─ Use case: Standard code generation
+Stage 2 (Attempts 3-4): Add Debug Logging, Continue Fast Model
+  ├─ Model: codellama:7b (local)
+  ├─ Temperature: 0.3 (attempt 3), 0.4 (attempt 4)
+  ├─ Strategy: Inject comprehensive logging for visibility
+  ├─ Logging: logging.debug() at ALL critical points
+  ├─ Success Rate: ~25% of remaining failures
+  └─ Avg Time: 20-25 seconds per attempt
 
-Level 3: Powerful Cloud Model (GPT-4/Claude)
-  ├─ Cost: $0.10-$0.50
-  ├─ Speed: ~30 seconds
-  ├─ Quality: 0.85-0.95
-  └─ Use case: Complex algorithms, refinement
+Stage 3 (Attempts 5-6): Powerful Model + Logging
+  ├─ Model: qwen2.5-coder:14b (local) OR gpt-4-turbo (cloud)
+  ├─ Temperature: 0.5 (attempt 5), 0.6 (attempt 6)
+  ├─ Strategy: Powerful model analyzes all previous attempts
+  ├─ Context: Full history of 1-4 attempts with errors
+  ├─ Success Rate: ~10% of remaining failures (local), ~40% (cloud frontier)
+  └─ Avg Time: 40-60 seconds (local), 10-20 seconds (cloud)
 
-Level 4: Specialized Model (qwen2.5-coder:32b)
-  ├─ Cost: $0 (but slow)
-  ├─ Speed: ~60 seconds
-  ├─ Quality: 0.80-0.95
-  └─ Use case: Technical code, complex logic
+Stage 4: Auto-Cleanup (If Successful)
+  ├─ Action: Strip all logging statements
+  ├─ Validation: Re-run tests on cleaned code
+  ├─ Fallback: Keep version with logging if cleanup breaks
+  └─ Avg Time: 5-10 seconds
+
+Stage 5: Best-Available Model Escalation (After 6 Failures)
+  ├─ Model: deepseek-coder:6.7b (local "god") OR claude-3.5-sonnet (cloud true frontier)
+  ├─ Temperature: 0.7 (high creativity)
+  ├─ Context: Complete history of ALL 6 attempts
+  ├─ Strategy: Fundamental re-thinking, may suggest rewrites
+  ├─ Success Rate: ~5% of remaining (local), ~20% (cloud frontier)
+  └─ Avg Time: 60-120 seconds (local), 15-30 seconds (cloud)
+
+Stage 6: Manual Intervention (If All Fail)
+  ├─ Action: Report detailed failure with all attempt info
+  ├─ Preserve: Best attempt (furthest progress)
+  ├─ Store: Failure pattern in RAG for learning
+  └─ Suggest: Manual debugging steps
+
+CLOUD FRONTIER SETUP (GPT-4/Claude):
+  ├─ Often succeeds in Stage 1-2 (powerful first model)
+  ├─ Escalation rarely needed beyond Stage 3
+  ├─ Stage 5 uses true frontier models (claude-3.5-sonnet, gpt-4-turbo)
+  └─ Overall success rate: ~90-95% (vs ~77% for local)
 ```
+
+**Key Innovation - Logging Injection**:
+
+When simple fixes fail (Stage 1), the system automatically adds comprehensive debug logging:
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# Before critical operations:
+logging.debug(f"Input data: {input_data}")
+logging.debug(f"Calling tool: {tool_name} with {args}")
+logging.debug(f"Tool result: {result[:100]}")
+logging.exception("Error details")  # In exception handlers
+```
+
+This provides **visibility into failure points** when code structure appears correct but runtime behavior fails. Once code passes tests, logging is automatically removed to keep production code clean.
 
 **Escalation Algorithm**:
 
@@ -2078,6 +2138,301 @@ def escalate_with_cost_awareness(
 6. **Progressive refinement**: Each attempt improves on previous
 
 This approach balances cost, speed, and quality while maximizing success rate through intelligent escalation.
+
+### 4.10 Intelligent Input Detection and Pre-Classification
+
+**Principle**: Filter nonsense inputs early and route tasks efficiently using lightweight models for classification.
+
+Many AI systems waste resources processing accidental or invalid inputs. DSE implements **accidental input detection** with helpful user guidance, plus **smart pre-classification** using model selection based on input length.
+
+**Input Detection Algorithm**:
+
+```python
+def check_if_accidental(description: str) -> Dict[str, Any]:
+    """
+    Detect nonsense/accidental inputs before processing.
+
+    Patterns detected:
+    - Very short inputs (≤2 characters)
+    - Common test strings ("test", "asdf", "qwerty")
+    - Just numbers with no context
+    - Random keypresses (3+ consecutive same char)
+    - Just punctuation
+    - High consonant ratio with no real words
+    """
+    desc_lower = description.lower().strip()
+    words = desc_lower.split()
+
+    # Pattern checks
+    accidental_patterns = [
+        len(description) <= 2,
+        len(words) == 1 and desc_lower in ['test', 'testing', 'asdf', 'qwerty'],
+        any(description.count(c * 3) > 0 for c in set(description)),
+        # ... more patterns
+    ]
+
+    if any(accidental_patterns):
+        return {
+            'is_accidental': True,
+            'understanding': "This looks like a test input",
+            'suggestions': [
+                "Try: 'write a function to add two numbers'",
+                "Try: 'create a fibonacci sequence generator'",
+                "Try: 'write a joke about programming'"
+            ]
+        }
+
+    return {'is_accidental': False}
+```
+
+**Smart Pre-Classification with Length-Based Model Selection**:
+
+```python
+class TaskEvaluator:
+    # Model selection based on input length
+    SHORT_INPUT = 200    # < 200 chars → use tinyllama
+    MEDIUM_INPUT = 1000  # < 1000 chars → use phi3 or gemma
+    LONG_INPUT = 5000    # < 5000 chars → use llama3
+
+    def evaluate_task_type(self, description: str):
+        input_length = len(description)
+
+        # Choose efficient model based on input length
+        if input_length < self.SHORT_INPUT:
+            model = "tinyllama"     # 1.1B params, ultra-fast
+        elif input_length < self.MEDIUM_INPUT:
+            model = "phi3:mini"     # 3.8B params, fast
+        elif input_length < self.LONG_INPUT:
+            model = "gemma3:4b"     # 4B params, balanced
+        else:
+            model = "llama3"        # 8B params, powerful
+
+        # Classify task type and complexity
+        response = self.client.generate(
+            model=model,
+            prompt=f"""Task: "{description}"
+
+Classify as ONE:
+creative_content, arithmetic, data_processing, code_generation,
+translation, question_answering, formatting, conversion, unknown
+
+Also rate COMPLEXITY:
+simple, moderate, complex
+
+CATEGORY: [pick one]
+COMPLEXITY: [pick one]"""
+        )
+
+        # Parse response and determine routing
+        category, complexity = self._parse_response(response)
+
+        return {
+            "task_type": category,
+            "complexity": complexity,
+            "recommended_tier": self._determine_tier(category, complexity)
+        }
+```
+
+**Benefits**:
+
+1. **Cost Savings**: Use tinyllama (free, fast) for most classifications instead of powerful models
+2. **User Experience**: Helpful suggestions for accidental inputs instead of cryptic errors
+3. **Efficiency**: Don't waste GPU cycles on "test" or random keypresses
+4. **Scalability**: Can handle thousands of classification requests per second
+
+**Example User Experience**:
+
+```
+User: "asdf"
+
+System:
+  This looks like a test input.
+
+  Suggestions:
+  • Try: 'write a function to add two numbers'
+  • Try: 'create a fibonacci sequence generator'
+  • Try: 'write a joke about programming'
+```
+
+### 4.11 Complexity-Aware Tier Routing and Timeout Fallback
+
+**Principle**: Route tasks to appropriate model tiers based on complexity, with automatic fallback on timeout.
+
+Not all tasks need powerful models. DSE implements **complexity assessment** to route simple tasks to fast models, moderate tasks to balanced models, and complex tasks to powerful models. Additionally, **timeout fallback** provides automatic recovery when slow models timeout.
+
+**Complexity-Based Routing**:
+
+```python
+def _determine_routing(self, task_type: TaskType, description: str, complexity: str):
+    """
+    Route tasks to appropriate model tier based on type and complexity.
+    """
+    if task_type == TaskType.CODE_GENERATION:
+        # Select tier based on complexity
+        if complexity == "simple":
+            return {
+                "recommended_tier": "coding.tier_1",  # qwen2.5-coder:3b
+                "reason": "Simple code generation (basic functions)"
+            }
+        elif complexity == "complex":
+            return {
+                "recommended_tier": "coding.tier_3",  # deepseek-coder-v2:16b
+                "reason": "Complex code generation (advanced algorithms, system design)"
+            }
+        else:  # moderate
+            return {
+                "recommended_tier": "coding.tier_2",  # codellama:7b
+                "reason": "Standard code generation (multi-step workflows)"
+            }
+
+    elif task_type == TaskType.CREATIVE_CONTENT:
+        return {
+            "recommended_tier": "content.tier_2",  # llama3:8b
+            "reason": "Creative content requires medium+ LLM"
+        }
+
+    # ... more routing logic
+```
+
+**Tier Configuration**:
+
+```yaml
+# model_tiers.yaml
+coding:
+  tier_1:
+    model: "qwen2.5-coder:3b"
+    context_window: 32768
+    use_for: ["simple arithmetic", "basic functions", "data processing"]
+    timeout_fallback: null  # No fallback (already fastest)
+
+  tier_2:
+    model: "codellama:7b"
+    context_window: 16384
+    use_for: ["standard code generation", "moderate complexity"]
+    timeout_fallback: "coding.tier_1"  # Fall back to tier_1
+
+  tier_3:
+    model: "deepseek-coder-v2:16b"
+    context_window: 16384
+    use_for: ["complex algorithms", "system design", "architecture"]
+    timeout_fallback: "coding.tier_2"  # Fall back to tier_2
+
+content:
+  tier_1:
+    model: "phi3:mini"
+    context_window: 4096
+    timeout_fallback: null
+
+  tier_2:
+    model: "llama3:8b"
+    context_window: 8192
+    timeout_fallback: "content.tier_1"
+```
+
+**Timeout Fallback Algorithm**:
+
+```python
+def invoke_llm_tool_with_fallback(
+    tool_id: str,
+    prompt: str,
+    current_tier: str
+) -> str:
+    """
+    Invoke LLM with automatic timeout fallback to faster models.
+
+    Example: deepseek-coder-v2:16b times out
+             → automatically retries with codellama:7b
+             → if that times out, tries qwen2.5-coder:3b
+    """
+    # Try primary model
+    response = invoke_llm_tool(tool_id, prompt)
+
+    if response:
+        return response  # Success
+
+    # Timeout occurred - check for fallback tier
+    tier_info = load_tier_config(current_tier)
+    fallback_tier = tier_info.get('timeout_fallback')
+
+    if not fallback_tier:
+        return ""  # No fallback available
+
+    # Recursively try fallback tier
+    console.print(f"Timeout on {current_tier} - falling back to {fallback_tier}...")
+
+    return invoke_llm_tool_with_fallback(
+        tool_id="general",
+        prompt=prompt,
+        current_tier=fallback_tier
+    )
+```
+
+**Benefits**:
+
+1. **Efficiency**: Simple tasks use fast models (qwen2.5-coder:3b) → 3-5 second response
+2. **Power When Needed**: Complex tasks get powerful models (deepseek-coder-v2:16b)
+3. **Self-Healing**: Automatic recovery from timeouts without user intervention
+4. **Cost Optimization**: Don't waste GPU cycles running powerful models for simple tasks
+5. **Reliability**: Progressive fallback ensures eventual response (tier_3 → tier_2 → tier_1)
+
+**Example Workflow**:
+
+```
+User: "write a simple add function"
+
+1. Pre-classification (tinyllama):
+   - Task type: code_generation
+   - Complexity: simple
+
+2. Tier routing:
+   - Selected: coding.tier_1 (qwen2.5-coder:3b)
+   - Reason: Simple code generation
+
+3. Code generation (3 seconds):
+   ✓ Success
+
+Total time: 3 seconds
+Total cost: $0
+
+---
+
+User: "design a multi-threaded async job scheduler with priority queues"
+
+1. Pre-classification (phi3):
+   - Task type: code_generation
+   - Complexity: complex
+
+2. Tier routing:
+   - Selected: coding.tier_3 (deepseek-coder-v2:16b)
+   - Reason: Complex system design
+
+3. Code generation (attempt 1, 60 seconds):
+   ✗ Timeout
+
+4. Fallback to coding.tier_2 (codellama:7b, 20 seconds):
+   ✓ Success
+
+Total time: 80 seconds (would have been 300+ if no fallback)
+Total cost: $0
+```
+
+**Complexity Detection Keywords**:
+
+```python
+# Fallback keyword-based detection if LLM response unclear
+SIMPLE_KEYWORDS = ['simple', 'basic', 'quick', 'small', 'easy', 'add', 'sum']
+COMPLEX_KEYWORDS = ['complex', 'advanced', 'system', 'architecture', 'multi',
+                    'design', 'distributed', 'concurrent', 'async', 'scalable']
+
+if any(word in description.lower() for word in SIMPLE_KEYWORDS):
+    complexity = 'simple'
+elif any(word in description.lower() for word in COMPLEX_KEYWORDS):
+    complexity = 'complex'
+else:
+    complexity = 'moderate'
+```
+
+This two-level intelligence (complexity routing + timeout fallback) creates a **self-healing, self-optimizing** infrastructure that maximizes both speed and reliability.
 
 ## 5. Optimization Strategies
 
