@@ -1,0 +1,79 @@
+name: "Base Locust Load Test Specification"
+version: "1.0.0"
+type: "locust_spec"
+description: |
+  Base specification for Locust load tests. This serves as a template
+  for generating performance tests with plausible data.
+
+# Default test configuration
+test_config:
+  users: 10  # Number of concurrent users
+  spawn_rate: 2  # Users spawned per second
+  run_time: "30s"  # Test duration (e.g., '30s', '5m', '1h')
+  wait_time:
+    min: 1  # Minimum wait between requests (seconds)
+    max: 3  # Maximum wait between requests (seconds)
+
+# Base URL configuration
+base_url: "http://localhost:8000"
+
+# Endpoint definitions template
+endpoints:
+  - path: "/health"
+    method: "GET"
+    weight: 10  # Relative probability of this request
+    description: "Health check endpoint"
+    response_validation:
+      - type: "status_code"
+        expected: 200
+      - type: "response_time"
+        threshold_ms: 100
+
+  - path: "/api/v1/resource"
+    method: "POST"
+    weight: 5
+    description: "Create resource"
+    request_body_schema:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          format: "name"
+        value:
+          type: "integer"
+          minimum: 1
+          maximum: 100
+    response_validation:
+      - type: "status_code"
+        expected: 201
+
+# Data generation configuration
+data_generation:
+  use_faker: true  # Use Faker library for realistic data
+  use_static_analysis: true  # Use static analysis results for hints
+  randomize: true  # Add randomization to data
+
+# Performance assertions
+assertions:
+  - type: "response_time"
+    threshold_ms: 1000
+    percentile: 95  # 95th percentile response time
+  - type: "success_rate"
+    threshold: 0.99  # 99% success rate
+  - type: "requests_per_second"
+    minimum: 10
+
+# Metadata for RAG storage
+metadata:
+  created_by: "base_spec_template"
+  purpose: "Performance characterization and load testing"
+  rag_tags:
+    - "performance"
+    - "load-test"
+    - "characterization"
+    - "template"
+  last_updated: "2025-11-16"
+  version_history:
+    - version: "1.0.0"
+      date: "2025-11-16"
+      changes: "Initial base specification"
