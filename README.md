@@ -72,9 +72,11 @@ Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 
 ##  Comprehensive Documentation
 
-**New: Complete DSE Framework Documentation**
+**Complete DSE Framework & Tool Documentation**
 
-This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE)** framework with advanced features:
+This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE)** framework with advanced features and detailed guides:
+
+### Core Architecture & Theory
 
 - **[ARCHITECTURE.md](code_evolver/ARCHITECTURE.md)** - Complete system architecture (9 layers, 851 lines)
   - Executable ground truth design principle
@@ -89,6 +91,32 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
   - Complete algorithms, experimental results, benchmarks
   - 92% cost reduction, 31% quality improvement demonstrated
   - Future research directions
+
+### Configuration & Tool Usage
+
+- **[CONFIGURATION_GUIDE.md](code_evolver/CONFIGURATION_GUIDE.md)** - Complete configuration system guide
+  - LLM backend setup (Ollama, OpenAI, Anthropic, Azure, LM Studio)
+  - Execution, testing, and optimization settings
+  - Auto-evolution and RAG configuration
+  - Multi-backend fallback strategies
+  - Environment variable setup
+
+- **[TOOL_INVOCATION_GUIDE.md](code_evolver/TOOL_INVOCATION_GUIDE.md)** - Using `call_tool()` and tool chains
+  - Unified tool invocation API
+  - Parallel tool execution with `call_tools_parallel()`
+  - Tool chaining for sequential workflows
+  - Tool discovery and selection
+  - Best practices and patterns
+  - Error handling and debugging
+
+- **[STATIC_ANALYSIS_TOOLS.md](code_evolver/STATIC_ANALYSIS_TOOLS.md)** - Static analysis validators
+  - Built-in validators (syntax, type checking, security, complexity)
+  - Validation pipeline and priority ordering
+  - Individual validator details and configuration
+  - Escalation workflow for failing validation
+  - Integration examples and custom validators
+
+### Advanced Features
 
 - **[ADAPTIVE_TIMEOUT.md](code_evolver/ADAPTIVE_TIMEOUT.md)** - Self-adjusting response time management
   - Learns optimal timeouts from actual performance (95th percentile + 20% buffer)
