@@ -1,0 +1,494 @@
+﻿name: "HTTP Raw Client"
+type: "executable"
+description: "Raw HTTP client that returns content as string without parsing. Perfect for HTML, text files, binary data, or any non-JSON content."
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/http_raw_client.py"]
+  stdin_mode: true
+  timeout: 60
+
+input_schema:
+  url:
+    type: string
+    description: "Target URL"
+    required: true
+    example: "https://example.com/page.html"
+
+  method:
+    type: string
+    description: "HTTP method"
+    required: false
+    default: "GET"
+    enum: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+
+  headers:
+    type: object
+    description: "HTTP headers"
+    required: false
+
+  body:
+    type: string
+    description: "Request body (raw string only)"
+    required: false
+
+  timeout:
+    type: integer
+    description: "Request timeout in seconds"
+    required: false
+    default: 30
+
+  encoding:
+    type: string
+    description: "Text encoding (default: utf-8)"
+    required: false
+    default: "utf-8"
+
+  return_binary:
+    type: boolean
+    description: "Force base64 encoding of response"
+    required: false
+    default: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether request succeeded"
+    status_code:
+      type: integer
+      description: "HTTP status code"
+    headers:
+      type: object
+      description: "Response headers"
+    content:
+      type: string
+      description: "Raw content (text or base64)"
+    content_type:
+      type: string
+      description: "Content-Type header value"
+    content_length:
+      type: integer
+      description: "Content length in bytes"
+    is_binary:
+      type: boolean
+      description: "Whether content is base64-encoded binary"
+    error:
+      type: string
+      description: "Error message if failed"
+
+examples:
+  - description: "Fetch HTML page"
+    input:
+      url: "https://example.com"
+      method: "GET"
+    output:
+      success: true
+      status_code: 200
+      content_type: "text/html"
+      content: "<!doctype html>\n<html>..."
+      is_binary: false
+
+  - description: "Fetch plain text"
+    input:
+      url: "https://example.com/robots.txt"
+    output:
+      success: true
+      status_code: 200
+      content_type: "text/plain"
+      content: "User-agent: *\nDisallow: /admin"
+
+  - description: "Download image (base64)"
+    input:
+      url: "https://example.com/logo.png"
+      return_binary: true
+    output:
+      success: true
+      status_code: 200
+      content_type: "image/png"
+      content: "iVBORw0KGgoAAAANSUhEUgAA..."
+      is_binary: true
+
+tags: ["http", "raw", "html", "scraping", "binary", "text", "client"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 80
+
+usage_notes: |
+  ## HTTP Raw Client - Get Raw Content Without Parsing
+
+  This tool fetches HTTP content as raw strings without any JSON parsing.
+  Perfect for HTML scraping, text files, binary data, or any non-JSON content.
+
+  ## Features
+
+  - [OK] Returns raw content without parsing
+  - [OK] Automatic text/binary detection
+  - [OK] Base64 encoding for binary data
+  - [OK] Custom encoding support
+  - [OK] All HTTP methods
+  - [OK] Handles images, PDFs, HTML, text, etc.
+
+  ## Usage Examples
+
+  ### Example 1: Fetch HTML Page
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com",
+      "method": "GET"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      html_content = data['content']
+      print(f"Page length: {len(html_content)} chars")
+      print(f"Content type: {data['content_type']}")
+  ```
+
+  ### Example 2: Fetch Plain Text
+
+  ```python
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com/robots.txt"
+  }))
+
+  data = json.loads(result)
+  print(data['content'])  # Raw robots.txt content
+  ```
+
+  ### Example 3: Download Binary Data
+
+  ```python
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com/logo.png",
+      "return_binary": True
+  }))
+
+  data = json.loads(result)
+  if data['is_binary']:
+      import base64
+      binary_data = base64.b64decode(data['content'])
+      # Save to file
+      with open('logo.png', 'wb') as f:
+          f.write(binary_data)
+  ```
+
+  ### Example 4: Custom Encoding
+
+  ```python
+  # For non-UTF-8 pages
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.jp/page",
+      "encoding": "shift-jis"
+  }))
+  ```
+
+  ### Example 5: POST with Raw Data
+
+  ```python
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://api.example.com/webhook",
+      "method": "POST",
+      "headers": {
+          "Content-Type": "text/plain"
+      },
+      "body": "raw text data here"
+  }))
+  ```
+
+  ## Binary vs Text Detection
+
+  The tool automatically detects binary content based on Content-Type:
+
+  ### Binary Content (base64-encoded):
+  - Images: image/png, image/jpeg, image/gif
+  - Videos: video/mp4, video/mpeg
+  - Audio: audio/mp3, audio/wav
+  - PDFs: application/pdf
+  - Archives: application/zip, application/gzip
+  - Generic binary: application/octet-stream
+
+  ### Text Content (raw string):
+  - HTML: text/html
+  - Plain text: text/plain
+  - XML: text/xml, application/xml
+  - JSON: application/json (but use http_rest_client for JSON)
+  - CSS: text/css
+  - JavaScript: application/javascript
+
+  ## Content Output Format
+
+  ### Text Content
+
+  ```json
+  {
+    "success": true,
+    "content": "<!DOCTYPE html>\n<html>...",
+    "content_type": "text/html",
+    "is_binary": false
+  }
+  ```
+
+  ### Binary Content
+
+  ```json
+  {
+    "success": true,
+    "content": "iVBORw0KGgoAAAANSUhEUgAA...",
+    "content_type": "image/png",
+    "is_binary": true
+  }
+  ```
+
+  ## When to Use
+
+  [OK] **Use http_raw_client for:**
+  - HTML pages (scraping)
+  - Text files (robots.txt, sitemap.xml)
+  - Binary files (images, PDFs, zips)
+  - Non-JSON APIs
+  - Custom data formats
+  - XML/RSS feeds
+
+  X **Use http_rest_client instead for:**
+  - JSON REST APIs
+  - Structured API responses
+  - When you want automatic JSON parsing
+
+  ## Comparison with REST Client
+
+  | Feature | http_raw_client | http_rest_client |
+  |---------|----------------|------------------|
+  | Content | Raw string/bytes | Parsed JSON |
+  | Use case | HTML, text, binary | REST APIs |
+  | Parsing | None (raw) | Automatic JSON |
+  | Binary support | Yes (base64) | No |
+  | Best for | Scraping, files | APIs |
+
+  ## Working with Binary Data
+
+  ### Decode Base64
+
+  ```python
+  import base64
+
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com/file.pdf",
+      "return_binary": True
+  }))
+
+  data = json.loads(result)
+  if data['is_binary']:
+      binary_content = base64.b64decode(data['content'])
+      # Now you have raw bytes
+  ```
+
+  ### Save to File
+
+  ```python
+  import base64
+
+  # Download file
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com/image.jpg"
+  }))
+
+  data = json.loads(result)
+  if data['success'] and data['is_binary']:
+      binary_data = base64.b64decode(data['content'])
+      with open('downloaded_image.jpg', 'wb') as f:
+          f.write(binary_data)
+  ```
+
+  ## HTML Scraping Example
+
+  ```python
+  # Fetch HTML page
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://news.ycombinator.com"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      html = data['content']
+
+      # Parse with regex or HTML parser
+      import re
+      titles = re.findall(r'<span class="titleline"><a[^>]*>([^<]+)</a>', html)
+
+      for title in titles[:5]:
+          print(f"- {title}")
+  ```
+
+  ## Integration Patterns
+
+  ### Pattern 1: Web Scraper
+
+  ```python
+  def scrape_page(url):
+      result = call_tool("http_raw_client", json.dumps({
+          "url": url
+      }))
+      data = json.loads(result)
+      return data['content'] if data['success'] else None
+
+  # Scrape multiple pages
+  urls = [
+      "https://example.com/page1",
+      "https://example.com/page2",
+      "https://example.com/page3"
+  ]
+
+  for url in urls:
+      content = scrape_page(url)
+      if content:
+          # Process content
+          pass
+  ```
+
+  ### Pattern 2: File Downloader
+
+  ```python
+  def download_file(url, save_path):
+      result = call_tool("http_raw_client", json.dumps({
+          "url": url,
+          "return_binary": True
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['is_binary']:
+          import base64
+          binary_data = base64.b64decode(data['content'])
+          with open(save_path, 'wb') as f:
+              f.write(binary_data)
+          return True
+      return False
+  ```
+
+  ### Pattern 3: RSS Feed Reader
+
+  ```python
+  def fetch_rss_feed(feed_url):
+      result = call_tool("http_raw_client", json.dumps({
+          "url": feed_url
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          # Parse XML
+          import xml.etree.ElementTree as ET
+          root = ET.fromstring(data['content'])
+          # Extract feed items
+          return root
+  ```
+
+  ## Performance
+
+  - **Latency**: Network-dependent
+  - **Memory**: Scales with content size
+  - **Max content**: ~10MB recommended
+  - **Timeout**: Configurable (default 30s)
+
+  ## Security Notes
+
+  - [OK] HTTPS supported
+  - ⚠️ Validate URLs before use
+  - ⚠️ Be cautious with user-supplied URLs
+  - ⚠️ Consider content size limits
+  - ⚠️ Sanitize scraped content before use
+
+  ## Error Handling
+
+  ```python
+  result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com/page"
+  }))
+
+  data = json.loads(result)
+
+  if not data['success']:
+      print(f"Error: {data.get('error')}")
+      print(f"Status: {data.get('status_code')}")
+  else:
+      content = data['content']
+      # Process content
+  ```
+
+  ## Troubleshooting
+
+  **Connection timeout:**
+  - Increase timeout parameter
+  - Check network connectivity
+  - Verify URL is accessible
+
+  **Encoding errors:**
+  - Try different encoding parameter
+  - Check page's actual encoding
+  - Use `return_binary: true` as fallback
+
+  **Memory issues:**
+  - Reduce downloaded file sizes
+  - Process content in chunks
+  - Use streaming for large files
+
+  ## Testing
+
+  ```bash
+  # Test with simple HTML page
+  cd code_evolver
+  echo '{
+    "url": "https://example.com",
+    "method": "GET"
+  }' | python tools/executable/http_raw_client.py
+
+  # Test with plain text
+  echo '{
+    "url": "https://www.google.com/robots.txt"
+  }' | python tools/executable/http_raw_client.py
+  ```
+
+  ## Combining with Other Tools
+
+  ### Scrape + Translate
+
+  ```python
+  # 1. Fetch HTML
+  html_result = call_tool("http_raw_client", json.dumps({
+      "url": "https://example.com"
+  }))
+
+  html_data = json.loads(html_result)
+
+  # 2. Extract text (simplified)
+  import re
+  text = re.sub(r'<[^>]+>', '', html_data['content'])
+
+  # 3. Translate
+  translation_result = call_tool("nmt_translator", json.dumps({
+      "text": text[:1000],
+      "target_lang": "es"
+  }))
+  ```
+
+  ### Fetch + Generate Test Data
+
+  ```python
+  # 1. Fetch API spec
+  spec_result = call_tool("http_raw_client", json.dumps({
+      "url": "https://api.example.com/openapi.json"
+  }))
+
+  # 2. Parse JSON manually
+  spec = json.loads(json.loads(spec_result)['content'])
+
+  # 3. Generate test data
+  test_data_result = call_tool("fake_data_generator", json.dumps({
+      "schema": spec['components']['schemas']['User']
+  }))
+  ```

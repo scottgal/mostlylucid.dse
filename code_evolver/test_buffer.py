@@ -28,13 +28,26 @@ def test_buffer_batching():
             "flush_strategy": "batched"
         }), disable_tracking=True)
 
-        result_data = json.loads(result)
-        print(f"Write item {i}: buffered={result_data['buffered_count']}, " +
-              f"flushed={result_data.get('flushed', False)}")
+        try:
+            result_data = json.loads(result)
+        except json.JSONDecodeError as e:
+            print(f"ERROR: Failed to parse JSON result: {e}")
+            print(f"Raw result: {result}")
+            raise
 
-        # Item 5 should trigger auto-flush
+        if 'error' in result_data:
+            print(f"ERROR from buffer tool: {result_data.get('error')}")
+            print(f"Full result: {result_data}")
+            raise Exception(result_data.get('error'))
+
+        # Check if this was an auto-flush (operation="flush") or regular write
         if result_data.get('flushed'):
-            print(f"  -> AUTO-FLUSH! Flushed {result_data.get('flushed_count', 0)} items\n")
+            # Auto-flush happened
+            print(f"Write item {i}: -> AUTO-FLUSH! Flushed {result_data.get('flushed_count', 0)} items\n")
+        else:
+            # Regular write
+            print(f"Write item {i}: buffered={result_data['buffered_count']}, " +
+                  f"flushed={result_data.get('flushed', False)}")
 
     print()
 

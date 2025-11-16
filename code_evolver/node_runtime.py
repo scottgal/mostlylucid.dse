@@ -376,6 +376,57 @@ class ToolChain:
         return self.result
 
 
+
+
+def call_tool_resilient(scenario: str, input_data: dict, **kwargs) -> str:
+    """
+    Call a tool with automatic fallback to alternatives on failure.
+    
+    Self-recovering tool execution that tries alternative tools when one fails.
+    Marks failures and learns from them to improve future tool selection.
+    
+    Args:
+        scenario: Description of what needs to be done
+        input_data: Input data for the selected tool
+        **kwargs:
+            tags (list): Optional tag filters for tool selection
+            max_attempts (int): Maximum tools to try (default: 5)
+            mark_failures (bool): Whether to mark failures (default: True)
+    
+    Returns:
+        Result from successful tool (as string)
+    
+    Raises:
+        Exception: If all tool attempts fail
+    
+    Example:
+        # Automatic tool selection and fallback
+        result = call_tool_resilient(
+            "translate english to french",
+            {"text": "Hello", "target": "fr"},
+            tags=["translation"],
+            max_attempts=5
+        )
+    """
+    runtime = NodeRuntime.get_instance()
+    
+    resilient_input = {
+        "scenario": scenario,
+        "input": input_data,
+        "tags": kwargs.get("tags", []),
+        "max_attempts": kwargs.get("max_attempts", 5),
+        "mark_failures": kwargs.get("mark_failures", True)
+    }
+    
+    result = runtime.call_tool("resilient_tool_call", json.dumps(resilient_input))
+    result_data = json.loads(result)
+    
+    if not result_data["success"]:
+        raise Exception(f"All tools failed: {result_data.get('message')}")
+    
+    return result_data["result"]
+
+
 # Example usage for generated code:
 if __name__ == "__main__":
     # Example 1: Simple tool call

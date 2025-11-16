@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438671Z"
+      "last_reset": "2025-11-16T21:33:12.339399Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438686Z"
+      "last_reset": "2025-11-16T21:33:12.339478Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438693Z"
+      "last_reset": "2025-11-16T21:33:12.339492Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438699Z"
+      "last_reset": "2025-11-16T21:33:12.339504Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438703Z"
+      "last_reset": "2025-11-16T21:33:12.339512Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438707Z"
+      "last_reset": "2025-11-16T21:33:12.339521Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438711Z"
+      "last_reset": "2025-11-16T21:33:12.339531Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438715Z"
+      "last_reset": "2025-11-16T21:33:12.339539Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438720Z"
+      "last_reset": "2025-11-16T21:33:12.339548Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438724Z"
+      "last_reset": "2025-11-16T21:33:12.339556Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438728Z"
+      "last_reset": "2025-11-16T21:33:12.339570Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 25,
+    "usage_count": 47,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438733Z"
+      "last_reset": "2025-11-16T21:33:12.339579Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438737Z"
+      "last_reset": "2025-11-16T21:33:12.339588Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438740Z"
+      "last_reset": "2025-11-16T21:33:12.339596Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438744Z"
+      "last_reset": "2025-11-16T21:33:12.339605Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438747Z"
+      "last_reset": "2025-11-16T21:33:12.339615Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438751Z"
+      "last_reset": "2025-11-16T21:33:12.339624Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438755Z"
+      "last_reset": "2025-11-16T21:33:12.339631Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 25,
+    "usage_count": 47,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438760Z"
+      "last_reset": "2025-11-16T21:33:12.339640Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438766Z"
+      "last_reset": "2025-11-16T21:33:12.339648Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438771Z"
+      "last_reset": "2025-11-16T21:33:12.339657Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438777Z"
+      "last_reset": "2025-11-16T21:33:12.339665Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438783Z"
+      "last_reset": "2025-11-16T21:33:12.339674Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438789Z"
+      "last_reset": "2025-11-16T21:33:12.339683Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 25,
+    "usage_count": 47,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438796Z"
+      "last_reset": "2025-11-16T21:33:12.339691Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438803Z"
+      "last_reset": "2025-11-16T21:33:12.339700Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438819Z"
+      "last_reset": "2025-11-16T21:33:12.339710Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438824Z"
+      "last_reset": "2025-11-16T21:33:12.339719Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438828Z"
+      "last_reset": "2025-11-16T21:33:12.339729Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438837Z"
+      "last_reset": "2025-11-16T21:33:12.339738Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1402,7 +1402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438841Z"
+      "last_reset": "2025-11-16T21:33:12.339746Z"
     },
     "created_at": "2025-11-16T08:22:04.604169Z",
     "usage_count": 0,
@@ -1444,10 +1444,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438847Z"
+      "last_reset": "2025-11-16T21:33:12.339757Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
-    "usage_count": 1,
+    "usage_count": 17,
     "version": "1.0.0",
     "definition_hash": "855d21cd65d566d635b0db03c3ac81f3edc2e197f6d059e9078474aa98ad7dad",
     "breaking_changes": []
@@ -1482,7 +1482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438853Z"
+      "last_reset": "2025-11-16T21:33:12.339764Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
     "usage_count": 0,
@@ -1522,10 +1522,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438859Z"
+      "last_reset": "2025-11-16T21:33:12.339772Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
-    "usage_count": 0,
+    "usage_count": 1,
     "version": "1.0.0",
     "definition_hash": "9b56051986fc316c54009f77193b7ca0af9830c586a0d92fc46ec1d9f90e136b",
     "breaking_changes": []
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438865Z"
+      "last_reset": "2025-11-16T21:33:12.339781Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 35,
+    "usage_count": 61,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438876Z"
+      "last_reset": "2025-11-16T21:33:12.339789Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438880Z"
+      "last_reset": "2025-11-16T21:33:12.339796Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438885Z"
+      "last_reset": "2025-11-16T21:33:12.339803Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1726,7 +1726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438889Z"
+      "last_reset": "2025-11-16T21:33:12.339810Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
     "usage_count": 1,
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438893Z"
+      "last_reset": "2025-11-16T21:33:12.339818Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438898Z"
+      "last_reset": "2025-11-16T21:33:12.339826Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,7 +1849,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438902Z"
+      "last_reset": "2025-11-16T21:33:12.339834Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
     "usage_count": 1,
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438907Z"
+      "last_reset": "2025-11-16T21:33:12.339843Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,7 +1930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438913Z"
+      "last_reset": "2025-11-16T21:33:12.339851Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
     "usage_count": 0,
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438917Z"
+      "last_reset": "2025-11-16T21:33:12.339859Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438922Z"
+      "last_reset": "2025-11-16T21:33:12.339866Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2053,7 +2053,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438926Z"
+      "last_reset": "2025-11-16T21:33:12.339874Z"
     },
     "created_at": "2025-11-16T08:22:06.400998Z",
     "usage_count": 0,
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438931Z"
+      "last_reset": "2025-11-16T21:33:12.339883Z"
     },
     "created_at": "2025-11-16T10:01:30.396360Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438935Z"
+      "last_reset": "2025-11-16T21:33:12.339890Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438940Z"
+      "last_reset": "2025-11-16T21:33:12.339935Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438943Z"
+      "last_reset": "2025-11-16T21:33:12.339952Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438947Z"
+      "last_reset": "2025-11-16T21:33:12.339959Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438951Z"
+      "last_reset": "2025-11-16T21:33:12.339963Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438954Z"
+      "last_reset": "2025-11-16T21:33:12.339970Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438958Z"
+      "last_reset": "2025-11-16T21:33:12.339973Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438961Z"
+      "last_reset": "2025-11-16T21:33:12.339977Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438965Z"
+      "last_reset": "2025-11-16T21:33:12.339981Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438969Z"
+      "last_reset": "2025-11-16T21:33:12.339985Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438973Z"
+      "last_reset": "2025-11-16T21:33:12.339989Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438977Z"
+      "last_reset": "2025-11-16T21:33:12.339993Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2507,17 +2507,16 @@
       "cost_tier": "free",
       "quality_tier": "excellent",
       "latency_ms": 50,
-      "capability": "Model and backend selection with multi-backend support",
-      "from_index": true
+      "capability": "Model and backend selection with multi-backend support"
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438981Z"
+      "last_reset": "2025-11-16T21:34:27.677764Z"
     },
-    "created_at": "2025-11-16T10:36:44.271377Z",
+    "created_at": "2025-11-16T21:34:27.677755Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2544,7 +2543,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438985Z"
+      "last_reset": "2025-11-16T21:33:12.340001Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2576,7 +2575,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438990Z"
+      "last_reset": "2025-11-16T21:33:12.340005Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2606,7 +2605,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438994Z"
+      "last_reset": "2025-11-16T21:33:12.340009Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2637,7 +2636,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.438998Z"
+      "last_reset": "2025-11-16T21:33:12.340013Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2647,30 +2646,35 @@
   },
   "write_a_poem": {
     "tool_id": "write_a_poem",
-    "name": "Python code that generates a poem based on user input using natural language processing (NLP) and machine learning (ML) techniques.",
+    "name": "write a poem",
     "tool_type": "workflow",
     "description": "write a poem",
     "tags": [
-      "python",
-      "nlp",
-      "ml",
-      "poetry",
-      "auto-generated"
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
     ],
     "parameters": {},
     "metadata": {
-      "from_rag": true,
-      "quality_score": 0.0,
-      "usage_count": 0
+      "node_id": "write_a_poem",
+      "quality_score": 1.1,
+      "latency_ms": 49914,
+      "memory_mb_peak": 1.93,
+      "created_at": "2025-11-16T13:40:48.563411+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write a poem",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439003Z"
+      "last_reset": "2025-11-16T21:33:12.340017Z"
     },
-    "created_at": "2025-11-16T08:22:06.626451Z",
+    "created_at": "2025-11-16T13:40:48.563426Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2698,7 +2702,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439007Z"
+      "last_reset": "2025-11-16T21:33:12.340021Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2729,7 +2733,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439011Z"
+      "last_reset": "2025-11-16T21:33:12.340025Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2758,7 +2762,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439015Z"
+      "last_reset": "2025-11-16T21:33:12.340030Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2788,7 +2792,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439020Z"
+      "last_reset": "2025-11-16T21:33:12.340033Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2817,7 +2821,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439023Z"
+      "last_reset": "2025-11-16T21:33:12.340037Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2848,7 +2852,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439027Z"
+      "last_reset": "2025-11-16T21:33:12.340041Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2878,7 +2882,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439031Z"
+      "last_reset": "2025-11-16T21:33:12.340045Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2909,7 +2913,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439034Z"
+      "last_reset": "2025-11-16T21:33:12.340049Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2938,7 +2942,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439038Z"
+      "last_reset": "2025-11-16T21:33:12.340052Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2968,7 +2972,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439042Z"
+      "last_reset": "2025-11-16T21:33:12.340056Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -2997,7 +3001,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439045Z"
+      "last_reset": "2025-11-16T21:33:12.340059Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3026,7 +3030,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439049Z"
+      "last_reset": "2025-11-16T21:33:12.340063Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3056,7 +3060,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439052Z"
+      "last_reset": "2025-11-16T21:33:12.340066Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3087,7 +3091,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439056Z"
+      "last_reset": "2025-11-16T21:33:12.340069Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3117,7 +3121,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439060Z"
+      "last_reset": "2025-11-16T21:33:12.340073Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3146,7 +3150,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439064Z"
+      "last_reset": "2025-11-16T21:33:12.340076Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3176,7 +3180,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439068Z"
+      "last_reset": "2025-11-16T21:33:12.340080Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3206,7 +3210,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439072Z"
+      "last_reset": "2025-11-16T21:33:12.340083Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3236,7 +3240,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439076Z"
+      "last_reset": "2025-11-16T21:33:12.340086Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3267,7 +3271,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439080Z"
+      "last_reset": "2025-11-16T21:33:12.340090Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3296,7 +3300,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439086Z"
+      "last_reset": "2025-11-16T21:33:12.340094Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3326,7 +3330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439089Z"
+      "last_reset": "2025-11-16T21:33:12.340098Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3355,7 +3359,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439093Z"
+      "last_reset": "2025-11-16T21:33:12.340101Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3385,7 +3389,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439097Z"
+      "last_reset": "2025-11-16T21:33:12.340105Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3395,29 +3399,35 @@
   },
   "write_a_haiku_about_coding": {
     "tool_id": "write_a_haiku_about_coding",
-    "name": "Python code that generates a Haiku about coding using natural language processing and programming concepts.",
+    "name": "write a haiku about coding",
     "tool_type": "workflow",
     "description": "write a haiku about coding",
     "tags": [
-      "python",
-      "natural language processing",
-      "programming",
-      "auto-generated"
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
     ],
     "parameters": {},
     "metadata": {
-      "from_rag": true,
-      "quality_score": 0.0,
-      "usage_count": 0
+      "node_id": "write_a_haiku_about_coding",
+      "quality_score": 1.1,
+      "latency_ms": 854,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-16T17:58:30.737629+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write a haiku about coding",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439100Z"
+      "last_reset": "2025-11-16T21:33:12.340109Z"
     },
-    "created_at": "2025-11-16T08:22:06.626612Z",
+    "created_at": "2025-11-16T17:58:30.737649Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -3445,7 +3455,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439104Z"
+      "last_reset": "2025-11-16T21:33:12.340114Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3481,7 +3491,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439108Z"
+      "last_reset": "2025-11-16T21:33:12.340117Z"
     },
     "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
@@ -3511,7 +3521,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439112Z"
+      "last_reset": "2025-11-16T21:33:12.340121Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3540,7 +3550,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439116Z"
+      "last_reset": "2025-11-16T21:33:12.340125Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3569,7 +3579,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439119Z"
+      "last_reset": "2025-11-16T21:33:12.340128Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3599,7 +3609,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439124Z"
+      "last_reset": "2025-11-16T21:33:12.340132Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3630,7 +3640,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439127Z"
+      "last_reset": "2025-11-16T21:33:12.340135Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3660,7 +3670,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439131Z"
+      "last_reset": "2025-11-16T21:33:12.340139Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3690,7 +3700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439135Z"
+      "last_reset": "2025-11-16T21:33:12.340142Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3726,7 +3736,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439138Z"
+      "last_reset": "2025-11-16T21:33:12.340147Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3762,7 +3772,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439142Z"
+      "last_reset": "2025-11-16T21:33:12.340150Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3798,7 +3808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439146Z"
+      "last_reset": "2025-11-16T21:33:12.340154Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
     "usage_count": 0,
@@ -3834,7 +3844,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439150Z"
+      "last_reset": "2025-11-16T21:33:12.340157Z"
     },
     "created_at": "2025-11-16T09:14:20.219639Z",
     "usage_count": 0,
@@ -3870,7 +3880,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439155Z"
+      "last_reset": "2025-11-16T21:33:12.340162Z"
     },
     "created_at": "2025-11-16T09:17:21.481820Z",
     "usage_count": 0,
@@ -3934,7 +3944,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439160Z"
+      "last_reset": "2025-11-16T21:33:12.340166Z"
     },
     "created_at": "2025-11-16T09:07:23.454598Z",
     "usage_count": 0,
@@ -3970,7 +3980,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439164Z"
+      "last_reset": "2025-11-16T21:33:12.340170Z"
     },
     "created_at": "2025-11-16T09:12:45.348005Z",
     "usage_count": 0,
@@ -4006,7 +4016,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439168Z"
+      "last_reset": "2025-11-16T21:33:12.340173Z"
     },
     "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
@@ -4042,7 +4052,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439172Z"
+      "last_reset": "2025-11-16T21:33:12.340177Z"
     },
     "created_at": "2025-11-16T09:25:57.866554Z",
     "usage_count": 0,
@@ -4078,7 +4088,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439176Z"
+      "last_reset": "2025-11-16T21:33:12.340180Z"
     },
     "created_at": "2025-11-16T09:28:27.164898Z",
     "usage_count": 0,
@@ -4114,7 +4124,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439179Z"
+      "last_reset": "2025-11-16T21:33:12.340184Z"
     },
     "created_at": "2025-11-16T09:29:38.153439Z",
     "usage_count": 0,
@@ -4150,7 +4160,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439183Z"
+      "last_reset": "2025-11-16T21:33:12.340189Z"
     },
     "created_at": "2025-11-16T09:35:06.567192Z",
     "usage_count": 0,
@@ -4203,7 +4213,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439188Z"
+      "last_reset": "2025-11-16T21:33:12.340193Z"
     },
     "created_at": "2025-11-16T10:01:29.141239Z",
     "usage_count": 0,
@@ -4256,10 +4266,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439192Z"
+      "last_reset": "2025-11-16T21:33:12.340196Z"
     },
     "created_at": "2025-11-16T10:01:30.181536Z",
-    "usage_count": 0,
+    "usage_count": 7,
     "version": "1.0.0",
     "definition_hash": "dfcbc9c80c85c4904cb96457ae817f66ad904165a51b3883ad36933a348a29a8",
     "breaking_changes": []
@@ -4292,7 +4302,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439196Z"
+      "last_reset": "2025-11-16T21:33:12.340200Z"
     },
     "created_at": "2025-11-16T10:06:10.391814Z",
     "usage_count": 0,
@@ -4328,7 +4338,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439200Z"
+      "last_reset": "2025-11-16T21:33:12.340203Z"
     },
     "created_at": "2025-11-16T10:12:47.223241Z",
     "usage_count": 0,
@@ -4364,7 +4374,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439203Z"
+      "last_reset": "2025-11-16T21:33:12.340207Z"
     },
     "created_at": "2025-11-16T10:14:13.615361Z",
     "usage_count": 0,
@@ -4400,7 +4410,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439207Z"
+      "last_reset": "2025-11-16T21:33:12.340210Z"
     },
     "created_at": "2025-11-16T10:15:06.069892Z",
     "usage_count": 0,
@@ -4436,7 +4446,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439210Z"
+      "last_reset": "2025-11-16T21:33:12.340214Z"
     },
     "created_at": "2025-11-16T10:42:33.746191Z",
     "usage_count": 0,
@@ -4472,7 +4482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439215Z"
+      "last_reset": "2025-11-16T21:33:12.340217Z"
     },
     "created_at": "2025-11-16T11:10:19.359123Z",
     "usage_count": 0,
@@ -4508,7 +4518,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439342Z"
+      "last_reset": "2025-11-16T21:33:12.340221Z"
     },
     "created_at": "2025-11-16T11:31:40.692912Z",
     "usage_count": 0,
@@ -4544,7 +4554,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439353Z"
+      "last_reset": "2025-11-16T21:33:12.340224Z"
     },
     "created_at": "2025-11-16T11:32:50.990789Z",
     "usage_count": 0,
@@ -4580,7 +4590,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439357Z"
+      "last_reset": "2025-11-16T21:33:12.340227Z"
     },
     "created_at": "2025-11-16T11:46:37.640775Z",
     "usage_count": 0,
@@ -4616,7 +4626,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439362Z"
+      "last_reset": "2025-11-16T21:33:12.340231Z"
     },
     "created_at": "2025-11-16T12:20:27.162450Z",
     "usage_count": 0,
@@ -4747,7 +4757,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439366Z"
+      "last_reset": "2025-11-16T21:33:12.340234Z"
     },
     "created_at": "2025-11-16T12:41:08.799526Z",
     "usage_count": 0,
@@ -4827,7 +4837,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439371Z"
+      "last_reset": "2025-11-16T21:33:12.340238Z"
     },
     "created_at": "2025-11-16T12:41:08.807420Z",
     "usage_count": 0,
@@ -4918,7 +4928,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439375Z"
+      "last_reset": "2025-11-16T21:33:12.340243Z"
     },
     "created_at": "2025-11-16T12:41:08.810729Z",
     "usage_count": 0,
@@ -4980,7 +4990,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439379Z"
+      "last_reset": "2025-11-16T21:33:12.340246Z"
     },
     "created_at": "2025-11-16T12:41:08.812165Z",
     "usage_count": 0,
@@ -5089,7 +5099,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439382Z"
+      "last_reset": "2025-11-16T21:33:12.340250Z"
     },
     "created_at": "2025-11-16T12:41:08.831401Z",
     "usage_count": 0,
@@ -5184,7 +5194,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439386Z"
+      "last_reset": "2025-11-16T21:33:12.340254Z"
     },
     "created_at": "2025-11-16T12:41:08.834283Z",
     "usage_count": 0,
@@ -5217,7 +5227,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439390Z"
+      "last_reset": "2025-11-16T21:33:12.340259Z"
     },
     "created_at": "2025-11-16T12:41:08.836868Z",
     "usage_count": 0,
@@ -5251,7 +5261,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439393Z"
+      "last_reset": "2025-11-16T21:33:12.340263Z"
     },
     "created_at": "2025-11-16T12:41:08.839875Z",
     "usage_count": 0,
@@ -5285,7 +5295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439397Z"
+      "last_reset": "2025-11-16T21:33:12.340266Z"
     },
     "created_at": "2025-11-16T12:41:08.844259Z",
     "usage_count": 0,
@@ -5326,7 +5336,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439401Z"
+      "last_reset": "2025-11-16T21:33:12.340270Z"
     },
     "created_at": "2025-11-16T12:41:08.871405Z",
     "usage_count": 0,
@@ -5368,7 +5378,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439404Z"
+      "last_reset": "2025-11-16T21:33:12.340274Z"
     },
     "created_at": "2025-11-16T12:41:08.875026Z",
     "usage_count": 0,
@@ -5411,7 +5421,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439408Z"
+      "last_reset": "2025-11-16T21:33:12.340278Z"
     },
     "created_at": "2025-11-16T12:41:08.881445Z",
     "usage_count": 0,
@@ -5454,12 +5464,2752 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T12:46:13.439412Z"
+      "last_reset": "2025-11-16T21:33:12.340281Z"
     },
     "created_at": "2025-11-16T12:41:08.887411Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "8151e5d1f02a71d585bf6b1bae91d0dff797500324436a59ec2cde160fb6afa6",
+    "breaking_changes": []
+  },
+  "count_backwares_from_50_in_ben": {
+    "tool_id": "count_backwares_from_50_in_ben",
+    "name": "count backwares from 50 in bengali",
+    "tool_type": "workflow",
+    "description": "count backwares from 50 in bengali",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "count_backwares_from_50_in_ben",
+      "quality_score": 1.1,
+      "latency_ms": 924,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-16T13:44:17.864342+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "count backwares from 50 in bengali",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340285Z"
+    },
+    "created_at": "2025-11-16T13:44:17.864365Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "extract_spec_from_file": {
+    "tool_id": "extract_spec_from_file",
+    "name": "Extract Spec From File",
+    "tool_type": "executable",
+    "description": "Extracts specifications from text files for overseer planning. Handles large files by summarizing and sectioning.",
+    "tags": [
+      "spec",
+      "file",
+      "extraction",
+      "overseer",
+      "planning"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\extract_spec_from_file.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/extract_spec_from_file.py"
+      ],
+      "input_schema": {
+        "file_path": {
+          "type": "string",
+          "description": "Path to specification file (txt, md, etc.)",
+          "required": true
+        },
+        "summarize": {
+          "type": "boolean",
+          "description": "Create overseer-friendly summary for large files",
+          "default": true,
+          "required": false
+        },
+        "max_length": {
+          "type": "integer",
+          "description": "Maximum length for overseer summary (characters)",
+          "default": 10000,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "file_size": {
+            "type": "integer",
+            "description": "Size in characters"
+          },
+          "word_count": {
+            "type": "integer"
+          },
+          "overseer_spec": {
+            "type": "string",
+            "description": "Summarized spec for overseer (if summarize=true)"
+          },
+          "full_spec": {
+            "type": "string",
+            "description": "Full specification text"
+          },
+          "sections": {
+            "type": "object",
+            "description": "Extracted sections (requirements, constraints, etc.)"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "2f1c1dc8f61c27c03e4768c9580dbf5dfa7c0422bad31db601f6afa002978f1e",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340288Z"
+    },
+    "created_at": "2025-11-16T14:05:46.456088Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "2f1c1dc8f61c27c03e4768c9580dbf5dfa7c0422bad31db601f6afa002978f1e",
+    "breaking_changes": []
+  },
+  "mark_tool_failure": {
+    "tool_id": "mark_tool_failure",
+    "name": "Mark Tool Failure",
+    "tool_type": "executable",
+    "description": "Records tool failures for specific scenarios, enabling demotion in search rankings and tag refinement. Helps the system learn which tools work where.",
+    "tags": [
+      "failure-tracking",
+      "tool-quality",
+      "demotion",
+      "learning",
+      "internal"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\mark_tool_failure.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/mark_tool_failure.py"
+      ],
+      "input_schema": {
+        "tool_id": {
+          "type": "string",
+          "description": "ID of the tool that failed",
+          "required": true
+        },
+        "scenario": {
+          "type": "string",
+          "description": "Description of what was attempted (used for similarity matching in future searches)",
+          "required": true
+        },
+        "error_message": {
+          "type": "string",
+          "description": "The error message that occurred",
+          "required": false,
+          "default": "Unknown error"
+        },
+        "severity": {
+          "type": "string",
+          "description": "Failure severity: low (minor issue), medium (significant), high (completely broken)",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "default": "medium",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "failure_id": {
+            "type": "string",
+            "description": "ID of the failure record"
+          },
+          "tool_id": {
+            "type": "string"
+          },
+          "scenario": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "demotion_applied": {
+            "type": "boolean",
+            "description": "Whether quality score was reduced"
+          },
+          "new_quality_score": {
+            "type": "number",
+            "description": "Updated quality score after demotion"
+          },
+          "tag_refinement": {
+            "type": "array",
+            "description": "Negative tags added to narrow tool use"
+          },
+          "total_failures": {
+            "type": "integer",
+            "description": "Total number of failures for this tool"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "48b8531efb15da48ac64ff6abada97a8ef3db6b69a197295d60633df5f0cfc6e",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340292Z"
+    },
+    "created_at": "2025-11-16T14:05:47.598951Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "48b8531efb15da48ac64ff6abada97a8ef3db6b69a197295d60633df5f0cfc6e",
+    "breaking_changes": []
+  },
+  "resilient_tool_call": {
+    "tool_id": "resilient_tool_call",
+    "name": "Resilient Tool Call",
+    "tool_type": "executable",
+    "description": "Self-recovering tool execution. Automatically tries alternative tools when one fails, marking failures and learning from them. Fulfills the prompt at all costs.",
+    "tags": [
+      "resilience",
+      "fallback",
+      "auto-recovery",
+      "tool-selection",
+      "internal"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\resilient_tool_call.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/resilient_tool_call.py"
+      ],
+      "input_schema": {
+        "scenario": {
+          "type": "string",
+          "description": "Description of what needs to be done (used to find best tool)",
+          "required": true
+        },
+        "input": {
+          "type": "object",
+          "description": "Input data to pass to the selected tool",
+          "required": false,
+          "default": {}
+        },
+        "tags": {
+          "type": "array",
+          "description": "Optional tag filters for tool selection (e.g., ['translation', 'api'])",
+          "required": false,
+          "default": []
+        },
+        "max_attempts": {
+          "type": "integer",
+          "description": "Maximum number of tools to try before giving up",
+          "default": 5,
+          "required": false
+        },
+        "mark_failures": {
+          "type": "boolean",
+          "description": "Whether to mark failed tools (enables learning)",
+          "default": true,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether any tool succeeded"
+          },
+          "result": {
+            "type": "any",
+            "description": "Output from successful tool"
+          },
+          "tool_id": {
+            "type": "string",
+            "description": "ID of the tool that succeeded"
+          },
+          "attempts": {
+            "type": "array",
+            "description": "List of all attempts made"
+          },
+          "failed_tools": {
+            "type": "array",
+            "description": "List of tools that failed"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "cc2c2782b2d7fa68d95c28c4863a7609c43cefa6ab652181108d7fa99955307e",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340296Z"
+    },
+    "created_at": "2025-11-16T14:05:47.896875Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "cc2c2782b2d7fa68d95c28c4863a7609c43cefa6ab652181108d7fa99955307e",
+    "breaking_changes": []
+  },
+  "translate_the_data": {
+    "tool_id": "translate_the_data",
+    "name": "translate the data",
+    "tool_type": "workflow",
+    "description": "translate the data",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "translate_the_data",
+      "quality_score": 1.1,
+      "latency_ms": 62143,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T14:09:32.745455+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "translate the data",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340299Z"
+    },
+    "created_at": "2025-11-16T14:09:32.745489Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "evolve_tool": {
+    "tool_id": "evolve_tool",
+    "name": "Evolve Tool",
+    "tool_type": "executable",
+    "description": "Evolves a failing tool by regenerating it with fixes and mutations. Creates a promoted version for the current workflow.",
+    "tags": [
+      "evolution",
+      "tool-mutation",
+      "code-generation",
+      "self-improvement"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\evolve_tool.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/evolve_tool.py"
+      ],
+      "input_schema": {
+        "tool_id": {
+          "type": "string",
+          "description": "ID of the tool to evolve",
+          "required": true
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Error message that occurred",
+          "required": false,
+          "default": "Unknown error"
+        },
+        "mutation_hint": {
+          "type": "string",
+          "description": "User hint for what to fix/change",
+          "required": false,
+          "default": "Fix the error"
+        },
+        "dynamic_schema": {
+          "type": "boolean",
+          "description": "Make output schema dynamic (flexible JSON)",
+          "default": false,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "tool_id": {
+            "type": "string"
+          },
+          "original_version": {
+            "type": "string"
+          },
+          "new_version": {
+            "type": "string"
+          },
+          "evolved_file": {
+            "type": "string",
+            "description": "Path to evolved tool file"
+          },
+          "promotion_file": {
+            "type": "string",
+            "description": "Path to promotion config"
+          },
+          "message": {
+            "type": "string"
+          },
+          "usage": {
+            "type": "string",
+            "description": "How to use the evolved tool"
+          }
+        }
+      },
+      "cost_tier": "medium",
+      "speed_tier": "slow",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "3251eeaac4ad00f18e6f149f3e010bfc0827e1ff43d56eacfff022c44e9299c7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340303Z"
+    },
+    "created_at": "2025-11-16T14:36:50.752511Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "3251eeaac4ad00f18e6f149f3e010bfc0827e1ff43d56eacfff022c44e9299c7",
+    "breaking_changes": []
+  },
+  "api_wrapper_generator": {
+    "tool_id": "api_wrapper_generator",
+    "name": "API Wrapper Generator",
+    "tool_type": "executable",
+    "description": "Generates a Flask API wrapper script for any tool or workflow, creating REST endpoints for tool invocation",
+    "tags": [
+      "api",
+      "flask",
+      "rest",
+      "wrapper",
+      "code-generation",
+      "web-service"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\api_wrapper_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/api_wrapper_generator.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON configuration with: tool_id (required), port (default: 8080), host (default: 0.0.0.0), enable_cors (default: true)"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "api_script": "str - Generated Flask API wrapper script",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "e4fd3abd7c05934ba73ca5b702ce1cdd828a6b86a25f88b0c7a5bc4ee6bacea4",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340306Z"
+    },
+    "created_at": "2025-11-16T14:44:34.683195Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "e4fd3abd7c05934ba73ca5b702ce1cdd828a6b86a25f88b0c7a5bc4ee6bacea4",
+    "breaking_changes": []
+  },
+  "config_file_generator": {
+    "tool_id": "config_file_generator",
+    "name": "Config File Generator",
+    "tool_type": "executable",
+    "description": "Generates comprehensive config.yaml files with sensible Ollama defaults (tinyllama, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes.",
+    "tags": [
+      "configuration",
+      "config",
+      "yaml",
+      "ollama",
+      "settings",
+      "documentation"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\config_file_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/config_file_generator.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON with: tool_id (required), mode ('docker' or 'standalone', default: docker), default_model ('tinyllama', 'llama3', 'qwen2.5-coder', 'codellama', default: tinyllama)"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "config_yaml": "str - Generated config.yaml with defaults and documentation",
+        "instructions": "str - Comprehensive configuration instructions (markdown)",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "bbfc40d4b71a9ffc07f06e7279a151892d5c05f4f3643ba746f3517cc83a3606",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340311Z"
+    },
+    "created_at": "2025-11-16T14:44:34.693151Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "bbfc40d4b71a9ffc07f06e7279a151892d5c05f4f3643ba746f3517cc83a3606",
+    "breaking_changes": []
+  },
+  "dependency_analyzer": {
+    "tool_id": "dependency_analyzer",
+    "name": "Dependency Analyzer",
+    "tool_type": "executable",
+    "description": "Analyzes tool dependencies using RAG and metadata for tree shaking. Recursively resolves all required tools, files, and packages to create minimal deployments.",
+    "tags": [
+      "dependencies",
+      "tree-shaking",
+      "optimization",
+      "analysis",
+      "packaging",
+      "deployment"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\dependency_analyzer.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/dependency_analyzer.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON with: tool_id (required), tools_root (default: code_evolver/tools), include_rag (default: false)"
+      },
+      "output_schema": {
+        "success": "bool - Whether analysis was successful",
+        "tool_id": "str - Analyzed tool ID",
+        "dependencies": "dict - All dependencies: {tools, tool_files, python_files, python_packages, core_modules, llm_providers, config_files}",
+        "requirements_txt": "str - Generated requirements.txt content",
+        "file_list": "list - Complete list of files to copy",
+        "stats": "dict - Statistics: {total_tools, total_files, total_packages, estimated_size_kb}",
+        "error": "str - Error message if analysis failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "244465966523eca60ea8cb33d604e22df926dba3242019235dff57000d64b68b",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340315Z"
+    },
+    "created_at": "2025-11-16T14:44:34.699603Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "244465966523eca60ea8cb33d604e22df926dba3242019235dff57000d64b68b",
+    "breaking_changes": []
+  },
+  "docker_compose_generator": {
+    "tool_id": "docker_compose_generator",
+    "name": "Docker Compose Generator",
+    "tool_type": "executable",
+    "description": "Generates docker-compose.yml configuration for containerized tool API wrappers",
+    "tags": [
+      "docker",
+      "docker-compose",
+      "orchestration",
+      "containerization",
+      "devops"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\docker_compose_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/docker_compose_generator.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON configuration with: service_name, image_name, port, env_vars (optional), volumes (optional), depends_on (optional)"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "docker_compose": "str - Generated docker-compose.yml content",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "b0100d77b2c1bf80808fa5cb04831c1b9c1c5562159e1ad7ed3044fe8ab7ab06",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340320Z"
+    },
+    "created_at": "2025-11-16T14:44:34.701148Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "b0100d77b2c1bf80808fa5cb04831c1b9c1c5562159e1ad7ed3044fe8ab7ab06",
+    "breaking_changes": []
+  },
+  "docker_helper_scripts_generator": {
+    "tool_id": "docker_helper_scripts_generator",
+    "name": "Docker Helper Scripts Generator",
+    "tool_type": "executable",
+    "description": "Generates helper scripts (build.sh, run.sh, test.sh, stop.sh) for Docker packages",
+    "tags": [
+      "docker",
+      "scripts",
+      "automation",
+      "devops",
+      "helpers"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\docker_helper_scripts_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/docker_helper_scripts_generator.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON configuration with: service_name, port"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "scripts": "dict - Dictionary of script names to content",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "97dacf94e7fa09ff8c777873b5b3eab927f3cdf227991ae64c2099535f0a2ac3",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340323Z"
+    },
+    "created_at": "2025-11-16T14:44:34.702597Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "97dacf94e7fa09ff8c777873b5b3eab927f3cdf227991ae64c2099535f0a2ac3",
+    "breaking_changes": []
+  },
+  "env_file_generator": {
+    "tool_id": "env_file_generator",
+    "name": "Environment File Generator",
+    "tool_type": "executable",
+    "description": "Generates .env and .env.example files with complete configuration documentation for Docker containers",
+    "tags": [
+      "environment",
+      "configuration",
+      "docker",
+      "dotenv",
+      "settings"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\env_file_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/env_file_generator.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON configuration with: tool_id, port, llm_config (optional dict), additional_vars (optional dict)"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "env_file": "str - Generated .env file content",
+        "env_example": "str - Generated .env.example file with documentation",
+        "instructions": "str - Detailed configuration instructions",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "56e35ec165238295f541b4bba25bb90e53af9b32d7982bd5a5dbc32b581dcad2",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340327Z"
+    },
+    "created_at": "2025-11-16T14:44:34.707867Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "56e35ec165238295f541b4bba25bb90e53af9b32d7982bd5a5dbc32b581dcad2",
+    "breaking_changes": []
+  },
+  "package_recovery_tool": {
+    "tool_id": "package_recovery_tool",
+    "name": "Package Recovery Tool",
+    "tool_type": "executable",
+    "description": "Automatically detects missing packages from error messages and installs them. Supports Python packages (via pip) and system commands (via apt). Enables self-healing workflows.",
+    "tags": [
+      "recovery",
+      "dependencies",
+      "error-handling",
+      "self-healing",
+      "package-management",
+      "resilience"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\package_recovery_tool.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/package_recovery_tool.py",
+        "{input_json}"
+      ],
+      "input_schema": {
+        "input_json": "str - JSON with: error_output (error message to analyze), auto_install (bool, default: true), install_system (bool, default: false)"
+      },
+      "output_schema": {
+        "success": "bool - Whether recovery was successful",
+        "detected": "dict - Detected missing packages: {python_packages: [...], system_commands: [...]}",
+        "installation_results": "dict - Installation results for Python and system packages",
+        "message": "str - Status message",
+        "error": "str - Error message if recovery failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "c798b362178fbeeda4bc5cbe5a3c8a4302bcf61fcaf2ba72ff89f1eeb5788376",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340331Z"
+    },
+    "created_at": "2025-11-16T14:44:34.723916Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "c798b362178fbeeda4bc5cbe5a3c8a4302bcf61fcaf2ba72ff89f1eeb5788376",
+    "breaking_changes": []
+  },
+  "selective_file_copier": {
+    "tool_id": "selective_file_copier",
+    "name": "Selective File Copier",
+    "tool_type": "executable",
+    "description": "Copies only required files based on dependency analysis for tree-shaken deployments. Maintains directory structure and creates Python package init files.",
+    "tags": [
+      "file-operations",
+      "tree-shaking",
+      "optimization",
+      "deployment",
+      "packaging"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\selective_file_copier.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/selective_file_copier.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON with: file_list (required list of files), source_root (default: .), dest_root (required destination)"
+      },
+      "output_schema": {
+        "success": "bool - Whether copy was successful",
+        "copied_files": "list - List of copied files with sizes",
+        "failed_files": "list - List of files that failed to copy",
+        "created_dirs": "list - Directories created",
+        "total_size_bytes": "int - Total bytes copied",
+        "stats": "dict - Statistics: {total_files, copied, failed, total_size_mb}",
+        "error": "str - Error message if copy failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "fefab5472da33286a01437417ddc02aab87153a012642ae34b455c509e4ac306",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340335Z"
+    },
+    "created_at": "2025-11-16T14:44:34.739060Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "fefab5472da33286a01437417ddc02aab87153a012642ae34b455c509e4ac306",
+    "breaking_changes": []
+  },
+  "standalone_exe_compiler": {
+    "tool_id": "standalone_exe_compiler",
+    "name": "Standalone Executable Compiler",
+    "tool_type": "executable",
+    "description": "Compiles tools/workflows into standalone executables (.exe, .app) using PyInstaller. Generates wrapper script, spec file, and build instructions",
+    "tags": [
+      "compiler",
+      "executable",
+      "pyinstaller",
+      "standalone",
+      "packaging",
+      "distribution"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\standalone_exe_compiler.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/standalone_exe_compiler.py",
+        "{config_json}"
+      ],
+      "input_schema": {
+        "config_json": "str - JSON configuration with: tool_id (required), output_name (optional), mode ('cli' or 'api', default: cli), port (for API mode, default: 8080)"
+      },
+      "output_schema": {
+        "success": "bool - Whether generation was successful",
+        "wrapper_script": "str - Generated standalone Python wrapper script",
+        "spec_file": "str - PyInstaller .spec file",
+        "build_instructions": "str - Build instructions in markdown",
+        "output_name": "str - Name of the output executable",
+        "error": "str - Error message if generation failed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "8e20e9e4d3b53916623b1bc339857745babac7a9f0070a5783ded6a32dc71c5f",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340338Z"
+    },
+    "created_at": "2025-11-16T14:44:34.753760Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "8e20e9e4d3b53916623b1bc339857745babac7a9f0070a5783ded6a32dc71c5f",
+    "breaking_changes": []
+  },
+  "dockerfile_generator": {
+    "tool_id": "dockerfile_generator",
+    "name": "Dockerfile Generator",
+    "tool_type": "llm",
+    "description": "Generates optimized Dockerfiles for wrapping tools and workflows with best practices including multi-stage builds, security hardening, and layer caching",
+    "tags": [
+      "docker",
+      "dockerfile",
+      "containerization",
+      "devops",
+      "infrastructure",
+      "api-wrapper"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\dockerfile_generator.yaml",
+      "llm_tier": "coding.tier_2",
+      "llm_role": "specialist",
+      "system_prompt": "You are a Docker and containerization expert. Generate production-ready Dockerfiles following these best practices:\n\n1. Multi-stage builds to minimize image size\n2. Security hardening (non-root user, minimal base images)\n3. Layer caching optimization (dependencies before code)\n4. Minimal attack surface (only necessary packages)\n5. Health checks and metadata labels\n6. Proper signal handling and graceful shutdown\n7. Build arguments for flexibility\n\nAlways output ONLY the Dockerfile content without markdown code blocks or explanations.\n",
+      "prompt_template": "Generate a Dockerfile for the following specification:\n\nBase Image: {base_image}\nApplication Type: {app_type}\nTool/Workflow ID: {tool_id}\nPort: {port}\nDependencies: {dependencies}\nEnvironment Variables: {env_vars}\nAdditional Requirements: {additional_requirements}\n\nThe Dockerfile should:\n- Copy the entire code_evolver directory structure\n- Install all Python dependencies\n- Create a non-root user for running the application\n- Expose the specified port\n- Include health check\n- Set up proper entrypoint for the API server\n",
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "long",
+      "version": "1.0.0",
+      "definition_hash": "7ec6c88e2243f43fc759e17fa521ffaf1ec78e8c711931787c998862af03f0d0",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340342Z"
+    },
+    "created_at": "2025-11-16T14:44:34.775905Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "7ec6c88e2243f43fc759e17fa521ffaf1ec78e8c711931787c998862af03f0d0",
+    "breaking_changes": []
+  },
+  "fetch_full_biography_data_from": {
+    "tool_id": "fetch_full_biography_data_from",
+    "name": "Fetch full biography data from API",
+    "tool_type": "workflow",
+    "description": "Fetch full biography data from API",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "fetch_full_biography_data_from",
+      "quality_score": 1.1,
+      "latency_ms": 49119,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-16T15:16:33.662203+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Fetch full biography data from API",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340346Z"
+    },
+    "created_at": "2025-11-16T15:16:33.662222Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "translate_full_biography_data": {
+    "tool_id": "translate_full_biography_data",
+    "name": "Translate full biography data from API to French",
+    "tool_type": "workflow",
+    "description": "Translate full biography data from API to French",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "translate_full_biography_data",
+      "quality_score": 1.1,
+      "latency_ms": 68298,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T15:18:49.659243+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Translate full biography data from API to French",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340350Z"
+    },
+    "created_at": "2025-11-16T15:18:49.659263Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "store_code_fix_pattern": {
+    "tool_id": "store_code_fix_pattern",
+    "name": "Store Code Fix Pattern",
+    "tool_type": "executable",
+    "description": "Stores code breaks and their fixes as reusable patterns. Learns from errors so similar issues can be fixed earlier next time.",
+    "tags": [
+      "learning",
+      "code-fix",
+      "pattern-storage",
+      "error-recovery",
+      "self-improvement"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\store_code_fix_pattern.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/store_code_fix_pattern.py"
+      ],
+      "input_schema": {
+        "error_message": {
+          "type": "string",
+          "description": "The error message that occurred",
+          "required": true
+        },
+        "broken_code": {
+          "type": "string",
+          "description": "The code that caused the error",
+          "required": true
+        },
+        "fixed_code": {
+          "type": "string",
+          "description": "The corrected code",
+          "required": true
+        },
+        "fix_description": {
+          "type": "string",
+          "description": "Description of what was wrong and how it was fixed",
+          "required": true
+        },
+        "error_type": {
+          "type": "string",
+          "description": "Category of error",
+          "enum": [
+            "syntax",
+            "runtime",
+            "logic",
+            "type",
+            "import",
+            "undefined",
+            "indentation",
+            "unicode",
+            "json",
+            "unknown"
+          ],
+          "default": "unknown",
+          "required": false
+        },
+        "language": {
+          "type": "string",
+          "description": "Programming language",
+          "default": "python",
+          "required": false
+        },
+        "context": {
+          "type": "object",
+          "description": "Additional context (tool_id, framework, etc.)",
+          "required": false
+        },
+        "debug_info": {
+          "type": "object",
+          "description": "Full debug information (stack trace, variables, locals, etc.)",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "pattern_id": {
+            "type": "string",
+            "description": "Unique ID for this fix pattern"
+          },
+          "error_type": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          },
+          "searchable_by": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.1",
+      "definition_hash": "3c5f1088702c21dde054eb501a8bfebf35d03f9f4e023791ee4b48df6bcd3d37",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340353Z"
+    },
+    "created_at": "2025-11-16T16:37:22.683405Z",
+    "usage_count": 0,
+    "version": "1.0.1",
+    "definition_hash": "3c5f1088702c21dde054eb501a8bfebf35d03f9f4e023791ee4b48df6bcd3d37",
+    "breaking_changes": []
+  },
+  "check_tool_duplicate": {
+    "tool_id": "check_tool_duplicate",
+    "name": "Check Tool Duplicate",
+    "tool_type": "executable",
+    "description": "Searches for semantically similar tools to avoid creating duplicates. Prevents tool proliferation by finding existing tools that match the functionality.",
+    "tags": [
+      "deduplication",
+      "tool-search",
+      "semantic-similarity",
+      "meta-programming"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\check_tool_duplicate.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/check_tool_duplicate.py"
+      ],
+      "input_schema": {
+        "tool_description": {
+          "type": "string",
+          "description": "What the tool does",
+          "required": true
+        },
+        "tool_name": {
+          "type": "string",
+          "description": "Name of the proposed tool",
+          "required": false
+        },
+        "parameters": {
+          "type": "array",
+          "description": "List of parameters the tool takes",
+          "required": false
+        },
+        "category": {
+          "type": "string",
+          "description": "Tool category (math, text, data, conversion, etc.)",
+          "required": false
+        },
+        "similarity_threshold": {
+          "type": "number",
+          "description": "Minimum similarity to consider a duplicate (0.0-1.0)",
+          "default": 0.85,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "has_duplicates": {
+            "type": "boolean",
+            "description": "Whether similar tools were found"
+          },
+          "duplicate_count": {
+            "type": "integer"
+          },
+          "best_match": {
+            "type": "object",
+            "description": "The most similar existing tool",
+            "properties": {
+              "tool_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "similarity": {
+                "type": "number"
+              },
+              "usage_count": {
+                "type": "integer"
+              },
+              "quality_score": {
+                "type": "number"
+              }
+            }
+          },
+          "all_matches": {
+            "type": "array",
+            "description": "All similar tools found"
+          },
+          "recommendation": {
+            "type": "string",
+            "enum": [
+              "use_existing_tool",
+              "create_new_tool"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "2dddef6d78f95092f500c142786273929547085bf011b29fb4e76a4e93b60577",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340357Z"
+    },
+    "created_at": "2025-11-16T15:46:53.635925Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "2dddef6d78f95092f500c142786273929547085bf011b29fb4e76a4e93b60577",
+    "breaking_changes": []
+  },
+  "find_code_fix_pattern": {
+    "tool_id": "find_code_fix_pattern",
+    "name": "Find Code Fix Pattern",
+    "tool_type": "executable",
+    "description": "Searches for similar code errors and suggests proven fixes. Returns multiple solutions ranked by usage count and similarity.",
+    "tags": [
+      "learning",
+      "code-fix",
+      "pattern-search",
+      "error-recovery",
+      "self-improvement"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\find_code_fix_pattern.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/find_code_fix_pattern.py"
+      ],
+      "input_schema": {
+        "error_message": {
+          "type": "string",
+          "description": "The error message to search for",
+          "required": true
+        },
+        "broken_code": {
+          "type": "string",
+          "description": "The broken code (helps with similarity matching)",
+          "required": false
+        },
+        "error_type": {
+          "type": "string",
+          "description": "Category of error (helps filter results)",
+          "required": false
+        },
+        "language": {
+          "type": "string",
+          "description": "Programming language",
+          "default": "python",
+          "required": false
+        },
+        "top_k": {
+          "type": "integer",
+          "description": "Number of similar patterns to return",
+          "default": 3,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "found": {
+            "type": "boolean",
+            "description": "Whether any patterns were found"
+          },
+          "pattern_count": {
+            "type": "integer",
+            "description": "Number of patterns found"
+          },
+          "best_match": {
+            "type": "object",
+            "description": "The highest-ranked fix (by usage + similarity)",
+            "properties": {
+              "pattern_id": {
+                "type": "string"
+              },
+              "similarity": {
+                "type": "number"
+              },
+              "usage_count": {
+                "type": "integer"
+              },
+              "rank_score": {
+                "type": "number"
+              },
+              "error_message": {
+                "type": "string"
+              },
+              "broken_code": {
+                "type": "string"
+              },
+              "fixed_code": {
+                "type": "string"
+              },
+              "fix_description": {
+                "type": "string"
+              },
+              "debug_info": {
+                "type": "object"
+              }
+            }
+          },
+          "all_patterns": {
+            "type": "array",
+            "description": "All matching patterns ranked by effectiveness",
+            "items": {
+              "type": "object"
+            }
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "how_to_apply": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "b61343309310df75278e225b8b79e6dff8e27a6241b4d7c3ba854577ce7cdf5d",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340361Z"
+    },
+    "created_at": "2025-11-16T15:46:53.660769Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "b61343309310df75278e225b8b79e6dff8e27a6241b4d7c3ba854577ce7cdf5d",
+    "breaking_changes": []
+  },
+  "prompt_genericiser": {
+    "tool_id": "prompt_genericiser",
+    "name": "Prompt Genericiser",
+    "tool_type": "llm",
+    "description": "Converts specific prompts into generic, reusable tool descriptions. Prevents unnecessary specialization by identifying the underlying generic pattern.",
+    "tags": [
+      "generalization",
+      "deduplication",
+      "pattern-extraction",
+      "meta-programming"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\prompt_genericiser.yaml",
+      "llm_tier": "triage",
+      "llm_role": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "a855ec629a92c9f384c9af8f3b7cc8aefc4c2e649774f2955cc79f3e88482787",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340365Z"
+    },
+    "created_at": "2025-11-16T15:46:53.734260Z",
+    "usage_count": 1,
+    "version": "1.0.0",
+    "definition_hash": "a855ec629a92c9f384c9af8f3b7cc8aefc4c2e649774f2955cc79f3e88482787",
+    "breaking_changes": []
+  },
+  "inline_tool": {
+    "tool_id": "inline_tool",
+    "name": "Inline Tool",
+    "tool_type": "executable",
+    "description": "Bakes tool code directly into workflow scripts with version tracking. Enables enterprise reproducibility by embedding dependencies with RAG references.",
+    "tags": [
+      "enterprise",
+      "reproducibility",
+      "deployment",
+      "dependency-management"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\inline_tool.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/inline_tool.py"
+      ],
+      "input_schema": {
+        "operation": {
+          "type": "string",
+          "description": "Operation: 'inline', 'extract', 'update', or 'list'",
+          "enum": [
+            "inline",
+            "extract",
+            "update",
+            "list"
+          ],
+          "default": "inline",
+          "required": false
+        },
+        "workflow_file": {
+          "type": "string",
+          "description": "Path to workflow script to modify",
+          "required": true
+        },
+        "tool_id": {
+          "type": "string",
+          "description": "ID of tool to inline (required for 'inline' operation)",
+          "required": false
+        },
+        "version": {
+          "type": "string",
+          "description": "Version to inline (or 'current' for latest)",
+          "default": "current",
+          "required": false
+        },
+        "inline_marker_id": {
+          "type": "string",
+          "description": "Marker ID of inlined section (required for 'extract' and 'update')",
+          "required": false
+        },
+        "position": {
+          "type": "string",
+          "description": "Where to insert inlined code ('top' or 'bottom')",
+          "enum": [
+            "top",
+            "bottom"
+          ],
+          "default": "top",
+          "required": false
+        },
+        "pin_version": {
+          "type": "boolean",
+          "description": "Pin this version in RAG to protect from trimming",
+          "default": true,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "tool_id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "workflow_file": {
+            "type": "string"
+          },
+          "inline_marker_id": {
+            "type": "string",
+            "description": "Unique marker for this inlined section"
+          },
+          "position": {
+            "type": "string"
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "code_size_bytes": {
+            "type": "integer"
+          },
+          "code_size_lines": {
+            "type": "integer"
+          },
+          "inlined_tools": {
+            "type": "array",
+            "description": "List of inlined tools (for 'list' operation)"
+          },
+          "extracted_lines": {
+            "type": "integer",
+            "description": "Lines removed (for 'extract' operation)"
+          },
+          "update": {
+            "type": "object",
+            "description": "Update information (for 'update' operation)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "e97d818682755ea3e8870c0c2ae012e3fa38804b7de477041389536bbe590164",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340368Z"
+    },
+    "created_at": "2025-11-16T16:37:21.157255Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "e97d818682755ea3e8870c0c2ae012e3fa38804b7de477041389536bbe590164",
+    "breaking_changes": []
+  },
+  "pin_tool_version": {
+    "tool_id": "pin_tool_version",
+    "name": "Pin Tool Version",
+    "tool_type": "executable",
+    "description": "Locks a workflow to specific tool versions. Pinned versions are protected from trimming and can be inlined into workflow scripts for enterprise reproducibility.",
+    "tags": [
+      "enterprise",
+      "version-control",
+      "dependency-management",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\pin_tool_version.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/pin_tool_version.py"
+      ],
+      "input_schema": {
+        "operation": {
+          "type": "string",
+          "description": "Operation: 'pin', 'unpin', or 'list'",
+          "enum": [
+            "pin",
+            "unpin",
+            "list"
+          ],
+          "default": "pin",
+          "required": false
+        },
+        "tool_id": {
+          "type": "string",
+          "description": "ID of the tool to pin/unpin (required for pin/unpin)",
+          "required": false
+        },
+        "version": {
+          "type": "string",
+          "description": "Version to pin (or 'current' for latest). Optional for unpin (unpins all versions if not specified)",
+          "default": "current",
+          "required": false
+        },
+        "workflow_id": {
+          "type": "string",
+          "description": "Workflow that depends on this version (optional, enables workflow-specific pins)",
+          "required": false
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why this version is pinned (documentation)",
+          "default": "",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "tool_id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "workflow_id": {
+            "type": "string"
+          },
+          "pin_key": {
+            "type": "string",
+            "description": "Unique pin identifier: workflow_id:tool_id@version"
+          },
+          "message": {
+            "type": "string"
+          },
+          "protected_from_trimming": {
+            "type": "boolean"
+          },
+          "pins": {
+            "type": "array",
+            "description": "List of pins (for 'list' operation)"
+          },
+          "unpinned": {
+            "type": "integer",
+            "description": "Number of pins removed (for 'unpin' operation)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "71dc551bc528db18de5d6ef42e64e923aa669eacd364fb1d4f61598452caba64",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340372Z"
+    },
+    "created_at": "2025-11-16T16:37:22.333430Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "71dc551bc528db18de5d6ef42e64e923aa669eacd364fb1d4f61598452caba64",
+    "breaking_changes": []
+  },
+  "trim_tool_versions": {
+    "tool_id": "trim_tool_versions",
+    "name": "Trim Tool Versions",
+    "tool_type": "executable",
+    "description": "Keeps tools tidy by retaining only recent versions (2-3 back) plus original. Archives or deletes old versions for rollback capability.",
+    "tags": [
+      "maintenance",
+      "version-control",
+      "cleanup",
+      "storage-optimization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\trim_tool_versions.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/trim_tool_versions.py"
+      ],
+      "input_schema": {
+        "tool_id": {
+          "type": "string",
+          "description": "ID of the tool to trim (or set trim_all: true)",
+          "required": false
+        },
+        "keep_recent": {
+          "type": "integer",
+          "description": "Number of recent versions to keep",
+          "default": 3,
+          "required": false
+        },
+        "archive_old": {
+          "type": "boolean",
+          "description": "Archive old versions instead of deleting",
+          "default": true,
+          "required": false
+        },
+        "dry_run": {
+          "type": "boolean",
+          "description": "Don't actually delete, just report what would happen",
+          "default": false,
+          "required": false
+        },
+        "trim_all": {
+          "type": "boolean",
+          "description": "Trim versions for all tools",
+          "default": false,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "tool_id": {
+            "type": "string"
+          },
+          "total_versions": {
+            "type": "integer"
+          },
+          "kept": {
+            "type": "integer"
+          },
+          "trimmed": {
+            "type": "integer"
+          },
+          "kept_versions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "trimmed_files": {
+            "type": "array"
+          },
+          "space_saved_kb": {
+            "type": "number"
+          },
+          "archive_location": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "aca0a2a245584365b597b5da1b1eeb0aec35d61cb36fd867681292d38a0f13a7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340376Z"
+    },
+    "created_at": "2025-11-16T16:37:23.010156Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "aca0a2a245584365b597b5da1b1eeb0aec35d61cb36fd867681292d38a0f13a7",
+    "breaking_changes": []
+  },
+  "detect_tool_specialization": {
+    "tool_id": "detect_tool_specialization",
+    "name": "Detect Tool Specialization",
+    "tool_type": "llm",
+    "description": "Detects when an evolved tool has diverged far enough to become a new specialized tool with its own directory. Prevents tools from evolving beyond their original purpose.",
+    "tags": [
+      "tool-evolution",
+      "specialization",
+      "meta-programming",
+      "organization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\detect_tool_specialization.yaml",
+      "llm_tier": "triage",
+      "llm_role": null,
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "6288365d06a154b314275cacb81da9c9eaad158c1f792401c3c70fb5e7c1e516",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340380Z"
+    },
+    "created_at": "2025-11-16T16:37:23.342186Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "6288365d06a154b314275cacb81da9c9eaad158c1f792401c3c70fb5e7c1e516",
+    "breaking_changes": []
+  },
+  "write_a_long_form_outline_ab": {
+    "tool_id": "write_a_long_form_outline_ab",
+    "name": "write a long form outline   about coding",
+    "tool_type": "workflow",
+    "description": "write a long form outline   about coding",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_long_form_outline_ab",
+      "quality_score": 1.1,
+      "latency_ms": 880,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-16T18:18:47.459894+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write a long form outline   about coding",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340384Z"
+    },
+    "created_at": "2025-11-16T18:18:47.459930Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "semantic_comparator": {
+    "tool_id": "semantic_comparator",
+    "name": "Semantic Comparator",
+    "tool_type": "llm",
+    "description": "Decides if two prompts have the EXACT same meaning (100% match) or are similar enough for mutation (>50%). Used to prevent inappropriate workflow reuse for creative tasks.",
+    "tags": [
+      "comparison",
+      "semantic",
+      "routing",
+      "cache-decision"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\semantic_comparator.yaml",
+      "llm_tier": "fast",
+      "llm_role": "comparator",
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "c126cd344668c2b8335951237903c6dcc4c6437b51b935cd5c3fd7414860450f",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340388Z"
+    },
+    "created_at": "2025-11-16T18:39:13.503483Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "c126cd344668c2b8335951237903c6dcc4c6437b51b935cd5c3fd7414860450f",
+    "breaking_changes": []
+  },
+  "use_the_received_instructions": {
+    "tool_id": "use_the_received_instructions",
+    "name": "Use the received instructions to generate a new workflow",
+    "tool_type": "workflow",
+    "description": "Use the received instructions to generate a new workflow",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "use_the_received_instructions",
+      "quality_score": 1.1,
+      "latency_ms": 77001,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T18:47:31.754777+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Use the received instructions to generate a new workflow",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340392Z"
+    },
+    "created_at": "2025-11-16T18:47:31.754804Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "fake_data_generator": {
+    "tool_id": "fake_data_generator",
+    "name": "Fake Data Generator",
+    "tool_type": "executable",
+    "description": "Generates realistic fake data using Faker library for API testing and data simulation",
+    "tags": [
+      "testing",
+      "data-generation",
+      "faker",
+      "api-testing",
+      "mock-data"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fake_data_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/fake_data_generator.py"
+      ],
+      "input_schema": {
+        "schema": {
+          "type": "object",
+          "description": "JSON schema describing the data structure to generate",
+          "required": false
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of fake data items to generate (default: 1)",
+          "required": false,
+          "default": 1
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether generation succeeded"
+          },
+          "data": {
+            "description": "Generated fake data (single item or array based on count)"
+          },
+          "schema": {
+            "type": "object",
+            "description": "The schema that was used"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.1",
+      "definition_hash": "e887b6fde6f02c2e70ae5a2b7faa0602999d23cd1d9af10000bccd87879332f4",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340395Z"
+    },
+    "created_at": "2025-11-16T19:12:19.491661Z",
+    "usage_count": 0,
+    "version": "1.0.1",
+    "definition_hash": "e887b6fde6f02c2e70ae5a2b7faa0602999d23cd1d9af10000bccd87879332f4",
+    "breaking_changes": []
+  },
+  "smart_api_parser": {
+    "tool_id": "smart_api_parser",
+    "name": "Smart API Parser",
+    "tool_type": "executable",
+    "description": "Intelligently parses OpenAPI specs, generates realistic test data, and tests all endpoints. Can use Faker or LLM for data generation.",
+    "tags": [
+      "api-testing",
+      "openapi",
+      "swagger",
+      "testing",
+      "data-generation",
+      "integration-testing"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\smart_api_parser.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/smart_api_parser.py"
+      ],
+      "input_schema": {
+        "openapi_spec": {
+          "type": "object",
+          "description": "OpenAPI 3.0 specification (JSON object)",
+          "required": true
+        },
+        "use_llm_generator": {
+          "type": "boolean",
+          "description": "Use LLM for contextual fake data (slower but smarter) vs Faker (faster)",
+          "required": false,
+          "default": false
+        },
+        "make_requests": {
+          "type": "boolean",
+          "description": "Actually make HTTP requests to endpoints (false = dry run with generated data only)",
+          "required": false,
+          "default": false
+        },
+        "endpoints": {
+          "type": "array",
+          "description": "List of endpoint operation IDs to test (null = test all)",
+          "required": false,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether parsing succeeded"
+          },
+          "api_info": {
+            "type": "object",
+            "description": "API metadata from OpenAPI spec"
+          },
+          "base_url": {
+            "type": "string",
+            "description": "Base URL of the API"
+          },
+          "total_endpoints": {
+            "type": "integer",
+            "description": "Total number of endpoints in spec"
+          },
+          "tested_endpoints": {
+            "type": "integer",
+            "description": "Number of endpoints tested"
+          },
+          "results": {
+            "type": "array",
+            "description": "Test results for each endpoint",
+            "items": {
+              "type": "object",
+              "properties": {
+                "endpoint": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "request_body": {
+                  "description": "Generated request body"
+                },
+                "status_code": {
+                  "type": "integer"
+                },
+                "response_body": {
+                  "description": "API response (if make_requests=true)"
+                },
+                "success": {
+                  "type": "boolean"
+                },
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "options": {
+            "type": "object",
+            "description": "Options used for testing"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "medium",
+      "quality_tier": "excellent",
+      "version": "1.0.1",
+      "definition_hash": "10cce07962ea1b717953a7d40d56e9347a89ce5510d3cff883f789d64d48a211",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340399Z"
+    },
+    "created_at": "2025-11-16T19:12:20.731463Z",
+    "usage_count": 0,
+    "version": "1.0.1",
+    "definition_hash": "10cce07962ea1b717953a7d40d56e9347a89ce5510d3cff883f789d64d48a211",
+    "breaking_changes": []
+  },
+  "llm_fake_data_generator": {
+    "tool_id": "llm_fake_data_generator",
+    "name": "LLM Fake Data Generator",
+    "tool_type": "llm",
+    "description": "Uses LLM to generate contextually appropriate fake data based on field names and descriptions. Better for complex, domain-specific data.",
+    "tags": [
+      "llm",
+      "data-generation",
+      "testing",
+      "api-testing",
+      "mock-data",
+      "contextual"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\llm_fake_data_generator.yaml",
+      "llm_tier": "fast",
+      "llm_role": "generator",
+      "system_prompt": null,
+      "prompt_template": null,
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "cdec28117cf095997bf159884b90b16a9e07680392739734b34d97ba502e80fc",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340403Z"
+    },
+    "created_at": "2025-11-16T18:54:43.788820Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "cdec28117cf095997bf159884b90b16a9e07680392739734b34d97ba502e80fc",
+    "breaking_changes": []
+  },
+  "collect_data_from_remote_api": {
+    "tool_id": "collect_data_from_remote_api",
+    "name": "Collect data from remote API",
+    "tool_type": "workflow",
+    "description": "Collect data from remote API",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "collect_data_from_remote_api",
+      "quality_score": 1.1,
+      "latency_ms": 782,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T19:40:57.911672+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Collect data from remote API",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340407Z"
+    },
+    "created_at": "2025-11-16T19:40:57.911688Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "save_data_to_disk_with_random": {
+    "tool_id": "save_data_to_disk_with_random",
+    "name": "Save data to disk with random filename SOMITING-OUT.TXT",
+    "tool_type": "workflow",
+    "description": "Save data to disk with random filename SOMITING-OUT.TXT",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "save_data_to_disk_with_random",
+      "quality_score": 1.1,
+      "latency_ms": 856,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T19:42:34.039134+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Save data to disk with random filename SOMITING-OUT.TXT",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340410Z"
+    },
+    "created_at": "2025-11-16T19:42:34.039153Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_an_efficient_systme_to_b": {
+    "tool_id": "write_an_efficient_systme_to_b",
+    "name": "Write an efficient systme to build a fractal. Evolve it 3 time suntil it is efficient.",
+    "tool_type": "workflow",
+    "description": "Write an efficient systme to build a fractal. Evolve it 3 time suntil it is efficient.",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_an_efficient_systme_to_b",
+      "quality_score": 1.1,
+      "latency_ms": 794,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T20:30:38.048858+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write an efficient systme to build a fractal. Evolve it 3 time suntil it is efficient.",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340416Z"
+    },
+    "created_at": "2025-11-16T20:30:38.048887Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "bugcatcher": {
+    "tool_id": "bugcatcher",
+    "name": "BugCatcher Exception Monitor",
+    "tool_type": "executable",
+    "description": "Global exception monitoring tool that watches for exceptions and logs them to Loki",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\bugcatcher.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "40977576bc52077d3a62f85c1fe98b4dd1450e966c7b71b5465db0baedf740fb",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340420Z"
+    },
+    "created_at": "2025-11-16T21:05:17.771074Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "40977576bc52077d3a62f85c1fe98b4dd1450e966c7b71b5465db0baedf740fb",
+    "breaking_changes": []
+  },
+  "http_raw_client": {
+    "tool_id": "http_raw_client",
+    "name": "HTTP Raw Client",
+    "tool_type": "executable",
+    "description": "Raw HTTP client that returns content as string without parsing. Perfect for HTML, text files, binary data, or any non-JSON content.",
+    "tags": [
+      "http",
+      "raw",
+      "html",
+      "scraping",
+      "binary",
+      "text",
+      "client"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\http_raw_client.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/http_raw_client.py"
+      ],
+      "input_schema": {
+        "url": {
+          "type": "string",
+          "description": "Target URL",
+          "required": true,
+          "example": "https://example.com/page.html"
+        },
+        "method": {
+          "type": "string",
+          "description": "HTTP method",
+          "required": false,
+          "default": "GET",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "HEAD",
+            "OPTIONS"
+          ]
+        },
+        "headers": {
+          "type": "object",
+          "description": "HTTP headers",
+          "required": false
+        },
+        "body": {
+          "type": "string",
+          "description": "Request body (raw string only)",
+          "required": false
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Request timeout in seconds",
+          "required": false,
+          "default": 30
+        },
+        "encoding": {
+          "type": "string",
+          "description": "Text encoding (default: utf-8)",
+          "required": false,
+          "default": "utf-8"
+        },
+        "return_binary": {
+          "type": "boolean",
+          "description": "Force base64 encoding of response",
+          "required": false,
+          "default": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether request succeeded"
+          },
+          "status_code": {
+            "type": "integer",
+            "description": "HTTP status code"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers"
+          },
+          "content": {
+            "type": "string",
+            "description": "Raw content (text or base64)"
+          },
+          "content_type": {
+            "type": "string",
+            "description": "Content-Type header value"
+          },
+          "content_length": {
+            "type": "integer",
+            "description": "Content length in bytes"
+          },
+          "is_binary": {
+            "type": "boolean",
+            "description": "Whether content is base64-encoded binary"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "54dc928854b760f3ffd6a1b4206e195c518b1e16bf74257de08620cce045a3f6",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340424Z"
+    },
+    "created_at": "2025-11-16T21:05:19.300501Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "54dc928854b760f3ffd6a1b4206e195c518b1e16bf74257de08620cce045a3f6",
+    "breaking_changes": []
+  },
+  "http_rest_client": {
+    "tool_id": "http_rest_client",
+    "name": "HTTP REST Client",
+    "tool_type": "executable",
+    "description": "Standard REST API client with automatic JSON parsing. Supports GET, POST, PUT, PATCH, DELETE methods with JSON request/response handling.",
+    "tags": [
+      "http",
+      "rest",
+      "api",
+      "json",
+      "web",
+      "client",
+      "request"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\http_rest_client.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/http_rest_client.py"
+      ],
+      "input_schema": {
+        "url": {
+          "type": "string",
+          "description": "Target URL",
+          "required": true,
+          "example": "https://api.example.com/users"
+        },
+        "method": {
+          "type": "string",
+          "description": "HTTP method",
+          "required": false,
+          "default": "GET",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "HEAD",
+            "OPTIONS"
+          ]
+        },
+        "headers": {
+          "type": "object",
+          "description": "HTTP headers",
+          "required": false,
+          "example": {
+            "Authorization": "Bearer token123",
+            "X-Custom-Header": "value"
+          }
+        },
+        "body": {
+          "description": "Request body (dict/list = JSON, string = raw)",
+          "required": false
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Request timeout in seconds",
+          "required": false,
+          "default": 30
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether request succeeded"
+          },
+          "status_code": {
+            "type": "integer",
+            "description": "HTTP status code"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers"
+          },
+          "body": {
+            "description": "Response body (parsed JSON or raw string)"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          },
+          "url": {
+            "type": "string",
+            "description": "Request URL"
+          },
+          "method": {
+            "type": "string",
+            "description": "Request method"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "13481298cb87a6ad9f48e294679f32b382960a4d8b40fa4f4aa3e5937ed9be68",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340428Z"
+    },
+    "created_at": "2025-11-16T21:05:19.850955Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "13481298cb87a6ad9f48e294679f32b382960a4d8b40fa4f4aa3e5937ed9be68",
+    "breaking_changes": []
+  },
+  "signalr_tool_trigger": {
+    "tool_id": "signalr_tool_trigger",
+    "name": "SignalR Tool Trigger",
+    "tool_type": "executable",
+    "description": "Listens to SignalR endpoint and dynamically triggers tools based on incoming messages. Supports direct tool invocation, workflow generation, and dynamic tool creation from API specs.",
+    "tags": [
+      "signalr",
+      "realtime",
+      "integration",
+      "dynamic",
+      "tool-trigger",
+      "workflow-generation"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\signalr_tool_trigger.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/signalr_tool_trigger.py"
+      ],
+      "input_schema": {
+        "hub_url": {
+          "type": "string",
+          "description": "SignalR hub URL to connect to",
+          "required": true,
+          "example": "http://localhost:5000/toolhub"
+        },
+        "hub_method": {
+          "type": "string",
+          "description": "Hub method name to subscribe to",
+          "required": false,
+          "default": "ToolTrigger"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "description": "How long to listen (omit for continuous listening)",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether connection was successful"
+          },
+          "hub_url": {
+            "type": "string",
+            "description": "URL connected to"
+          },
+          "hub_method": {
+            "type": "string",
+            "description": "Hub method subscribed to"
+          },
+          "total_messages": {
+            "type": "integer",
+            "description": "Total messages received"
+          },
+          "successful_results": {
+            "type": "integer",
+            "description": "Number of successfully processed messages"
+          },
+          "errors": {
+            "type": "integer",
+            "description": "Number of errors encountered"
+          },
+          "results": {
+            "type": "array",
+            "description": "Array of results from triggered tools/workflows"
+          },
+          "error_details": {
+            "type": "array",
+            "description": "Details of any errors"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "realtime",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "eebcab7a6c40bb8aba31d3cba1e5193003280098ed6e1b408f43fb6d95b85039",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T21:33:12.340432Z"
+    },
+    "created_at": "2025-11-16T21:05:20.413481Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "eebcab7a6c40bb8aba31d3cba1e5193003280098ed6e1b408f43fb6d95b85039",
+    "breaking_changes": []
+  },
+  "compress_the_image_to_50": {
+    "tool_id": "compress_the_image_to_50",
+    "name": "Compress the image to 50%",
+    "tool_type": "workflow",
+    "description": "Compress the image to 50%",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "compress_the_image_to_50",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 41,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-16T22:00:32.057365+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Compress the image to 50%"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T22:00:32.057389Z"
+    },
+    "created_at": "2025-11-16T22:00:32.057386Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
     "breaking_changes": []
   }
 }

@@ -106,6 +106,7 @@ from src import (
 )
 from src.config_manager import ConfigManager
 from src.tools_manager import ToolsManager, ToolType
+from src.background_tools_loader import BackgroundToolsLoader
 from src.task_evaluator import TaskEvaluator
 
 def safe_str(text: str) -> str:
@@ -291,25 +292,35 @@ class ChatCLI:
             else:
                 console.print("[yellow]WARNING Qdrant requested but not available, using NumPy-based RAG[/yellow]")
 
-        # Initialize tools manager with RAG
-        self.tools_manager = ToolsManager(
+        # Initialize tools manager in background (non-blocking)
+        # Progress will be shown via live spinner in BackgroundToolsLoader
+        self._tools_loader = BackgroundToolsLoader(
             config_manager=self.config,
             ollama_client=self.client,
             rag_memory=self.rag
         )
+        self._tools_loader.start()
+        self._tools_manager = None  # Will be set when ready
+
+        # Register callback to update when ready (silent, spinner already shows this)
+        def on_tools_ready(tools_manager):
+            self._tools_manager = tools_manager
+            # Completion message already shown by BackgroundToolsLoader spinner
+
+            # Register model selector tool AFTER tools are ready (non-blocking)
+            try:
+                from src.model_selector_tool import create_model_selector_tool
+                if self.config.config.get("model_selector", {}).get("enabled", True):
+                    create_model_selector_tool(self.config, tools_manager)
+            except (ImportError, Exception) as e:
+                pass  # Silent failure, not critical
+
+        self._tools_loader.on_ready(on_tools_ready)
 
         # Initialize task evaluator for routing decisions
         self.task_evaluator = TaskEvaluator(self.client)
 
-        # Register model selector tool if multi-backend support is enabled
-        try:
-            from src.model_selector_tool import create_model_selector_tool
-            if self.config.config.get("model_selector", {}).get("enabled", True):
-                create_model_selector_tool(self.config, self.tools_manager)
-                console.print("[dim]Registered model selector tool[/dim]")
-        except (ImportError, Exception) as e:
-            console.print(f"[dim]Model selector not available: {e}[/dim]")
-
+        # Initialize history and context BEFORE tools access
         self.context = {}
         self.history = []
         self.display = WorkflowDisplay(console)
@@ -322,15 +333,24 @@ class ChatCLI:
             self.pt_history = FileHistory(str(self.history_file))
             # Create command completer for slash commands
             slash_commands = [
-                '/generate', '/tools', '/tool', '/status', '/clear', '/clear_rag',
-                '/help', '/manual', '/config', '/auto', '/delete', '/evolve',
-                '/list', '/exit', '/quit'
+                "/generate", "/tools", "/tool", "/status", "/clear", "/clear_rag",
+                "/help", "/manual", "/config", "/auto", "/delete", "/evolve",
+                "/list", "/exit", "/quit"
             ]
             self.pt_completer = WordCompleter(slash_commands, ignore_case=True)
         else:
             self.pt_history = None
             self.pt_completer = None
             self._load_history()
+
+    @property
+    def tools_manager(self):
+        """Get tools manager, waiting if necessary."""  
+        if self._tools_manager is None:
+            if not self._tools_loader.is_ready_sync():
+                console.print("[dim yellow]Waiting for tools...[/dim yellow]")
+            self._tools_manager = self._tools_loader.get_tools(wait=True)
+        return self._tools_manager
 
     def _load_history(self):
         """Load command history from file (readline fallback)."""
@@ -471,6 +491,72 @@ class ChatCLI:
 
         return code.strip()
 
+    def _looks_like_python(self, code: str) -> bool:
+        """
+        Check if text looks like Python code (not natural language).
+
+        Args:
+            code: Text to check
+
+        Returns:
+            True if it looks like Python code, False otherwise
+        """
+        if not code or not code.strip():
+            return False
+
+        code = code.strip()
+
+        # Must contain at least one of these Python keywords/patterns
+        python_indicators = [
+            'import ',
+            'from ',
+            'def ',
+            'class ',
+            'if __name__',
+            'assert ',
+            'return ',
+            'print(',
+            '"""',
+            "'''",
+        ]
+
+        # Count how many Python indicators are present
+        indicator_count = sum(1 for indicator in python_indicators if indicator in code)
+
+        # Natural language indicators (signs it's NOT code)
+        natural_language_patterns = [
+            'The main() function',
+            'This code',
+            'The code',
+            'Here is',
+            'Here\'s',
+            'following',
+            'defines several',
+            'that are read from',
+        ]
+
+        # If it contains natural language patterns, it's not code
+        for pattern in natural_language_patterns:
+            if pattern in code:
+                return False
+
+        # Must have at least 2 Python indicators to be considered code
+        if indicator_count < 2:
+            return False
+
+        # Check that it has proper structure (indentation or function definitions)
+        lines = code.split('\n')
+        has_structure = any(
+            line.startswith('def ') or
+            line.startswith('class ') or
+            line.startswith('import ') or
+            line.startswith('from ') or
+            line.startswith('    ')  # Has indentation
+            for line in lines
+        )
+
+        return has_structure
+
     def _fix_code_with_llm(self, code: str, error_msg: str) -> str:
         """
         Use the code model to fix invalid code with a STRICT prompt.
@@ -541,7 +627,7 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
         if similar_workflows:
             workflow_examples = "\n\nSIMILAR WORKFLOWS FROM MEMORY (use as templates):\n"
             for wf_artifact, similarity in similar_workflows:
-                if similarity > 0.6:  # Only show reasonably similar workflows
+                if similarity >= 0.90:  # STRICT: Only show very similar workflows (90%+)
                     workflow_examples += f"\nWorkflow (similarity: {similarity:.0%}): {wf_artifact.description}\n"
                     # Include the workflow structure as an example
                     try:
@@ -1190,8 +1276,9 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # Try code reuse first (more specific than workflow)
         if existing_code and len(existing_code) > 0:
             code_artifact, similarity = existing_code[0]
-            # Lower threshold to 70% for better reuse (was 85%)
-            if similarity > 0.70:
+            # STRICT: 90% minimum similarity - prefer NOT matching unless very confident
+            # System optimizes later anyway, so be conservative about reuse
+            if similarity >= 0.90:
                 self.display.complete_stage("Search RAG", f"Found {code_artifact.name} ({similarity:.0%} match)")
 
                 # Get the node_id from metadata
@@ -1205,11 +1292,10 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
                         code_content = code_path.read_text()
 
                         # Strategy based on similarity:
-                        # - High similarity (>90%): Check semantic equivalence, then reuse as-is
-                        # - Medium similarity (70-90%): Check semantic equivalence, then use as template
-                        # - Low similarity (<70%): Generate from scratch
+                        # - High similarity (>=90%): Check semantic equivalence with fast LLM, then reuse as-is
+                        # - Low similarity (<90%): Generate from scratch (STRICT policy)
 
-                        # CRITICAL: Use tinyllama to check relationship between tasks
+                        # CRITICAL: Use fast LLM (not very fast) to check relationship between tasks
                         # Three possibilities:
                         # 1. SAME - Exact same task (reuse as-is)
                         # 2. RELATED - Similar domain but different variation (use as template and modify)
@@ -1236,11 +1322,12 @@ Examples:
 Answer with ONLY ONE WORD: SAME, RELATED, or DIFFERENT
 Answer:"""
 
+                        # Use fast LLM (not very fast) for semantic assessment
                         semantic_response = self.client.generate(
-                            model=self.config.triage_model,
+                            role="fast",  # Use fast tier (e.g., gemma3_4b) not veryfast (tinyllama)
                             prompt=semantic_check_prompt,
                             temperature=0.1,  # Low temperature for consistent classification
-                            model_key=self.config.triage_model_key  # Use actual model key for routing
+                            model_key=self.config.generator_model_key
                         ).strip().upper()
 
                         if "SAME" in semantic_response:
@@ -1475,7 +1562,7 @@ Answer:"""
 
                                     # Generate test data
                                     schema_json = json.dumps(schema)
-                                    test_data_result = self.tools.invoke_executable_tool(
+                                    test_data_result = self.tools_manager.invoke_executable_tool(
                                         tool_id="random_data_generator",
                                         source_file="",
                                         prompt=schema_json
@@ -1818,13 +1905,8 @@ The code generator will follow this specification EXACTLY, so include ALL critic
 
         self.display.complete_stage("Thinking", "Specification complete")
 
-        # Always show the specification to the user
-        # Sanitize specification using the safe_str() function to handle ALL Unicode characters
-        sanitized_spec = safe_str(specification)
-
-        console.print(f"\n[bold cyan][SPEC] Technical Specification ({len(specification)} chars):[/bold cyan]")
-        console.print(Panel(sanitized_spec, title=safe_str("Specification from Overseer"), border_style="cyan", box=box.ROUNDED))
-        console.print()
+        # Show brief specification summary (full spec saved to specification.md in node directory)
+        console.print(f"[dim cyan]Specification: {len(specification)} chars (saved to specification.md)[/dim cyan]")
 
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
 
@@ -3075,7 +3157,7 @@ This workflow successfully completed with passing tests.
 
                 # Generate test data
                 schema_json = json.dumps(schema)
-                test_data_result = self.tools.invoke_executable_tool(
+                test_data_result = self.tools_manager.invoke_executable_tool(
                     tool_id="random_data_generator",
                     source_file="",
                     prompt=schema_json
@@ -3577,9 +3659,9 @@ if __name__ == "__main__":
             # Clean the test code
             test_code = self._clean_code(test_code) if test_code else ""
 
-            # Check if generation failed or returned empty
-            if not test_code or len(test_code) < 50:
-                console.print(f"[yellow]Warning: Test generation returned {len(test_code)} chars, using fallback template[/yellow]")
+            # Check if generation failed, returned empty, or returned non-Python content
+            if not test_code or len(test_code) < 50 or not self._looks_like_python(test_code):
+                console.print(f"[yellow]Warning: Test generation returned {len(test_code)} chars or invalid Python, using fallback template[/yellow]")
                 # Use fallback template
                 test_code = """import sys
 import json
@@ -6392,8 +6474,8 @@ def call_tools_parallel(tool_calls: list) -> list:
                     '--module-name', module_name,
                     '--output-path', str(tests_dir),
                     '--maximum-search-time', str(timeout),
-                    '--assertion-generation', 'MUTATION_ANALYSIS',
-                    '--test-case-output', 'PytestTest'
+                    '--assertion-generation', 'MUTATION_ANALYSIS'
+                    # Removed --test-case-output (not supported in pynguin 0.43.0)
                 ],
                 capture_output=True,
                 text=True,

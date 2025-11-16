@@ -1,0 +1,196 @@
+﻿name: "Store Code Fix Pattern"
+type: "executable"
+description: "Stores code breaks and their fixes as reusable patterns. Learns from errors so similar issues can be fixed earlier next time."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/store_code_fix_pattern.py"]
+
+input_schema:
+  error_message:
+    type: string
+    description: "The error message that occurred"
+    required: true
+
+  broken_code:
+    type: string
+    description: "The code that caused the error"
+    required: true
+
+  fixed_code:
+    type: string
+    description: "The corrected code"
+    required: true
+
+  fix_description:
+    type: string
+    description: "Description of what was wrong and how it was fixed"
+    required: true
+
+  error_type:
+    type: string
+    description: "Category of error"
+    enum: ["syntax", "runtime", "logic", "type", "import", "undefined", "indentation", "unicode", "json", "unknown"]
+    default: "unknown"
+    required: false
+
+  language:
+    type: string
+    description: "Programming language"
+    default: "python"
+    required: false
+
+  context:
+    type: object
+    description: "Additional context (tool_id, framework, etc.)"
+    required: false
+
+  debug_info:
+    type: object
+    description: "Full debug information (stack trace, variables, locals, etc.)"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    pattern_id:
+      type: string
+      description: "Unique ID for this fix pattern"
+    error_type:
+      type: string
+    tags:
+      type: array
+      items:
+        type: string
+    message:
+      type: string
+    searchable_by:
+      type: array
+      items:
+        type: string
+
+tags: ["learning", "code-fix", "pattern-storage", "error-recovery", "self-improvement"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 95
+
+usage_notes: |
+  ## Overview
+
+  Stores code errors and their fixes as reusable patterns in RAG memory.
+  The system can then search for similar errors and apply proven fixes.
+
+  ## Usage
+
+  ### Store a Fix Pattern
+
+  ```bash
+  echo '{
+    "error_message": "SyntaxError: f-string: single } is not allowed",
+    "broken_code": "f\"Hello {{name}}\"",
+    "fixed_code": "f\"Hello {{{{name}}}}\"",
+    "fix_description": "In f-strings, literal braces must be doubled. Single { or } inside f-strings need to be escaped as {{ or }}",
+    "error_type": "syntax",
+    "language": "python",
+    "context": {
+      "tool_id": "standalone_exe_compiler",
+      "location": "generate_standalone_wrapper"
+    }
+  }' | python tools/executable/store_code_fix_pattern.py
+  ```
+
+  ### Result
+
+  ```json
+  {
+    "success": true,
+    "pattern_id": "fix_pattern_a3f2d1b8c9e4",
+    "error_type": "syntax",
+    "tags": ["code-fix-pattern", "syntax", "python", "syntax-error", "tool:standalone_exe_compiler"],
+    "message": "Stored code fix pattern: fix_pattern_a3f2d1b8c9e4",
+    "searchable_by": [
+      "Error message similarity",
+      "Code structure similarity",
+      "Tags and keywords",
+      "Error type"
+    ]
+  }
+  ```
+
+  ## Integration with Fix Cycle
+
+  Use this in your fix workflow:
+
+  ```python
+  # 1. Code breaks with error
+  try:
+      result = execute_code(code)
+  except Exception as e:
+      error_msg = str(e)
+
+      # 2. Search for similar fix patterns
+      similar_fixes = call_tool("find_code_fix_pattern", json.dumps({
+          "error_message": error_msg,
+          "broken_code": code
+      }))
+
+      # 3. If pattern found, apply the fix
+      if similar_fixes['found']:
+          fixed_code = apply_fix_pattern(code, similar_fixes['pattern'])
+      else:
+          # 4. Manual fix or LLM-based fix
+          fixed_code = llm_fix_code(code, error_msg)
+
+      # 5. Store the new fix pattern for future use
+      call_tool("store_code_fix_pattern", json.dumps({
+          "error_message": error_msg,
+          "broken_code": code,
+          "fixed_code": fixed_code,
+          "fix_description": "...",
+          "error_type": "syntax"
+      }))
+  ```
+
+  ## Benefits
+
+  - **Learn from mistakes** - Never make the same error twice
+  - **Faster fixes** - Apply proven solutions instantly
+  - **Knowledge accumulation** - Build a library of fix patterns
+  - **Semantic search** - Find similar errors even with different wording
+  - **Context-aware** - Tag fixes by tool, framework, language
+
+  ## Stored Pattern Structure
+
+  Each pattern includes:
+  - Error message and type
+  - Broken code snippet
+  - Fixed code snippet
+  - Fix description
+  - Tags for categorization
+  - Context (tool, framework, etc.)
+  - Quality score (0.95 for proven fixes)
+  - Embedding for semantic search
+
+examples:
+  - inputs:
+      error_message: "SyntaxError: f-string: single '}' is not allowed"
+      broken_code: "f'Status: {status}'"
+      fixed_code: "f'Status: {{status}}'"
+      fix_description: "Literal braces in f-strings must be doubled"
+      error_type: "syntax"
+      language: "python"
+      context:
+        tool_id: "standalone_exe_compiler"
+    output: |
+      {
+        "success": true,
+        "pattern_id": "fix_pattern_abc123",
+        "error_type": "syntax",
+        "tags": ["code-fix-pattern", "syntax", "python", "syntax-error"],
+        "message": "Stored code fix pattern: fix_pattern_abc123"
+      }

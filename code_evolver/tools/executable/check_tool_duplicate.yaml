@@ -1,0 +1,280 @@
+﻿name: "Check Tool Duplicate"
+type: "executable"
+description: "Searches for semantically similar tools to avoid creating duplicates. Prevents tool proliferation by finding existing tools that match the functionality."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/check_tool_duplicate.py"]
+
+input_schema:
+  tool_description:
+    type: string
+    description: "What the tool does"
+    required: true
+
+  tool_name:
+    type: string
+    description: "Name of the proposed tool"
+    required: false
+
+  parameters:
+    type: array
+    description: "List of parameters the tool takes"
+    required: false
+
+  category:
+    type: string
+    description: "Tool category (math, text, data, conversion, etc.)"
+    required: false
+
+  similarity_threshold:
+    type: number
+    description: "Minimum similarity to consider a duplicate (0.0-1.0)"
+    default: 0.85
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    has_duplicates:
+      type: boolean
+      description: "Whether similar tools were found"
+    duplicate_count:
+      type: integer
+    best_match:
+      type: object
+      description: "The most similar existing tool"
+      properties:
+        tool_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        similarity:
+          type: number
+        usage_count:
+          type: integer
+        quality_score:
+          type: number
+    all_matches:
+      type: array
+      description: "All similar tools found"
+    recommendation:
+      type: string
+      enum: ["use_existing_tool", "create_new_tool"]
+    message:
+      type: string
+
+tags: ["deduplication", "tool-search", "semantic-similarity", "meta-programming"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 92
+
+usage_notes: |
+  ## Purpose
+
+  Prevents creating duplicate tools by searching for semantically similar existing tools.
+
+  ## Usage
+
+  ### Check Before Creating a Tool
+
+  ```bash
+  echo '{
+    "tool_description": "Adds two numbers together",
+    "tool_name": "Add Numbers",
+    "category": "math",
+    "similarity_threshold": 0.85
+  }' | python tools/executable/check_tool_duplicate.py
+  ```
+
+  ### Result: Duplicate Found
+
+  ```json
+  {
+    "success": true,
+    "has_duplicates": true,
+    "duplicate_count": 2,
+    "best_match": {
+      "tool_id": "add_two_numbers",
+      "name": "Add Two Numbers",
+      "description": "Adds two numbers together and returns the sum",
+      "similarity": 0.96,
+      "usage_count": 150,
+      "quality_score": 0.92,
+      "parameters": [
+        {"name": "number1", "type": "number"},
+        {"name": "number2", "type": "number"}
+      ]
+    },
+    "recommendation": "use_existing_tool",
+    "message": "Found existing tool: Add Two Numbers (96% similar)"
+  }
+  ```
+
+  ### Result: No Duplicate
+
+  ```json
+  {
+    "success": true,
+    "has_duplicates": false,
+    "recommendation": "create_new_tool",
+    "message": "No similar tools found - safe to create"
+  }
+  ```
+
+  ## Integration with Tool Creation
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  def create_tool_safely(description, name, parameters):
+      # Check for duplicates first
+      check_result = call_tool("check_tool_duplicate", json.dumps({
+          "tool_description": description,
+          "tool_name": name,
+          "parameters": parameters
+      }))
+
+      check_data = json.loads(check_result)
+
+      if check_data['has_duplicates']:
+          existing_tool = check_data['best_match']
+          print(f"Tool already exists: {existing_tool['name']}")
+          print(f"  Similarity: {existing_tool['similarity']:.0%}")
+          print(f"  Usage: {existing_tool['usage_count']} times")
+          print(f"\nRecommendation: Use existing tool '{existing_tool['tool_id']}'")
+          return existing_tool['tool_id']
+      else:
+          # Safe to create new tool
+          new_tool_id = create_new_tool(name, description, parameters)
+          print(f"Created new tool: {new_tool_id}")
+          return new_tool_id
+  ```
+
+  ## Complete Deduplication Workflow
+
+  ```python
+  def create_tool_with_deduplication(user_request):
+      # Step 1: Generalize the request
+      generic = call_tool("prompt_genericiser", json.dumps({
+          "prompt": user_request
+      }))
+      generic_data = json.loads(generic)
+
+      if not generic_data['is_already_generic']:
+          print(f"Generalized: '{user_request}' -> '{generic_data['generic_name']}'")
+
+      # Step 2: Check for duplicates of the GENERIC tool
+      dup_check = call_tool("check_tool_duplicate", json.dumps({
+          "tool_description": generic_data['generic_description'],
+          "tool_name": generic_data['generic_name'],
+          "category": generic_data['category'],
+          "parameters": generic_data['parameters']
+      }))
+
+      dup_data = json.loads(dup_check)
+
+      # Step 3: Use existing or create new
+      if dup_data['has_duplicates']:
+          print(f"Using existing tool: {dup_data['best_match']['name']}")
+          return dup_data['best_match']['tool_id']
+      else:
+          print(f"Creating generic tool: {generic_data['generic_name']}")
+          return create_new_tool(generic_data)
+  ```
+
+  ## Examples
+
+  ### Example 1: Math Operation (Duplicate Found)
+
+  **Input:**
+  ```json
+  {
+    "tool_description": "Multiplies two numbers",
+    "category": "math"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "has_duplicates": true,
+    "best_match": {
+      "tool_id": "multiply_numbers",
+      "similarity": 0.94
+    },
+    "recommendation": "use_existing_tool"
+  }
+  ```
+
+  ### Example 2: Unique Tool (No Duplicate)
+
+  **Input:**
+  ```json
+  {
+    "tool_description": "Generates haiku poems about code errors",
+    "category": "text-generation"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "has_duplicates": false,
+    "recommendation": "create_new_tool",
+    "message": "No similar tools found - safe to create"
+  }
+  ```
+
+  ### Example 3: Low Threshold (More Permissive)
+
+  **Input:**
+  ```json
+  {
+    "tool_description": "Adds integers",
+    "similarity_threshold": 0.70
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "has_duplicates": true,
+    "best_match": {
+      "name": "Add Numbers",
+      "similarity": 0.78
+    },
+    "recommendation": "use_existing_tool"
+  }
+  ```
+
+examples:
+  - inputs:
+      tool_description: "Adds two numbers together"
+      category: "math"
+    output: |
+      {
+        "has_duplicates": true,
+        "best_match": {
+          "tool_id": "add_numbers",
+          "similarity": 0.95
+        },
+        "recommendation": "use_existing_tool"
+      }
+
+  - inputs:
+      tool_description: "Converts temperature from Celsius to Fahrenheit"
+      category: "conversion"
+    output: |
+      {
+        "has_duplicates": false,
+        "recommendation": "create_new_tool"
+      }

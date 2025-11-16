@@ -1,0 +1,504 @@
+﻿name: "Inline Tool"
+type: "executable"
+description: "Bakes tool code directly into workflow scripts with version tracking. Enables enterprise reproducibility by embedding dependencies with RAG references."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/inline_tool.py"]
+
+input_schema:
+  operation:
+    type: string
+    description: "Operation: 'inline', 'extract', 'update', or 'list'"
+    enum: ["inline", "extract", "update", "list"]
+    default: "inline"
+    required: false
+
+  workflow_file:
+    type: string
+    description: "Path to workflow script to modify"
+    required: true
+
+  tool_id:
+    type: string
+    description: "ID of tool to inline (required for 'inline' operation)"
+    required: false
+
+  version:
+    type: string
+    description: "Version to inline (or 'current' for latest)"
+    default: "current"
+    required: false
+
+  inline_marker_id:
+    type: string
+    description: "Marker ID of inlined section (required for 'extract' and 'update')"
+    required: false
+
+  position:
+    type: string
+    description: "Where to insert inlined code ('top' or 'bottom')"
+    enum: ["top", "bottom"]
+    default: "top"
+    required: false
+
+  pin_version:
+    type: boolean
+    description: "Pin this version in RAG to protect from trimming"
+    default: true
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    tool_id:
+      type: string
+    version:
+      type: string
+    workflow_file:
+      type: string
+    inline_marker_id:
+      type: string
+      description: "Unique marker for this inlined section"
+    position:
+      type: string
+    pinned:
+      type: boolean
+    message:
+      type: string
+    code_size_bytes:
+      type: integer
+    code_size_lines:
+      type: integer
+    inlined_tools:
+      type: array
+      description: "List of inlined tools (for 'list' operation)"
+    extracted_lines:
+      type: integer
+      description: "Lines removed (for 'extract' operation)"
+    update:
+      type: object
+      description: "Update information (for 'update' operation)"
+
+tags: ["enterprise", "reproducibility", "deployment", "dependency-management"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## Purpose
+
+  Enterprise tool inlining for ultimate reproducibility:
+  - **Inline tools** directly into workflow scripts
+  - **Track versions** with special RAG-linked comments
+  - **Protect from trimming** (pinned versions)
+  - **Force updates** by extracting and re-inlining
+  - **Offline execution** (no external dependencies)
+
+  ## Inline Format
+
+  When a tool is inlined, it's embedded with tracking comments:
+
+  ```python
+  # ==================== INLINED TOOL: buffer@1.5.0 ====================
+  # INLINE_MARKER: a3f5c2d1
+  # TOOL_ID: buffer
+  # VERSION: 1.5.0
+  # RAG_ARTIFACT_ID: buffer_v1_5_0
+  # INLINED_AT: 2025-01-15T10:30:00Z
+  # PINNED: true
+  #
+  # This tool has been inlined for enterprise reproducibility.
+  # The code below is tied to buffer v1.5.0 in the RAG memory.
+  # This version is protected from trimming.
+  #
+  # To extract: python tools/executable/inline_tool.py extract workflow.py a3f5c2d1
+  # To update: python tools/executable/inline_tool.py update workflow.py a3f5c2d1 --version 1.6.0
+  # ==================== CODE START ====================
+
+  [buffer v1.5.0 code here]
+
+  # ==================== CODE END: buffer@1.5.0 ====================
+  ```
+
+  ## Usage
+
+  ### Inline Tool into Workflow
+
+  ```bash
+  echo '{
+    "operation": "inline",
+    "workflow_file": "workflows/production_pipeline.py",
+    "tool_id": "buffer",
+    "version": "1.5.0",
+    "position": "top",
+    "pin_version": true
+  }' | python tools/executable/inline_tool.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "buffer",
+    "version": "1.5.0",
+    "workflow_file": "workflows/production_pipeline.py",
+    "inline_marker_id": "a3f5c2d1",
+    "position": "top",
+    "pinned": true,
+    "message": "Inlined buffer@1.5.0 into workflows/production_pipeline.py",
+    "code_size_bytes": 12450,
+    "code_size_lines": 285
+  }
+  ```
+
+  ### Inline Current Version
+
+  ```bash
+  echo '{
+    "operation": "inline",
+    "workflow_file": "my_workflow.py",
+    "tool_id": "nmt_translator",
+    "version": "current"
+  }' | python tools/executable/inline_tool.py
+  ```
+
+  ### List All Inlined Tools
+
+  ```bash
+  echo '{
+    "operation": "list",
+    "workflow_file": "workflows/production_pipeline.py"
+  }' | python tools/executable/inline_tool.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "workflow_file": "workflows/production_pipeline.py",
+    "inlined_tools": [
+      {
+        "inline_marker_id": "a3f5c2d1",
+        "tool_id": "buffer",
+        "version": "1.5.0",
+        "inlined_at": "2025-01-15T10:30:00Z",
+        "pinned": true
+      },
+      {
+        "inline_marker_id": "b7e4d9f2",
+        "tool_id": "nmt_translator",
+        "version": "2.5.0",
+        "inlined_at": "2025-01-15T11:00:00Z",
+        "pinned": true
+      }
+    ],
+    "count": 2,
+    "message": "Found 2 inlined tool(s)"
+  }
+  ```
+
+  ### Extract Inlined Tool
+
+  ```bash
+  echo '{
+    "operation": "extract",
+    "workflow_file": "workflows/production_pipeline.py",
+    "inline_marker_id": "a3f5c2d1"
+  }' | python tools/executable/inline_tool.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "buffer",
+    "version": "1.5.0",
+    "inline_marker_id": "a3f5c2d1",
+    "workflow_file": "workflows/production_pipeline.py",
+    "extracted_lines": 302,
+    "message": "Extracted buffer@1.5.0 from workflows/production_pipeline.py"
+  }
+  ```
+
+  ### Force Update to New Version
+
+  ```bash
+  # Critical bug fix in buffer v1.5.1
+  echo '{
+    "operation": "update",
+    "workflow_file": "workflows/production_pipeline.py",
+    "inline_marker_id": "a3f5c2d1",
+    "version": "1.5.1"
+  }' | python tools/executable/inline_tool.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "buffer",
+    "version": "1.5.1",
+    "inline_marker_id": "c8a2e5b3",
+    "workflow_file": "workflows/production_pipeline.py",
+    "update": {
+      "old_version": "1.5.0",
+      "new_version": "1.5.1",
+      "message": "Updated buffer from v1.5.0 to v1.5.1"
+    }
+  }
+  ```
+
+  ## Workflows
+
+  ### Enterprise Deployment Workflow
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # Step 1: Pin all dependencies to current versions
+  dependencies = ["buffer", "nmt_translator", "evaluator"]
+
+  for tool_id in dependencies:
+      call_tool("pin_tool_version", json.dumps({
+          "tool_id": tool_id,
+          "version": "current",
+          "workflow_id": "prod_pipeline_v2",
+          "reason": "Production release 2.0"
+      }))
+
+  # Step 2: Inline all dependencies into workflow
+  workflow_file = "workflows/production_pipeline_v2.py"
+
+  for tool_id in dependencies:
+      result = call_tool("inline_tool", json.dumps({
+          "operation": "inline",
+          "workflow_file": workflow_file,
+          "tool_id": tool_id,
+          "version": "current",
+          "pin_version": True
+      }))
+
+      print(f"Inlined {tool_id}: {result['inline_marker_id']}")
+
+  # Step 3: Workflow is now fully self-contained
+  # Can be deployed to production without external tool dependencies
+  # All versions are pinned and tracked in RAG
+  ```
+
+  ### Force Update Workflow
+
+  ```python
+  # Critical security fix in buffer v1.5.1
+
+  # Step 1: List all workflows using buffer
+  workflows = [
+      "workflows/prod_pipeline.py",
+      "workflows/staging_pipeline.py",
+      "workflows/dev_pipeline.py"
+  ]
+
+  # Step 2: Find and update all inlined instances
+  for workflow_file in workflows:
+      # List inlined tools
+      result = call_tool("inline_tool", json.dumps({
+          "operation": "list",
+          "workflow_file": workflow_file
+      }))
+
+      # Find buffer instances
+      for tool in result['inlined_tools']:
+          if tool['tool_id'] == 'buffer':
+              # Force update to v1.5.1
+              update_result = call_tool("inline_tool", json.dumps({
+                  "operation": "update",
+                  "workflow_file": workflow_file,
+                  "inline_marker_id": tool['inline_marker_id'],
+                  "version": "1.5.1"
+              }))
+
+              print(f"Updated {workflow_file}: {update_result['update']['message']}")
+  ```
+
+  ### Rollback Workflow
+
+  ```python
+  # Rollback to previous version if new version has issues
+
+  # Step 1: Extract current (broken) version
+  call_tool("inline_tool", json.dumps({
+      "operation": "extract",
+      "workflow_file": "workflows/prod_pipeline.py",
+      "inline_marker_id": "c8a2e5b3"  # v1.5.1 (broken)
+  }))
+
+  # Step 2: Inline previous (stable) version
+  call_tool("inline_tool", json.dumps({
+      "operation": "inline",
+      "workflow_file": "workflows/prod_pipeline.py",
+      "tool_id": "buffer",
+      "version": "1.5.0",  # Previous stable version
+      "pin_version": True
+  }))
+  ```
+
+  ## Integration with Version Management
+
+  ### Pinned Versions Protected from Trimming
+
+  ```python
+  # Inlining automatically pins the version
+  inline_result = call_tool("inline_tool", json.dumps({
+      "operation": "inline",
+      "workflow_file": "prod.py",
+      "tool_id": "buffer",
+      "version": "1.5.0"
+  }))
+
+  # Now trim old versions
+  trim_result = call_tool("trim_tool_versions", json.dumps({
+      "tool_id": "buffer",
+      "keep_recent": 2
+  }))
+
+  # buffer v1.5.0 is PROTECTED from trimming because:
+  # 1. It's tagged with 'pinned' in RAG
+  # 2. It's tagged with 'inlined:{marker_id}'
+  # 3. trim_tool_versions checks tags before deleting
+  ```
+
+  ## Use Cases
+
+  ### Case 1: Production Deployment
+  - Pin and inline all dependencies
+  - Deploy single self-contained workflow script
+  - No external tool dependencies
+  - Guaranteed reproducibility
+
+  ### Case 2: Air-Gapped Environments
+  - Inline all tools into workflow
+  - Transfer single file to air-gapped system
+  - No network access needed for tool resolution
+
+  ### Case 3: Compliance and Auditing
+  - Inline tools with version tracking
+  - RAG maintains complete audit trail
+  - Can prove exact versions used in production
+
+  ### Case 4: Emergency Updates
+  - Critical bug found in production tool
+  - Force update all workflows using that tool
+  - Maintain version tracking and audit trail
+
+  ## Best Practices
+
+  ### 1. Always Pin Before Inlining
+
+  ```bash
+  # Pin first
+  echo '{"tool_id": "buffer", "version": "1.5.0"}' | \
+    python tools/executable/pin_tool_version.py
+
+  # Then inline (auto-pins anyway, but explicit is better)
+  echo '{"workflow_file": "prod.py", "tool_id": "buffer", "version": "1.5.0"}' | \
+    python tools/executable/inline_tool.py
+  ```
+
+  ### 2. Document Why Versions Are Inlined
+
+  ```python
+  # Use 'reason' field in pin_tool_version
+  call_tool("pin_tool_version", json.dumps({
+      "tool_id": "buffer",
+      "version": "1.5.0",
+      "workflow_id": "prod_pipeline",
+      "reason": "Validated for production - tested with 1M records"
+  }))
+  ```
+
+  ### 3. Track Inlined Versions in Documentation
+
+  ```markdown
+  ## Production Pipeline v2.0
+
+  ### Inlined Dependencies:
+  - buffer@1.5.0 (marker: a3f5c2d1) - Batch processing
+  - nmt_translator@2.5.0 (marker: b7e4d9f2) - Translation engine
+  - evaluator@1.2.0 (marker: c4f8e1a5) - Quality scoring
+  ```
+
+  ### 4. Test Updates in Staging First
+
+  ```bash
+  # Update staging
+  echo '{"workflow_file": "staging.py", "inline_marker_id": "...", "version": "1.6.0"}' | \
+    python tools/executable/inline_tool.py
+
+  # Test thoroughly
+  python staging.py
+
+  # If successful, update production
+  echo '{"workflow_file": "prod.py", "inline_marker_id": "...", "version": "1.6.0"}' | \
+    python tools/executable/inline_tool.py
+  ```
+
+  ## Advantages Over External Dependencies
+
+  | Aspect | External Tools | Inlined Tools |
+  |--------|---------------|---------------|
+  | Reproducibility | Depends on tool availability | Guaranteed |
+  | Offline Execution | No | Yes |
+  | Version Control | Separate tracking | Embedded in workflow |
+  | Deployment | Multiple files | Single file |
+  | Audit Trail | External references | Complete code |
+  | Rollback | Complex | Simple (extract + re-inline) |
+  | Force Updates | Difficult | Easy (update operation) |
+
+examples:
+  - inputs:
+      operation: "inline"
+      workflow_file: "my_workflow.py"
+      tool_id: "buffer"
+      version: "1.5.0"
+    output: |
+      {
+        "success": true,
+        "tool_id": "buffer",
+        "version": "1.5.0",
+        "inline_marker_id": "a3f5c2d1",
+        "pinned": true,
+        "code_size_lines": 285
+      }
+
+  - inputs:
+      operation: "list"
+      workflow_file: "my_workflow.py"
+    output: |
+      {
+        "success": true,
+        "inlined_tools": [
+          {"tool_id": "buffer", "version": "1.5.0", "inline_marker_id": "a3f5c2d1"}
+        ],
+        "count": 1
+      }
+
+  - inputs:
+      operation: "update"
+      workflow_file: "my_workflow.py"
+      inline_marker_id: "a3f5c2d1"
+      version: "1.6.0"
+    output: |
+      {
+        "success": true,
+        "update": {
+          "old_version": "1.5.0",
+          "new_version": "1.6.0",
+          "message": "Updated buffer from v1.5.0 to v1.6.0"
+        }
+      }

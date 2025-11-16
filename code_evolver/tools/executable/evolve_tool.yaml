@@ -1,0 +1,295 @@
+﻿name: "Evolve Tool"
+type: "executable"
+description: "Evolves a failing tool by regenerating it with fixes and mutations. Creates a promoted version for the current workflow."
+
+track_usage: false
+
+executable:
+  command: "python"
+  args: ["tools/executable/evolve_tool.py"]
+
+input_schema:
+  tool_id:
+    type: string
+    description: "ID of the tool to evolve"
+    required: true
+
+  error_message:
+    type: string
+    description: "Error message that occurred"
+    required: false
+    default: "Unknown error"
+
+  mutation_hint:
+    type: string
+    description: "User hint for what to fix/change"
+    required: false
+    default: "Fix the error"
+
+  dynamic_schema:
+    type: boolean
+    description: "Make output schema dynamic (flexible JSON)"
+    default: false
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    tool_id:
+      type: string
+    original_version:
+      type: string
+    new_version:
+      type: string
+    evolved_file:
+      type: string
+      description: "Path to evolved tool file"
+    promotion_file:
+      type: string
+      description: "Path to promotion config"
+    message:
+      type: string
+    usage:
+      type: string
+      description: "How to use the evolved tool"
+
+tags: ["evolution", "tool-mutation", "code-generation", "self-improvement"]
+cost_tier: "medium"
+speed_tier: "slow"
+quality_tier: "excellent"
+priority: 90
+
+usage_notes: |
+  ## Overview
+
+  When a tool fails, evolve it to fix the issue:
+  1. Captures failing tool code
+  2. Sends to code generator with error + hint
+  3. Generates evolved version
+  4. Promotes it for current workflow
+  5. Original tool unchanged (safe mutation)
+
+  ## Usage
+
+  ### CLI Command
+  ```bash
+  /tool evolve <tool_id> <hint>
+
+  # Example:
+  /tool evolve csv_parser "allow JSON schema to be dynamic"
+  ```
+
+  ### Direct Call
+  ```python
+  result = call_tool("evolve_tool", json.dumps({
+      "tool_id": "csv_parser",
+      "error_message": "JSONDecodeError: Expecting value",
+      "mutation_hint": "Support both CSV and JSON input formats",
+      "dynamic_schema": True  # Make output flexible
+  }))
+
+  # Result:
+  {
+    "success": True,
+    "tool_id": "csv_parser",
+    "original_version": "1.0.0",
+    "new_version": "1.1.0",
+    "evolved_file": "tools/executable/csv_parser_v1_1_0.py",
+    "message": "Evolved csv_parser from v1.0.0 to v1.1.0",
+    "usage": "The evolved tool is now active. Use csv_parser normally."
+  }
+  ```
+
+  ## How It Works
+
+  ### 1. Captures Failing Tool
+  ```python
+  # Tool fails
+  try:
+      result = call_tool("csv_parser", data)
+  except Exception as e:
+      error = str(e)
+  ```
+
+  ### 2. Generates Evolution Prompt
+  ```
+  Fix and evolve this tool that's currently failing.
+
+  Tool: csv_parser
+  Error: JSONDecodeError: Expecting value
+  User Hint: Support both CSV and JSON input formats
+
+  Current Implementation:
+  [tool code]
+
+  Requirements:
+  1. Fix the error
+  2. Apply the mutation
+  3. Make output schema dynamic
+  4. Maintain backward compatibility
+  5. Add tests
+  ```
+
+  ### 3. Generates Evolved Tool
+  - Uses code generator (with resilient fallback)
+  - Creates new version file (e.g., `csv_parser_v1_1_0.py`)
+  - Updates YAML if dynamic schema requested
+  - Increments version number
+
+  ### 4. Promotes for Workflow
+  Creates `.tool_promotions.json`:
+  ```json
+  {
+    "csv_parser": {
+      "evolved_version": "1.1.0",
+      "evolved_file": "tools/executable/csv_parser_v1_1_0.py",
+      "original_version": "1.0.0",
+      "reason": "Evolved to fix: JSONDecodeError",
+      "mutation": "Support both CSV and JSON",
+      "promoted_at": "2025-01-15T10:30:00Z"
+    }
+  }
+  ```
+
+  ### 5. Tool Runtime Uses Evolved Version
+  When `call_tool("csv_parser", ...)` is called:
+  - Checks `.tool_promotions.json`
+  - Finds evolved version
+  - Uses `csv_parser_v1_1_0.py` instead
+  - Original tool unchanged
+
+  ## Example Workflow
+
+  ```python
+  # 1. Tool fails
+  try:
+      result = call_tool("nmt_translator", json.dumps({
+          "text": "Hello",
+          "target": "fr"
+      }))
+  except Exception as e:
+      print(f"Tool failed: {e}")
+
+      # 2. Evolve the tool
+      evolution = call_tool("evolve_tool", json.dumps({
+          "tool_id": "nmt_translator",
+          "error_message": str(e),
+          "mutation_hint": "Add fallback to offline dictionary if API fails",
+          "dynamic_schema": False
+      }))
+
+      print(f"Evolved to v{evolution['new_version']}")
+
+      # 3. Retry with evolved tool
+      result = call_tool("nmt_translator", json.dumps({
+          "text": "Hello",
+          "target": "fr"
+      }))
+
+      # Now uses evolved version automatically!
+      print(result)  # "Bonjour"
+  ```
+
+  ## Dynamic Schema
+
+  Set `dynamic_schema: true` to make output flexible:
+
+  **Before:**
+  ```yaml
+  output_schema:
+    type: object
+    properties:
+      result:
+        type: string
+      status:
+        type: string
+  ```
+
+  **After:**
+  ```yaml
+  output_schema:
+    type: object
+    description: "Dynamic output (flexible schema)"
+    additionalProperties: true
+  ```
+
+  This allows the tool to return any JSON structure.
+
+  ## Mutation Hints
+
+  Be specific about what to change:
+
+  - ✅ **Good:** "Add fallback to offline mode if API times out"
+  - ✅ **Good:** "Support both CSV and JSON input formats"
+  - ✅ **Good:** "Return detailed error messages instead of generic ones"
+  - ❌ **Bad:** "Make it better"
+  - ❌ **Bad:** "Fix it"
+
+  ## Version Management
+
+  Tools are versioned:
+  - Original: `csv_parser.py` (v1.0.0)
+  - Evolved: `csv_parser_v1_1_0.py` (v1.1.0)
+  - Promoted in `.tool_promotions.json`
+
+  ## Safety
+
+  - **Original tool unchanged** - Safe to experiment
+  - **Scoped to workflow** - Only affects current session
+  - **Reversible** - Delete `.tool_promotions.json` to revert
+  - **Tested** - Evolution includes test generation
+
+  ## CLI Integration
+
+  Add to chat_cli.py:
+
+  ```python
+  def handle_tool_evolve(self, args):
+      """Handle /tool evolve command."""
+      # Parse: /tool evolve <tool_id> <hint>
+      parts = args.split(maxsplit=1)
+      if len(parts) < 2:
+          console.print("[red]Usage: /tool evolve <tool_id> <hint>[/red]")
+          return
+
+      tool_id, hint = parts
+
+      # Get last error for this tool (from history)
+      error = self._get_last_tool_error(tool_id) or "Unknown error"
+
+      # Evolve
+      result = call_tool("evolve_tool", json.dumps({
+          "tool_id": tool_id,
+          "error_message": error,
+          "mutation_hint": hint,
+          "dynamic_schema": True  # Default to flexible
+      }))
+
+      result_data = json.loads(result)
+
+      if result_data["success"]:
+          console.print(f"[green]✓ {result_data['message']}[/green]")
+          console.print(f"[dim]{result_data['usage']}[/dim]")
+      else:
+          console.print(f"[red]✗ Evolution failed: {result_data['error']}[/red]")
+  ```
+
+examples:
+  - inputs:
+      tool_id: "csv_parser"
+      error_message: "JSONDecodeError: Expecting value"
+      mutation_hint: "Support both CSV and JSON input formats"
+      dynamic_schema: true
+    output: |
+      {
+        "success": true,
+        "tool_id": "csv_parser",
+        "original_version": "1.0.0",
+        "new_version": "1.1.0",
+        "evolved_file": "tools/executable/csv_parser_v1_1_0.py",
+        "promotion_file": ".tool_promotions.json",
+        "message": "Evolved csv_parser from v1.0.0 to v1.1.0",
+        "usage": "The evolved tool is now active in this workflow. Use csv_parser normally."
+      }

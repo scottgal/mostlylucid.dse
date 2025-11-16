@@ -1,0 +1,354 @@
+﻿name: "Detect Tool Specialization"
+type: "llm"
+description: "Detects when an evolved tool has diverged far enough to become a new specialized tool with its own directory. Prevents tools from evolving beyond their original purpose."
+
+llm:
+  tier: "triage"  # Fast model for quick decisions
+  temperature: 0.2
+  max_tokens: 300
+
+system_prompt: |
+  You are a tool evolution analyzer. Determine if an evolved tool has diverged enough to become a NEW specialized tool.
+
+  ## Criteria for Specialization
+
+  A tool should specialize (become new tool) if:
+  1. **Name changed significantly** - "add_numbers" -> "advanced_calculator"
+  2. **Purpose changed** - "translate text" -> "translate and summarize text"
+  3. **Parameters fundamentally different** - 2 params -> 10 params
+  4. **Category changed** - "math" -> "data-analysis"
+  5. **Complexity increased dramatically** - simple function -> multi-step workflow
+
+  A tool should continue evolving (same tool) if:
+  1. Bug fixes or optimizations
+  2. Minor parameter additions
+  3. Same core purpose
+  4. Same category
+  5. Backward compatible
+
+  ## Output Format
+
+  Return JSON:
+  ```json
+  {
+    "should_specialize": true/false,
+    "confidence": 0.0-1.0,
+    "reason": "explanation",
+    "suggested_new_name": "new_tool_name" (if specializing),
+    "divergence_score": 0.0-1.0,
+    "changes": ["list", "of", "key", "changes"]
+  }
+  ```
+
+prompt_template: |
+  Analyze if this evolved tool should become a new specialized tool:
+
+  **Original Tool:**
+  - Name: {original_name}
+  - Description: {original_description}
+  - Parameters: {original_parameters}
+  - Category: {original_category}
+
+  **Evolved Tool:**
+  - Name: {evolved_name}
+  - Description: {evolved_description}
+  - Parameters: {evolved_parameters}
+  - Category: {evolved_category}
+
+  **Evolution Context:**
+  {evolution_context}
+
+  Determine if this should:
+  - **Continue as evolution** (same tool, new version)
+  - **Specialize** (new tool, own directory)
+
+  Return ONLY valid JSON.
+
+input_schema:
+  original_name:
+    type: string
+    description: "Name of original tool"
+    required: true
+
+  original_description:
+    type: string
+    description: "Description of original tool"
+    required: true
+
+  original_parameters:
+    type: string
+    description: "Parameters of original tool (JSON string or description)"
+    required: true
+
+  original_category:
+    type: string
+    description: "Category of original tool"
+    required: false
+    default: "unknown"
+
+  evolved_name:
+    type: string
+    description: "Name of evolved tool"
+    required: true
+
+  evolved_description:
+    type: string
+    description: "Description of evolved tool"
+    required: true
+
+  evolved_parameters:
+    type: string
+    description: "Parameters of evolved tool"
+    required: true
+
+  evolved_category:
+    type: string
+    description: "Category of evolved tool"
+    required: false
+    default: "unknown"
+
+  evolution_context:
+    type: string
+    description: "Why the tool was evolved (error, mutation, etc.)"
+    required: false
+    default: ""
+
+output_schema:
+  type: object
+  properties:
+    should_specialize:
+      type: boolean
+      description: "Whether tool should become new specialized tool"
+    confidence:
+      type: number
+      description: "Confidence in decision (0.0-1.0)"
+    reason:
+      type: string
+      description: "Explanation of decision"
+    suggested_new_name:
+      type: string
+      description: "Suggested name for specialized tool (if applicable)"
+    divergence_score:
+      type: number
+      description: "How much tool has diverged (0.0-1.0)"
+    changes:
+      type: array
+      items:
+        type: string
+      description: "Key changes that led to decision"
+
+tags: ["tool-evolution", "specialization", "meta-programming", "organization"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+priority: 85
+
+usage_notes: |
+  ## Purpose
+
+  Detects when tool evolution goes too far and should fork into a new specialized tool.
+
+  ## Decision Tree
+
+  ```
+  Tool Evolved
+      ↓
+  [Detect Specialization]
+      ↓
+  Divergence < 30% → Continue evolution (same tool, bump version)
+  Divergence 30-70% → Uncertain (ask user or default to evolution)
+  Divergence > 70% → Specialize (new tool, own directory)
+  ```
+
+  ## Usage
+
+  ### Check if Tool Should Specialize
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # After evolving a tool
+  result = call_tool("detect_tool_specialization", json.dumps({
+      "original_name": "add_numbers",
+      "original_description": "Adds two numbers together",
+      "original_parameters": '["number1", "number2"]',
+      "original_category": "math",
+      "evolved_name": "advanced_calculator",
+      "evolved_description": "Performs complex calculations with multiple operations",
+      "evolved_parameters": '["numbers", "operations", "precision", "format"]',
+      "evolved_category": "calculation",
+      "evolution_context": "User requested support for multiple operations"
+  }))
+
+  decision = json.loads(result)
+
+  if decision['should_specialize']:
+      # Create new tool in own directory
+      create_specialized_tool(
+          original_tool="add_numbers",
+          new_tool=decision['suggested_new_name'],
+          keep_original=True
+      )
+  else:
+      # Continue evolution
+      bump_version("add_numbers")
+  ```
+
+  ## Examples
+
+  ### Example 1: Should Continue Evolution
+
+  **Input:**
+  ```json
+  {
+    "original_name": "translate_text",
+    "original_description": "Translates text to another language",
+    "original_parameters": '["text", "target_language"]',
+    "evolved_name": "translate_text",
+    "evolved_description": "Translates text to another language with better error handling",
+    "evolved_parameters": '["text", "target_language", "fallback_language"]'
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "should_specialize": false,
+    "confidence": 0.92,
+    "reason": "Minor evolution: added fallback parameter, same core purpose",
+    "divergence_score": 0.15,
+    "changes": ["Added fallback parameter", "Better error handling"]
+  }
+  ```
+
+  ### Example 2: Should Specialize
+
+  **Input:**
+  ```json
+  {
+    "original_name": "add_numbers",
+    "original_description": "Adds two numbers",
+    "original_parameters": '["number1", "number2"]',
+    "original_category": "math",
+    "evolved_name": "scientific_calculator",
+    "evolved_description": "Performs scientific calculations with trig, logs, etc.",
+    "evolved_parameters": '["expression", "mode", "precision", "units"]',
+    "evolved_category": "calculation"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "should_specialize": true,
+    "confidence": 0.95,
+    "reason": "Major divergence: name changed, complexity increased, different purpose",
+    "suggested_new_name": "scientific_calculator",
+    "divergence_score": 0.85,
+    "changes": [
+      "Name: add_numbers -> scientific_calculator",
+      "Parameters: 2 -> 4 (fundamentally different)",
+      "Purpose: addition -> scientific calculations"
+    ]
+  }
+  ```
+
+  ### Example 3: Edge Case (Low Confidence)
+
+  **Input:**
+  ```json
+  {
+    "original_name": "fetch_data",
+    "original_description": "Fetches data from API",
+    "evolved_name": "fetch_and_cache_data",
+    "evolved_description": "Fetches data from API with caching",
+    "evolved_parameters": '["url", "cache_ttl"]'
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "should_specialize": false,
+    "confidence": 0.65,
+    "reason": "Added caching is enhancement, not new purpose. Borderline case.",
+    "divergence_score": 0.45,
+    "changes": ["Added caching functionality"]
+  }
+  ```
+
+  ## Integration with evolve_tool
+
+  ```python
+  # In evolve_tool.py
+  def evolve_tool(tool_id, error_message, mutation_hint):
+      # ... generate evolved code ...
+
+      # Check if should specialize
+      spec_check = call_tool("detect_tool_specialization", json.dumps({
+          "original_name": original_tool['name'],
+          "original_description": original_tool['description'],
+          "original_parameters": json.dumps(original_tool['parameters']),
+          "evolved_name": evolved_tool['name'],
+          "evolved_description": evolved_tool['description'],
+          "evolved_parameters": json.dumps(evolved_tool['parameters']),
+          "evolution_context": mutation_hint
+      }))
+
+      decision = json.loads(spec_check)
+
+      if decision['should_specialize'] and decision['confidence'] > 0.8:
+          # Create new specialized tool
+          new_tool_id = decision['suggested_new_name']
+
+          # Create own directory
+          new_tool_dir = Path(f"tools/executable/{new_tool_id}")
+          new_tool_dir.mkdir(exist_ok=True)
+
+          # Save as v1.0.0 of new tool
+          save_tool(new_tool_dir, new_tool_id, evolved_code, "1.0.0")
+
+          # Leave original tool alone
+          return {
+              "action": "specialized",
+              "original_tool": tool_id,
+              "new_tool": new_tool_id,
+              "message": f"Tool diverged too far. Created new tool: {new_tool_id}"
+          }
+      else:
+          # Continue evolution
+          bump_version(tool_id, evolved_code)
+
+          return {
+              "action": "evolved",
+              "tool": tool_id,
+              "new_version": new_version
+          }
+  ```
+
+examples:
+  - inputs:
+      original_name: "add_numbers"
+      original_description: "Adds two numbers"
+      evolved_name: "calculator"
+      evolved_description: "Performs various calculations"
+    output: |
+      {
+        "should_specialize": true,
+        "confidence": 0.88,
+        "suggested_new_name": "calculator",
+        "divergence_score": 0.75
+      }
+
+  - inputs:
+      original_name: "translate_text"
+      original_description: "Translates text"
+      evolved_name: "translate_text"
+      evolved_description: "Translates text with fallback"
+    output: |
+      {
+        "should_specialize": false,
+        "confidence": 0.91,
+        "divergence_score": 0.20
+      }

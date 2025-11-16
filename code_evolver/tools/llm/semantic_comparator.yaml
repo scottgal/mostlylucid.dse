@@ -1,0 +1,253 @@
+﻿name: "Semantic Comparator"
+type: "llm"
+description: "Decides if two prompts have the EXACT same meaning (100% match) or are similar enough for mutation (>50%). Used to prevent inappropriate workflow reuse for creative tasks."
+
+llm:
+  tier: "fast"  # Use gemma3:4b for fast comparison
+  role: "comparator"
+  model: "gemma3:4b"
+  temperature: 0.1  # Low temperature for consistent comparison
+  max_tokens: 100
+
+system_prompt: |
+  You are a semantic comparator. Compare two prompts and return a SINGLE NUMBER (0-100) that indicates:
+
+  **100 = IDENTICAL MEANING** (full reuse)
+  - Exact same intent, just different wording
+  - Same task, same parameters, same expected output type
+  - Examples:
+    * "write a haiku about coding" vs "compose a haiku about programming" → 100
+    * "add 1 + 2" vs "calculate 1 plus 2" → 100
+    * "translate hello to French" vs "translate 'hello' to French" → 100
+
+  **70-99 = SIMILAR BUT DIFFERENT** (can mutate/adapt)
+  - Same general task type, different parameters or scope
+  - Can reuse workflow structure but need to adapt
+  - Examples:
+    * "write a haiku about coding" vs "write a poem about coding" → 75 (haiku→poem)
+    * "write a haiku about coding" vs "write a haiku about nature" → 70 (coding→nature)
+    * "add 1 + 2" vs "add 5 + 10" → 85 (same op, different numbers)
+
+  **0-69 = DIFFERENT** (generate new)
+  - Different task types or completely unrelated
+  - Cannot reuse workflow in meaningful way
+  - Examples:
+    * "write a haiku" vs "calculate 1 + 2" → 5 (creative vs math)
+    * "write a haiku" vs "translate text" → 10 (creative vs translation)
+    * "add numbers" vs "multiply numbers" → 40 (different operation)
+
+  CRITICAL RULES:
+  1. For CREATIVE tasks requesting NEW content → Never return 100 unless they want EXACT SAME output
+  2. Typos/synonyms/rewording → Always 100 if intent is identical
+  3. Same structure, different data → 70-90 (can mutate)
+  4. Different task types → < 50 (generate new)
+
+  Return ONLY the number 0-100. No explanation, no text, just the number.
+
+prompt_template: |
+  Prompt 1: {prompt1}
+  Prompt 2: {prompt2}
+
+  Semantic similarity (0-100):
+
+input_schema:
+  prompt1:
+    type: string
+    description: "First prompt to compare"
+    required: true
+
+  prompt2:
+    type: string
+    description: "Second prompt to compare"
+    required: true
+
+output_schema:
+  type: integer
+  description: "Similarity score from 0-100"
+  minimum: 0
+  maximum: 100
+
+tags: ["comparison", "semantic", "routing", "cache-decision"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+priority: 90
+
+usage_notes: |
+  ## Purpose
+
+  Makes intelligent decisions about workflow reuse based on SEMANTIC MEANING, not just embedding similarity.
+
+  ## Decision Tree
+
+  ```
+  Embedding Similarity > 0.85
+      ↓
+  [Semantic Comparator]
+      ↓
+  100 = EXACT MATCH
+    → Reuse workflow + output (if deterministic)
+    → For creative: Reuse workflow, call LLM for new content
+
+  50-99 = SIMILAR (Mutation)
+    → Reuse components
+    → Modify for new context
+    → For creative: Use structure, generate new content
+
+  0-49 = DIFFERENT
+    → Generate from scratch
+  ```
+
+  ## Usage
+
+  ### Example 1: Exact Match (Creative Task)
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # User requests same creative task twice
+  prompt1 = "write a haiku about coding"
+  prompt2 = "write a haiku about coding"
+
+  similarity = call_tool("semantic_comparator", json.dumps({
+      "prompt1": prompt1,
+      "prompt2": prompt2
+  }))
+
+  score = int(similarity)
+
+  if score == 100:
+      # EXACT match, but creative task
+      # Reuse workflow structure, call LLM for new content
+      workflow = get_cached_workflow(prompt1)
+      result = execute_workflow_with_llm(workflow)  # Generates NEW haiku
+  ```
+
+  ### Example 2: Similar (Mutation)
+
+  ```python
+  prompt1 = "write a haiku about coding"
+  prompt2 = "write a poem about coding"
+
+  similarity = call_tool("semantic_comparator", json.dumps({
+      "prompt1": prompt1,
+      "prompt2": prompt2
+  }))
+
+  score = int(similarity)  # Returns ~65
+
+  if 50 <= score < 100:
+      # Similar - mutate workflow
+      base_workflow = get_cached_workflow(prompt1)
+      mutated_workflow = mutate_workflow(base_workflow, prompt2)
+      result = execute_workflow_with_llm(mutated_workflow)
+  ```
+
+  ### Example 3: Different (Generate New)
+
+  ```python
+  prompt1 = "write a haiku about coding"
+  prompt2 = "calculate 1 + 2"
+
+  similarity = call_tool("semantic_comparator", json.dumps({
+      "prompt1": prompt1,
+      "prompt2": prompt2
+  }))
+
+  score = int(similarity)  # Returns ~5
+
+  if score < 50:
+      # Too different - generate from scratch
+      result = generate_new_workflow(prompt2)
+  ```
+
+  ## Integration with Caching
+
+  ```python
+  # In workflow caching logic:
+
+  # Step 1: Embedding similarity search
+  cached_workflows = rag.find_similar(user_prompt, top_k=5)
+
+  if cached_workflows and cached_workflows[0][1] > 0.85:
+      # High embedding similarity - use comparator for final decision
+      cached_prompt = cached_workflows[0][0].metadata['original_prompt']
+
+      similarity_score = int(call_tool("semantic_comparator", json.dumps({
+          "prompt1": cached_prompt,
+          "prompt2": user_prompt
+      })))
+
+      if similarity_score == 100:
+          # EXACT semantic match
+          if is_creative_task(user_prompt):
+              # Reuse workflow, call LLM for new content
+              workflow = cached_workflows[0][0]
+              return execute_workflow_fresh(workflow)
+          else:
+              # Deterministic - full reuse
+              return cached_workflows[0][0].output
+      elif 50 <= similarity_score < 100:
+          # Similar - mutate
+          return mutate_and_execute(cached_workflows[0][0], user_prompt)
+      else:
+          # Different - generate new
+          return generate_new(user_prompt)
+  else:
+      # Low embedding similarity - generate new
+      return generate_new(user_prompt)
+  ```
+
+  ## Comparison Examples
+
+  ### Creative Tasks
+
+  | Prompt 1 | Prompt 2 | Score | Decision |
+  |----------|----------|-------|----------|
+  | "write a haiku about coding" | "write a haiku about coding" | 100 | Reuse workflow, NEW content |
+  | "write a haiku about coding" | "compose a haiku about programming" | 100 | Reuse workflow, NEW content |
+  | "write a haiku about coding" | "write a poem about coding" | 65 | Mutate (haiku → poem) |
+  | "write a haiku about coding" | "write a haiku about nature" | 40 | Generate new |
+
+  ### Deterministic Tasks
+
+  | Prompt 1 | Prompt 2 | Score | Decision |
+  |----------|----------|-------|----------|
+  | "add 1 + 2" | "add 1 + 2" | 100 | Full reuse (output: "3") |
+  | "add 1 + 2" | "calculate 1 plus 2" | 100 | Full reuse (output: "3") |
+  | "add 1 + 2" | "add 2 + 3" | 70 | Mutate (same operation, different numbers) |
+  | "add 1 + 2" | "multiply 1 × 2" | 45 | Generate new (different operation) |
+
+  ## Benefits
+
+  - **Prevents inappropriate reuse** of creative content
+  - **Enables component reuse** for similar tasks (mutation)
+  - **Faster than full generation** when components can be reused
+  - **More accurate** than embedding similarity alone
+
+examples:
+  - inputs:
+      prompt1: "write a haiku about coding"
+      prompt2: "write a haiku about programming"
+    output: "100"
+
+  - inputs:
+      prompt1: "write a haiku about coding"
+      prompt2: "write a poem about coding"
+    output: "65"
+
+  - inputs:
+      prompt1: "write a haiku about coding"
+      prompt2: "calculate 1 + 2"
+    output: "5"
+
+  - inputs:
+      prompt1: "add 1 + 2"
+      prompt2: "add 1 plus 2"
+    output: "100"
+
+  - inputs:
+      prompt1: "translate hello to French"
+      prompt2: "translate hi to French"
+    output: "95"

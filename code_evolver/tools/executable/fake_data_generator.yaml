@@ -1,0 +1,87 @@
+﻿name: "Fake Data Generator"
+type: "executable"
+description: "Generates realistic fake data using Faker library for API testing and data simulation"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/fake_data_generator.py"]
+  stdin_mode: true
+  timeout: 30
+
+input_schema:
+  schema:
+    type: object
+    description: "JSON schema describing the data structure to generate"
+    required: false
+
+  count:
+    type: integer
+    description: "Number of fake data items to generate (default: 1)"
+    required: false
+    default: 1
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether generation succeeded"
+    data:
+      description: "Generated fake data (single item or array based on count)"
+    schema:
+      type: object
+      description: "The schema that was used"
+    error:
+      type: string
+      description: "Error message if failed"
+
+examples:
+  - description: "Generate fake email"
+    input:
+      schema:
+        type: string
+        format: email
+    output:
+      success: true
+      data: "john.doe@example.com"
+
+  - description: "Generate fake user object"
+    input:
+      schema:
+        type: object
+        required: ["name", "email"]
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+            format: email
+          age:
+            type: integer
+            minimum: 18
+            maximum: 80
+    output:
+      success: true
+      data:
+        name: "John Smith"
+        email: "john.smith@example.com"
+        age: 42
+
+  - description: "Generate array of fake phone numbers"
+    input:
+      schema:
+        type: string
+        description: "phone number"
+      count: 3
+    output:
+      success: true
+      data:
+        - "+1-555-123-4567"
+        - "+1-555-987-6543"
+        - "+1-555-246-8135"
+
+tags: ["testing", "data-generation", "faker", "api-testing", "mock-data"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 70

@@ -136,7 +136,98 @@
     "tool_signalr_connection_parser",
     "tool_signalr_llmapi_management",
     "tool_task_to_workflow_router",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "tool_count_backwares_from_50_in_ben",
+    "tool_extract_spec_from_file",
+    "tool_mark_tool_failure",
+    "tool_resilient_tool_call",
+    "tool_translate_the_data",
+    "tool_evolve_tool",
+    "tool_api_wrapper_generator",
+    "tool_config_file_generator",
+    "tool_dependency_analyzer",
+    "tool_docker_compose_generator",
+    "tool_docker_helper_scripts_generator",
+    "tool_env_file_generator",
+    "tool_package_recovery_tool",
+    "tool_selective_file_copier",
+    "tool_standalone_exe_compiler",
+    "tool_dockerfile_generator",
+    "tool_fetch_full_biography_data_from",
+    "tool_translate_full_biography_data",
+    "tool_store_code_fix_pattern",
+    "tool_check_tool_duplicate",
+    "tool_find_code_fix_pattern",
+    "tool_prompt_genericiser",
+    "tool_inline_tool",
+    "tool_pin_tool_version",
+    "tool_trim_tool_versions",
+    "tool_detect_tool_specialization",
+    "tool_write_a_long_form_outline_ab",
+    "tool_semantic_comparator",
+    "interaction_26c8576d17cd",
+    "interaction_ecb403cf8eca",
+    "interaction_c7ad29dae897",
+    "interaction_293566013f17",
+    "interaction_b1542d57455f",
+    "interaction_e125182b5836",
+    "tool_use_the_received_instructions",
+    "interaction_6f91525acb92",
+    "interaction_18f1d9358b82",
+    "interaction_4b78f4f48eed",
+    "interaction_e7951775a564",
+    "workflow_1763318989",
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_llm_fake_data_generator",
+    "interaction_e31c57457c81",
+    "interaction_c2ad56502255",
+    "interaction_48374c0e5c6c",
+    "interaction_681de95e8f3e",
+    "workflow_1763320655",
+    "interaction_c1ac2f764aaa",
+    "interaction_fc1d15113a42",
+    "interaction_f9bcd0e8d452",
+    "interaction_a132cda1f564",
+    "tool_collect_data_from_remote_api",
+    "interaction_06fe5f29b1d0",
+    "interaction_b44807b6c81f",
+    "interaction_ddf2817159a5",
+    "interaction_a9211aba8475",
+    "tool_save_data_to_disk_with_random",
+    "workflow_1763322154",
+    "interaction_fb3e210537d3",
+    "interaction_ca1c24cd516c",
+    "interaction_e5e7fe44e1c8",
+    "interaction_46be9a1fde3a",
+    "interaction_931fdf7fdcae",
+    "interaction_0bd3141ac4ce",
+    "interaction_f3e678280668",
+    "interaction_20d7ed70aee4",
+    "interaction_4bd1c8d539c7",
+    "interaction_03324d2af9cd",
+    "interaction_84f73db8cffe",
+    "interaction_20d0cbfa1b09",
+    "interaction_ce3383b0966f",
+    "interaction_86306e7b02e2",
+    "tool_write_an_efficient_systme_to_b",
+    "tool_bugcatcher",
+    "tool_http_raw_client",
+    "tool_http_rest_client",
+    "tool_signalr_tool_trigger",
+    "interaction_613fd9235cb7",
+    "interaction_a03d790846fa",
+    "interaction_bc24a370dce6",
+    "interaction_b7f27ed6e339",
+    "interaction_81291b38d802",
+    "interaction_a7ae562ef696",
+    "interaction_d79d36c35d6d",
+    "interaction_e7b699b16c95",
+    "interaction_bf4c17438db7",
+    "interaction_5bcfc546c773",
+    "interaction_4bc2064fe4d7",
+    "interaction_6efdb69a8600",
+    "tool_compress_the_image_to_50"
   ],
   "llm": [
     "tool_general",
@@ -166,7 +257,27 @@
     "tool_signalr_connection_parser",
     "tool_signalr_llmapi_management",
     "tool_task_to_workflow_router",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "tool_dockerfile_generator",
+    "tool_prompt_genericiser",
+    "tool_detect_tool_specialization",
+    "tool_semantic_comparator",
+    "interaction_1f8a0df55107",
+    "interaction_ee79bb1c7983",
+    "interaction_e0ba22dec0a2",
+    "tool_llm_fake_data_generator",
+    "interaction_40b97efbb525",
+    "interaction_b530ab651f70",
+    "interaction_8229a63ac581",
+    "interaction_b1228deaf91b",
+    "interaction_743f5ae828a2",
+    "interaction_93ff692104f9",
+    "interaction_c986a284100d",
+    "interaction_1a328b5d7404",
+    "interaction_1c66836858c3",
+    "interaction_38d207ac5bab",
+    "interaction_7b1cae60fe0c",
+    "interaction_ca09e5fa04c0"
   ],
   "general": [
     "tool_general",
@@ -210,14 +321,57 @@
     "invocation_general_1763292691805",
     "invocation_general_1763292754169",
     "invocation_general_1763293354147",
-    "invocation_general_1763295612762"
+    "invocation_general_1763295612762",
+    "invocation_general_1763300393257",
+    "invocation_general_1763302106006",
+    "invocation_general_1763302283772",
+    "invocation_general_1763306110817",
+    "invocation_general_1763306255980",
+    "invocation_general_1763306367173",
+    "invocation_general_1763315878850",
+    "invocation_general_1763316916420",
+    "invocation_general_1763317596962",
+    "invocation_general_1763317745322",
+    "invocation_general_1763318051439",
+    "invocation_general_1763318226640",
+    "invocation_general_1763318626883",
+    "interaction_1f8a0df55107",
+    "invocation_general_1763318758619",
+    "interaction_ee79bb1c7983",
+    "invocation_general_1763318892564",
+    "interaction_e0ba22dec0a2",
+    "invocation_general_1763320511861",
+    "interaction_40b97efbb525",
+    "invocation_general_1763321997880",
+    "interaction_b530ab651f70",
+    "invocation_general_1763322101700",
+    "interaction_8229a63ac581",
+    "invocation_general_1763322275643",
+    "interaction_b1228deaf91b",
+    "invocation_general_1763322879756",
+    "interaction_743f5ae828a2",
+    "invocation_general_1763323331802",
+    "interaction_93ff692104f9",
+    "invocation_general_1763324602496",
+    "interaction_c986a284100d",
+    "invocation_general_1763329031908",
+    "interaction_1c66836858c3",
+    "invocation_general_1763329638677",
+    "interaction_38d207ac5bab",
+    "invocation_general_1763330277264",
+    "interaction_7b1cae60fe0c",
+    "invocation_general_1763330346104",
+    "interaction_ca09e5fa04c0"
   ],
   "fallback": [
-    "tool_general"
+    "tool_general",
+    "tool_resilient_tool_call"
   ],
   "code-generation": [
     "tool_general",
-    "tool_fast_code_generator"
+    "tool_fast_code_generator",
+    "tool_evolve_tool",
+    "tool_api_wrapper_generator"
   ],
   "any-task": [
     "tool_general"
@@ -258,14 +412,17 @@
     "tool_model_selector",
     "tool_pyinstrument_profiler",
     "tool_code_optimizer",
-    "tool_performance_profiler"
+    "tool_performance_profiler",
+    "tool_dependency_analyzer",
+    "tool_selective_file_copier"
   ],
   "documentation": [
     "tool_doc_generator",
     "tool_technical_writer",
     "tool_pydocstyle_checker",
     "tool_document_workflow",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "tool_config_file_generator"
   ],
   "docs": [
     "tool_doc_generator"
@@ -298,7 +455,17 @@
     "spec_translate_the_article_into_ger",
     "spec_write_me_some_plausible_sample",
     "spec_connect_to_signalr_api_at",
-    "spec_process_the_josn_contents_into"
+    "spec_process_the_josn_contents_into",
+    "spec_write_a_poem",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_long_form_outline_ab",
+    "spec_generate_a_piece_of_english_te",
+    "spec_connect_to_llmapi_signalr_serv",
+    "spec_write_a_tool_which_specificall",
+    "spec_fetch_content_from_an_http_en",
+    "spec_mutate_fetch_content_from_an_h",
+    "spec_write_an_efficient_systme_to_b",
+    "spec_write_a_spam_email_detedtor_us"
   ],
   "technical": [
     "tool_technical_writer"
@@ -321,7 +488,8 @@
   "analysis": [
     "tool_article_analyzer",
     "tool_summarizer",
-    "tool_performance_profiler"
+    "tool_performance_profiler",
+    "tool_dependency_analyzer"
   ],
   "seo": [
     "tool_article_analyzer",
@@ -333,7 +501,8 @@
   "content": [
     "tool_article_analyzer",
     "tool_fast_content_writer",
-    "tool_content_generator"
+    "tool_content_generator",
+    "workflow_1763322901"
   ],
   "keywords": [
     "tool_seo_optimizer"
@@ -366,11 +535,13 @@
   ],
   "planning": [
     "tool_outline_generator",
-    "tool_model_selector"
+    "tool_model_selector",
+    "tool_extract_spec_from_file"
   ],
   "organization": [
     "tool_outline_generator",
-    "tool_isort_import_checker"
+    "tool_isort_import_checker",
+    "tool_detect_tool_specialization"
   ],
   "proofreading": [
     "tool_proofreader",
@@ -505,7 +676,51 @@
     "workflow_1763295627",
     "tool_document_workflow",
     "tool_task_to_workflow_router",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "workflow_write_a_poem",
+    "workflow_count_backwares_from_50_in_ben",
+    "tool_count_backwares_from_50_in_ben",
+    "workflow_translate_the_data",
+    "tool_translate_the_data",
+    "workflow_1763303111",
+    "workflow_fetch_full_biography_data_from",
+    "tool_fetch_full_biography_data_from",
+    "workflow_translate_full_biography_data",
+    "tool_translate_full_biography_data",
+    "workflow_output_translated_full_biograp",
+    "workflow_1763306429",
+    "tool_pin_tool_version",
+    "workflow_write_a_haiku_about_coding",
+    "tool_write_a_long_form_outline_ab",
+    "workflow_generate_a_piece_of_english_te",
+    "workflow_method_1_translation_method",
+    "workflow_method_4_translation_method",
+    "workflow_report_translation_times",
+    "workflow_1763318317",
+    "workflow_connect_to_llmapi_signalr_serv",
+    "workflow_use_the_received_instructions",
+    "tool_use_the_received_instructions",
+    "workflow_repeat_the_workflow_generation",
+    "workflow_1763318989",
+    "workflow_write_a_tool_which_specificall",
+    "workflow_1763320655",
+    "workflow_collect_data_from_remote_api",
+    "tool_collect_data_from_remote_api",
+    "workflow_save_data_to_disk_with_random",
+    "tool_save_data_to_disk_with_random",
+    "workflow_1763322154",
+    "workflow_fix_this_error_generating_re",
+    "workflow_fetch_content_from_an_http_en",
+    "workflow_1763322901",
+    "workflow_mutate_fetch_content_from_an_h",
+    "workflow_write_an_efficient_systme_to_b",
+    "tool_write_an_efficient_systme_to_b",
+    "workflow_reverse_the_order_of_the_words",
+    "workflow_write_a_spam_email_detedtor_us",
+    "workflow_resize_the_image",
+    "workflow_compress_the_image_to_50",
+    "tool_compress_the_image_to_50",
+    "workflow_1763330432"
   ],
   "generated": [
     "tool_write_a_technical_story_and_tr",
@@ -642,7 +857,96 @@
     "spec_connect_to_http_127",
     "func_connect_to_http_127",
     "workflow_connect_to_http_127",
-    "tool_connect_to_http_127"
+    "tool_connect_to_http_127",
+    "spec_write_a_poem",
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem",
+    "spec_count_backwares_from_50_in_ben",
+    "func_count_backwares_from_50_in_ben",
+    "workflow_count_backwares_from_50_in_ben",
+    "tool_count_backwares_from_50_in_ben",
+    "spec_translate_the_data",
+    "func_translate_the_data",
+    "workflow_translate_the_data",
+    "tool_translate_the_data",
+    "spec_display_the_translated_data_on",
+    "spec_fetch_full_biography_data_from",
+    "func_fetch_full_biography_data_from",
+    "workflow_fetch_full_biography_data_from",
+    "tool_fetch_full_biography_data_from",
+    "spec_translate_full_biography_data",
+    "func_translate_full_biography_data",
+    "workflow_translate_full_biography_data",
+    "tool_translate_full_biography_data",
+    "spec_output_translated_full_biograp",
+    "func_output_translated_full_biograp",
+    "workflow_output_translated_full_biograp",
+    "spec_write_a_haiku_about_coding",
+    "func_write_a_haiku_about_coding",
+    "workflow_write_a_haiku_about_coding",
+    "tool_write_a_haiku_about_coding",
+    "spec_write_a_long_form_outline_ab",
+    "tool_write_a_long_form_outline_ab",
+    "spec_generate_a_piece_of_english_te",
+    "func_generate_a_piece_of_english_te",
+    "workflow_generate_a_piece_of_english_te",
+    "spec_method_1_translation_method",
+    "func_method_1_translation_method",
+    "workflow_method_1_translation_method",
+    "spec_method_4_translation_method",
+    "func_method_4_translation_method",
+    "workflow_method_4_translation_method",
+    "spec_report_translation_times",
+    "func_report_translation_times",
+    "workflow_report_translation_times",
+    "spec_connect_to_llmapi_signalr_serv",
+    "func_connect_to_llmapi_signalr_serv",
+    "workflow_connect_to_llmapi_signalr_serv",
+    "spec_use_the_received_instructions",
+    "func_use_the_received_instructions",
+    "workflow_use_the_received_instructions",
+    "tool_use_the_received_instructions",
+    "spec_repeat_the_workflow_generation",
+    "func_repeat_the_workflow_generation",
+    "workflow_repeat_the_workflow_generation",
+    "spec_write_a_tool_which_specificall",
+    "func_write_a_tool_which_specificall",
+    "workflow_write_a_tool_which_specificall",
+    "spec_collect_data_from_remote_api",
+    "func_collect_data_from_remote_api",
+    "workflow_collect_data_from_remote_api",
+    "tool_collect_data_from_remote_api",
+    "spec_save_data_to_disk_with_random",
+    "func_save_data_to_disk_with_random",
+    "workflow_save_data_to_disk_with_random",
+    "tool_save_data_to_disk_with_random",
+    "spec_fix_this_error_generating_re",
+    "func_fix_this_error_generating_re",
+    "workflow_fix_this_error_generating_re",
+    "spec_fetch_content_from_an_http_en",
+    "func_fetch_content_from_an_http_en",
+    "workflow_fetch_content_from_an_http_en",
+    "spec_mutate_fetch_content_from_an_h",
+    "func_mutate_fetch_content_from_an_h",
+    "workflow_mutate_fetch_content_from_an_h",
+    "spec_write_an_efficient_systme_to_b",
+    "func_write_an_efficient_systme_to_b",
+    "workflow_write_an_efficient_systme_to_b",
+    "tool_write_an_efficient_systme_to_b",
+    "spec_reverse_the_order_of_the_words",
+    "func_reverse_the_order_of_the_words",
+    "workflow_reverse_the_order_of_the_words",
+    "spec_write_a_spam_email_detedtor_us",
+    "func_write_a_spam_email_detedtor_us",
+    "workflow_write_a_spam_email_detedtor_us",
+    "spec_resize_the_image",
+    "func_resize_the_image",
+    "workflow_resize_the_image",
+    "spec_compress_the_image_to_50",
+    "func_compress_the_image_to_50",
+    "workflow_compress_the_image_to_50",
+    "tool_compress_the_image_to_50"
   ],
   "chat": [
     "tool_write_a_technical_story_and_tr",
@@ -736,7 +1040,69 @@
     "tool_route_this_to_the_most_powerfu",
     "func_connect_to_http_127",
     "workflow_connect_to_http_127",
-    "tool_connect_to_http_127"
+    "tool_connect_to_http_127",
+    "func_write_a_poem",
+    "workflow_write_a_poem",
+    "tool_write_a_poem",
+    "func_count_backwares_from_50_in_ben",
+    "workflow_count_backwares_from_50_in_ben",
+    "tool_count_backwares_from_50_in_ben",
+    "func_translate_the_data",
+    "workflow_translate_the_data",
+    "tool_translate_the_data",
+    "func_fetch_full_biography_data_from",
+    "workflow_fetch_full_biography_data_from",
+    "tool_fetch_full_biography_data_from",
+    "func_translate_full_biography_data",
+    "workflow_translate_full_biography_data",
+    "tool_translate_full_biography_data",
+    "func_output_translated_full_biograp",
+    "workflow_output_translated_full_biograp",
+    "func_write_a_haiku_about_coding",
+    "workflow_write_a_haiku_about_coding",
+    "tool_write_a_haiku_about_coding",
+    "tool_write_a_long_form_outline_ab",
+    "func_generate_a_piece_of_english_te",
+    "workflow_generate_a_piece_of_english_te",
+    "func_method_1_translation_method",
+    "workflow_method_1_translation_method",
+    "func_method_4_translation_method",
+    "workflow_method_4_translation_method",
+    "func_report_translation_times",
+    "workflow_report_translation_times",
+    "func_connect_to_llmapi_signalr_serv",
+    "workflow_connect_to_llmapi_signalr_serv",
+    "func_use_the_received_instructions",
+    "workflow_use_the_received_instructions",
+    "tool_use_the_received_instructions",
+    "func_repeat_the_workflow_generation",
+    "workflow_repeat_the_workflow_generation",
+    "func_write_a_tool_which_specificall",
+    "workflow_write_a_tool_which_specificall",
+    "func_collect_data_from_remote_api",
+    "workflow_collect_data_from_remote_api",
+    "tool_collect_data_from_remote_api",
+    "func_save_data_to_disk_with_random",
+    "workflow_save_data_to_disk_with_random",
+    "tool_save_data_to_disk_with_random",
+    "func_fix_this_error_generating_re",
+    "workflow_fix_this_error_generating_re",
+    "func_fetch_content_from_an_http_en",
+    "workflow_fetch_content_from_an_http_en",
+    "func_mutate_fetch_content_from_an_h",
+    "workflow_mutate_fetch_content_from_an_h",
+    "func_write_an_efficient_systme_to_b",
+    "workflow_write_an_efficient_systme_to_b",
+    "tool_write_an_efficient_systme_to_b",
+    "func_reverse_the_order_of_the_words",
+    "workflow_reverse_the_order_of_the_words",
+    "func_write_a_spam_email_detedtor_us",
+    "workflow_write_a_spam_email_detedtor_us",
+    "func_resize_the_image",
+    "workflow_resize_the_image",
+    "func_compress_the_image_to_50",
+    "workflow_compress_the_image_to_50",
+    "tool_compress_the_image_to_50"
   ],
   "auto-generated": [
     "tool_write_a_technical_story_and_tr",
@@ -806,7 +1172,17 @@
     "tool_connect_to_signalr_api_at",
     "tool_process_the_josn_contents_into",
     "tool_route_this_to_the_most_powerfu",
-    "tool_connect_to_http_127"
+    "tool_connect_to_http_127",
+    "tool_count_backwares_from_50_in_ben",
+    "tool_translate_the_data",
+    "tool_fetch_full_biography_data_from",
+    "tool_translate_full_biography_data",
+    "tool_write_a_long_form_outline_ab",
+    "tool_use_the_received_instructions",
+    "tool_collect_data_from_remote_api",
+    "tool_save_data_to_disk_with_random",
+    "tool_write_an_efficient_systme_to_b",
+    "tool_compress_the_image_to_50"
   ],
   "python": [
     "tool_add_5_and_8",
@@ -906,7 +1282,128 @@
     "exec_invocation_node_runtime_import_validator_1763293596056",
     "exec_invocation_python_syntax_validator_1763295623619",
     "exec_invocation_node_runtime_import_validator_1763295624782",
-    "exec_invocation_buffer_1763296911972"
+    "exec_invocation_buffer_1763296911972",
+    "exec_invocation_buffer_1763297219550",
+    "exec_invocation_buffer_1763297388898",
+    "exec_invocation_buffer_1763297569495",
+    "exec_invocation_buffer_1763297569832",
+    "exec_invocation_buffer_1763297570137",
+    "exec_invocation_buffer_1763297570525",
+    "exec_invocation_buffer_1763297570889",
+    "exec_invocation_buffer_1763297571207",
+    "exec_invocation_buffer_1763297571537",
+    "exec_invocation_buffer_1763297571892",
+    "exec_invocation_buffer_1763297572240",
+    "exec_invocation_buffer_1763297572574",
+    "exec_invocation_buffer_1763297575954",
+    "exec_invocation_buffer_1763297576306",
+    "exec_invocation_buffer_1763297576637",
+    "exec_invocation_buffer_1763297576988",
+    "exec_invocation_buffer_1763297577332",
+    "exec_invocation_buffer_1763297577678",
+    "exec_invocation_buffer_1763297578033",
+    "exec_invocation_buffer_1763297578404",
+    "exec_invocation_buffer_1763297578788",
+    "exec_invocation_buffer_1763297579163",
+    "exec_invocation_buffer_1763297579548",
+    "exec_invocation_buffer_1763297579917",
+    "exec_invocation_buffer_1763297580284",
+    "exec_invocation_buffer_1763299787924",
+    "exec_invocation_buffer_1763299788287",
+    "exec_invocation_buffer_1763299788653",
+    "exec_invocation_buffer_1763299789013",
+    "exec_invocation_buffer_1763299789389",
+    "exec_invocation_buffer_1763299870325",
+    "exec_invocation_buffer_1763299870896",
+    "exec_invocation_buffer_1763299871321",
+    "exec_invocation_buffer_1763299871764",
+    "exec_invocation_buffer_1763299872165",
+    "exec_invocation_buffer_1763300130322",
+    "exec_invocation_buffer_1763300130721",
+    "exec_invocation_buffer_1763300131126",
+    "exec_invocation_buffer_1763300131506",
+    "exec_invocation_buffer_1763300131892",
+    "exec_invocation_buffer_1763300132289",
+    "exec_invocation_buffer_1763300132707",
+    "exec_invocation_buffer_1763300133095",
+    "exec_invocation_buffer_1763300133498",
+    "exec_invocation_buffer_1763300133901",
+    "exec_invocation_buffer_1763300137297",
+    "exec_invocation_buffer_1763300137716",
+    "exec_invocation_buffer_1763300138105",
+    "exec_invocation_buffer_1763300138524",
+    "exec_invocation_buffer_1763300138945",
+    "exec_invocation_buffer_1763300139334",
+    "exec_invocation_buffer_1763300139741",
+    "exec_invocation_buffer_1763300140174",
+    "exec_invocation_buffer_1763300140584",
+    "exec_invocation_buffer_1763300140986",
+    "exec_invocation_buffer_1763300141363",
+    "exec_invocation_buffer_1763300141758",
+    "exec_invocation_buffer_1763300142144",
+    "exec_invocation_python_syntax_validator_1763300396971",
+    "exec_invocation_node_runtime_import_validator_1763300397790",
+    "exec_invocation_python_syntax_validator_1763300651025",
+    "exec_invocation_node_runtime_import_validator_1763300655901",
+    "exec_invocation_python_syntax_validator_1763302108348",
+    "exec_invocation_node_runtime_import_validator_1763302109259",
+    "exec_invocation_random_data_generator_1763302110266",
+    "exec_invocation_standalone_exe_compiler_1763304507147",
+    "exec_invocation_dependency_analyzer_1763305004135",
+    "exec_invocation_dependency_analyzer_1763305205537",
+    "exec_invocation_python_syntax_validator_1763306141935",
+    "exec_invocation_node_runtime_import_validator_1763306143318",
+    "exec_invocation_random_data_generator_1763306144249",
+    "exec_invocation_python_syntax_validator_1763306259535",
+    "exec_invocation_node_runtime_import_validator_1763306260410",
+    "exec_invocation_python_syntax_validator_1763306370502",
+    "exec_invocation_node_runtime_import_validator_1763306371423",
+    "fix_pattern_34d2537d1213",
+    "fix_pattern_51852d82e561",
+    "exec_invocation_python_syntax_validator_1763315904741",
+    "exec_invocation_node_runtime_import_validator_1763315908891",
+    "exec_invocation_python_syntax_validator_1763317614266",
+    "exec_invocation_node_runtime_import_validator_1763317615194",
+    "exec_invocation_python_syntax_validator_1763317753949",
+    "exec_invocation_node_runtime_import_validator_1763317754830",
+    "exec_invocation_python_syntax_validator_1763318058502",
+    "exec_invocation_node_runtime_import_validator_1763318059389",
+    "exec_invocation_python_syntax_validator_1763318311003",
+    "exec_invocation_node_runtime_import_validator_1763318315353",
+    "exec_invocation_python_syntax_validator_1763318635208",
+    "exec_invocation_node_runtime_import_validator_1763318636757",
+    "exec_invocation_python_syntax_validator_1763318771812",
+    "exec_invocation_node_runtime_import_validator_1763318773379",
+    "exec_invocation_python_syntax_validator_1763318897267",
+    "exec_invocation_node_runtime_import_validator_1763318899433",
+    "exec_invocation_random_data_generator_1763318901524",
+    "exec_invocation_python_syntax_validator_1763320646517",
+    "exec_invocation_node_runtime_import_validator_1763320652074",
+    "exec_invocation_random_data_generator_1763320653569",
+    "exec_invocation_python_syntax_validator_1763322048167",
+    "exec_invocation_node_runtime_import_validator_1763322054895",
+    "exec_invocation_random_data_generator_1763322056396",
+    "exec_invocation_python_syntax_validator_1763322147016",
+    "exec_invocation_node_runtime_import_validator_1763322150853",
+    "exec_invocation_random_data_generator_1763322152420",
+    "exec_invocation_python_syntax_validator_1763322278240",
+    "exec_invocation_node_runtime_import_validator_1763322280011",
+    "exec_invocation_python_syntax_validator_1763322896543",
+    "exec_invocation_node_runtime_import_validator_1763322898439",
+    "exec_invocation_random_data_generator_1763322900097",
+    "exec_invocation_python_syntax_validator_1763323347459",
+    "exec_invocation_node_runtime_import_validator_1763323349445",
+    "exec_invocation_random_data_generator_1763323351095",
+    "exec_invocation_python_syntax_validator_1763325029452",
+    "exec_invocation_node_runtime_import_validator_1763325035272",
+    "exec_invocation_python_syntax_validator_1763329037249",
+    "exec_invocation_node_runtime_import_validator_1763329039120",
+    "exec_invocation_python_syntax_validator_1763329641323",
+    "exec_invocation_node_runtime_import_validator_1763329643191",
+    "exec_invocation_python_syntax_validator_1763330281901",
+    "exec_invocation_node_runtime_import_validator_1763330283889",
+    "exec_invocation_python_syntax_validator_1763330424653",
+    "exec_invocation_node_runtime_import_validator_1763330430290"
   ],
   "addition": [
     "tool_add_5_and_8",
@@ -957,7 +1454,32 @@
     "tool_document_workflow",
     "tool_internal_test_validator",
     "tool_signalr_hub_connector",
-    "tool_signalr_llmapi_skill"
+    "tool_signalr_llmapi_skill",
+    "tool_extract_spec_from_file",
+    "tool_mark_tool_failure",
+    "tool_resilient_tool_call",
+    "tool_evolve_tool",
+    "tool_api_wrapper_generator",
+    "tool_config_file_generator",
+    "tool_dependency_analyzer",
+    "tool_docker_compose_generator",
+    "tool_docker_helper_scripts_generator",
+    "tool_env_file_generator",
+    "tool_package_recovery_tool",
+    "tool_selective_file_copier",
+    "tool_standalone_exe_compiler",
+    "tool_store_code_fix_pattern",
+    "tool_check_tool_duplicate",
+    "tool_find_code_fix_pattern",
+    "tool_inline_tool",
+    "tool_pin_tool_version",
+    "tool_trim_tool_versions",
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_bugcatcher",
+    "tool_http_raw_client",
+    "tool_http_rest_client",
+    "tool_signalr_tool_trigger"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -1006,7 +1528,10 @@
     "tool_code_optimizer",
     "tool_run_static_analysis",
     "tool_random_data_generator",
-    "tool_internal_test_validator"
+    "tool_internal_test_validator",
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_llm_fake_data_generator"
   ],
   "pytest": [
     "tool_pytest_runner",
@@ -1034,7 +1559,8 @@
     "tool_vulture_deadcode"
   ],
   "cleanup": [
-    "tool_vulture_deadcode"
+    "tool_vulture_deadcode",
+    "tool_trim_tool_versions"
   ],
   "docstrings": [
     "tool_pydocstyle_checker"
@@ -1052,7 +1578,9 @@
   ],
   "syntax": [
     "tool_quick_feedback",
-    "tool_python_syntax_validator"
+    "tool_python_syntax_validator",
+    "fix_pattern_34d2537d1213",
+    "fix_pattern_51852d82e561"
   ],
   "quick-feedback": [
     "tool_quick_feedback"
@@ -1080,13 +1608,15 @@
     "tool_summarizer"
   ],
   "extraction": [
-    "tool_summarizer"
+    "tool_summarizer",
+    "tool_extract_spec_from_file"
   ],
   "efficient": [
     "tool_summarizer"
   ],
   "openapi": [
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_smart_api_parser"
   ],
   "translation": [
     "tool_nmt_translator",
@@ -1116,7 +1646,9 @@
     "tool_http_content_fetcher",
     "tool_http_server",
     "tool_nmt_translate",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "tool_api_wrapper_generator",
+    "tool_http_rest_client"
   ],
   "validation": [
     "tool_translation_quality_checker",
@@ -1145,7 +1677,8 @@
     "tool_multiply_6_and_7_1763228888",
     "tool_http_content_fetcher",
     "tool_http_server",
-    "tool_json_output_validator"
+    "tool_json_output_validator",
+    "tool_http_rest_client"
   ],
   "creative-writing": [
     "tool_long_form_writer"
@@ -1200,7 +1733,8 @@
     "tool_multiply_6_and_7_1763228888",
     "tool_add_1_5",
     "tool_basic_calculator",
-    "spec_write_me_some_plausible_sample"
+    "spec_write_me_some_plausible_sample",
+    "spec_mutate_fetch_content_from_an_h"
   ],
   "dynamic programming": [
     "tool_calculate_the_fibonacci_sequen"
@@ -1252,7 +1786,9 @@
     "workflow_1763280509",
     "workflow_1763282170",
     "workflow_1763287739",
-    "workflow_1763288106"
+    "workflow_1763288106",
+    "workflow_1763320655",
+    "workflow_1763322154"
   ],
   "disk": [
     "tool_save_to_disk",
@@ -1277,7 +1813,9 @@
     "tool_stdin_usage_validator"
   ],
   "dependencies": [
-    "tool_pip_install"
+    "tool_pip_install",
+    "tool_dependency_analyzer",
+    "tool_package_recovery_tool"
   ],
   "pip": [
     "tool_pip_install",
@@ -1377,21 +1915,28 @@
   "http": [
     "tool_http_content_fetcher",
     "tool_http_server",
-    "tool_sse_stream"
+    "tool_sse_stream",
+    "tool_http_raw_client",
+    "tool_http_rest_client"
   ],
   "fetch": [
-    "tool_http_content_fetcher"
+    "tool_http_content_fetcher",
+    "workflow_1763306429",
+    "workflow_1763322901"
   ],
   "content-fetching": [
     "tool_http_content_fetcher"
   ],
   "web": [
     "tool_http_content_fetcher",
-    "tool_http_server"
+    "tool_http_server",
+    "tool_http_rest_client"
   ],
   "rest": [
     "tool_http_content_fetcher",
-    "tool_http_server"
+    "tool_http_server",
+    "tool_api_wrapper_generator",
+    "tool_http_rest_client"
   ],
   "api-connector": [
     "tool_http_content_fetcher"
@@ -1440,7 +1985,8 @@
     "tool_http_server"
   ],
   "html": [
-    "tool_http_server"
+    "tool_http_server",
+    "tool_http_raw_client"
   ],
   "shebang": [
     "tool_review_this_code_usr_bin_en"
@@ -1477,7 +2023,8 @@
     "tool_unit_converter"
   ],
   "text": [
-    "tool_text_formatter"
+    "tool_text_formatter",
+    "tool_http_raw_client"
   ],
   "string": [
     "tool_text_formatter"
@@ -1592,7 +2139,34 @@
     "spec_connect_to_signalr_api_at",
     "spec_process_the_josn_contents_into",
     "spec_route_this_to_the_most_powerfu",
-    "spec_connect_to_http_127"
+    "spec_connect_to_http_127",
+    "spec_write_a_poem",
+    "spec_count_backwares_from_50_in_ben",
+    "spec_translate_the_data",
+    "spec_display_the_translated_data_on",
+    "spec_fetch_full_biography_data_from",
+    "spec_translate_full_biography_data",
+    "spec_output_translated_full_biograp",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_long_form_outline_ab",
+    "spec_generate_a_piece_of_english_te",
+    "spec_method_1_translation_method",
+    "spec_method_4_translation_method",
+    "spec_report_translation_times",
+    "spec_connect_to_llmapi_signalr_serv",
+    "spec_use_the_received_instructions",
+    "spec_repeat_the_workflow_generation",
+    "spec_write_a_tool_which_specificall",
+    "spec_collect_data_from_remote_api",
+    "spec_save_data_to_disk_with_random",
+    "spec_fix_this_error_generating_re",
+    "spec_fetch_content_from_an_http_en",
+    "spec_mutate_fetch_content_from_an_h",
+    "spec_write_an_efficient_systme_to_b",
+    "spec_reverse_the_order_of_the_words",
+    "spec_write_a_spam_email_detedtor_us",
+    "spec_resize_the_image",
+    "spec_compress_the_image_to_50"
   ],
   "plan": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1637,7 +2211,34 @@
     "spec_connect_to_signalr_api_at",
     "spec_process_the_josn_contents_into",
     "spec_route_this_to_the_most_powerfu",
-    "spec_connect_to_http_127"
+    "spec_connect_to_http_127",
+    "spec_write_a_poem",
+    "spec_count_backwares_from_50_in_ben",
+    "spec_translate_the_data",
+    "spec_display_the_translated_data_on",
+    "spec_fetch_full_biography_data_from",
+    "spec_translate_full_biography_data",
+    "spec_output_translated_full_biograp",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_long_form_outline_ab",
+    "spec_generate_a_piece_of_english_te",
+    "spec_method_1_translation_method",
+    "spec_method_4_translation_method",
+    "spec_report_translation_times",
+    "spec_connect_to_llmapi_signalr_serv",
+    "spec_use_the_received_instructions",
+    "spec_repeat_the_workflow_generation",
+    "spec_write_a_tool_which_specificall",
+    "spec_collect_data_from_remote_api",
+    "spec_save_data_to_disk_with_random",
+    "spec_fix_this_error_generating_re",
+    "spec_fetch_content_from_an_http_en",
+    "spec_mutate_fetch_content_from_an_h",
+    "spec_write_an_efficient_systme_to_b",
+    "spec_reverse_the_order_of_the_words",
+    "spec_write_a_spam_email_detedtor_us",
+    "spec_resize_the_image",
+    "spec_compress_the_image_to_50"
   ],
   "overseer": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1682,7 +2283,35 @@
     "spec_connect_to_signalr_api_at",
     "spec_process_the_josn_contents_into",
     "spec_route_this_to_the_most_powerfu",
-    "spec_connect_to_http_127"
+    "spec_connect_to_http_127",
+    "spec_write_a_poem",
+    "spec_count_backwares_from_50_in_ben",
+    "tool_extract_spec_from_file",
+    "spec_translate_the_data",
+    "spec_display_the_translated_data_on",
+    "spec_fetch_full_biography_data_from",
+    "spec_translate_full_biography_data",
+    "spec_output_translated_full_biograp",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_long_form_outline_ab",
+    "spec_generate_a_piece_of_english_te",
+    "spec_method_1_translation_method",
+    "spec_method_4_translation_method",
+    "spec_report_translation_times",
+    "spec_connect_to_llmapi_signalr_serv",
+    "spec_use_the_received_instructions",
+    "spec_repeat_the_workflow_generation",
+    "spec_write_a_tool_which_specificall",
+    "spec_collect_data_from_remote_api",
+    "spec_save_data_to_disk_with_random",
+    "spec_fix_this_error_generating_re",
+    "spec_fetch_content_from_an_http_en",
+    "spec_mutate_fetch_content_from_an_h",
+    "spec_write_an_efficient_systme_to_b",
+    "spec_reverse_the_order_of_the_words",
+    "spec_write_a_spam_email_detedtor_us",
+    "spec_resize_the_image",
+    "spec_compress_the_image_to_50"
   ],
   "claude-sonnet": [
     "tool_general",
@@ -1761,7 +2390,36 @@
     "invocation_general_1763292691805",
     "invocation_general_1763292754169",
     "invocation_general_1763293354147",
-    "invocation_general_1763295612762"
+    "invocation_general_1763295612762",
+    "invocation_general_1763300393257",
+    "invocation_fast_code_generator_1763300561594",
+    "invocation_general_1763302106006",
+    "invocation_general_1763302283772",
+    "invocation_general_1763306110817",
+    "invocation_general_1763306255980",
+    "invocation_general_1763306367173",
+    "invocation_prompt_genericiser_1763308075378",
+    "invocation_general_1763315878850",
+    "invocation_general_1763316916420",
+    "invocation_general_1763317596962",
+    "invocation_general_1763317745322",
+    "invocation_general_1763318051439",
+    "invocation_general_1763318226640",
+    "invocation_general_1763318626883",
+    "invocation_general_1763318758619",
+    "invocation_general_1763318892564",
+    "invocation_general_1763320511861",
+    "invocation_general_1763321997880",
+    "invocation_general_1763322101700",
+    "invocation_general_1763322275643",
+    "invocation_general_1763322879756",
+    "invocation_general_1763323331802",
+    "invocation_general_1763324602496",
+    "invocation_content_generator_1763327405162",
+    "invocation_general_1763329031908",
+    "invocation_general_1763329638677",
+    "invocation_general_1763330277264",
+    "invocation_general_1763330346104"
   ],
   "prompt": [
     "invocation_general_1763277296689",
@@ -1810,7 +2468,36 @@
     "invocation_general_1763292691805",
     "invocation_general_1763292754169",
     "invocation_general_1763293354147",
-    "invocation_general_1763295612762"
+    "invocation_general_1763295612762",
+    "invocation_general_1763300393257",
+    "invocation_fast_code_generator_1763300561594",
+    "invocation_general_1763302106006",
+    "invocation_general_1763302283772",
+    "invocation_general_1763306110817",
+    "invocation_general_1763306255980",
+    "invocation_general_1763306367173",
+    "invocation_prompt_genericiser_1763308075378",
+    "invocation_general_1763315878850",
+    "invocation_general_1763316916420",
+    "invocation_general_1763317596962",
+    "invocation_general_1763317745322",
+    "invocation_general_1763318051439",
+    "invocation_general_1763318226640",
+    "invocation_general_1763318626883",
+    "invocation_general_1763318758619",
+    "invocation_general_1763318892564",
+    "invocation_general_1763320511861",
+    "invocation_general_1763321997880",
+    "invocation_general_1763322101700",
+    "invocation_general_1763322275643",
+    "invocation_general_1763322879756",
+    "invocation_general_1763323331802",
+    "invocation_general_1763324602496",
+    "invocation_content_generator_1763327405162",
+    "invocation_general_1763329031908",
+    "invocation_general_1763329638677",
+    "invocation_general_1763330277264",
+    "invocation_general_1763330346104"
   ],
   "llama3": [
     "timeout_stats_llama3",
@@ -1854,12 +2541,43 @@
     "invocation_general_1763292691805",
     "invocation_general_1763292754169",
     "invocation_general_1763293354147",
-    "invocation_general_1763295612762"
+    "invocation_general_1763295612762",
+    "invocation_general_1763300393257",
+    "invocation_fast_code_generator_1763300561594",
+    "invocation_general_1763302106006",
+    "invocation_general_1763302283772",
+    "invocation_general_1763306110817",
+    "invocation_general_1763306255980",
+    "invocation_general_1763306367173",
+    "invocation_prompt_genericiser_1763308075378",
+    "invocation_general_1763315878850",
+    "invocation_general_1763316916420",
+    "invocation_general_1763317596962",
+    "invocation_general_1763317745322",
+    "invocation_general_1763318051439",
+    "invocation_general_1763318226640",
+    "invocation_general_1763318626883",
+    "invocation_general_1763318758619",
+    "invocation_general_1763318892564",
+    "invocation_general_1763320511861",
+    "invocation_general_1763321997880",
+    "invocation_general_1763322101700",
+    "invocation_general_1763322275643",
+    "invocation_general_1763322879756",
+    "invocation_general_1763323331802",
+    "invocation_general_1763324602496",
+    "invocation_content_generator_1763327405162",
+    "invocation_general_1763329031908",
+    "invocation_general_1763329638677",
+    "invocation_general_1763330277264",
+    "invocation_general_1763330346104"
   ],
   "content_generator": [
     "invocation_content_generator_1763278040988",
     "invocation_content_generator_1763280669198",
-    "invocation_content_generator_1763289002444"
+    "invocation_content_generator_1763289002444",
+    "invocation_content_generator_1763327405162",
+    "interaction_1a328b5d7404"
   ],
   "yaml-defined": [
     "tool_call_tool_validator",
@@ -1912,7 +2630,23 @@
     "tool_nmt_translator",
     "tool_workflow_datastore",
     "tool_nmt_translate",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_extract_spec_from_file",
+    "tool_mark_tool_failure",
+    "tool_resilient_tool_call",
+    "tool_evolve_tool",
+    "tool_inline_tool",
+    "tool_pin_tool_version",
+    "tool_store_code_fix_pattern",
+    "tool_trim_tool_versions",
+    "tool_detect_tool_specialization",
+    "tool_semantic_comparator",
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_bugcatcher",
+    "tool_http_raw_client",
+    "tool_http_rest_client",
+    "tool_signalr_tool_trigger"
   ],
   "call_tool": [
     "tool_call_tool_validator"
@@ -1947,7 +2681,15 @@
     "workflow_1763288106",
     "workflow_1763291422",
     "workflow_1763292771",
-    "workflow_1763295627"
+    "workflow_1763295627",
+    "workflow_1763303111",
+    "workflow_1763306429",
+    "workflow_1763318317",
+    "workflow_1763318989",
+    "workflow_1763320655",
+    "workflow_1763322154",
+    "workflow_1763322901",
+    "workflow_1763330432"
   ],
   "a": [
     "workflow_1763280509",
@@ -1956,7 +2698,11 @@
     "workflow_1763285977",
     "workflow_1763287739",
     "workflow_1763288106",
-    "workflow_1763291422"
+    "workflow_1763291422",
+    "workflow_1763318317",
+    "workflow_1763318989",
+    "workflow_1763320655",
+    "workflow_1763322154"
   ],
   "comprehensive": [
     "tool_run_static_analysis"
@@ -2011,7 +2757,32 @@
     "workflow_connect_to_signalr_api_at",
     "workflow_process_the_josn_contents_into",
     "workflow_route_this_to_the_most_powerfu",
-    "workflow_connect_to_http_127"
+    "workflow_connect_to_http_127",
+    "workflow_write_a_poem",
+    "workflow_count_backwares_from_50_in_ben",
+    "workflow_translate_the_data",
+    "workflow_fetch_full_biography_data_from",
+    "workflow_translate_full_biography_data",
+    "workflow_output_translated_full_biograp",
+    "workflow_write_a_haiku_about_coding",
+    "workflow_generate_a_piece_of_english_te",
+    "workflow_method_1_translation_method",
+    "workflow_method_4_translation_method",
+    "workflow_report_translation_times",
+    "workflow_connect_to_llmapi_signalr_serv",
+    "workflow_use_the_received_instructions",
+    "workflow_repeat_the_workflow_generation",
+    "workflow_write_a_tool_which_specificall",
+    "workflow_collect_data_from_remote_api",
+    "workflow_save_data_to_disk_with_random",
+    "workflow_fix_this_error_generating_re",
+    "workflow_fetch_content_from_an_http_en",
+    "workflow_mutate_fetch_content_from_an_h",
+    "workflow_write_an_efficient_systme_to_b",
+    "workflow_reverse_the_order_of_the_words",
+    "workflow_write_a_spam_email_detedtor_us",
+    "workflow_resize_the_image",
+    "workflow_compress_the_image_to_50"
   ],
   "tested": [
     "workflow_write_a_technical_story",
@@ -2042,7 +2813,32 @@
     "workflow_connect_to_signalr_api_at",
     "workflow_process_the_josn_contents_into",
     "workflow_route_this_to_the_most_powerfu",
-    "workflow_connect_to_http_127"
+    "workflow_connect_to_http_127",
+    "workflow_write_a_poem",
+    "workflow_count_backwares_from_50_in_ben",
+    "workflow_translate_the_data",
+    "workflow_fetch_full_biography_data_from",
+    "workflow_translate_full_biography_data",
+    "workflow_output_translated_full_biograp",
+    "workflow_write_a_haiku_about_coding",
+    "workflow_generate_a_piece_of_english_te",
+    "workflow_method_1_translation_method",
+    "workflow_method_4_translation_method",
+    "workflow_report_translation_times",
+    "workflow_connect_to_llmapi_signalr_serv",
+    "workflow_use_the_received_instructions",
+    "workflow_repeat_the_workflow_generation",
+    "workflow_write_a_tool_which_specificall",
+    "workflow_collect_data_from_remote_api",
+    "workflow_save_data_to_disk_with_random",
+    "workflow_fix_this_error_generating_re",
+    "workflow_fetch_content_from_an_http_en",
+    "workflow_mutate_fetch_content_from_an_h",
+    "workflow_write_an_efficient_systme_to_b",
+    "workflow_reverse_the_order_of_the_words",
+    "workflow_write_a_spam_email_detedtor_us",
+    "workflow_resize_the_image",
+    "workflow_compress_the_image_to_50"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763282532779"
@@ -2131,7 +2927,151 @@
     "exec_invocation_python_syntax_validator_1763295623619",
     "exec_invocation_undefined_name_checker_1763295624339",
     "exec_invocation_node_runtime_import_validator_1763295624782",
-    "exec_invocation_buffer_1763296911972"
+    "exec_invocation_buffer_1763296911972",
+    "exec_invocation_buffer_1763297219550",
+    "exec_invocation_buffer_1763297388898",
+    "exec_invocation_buffer_1763297569495",
+    "exec_invocation_buffer_1763297569832",
+    "exec_invocation_buffer_1763297570137",
+    "exec_invocation_buffer_1763297570525",
+    "exec_invocation_buffer_1763297570889",
+    "exec_invocation_buffer_1763297571207",
+    "exec_invocation_buffer_1763297571537",
+    "exec_invocation_buffer_1763297571892",
+    "exec_invocation_buffer_1763297572240",
+    "exec_invocation_buffer_1763297572574",
+    "exec_invocation_buffer_1763297575954",
+    "exec_invocation_buffer_1763297576306",
+    "exec_invocation_buffer_1763297576637",
+    "exec_invocation_buffer_1763297576988",
+    "exec_invocation_buffer_1763297577332",
+    "exec_invocation_buffer_1763297577678",
+    "exec_invocation_buffer_1763297578033",
+    "exec_invocation_buffer_1763297578404",
+    "exec_invocation_buffer_1763297578788",
+    "exec_invocation_buffer_1763297579163",
+    "exec_invocation_buffer_1763297579548",
+    "exec_invocation_buffer_1763297579917",
+    "exec_invocation_buffer_1763297580284",
+    "exec_invocation_buffer_1763299787924",
+    "exec_invocation_buffer_1763299788287",
+    "exec_invocation_buffer_1763299788653",
+    "exec_invocation_buffer_1763299789013",
+    "exec_invocation_buffer_1763299789389",
+    "exec_invocation_buffer_1763299870325",
+    "exec_invocation_buffer_1763299870896",
+    "exec_invocation_buffer_1763299871321",
+    "exec_invocation_buffer_1763299871764",
+    "exec_invocation_buffer_1763299872165",
+    "exec_invocation_buffer_1763300130322",
+    "exec_invocation_buffer_1763300130721",
+    "exec_invocation_buffer_1763300131126",
+    "exec_invocation_buffer_1763300131506",
+    "exec_invocation_buffer_1763300131892",
+    "exec_invocation_buffer_1763300132289",
+    "exec_invocation_buffer_1763300132707",
+    "exec_invocation_buffer_1763300133095",
+    "exec_invocation_buffer_1763300133498",
+    "exec_invocation_buffer_1763300133901",
+    "exec_invocation_buffer_1763300137297",
+    "exec_invocation_buffer_1763300137716",
+    "exec_invocation_buffer_1763300138105",
+    "exec_invocation_buffer_1763300138524",
+    "exec_invocation_buffer_1763300138945",
+    "exec_invocation_buffer_1763300139334",
+    "exec_invocation_buffer_1763300139741",
+    "exec_invocation_buffer_1763300140174",
+    "exec_invocation_buffer_1763300140584",
+    "exec_invocation_buffer_1763300140986",
+    "exec_invocation_buffer_1763300141363",
+    "exec_invocation_buffer_1763300141758",
+    "exec_invocation_buffer_1763300142144",
+    "exec_invocation_python_syntax_validator_1763300396971",
+    "exec_invocation_undefined_name_checker_1763300397460",
+    "exec_invocation_node_runtime_import_validator_1763300397790",
+    "exec_invocation_python_syntax_validator_1763300651025",
+    "exec_invocation_undefined_name_checker_1763300655475",
+    "exec_invocation_node_runtime_import_validator_1763300655901",
+    "exec_invocation_python_syntax_validator_1763302108348",
+    "exec_invocation_undefined_name_checker_1763302108916",
+    "exec_invocation_node_runtime_import_validator_1763302109259",
+    "exec_invocation_random_data_generator_1763302110266",
+    "exec_invocation_standalone_exe_compiler_1763304507147",
+    "exec_invocation_dependency_analyzer_1763305004135",
+    "exec_invocation_dependency_analyzer_1763305205537",
+    "exec_invocation_python_syntax_validator_1763306141935",
+    "exec_invocation_undefined_name_checker_1763306142981",
+    "exec_invocation_node_runtime_import_validator_1763306143318",
+    "exec_invocation_random_data_generator_1763306144249",
+    "exec_invocation_python_syntax_validator_1763306259535",
+    "exec_invocation_undefined_name_checker_1763306260043",
+    "exec_invocation_node_runtime_import_validator_1763306260410",
+    "exec_invocation_python_syntax_validator_1763306370502",
+    "exec_invocation_undefined_name_checker_1763306371024",
+    "exec_invocation_node_runtime_import_validator_1763306371423",
+    "exec_invocation_python_syntax_validator_1763315904741",
+    "exec_invocation_undefined_name_checker_1763315908498",
+    "exec_invocation_node_runtime_import_validator_1763315908891",
+    "exec_invocation_python_syntax_validator_1763317614266",
+    "exec_invocation_undefined_name_checker_1763317614820",
+    "exec_invocation_node_runtime_import_validator_1763317615194",
+    "exec_invocation_python_syntax_validator_1763317753949",
+    "exec_invocation_undefined_name_checker_1763317754454",
+    "exec_invocation_node_runtime_import_validator_1763317754830",
+    "exec_invocation_python_syntax_validator_1763318058502",
+    "exec_invocation_undefined_name_checker_1763318059006",
+    "exec_invocation_node_runtime_import_validator_1763318059389",
+    "exec_invocation_python_syntax_validator_1763318311003",
+    "exec_invocation_undefined_name_checker_1763318314965",
+    "exec_invocation_node_runtime_import_validator_1763318315353",
+    "exec_invocation_python_syntax_validator_1763318635208",
+    "exec_invocation_undefined_name_checker_1763318636042",
+    "exec_invocation_node_runtime_import_validator_1763318636757",
+    "exec_invocation_python_syntax_validator_1763318771812",
+    "exec_invocation_undefined_name_checker_1763318772664",
+    "exec_invocation_node_runtime_import_validator_1763318773379",
+    "exec_invocation_python_syntax_validator_1763318897267",
+    "exec_invocation_undefined_name_checker_1763318898444",
+    "exec_invocation_node_runtime_import_validator_1763318899433",
+    "exec_invocation_random_data_generator_1763318901524",
+    "exec_invocation_python_syntax_validator_1763320646517",
+    "exec_invocation_undefined_name_checker_1763320651273",
+    "exec_invocation_node_runtime_import_validator_1763320652074",
+    "exec_invocation_random_data_generator_1763320653569",
+    "exec_invocation_python_syntax_validator_1763322048167",
+    "exec_invocation_undefined_name_checker_1763322054122",
+    "exec_invocation_node_runtime_import_validator_1763322054895",
+    "exec_invocation_random_data_generator_1763322056396",
+    "exec_invocation_python_syntax_validator_1763322147016",
+    "exec_invocation_undefined_name_checker_1763322150057",
+    "exec_invocation_node_runtime_import_validator_1763322150853",
+    "exec_invocation_random_data_generator_1763322152420",
+    "exec_invocation_python_syntax_validator_1763322278240",
+    "exec_invocation_undefined_name_checker_1763322279185",
+    "exec_invocation_node_runtime_import_validator_1763322280011",
+    "exec_invocation_python_syntax_validator_1763322896543",
+    "exec_invocation_undefined_name_checker_1763322897538",
+    "exec_invocation_node_runtime_import_validator_1763322898439",
+    "exec_invocation_random_data_generator_1763322900097",
+    "exec_invocation_python_syntax_validator_1763323347459",
+    "exec_invocation_undefined_name_checker_1763323348594",
+    "exec_invocation_node_runtime_import_validator_1763323349445",
+    "exec_invocation_random_data_generator_1763323351095",
+    "exec_invocation_python_syntax_validator_1763325029452",
+    "exec_invocation_undefined_name_checker_1763325034278",
+    "exec_invocation_node_runtime_import_validator_1763325035272",
+    "exec_invocation_python_syntax_validator_1763329037249",
+    "exec_invocation_undefined_name_checker_1763329038259",
+    "exec_invocation_node_runtime_import_validator_1763329039120",
+    "exec_invocation_python_syntax_validator_1763329641323",
+    "exec_invocation_undefined_name_checker_1763329642322",
+    "exec_invocation_node_runtime_import_validator_1763329643191",
+    "exec_invocation_python_syntax_validator_1763330281901",
+    "exec_invocation_undefined_name_checker_1763330282973",
+    "exec_invocation_node_runtime_import_validator_1763330283889",
+    "exec_invocation_python_syntax_validator_1763330424653",
+    "exec_invocation_undefined_name_checker_1763330429394",
+    "exec_invocation_node_runtime_import_validator_1763330430290"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -2214,7 +3154,151 @@
     "exec_invocation_python_syntax_validator_1763295623619",
     "exec_invocation_undefined_name_checker_1763295624339",
     "exec_invocation_node_runtime_import_validator_1763295624782",
-    "exec_invocation_buffer_1763296911972"
+    "exec_invocation_buffer_1763296911972",
+    "exec_invocation_buffer_1763297219550",
+    "exec_invocation_buffer_1763297388898",
+    "exec_invocation_buffer_1763297569495",
+    "exec_invocation_buffer_1763297569832",
+    "exec_invocation_buffer_1763297570137",
+    "exec_invocation_buffer_1763297570525",
+    "exec_invocation_buffer_1763297570889",
+    "exec_invocation_buffer_1763297571207",
+    "exec_invocation_buffer_1763297571537",
+    "exec_invocation_buffer_1763297571892",
+    "exec_invocation_buffer_1763297572240",
+    "exec_invocation_buffer_1763297572574",
+    "exec_invocation_buffer_1763297575954",
+    "exec_invocation_buffer_1763297576306",
+    "exec_invocation_buffer_1763297576637",
+    "exec_invocation_buffer_1763297576988",
+    "exec_invocation_buffer_1763297577332",
+    "exec_invocation_buffer_1763297577678",
+    "exec_invocation_buffer_1763297578033",
+    "exec_invocation_buffer_1763297578404",
+    "exec_invocation_buffer_1763297578788",
+    "exec_invocation_buffer_1763297579163",
+    "exec_invocation_buffer_1763297579548",
+    "exec_invocation_buffer_1763297579917",
+    "exec_invocation_buffer_1763297580284",
+    "exec_invocation_buffer_1763299787924",
+    "exec_invocation_buffer_1763299788287",
+    "exec_invocation_buffer_1763299788653",
+    "exec_invocation_buffer_1763299789013",
+    "exec_invocation_buffer_1763299789389",
+    "exec_invocation_buffer_1763299870325",
+    "exec_invocation_buffer_1763299870896",
+    "exec_invocation_buffer_1763299871321",
+    "exec_invocation_buffer_1763299871764",
+    "exec_invocation_buffer_1763299872165",
+    "exec_invocation_buffer_1763300130322",
+    "exec_invocation_buffer_1763300130721",
+    "exec_invocation_buffer_1763300131126",
+    "exec_invocation_buffer_1763300131506",
+    "exec_invocation_buffer_1763300131892",
+    "exec_invocation_buffer_1763300132289",
+    "exec_invocation_buffer_1763300132707",
+    "exec_invocation_buffer_1763300133095",
+    "exec_invocation_buffer_1763300133498",
+    "exec_invocation_buffer_1763300133901",
+    "exec_invocation_buffer_1763300137297",
+    "exec_invocation_buffer_1763300137716",
+    "exec_invocation_buffer_1763300138105",
+    "exec_invocation_buffer_1763300138524",
+    "exec_invocation_buffer_1763300138945",
+    "exec_invocation_buffer_1763300139334",
+    "exec_invocation_buffer_1763300139741",
+    "exec_invocation_buffer_1763300140174",
+    "exec_invocation_buffer_1763300140584",
+    "exec_invocation_buffer_1763300140986",
+    "exec_invocation_buffer_1763300141363",
+    "exec_invocation_buffer_1763300141758",
+    "exec_invocation_buffer_1763300142144",
+    "exec_invocation_python_syntax_validator_1763300396971",
+    "exec_invocation_undefined_name_checker_1763300397460",
+    "exec_invocation_node_runtime_import_validator_1763300397790",
+    "exec_invocation_python_syntax_validator_1763300651025",
+    "exec_invocation_undefined_name_checker_1763300655475",
+    "exec_invocation_node_runtime_import_validator_1763300655901",
+    "exec_invocation_python_syntax_validator_1763302108348",
+    "exec_invocation_undefined_name_checker_1763302108916",
+    "exec_invocation_node_runtime_import_validator_1763302109259",
+    "exec_invocation_random_data_generator_1763302110266",
+    "exec_invocation_standalone_exe_compiler_1763304507147",
+    "exec_invocation_dependency_analyzer_1763305004135",
+    "exec_invocation_dependency_analyzer_1763305205537",
+    "exec_invocation_python_syntax_validator_1763306141935",
+    "exec_invocation_undefined_name_checker_1763306142981",
+    "exec_invocation_node_runtime_import_validator_1763306143318",
+    "exec_invocation_random_data_generator_1763306144249",
+    "exec_invocation_python_syntax_validator_1763306259535",
+    "exec_invocation_undefined_name_checker_1763306260043",
+    "exec_invocation_node_runtime_import_validator_1763306260410",
+    "exec_invocation_python_syntax_validator_1763306370502",
+    "exec_invocation_undefined_name_checker_1763306371024",
+    "exec_invocation_node_runtime_import_validator_1763306371423",
+    "exec_invocation_python_syntax_validator_1763315904741",
+    "exec_invocation_undefined_name_checker_1763315908498",
+    "exec_invocation_node_runtime_import_validator_1763315908891",
+    "exec_invocation_python_syntax_validator_1763317614266",
+    "exec_invocation_undefined_name_checker_1763317614820",
+    "exec_invocation_node_runtime_import_validator_1763317615194",
+    "exec_invocation_python_syntax_validator_1763317753949",
+    "exec_invocation_undefined_name_checker_1763317754454",
+    "exec_invocation_node_runtime_import_validator_1763317754830",
+    "exec_invocation_python_syntax_validator_1763318058502",
+    "exec_invocation_undefined_name_checker_1763318059006",
+    "exec_invocation_node_runtime_import_validator_1763318059389",
+    "exec_invocation_python_syntax_validator_1763318311003",
+    "exec_invocation_undefined_name_checker_1763318314965",
+    "exec_invocation_node_runtime_import_validator_1763318315353",
+    "exec_invocation_python_syntax_validator_1763318635208",
+    "exec_invocation_undefined_name_checker_1763318636042",
+    "exec_invocation_node_runtime_import_validator_1763318636757",
+    "exec_invocation_python_syntax_validator_1763318771812",
+    "exec_invocation_undefined_name_checker_1763318772664",
+    "exec_invocation_node_runtime_import_validator_1763318773379",
+    "exec_invocation_python_syntax_validator_1763318897267",
+    "exec_invocation_undefined_name_checker_1763318898444",
+    "exec_invocation_node_runtime_import_validator_1763318899433",
+    "exec_invocation_random_data_generator_1763318901524",
+    "exec_invocation_python_syntax_validator_1763320646517",
+    "exec_invocation_undefined_name_checker_1763320651273",
+    "exec_invocation_node_runtime_import_validator_1763320652074",
+    "exec_invocation_random_data_generator_1763320653569",
+    "exec_invocation_python_syntax_validator_1763322048167",
+    "exec_invocation_undefined_name_checker_1763322054122",
+    "exec_invocation_node_runtime_import_validator_1763322054895",
+    "exec_invocation_random_data_generator_1763322056396",
+    "exec_invocation_python_syntax_validator_1763322147016",
+    "exec_invocation_undefined_name_checker_1763322150057",
+    "exec_invocation_node_runtime_import_validator_1763322150853",
+    "exec_invocation_random_data_generator_1763322152420",
+    "exec_invocation_python_syntax_validator_1763322278240",
+    "exec_invocation_undefined_name_checker_1763322279185",
+    "exec_invocation_node_runtime_import_validator_1763322280011",
+    "exec_invocation_python_syntax_validator_1763322896543",
+    "exec_invocation_undefined_name_checker_1763322897538",
+    "exec_invocation_node_runtime_import_validator_1763322898439",
+    "exec_invocation_random_data_generator_1763322900097",
+    "exec_invocation_python_syntax_validator_1763323347459",
+    "exec_invocation_undefined_name_checker_1763323348594",
+    "exec_invocation_node_runtime_import_validator_1763323349445",
+    "exec_invocation_random_data_generator_1763323351095",
+    "exec_invocation_python_syntax_validator_1763325029452",
+    "exec_invocation_undefined_name_checker_1763325034278",
+    "exec_invocation_node_runtime_import_validator_1763325035272",
+    "exec_invocation_python_syntax_validator_1763329037249",
+    "exec_invocation_undefined_name_checker_1763329038259",
+    "exec_invocation_node_runtime_import_validator_1763329039120",
+    "exec_invocation_python_syntax_validator_1763329641323",
+    "exec_invocation_undefined_name_checker_1763329642322",
+    "exec_invocation_node_runtime_import_validator_1763329643191",
+    "exec_invocation_python_syntax_validator_1763330281901",
+    "exec_invocation_undefined_name_checker_1763330282973",
+    "exec_invocation_node_runtime_import_validator_1763330283889",
+    "exec_invocation_python_syntax_validator_1763330424653",
+    "exec_invocation_undefined_name_checker_1763330429394",
+    "exec_invocation_node_runtime_import_validator_1763330430290"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -2242,7 +3326,46 @@
     "exec_invocation_python_syntax_validator_1763292698645",
     "exec_invocation_python_syntax_validator_1763292768828",
     "exec_invocation_python_syntax_validator_1763293592005",
-    "exec_invocation_python_syntax_validator_1763295623619"
+    "exec_invocation_python_syntax_validator_1763295623619",
+    "exec_invocation_python_syntax_validator_1763300396971",
+    "exec_invocation_python_syntax_validator_1763300651025",
+    "exec_invocation_python_syntax_validator_1763302108348",
+    "exec_invocation_python_syntax_validator_1763306141935",
+    "exec_invocation_python_syntax_validator_1763306259535",
+    "exec_invocation_python_syntax_validator_1763306370502",
+    "exec_invocation_python_syntax_validator_1763315904741",
+    "exec_invocation_python_syntax_validator_1763317614266",
+    "exec_invocation_python_syntax_validator_1763317753949",
+    "exec_invocation_python_syntax_validator_1763318058502",
+    "exec_invocation_python_syntax_validator_1763318311003",
+    "exec_invocation_python_syntax_validator_1763318635208",
+    "interaction_26c8576d17cd",
+    "exec_invocation_python_syntax_validator_1763318771812",
+    "interaction_293566013f17",
+    "exec_invocation_python_syntax_validator_1763318897267",
+    "interaction_6f91525acb92",
+    "exec_invocation_python_syntax_validator_1763320646517",
+    "interaction_e31c57457c81",
+    "exec_invocation_python_syntax_validator_1763322048167",
+    "interaction_c1ac2f764aaa",
+    "exec_invocation_python_syntax_validator_1763322147016",
+    "interaction_06fe5f29b1d0",
+    "exec_invocation_python_syntax_validator_1763322278240",
+    "interaction_fb3e210537d3",
+    "exec_invocation_python_syntax_validator_1763322896543",
+    "interaction_46be9a1fde3a",
+    "exec_invocation_python_syntax_validator_1763323347459",
+    "interaction_20d7ed70aee4",
+    "exec_invocation_python_syntax_validator_1763325029452",
+    "interaction_20d0cbfa1b09",
+    "exec_invocation_python_syntax_validator_1763329037249",
+    "interaction_613fd9235cb7",
+    "exec_invocation_python_syntax_validator_1763329641323",
+    "interaction_b7f27ed6e339",
+    "exec_invocation_python_syntax_validator_1763330281901",
+    "interaction_d79d36c35d6d",
+    "exec_invocation_python_syntax_validator_1763330424653",
+    "interaction_5bcfc546c773"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -2270,7 +3393,46 @@
     "exec_invocation_undefined_name_checker_1763292699036",
     "exec_invocation_undefined_name_checker_1763292769218",
     "exec_invocation_undefined_name_checker_1763293595768",
-    "exec_invocation_undefined_name_checker_1763295624339"
+    "exec_invocation_undefined_name_checker_1763295624339",
+    "exec_invocation_undefined_name_checker_1763300397460",
+    "exec_invocation_undefined_name_checker_1763300655475",
+    "exec_invocation_undefined_name_checker_1763302108916",
+    "exec_invocation_undefined_name_checker_1763306142981",
+    "exec_invocation_undefined_name_checker_1763306260043",
+    "exec_invocation_undefined_name_checker_1763306371024",
+    "exec_invocation_undefined_name_checker_1763315908498",
+    "exec_invocation_undefined_name_checker_1763317614820",
+    "exec_invocation_undefined_name_checker_1763317754454",
+    "exec_invocation_undefined_name_checker_1763318059006",
+    "exec_invocation_undefined_name_checker_1763318314965",
+    "exec_invocation_undefined_name_checker_1763318636042",
+    "interaction_ecb403cf8eca",
+    "exec_invocation_undefined_name_checker_1763318772664",
+    "interaction_b1542d57455f",
+    "exec_invocation_undefined_name_checker_1763318898444",
+    "interaction_18f1d9358b82",
+    "exec_invocation_undefined_name_checker_1763320651273",
+    "interaction_c2ad56502255",
+    "exec_invocation_undefined_name_checker_1763322054122",
+    "interaction_fc1d15113a42",
+    "exec_invocation_undefined_name_checker_1763322150057",
+    "interaction_b44807b6c81f",
+    "exec_invocation_undefined_name_checker_1763322279185",
+    "interaction_ca1c24cd516c",
+    "exec_invocation_undefined_name_checker_1763322897538",
+    "interaction_931fdf7fdcae",
+    "exec_invocation_undefined_name_checker_1763323348594",
+    "interaction_4bd1c8d539c7",
+    "exec_invocation_undefined_name_checker_1763325034278",
+    "interaction_ce3383b0966f",
+    "exec_invocation_undefined_name_checker_1763329038259",
+    "interaction_a03d790846fa",
+    "exec_invocation_undefined_name_checker_1763329642322",
+    "interaction_81291b38d802",
+    "exec_invocation_undefined_name_checker_1763330282973",
+    "interaction_e7b699b16c95",
+    "exec_invocation_undefined_name_checker_1763330429394",
+    "interaction_4bc2064fe4d7"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -2298,7 +3460,32 @@
     "exec_invocation_undefined_name_checker_1763292699036",
     "exec_invocation_undefined_name_checker_1763292769218",
     "exec_invocation_undefined_name_checker_1763293595768",
-    "exec_invocation_undefined_name_checker_1763295624339"
+    "exec_invocation_undefined_name_checker_1763295624339",
+    "exec_invocation_undefined_name_checker_1763300397460",
+    "exec_invocation_undefined_name_checker_1763300655475",
+    "exec_invocation_undefined_name_checker_1763302108916",
+    "exec_invocation_undefined_name_checker_1763306142981",
+    "exec_invocation_undefined_name_checker_1763306260043",
+    "exec_invocation_undefined_name_checker_1763306371024",
+    "exec_invocation_undefined_name_checker_1763315908498",
+    "exec_invocation_undefined_name_checker_1763317614820",
+    "exec_invocation_undefined_name_checker_1763317754454",
+    "exec_invocation_undefined_name_checker_1763318059006",
+    "exec_invocation_undefined_name_checker_1763318314965",
+    "exec_invocation_undefined_name_checker_1763318636042",
+    "exec_invocation_undefined_name_checker_1763318772664",
+    "exec_invocation_undefined_name_checker_1763318898444",
+    "exec_invocation_undefined_name_checker_1763320651273",
+    "exec_invocation_undefined_name_checker_1763322054122",
+    "exec_invocation_undefined_name_checker_1763322150057",
+    "exec_invocation_undefined_name_checker_1763322279185",
+    "exec_invocation_undefined_name_checker_1763322897538",
+    "exec_invocation_undefined_name_checker_1763323348594",
+    "exec_invocation_undefined_name_checker_1763325034278",
+    "exec_invocation_undefined_name_checker_1763329038259",
+    "exec_invocation_undefined_name_checker_1763329642322",
+    "exec_invocation_undefined_name_checker_1763330282973",
+    "exec_invocation_undefined_name_checker_1763330429394"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763283458929",
@@ -2326,7 +3513,46 @@
     "exec_invocation_node_runtime_import_validator_1763292699281",
     "exec_invocation_node_runtime_import_validator_1763292769491",
     "exec_invocation_node_runtime_import_validator_1763293596056",
-    "exec_invocation_node_runtime_import_validator_1763295624782"
+    "exec_invocation_node_runtime_import_validator_1763295624782",
+    "exec_invocation_node_runtime_import_validator_1763300397790",
+    "exec_invocation_node_runtime_import_validator_1763300655901",
+    "exec_invocation_node_runtime_import_validator_1763302109259",
+    "exec_invocation_node_runtime_import_validator_1763306143318",
+    "exec_invocation_node_runtime_import_validator_1763306260410",
+    "exec_invocation_node_runtime_import_validator_1763306371423",
+    "exec_invocation_node_runtime_import_validator_1763315908891",
+    "exec_invocation_node_runtime_import_validator_1763317615194",
+    "exec_invocation_node_runtime_import_validator_1763317754830",
+    "exec_invocation_node_runtime_import_validator_1763318059389",
+    "exec_invocation_node_runtime_import_validator_1763318315353",
+    "exec_invocation_node_runtime_import_validator_1763318636757",
+    "interaction_c7ad29dae897",
+    "exec_invocation_node_runtime_import_validator_1763318773379",
+    "interaction_e125182b5836",
+    "exec_invocation_node_runtime_import_validator_1763318899433",
+    "interaction_4b78f4f48eed",
+    "exec_invocation_node_runtime_import_validator_1763320652074",
+    "interaction_48374c0e5c6c",
+    "exec_invocation_node_runtime_import_validator_1763322054895",
+    "interaction_f9bcd0e8d452",
+    "exec_invocation_node_runtime_import_validator_1763322150853",
+    "interaction_ddf2817159a5",
+    "exec_invocation_node_runtime_import_validator_1763322280011",
+    "interaction_e5e7fe44e1c8",
+    "exec_invocation_node_runtime_import_validator_1763322898439",
+    "interaction_0bd3141ac4ce",
+    "exec_invocation_node_runtime_import_validator_1763323349445",
+    "interaction_03324d2af9cd",
+    "exec_invocation_node_runtime_import_validator_1763325035272",
+    "interaction_86306e7b02e2",
+    "exec_invocation_node_runtime_import_validator_1763329039120",
+    "interaction_bc24a370dce6",
+    "exec_invocation_node_runtime_import_validator_1763329643191",
+    "interaction_a7ae562ef696",
+    "exec_invocation_node_runtime_import_validator_1763330283889",
+    "interaction_bf4c17438db7",
+    "exec_invocation_node_runtime_import_validator_1763330430290",
+    "interaction_6efdb69a8600"
   ],
   "so": [
     "workflow_1763283819",
@@ -2355,19 +3581,22 @@
     "workflow_1763286644"
   ],
   "the": [
-    "workflow_1763284721"
+    "workflow_1763284721",
+    "workflow_1763306429"
   ],
   "word": [
     "workflow_1763284721"
   ],
   "create": [
     "workflow_1763285378",
-    "workflow_1763285977"
+    "workflow_1763285977",
+    "workflow_1763318989"
   ],
   "system": [
     "workflow_1763285378",
     "workflow_1763285977",
-    "workflow_1763291422"
+    "workflow_1763291422",
+    "workflow_1763318317"
   ],
   "\"hello": [
     "workflow_1763286644"
@@ -2413,7 +3642,8 @@
   ],
   "to": [
     "workflow_1763292771",
-    "workflow_1763295627"
+    "workflow_1763295627",
+    "workflow_1763303111"
   ],
   "connect": [
     "workflow_1763295627"
@@ -2423,7 +3653,65 @@
   ],
   "buffer": [
     "tool_buffer",
-    "exec_invocation_buffer_1763296911972"
+    "exec_invocation_buffer_1763296911972",
+    "exec_invocation_buffer_1763297219550",
+    "exec_invocation_buffer_1763297388898",
+    "exec_invocation_buffer_1763297569495",
+    "exec_invocation_buffer_1763297569832",
+    "exec_invocation_buffer_1763297570137",
+    "exec_invocation_buffer_1763297570525",
+    "exec_invocation_buffer_1763297570889",
+    "exec_invocation_buffer_1763297571207",
+    "exec_invocation_buffer_1763297571537",
+    "exec_invocation_buffer_1763297571892",
+    "exec_invocation_buffer_1763297572240",
+    "exec_invocation_buffer_1763297572574",
+    "exec_invocation_buffer_1763297575954",
+    "exec_invocation_buffer_1763297576306",
+    "exec_invocation_buffer_1763297576637",
+    "exec_invocation_buffer_1763297576988",
+    "exec_invocation_buffer_1763297577332",
+    "exec_invocation_buffer_1763297577678",
+    "exec_invocation_buffer_1763297578033",
+    "exec_invocation_buffer_1763297578404",
+    "exec_invocation_buffer_1763297578788",
+    "exec_invocation_buffer_1763297579163",
+    "exec_invocation_buffer_1763297579548",
+    "exec_invocation_buffer_1763297579917",
+    "exec_invocation_buffer_1763297580284",
+    "exec_invocation_buffer_1763299787924",
+    "exec_invocation_buffer_1763299788287",
+    "exec_invocation_buffer_1763299788653",
+    "exec_invocation_buffer_1763299789013",
+    "exec_invocation_buffer_1763299789389",
+    "exec_invocation_buffer_1763299870325",
+    "exec_invocation_buffer_1763299870896",
+    "exec_invocation_buffer_1763299871321",
+    "exec_invocation_buffer_1763299871764",
+    "exec_invocation_buffer_1763299872165",
+    "exec_invocation_buffer_1763300130322",
+    "exec_invocation_buffer_1763300130721",
+    "exec_invocation_buffer_1763300131126",
+    "exec_invocation_buffer_1763300131506",
+    "exec_invocation_buffer_1763300131892",
+    "exec_invocation_buffer_1763300132289",
+    "exec_invocation_buffer_1763300132707",
+    "exec_invocation_buffer_1763300133095",
+    "exec_invocation_buffer_1763300133498",
+    "exec_invocation_buffer_1763300133901",
+    "exec_invocation_buffer_1763300137297",
+    "exec_invocation_buffer_1763300137716",
+    "exec_invocation_buffer_1763300138105",
+    "exec_invocation_buffer_1763300138524",
+    "exec_invocation_buffer_1763300138945",
+    "exec_invocation_buffer_1763300139334",
+    "exec_invocation_buffer_1763300139741",
+    "exec_invocation_buffer_1763300140174",
+    "exec_invocation_buffer_1763300140584",
+    "exec_invocation_buffer_1763300140986",
+    "exec_invocation_buffer_1763300141363",
+    "exec_invocation_buffer_1763300141758",
+    "exec_invocation_buffer_1763300142144"
   ],
   "batching": [
     "tool_buffer"
@@ -2443,7 +3731,8 @@
     "tool_signalr_llmapi_skill",
     "tool_signalr_websocket_stream",
     "tool_signalr_connection_parser",
-    "tool_signalr_llmapi_management"
+    "tool_signalr_llmapi_management",
+    "tool_signalr_tool_trigger"
   ],
   "natural-language": [
     "tool_connect_signalr",
@@ -2455,10 +3744,12 @@
   ],
   "realtime": [
     "tool_connect_signalr",
-    "tool_signalr_hub_connector"
+    "tool_signalr_hub_connector",
+    "tool_signalr_tool_trigger"
   ],
   "workflow-generation": [
-    "tool_connect_signalr"
+    "tool_connect_signalr",
+    "tool_signalr_tool_trigger"
   ],
   "training": [
     "tool_connect_signalr",
@@ -2473,16 +3764,20 @@
   ],
   "automation": [
     "tool_document_workflow",
-    "tool_task_to_workflow_router"
+    "tool_task_to_workflow_router",
+    "tool_docker_helper_scripts_generator"
   ],
   "internal": [
-    "tool_internal_test_validator"
+    "tool_internal_test_validator",
+    "tool_mark_tool_failure",
+    "tool_resilient_tool_call"
   ],
   "no-tracking": [
     "tool_internal_test_validator"
   ],
   "integration": [
-    "tool_signalr_hub_connector"
+    "tool_signalr_hub_connector",
+    "tool_signalr_tool_trigger"
   ],
   "hub": [
     "tool_signalr_hub_connector"
@@ -2540,7 +3835,9 @@
     "tool_signalr_connection_parser"
   ],
   "configuration": [
-    "tool_signalr_connection_parser"
+    "tool_signalr_connection_parser",
+    "tool_config_file_generator",
+    "tool_env_file_generator"
   ],
   "admin": [
     "tool_signalr_llmapi_management"
@@ -2549,7 +3846,8 @@
     "tool_signalr_llmapi_management"
   ],
   "routing": [
-    "tool_task_to_workflow_router"
+    "tool_task_to_workflow_router",
+    "tool_semantic_comparator"
   ],
   "task": [
     "tool_task_to_workflow_router"
@@ -2562,5 +3860,601 @@
   ],
   "frontend": [
     "tool_workflow_documenter"
+  ],
+  "fast_code_generator": [
+    "invocation_fast_code_generator_1763300561594"
+  ],
+  "spec": [
+    "tool_extract_spec_from_file"
+  ],
+  "file": [
+    "tool_extract_spec_from_file"
+  ],
+  "failure-tracking": [
+    "tool_mark_tool_failure"
+  ],
+  "tool-quality": [
+    "tool_mark_tool_failure"
+  ],
+  "demotion": [
+    "tool_mark_tool_failure"
+  ],
+  "learning": [
+    "tool_mark_tool_failure",
+    "tool_store_code_fix_pattern",
+    "tool_find_code_fix_pattern"
+  ],
+  "resilience": [
+    "tool_resilient_tool_call",
+    "tool_package_recovery_tool"
+  ],
+  "auto-recovery": [
+    "tool_resilient_tool_call"
+  ],
+  "tool-selection": [
+    "tool_resilient_tool_call"
+  ],
+  "random_data_generator": [
+    "exec_invocation_random_data_generator_1763302110266",
+    "exec_invocation_random_data_generator_1763306144249",
+    "exec_invocation_random_data_generator_1763318901524",
+    "interaction_e7951775a564",
+    "exec_invocation_random_data_generator_1763320653569",
+    "interaction_681de95e8f3e",
+    "exec_invocation_random_data_generator_1763322056396",
+    "interaction_a132cda1f564",
+    "exec_invocation_random_data_generator_1763322152420",
+    "interaction_a9211aba8475",
+    "exec_invocation_random_data_generator_1763322900097",
+    "interaction_f3e678280668",
+    "exec_invocation_random_data_generator_1763323351095",
+    "interaction_84f73db8cffe"
+  ],
+  "go": [
+    "workflow_1763303111"
+  ],
+  "here": [
+    "workflow_1763303111"
+  ],
+  "evolution": [
+    "tool_evolve_tool"
+  ],
+  "tool-mutation": [
+    "tool_evolve_tool"
+  ],
+  "self-improvement": [
+    "tool_evolve_tool",
+    "tool_store_code_fix_pattern",
+    "tool_find_code_fix_pattern"
+  ],
+  "flask": [
+    "tool_api_wrapper_generator"
+  ],
+  "wrapper": [
+    "tool_api_wrapper_generator"
+  ],
+  "web-service": [
+    "tool_api_wrapper_generator"
+  ],
+  "config": [
+    "tool_config_file_generator"
+  ],
+  "yaml": [
+    "tool_config_file_generator"
+  ],
+  "ollama": [
+    "tool_config_file_generator"
+  ],
+  "settings": [
+    "tool_config_file_generator",
+    "tool_env_file_generator"
+  ],
+  "tree-shaking": [
+    "tool_dependency_analyzer",
+    "tool_selective_file_copier"
+  ],
+  "packaging": [
+    "tool_dependency_analyzer",
+    "tool_selective_file_copier",
+    "tool_standalone_exe_compiler"
+  ],
+  "deployment": [
+    "tool_dependency_analyzer",
+    "tool_selective_file_copier",
+    "tool_inline_tool"
+  ],
+  "docker": [
+    "tool_docker_compose_generator",
+    "tool_docker_helper_scripts_generator",
+    "tool_env_file_generator",
+    "tool_dockerfile_generator"
+  ],
+  "docker-compose": [
+    "tool_docker_compose_generator"
+  ],
+  "orchestration": [
+    "tool_docker_compose_generator"
+  ],
+  "containerization": [
+    "tool_docker_compose_generator",
+    "tool_dockerfile_generator"
+  ],
+  "devops": [
+    "tool_docker_compose_generator",
+    "tool_docker_helper_scripts_generator",
+    "tool_dockerfile_generator"
+  ],
+  "scripts": [
+    "tool_docker_helper_scripts_generator"
+  ],
+  "helpers": [
+    "tool_docker_helper_scripts_generator"
+  ],
+  "environment": [
+    "tool_env_file_generator"
+  ],
+  "dotenv": [
+    "tool_env_file_generator"
+  ],
+  "recovery": [
+    "tool_package_recovery_tool"
+  ],
+  "error-handling": [
+    "tool_package_recovery_tool"
+  ],
+  "self-healing": [
+    "tool_package_recovery_tool"
+  ],
+  "package-management": [
+    "tool_package_recovery_tool"
+  ],
+  "file-operations": [
+    "tool_selective_file_copier"
+  ],
+  "compiler": [
+    "tool_standalone_exe_compiler"
+  ],
+  "pyinstaller": [
+    "tool_standalone_exe_compiler"
+  ],
+  "standalone": [
+    "tool_standalone_exe_compiler"
+  ],
+  "distribution": [
+    "tool_standalone_exe_compiler"
+  ],
+  "dockerfile": [
+    "tool_dockerfile_generator"
+  ],
+  "infrastructure": [
+    "tool_dockerfile_generator"
+  ],
+  "api-wrapper": [
+    "tool_dockerfile_generator"
+  ],
+  "standalone_exe_compiler": [
+    "exec_invocation_standalone_exe_compiler_1763304507147"
+  ],
+  "dependency_analyzer": [
+    "exec_invocation_dependency_analyzer_1763305004135",
+    "exec_invocation_dependency_analyzer_1763305205537"
+  ],
+  "contrnes": [
+    "workflow_1763306429"
+  ],
+  "code-fix-pattern": [
+    "fix_pattern_34d2537d1213",
+    "fix_pattern_51852d82e561"
+  ],
+  "syntax-error": [
+    "fix_pattern_34d2537d1213",
+    "fix_pattern_51852d82e561"
+  ],
+  "tool:standalone_exe_compiler": [
+    "fix_pattern_34d2537d1213",
+    "fix_pattern_51852d82e561"
+  ],
+  "code-fix": [
+    "tool_store_code_fix_pattern",
+    "tool_find_code_fix_pattern"
+  ],
+  "pattern-storage": [
+    "tool_store_code_fix_pattern"
+  ],
+  "error-recovery": [
+    "tool_store_code_fix_pattern",
+    "tool_find_code_fix_pattern"
+  ],
+  "deduplication": [
+    "tool_check_tool_duplicate",
+    "tool_prompt_genericiser"
+  ],
+  "tool-search": [
+    "tool_check_tool_duplicate"
+  ],
+  "semantic-similarity": [
+    "tool_check_tool_duplicate"
+  ],
+  "meta-programming": [
+    "tool_check_tool_duplicate",
+    "tool_prompt_genericiser",
+    "tool_detect_tool_specialization"
+  ],
+  "pattern-search": [
+    "tool_find_code_fix_pattern"
+  ],
+  "generalization": [
+    "tool_prompt_genericiser"
+  ],
+  "pattern-extraction": [
+    "tool_prompt_genericiser"
+  ],
+  "prompt_genericiser": [
+    "invocation_prompt_genericiser_1763308075378"
+  ],
+  "enterprise": [
+    "tool_inline_tool",
+    "tool_pin_tool_version"
+  ],
+  "reproducibility": [
+    "tool_inline_tool"
+  ],
+  "dependency-management": [
+    "tool_inline_tool",
+    "tool_pin_tool_version"
+  ],
+  "version-control": [
+    "tool_pin_tool_version",
+    "tool_trim_tool_versions"
+  ],
+  "maintenance": [
+    "tool_trim_tool_versions"
+  ],
+  "storage-optimization": [
+    "tool_trim_tool_versions"
+  ],
+  "tool-evolution": [
+    "tool_detect_tool_specialization"
+  ],
+  "specialization": [
+    "tool_detect_tool_specialization"
+  ],
+  "build": [
+    "workflow_1763318317"
+  ],
+  "comparison": [
+    "tool_semantic_comparator"
+  ],
+  "semantic": [
+    "tool_semantic_comparator"
+  ],
+  "cache-decision": [
+    "tool_semantic_comparator"
+  ],
+  "interaction": [
+    "interaction_1f8a0df55107",
+    "interaction_26c8576d17cd",
+    "interaction_ecb403cf8eca",
+    "interaction_c7ad29dae897",
+    "interaction_ee79bb1c7983",
+    "interaction_293566013f17",
+    "interaction_b1542d57455f",
+    "interaction_e125182b5836",
+    "interaction_e0ba22dec0a2",
+    "interaction_6f91525acb92",
+    "interaction_18f1d9358b82",
+    "interaction_4b78f4f48eed",
+    "interaction_e7951775a564",
+    "interaction_40b97efbb525",
+    "interaction_e31c57457c81",
+    "interaction_c2ad56502255",
+    "interaction_48374c0e5c6c",
+    "interaction_681de95e8f3e",
+    "interaction_b530ab651f70",
+    "interaction_c1ac2f764aaa",
+    "interaction_fc1d15113a42",
+    "interaction_f9bcd0e8d452",
+    "interaction_a132cda1f564",
+    "interaction_8229a63ac581",
+    "interaction_06fe5f29b1d0",
+    "interaction_b44807b6c81f",
+    "interaction_ddf2817159a5",
+    "interaction_a9211aba8475",
+    "interaction_b1228deaf91b",
+    "interaction_fb3e210537d3",
+    "interaction_ca1c24cd516c",
+    "interaction_e5e7fe44e1c8",
+    "interaction_743f5ae828a2",
+    "interaction_46be9a1fde3a",
+    "interaction_931fdf7fdcae",
+    "interaction_0bd3141ac4ce",
+    "interaction_f3e678280668",
+    "interaction_93ff692104f9",
+    "interaction_20d7ed70aee4",
+    "interaction_4bd1c8d539c7",
+    "interaction_03324d2af9cd",
+    "interaction_84f73db8cffe",
+    "interaction_c986a284100d",
+    "interaction_20d0cbfa1b09",
+    "interaction_ce3383b0966f",
+    "interaction_86306e7b02e2",
+    "interaction_1a328b5d7404",
+    "interaction_1c66836858c3",
+    "interaction_613fd9235cb7",
+    "interaction_a03d790846fa",
+    "interaction_bc24a370dce6",
+    "interaction_38d207ac5bab",
+    "interaction_b7f27ed6e339",
+    "interaction_81291b38d802",
+    "interaction_a7ae562ef696",
+    "interaction_7b1cae60fe0c",
+    "interaction_d79d36c35d6d",
+    "interaction_e7b699b16c95",
+    "interaction_bf4c17438db7",
+    "interaction_ca09e5fa04c0",
+    "interaction_5bcfc546c773",
+    "interaction_4bc2064fe4d7",
+    "interaction_6efdb69a8600"
+  ],
+  "success:True": [
+    "interaction_1f8a0df55107",
+    "interaction_26c8576d17cd",
+    "interaction_ecb403cf8eca",
+    "interaction_c7ad29dae897",
+    "interaction_ee79bb1c7983",
+    "interaction_293566013f17",
+    "interaction_b1542d57455f",
+    "interaction_e125182b5836",
+    "interaction_e0ba22dec0a2",
+    "interaction_6f91525acb92",
+    "interaction_18f1d9358b82",
+    "interaction_4b78f4f48eed",
+    "interaction_e7951775a564",
+    "interaction_40b97efbb525",
+    "interaction_e31c57457c81",
+    "interaction_681de95e8f3e",
+    "interaction_b530ab651f70",
+    "interaction_c1ac2f764aaa",
+    "interaction_a132cda1f564",
+    "interaction_8229a63ac581",
+    "interaction_06fe5f29b1d0",
+    "interaction_a9211aba8475",
+    "interaction_b1228deaf91b",
+    "interaction_fb3e210537d3",
+    "interaction_ca1c24cd516c",
+    "interaction_e5e7fe44e1c8",
+    "interaction_743f5ae828a2",
+    "interaction_46be9a1fde3a",
+    "interaction_931fdf7fdcae",
+    "interaction_0bd3141ac4ce",
+    "interaction_f3e678280668",
+    "interaction_93ff692104f9",
+    "interaction_20d7ed70aee4",
+    "interaction_4bd1c8d539c7",
+    "interaction_03324d2af9cd",
+    "interaction_84f73db8cffe",
+    "interaction_c986a284100d",
+    "interaction_20d0cbfa1b09",
+    "interaction_1a328b5d7404",
+    "interaction_1c66836858c3",
+    "interaction_613fd9235cb7",
+    "interaction_a03d790846fa",
+    "interaction_bc24a370dce6",
+    "interaction_38d207ac5bab",
+    "interaction_b7f27ed6e339",
+    "interaction_81291b38d802",
+    "interaction_a7ae562ef696",
+    "interaction_7b1cae60fe0c",
+    "interaction_d79d36c35d6d",
+    "interaction_e7b699b16c95",
+    "interaction_bf4c17438db7",
+    "interaction_ca09e5fa04c0",
+    "interaction_5bcfc546c773",
+    "interaction_6efdb69a8600"
+  ],
+  "type:llm": [
+    "interaction_1f8a0df55107",
+    "interaction_ee79bb1c7983",
+    "interaction_e0ba22dec0a2",
+    "interaction_40b97efbb525",
+    "interaction_b530ab651f70",
+    "interaction_8229a63ac581",
+    "interaction_b1228deaf91b",
+    "interaction_743f5ae828a2",
+    "interaction_93ff692104f9",
+    "interaction_c986a284100d",
+    "interaction_1a328b5d7404",
+    "interaction_1c66836858c3",
+    "interaction_38d207ac5bab",
+    "interaction_7b1cae60fe0c",
+    "interaction_ca09e5fa04c0"
+  ],
+  "cacheable:False": [
+    "interaction_1f8a0df55107",
+    "interaction_ee79bb1c7983",
+    "interaction_e0ba22dec0a2",
+    "interaction_40b97efbb525",
+    "interaction_b530ab651f70",
+    "interaction_8229a63ac581",
+    "interaction_b1228deaf91b",
+    "interaction_743f5ae828a2",
+    "interaction_93ff692104f9",
+    "interaction_c986a284100d",
+    "interaction_1a328b5d7404",
+    "interaction_1c66836858c3",
+    "interaction_38d207ac5bab",
+    "interaction_7b1cae60fe0c",
+    "interaction_ca09e5fa04c0"
+  ],
+  "type:tool": [
+    "interaction_26c8576d17cd",
+    "interaction_ecb403cf8eca",
+    "interaction_c7ad29dae897",
+    "interaction_293566013f17",
+    "interaction_b1542d57455f",
+    "interaction_e125182b5836",
+    "interaction_6f91525acb92",
+    "interaction_18f1d9358b82",
+    "interaction_4b78f4f48eed",
+    "interaction_e7951775a564",
+    "interaction_e31c57457c81",
+    "interaction_c2ad56502255",
+    "interaction_48374c0e5c6c",
+    "interaction_681de95e8f3e",
+    "interaction_c1ac2f764aaa",
+    "interaction_fc1d15113a42",
+    "interaction_f9bcd0e8d452",
+    "interaction_a132cda1f564",
+    "interaction_06fe5f29b1d0",
+    "interaction_b44807b6c81f",
+    "interaction_ddf2817159a5",
+    "interaction_a9211aba8475",
+    "interaction_fb3e210537d3",
+    "interaction_ca1c24cd516c",
+    "interaction_e5e7fe44e1c8",
+    "interaction_46be9a1fde3a",
+    "interaction_931fdf7fdcae",
+    "interaction_0bd3141ac4ce",
+    "interaction_f3e678280668",
+    "interaction_20d7ed70aee4",
+    "interaction_4bd1c8d539c7",
+    "interaction_03324d2af9cd",
+    "interaction_84f73db8cffe",
+    "interaction_20d0cbfa1b09",
+    "interaction_ce3383b0966f",
+    "interaction_86306e7b02e2",
+    "interaction_613fd9235cb7",
+    "interaction_a03d790846fa",
+    "interaction_bc24a370dce6",
+    "interaction_b7f27ed6e339",
+    "interaction_81291b38d802",
+    "interaction_a7ae562ef696",
+    "interaction_d79d36c35d6d",
+    "interaction_e7b699b16c95",
+    "interaction_bf4c17438db7",
+    "interaction_5bcfc546c773",
+    "interaction_4bc2064fe4d7",
+    "interaction_6efdb69a8600"
+  ],
+  "cacheable:True": [
+    "interaction_26c8576d17cd",
+    "interaction_ecb403cf8eca",
+    "interaction_c7ad29dae897",
+    "interaction_293566013f17",
+    "interaction_b1542d57455f",
+    "interaction_e125182b5836",
+    "interaction_6f91525acb92",
+    "interaction_18f1d9358b82",
+    "interaction_4b78f4f48eed",
+    "interaction_e7951775a564",
+    "interaction_e31c57457c81",
+    "interaction_c2ad56502255",
+    "interaction_48374c0e5c6c",
+    "interaction_681de95e8f3e",
+    "interaction_c1ac2f764aaa",
+    "interaction_fc1d15113a42",
+    "interaction_f9bcd0e8d452",
+    "interaction_a132cda1f564",
+    "interaction_06fe5f29b1d0",
+    "interaction_b44807b6c81f",
+    "interaction_ddf2817159a5",
+    "interaction_a9211aba8475",
+    "interaction_fb3e210537d3",
+    "interaction_ca1c24cd516c",
+    "interaction_e5e7fe44e1c8",
+    "interaction_46be9a1fde3a",
+    "interaction_931fdf7fdcae",
+    "interaction_0bd3141ac4ce",
+    "interaction_f3e678280668",
+    "interaction_20d7ed70aee4",
+    "interaction_4bd1c8d539c7",
+    "interaction_03324d2af9cd",
+    "interaction_84f73db8cffe",
+    "interaction_20d0cbfa1b09",
+    "interaction_ce3383b0966f",
+    "interaction_86306e7b02e2",
+    "interaction_613fd9235cb7",
+    "interaction_a03d790846fa",
+    "interaction_bc24a370dce6",
+    "interaction_b7f27ed6e339",
+    "interaction_81291b38d802",
+    "interaction_a7ae562ef696",
+    "interaction_d79d36c35d6d",
+    "interaction_e7b699b16c95",
+    "interaction_bf4c17438db7",
+    "interaction_5bcfc546c773",
+    "interaction_4bc2064fe4d7",
+    "interaction_6efdb69a8600"
+  ],
+  "data-generation": [
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_llm_fake_data_generator"
+  ],
+  "faker": [
+    "tool_fake_data_generator"
+  ],
+  "api-testing": [
+    "tool_fake_data_generator",
+    "tool_smart_api_parser",
+    "tool_llm_fake_data_generator"
+  ],
+  "mock-data": [
+    "tool_fake_data_generator",
+    "tool_llm_fake_data_generator"
+  ],
+  "swagger": [
+    "tool_smart_api_parser"
+  ],
+  "integration-testing": [
+    "tool_smart_api_parser"
+  ],
+  "contextual": [
+    "tool_llm_fake_data_generator"
+  ],
+  "success:False": [
+    "interaction_c2ad56502255",
+    "interaction_48374c0e5c6c",
+    "interaction_fc1d15113a42",
+    "interaction_f9bcd0e8d452",
+    "interaction_b44807b6c81f",
+    "interaction_ddf2817159a5",
+    "interaction_ce3383b0966f",
+    "interaction_86306e7b02e2",
+    "interaction_4bc2064fe4d7"
+  ],
+  "from": [
+    "workflow_1763322901"
+  ],
+  "raw": [
+    "tool_http_raw_client"
+  ],
+  "scraping": [
+    "tool_http_raw_client"
+  ],
+  "binary": [
+    "tool_http_raw_client"
+  ],
+  "client": [
+    "tool_http_raw_client",
+    "tool_http_rest_client"
+  ],
+  "request": [
+    "tool_http_rest_client"
+  ],
+  "dynamic": [
+    "tool_signalr_tool_trigger"
+  ],
+  "tool-trigger": [
+    "tool_signalr_tool_trigger"
+  ],
+  "resize": [
+    "workflow_1763330432"
+  ],
+  "an": [
+    "workflow_1763330432"
+  ],
+  "image": [
+    "workflow_1763330432"
   ]
 }

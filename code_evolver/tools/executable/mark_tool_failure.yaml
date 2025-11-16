@@ -1,0 +1,280 @@
+﻿name: "Mark Tool Failure"
+type: "executable"
+description: "Records tool failures for specific scenarios, enabling demotion in search rankings and tag refinement. Helps the system learn which tools work where."
+
+# Don't track usage of this internal tool
+track_usage: false
+
+executable:
+  command: "python"
+  args: ["tools/executable/mark_tool_failure.py"]
+
+input_schema:
+  tool_id:
+    type: string
+    description: "ID of the tool that failed"
+    required: true
+
+  scenario:
+    type: string
+    description: "Description of what was attempted (used for similarity matching in future searches)"
+    required: true
+
+  error_message:
+    type: string
+    description: "The error message that occurred"
+    required: false
+    default: "Unknown error"
+
+  severity:
+    type: string
+    description: "Failure severity: low (minor issue), medium (significant), high (completely broken)"
+    enum: ["low", "medium", "high"]
+    default: "medium"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    failure_id:
+      type: string
+      description: "ID of the failure record"
+    tool_id:
+      type: string
+    scenario:
+      type: string
+    severity:
+      type: string
+    demotion_applied:
+      type: boolean
+      description: "Whether quality score was reduced"
+    new_quality_score:
+      type: number
+      description: "Updated quality score after demotion"
+    tag_refinement:
+      type: array
+      description: "Negative tags added to narrow tool use"
+    total_failures:
+      type: integer
+      description: "Total number of failures for this tool"
+    message:
+      type: string
+
+tags: ["failure-tracking", "tool-quality", "demotion", "learning", "internal"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 90
+
+usage_notes: |
+  ## Overview
+
+  When a tool fails for a specific scenario, mark it so the system learns to:
+  - **Demote** the tool in search results for similar scenarios
+  - **Refine tags** to narrow the tool's use case
+  - **Track patterns** of failure for debugging
+
+  ## Severity Levels
+
+  ### Low (0.01 demotion)
+  - Minor issue, tool mostly works
+  - Edge case failure
+  - Temporary error
+
+  ### Medium (0.05 demotion, default)
+  - Significant failure
+  - Tool doesn't work for this use case
+  - Reproducible error
+
+  ### High (0.10 demotion)
+  - Completely broken
+  - Critical failure
+  - Tool should not be used for this scenario
+
+  ## How It Works
+
+  1. **Records Failure**: Stores failure in RAG with scenario description
+  2. **Demotes Tool**: Reduces quality_score based on severity
+  3. **Refines Tags**: Adds negative tags like "not-for-{scenario}"
+  4. **Enables Learning**: Future tool searches check failure history
+
+  ## Example: Tool Fails for Scenario
+
+  ```python
+  # User tries to use tool X for a task
+  try:
+      result = call_tool("python_code_analyzer", json.dumps({
+          "code": "some javascript code",
+          "language": "javascript"
+      }))
+  except Exception as e:
+      # Tool failed! Mark the failure
+      call_tool("mark_tool_failure", json.dumps({
+          "tool_id": "python_code_analyzer",
+          "scenario": "analyze javascript code",
+          "error_message": str(e),
+          "severity": "high"  # This tool only works for Python!
+      }))
+  ```
+
+  **Result:**
+  - Tool demoted by 0.10 (high severity)
+  - Tags added: `not-for-javascript`, `not-for-analyze`, `not-for-code`
+  - Future searches for "analyze javascript" will rank this tool lower
+  - Next time someone searches for "javascript analyzer", this tool won't be recommended
+
+  ## Integration with Tool Search
+
+  The `find_best_tool_for_scenario()` function checks failure history:
+
+  ```python
+  def find_best_tool_for_scenario(scenario: str):
+      # 1. Search for tools matching scenario
+      candidates = rag.find_similar(scenario, artifact_type=ArtifactType.TOOL)
+
+      # 2. Check failure history for each candidate
+      for tool, similarity in candidates:
+          failures = rag.find_similar(
+              scenario,
+              artifact_type=ArtifactType.PATTERN,
+              tags=["tool_failure", tool.artifact_id]
+          )
+
+          # 3. Demote tools with similar failures
+          if failures:
+              similarity *= 0.5  # Reduce ranking
+
+      # 4. Return best tool (considering failures)
+      return sorted(candidates, key=lambda x: x[1], reverse=True)[0]
+  ```
+
+  ## Repeated Failures
+
+  The system tracks total failures per tool:
+  - **5+ failures**: Additional 0.05 demotion
+  - **10+ failures**: Additional 0.10 demotion
+  - **Quality score**: Can go down to 0.0 (tool becomes unusable)
+
+  ## Tag Refinement
+
+  When a tool fails, the system adds negative tags based on the scenario:
+
+  **Scenario:** "translate python code to rust"
+  **Tool:** "python_syntax_checker"
+  **Tags Added:** `not-for-translate`, `not-for-rust`
+
+  This narrows the tool's use case to only what it actually works for.
+
+  ## Recovery
+
+  If a tool is fixed or the failure was temporary:
+
+  ```python
+  # Manually increase quality score
+  rag.update_quality_score("python_code_analyzer", 0.9)
+
+  # Or remove negative tags
+  rag.update_artifact_metadata("python_code_analyzer", {
+      "tags": ["python", "analyzer", "syntax"]  # Remove not-for-* tags
+  })
+  ```
+
+  ## Use Cases
+
+  ### 1. Tool Discovery Gone Wrong
+  ```python
+  # System finds a tool via RAG search
+  tool = find_best_tool_for_scenario("parse CSV files")
+
+  # Tool doesn't work (wrong input format)
+  try:
+      result = call_tool(tool.tool_id, data)
+  except Exception as e:
+      # Mark failure so it won't be recommended next time
+      call_tool("mark_tool_failure", json.dumps({
+          "tool_id": tool.tool_id,
+          "scenario": "parse CSV files",
+          "error_message": str(e),
+          "severity": "medium"
+      }))
+  ```
+
+  ### 2. Narrow Tool Use Case
+  ```python
+  # Tool works for some scenarios but not others
+  # Mark failures to refine its tags
+
+  # Works: "analyze Python code"
+  # Fails: "analyze JavaScript code" → mark failure
+  # Fails: "analyze Rust code" → mark failure
+
+  # After marking failures, tool tags become:
+  # ["python", "analyzer", "not-for-javascript", "not-for-rust"]
+  ```
+
+  ### 3. Automatic Quality Control
+  ```python
+  # In your workflow orchestrator:
+  def execute_tool_safely(tool_id, scenario, input_data):
+      try:
+          result = call_tool(tool_id, json.dumps(input_data))
+          return result
+      except Exception as e:
+          # Auto-mark failure
+          call_tool("mark_tool_failure", json.dumps({
+              "tool_id": tool_id,
+              "scenario": scenario,
+              "error_message": str(e),
+              "severity": "medium"
+          }))
+          raise
+  ```
+
+  ## Benefits
+
+  - **Adaptive Tool Discovery**: System learns which tools work where
+  - **Prevents Repeated Failures**: Won't recommend broken tools
+  - **Tag Refinement**: Tool metadata becomes more accurate over time
+  - **Quality Tracking**: Quality scores reflect real-world performance
+  - **Debugging Aid**: Failure history helps identify tool issues
+
+examples:
+  - inputs:
+      tool_id: "python_code_analyzer"
+      scenario: "analyze javascript code for syntax errors"
+      error_message: "UnsupportedLanguageError: This tool only supports Python"
+      severity: "high"
+    output: |
+      {
+        "success": true,
+        "failure_id": "failure_python_code_analyzer_1234567890",
+        "tool_id": "python_code_analyzer",
+        "scenario": "analyze javascript code for syntax errors",
+        "severity": "high",
+        "demotion_applied": true,
+        "new_quality_score": 0.75,
+        "tag_refinement": ["not-for-javascript", "not-for-analyze", "not-for-syntax"],
+        "total_failures": 3,
+        "message": "Marked python_code_analyzer as failing for scenario: analyze javascript code for syntax errors..."
+      }
+
+  - inputs:
+      tool_id: "csv_parser"
+      scenario: "parse JSON data"
+      error_message: "JSONDecodeError: Expecting value"
+      severity: "medium"
+    output: |
+      {
+        "success": true,
+        "failure_id": "failure_csv_parser_1234567891",
+        "tool_id": "csv_parser",
+        "scenario": "parse JSON data",
+        "severity": "medium",
+        "demotion_applied": true,
+        "new_quality_score": 0.85,
+        "tag_refinement": ["not-for-parse", "not-for-json"],
+        "total_failures": 1,
+        "message": "Marked csv_parser as failing for scenario: parse JSON data..."
+      }

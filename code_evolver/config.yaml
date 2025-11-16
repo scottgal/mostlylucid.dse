@@ -327,9 +327,9 @@ testing:
   test_driven_development: true
   initial_optimization_iterations: 3
   optimization_score_threshold: 0.1
-  use_pynguin: false  # Disabled by default (incompatible with Windows)
-  use_pynguin_tdd: false
-  pynguin_timeout: 30
+  use_pynguin: true  # Enabled with PYNGUIN_DANGER_AWARE=1
+  use_pynguin_tdd: true  # Use pynguin for TDD mode too
+  pynguin_timeout: 60  # Increased timeout for better coverage
   pynguin_min_coverage: 0.70
 
 optimization:

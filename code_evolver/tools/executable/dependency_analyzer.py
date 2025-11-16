@@ -88,8 +88,24 @@ class DependencyAnalyzer:
             args = executable.get('args', [])
             for arg in args:
                 # Check for Python scripts referenced
-                if arg.endswith('.py') or '{tool_dir}' in arg:
-                    script_path = arg.replace('{tool_dir}/', 'code_evolver/tools/executable/')
+                if arg.endswith('.py'):
+                    # Handle different path formats
+                    if '{tool_dir}' in arg:
+                        # Replace {tool_dir} with actual tools path
+                        if self.tools_root.endswith('tools'):
+                            script_path = arg.replace('{tool_dir}/', f"{self.tools_root}/executable/")
+                        else:
+                            script_path = arg.replace('{tool_dir}/', 'tools/executable/')
+                    elif arg.startswith('tools/'):
+                        # Already has tools/ prefix, use as-is if it exists,
+                        # otherwise try with code_evolver/ prefix
+                        if os.path.exists(arg):
+                            script_path = arg
+                        else:
+                            script_path = f"code_evolver/{arg}"
+                    else:
+                        script_path = arg
+
                     if os.path.exists(script_path):
                         dependencies['python_files'].add(script_path)
 
@@ -243,7 +259,10 @@ def main():
         # Parse configuration
         config = json.loads(sys.argv[1])
         tool_id = config.get('tool_id')
-        tools_root = config.get('tools_root', 'code_evolver/tools')
+
+        # Auto-detect tools_root based on current directory
+        default_tools_root = 'tools' if os.path.exists('tools') else 'code_evolver/tools'
+        tools_root = config.get('tools_root', default_tools_root)
         include_rag = config.get('include_rag', False)
 
         if not tool_id:

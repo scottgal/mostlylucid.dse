@@ -1,0 +1,267 @@
+﻿name: "Prompt Genericiser"
+type: "llm"
+description: "Converts specific prompts into generic, reusable tool descriptions. Prevents unnecessary specialization by identifying the underlying generic pattern."
+
+llm:
+  tier: "triage"  # Use fast model (tinyllama or haiku)
+  temperature: 0.3
+  max_tokens: 500
+
+system_prompt: |
+  You are a prompt generalization expert. Your job is to identify the GENERIC pattern behind specific requests.
+
+  ## Rules
+
+  1. Extract the core operation, not the specific values
+  2. Replace concrete values with parameter placeholders
+  3. Keep the tool as general as possible while maintaining utility
+  4. Identify the category of operation (math, text, data, etc.)
+
+  ## Examples
+
+  ### Input: "add 1 + 50"
+  **Generic Tool:**
+  - Name: "Add Two Numbers"
+  - Description: "Adds two numbers together"
+  - Parameters: number1 (int/float), number2 (int/float)
+  - Category: math
+
+  ### Input: "translate 'hello' to French"
+  **Generic Tool:**
+  - Name: "Translate Text"
+  - Description: "Translates text from one language to another"
+  - Parameters: text (string), target_language (string), source_language (optional)
+  - Category: translation
+
+  ### Input: "fetch user data for ID 12345"
+  **Generic Tool:**
+  - Name: "Fetch User Data"
+  - Description: "Retrieves user data by user ID"
+  - Parameters: user_id (string/int)
+  - Category: data-retrieval
+
+  ### Input: "convert 100 USD to EUR"
+  **Generic Tool:**
+  - Name: "Convert Currency"
+  - Description: "Converts amount from one currency to another"
+  - Parameters: amount (float), from_currency (string), to_currency (string)
+  - Category: conversion
+
+  ## Output Format
+
+  Return a JSON object with:
+  - generic_name: Short name for the tool
+  - generic_description: What the tool does (no specific values)
+  - parameters: List of parameter objects with {name, type, description}
+  - category: Tool category
+  - confidence: How confident you are this is the right generalization (0.0-1.0)
+  - is_already_generic: Boolean - true if input was already generic
+
+prompt_template: |
+  Analyze this specific request and extract the generic pattern:
+
+  **Specific Request:** {prompt}
+
+  **Context (if any):** {context}
+
+  Return ONLY valid JSON in this exact format:
+  ```json
+  {
+    "generic_name": "Tool Name",
+    "generic_description": "What the tool does generically",
+    "parameters": [
+      {"name": "param1", "type": "string", "description": "What this parameter is for"},
+      {"name": "param2", "type": "integer", "description": "What this parameter is for"}
+    ],
+    "category": "math|text|data|conversion|translation|validation|etc",
+    "confidence": 0.95,
+    "is_already_generic": false,
+    "specific_example": {
+      "param1": "example value from original request",
+      "param2": "example value from original request"
+    }
+  }
+  ```
+
+input_schema:
+  prompt:
+    type: string
+    description: "The specific prompt to generalize"
+    required: true
+
+  context:
+    type: string
+    description: "Additional context about the request"
+    required: false
+    default: ""
+
+output_schema:
+  type: object
+  properties:
+    generic_name:
+      type: string
+    generic_description:
+      type: string
+    parameters:
+      type: array
+      items:
+        type: object
+    category:
+      type: string
+    confidence:
+      type: number
+    is_already_generic:
+      type: boolean
+    specific_example:
+      type: object
+
+tags: ["generalization", "deduplication", "pattern-extraction", "meta-programming"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+priority: 90
+
+usage_notes: |
+  ## Purpose
+
+  Prevents tool proliferation by identifying when specific requests can be handled by generic tools.
+
+  ## Usage
+
+  ### Before Creating a New Tool
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  user_request = "add 1 + 50"
+
+  # Check if this should be a generic tool
+  generic = call_tool("prompt_genericiser", json.dumps({
+      "prompt": user_request
+  }))
+
+  generic_data = json.loads(generic)
+
+  if generic_data['confidence'] > 0.8:
+      # Create generic tool, not specific one
+      tool_spec = {
+          "name": generic_data['generic_name'],
+          "description": generic_data['generic_description'],
+          "parameters": generic_data['parameters']
+      }
+
+      # Check if this generic tool already exists
+      existing = search_similar_tools(generic_data['generic_description'])
+
+      if existing:
+          print(f"Use existing tool: {existing['name']}")
+      else:
+          print(f"Create generic tool: {tool_spec['name']}")
+  ```
+
+  ## Examples
+
+  ### Example 1: Math Operation
+
+  **Input:**
+  ```json
+  {
+    "prompt": "multiply 5 by 12"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "generic_name": "Multiply Two Numbers",
+    "generic_description": "Multiplies two numbers together",
+    "parameters": [
+      {"name": "number1", "type": "number", "description": "First number"},
+      {"name": "number2", "type": "number", "description": "Second number"}
+    ],
+    "category": "math",
+    "confidence": 0.98,
+    "is_already_generic": false,
+    "specific_example": {"number1": 5, "number2": 12}
+  }
+  ```
+
+  ### Example 2: Already Generic
+
+  **Input:**
+  ```json
+  {
+    "prompt": "translate text to any language"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "generic_name": "Translate Text",
+    "generic_description": "Translates text to specified language",
+    "parameters": [
+      {"name": "text", "type": "string", "description": "Text to translate"},
+      {"name": "target_language", "type": "string", "description": "Target language"}
+    ],
+    "category": "translation",
+    "confidence": 0.95,
+    "is_already_generic": true,
+    "specific_example": {"text": "example", "target_language": "Spanish"}
+  }
+  ```
+
+  ### Example 3: Data Operation
+
+  **Input:**
+  ```json
+  {
+    "prompt": "get weather for London"
+  }
+  ```
+
+  **Output:**
+  ```json
+  {
+    "generic_name": "Get Weather",
+    "generic_description": "Retrieves weather information for a location",
+    "parameters": [
+      {"name": "location", "type": "string", "description": "City or location name"}
+    ],
+    "category": "data-retrieval",
+    "confidence": 0.92,
+    "is_already_generic": false,
+    "specific_example": {"location": "London"}
+  }
+  ```
+
+examples:
+  - inputs:
+      prompt: "add 1 + 50"
+    output: |
+      {
+        "generic_name": "Add Two Numbers",
+        "generic_description": "Adds two numbers together",
+        "parameters": [
+          {"name": "number1", "type": "number"},
+          {"name": "number2", "type": "number"}
+        ],
+        "category": "math",
+        "confidence": 0.98
+      }
+
+  - inputs:
+      prompt: "convert 100 meters to feet"
+    output: |
+      {
+        "generic_name": "Convert Units",
+        "generic_description": "Converts value from one unit to another",
+        "parameters": [
+          {"name": "value", "type": "number"},
+          {"name": "from_unit", "type": "string"},
+          {"name": "to_unit", "type": "string"}
+        ],
+        "category": "conversion",
+        "confidence": 0.95
+      }

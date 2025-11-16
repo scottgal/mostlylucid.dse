@@ -1,0 +1,410 @@
+﻿name: "HTTP REST Client"
+type: "executable"
+description: "Standard REST API client with automatic JSON parsing. Supports GET, POST, PUT, PATCH, DELETE methods with JSON request/response handling."
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/http_rest_client.py"]
+  stdin_mode: true
+  timeout: 60
+
+input_schema:
+  url:
+    type: string
+    description: "Target URL"
+    required: true
+    example: "https://api.example.com/users"
+
+  method:
+    type: string
+    description: "HTTP method"
+    required: false
+    default: "GET"
+    enum: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+
+  headers:
+    type: object
+    description: "HTTP headers"
+    required: false
+    example:
+      Authorization: "Bearer token123"
+      X-Custom-Header: "value"
+
+  body:
+    description: "Request body (dict/list = JSON, string = raw)"
+    required: false
+
+  timeout:
+    type: integer
+    description: "Request timeout in seconds"
+    required: false
+    default: 30
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether request succeeded"
+    status_code:
+      type: integer
+      description: "HTTP status code"
+    headers:
+      type: object
+      description: "Response headers"
+    body:
+      description: "Response body (parsed JSON or raw string)"
+    error:
+      type: string
+      description: "Error message if failed"
+    url:
+      type: string
+      description: "Request URL"
+    method:
+      type: string
+      description: "Request method"
+
+examples:
+  - description: "GET request - Fetch users"
+    input:
+      url: "https://jsonplaceholder.typicode.com/users/1"
+      method: "GET"
+    output:
+      success: true
+      status_code: 200
+      body:
+        id: 1
+        name: "Leanne Graham"
+        email: "Sincere@april.biz"
+
+  - description: "POST request - Create user"
+    input:
+      url: "https://jsonplaceholder.typicode.com/users"
+      method: "POST"
+      headers:
+        Content-Type: "application/json"
+      body:
+        name: "John Doe"
+        email: "john@example.com"
+    output:
+      success: true
+      status_code: 201
+      body:
+        id: 11
+        name: "John Doe"
+        email: "john@example.com"
+
+  - description: "PUT request - Update user"
+    input:
+      url: "https://jsonplaceholder.typicode.com/users/1"
+      method: "PUT"
+      body:
+        id: 1
+        name: "Updated Name"
+        email: "updated@example.com"
+    output:
+      success: true
+      status_code: 200
+
+  - description: "DELETE request"
+    input:
+      url: "https://jsonplaceholder.typicode.com/users/1"
+      method: "DELETE"
+    output:
+      success: true
+      status_code: 200
+
+tags: ["http", "rest", "api", "json", "web", "client", "request"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## HTTP REST Client - Standard JSON API Communication
+
+  This tool provides a simple, reliable way to make HTTP REST API calls with
+  automatic JSON handling.
+
+  ## Features
+
+  - [OK] All HTTP methods (GET, POST, PUT, PATCH, DELETE)
+  - [OK] Automatic JSON encoding/decoding
+  - [OK] Custom headers support
+  - [OK] Error handling (4xx, 5xx)
+  - [OK] Timeout control
+  - [OK] Fallback to raw string if not JSON
+
+  ## Usage Examples
+
+  ### Example 1: Simple GET Request
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("http_rest_client", json.dumps({
+      "url": "https://api.github.com/users/octocat",
+      "method": "GET"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      user = data['body']
+      print(f"User: {user['name']}")
+  ```
+
+  ### Example 2: POST with JSON Body
+
+  ```python
+  result = call_tool("http_rest_client", json.dumps({
+      "url": "https://api.example.com/users",
+      "method": "POST",
+      "headers": {
+          "Authorization": "Bearer token123"
+      },
+      "body": {
+          "name": "John Doe",
+          "email": "john@example.com"
+      }
+  }))
+
+  data = json.loads(result)
+  print(f"Created user ID: {data['body']['id']}")
+  ```
+
+  ### Example 3: PUT Request (Update)
+
+  ```python
+  result = call_tool("http_rest_client", json.dumps({
+      "url": "https://api.example.com/users/123",
+      "method": "PUT",
+      "body": {
+          "name": "Updated Name",
+          "status": "active"
+      }
+  }))
+  ```
+
+  ### Example 4: Error Handling
+
+  ```python
+  result = call_tool("http_rest_client", json.dumps({
+      "url": "https://api.example.com/not-found",
+      "method": "GET"
+  }))
+
+  data = json.loads(result)
+  if not data['success']:
+      print(f"Error: {data['error']}")
+      print(f"Status: {data.get('status_code')}")
+      print(f"Response: {data.get('body')}")
+  ```
+
+  ## Request Body Handling
+
+  ### Dictionary/List -> Automatic JSON Encoding
+
+  ```python
+  body = {
+      "user": {
+          "name": "Alice",
+          "age": 30
+      },
+      "tags": ["python", "developer"]
+  }
+  # Automatically JSON-encoded and Content-Type set to application/json
+  ```
+
+  ### String -> Raw Body
+
+  ```python
+  body = "raw text data"
+  # Sent as-is, no JSON encoding
+  ```
+
+  ## Response Handling
+
+  ### JSON Response -> Parsed Automatically
+
+  ```json
+  {
+    "success": true,
+    "status_code": 200,
+    "body": {
+      "id": 123,
+      "name": "User data"
+    }
+  }
+  ```
+
+  ### Non-JSON Response -> Raw String
+
+  ```json
+  {
+    "success": true,
+    "status_code": 200,
+    "body": "<!DOCTYPE html><html>..."
+  }
+  ```
+
+  ## Error Responses
+
+  ### HTTP Error (4xx, 5xx)
+
+  ```json
+  {
+    "success": false,
+    "status_code": 404,
+    "error": "HTTP 404: Not Found",
+    "body": {
+      "message": "Resource not found"
+    }
+  }
+  ```
+
+  ### Connection Error
+
+  ```json
+  {
+    "success": false,
+    "error": "Connection failed: Name or service not known"
+  }
+  ```
+
+  ## Headers
+
+  ### Common Headers
+
+  ```python
+  headers = {
+      "Authorization": "Bearer your-token",
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "User-Agent": "MyApp/1.0",
+      "X-API-Key": "secret-key"
+  }
+  ```
+
+  ## Timeout
+
+  ```python
+  # Default: 30 seconds
+  # Custom timeout:
+  result = call_tool("http_rest_client", json.dumps({
+      "url": "https://slow-api.example.com",
+      "timeout": 60  # 60 seconds
+  }))
+  ```
+
+  ## When to Use
+
+  [OK] REST APIs with JSON
+  [OK] Standard CRUD operations
+  [OK] APIs with structured responses
+  [OK] When you need automatic JSON parsing
+
+  X For raw/binary data -> Use `http_raw_client`
+  X For HTML scraping -> Use specialized tools
+  X For file downloads -> Use download tools
+
+  ## Comparison with Raw HTTP Client
+
+  | Feature | http_rest_client | http_raw_client |
+  |---------|-----------------|-----------------|
+  | JSON parsing | Automatic | Manual |
+  | Use case | REST APIs | Any HTTP |
+  | Body handling | JSON + raw | Raw only |
+  | Response | Parsed object | Raw string/bytes |
+  | Best for | APIs | Scraping, files |
+
+  ## Performance
+
+  - **Latency**: Network-dependent (typically 50-500ms)
+  - **Throughput**: Limited by network and API
+  - **Memory**: Low overhead
+  - **Timeout**: Configurable (default 30s)
+
+  ## Security Notes
+
+  - [OK] HTTPS supported
+  - [OK] Custom headers for auth
+  - ⚠️ Validate URLs before use
+  - ⚠️ Sanitize user input in bodies
+  - ⚠️ Handle sensitive data in headers carefully
+
+  ## Integration Patterns
+
+  ### Pattern 1: API Wrapper
+
+  ```python
+  def get_user(user_id):
+      result = call_tool("http_rest_client", json.dumps({
+          "url": f"https://api.example.com/users/{user_id}",
+          "method": "GET"
+      }))
+      data = json.loads(result)
+      return data['body'] if data['success'] else None
+  ```
+
+  ### Pattern 2: Batch Requests
+
+  ```python
+  user_ids = [1, 2, 3, 4, 5]
+  users = []
+
+  for user_id in user_ids:
+      result = call_tool("http_rest_client", json.dumps({
+          "url": f"https://api.example.com/users/{user_id}"
+      }))
+      data = json.loads(result)
+      if data['success']:
+          users.append(data['body'])
+  ```
+
+  ### Pattern 3: With Retry Logic
+
+  ```python
+  max_retries = 3
+  for attempt in range(max_retries):
+      result = call_tool("http_rest_client", json.dumps({
+          "url": "https://api.example.com/data",
+          "timeout": 10
+      }))
+      data = json.loads(result)
+      if data['success']:
+          break
+      time.sleep(2 ** attempt)  # Exponential backoff
+  ```
+
+  ## Troubleshooting
+
+  **Connection timeout:**
+  - Increase timeout parameter
+  - Check network connectivity
+  - Verify URL is accessible
+
+  **JSON parsing error:**
+  - Response may not be JSON
+  - Check response in data['body'] (will be raw string)
+  - Use http_raw_client if needed
+
+  **401 Unauthorized:**
+  - Check Authorization header
+  - Verify API key/token
+  - Check token expiration
+
+  **CORS errors:**
+  - Not applicable (server-side tool)
+  - CORS only affects browsers
+
+  ## Testing
+
+  ```bash
+  # Test with public API
+  cd code_evolver
+  echo '{
+    "url": "https://jsonplaceholder.typicode.com/users/1",
+    "method": "GET"
+  }' | python tools/executable/http_rest_client.py
+  ```

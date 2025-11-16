@@ -1,0 +1,200 @@
+﻿name: "LLM Fake Data Generator"
+type: "llm"
+description: "Uses LLM to generate contextually appropriate fake data based on field names and descriptions. Better for complex, domain-specific data."
+
+llm:
+  tier: "fast"
+  role: "generator"
+  model: "gemma3:4b"
+  temperature: 0.7  # Higher for creative data generation
+  max_tokens: 500
+
+system_prompt: |
+  You are a data generator. Generate realistic fake data based on the schema provided.
+
+  Rules:
+  1. Return ONLY valid JSON matching the requested schema
+  2. Use realistic, contextually appropriate values
+  3. If field has "description", use it to guide data generation
+  4. For names, use realistic full names
+  5. For emails, use realistic formats (firstname.lastname@domain.com)
+  6. For addresses, use real-looking street addresses with city, state, zip
+  7. For dates, use ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)
+  8. For IDs, use realistic formats (UUIDs, numeric IDs, etc.)
+  9. Make data look production-like, not obviously fake
+  10. NO explanations, NO markdown, ONLY the JSON data
+
+prompt_template: |
+  Generate fake data for this schema:
+
+  {schema_json}
+
+  {additional_context}
+
+  Return ONLY the JSON data, no explanation:
+
+input_schema:
+  schema_json:
+    type: string
+    description: "JSON schema (as string) describing the data to generate"
+    required: true
+
+  additional_context:
+    type: string
+    description: "Additional context about the domain or use case"
+    required: false
+    default: ""
+
+output_schema:
+  type: object
+  description: "Generated fake data matching the schema"
+
+examples:
+  - inputs:
+      schema_json: |
+        {
+          "type": "object",
+          "properties": {
+            "user_id": {"type": "integer"},
+            "username": {"type": "string"},
+            "email": {"type": "string", "format": "email"},
+            "created_at": {"type": "string", "format": "date-time"}
+          },
+          "required": ["user_id", "username", "email"]
+        }
+      additional_context: "For a social media platform"
+    output: |
+      {
+        "user_id": 12847,
+        "username": "sarah_tech_2024",
+        "email": "sarah.thompson@gmail.com",
+        "created_at": "2024-03-15T14:32:11Z"
+      }
+
+  - inputs:
+      schema_json: |
+        {
+          "type": "object",
+          "properties": {
+            "order_id": {"type": "string"},
+            "customer_name": {"type": "string"},
+            "total_amount": {"type": "number"},
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "product_name": {"type": "string"},
+                  "quantity": {"type": "integer"},
+                  "price": {"type": "number"}
+                }
+              }
+            }
+          }
+        }
+      additional_context: "E-commerce order data"
+    output: |
+      {
+        "order_id": "ORD-2024-0315-7429",
+        "customer_name": "Michael Rodriguez",
+        "total_amount": 127.48,
+        "items": [
+          {
+            "product_name": "Wireless Mouse",
+            "quantity": 2,
+            "price": 24.99
+          },
+          {
+            "product_name": "USB-C Cable",
+            "quantity": 3,
+            "price": 12.50
+          },
+          {
+            "product_name": "Laptop Stand",
+            "quantity": 1,
+            "price": 52.00
+          }
+        ]
+      }
+
+  - inputs:
+      schema_json: |
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_id": {"type": "string"},
+              "amount": {"type": "number"},
+              "status": {"type": "string", "enum": ["pending", "completed", "failed"]}
+            }
+          },
+          "minItems": 3,
+          "maxItems": 5
+        }
+      additional_context: "Payment transactions"
+    output: |
+      [
+        {
+          "transaction_id": "TXN-20240315-142857",
+          "amount": 45.99,
+          "status": "completed"
+        },
+        {
+          "transaction_id": "TXN-20240315-143012",
+          "amount": 123.50,
+          "status": "pending"
+        },
+        {
+          "transaction_id": "TXN-20240315-143145",
+          "amount": 78.25,
+          "status": "completed"
+        }
+      ]
+
+tags: ["llm", "data-generation", "testing", "api-testing", "mock-data", "contextual"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 75
+
+usage_notes: |
+  ## When to use LLM vs Faker-based generator
+
+  **Use LLM generator when:**
+  - Need domain-specific, contextually appropriate data
+  - Complex nested objects with relationships
+  - Data needs to "make sense" together (e.g., matching addresses and zip codes)
+  - Custom business logic in data generation
+
+  **Use Faker generator when:**
+  - Simple, standard data types (emails, names, etc.)
+  - High volume data generation (faster, no LLM cost)
+  - Don't need contextual relationships
+
+  ## Usage
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  schema = {
+      "type": "object",
+      "properties": {
+          "patient_id": {"type": "string"},
+          "name": {"type": "string"},
+          "diagnosis": {"type": "string"},
+          "medications": {
+              "type": "array",
+              "items": {"type": "string"}
+          }
+      }
+  }
+
+  result = call_tool("llm_fake_data_generator", json.dumps({
+      "schema_json": json.dumps(schema),
+      "additional_context": "Medical patient records"
+  }))
+
+  print(result)
+  ```

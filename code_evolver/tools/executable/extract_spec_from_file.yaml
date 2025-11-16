@@ -1,0 +1,300 @@
+﻿name: "Extract Spec From File"
+type: "executable"
+description: "Extracts specifications from text files for overseer planning. Handles large files by summarizing and sectioning."
+
+track_usage: false
+
+executable:
+  command: "python"
+  args: ["tools/executable/extract_spec_from_file.py"]
+
+input_schema:
+  file_path:
+    type: string
+    description: "Path to specification file (txt, md, etc.)"
+    required: true
+
+  summarize:
+    type: boolean
+    description: "Create overseer-friendly summary for large files"
+    default: true
+    required: false
+
+  max_length:
+    type: integer
+    description: "Maximum length for overseer summary (characters)"
+    default: 10000
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    file_path:
+      type: string
+    file_size:
+      type: integer
+      description: "Size in characters"
+    word_count:
+      type: integer
+    overseer_spec:
+      type: string
+      description: "Summarized spec for overseer (if summarize=true)"
+    full_spec:
+      type: string
+      description: "Full specification text"
+    sections:
+      type: object
+      description: "Extracted sections (requirements, constraints, etc.)"
+    message:
+      type: string
+
+tags: ["spec", "file", "extraction", "overseer", "planning"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## Overview
+
+  Extract specifications from text files for workflow generation.
+  Handles large specification documents by:
+  - Sectioning (requirements, constraints, examples)
+  - Summarizing for overseer (keeps important parts)
+  - Preserving full spec for reference
+
+  ## Use Cases
+
+  ### 1. Large Spec Documents
+
+  ```python
+  # Extract from 50-page specification document
+  spec = call_tool("extract_spec_from_file", json.dumps({
+      "file_path": "specs/full_requirements.md",
+      "summarize": True,  # Create overseer summary
+      "max_length": 10000  # Max 10k chars for overseer
+  }))
+
+  spec_data = json.loads(spec)
+
+  # Use summarized version for overseer
+  overseer_plan = call_llm("overseer_model", spec_data["overseer_spec"])
+
+  # Full spec available if needed
+  full_spec = spec_data["full_spec"]
+  ```
+
+  ### 2. CLI Integration
+
+  ```bash
+  # Generate workflow from spec file
+  python chat_cli.py --spec-file specs/requirements.txt
+
+  # Or use the tool directly
+  python orchestrator.py generate_from_file --spec specs/big_spec.md
+  ```
+
+  ### 3. Structured Specs
+
+  **Input File (specs/api_requirements.md):**
+  ```markdown
+  # API Requirements
+
+  ## Overview
+  Build a REST API for user management.
+
+  ## Requirements
+  - User CRUD operations
+  - Authentication with JWT
+  - Role-based access control
+  - Rate limiting
+
+  ## Constraints
+  - Must use PostgreSQL
+  - Max response time: 200ms
+  - Support 10k concurrent users
+
+  ## Examples
+  ```
+  GET /api/users/123
+  Response: {"id": 123, "name": "Alice"}
+  ```
+  ```
+
+  **Extraction:**
+  ```python
+  result = call_tool("extract_spec_from_file", json.dumps({
+      "file_path": "specs/api_requirements.md",
+      "summarize": True
+  }))
+
+  data = json.loads(result)
+
+  # Sections extracted automatically:
+  print(data["sections"]["requirements"])
+  # "- User CRUD operations
+  #  - Authentication with JWT
+  #  - Role-based access control..."
+
+  print(data["sections"]["constraints"])
+  # "- Must use PostgreSQL
+  #  - Max response time: 200ms..."
+  ```
+
+  ## Summarization Strategy
+
+  For large files, creates a summary prioritized by importance:
+
+  1. **Overview** (first paragraph)
+  2. **Requirements** (critical)
+  3. **Constraints** (important)
+  4. **Examples** (helpful)
+  5. **Key Points** (bullet points from full text)
+
+  **Example:**
+
+  Input: 50,000 character spec file
+  Output: 10,000 character summary with:
+  - Complete overview
+  - All requirements
+  - Key constraints
+  - Representative examples
+  - Note indicating truncation
+
+  ## Section Extraction
+
+  Automatically identifies sections:
+
+  - **Requirements**: Headers with "requirement", "must have", "features"
+  - **Constraints**: Headers with "constraint", "limitation", "restriction"
+  - **Examples**: Headers with "example", "sample", "demo"
+  - **Code Blocks**: Markdown ``` blocks with language tags
+
+  ## CLI Flag (chat_cli.py)
+
+  ```bash
+  # Start workflow from spec file
+  python chat_cli.py --spec-file path/to/spec.txt
+
+  # Short form
+  python chat_cli.py -s path/to/spec.txt
+
+  # With custom max length
+  python chat_cli.py --spec-file spec.md --max-spec-length 15000
+  ```
+
+  ## Integration Example
+
+  ```python
+  # In chat_cli.py or orchestrator.py
+
+  import argparse
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--spec-file', '-s', help='Specification file path')
+  parser.add_argument('--max-spec-length', type=int, default=10000)
+  args = parser.parse_args()
+
+  if args.spec_file:
+      # Extract spec from file
+      spec_result = call_tool("extract_spec_from_file", json.dumps({
+          "file_path": args.spec_file,
+          "summarize": True,
+          "max_length": args.max_spec_length
+      }))
+
+      spec_data = json.loads(spec_result)
+
+      if spec_data["success"]:
+          # Use overseer_spec for planning
+          user_request = spec_data["overseer_spec"]
+
+          # Generate workflow from spec
+          generate_workflow(user_request)
+      else:
+          print(f"Error: {spec_data['error']}")
+  ```
+
+  ## File Formats Supported
+
+  - **Markdown** (.md): Full support for headers, code blocks, lists
+  - **Plain Text** (.txt): Section detection via patterns
+  - **ReStructuredText** (.rst): Basic support
+  - **Any UTF-8 text file**
+
+  ## Best Practices
+
+  ### 1. Structure Your Specs
+
+  Use headers for automatic section extraction:
+
+  ```markdown
+  ## Requirements
+  - Feature 1
+  - Feature 2
+
+  ## Constraints
+  - Database: PostgreSQL
+  - Language: Python 3.9+
+
+  ## Examples
+  ```python
+  example_code()
+  ```
+  ```
+
+  ### 2. Keep Overseer Summary Short
+
+  ```python
+  # For very large specs, increase max_length
+  {
+      "file_path": "huge_spec.md",
+      "max_length": 20000  # Larger budget for complex projects
+  }
+  ```
+
+  ### 3. Check Truncation
+
+  ```python
+  result = json.loads(spec)
+
+  if result["file_size"] > result["overseer_spec"]:
+      print(f"Spec truncated: {result['file_size']} -> {len(result['overseer_spec'])}")
+      # Full spec still available in result["full_spec"]
+  ```
+
+  ### 4. Use Sections Directly
+
+  ```python
+  # Skip summarization, use specific sections
+  spec = json.loads(call_tool("extract_spec_from_file", ...))
+
+  # Pass requirements directly to generator
+  code = generate_code(spec["sections"]["requirements"])
+
+  # Pass constraints to validator
+  validate_constraints(spec["sections"]["constraints"])
+  ```
+
+examples:
+  - inputs:
+      file_path: "specs/requirements.txt"
+      summarize: true
+      max_length: 10000
+    output: |
+      {
+        "success": true,
+        "file_path": "/path/to/specs/requirements.txt",
+        "file_size": 25000,
+        "word_count": 3500,
+        "overseer_spec": "## Overview\nBuild a REST API...\n\n## Requirements\n- User CRUD\n- Authentication\n...",
+        "full_spec": "(full 25000 character specification)",
+        "sections": {
+          "requirements": "- User CRUD operations...",
+          "constraints": "- PostgreSQL database...",
+          "examples": "GET /api/users/123..."
+        },
+        "message": "Extracted 25000 characters from requirements.txt"
+      }

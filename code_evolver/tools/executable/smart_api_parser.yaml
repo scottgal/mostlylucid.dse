@@ -1,0 +1,325 @@
+﻿name: "Smart API Parser"
+type: "executable"
+description: "Intelligently parses OpenAPI specs, generates realistic test data, and tests all endpoints. Can use Faker or LLM for data generation."
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/smart_api_parser.py"]
+  stdin_mode: true
+  timeout: 120
+
+input_schema:
+  openapi_spec:
+    type: object
+    description: "OpenAPI 3.0 specification (JSON object)"
+    required: true
+
+  use_llm_generator:
+    type: boolean
+    description: "Use LLM for contextual fake data (slower but smarter) vs Faker (faster)"
+    required: false
+    default: false
+
+  make_requests:
+    type: boolean
+    description: "Actually make HTTP requests to endpoints (false = dry run with generated data only)"
+    required: false
+    default: false
+
+  endpoints:
+    type: array
+    description: "List of endpoint operation IDs to test (null = test all)"
+    required: false
+    items:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether parsing succeeded"
+
+    api_info:
+      type: object
+      description: "API metadata from OpenAPI spec"
+
+    base_url:
+      type: string
+      description: "Base URL of the API"
+
+    total_endpoints:
+      type: integer
+      description: "Total number of endpoints in spec"
+
+    tested_endpoints:
+      type: integer
+      description: "Number of endpoints tested"
+
+    results:
+      type: array
+      description: "Test results for each endpoint"
+      items:
+        type: object
+        properties:
+          endpoint:
+            type: string
+          method:
+            type: string
+          url:
+            type: string
+          request_body:
+            description: "Generated request body"
+          status_code:
+            type: integer
+          response_body:
+            description: "API response (if make_requests=true)"
+          success:
+            type: boolean
+          error:
+            type: string
+
+    options:
+      type: object
+      description: "Options used for testing"
+
+    error:
+      type: string
+      description: "Error message if failed"
+
+examples:
+  - description: "Dry run - parse spec and generate test data"
+    input:
+      openapi_spec:
+        openapi: "3.0.0"
+        info:
+          title: "User API"
+          version: "1.0.0"
+        servers:
+          - url: "https://api.example.com/v1"
+        paths:
+          /users:
+            post:
+              operationId: "createUser"
+              summary: "Create a new user"
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      required: ["email", "name"]
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                          format: email
+                        age:
+                          type: integer
+              responses:
+                '201':
+                  description: "User created"
+      use_llm_generator: false
+      make_requests: false
+    output:
+      success: true
+      total_endpoints: 1
+      tested_endpoints: 1
+      results:
+        - endpoint: "createUser"
+          method: "POST"
+          url: "https://api.example.com/v1/users"
+          request_body:
+            name: "John Smith"
+            email: "john.smith@example.com"
+            age: 42
+          dry_run: true
+
+  - description: "Use LLM generator for contextual data"
+    input:
+      openapi_spec:
+        openapi: "3.0.0"
+        servers:
+          - url: "https://api.hospital.com"
+        paths:
+          /patients:
+            post:
+              operationId: "createPatient"
+              summary: "Create patient record"
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        patient_id:
+                          type: string
+                        name:
+                          type: string
+                        diagnosis:
+                          type: string
+                        medications:
+                          type: array
+                          items:
+                            type: string
+      use_llm_generator: true
+      make_requests: false
+    output:
+      success: true
+      results:
+        - endpoint: "createPatient"
+          request_body:
+            patient_id: "PT-2024-03547"
+            name: "Emily Johnson"
+            diagnosis: "Type 2 Diabetes"
+            medications:
+              - "Metformin 500mg"
+              - "Insulin glargine"
+
+  - description: "Actually test endpoints (make real requests)"
+    input:
+      openapi_spec:
+        openapi: "3.0.0"
+        servers:
+          - url: "http://localhost:3000"
+        paths:
+          /health:
+            get:
+              operationId: "healthCheck"
+              summary: "Health check"
+              responses:
+                '200':
+                  description: "Healthy"
+      make_requests: true
+    output:
+      success: true
+      results:
+        - endpoint: "healthCheck"
+          method: "GET"
+          url: "http://localhost:3000/health"
+          status_code: 200
+          response_body: '{"status": "healthy"}'
+          success: true
+
+tags: ["api-testing", "openapi", "swagger", "testing", "data-generation", "integration-testing"]
+cost_tier: "low"  # Free if using faker, low if using LLM
+speed_tier: "medium"  # Depends on number of endpoints
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## Smart API Parser - Comprehensive API Testing Tool
+
+  This tool provides intelligent API testing by:
+  1. Parsing OpenAPI 3.0 specifications
+  2. Generating realistic test data for all endpoints
+  3. Optionally making actual HTTP requests
+  4. Providing detailed results for each endpoint
+
+  ## Modes of Operation
+
+  ### 1. Dry Run (Default)
+  Parse spec and generate test data without making requests.
+  Perfect for:
+  - Validating your OpenAPI spec
+  - Seeing what test data would be generated
+  - Planning test scenarios
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  spec = {
+      "openapi": "3.0.0",
+      "paths": { ... }
+  }
+
+  result = call_tool("smart_api_parser", json.dumps({
+      "openapi_spec": spec,
+      "make_requests": False
+  }))
+  ```
+
+  ### 2. Faker-based Data Generation (Fast)
+  Use Faker library for quick, realistic data.
+  Best for:
+  - Standard data types (names, emails, numbers)
+  - High-volume testing
+  - Simple APIs
+
+  ```python
+  result = call_tool("smart_api_parser", json.dumps({
+      "openapi_spec": spec,
+      "use_llm_generator": False,
+      "make_requests": True
+  }))
+  ```
+
+  ### 3. LLM-based Data Generation (Smart)
+  Use LLM (gemma3:4b) for contextually appropriate data.
+  Best for:
+  - Domain-specific APIs (healthcare, finance, etc.)
+  - Complex nested objects
+  - Data that needs to "make sense" together
+
+  ```python
+  result = call_tool("smart_api_parser", json.dumps({
+      "openapi_spec": spec,
+      "use_llm_generator": True,  # Slower but smarter
+      "make_requests": True
+  }))
+  ```
+
+  ### 4. Selective Endpoint Testing
+  Test only specific endpoints by operation ID.
+
+  ```python
+  result = call_tool("smart_api_parser", json.dumps({
+      "openapi_spec": spec,
+      "endpoints": ["createUser", "getUser"],  # Only test these
+      "make_requests": True
+  }))
+  ```
+
+  ## Complete Example
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # Load your OpenAPI spec
+  with open('api_spec.json') as f:
+      spec = json.load(f)
+
+  # Test all endpoints with LLM-generated data
+  result = call_tool("smart_api_parser", json.dumps({
+      "openapi_spec": spec,
+      "use_llm_generator": True,
+      "make_requests": True
+  }))
+
+  result_data = json.loads(result)
+
+  # Check results
+  for endpoint_result in result_data['results']:
+      if endpoint_result.get('success'):
+          print(f"✓ {endpoint_result['endpoint']}: {endpoint_result['status_code']}")
+      else:
+          print(f"✗ {endpoint_result['endpoint']}: {endpoint_result.get('error')}")
+  ```
+
+  ## Performance Comparison
+
+  | Mode | Speed | Quality | Cost | Use Case |
+  |------|-------|---------|------|----------|
+  | Dry Run | Instant | N/A | Free | Spec validation |
+  | Faker | Fast (~100ms/endpoint) | Good | Free | Standard APIs |
+  | LLM | Slower (~500ms/endpoint) | Excellent | ~$0.0001/endpoint | Complex/domain APIs |
+
+  ## Tips
+
+  1. **Start with dry run** to validate your spec and see generated data
+  2. **Use Faker by default** for most APIs (faster, free)
+  3. **Use LLM when** data needs to be contextually appropriate
+  4. **Test selectively** in development, all endpoints in CI/CD
+  5. **Check response codes** - 4xx/5xx indicate issues with generated data or spec

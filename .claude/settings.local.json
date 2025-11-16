@@ -67,7 +67,9 @@
       "Bash(timeout:*)",
       "WebFetch(domain:127.0.0.1)",
       "Bash(for i in {2..5})",
-      "Bash(do echo \"{\"\"operation\"\": \"\"write\"\", \"\"buffer_id\"\": \"\"test_buffer\"\", \"\"data\"\": {\"\"item\"\": $i}, \"\"max_size\"\": 5}\")"
+      "Bash(do echo \"{\"\"operation\"\": \"\"write\"\", \"\"buffer_id\"\": \"\"test_buffer\"\", \"\"data\"\": {\"\"item\"\": $i}, \"\"max_size\"\": 5}\")",
+      "Bash(setx:*)",
+      "Bash(set PYNGUIN_DANGER_AWARE=1)"
     ],
     "deny": [],
     "ask": []

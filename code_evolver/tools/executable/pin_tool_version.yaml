@@ -1,0 +1,417 @@
+﻿name: "Pin Tool Version"
+type: "executable"
+description: "Locks a workflow to specific tool versions. Pinned versions are protected from trimming and can be inlined into workflow scripts for enterprise reproducibility."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/pin_tool_version.py"]
+
+input_schema:
+  operation:
+    type: string
+    description: "Operation: 'pin', 'unpin', or 'list'"
+    enum: ["pin", "unpin", "list"]
+    default: "pin"
+    required: false
+
+  tool_id:
+    type: string
+    description: "ID of the tool to pin/unpin (required for pin/unpin)"
+    required: false
+
+  version:
+    type: string
+    description: "Version to pin (or 'current' for latest). Optional for unpin (unpins all versions if not specified)"
+    default: "current"
+    required: false
+
+  workflow_id:
+    type: string
+    description: "Workflow that depends on this version (optional, enables workflow-specific pins)"
+    required: false
+
+  reason:
+    type: string
+    description: "Why this version is pinned (documentation)"
+    default: ""
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    tool_id:
+      type: string
+    version:
+      type: string
+    workflow_id:
+      type: string
+    pin_key:
+      type: string
+      description: "Unique pin identifier: workflow_id:tool_id@version"
+    message:
+      type: string
+    protected_from_trimming:
+      type: boolean
+    pins:
+      type: array
+      description: "List of pins (for 'list' operation)"
+    unpinned:
+      type: integer
+      description: "Number of pins removed (for 'unpin' operation)"
+
+tags: ["enterprise", "version-control", "dependency-management", "workflow"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+priority: 80
+
+usage_notes: |
+  ## Purpose
+
+  Enterprise-grade tool version management:
+  - **Pin tools** to specific versions for reproducibility
+  - **Protect versions** from trimming even if old
+  - **Workflow-specific pins** for different environments
+  - **Force updates** possible for critical bug fixes
+
+  ## Directory Structure
+
+  ```
+  .tool_pins.json           # Pin registry
+  tools/executable/
+    my_tool/
+      my_tool_v1_5_0.py     # Pinned version (protected)
+      my_tool_v2_0_0.py     # Current version
+  ```
+
+  ## Usage
+
+  ### Pin Current Version
+
+  ```bash
+  echo '{
+    "operation": "pin",
+    "tool_id": "nmt_translator",
+    "version": "current",
+    "reason": "Production workflow dependency"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "nmt_translator",
+    "version": "2.5.0",
+    "pin_key": "nmt_translator@2.5.0",
+    "message": "Pinned nmt_translator to version 2.5.0",
+    "protected_from_trimming": true
+  }
+  ```
+
+  ### Pin Specific Version for Workflow
+
+  ```bash
+  echo '{
+    "operation": "pin",
+    "tool_id": "buffer",
+    "version": "1.3.0",
+    "workflow_id": "data_pipeline_prod",
+    "reason": "Tested and validated for production"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "buffer",
+    "version": "1.3.0",
+    "workflow_id": "data_pipeline_prod",
+    "pin_key": "data_pipeline_prod:buffer@1.3.0",
+    "message": "Pinned buffer to version 1.3.0",
+    "protected_from_trimming": true
+  }
+  ```
+
+  ### List All Pins
+
+  ```bash
+  echo '{
+    "operation": "list"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "pins": [
+      {
+        "pin_key": "nmt_translator@2.5.0",
+        "tool_id": "nmt_translator",
+        "version": "2.5.0",
+        "workflow_id": null,
+        "pinned_at": "2025-01-15T10:30:00Z",
+        "reason": "Production workflow dependency",
+        "pinned_by": "user"
+      },
+      {
+        "pin_key": "data_pipeline_prod:buffer@1.3.0",
+        "tool_id": "buffer",
+        "version": "1.3.0",
+        "workflow_id": "data_pipeline_prod",
+        "pinned_at": "2025-01-15T11:00:00Z",
+        "reason": "Tested and validated for production",
+        "pinned_by": "user"
+      }
+    ],
+    "count": 2,
+    "message": "Found 2 pinned version(s)"
+  }
+  ```
+
+  ### List Pins for Specific Tool
+
+  ```bash
+  echo '{
+    "operation": "list",
+    "tool_id": "buffer"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  ### Unpin Specific Version
+
+  ```bash
+  echo '{
+    "operation": "unpin",
+    "tool_id": "buffer",
+    "version": "1.3.0",
+    "workflow_id": "data_pipeline_prod"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "unpinned": 1,
+    "unpinned_keys": ["data_pipeline_prod:buffer@1.3.0"],
+    "message": "Unpinned 1 version(s) of buffer"
+  }
+  ```
+
+  ### Unpin All Versions of Tool
+
+  ```bash
+  echo '{
+    "operation": "unpin",
+    "tool_id": "nmt_translator"
+  }' | python tools/executable/pin_tool_version.py
+  ```
+
+  ## Integration with Version Management
+
+  ### Pins Protect from Trimming
+
+  When `trim_tool_versions` runs:
+
+  ```python
+  # trim_tool_versions checks for pinned tags
+  for version in to_trim:
+      if 'pinned' in version.tags:
+          # SKIP - protected version
+          continue
+      else:
+          # Archive or delete
+          archive_version(version)
+  ```
+
+  ### Workflow Example
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # Pin dependencies before deploying workflow
+  call_tool("pin_tool_version", json.dumps({
+      "tool_id": "nmt_translator",
+      "version": "current",
+      "workflow_id": "translation_pipeline_v2",
+      "reason": "Validated performance for production"
+  }))
+
+  call_tool("pin_tool_version", json.dumps({
+      "tool_id": "buffer",
+      "version": "1.5.0",
+      "workflow_id": "translation_pipeline_v2",
+      "reason": "Required for batch processing"
+  }))
+
+  # Now safe to trim other tools
+  call_tool("trim_tool_versions", json.dumps({
+      "trim_all": True,
+      "keep_recent": 2
+  }))
+
+  # Pinned versions are protected!
+  ```
+
+  ## Use Cases
+
+  ### Production Workflows
+  ```bash
+  # Pin all dependencies before production deployment
+  for tool in ["buffer", "nmt_translator", "evaluator"]; do
+    echo "{\"operation\": \"pin\", \"tool_id\": \"$tool\",
+           \"workflow_id\": \"prod_pipeline\",
+           \"reason\": \"Production release 2.0\"}" | \
+      python tools/executable/pin_tool_version.py
+  done
+  ```
+
+  ### Testing New Versions
+  ```bash
+  # Development uses latest, production uses pinned
+  echo '{
+    "operation": "pin",
+    "tool_id": "buffer",
+    "version": "1.3.0",
+    "workflow_id": "prod_pipeline",
+    "reason": "Stable version"
+  }' | python tools/executable/pin_tool_version.py
+
+  # Dev workflow uses current (unpinned)
+  # Prod workflow uses pinned 1.3.0
+  ```
+
+  ### Force Update for Critical Bugs
+  ```bash
+  # Bug found in buffer v1.3.0
+  # Fix created in v1.3.1
+
+  # Option 1: Update pin
+  echo '{
+    "operation": "unpin",
+    "tool_id": "buffer",
+    "version": "1.3.0",
+    "workflow_id": "prod_pipeline"
+  }' | python tools/executable/pin_tool_version.py
+
+  echo '{
+    "operation": "pin",
+    "tool_id": "buffer",
+    "version": "1.3.1",
+    "workflow_id": "prod_pipeline",
+    "reason": "Critical bug fix - CVE-2025-1234"
+  }' | python tools/executable/pin_tool_version.py
+
+  # Option 2: Leave pinned, manually inline v1.3.1 code
+  ```
+
+  ## Integration with Inline Tools
+
+  Pinned tools can be inlined into workflow scripts for ultimate reproducibility:
+
+  ```bash
+  # Pin version
+  /tool buffer pin --version 1.5.0 --workflow prod_pipeline
+
+  # Inline into workflow script
+  /tool buffer inline --workflow prod_pipeline
+
+  # Result: workflow_prod_pipeline.py contains:
+  # ==================== PINNED: buffer@1.5.0 ====================
+  # RAG_VERSION_ID: buffer_v1_5_0
+  # PINNED_AT: 2025-01-15T10:30:00Z
+  # REASON: Production validated
+  # ==================== CODE START ====================
+  # [buffer v1.5.0 code inlined here]
+  # ==================== CODE END ====================
+  ```
+
+  ## Pin File Format
+
+  `.tool_pins.json`:
+  ```json
+  {
+    "nmt_translator@2.5.0": {
+      "tool_id": "nmt_translator",
+      "version": "2.5.0",
+      "workflow_id": null,
+      "pinned_at": "2025-01-15T10:30:00Z",
+      "reason": "Production workflow dependency",
+      "pinned_by": "user"
+    },
+    "data_pipeline_prod:buffer@1.3.0": {
+      "tool_id": "buffer",
+      "version": "1.3.0",
+      "workflow_id": "data_pipeline_prod",
+      "pinned_at": "2025-01-15T11:00:00Z",
+      "reason": "Tested and validated for production",
+      "pinned_by": "user"
+    }
+  }
+  ```
+
+examples:
+  - inputs:
+      operation: "pin"
+      tool_id: "buffer"
+      version: "current"
+      reason: "Production dependency"
+    output: |
+      {
+        "success": true,
+        "tool_id": "buffer",
+        "version": "1.5.0",
+        "pin_key": "buffer@1.5.0",
+        "message": "Pinned buffer to version 1.5.0",
+        "protected_from_trimming": true
+      }
+
+  - inputs:
+      operation: "pin"
+      tool_id: "nmt_translator"
+      version: "2.3.0"
+      workflow_id: "translation_prod"
+      reason: "Validated for production"
+    output: |
+      {
+        "success": true,
+        "tool_id": "nmt_translator",
+        "version": "2.3.0",
+        "workflow_id": "translation_prod",
+        "pin_key": "translation_prod:nmt_translator@2.3.0",
+        "protected_from_trimming": true
+      }
+
+  - inputs:
+      operation: "list"
+    output: |
+      {
+        "success": true,
+        "pins": [
+          {
+            "pin_key": "buffer@1.5.0",
+            "tool_id": "buffer",
+            "version": "1.5.0"
+          }
+        ],
+        "count": 1
+      }
+
+  - inputs:
+      operation: "unpin"
+      tool_id: "buffer"
+    output: |
+      {
+        "success": true,
+        "unpinned": 2,
+        "unpinned_keys": ["buffer@1.5.0", "prod:buffer@1.3.0"],
+        "message": "Unpinned 2 version(s) of buffer"
+      }

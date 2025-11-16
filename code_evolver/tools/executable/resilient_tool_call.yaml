@@ -1,0 +1,361 @@
+﻿name: "Resilient Tool Call"
+type: "executable"
+description: "Self-recovering tool execution. Automatically tries alternative tools when one fails, marking failures and learning from them. Fulfills the prompt at all costs."
+
+# Don't track usage of this internal tool
+track_usage: false
+
+executable:
+  command: "python"
+  args: ["tools/executable/resilient_tool_call.py"]
+
+input_schema:
+  scenario:
+    type: string
+    description: "Description of what needs to be done (used to find best tool)"
+    required: true
+
+  input:
+    type: object
+    description: "Input data to pass to the selected tool"
+    required: false
+    default: {}
+
+  tags:
+    type: array
+    description: "Optional tag filters for tool selection (e.g., ['translation', 'api'])"
+    required: false
+    default: []
+
+  max_attempts:
+    type: integer
+    description: "Maximum number of tools to try before giving up"
+    default: 5
+    required: false
+
+  mark_failures:
+    type: boolean
+    description: "Whether to mark failed tools (enables learning)"
+    default: true
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether any tool succeeded"
+    result:
+      type: any
+      description: "Output from successful tool"
+    tool_id:
+      type: string
+      description: "ID of the tool that succeeded"
+    attempts:
+      type: array
+      description: "List of all attempts made"
+    failed_tools:
+      type: array
+      description: "List of tools that failed"
+    message:
+      type: string
+
+tags: ["resilience", "fallback", "auto-recovery", "tool-selection", "internal"]
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+priority: 95
+
+usage_notes: |
+  ## Overview
+
+  **Resilient Tool Call** provides automatic fault tolerance for tool execution:
+
+  1. **Finds best tool** for the scenario (via RAG semantic search)
+  2. **Tries the tool** with your input
+  3. **If it fails:**
+     - Marks the failure (so it won't be tried again)
+     - Finds the next best tool
+     - Retries automatically
+  4. **Repeats until success** or max attempts reached
+  5. **Fulfills the prompt** at all costs
+
+  ## Why Use This?
+
+  ### Without Resilient Call
+  ```python
+  # Brittle - fails if tool is broken
+  result = call_tool("csv_parser", json.dumps({"data": csv_data}))
+  # If csv_parser is broken, you get an error and give up
+  ```
+
+  ### With Resilient Call
+  ```python
+  # Robust - tries alternatives automatically
+  result = call_tool("resilient_tool_call", json.dumps({
+      "scenario": "parse CSV data into JSON",
+      "input": {"data": csv_data},
+      "tags": ["parser", "csv"],
+      "max_attempts": 5
+  }))
+  # Tries csv_parser → fails
+  # Tries csv_to_json → fails
+  # Tries data_parser → SUCCESS!
+  ```
+
+  ## How Tool Selection Works
+
+  The system ranks tools by:
+
+  1. **Semantic Similarity**: How well tool description matches scenario
+  2. **Quality Score**: Current quality rating (affected by failures)
+  3. **Failure History**: Demotes tools with similar past failures
+  4. **Tag Matching**: Filters by required tags
+
+  **Ranking Formula:**
+  ```
+  final_score = (semantic_similarity - failure_demotion) * quality_score
+  ```
+
+  ## Example: Self-Recovery in Action
+
+  ```python
+  # Scenario: Translate text to French
+  result = call_tool("resilient_tool_call", json.dumps({
+      "scenario": "translate english text to french",
+      "input": {
+          "text": "Hello, how are you?",
+          "target_language": "french"
+      },
+      "tags": ["translation"],
+      "max_attempts": 5
+  }))
+
+  # What happens:
+  # 1. Finds: nmt_translator (score: 0.92)
+  #    ❌ FAILS: API key missing
+  #    → Marks failure, demotes tool
+  #
+  # 2. Finds: google_translate (score: 0.85)
+  #    ❌ FAILS: Network timeout
+  #    → Marks failure, tries next
+  #
+  # 3. Finds: offline_translator (score: 0.78)
+  #    ✓ SUCCESS!
+  #    → Returns result
+
+  print(result)
+  # {
+  #   "success": true,
+  #   "result": "Bonjour, comment allez-vous?",
+  #   "tool_id": "offline_translator",
+  #   "attempts": [
+  #     {"attempt": 1, "tool_id": "nmt_translator", "success": false, "error": "..."},
+  #     {"attempt": 2, "tool_id": "google_translate", "success": false, "error": "..."},
+  #     {"attempt": 3, "tool_id": "offline_translator", "success": true}
+  #   ],
+  #   "message": "Success with offline_translator on attempt 3"
+  # }
+  ```
+
+  ## Use Cases
+
+  ### 1. Critical Operations (Must Succeed)
+  ```python
+  # MUST translate this text, no matter what
+  result = call_tool("resilient_tool_call", json.dumps({
+      "scenario": "translate critical error message to spanish",
+      "input": {"text": error_msg, "target": "es"},
+      "max_attempts": 10  # Try up to 10 different tools
+  }))
+  ```
+
+  ### 2. Uncertain Tool Availability
+  ```python
+  # Don't know which CSV parser is working today
+  result = call_tool("resilient_tool_call", json.dumps({
+      "scenario": "parse CSV file with headers",
+      "input": {"file_path": "data.csv"},
+      "tags": ["csv", "parser"]  # Only try CSV parsers
+  }))
+  ```
+
+  ### 3. Production Workflows
+  ```python
+  # Replace brittle call_tool with resilient version
+  def translate_text(text, lang):
+      result = call_tool("resilient_tool_call", json.dumps({
+          "scenario": f"translate text to {lang}",
+          "input": {"text": text, "target_language": lang},
+          "tags": ["translation"],
+          "max_attempts": 3
+      }))
+
+      if result["success"]:
+          return json.loads(result["result"])
+      else:
+          raise Exception(f"Translation failed after {len(result['attempts'])} attempts")
+  ```
+
+  ### 4. Adaptive Workflows
+  ```python
+  # Workflow that adapts to tool availability
+  def process_data(data):
+      # Try to use best tool, fall back to alternatives
+      result = call_tool("resilient_tool_call", json.dumps({
+          "scenario": "validate and clean data",
+          "input": {"data": data},
+          "tags": ["validation", "cleaning"]
+      }))
+
+      # Log which tool was used (for monitoring)
+      print(f"Used tool: {result['tool_id']}")
+
+      return result["result"]
+  ```
+
+  ## Integration with node_runtime
+
+  Add a convenience function to `node_runtime.py`:
+
+  ```python
+  def call_tool_resilient(scenario: str, input_data: dict, **kwargs) -> str:
+      """
+      Call a tool with automatic fallback.
+
+      Usage:
+          result = call_tool_resilient(
+              "translate to french",
+              {"text": "hello", "target": "fr"},
+              tags=["translation"],
+              max_attempts=5
+          )
+      """
+      runtime = NodeRuntime.get_instance()
+
+      resilient_input = {
+          "scenario": scenario,
+          "input": input_data,
+          "tags": kwargs.get("tags", []),
+          "max_attempts": kwargs.get("max_attempts", 5),
+          "mark_failures": kwargs.get("mark_failures", True)
+      }
+
+      result = runtime.call_tool("resilient_tool_call", json.dumps(resilient_input))
+      result_data = json.loads(result)
+
+      if not result_data["success"]:
+          raise Exception(f"All tools failed: {result_data.get('message')}")
+
+      return result_data["result"]
+  ```
+
+  ## Failure Marking
+
+  By default, failed tools are automatically marked using `mark_tool_failure`. This:
+  - Records the failure scenario
+  - Demotes tool quality score
+  - Adds negative tags
+  - Prevents recommending the tool for similar scenarios
+
+  **Disable marking** if you don't want to learn from failures:
+  ```python
+  {
+      "scenario": "...",
+      "input": {...},
+      "mark_failures": false  # Don't mark failures
+  }
+  ```
+
+  ## Max Attempts Strategy
+
+  Choose based on criticality:
+
+  - **max_attempts: 1** - No fallback, fail fast
+  - **max_attempts: 3** - Moderate resilience (default)
+  - **max_attempts: 5** - High resilience
+  - **max_attempts: 10+** - Critical operations (must succeed)
+
+  ## Monitoring
+
+  The `attempts` field shows what was tried:
+
+  ```json
+  {
+    "attempts": [
+      {"attempt": 1, "tool_id": "tool_a", "success": false, "error": "timeout"},
+      {"attempt": 2, "tool_id": "tool_b", "success": false, "error": "not found"},
+      {"attempt": 3, "tool_id": "tool_c", "success": true}
+    ]
+  }
+  ```
+
+  Use this for:
+  - Debugging tool issues
+  - Monitoring tool reliability
+  - Optimizing tool selection
+
+  ## Best Practices
+
+  1. **Use descriptive scenarios**: Better scenarios = better tool selection
+     - ✅ Good: "translate english text to french using neural model"
+     - ❌ Bad: "translate"
+
+  2. **Set appropriate max_attempts**: Balance speed vs resilience
+     - Fast operations: 3 attempts
+     - Critical operations: 10 attempts
+
+  3. **Use tag filters**: Narrow the search space
+     - `tags: ["translation", "api"]` - Only API-based translators
+     - `tags: ["local", "offline"]` - Only local tools
+
+  4. **Monitor attempts**: Log which tools are used
+     ```python
+     result = call_tool_resilient(...)
+     logger.info(f"Used {result['tool_id']} after {len(result['attempts'])} attempts")
+     ```
+
+  5. **Handle total failure**: Always check success
+     ```python
+     result = call_tool_resilient(...)
+     if not result["success"]:
+         # Escalate or use manual fallback
+         handle_total_failure(result["attempts"])
+     ```
+
+examples:
+  - inputs:
+      scenario: "translate english to french"
+      input:
+        text: "Hello, world!"
+        target_language: "french"
+      tags: ["translation"]
+      max_attempts: 5
+    output: |
+      {
+        "success": true,
+        "result": "Bonjour, le monde!",
+        "tool_id": "nmt_translator",
+        "attempts": [
+          {"attempt": 1, "tool_id": "nmt_translator", "success": true, "score": 0.92}
+        ],
+        "message": "Success with nmt_translator on attempt 1"
+      }
+
+  - inputs:
+      scenario: "parse CSV data with headers"
+      input:
+        data: "name,age\\nAlice,30\\nBob,25"
+      tags: ["parser", "csv"]
+      max_attempts: 3
+    output: |
+      {
+        "success": true,
+        "result": "[{\"name\": \"Alice\", \"age\": 30}, {\"name\": \"Bob\", \"age\": 25}]",
+        "tool_id": "csv_to_json_v2",
+        "attempts": [
+          {"attempt": 1, "tool_id": "csv_parser", "success": false, "error": "Module not found"},
+          {"attempt": 2, "tool_id": "csv_to_json_v2", "success": true, "score": 0.85}
+        ],
+        "message": "Success with csv_to_json_v2 on attempt 2"
+      }

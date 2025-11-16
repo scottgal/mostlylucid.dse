@@ -1,0 +1,232 @@
+﻿name: "Find Code Fix Pattern"
+type: "executable"
+description: "Searches for similar code errors and suggests proven fixes. Returns multiple solutions ranked by usage count and similarity."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/find_code_fix_pattern.py"]
+
+input_schema:
+  error_message:
+    type: string
+    description: "The error message to search for"
+    required: true
+
+  broken_code:
+    type: string
+    description: "The broken code (helps with similarity matching)"
+    required: false
+
+  error_type:
+    type: string
+    description: "Category of error (helps filter results)"
+    required: false
+
+  language:
+    type: string
+    description: "Programming language"
+    default: "python"
+    required: false
+
+  top_k:
+    type: integer
+    description: "Number of similar patterns to return"
+    default: 3
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    found:
+      type: boolean
+      description: "Whether any patterns were found"
+    pattern_count:
+      type: integer
+      description: "Number of patterns found"
+    best_match:
+      type: object
+      description: "The highest-ranked fix (by usage + similarity)"
+      properties:
+        pattern_id:
+          type: string
+        similarity:
+          type: number
+        usage_count:
+          type: integer
+        rank_score:
+          type: number
+        error_message:
+          type: string
+        broken_code:
+          type: string
+        fixed_code:
+          type: string
+        fix_description:
+          type: string
+        debug_info:
+          type: object
+    all_patterns:
+      type: array
+      description: "All matching patterns ranked by effectiveness"
+      items:
+        type: object
+    recommendation:
+      type: string
+    how_to_apply:
+      type: array
+      items:
+        type: string
+
+tags: ["learning", "code-fix", "pattern-search", "error-recovery", "self-improvement"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 95
+
+usage_notes: |
+  ## Overview
+
+  Searches RAG memory for similar code errors and returns proven fixes.
+  Patterns are ranked by:
+  1. **Usage count** (most proven/successful)
+  2. **Similarity** (how closely it matches your error)
+  3. **Quality score** (confidence in the fix)
+
+  ## Usage
+
+  ### Find Fix for an Error
+
+  ```bash
+  echo '{
+    "error_message": "SyntaxError: f-string: single } is not allowed",
+    "broken_code": "f\"Status: {status}\"",
+    "error_type": "syntax",
+    "top_k": 5
+  }' | python tools/executable/find_code_fix_pattern.py
+  ```
+
+  ### Result
+
+  ```json
+  {
+    "success": true,
+    "found": true,
+    "pattern_count": 3,
+    "best_match": {
+      "pattern_id": "fix_pattern_abc123",
+      "similarity": 0.95,
+      "usage_count": 15,
+      "rank_score": 150.95,
+      "error_message": "SyntaxError: f-string: single '}' is not allowed",
+      "broken_code": "f'Hello {name}'",
+      "fixed_code": "f'Hello {{name}}'",
+      "fix_description": "Literal braces must be doubled in f-strings",
+      "debug_info": {...}
+    },
+    "all_patterns": [
+      {...pattern 1 - most used...},
+      {...pattern 2 - second most used...},
+      {...pattern 3 - third most used...}
+    ],
+    "recommendation": "Apply fix from pattern fix_pattern_abc123 (used 15 times, 95% similar)"
+  }
+  ```
+
+  ## Integration Example
+
+  ```python
+  # Auto-fix code errors using learned patterns
+  try:
+      result = execute_code(code)
+  except Exception as e:
+      # Search for similar fixes
+      fixes = call_tool("find_code_fix_pattern", json.dumps({
+          "error_message": str(e),
+          "broken_code": code,
+          "error_type": "runtime"
+      }))
+
+      if fixes['found']:
+          best_fix = fixes['best_match']
+
+          # Apply the most proven fix (highest usage count)
+          fixed_code = apply_transformation(
+              code,
+              best_fix['broken_code'],
+              best_fix['fixed_code']
+          )
+
+          # Test the fix
+          try:
+              result = execute_code(fixed_code)
+
+              # Success! Increment usage count
+              rag.increment_usage(best_fix['pattern_id'])
+
+          except:
+              # This fix didn't work, try next one
+              next_fix = fixes['all_patterns'][1]
+              # ...
+      else:
+          # No pattern found, use LLM to fix
+          fixed_code = llm_fix_code(code, str(e))
+
+          # Store this new fix for future use
+          call_tool("store_code_fix_pattern", json.dumps({
+              "error_message": str(e),
+              "broken_code": code,
+              "fixed_code": fixed_code,
+              "fix_description": "...",
+              "error_type": "runtime"
+          }))
+  ```
+
+  ## Ranking Logic
+
+  Patterns are ranked by this formula:
+  ```
+  rank_score = (usage_count × 10) + similarity
+  ```
+
+  This means:
+  - A fix used 10 times ranks higher than a 100% similar but unused fix
+  - Proven fixes get priority over perfect matches
+  - System learns which fixes actually work in practice
+
+  ## Multiple Fixes for Same Error
+
+  The same error can have multiple fixes stored as separate nodes.
+  Each fix tracks its own usage count independently.
+
+  **Example:**
+  - Error: "TypeError: str + int"
+  - Fix 1: Convert int to str → Used 50 times
+  - Fix 2: Convert str to int → Used 5 times
+  - Fix 3: Use f-string → Used 100 times ← Best match
+
+  The system will recommend Fix 3 (most proven) first.
+
+examples:
+  - inputs:
+      error_message: "NameError: name 'x' is not defined"
+      broken_code: "print(x)"
+      error_type: "runtime"
+      top_k: 3
+    output: |
+      {
+        "success": true,
+        "found": true,
+        "pattern_count": 2,
+        "best_match": {
+          "pattern_id": "fix_pattern_xyz789",
+          "usage_count": 25,
+          "similarity": 0.98,
+          "fixed_code": "x = 0\nprint(x)",
+          "fix_description": "Variable used before definition"
+        },
+        "all_patterns": [...]
+      }

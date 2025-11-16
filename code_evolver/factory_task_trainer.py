@@ -388,7 +388,7 @@ class FactoryTaskTrainer:
 
     def _execute_task(self, task: str) -> bool:
         """
-        Execute a task through the DSE system.
+        Execute a task through the DSE system with full RAG and tool registration.
 
         Args:
             task: Task prompt to execute
@@ -397,43 +397,34 @@ class FactoryTaskTrainer:
             True if successful, False otherwise
         """
         try:
-            # Option 1: Execute via chat_cli.py subprocess (uncomment to use)
-            # import subprocess
-            # result = subprocess.run(
-            #     ['python', 'code_evolver/chat_cli.py'],
-            #     input=task,
-            #     capture_output=True,
-            #     text=True,
-            #     timeout=30
-            # )
-            # success = result.returncode == 0
+            # Execute via chat_cli integration
+            import sys
+            sys.path.insert(0, str(Path(__file__).parent / 'code_evolver'))
 
-            # Option 2: Execute via orchestrator import (uncomment to use)
-            # import sys
-            # sys.path.insert(0, str(Path(__file__).parent))
-            # from orchestrator import Orchestrator
-            # orch = Orchestrator()
-            # node_id = f"train_{int(time.time() * 1000)}"
-            # success = orch.generate_node(node_id, "Training Task", task)
+            from chat_cli import ChatCLI
 
-            # Option 3: Simulate task execution (default for testing)
-            # Simulate processing time
-            processing_time = random.uniform(0.5, 3.0)
-            time.sleep(processing_time)
+            # Create CLI instance (will initialize all components including RAG)
+            cli = ChatCLI()
 
-            # Simulate success/failure (90% success rate)
-            success = random.random() < 0.9
+            # Generate node_id from task
+            import hashlib
+            task_hash = hashlib.sha256(task.encode()).hexdigest()[:8]
+            node_id = f"train_{int(time.time() * 1000)}_{task_hash}"
 
-            # In real integration, this would:
-            # 1. Pass task to orchestrator/workflow system
-            # 2. Execute through appropriate LLM client
-            # 3. Capture and validate results
-            # 4. Return actual success status
+            # Execute the task using handle_generate (which handles RAG, tests, and tool registration)
+            success = cli.handle_generate(task)
+
+            if success:
+                logger.debug(f"Task completed successfully, node registered as tool")
+            else:
+                logger.debug(f"Task failed to complete")
 
             return success
 
         except Exception as e:
             logger.error(f"Task execution error: {e}")
+            import traceback
+            logger.debug(traceback.format_exc())
             return False
 
 

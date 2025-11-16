@@ -333,6 +333,17 @@ class ToolsManager:
         # In-memory registry
         self.tools: Dict[str, Tool] = {}
 
+        # Initialize interaction logger for comprehensive tracking
+        try:
+            from .interaction_logger import InteractionLogger
+            self.interaction_logger = InteractionLogger(
+                rag_memory=rag_memory,
+                ollama_client=ollama_client
+            )
+        except Exception as e:
+            logger.warning(f"Could not initialize interaction logger: {e}")
+            self.interaction_logger = None
+
         self._load_tools()
 
         # Load tools from config if available
@@ -548,7 +559,14 @@ class ToolsManager:
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
 
             except Exception as e:
-                logger.error(f"Error loading tool from {yaml_file}: {e}")
+                # Sanitize error message to handle unicode characters on Windows
+                try:
+                    error_msg = str(e).encode('ascii', errors='replace').decode('ascii')
+                    file_str = str(yaml_file).encode('ascii', errors='replace').decode('ascii')
+                    logger.error(f"Error loading tool from {file_str}: {error_msg}")
+                except:
+                    # Ultimate fallback - just log that there was an error
+                    logger.error(f"Error loading tool from YAML file (filename contains special characters)")
 
         logger.info(f"✓ Loaded {len(yaml_files)} tool(s) from YAML files")
 
@@ -1096,6 +1114,50 @@ Tags: {', '.join(tool.tags)}
             except Exception as e:
                 logger.warning(f"Could not store tool invocation in RAG: {e}")
 
+        # Log interaction with comprehensive tracking (for intelligent caching & learning)
+        if self.interaction_logger:
+            try:
+                # Calculate quality score based on response
+                quality_score = None
+                if response:
+                    # Base quality on response length and non-empty status
+                    quality_score = min(0.95, 0.5 + (len(response) / 1000.0) * 0.1)
+                else:
+                    quality_score = 0.1  # Failed/empty response
+
+                # Detect if this is a creative/non-deterministic task
+                # Creative content should NEVER be cached (each generation should be unique)
+                cacheable_output = True
+                prompt_lower = prompt.lower()
+                creative_keywords = [
+                    'write', 'create', 'generate', 'compose', 'make up',
+                    'story', 'poem', 'haiku', 'joke', 'article', 'essay',
+                    'creative', 'random', 'sample data', 'test data', 'fake data'
+                ]
+                if any(keyword in prompt_lower for keyword in creative_keywords):
+                    cacheable_output = False
+                    logger.debug(f"Detected creative task - output will NOT be cached")
+
+                self.interaction_logger.log_interaction(
+                    tool_id=tool_id,
+                    input_data={'prompt': prompt, 'system_prompt': system_prompt, 'temperature': temperature},
+                    output_data=response,
+                    success=bool(response),
+                    quality_score=quality_score,
+                    latency_ms=response_time * 1000,
+                    interaction_type='llm',
+                    metadata={
+                        'model': model,
+                        'endpoint': endpoint or 'default',
+                        'tool_name': tool.name,
+                        'timed_out': timed_out
+                    },
+                    auto_embed=True,
+                    cacheable_output=cacheable_output
+                )
+            except Exception as e:
+                logger.debug(f"Could not log interaction: {e}")
+
         return response
 
     def invoke_llm_tool_with_fallback(
@@ -1337,9 +1399,15 @@ Tags: {', '.join(tool.tags)}
 
         # Execute the command
         import subprocess
+        import time
+        start_time = time.time()
         try:
+            # If prompt kwarg provided, pass it as stdin
+            stdin_input = kwargs.get('prompt', None)
+
             result_obj = subprocess.run(
                 full_command,
+                input=stdin_input,  # Pass prompt as stdin if provided
                 capture_output=True,
                 text=True,
                 timeout=60  # 60 second timeout
@@ -1414,6 +1482,32 @@ Tags: {', '.join(tool.tags)}
                 logger.debug(f"Stored executable invocation for {tool_id} in RAG")
             except Exception as e:
                 logger.warning(f"Could not store executable invocation in RAG: {e}")
+
+        # Log interaction with comprehensive tracking (for intelligent caching & learning)
+        if self.interaction_logger:
+            try:
+                execution_time = time.time() - start_time
+
+                # Calculate quality based on success and output
+                quality_score = 0.9 if result['success'] else 0.3
+
+                self.interaction_logger.log_interaction(
+                    tool_id=tool_id,
+                    input_data={'source_file': source_file, 'command': result['command'], **kwargs},
+                    output_data=result,
+                    success=result['success'],
+                    quality_score=quality_score,
+                    latency_ms=execution_time * 1000,
+                    interaction_type='tool',
+                    metadata={
+                        'command': command,
+                        'tool_name': tool.name,
+                        'exit_code': result['exit_code']
+                    },
+                    auto_embed=True
+                )
+            except Exception as e:
+                logger.debug(f"Could not log interaction: {e}")
 
         return result
 

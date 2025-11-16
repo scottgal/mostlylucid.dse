@@ -1,0 +1,248 @@
+﻿name: "Trim Tool Versions"
+type: "executable"
+description: "Keeps tools tidy by retaining only recent versions (2-3 back) plus original. Archives or deletes old versions for rollback capability."
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/trim_tool_versions.py"]
+
+input_schema:
+  tool_id:
+    type: string
+    description: "ID of the tool to trim (or set trim_all: true)"
+    required: false
+
+  keep_recent:
+    type: integer
+    description: "Number of recent versions to keep"
+    default: 3
+    required: false
+
+  archive_old:
+    type: boolean
+    description: "Archive old versions instead of deleting"
+    default: true
+    required: false
+
+  dry_run:
+    type: boolean
+    description: "Don't actually delete, just report what would happen"
+    default: false
+    required: false
+
+  trim_all:
+    type: boolean
+    description: "Trim versions for all tools"
+    default: false
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    tool_id:
+      type: string
+    total_versions:
+      type: integer
+    kept:
+      type: integer
+    trimmed:
+      type: integer
+    kept_versions:
+      type: array
+      items:
+        type: string
+    trimmed_files:
+      type: array
+    space_saved_kb:
+      type: number
+    archive_location:
+      type: string
+    message:
+      type: string
+
+tags: ["maintenance", "version-control", "cleanup", "storage-optimization"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "good"
+priority: 70
+
+usage_notes: |
+  ## Purpose
+
+  Keeps tool versions manageable by:
+  - Always keeping original (v1.0.0) as ultimate backup
+  - Always keeping YAML definition
+  - Keeping last 2-3 versions for rollback
+  - Archiving or deleting older versions
+
+  ## Directory Structure
+
+  ```
+  tools/executable/
+    my_tool/
+      my_tool.yaml              # Original definition (never deleted)
+      my_tool_v1_0_0.py         # Original version (never deleted)
+      my_tool_v1_1_0.py         # Old version (trimmed)
+      my_tool_v1_2_0.py         # Recent version (kept)
+      my_tool_v1_3_0.py         # Recent version (kept)
+      my_tool_v1_4_0.py         # Current version (kept)
+      my_tool.py -> my_tool_v1_4_0.py  # Symlink to latest
+      archived_versions/
+        my_tool_v1_1_0.py       # Archived for safety
+  ```
+
+  ## Usage
+
+  ### Trim Single Tool
+
+  ```bash
+  echo '{
+    "tool_id": "buffer",
+    "keep_recent": 3,
+    "archive_old": true,
+    "dry_run": false
+  }' | python tools/executable/trim_tool_versions.py
+  ```
+
+  ### Dry Run (Preview)
+
+  ```bash
+  echo '{
+    "tool_id": "buffer",
+    "dry_run": true
+  }' | python tools/executable/trim_tool_versions.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tool_id": "buffer",
+    "total_versions": 10,
+    "kept": 4,
+    "trimmed": 6,
+    "kept_versions": ["1.0.0", "1.7.0", "1.8.0", "1.9.0"],
+    "trimmed_files": [
+      {"file": "buffer_v1_1_0.py", "version": "1.1.0", "action": "would_archive"},
+      {"file": "buffer_v1_2_0.py", "version": "1.2.0", "action": "would_archive"}
+    ],
+    "space_saved_kb": 245.6,
+    "message": "Kept 4 versions, trimmed 6"
+  }
+  ```
+
+  ### Trim All Tools
+
+  ```bash
+  echo '{
+    "trim_all": true,
+    "keep_recent": 3,
+    "dry_run": false
+  }' | python tools/executable/trim_tool_versions.py
+  ```
+
+  **Output:**
+  ```json
+  {
+    "success": true,
+    "tools_processed": 25,
+    "total_trimmed": 87,
+    "total_space_saved_mb": 12.3,
+    "results": [
+      {"tool_id": "buffer", "trimmed": 6},
+      {"tool_id": "nmt_translator", "trimmed": 3}
+    ]
+  }
+  ```
+
+  ## Retention Policy
+
+  **Always Kept:**
+  - Original YAML definition
+  - v1.0.0 (first version)
+  - Last N versions (default: 3)
+
+  **Archived:**
+  - Versions between original and recent N
+  - Moved to `archived_versions/` subdirectory
+
+  **Never Kept:**
+  - (Optional) Very old versions can be permanently deleted
+
+  ## Integration with evolve_tool
+
+  After evolving a tool, automatically trim:
+
+  ```python
+  # Evolve tool
+  evolution = call_tool("evolve_tool", json.dumps({
+      "tool_id": "my_tool",
+      "error_message": "...",
+      "mutation_hint": "..."
+  }))
+
+  # Trim old versions
+  call_tool("trim_tool_versions", json.dumps({
+      "tool_id": "my_tool",
+      "keep_recent": 3
+  }))
+  ```
+
+  ## Rollback
+
+  To rollback to a previous version:
+
+  ```bash
+  # List archived versions
+  ls tools/executable/my_tool/archived_versions/
+
+  # Restore a version
+  cp tools/executable/my_tool/archived_versions/my_tool_v1_2_0.py \
+     tools/executable/my_tool/
+
+  # Update symlink
+  cd tools/executable/my_tool
+  ln -sf my_tool_v1_2_0.py my_tool.py
+  ```
+
+  ## Automated Cleanup Schedule
+
+  Run periodically to keep tools tidy:
+
+  ```bash
+  # Weekly cleanup (cron job)
+  0 2 * * 0 cd /path/to/code_evolver && \
+    echo '{"trim_all": true, "keep_recent": 3}' | \
+    python tools/executable/trim_tool_versions.py
+  ```
+
+examples:
+  - inputs:
+      tool_id: "buffer"
+      keep_recent: 3
+      dry_run: true
+    output: |
+      {
+        "success": true,
+        "tool_id": "buffer",
+        "total_versions": 10,
+        "kept": 4,
+        "trimmed": 6,
+        "space_saved_kb": 245.6,
+        "message": "Kept 4 versions, trimmed 6"
+      }
+
+  - inputs:
+      trim_all: true
+      keep_recent: 2
+    output: |
+      {
+        "success": true,
+        "tools_processed": 25,
+        "total_trimmed": 87,
+        "total_space_saved_mb": 12.3
+      }
