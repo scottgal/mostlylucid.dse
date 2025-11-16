@@ -1956,6 +1956,9 @@ Return ONLY the JSON object, nothing else."""
             console.print("[red]Failed to generate valid response[/red]")
             return False
 
+        # CRITICAL: Validate and fix code syntax BEFORE extraction
+        # This prevents indentation errors that plague code generation
+
         # Parse JSON response
         try:
             import json
@@ -2028,6 +2031,32 @@ Return ONLY the JSON object, nothing else."""
 
         # Clean the code (remove any remaining markdown)
         code = self._clean_code(code)
+
+        # CRITICAL: Auto-fix indentation and syntax issues using autopep8
+        try:
+            import autopep8
+            original_code = code
+            code = autopep8.fix_code(code, options={'aggressive': 2, 'max_line_length': 120})
+
+            if code != original_code:
+                console.print("[green]Auto-fixed code formatting and indentation[/green]")
+                logger.info("autopep8 fixed formatting issues in generated code")
+        except ImportError:
+            console.print("[yellow]Warning: autopep8 not installed - skipping auto-formatting[/yellow]")
+            console.print("[dim]Install with: pip install autopep8[/dim]")
+        except Exception as e:
+            logger.warning(f"autopep8 failed to fix code: {e}")
+            console.print(f"[yellow]Could not auto-format code: {e}[/yellow]")
+
+        # Validate syntax after formatting
+        try:
+            import ast
+            ast.parse(code)
+            console.print("[dim]Syntax validation: OK[/dim]")
+        except SyntaxError as e:
+            console.print(f"[red]Syntax error detected after formatting:[/red]")
+            console.print(f"[red]  Line {e.lineno}: {e.msg}[/red]")
+            console.print(f"[yellow]Will attempt to fix via adaptive escalation...[/yellow]")
 
         # Check for required imports and add if missing
         required_imports = []
