@@ -681,6 +681,78 @@ class ScheduledTaskManager:
 
         return tasks
 
+    def query_tasks_natural_language(
+        self,
+        query: str,
+        current_time: Optional[datetime] = None
+    ) -> Dict[str, Any]:
+        """
+        Query tasks using natural language.
+
+        This is a high-level interface that:
+        1. Parses the natural language query into structured filters
+        2. Searches RAG for matching tasks
+        3. If time window specified, also checks for tasks due in that window
+
+        Args:
+            query: Natural language query
+            current_time: Reference time (defaults to now)
+
+        Returns:
+            Dict with parsed query, matched tasks, and due tasks
+
+        Examples:
+            - query_tasks_natural_language("backup jobs running tonight")
+            - query_tasks_natural_language("all tasks in the next 3 hours")
+            - query_tasks_natural_language("weekly reports on monday morning")
+        """
+        from tools.executable.cron_querier import query_scheduled_tasks
+
+        current_time = current_time or datetime.now()
+
+        # Parse the query
+        parsed = query_scheduled_tasks(
+            query,
+            current_time=current_time.isoformat(),
+            llm_client=self.ollama_client
+        )
+
+        # Search for matching tasks
+        matched_tasks = []
+        if parsed.get('filters') or parsed.get('search_query'):
+            matched_tasks = self.search_tasks(
+                parsed['search_query'],
+                parsed.get('filters')
+            )
+
+        # Get tasks due in time window if specified
+        due_tasks = []
+        if parsed.get('time_window'):
+            window_minutes = parsed['time_window']['window_minutes']
+            due_tasks = self.get_tasks_due_now(
+                current_time=current_time,
+                window_minutes=window_minutes
+            )
+
+        # Combine and deduplicate
+        if due_tasks and matched_tasks:
+            # Intersection: tasks that match filters AND are due
+            task_ids_matched = {t.task_id for t in matched_tasks}
+            combined = [t for t in due_tasks if t.task_id in task_ids_matched]
+        elif due_tasks:
+            combined = due_tasks
+        else:
+            combined = matched_tasks
+
+        return {
+            'query': query,
+            'parsed': parsed,
+            'matched_tasks': matched_tasks,
+            'due_tasks': due_tasks,
+            'combined_results': combined,
+            'result_count': len(combined)
+        }
+
     def delete_task(self, task_id: str) -> bool:
         """
         Delete a task.
