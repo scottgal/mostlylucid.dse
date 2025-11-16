@@ -12,6 +12,9 @@ from typing import Optional, Dict, Any, TYPE_CHECKING
 if TYPE_CHECKING:
     from .config_manager import ConfigManager
 
+# Import profiling utilities
+from .profiling import ProfileContext, get_global_registry
+
 # Enable DEBUG logging by default (shows full LLM conversations)
 # Set CODE_EVOLVER_DEBUG=0 to disable debug output
 log_level = logging.INFO if os.getenv("CODE_EVOLVER_DEBUG") == "0" else logging.DEBUG
@@ -236,77 +239,87 @@ class OllamaClient:
         Returns:
             Generated text response
         """
-        # Determine endpoint to use
-        target_endpoint = endpoint
-
-        # If no endpoint specified but we have a config_manager and model_key
-        if not target_endpoint and self.config_manager and model_key:
-            # Get endpoints (can be single or multiple)
-            endpoints = self.config_manager.get_model_endpoints(model_key)
-            if endpoints:
-                target_endpoint = self._get_next_endpoint(model_key, endpoints)
-            else:
-                target_endpoint = self.base_url
-
-        # Fall back to base_url
-        if not target_endpoint:
-            target_endpoint = self.base_url
-
-        # Truncate prompt if necessary based on model's context window
-        truncated_prompt = self.truncate_prompt(prompt, model)
-
-        generate_url = f"{target_endpoint}/api/generate"
-
-        payload = {
+        # Profile this LLM call (typically 70-90% of total latency)
+        profile_name = f"LLM.generate.{model_key or model}"
+        profile_metadata = {
             "model": model,
-            "prompt": truncated_prompt,
-            "stream": stream,
-            "options": {
-                "temperature": temperature
-            }
+            "model_key": model_key,
+            "prompt_length": len(prompt),
+            "temperature": temperature
         }
 
-        if system:
-            payload["system"] = system
+        with ProfileContext(profile_name, metadata=profile_metadata):
+            # Determine endpoint to use
+            target_endpoint = endpoint
 
-        try:
-            # Calculate dynamic timeout based on model and speed tier
-            timeout = self.calculate_timeout(model, model_key, speed_tier)
+            # If no endpoint specified but we have a config_manager and model_key
+            if not target_endpoint and self.config_manager and model_key:
+                # Get endpoints (can be single or multiple)
+                endpoints = self.config_manager.get_model_endpoints(model_key)
+                if endpoints:
+                    target_endpoint = self._get_next_endpoint(model_key, endpoints)
+                else:
+                    target_endpoint = self.base_url
 
-            logger.info(f"Generating with model '{model}' at {target_endpoint} (timeout: {timeout}s)...")
+            # Fall back to base_url
+            if not target_endpoint:
+                target_endpoint = self.base_url
 
-            # Debug logging: Log the request (full content, not truncated)
-            logger.debug(f"Request to {target_endpoint}:")
-            logger.debug(f"  Model: {model}")
-            logger.debug(f"  Prompt: {truncated_prompt}")
-            logger.debug(f"  Temperature: {temperature}")
+            # Truncate prompt if necessary based on model's context window
+            truncated_prompt = self.truncate_prompt(prompt, model)
+
+            generate_url = f"{target_endpoint}/api/generate"
+
+            payload = {
+                "model": model,
+                "prompt": truncated_prompt,
+                "stream": stream,
+                "options": {
+                    "temperature": temperature
+                }
+            }
+
             if system:
-                logger.debug(f"  System prompt: {system}")
+                payload["system"] = system
 
-            response = requests.post(
-                generate_url,
-                json=payload,
-                timeout=timeout
-            )
-            response.raise_for_status()
-            data = response.json()
+            try:
+                # Calculate dynamic timeout based on model and speed tier
+                timeout = self.calculate_timeout(model, model_key, speed_tier)
 
-            result = data.get("response", "")
+                logger.info(f"Generating with model '{model}' at {target_endpoint} (timeout: {timeout}s)...")
 
-            # Debug logging: Log the response (full content, not truncated)
-            logger.debug(f"Response from {target_endpoint}:")
-            logger.debug(f"  Length: {len(result)} characters")
-            logger.debug(f"  Full response: {result}")
+                # Debug logging: Log the request (full content, not truncated)
+                logger.debug(f"Request to {target_endpoint}:")
+                logger.debug(f"  Model: {model}")
+                logger.debug(f"  Prompt: {truncated_prompt}")
+                logger.debug(f"  Temperature: {temperature}")
+                if system:
+                    logger.debug(f"  System prompt: {system}")
 
-            logger.info(f"✓ Generated {len(result)} characters from {target_endpoint}")
-            return result
+                response = requests.post(
+                    generate_url,
+                    json=payload,
+                    timeout=timeout
+                )
+                response.raise_for_status()
+                data = response.json()
 
-        except requests.exceptions.Timeout:
-            logger.error(f"Request timed out for {target_endpoint}")
-            return ""
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error generating response from {target_endpoint}: {e}")
-            return ""
+                result = data.get("response", "")
+
+                # Debug logging: Log the response (full content, not truncated)
+                logger.debug(f"Response from {target_endpoint}:")
+                logger.debug(f"  Length: {len(result)} characters")
+                logger.debug(f"  Full response: {result}")
+
+                logger.info(f"✓ Generated {len(result)} characters from {target_endpoint}")
+                return result
+
+            except requests.exceptions.Timeout:
+                logger.error(f"Request timed out for {target_endpoint}")
+                return ""
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error generating response from {target_endpoint}: {e}")
+                return ""
 
     def generate_code(self, prompt: str, constraints: Optional[str] = None) -> str:
         """
