@@ -54,7 +54,8 @@
       "Bash(for model in \"qwen2.5-coder:3b\" \"codellama:7b\" \"deepseek-coder-v2:16b\")",
       "Bash(do echo \"=== $model ===\")",
       "Bash(done)",
-      "Bash(ollama list:*)"
+      "Bash(ollama list:*)",
+      "Bash(=3.0.43 --quiet)"
     ],
     "deny": [],
     "ask": []

@@ -52,7 +52,12 @@
     "invocation_general_1763256515448",
     "invocation_general_1763256869304",
     "invocation_general_1763259606313",
-    "invocation_general_1763259785630"
+    "invocation_general_1763259785630",
+    "invocation_general_1763265107513",
+    "invocation_general_1763265570362",
+    "invocation_general_1763266762349",
+    "invocation_general_1763268165085",
+    "invocation_general_1763268600271"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -154,7 +159,12 @@
     "invocation_general_1763256515448",
     "invocation_general_1763256869304",
     "invocation_general_1763259606313",
-    "invocation_general_1763259785630"
+    "invocation_general_1763259785630",
+    "invocation_general_1763265107513",
+    "invocation_general_1763265570362",
+    "invocation_general_1763266762349",
+    "invocation_general_1763268165085",
+    "invocation_general_1763268600271"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -256,7 +266,12 @@
     "invocation_general_1763256515448",
     "invocation_general_1763256869304",
     "invocation_general_1763259606313",
-    "invocation_general_1763259785630"
+    "invocation_general_1763259785630",
+    "invocation_general_1763265107513",
+    "invocation_general_1763265570362",
+    "invocation_general_1763266762349",
+    "invocation_general_1763268165085",
+    "invocation_general_1763268600271"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -405,7 +420,10 @@
     "tool_write_a_haiku_about_coding",
     "tool_exit_1763253889",
     "tool_write_me_a_poem",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "tool_pynguin_test_generator",
+    "tool_write_a_poem_and_translate_it",
+    "tool_translate_the_work_boob_to_f"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
@@ -488,7 +506,9 @@
     "spec_write_me_a_poem_1763255171",
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
-    "spec_write_me_a_poem_1763259570"
+    "spec_write_me_a_poem_1763259570",
+    "spec_write_a_poem_and_translate_it",
+    "spec_write_a_short_joke"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -581,7 +601,9 @@
     "workflow_1763253780",
     "tool_exit_1763253889",
     "tool_write_me_a_poem",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "tool_write_a_poem_and_translate_it",
+    "tool_translate_the_work_boob_to_f"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -718,7 +740,10 @@
     "spec_implement_binary_search_1763255952",
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
-    "spec_write_me_a_poem_1763259570"
+    "spec_write_me_a_poem_1763259570",
+    "spec_write_a_poem_and_translate_it",
+    "spec_translate_the_work_boob_to_f",
+    "spec_write_a_short_joke"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -814,7 +839,9 @@
     "tool_write_a_haiku_about_coding",
     "tool_exit_1763253889",
     "tool_write_me_a_poem",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "tool_write_a_poem_and_translate_it",
+    "tool_translate_the_work_boob_to_f"
   ],
   "python": [
     "func_add_100_and_200",
@@ -880,7 +907,10 @@
     "func_write_me_a_poem",
     "workflow_write_me_a_poem",
     "tool_write_me_a_poem",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "func_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it",
+    "tool_translate_the_work_boob_to_f"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -1257,7 +1287,10 @@
     "spec_implement_binary_search_1763255952",
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
-    "spec_write_me_a_poem_1763259570"
+    "spec_write_me_a_poem_1763259570",
+    "spec_write_a_poem_and_translate_it",
+    "spec_translate_the_work_boob_to_f",
+    "spec_write_a_short_joke"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1346,7 +1379,10 @@
     "spec_implement_binary_search_1763255952",
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
-    "spec_write_me_a_poem_1763259570"
+    "spec_write_me_a_poem_1763259570",
+    "spec_write_a_poem_and_translate_it",
+    "spec_translate_the_work_boob_to_f",
+    "spec_write_a_short_joke"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1435,7 +1471,10 @@
     "spec_implement_binary_search_1763255952",
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
-    "spec_write_me_a_poem_1763259570"
+    "spec_write_me_a_poem_1763259570",
+    "spec_write_a_poem_and_translate_it",
+    "spec_translate_the_work_boob_to_f",
+    "spec_write_a_short_joke"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1445,7 +1484,9 @@
     "func_write_me_a_poem",
     "workflow_write_me_a_poem",
     "tool_write_me_a_poem",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "func_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it"
   ],
   "robert burns": [
     "func_write_a_poem_in_the_style_of_r"
@@ -1532,7 +1573,9 @@
     "tool_write_a_poem",
     "tool_write_a_joke_1763181926",
     "tool_write_me_a_joke_1763182563",
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "func_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it"
   ],
   "content_creation": [
     "func_write_a_joke_1763181926",
@@ -1753,7 +1796,8 @@
     "tool_security_auditor"
   ],
   "performance": [
-    "tool_performance_optimizer"
+    "tool_performance_optimizer",
+    "timeout_stats_codellama"
   ],
   "optimization": [
     "tool_performance_optimizer",
@@ -1874,7 +1918,8 @@
     "tool_pip_install",
     "tool_basic_calculator",
     "tool_text_formatter",
-    "tool_unit_converter"
+    "tool_unit_converter",
+    "tool_pynguin_test_generator"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -1909,17 +1954,21 @@
   ],
   "testing": [
     "tool_pytest_runner",
-    "tool_pytest_coverage"
+    "tool_pytest_coverage",
+    "tool_pynguin_test_generator"
   ],
   "pytest": [
     "tool_pytest_runner",
-    "tool_pytest_coverage"
+    "tool_pytest_coverage",
+    "tool_pynguin_test_generator"
   ],
   "unit-tests": [
-    "tool_pytest_runner"
+    "tool_pytest_runner",
+    "tool_pynguin_test_generator"
   ],
   "coverage": [
-    "tool_pytest_coverage"
+    "tool_pytest_coverage",
+    "tool_pynguin_test_generator"
   ],
   "complexity": [
     "tool_radon_complexity"
@@ -1962,7 +2011,8 @@
     "tool_fast_content_writer",
     "tool_basic_calculator",
     "tool_text_formatter",
-    "tool_unit_converter"
+    "tool_unit_converter",
+    "tool_pynguin_test_generator"
   ],
   "chunking": [
     "tool_quick_feedback"
@@ -1988,7 +2038,9 @@
     "tool_code_translation_validator",
     "tool_write_a_joke_and_translate_to_1763216276",
     "tool_translate_the_poem_to_french",
-    "tool_quick_translator"
+    "tool_quick_translator",
+    "func_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it"
   ],
   "nmt": [
     "tool_nmt_translator"
@@ -2248,7 +2300,13 @@
     "invocation_general_1763256515448",
     "invocation_general_1763256869304",
     "invocation_general_1763259606313",
-    "invocation_general_1763259785630"
+    "invocation_general_1763259785630",
+    "timeout_stats_codellama",
+    "invocation_general_1763265107513",
+    "invocation_general_1763265570362",
+    "invocation_general_1763266762349",
+    "invocation_general_1763268165085",
+    "invocation_general_1763268600271"
   ],
   "translate": [
     "workflow_1763251699"
@@ -2292,7 +2350,8 @@
     "tool_quick_translator"
   ],
   "natural language processing": [
-    "tool_write_a_haiku_about_coding"
+    "tool_write_a_haiku_about_coding",
+    "tool_translate_the_work_boob_to_f"
   ],
   "programming": [
     "tool_write_a_haiku_about_coding"
@@ -2311,5 +2370,32 @@
   ],
   "machine-learning": [
     "tool_write_me_a_poem_1763255171"
+  ],
+  "yaml-defined": [
+    "tool_pynguin_test_generator"
+  ],
+  "test-generation": [
+    "tool_pynguin_test_generator"
+  ],
+  "automated": [
+    "tool_pynguin_test_generator"
+  ],
+  "pynguin": [
+    "tool_pynguin_test_generator"
+  ],
+  "evolutionary": [
+    "tool_pynguin_test_generator"
+  ],
+  "first-line-defense": [
+    "tool_pynguin_test_generator"
+  ],
+  "timeout_stats": [
+    "timeout_stats_codellama"
+  ],
+  "adaptive": [
+    "timeout_stats_codellama"
+  ],
+  "machine learning": [
+    "tool_translate_the_work_boob_to_f"
   ]
 }

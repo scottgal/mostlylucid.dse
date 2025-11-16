@@ -1,0 +1,103 @@
+name: "Pynguin Test Generator"
+type: "executable"
+description: "Fast automated unit test generation using Pynguin's evolutionary algorithm. Generates high-coverage pytest tests automatically from source code."
+version: "1.0.0"
+
+executable:
+  command: "pynguin"
+  args:
+    - "--project-path"
+    - "{project_path}"
+    - "--module-name"
+    - "{module_name}"
+    - "--output-path"
+    - "{output_path}"
+    - "--maximum-search-time"
+    - "{timeout}"
+    - "--assertion-generation"
+    - "MUTATION_ANALYSIS"
+    - "--test-case-output"
+    - "PytestTest"
+  install_command: "pip install pynguin"
+
+input_schema:
+  project_path:
+    type: "string"
+    description: "Path to the project directory containing the module"
+    required: true
+  module_name:
+    type: "string"
+    description: "Name of the module to generate tests for (e.g., 'calculator' for calculator.py)"
+    required: true
+  output_path:
+    type: "string"
+    description: "Directory where generated tests will be saved"
+    required: true
+    default: "./tests"
+  timeout:
+    type: "integer"
+    description: "Maximum search time in seconds (default: 60)"
+    required: false
+    default: "60"
+
+output_schema:
+  test_file:
+    type: "string"
+    description: "Path to generated test file (test_{module_name}.py)"
+  coverage:
+    type: "float"
+    description: "Estimated code coverage percentage"
+  test_count:
+    type: "integer"
+    description: "Number of test cases generated"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "long"
+
+tags:
+  - "testing"
+  - "test-generation"
+  - "unit-tests"
+  - "pytest"
+  - "coverage"
+  - "fast"
+  - "automated"
+  - "pynguin"
+  - "evolutionary"
+  - "first-line-defense"
+
+examples:
+  - "Generate tests for calculator module with 60 second timeout"
+  - "Create pytest tests for data_processor.py with high coverage"
+  - "Quick test generation for newly created functions"
+  - "Automated test suite generation during code evolution"
+
+use_cases:
+  - "First-line test generation during code creation"
+  - "Quick coverage baseline before manual test refinement"
+  - "Regression test suite generation"
+  - "Edge case discovery through evolutionary testing"
+  - "Initial test scaffold for new modules"
+
+advantages:
+  - "Very fast (typically completes in under 60 seconds)"
+  - "No manual test writing required"
+  - "High code coverage automatically"
+  - "Discovers edge cases through mutation analysis"
+  - "Generates valid pytest code"
+  - "Free and open source"
+
+limitations:
+  - "Generated tests may need manual refinement"
+  - "Assertion quality varies"
+  - "May not understand complex business logic"
+  - "Requires installable Python module"
+  - "Best for pure functions, struggles with I/O and side effects"
+
+workflow_integration:
+  position: "first-line"
+  trigger: "after code generation"
+  next_step: "review and refine tests with LLM if needed"
+  fallback: "Use LLM-based test generation if Pynguin fails"

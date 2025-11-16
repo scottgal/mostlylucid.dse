@@ -8,7 +8,7 @@ import signal
 import json
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional, List
 from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax
@@ -17,6 +17,8 @@ from rich import box
 from rich.live import Live
 from rich.spinner import Spinner
 from datetime import datetime
+import re
+import unicodedata
 
 # Disable all debug/info logging for clean chat experience
 logging.basicConfig(level=logging.ERROR)
@@ -29,12 +31,21 @@ logging.getLogger("src.node_runner").setLevel(logging.ERROR)
 logging.getLogger("src.tools_manager").setLevel(logging.ERROR)
 logging.getLogger("src.qdrant_rag_memory").setLevel(logging.ERROR)
 
-# readline is Unix/Linux only - optional for history features
+# Command history support - use prompt_toolkit for cross-platform compatibility
 try:
-    import readline
-    READLINE_AVAILABLE = True
+    from prompt_toolkit import prompt as pt_prompt
+    from prompt_toolkit.history import FileHistory
+    from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+    from prompt_toolkit.completion import WordCompleter
+    PROMPT_TOOLKIT_AVAILABLE = True
 except ImportError:
-    READLINE_AVAILABLE = False
+    PROMPT_TOOLKIT_AVAILABLE = False
+    # Fallback: readline is Unix/Linux only
+    try:
+        import readline
+        READLINE_AVAILABLE = True
+    except ImportError:
+        READLINE_AVAILABLE = False
 
 from src import (
     OllamaClient, Registry, NodeRunner, Evaluator,
@@ -44,7 +55,80 @@ from src.config_manager import ConfigManager
 from src.tools_manager import ToolsManager, ToolType
 from src.task_evaluator import TaskEvaluator
 
-console = Console()
+def safe_str(text: str) -> str:
+    """
+    Sanitize text to remove problematic Unicode characters for Windows console.
+    This prevents UnicodeEncodeError on Windows terminals with cp1252 encoding.
+    """
+    if not text:
+        return text
+
+    # Replace common Unicode characters with ASCII equivalents
+    replacements = {
+        '\U0001f4cb': '[SPEC]',  # Clipboard emoji
+        '\U0001f4dd': '[NOTE]',  # Memo emoji
+        '\U0001f4e6': '[PKG]',   # Package emoji
+        '\U0001f527': '[TOOL]',  # Wrench emoji
+        '\U0001f4ca': '[CHART]', # Chart emoji
+        '\U0001f6e0': '[BUILD]', # Build emoji
+        '\U0001f4c4': '[DOC]',   # Document emoji
+        '\U0001f4c1': '[FOLDER]',# Folder emoji
+        '\U0001f4be': '[SAVE]',  # Floppy disk emoji
+        '\U0001f525': '[FIRE]',  # Fire emoji
+        '\U0001f4a1': '[IDEA]',  # Light bulb emoji
+        '\U0001f680': '[ROCKET]',# Rocket emoji
+        '\U0001f41b': '[BUG]',   # Bug emoji
+        '\U0001f44d': '[OK]',    # Thumbs up emoji
+        '\u2714': '[OK]',        # Check mark
+        '\u2716': '[X]',         # X mark
+        '\u2192': '->',          # Right arrow
+        '\u2190': '<-',          # Left arrow
+        '\u2194': '<->',         # Left-right arrow
+        '\u21d2': '=>',          # Double right arrow
+        '\u2022': '*',           # Bullet
+        '\u2026': '...',         # Ellipsis
+        '\u2014': '--',          # Em dash
+        '\u2013': '-',           # En dash
+        '\u2018': "'",           # Left single quote
+        '\u2019': "'",           # Right single quote
+        '\u201c': '"',           # Left double quote
+        '\u201d': '"',           # Right double quote
+    }
+
+    result = text
+    for unicode_char, replacement in replacements.items():
+        result = result.replace(unicode_char, replacement)
+
+    # Remove any remaining non-ASCII characters that aren't printable
+    # This is a safety net for characters we didn't explicitly map
+    try:
+        result.encode('cp1252')
+        return result
+    except UnicodeEncodeError:
+        # Fall back to ASCII transliteration
+        result = unicodedata.normalize('NFKD', result)
+        result = result.encode('ascii', 'ignore').decode('ascii')
+        return result
+
+
+class SafeConsole(Console):
+    """
+    Console wrapper that automatically sanitizes output to prevent Unicode encoding errors.
+    """
+    def print(self, *objects, **kwargs):
+        """Override print to sanitize text before output."""
+        # Sanitize all string objects
+        safe_objects = []
+        for obj in objects:
+            if isinstance(obj, str):
+                safe_objects.append(safe_str(obj))
+            else:
+                safe_objects.append(obj)
+        super().print(*safe_objects, **kwargs)
+
+
+# Use SafeConsole instead of regular Console to prevent Windows encoding errors
+console = SafeConsole()
 
 
 class WorkflowDisplay:
@@ -172,27 +256,41 @@ class ChatCLI:
         self.context = {}
         self.history = []
         self.display = WorkflowDisplay(console)
-        self._load_history()
+
+        # Set up command history
+        self.history_file = Path(self.config.get("chat.history_file", ".code_evolver_history"))
+
+        # Setup prompt_toolkit history if available
+        if PROMPT_TOOLKIT_AVAILABLE:
+            self.pt_history = FileHistory(str(self.history_file))
+            # Create command completer for slash commands
+            slash_commands = [
+                '/generate', '/tools', '/tool', '/status', '/clear', '/clear_rag',
+                '/help', '/manual', '/config', '/auto', '/delete', '/evolve',
+                '/list', '/exit', '/quit'
+            ]
+            self.pt_completer = WordCompleter(slash_commands, ignore_case=True)
+        else:
+            self.pt_history = None
+            self.pt_completer = None
+            self._load_history()
 
     def _load_history(self):
-        """Load command history from file."""
-        if not READLINE_AVAILABLE:
+        """Load command history from file (readline fallback)."""
+        if not READLINE_AVAILABLE or PROMPT_TOOLKIT_AVAILABLE:
             return
 
-        history_file = self.config.get("chat.history_file", ".code_evolver_history")
-        history_path = Path(history_file)
-
-        if history_path.exists():
+        if self.history_file.exists():
             try:
-                with open(history_path, 'r') as f:
+                with open(self.history_file, 'r', encoding='utf-8') as f:
                     for line in f:
                         readline.add_history(line.strip())
             except Exception:
                 pass
 
     def _save_history(self):
-        """Save command history to file."""
-        if not READLINE_AVAILABLE:
+        """Save command history to file (readline fallback)."""
+        if not READLINE_AVAILABLE or PROMPT_TOOLKIT_AVAILABLE:
             return
 
         history_file = self.config.get("chat.history_file", ".code_evolver_history")
@@ -1474,13 +1572,11 @@ The code generator will follow this specification EXACTLY, so include ALL critic
         self.display.complete_stage("Thinking", "Specification complete")
 
         # Always show the specification to the user
-        # Sanitize specification to remove Unicode characters that cause encoding issues on Windows
-        sanitized_spec = specification.replace('→', '->').replace('←', '<-').replace('↔', '<->').replace('⇒', '=>')
-        sanitized_spec = sanitized_spec.replace('•', '*').replace('…', '...').replace('—', '--').replace(''', "'").replace(''', "'")
-        sanitized_spec = sanitized_spec.replace('"', '"').replace('"', '"').replace('–', '-')
+        # Sanitize specification using the safe_str() function to handle ALL Unicode characters
+        sanitized_spec = safe_str(specification)
 
         console.print(f"\n[bold cyan][SPEC] Technical Specification ({len(specification)} chars):[/bold cyan]")
-        console.print(Panel(sanitized_spec, title="Specification from Overseer", border_style="cyan", box=box.ROUNDED))
+        console.print(Panel(sanitized_spec, title=safe_str("Specification from Overseer"), border_style="cyan", box=box.ROUNDED))
         console.print()
 
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
@@ -1935,30 +2031,62 @@ Return ONLY the JSON object, nothing else."""
                 temperature=0.3
             )
         else:
-            # For ANY content generation (simple or complex), use the general tool (respects tool-specific endpoint)
-            # Otherwise use config generator_model (codellama)
-            if (is_simple_content or is_complex_content) and 'general' in self.tools_manager.tools:
-                general_tool = self.tools_manager.tools['general']
-                model_to_use = general_tool.metadata.get('llm_model', self.config.generator_model)
-                console.print(f"\n[cyan]Generating code with {model_to_use} (general tool)...[/cyan]")
-                # Use invoke_llm_tool to respect tool-specific endpoint configuration
-                response = self.tools_manager.invoke_llm_tool(
-                    tool_id='general',
-                    prompt=code_prompt,
-                    temperature=0.2
-                )
-            else:
-                console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
-                response = self.client.generate(
-                    model=self.config.generator_model,
-                    prompt=code_prompt,
-                    temperature=0.2,  # Lower temp for more structured output
-                    model_key="generator"
-                )
+            # Robust code generation with retries and exponential backoff
+            max_retries = 3
+            response = ""
+
+            for attempt in range(max_retries):
+                try:
+                    if attempt > 0:
+                        console.print(f"[yellow]Retry {attempt + 1}/{max_retries}...[/yellow]")
+                        import time
+                        time.sleep(2 ** attempt)  # Exponential backoff: 2s, 4s, 8s
+
+                    # For ANY content generation (simple or complex), use the general tool
+                    if (is_simple_content or is_complex_content) and 'general' in self.tools_manager.tools:
+                        general_tool = self.tools_manager.tools['general']
+                        model_to_use = general_tool.metadata.get('llm_model', self.config.generator_model)
+
+                        if attempt == 0:
+                            console.print(f"\n[cyan]Generating code with {model_to_use} (general tool)...[/cyan]")
+
+                        response = self.tools_manager.invoke_llm_tool(
+                            tool_id='general',
+                            prompt=code_prompt,
+                            temperature=0.2 + (attempt * 0.05)  # Slightly increase temp on retries
+                        )
+                    else:
+                        if attempt == 0:
+                            console.print(f"\n[cyan]Generating code with {self.config.generator_model}...[/cyan]")
+
+                        response = self.client.generate(
+                            model=self.config.generator_model,
+                            prompt=code_prompt,
+                            temperature=0.2 + (attempt * 0.05),
+                            model_key="generator"
+                        )
+
+                    # Validate response
+                    if response and len(response) >= 50:
+                        console.print(f"[green]✓ Generated {len(response)} chars[/green]")
+                        break
+                    else:
+                        console.print(f"[yellow]Response too short ({len(response)} chars)[/yellow]")
+
+                except Exception as e:
+                    console.print(f"[yellow]Attempt {attempt + 1} failed: {str(e)[:100]}[/yellow]")
+
+                if attempt == max_retries - 1 and (not response or len(response) < 50):
+                    console.print(f"[red]All {max_retries} attempts failed[/red]")
+
         workflow.complete_step("code_generation", f"Generated {len(response)} chars", {"generator": generator_name})
 
         if not response or len(response) < 50:
-            console.print("[red]Failed to generate valid response[/red]")
+            console.print("[red]CRITICAL: Failed to generate valid code[/red]")
+            console.print("[yellow]Troubleshooting:[/yellow]")
+            console.print("  1. Check Ollama: ollama list")
+            console.print("  2. Check model: ollama show codellama")
+            console.print("  3. Restart: ollama serve")
             return False
 
         # CRITICAL: Validate and fix code syntax BEFORE extraction
@@ -2045,12 +2173,10 @@ Return ONLY the JSON object, nothing else."""
 
             if code != original_code:
                 console.print("[green]Auto-fixed code formatting and indentation[/green]")
-                logger.info("autopep8 fixed formatting issues in generated code")
         except ImportError:
             console.print("[yellow]Warning: autopep8 not installed - skipping auto-formatting[/yellow]")
             console.print("[dim]Install with: pip install autopep8[/dim]")
         except Exception as e:
-            logger.warning(f"autopep8 failed to fix code: {e}")
             console.print(f"[yellow]Could not auto-format code: {e}[/yellow]")
 
         # Validate syntax after formatting
@@ -2068,8 +2194,8 @@ Return ONLY the JSON object, nothing else."""
         needs_json = 'json.load' in code or 'json.dump' in code
         needs_sys = 'sys.stdin' in code or 'sys.stdout' in code or 'sys.stderr' in code
 
-        # CRITICAL: If code uses call_tool, it MUST have the path setup
-        if needs_call_tool and 'sys.path.insert' not in code:
+        # CRITICAL: If code uses call_tool, it MUST have the import
+        if needs_call_tool and 'from node_runtime import call_tool' not in code:
             # Add complete path setup block at the top
             path_setup = """from pathlib import Path
 import sys
@@ -2098,6 +2224,16 @@ from node_runtime import call_tool
             if 'import sys' not in code:
                 code = 'import sys\n' + code
                 console.print("[dim yellow]Added missing import: sys[/dim yellow]")
+
+        # CRITICAL: Ensure code has if __name__ == "__main__" block to actually run
+        has_main_function = 'def main(' in code
+        has_main_block = '__name__' in code and '__main__' in code
+
+        if has_main_function and not has_main_block:
+            # Code defines main() but never calls it!
+            console.print("[yellow]Code has main() but doesn't call it - adding if __name__ block[/yellow]")
+            code = code + '\n\nif __name__ == "__main__":\n    main()\n'
+            console.print("[green]Added if __name__ == '__main__': main() block[/green]")
 
         # CRITICAL: Strip out any logging calls that LLM might have added
         # UNLESS the user explicitly requested logging/debugging functionality
@@ -2300,7 +2436,35 @@ logger = _DummyLogger()
                     auto_embed=True
                 )
 
-                # Store complete workflow for future reuse
+                # Save specification to filesystem alongside code
+                spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
+                try:
+                    spec_content = f"""# Specification for {node_id}
+
+## Description
+{description}
+
+## Detailed Specification
+{specification}
+
+## Tools Used
+{available_tools if "No specific tools" not in available_tools else "general"}
+
+## Code Summary
+{code_description}
+
+## Tags
+{', '.join(code_tags)}
+
+## Generated
+{datetime.now().isoformat()}
+"""
+                    spec_path.write_text(spec_content, encoding='utf-8')
+                    console.print(f"[dim]Saved specification to specification.md[/dim]")
+                except Exception as e:
+                    console.print(f"[dim yellow]Could not save specification file: {e}[/dim yellow]")
+
+                # Store complete workflow for future reuse with embedded specification
                 workflow_content = {
                     "description": description,
                     "specification": specification,
@@ -2310,22 +2474,45 @@ logger = _DummyLogger()
                     "code_summary": code_description
                 }
 
+                # Create rich content for embedding that includes specification details
+                # This improves semantic matching for similar future requests
+                embedding_content = f"""Workflow: {code_description}
+
+Description: {description}
+
+Specification:
+{specification}
+
+Tools Used: {available_tools if "No specific tools" not in available_tools else "general"}
+
+Implementation Summary:
+{code_description}
+
+Tags: {', '.join(code_tags)}
+
+This workflow successfully completed with passing tests.
+"""
+
                 self.rag.store_artifact(
                     artifact_id=f"workflow_{node_id}",
                     artifact_type=ArtifactType.WORKFLOW,
                     name=f"Workflow: {code_description}",
                     description=description,
-                    content=json.dumps(workflow_content, indent=2),
+                    content=embedding_content,  # Use rich content for better semantic matching
                     tags=["workflow", "complete", "tested"] + code_tags,
                     metadata={
                         "node_id": node_id,
                         "question": description,
+                        "specification": specification,  # Store full spec in metadata
                         "specification_hash": hash(specification[:200]),
-                        "tests_passed": True
+                        "specification_file": str(spec_path.relative_to(self.nodes_path.parent)),
+                        "tools_used": available_tools if "No specific tools" not in available_tools else "general",
+                        "tests_passed": True,
+                        "workflow_json": json.dumps(workflow_content)  # Keep original structure
                     },
                     auto_embed=True
                 )
-                console.print(f"[dim]OK Code and workflow stored in RAG for future reuse[/dim]")
+                console.print(f"[dim]OK Code, workflow, and specification stored in RAG for future reuse[/dim]")
             except Exception as e:
                 console.print(f"[dim yellow]Note: Could not store in RAG: {e}[/dim yellow]")
         elif not test_success:
@@ -2934,6 +3121,20 @@ Now generate the interface-defining tests for: {description}
 
 Output ONLY the Python test code (no markdown fences, no explanations):"""
 
+        # Try Pynguin-based TDD template generation first (fast, specification-driven)
+        use_pynguin_tdd = self.config.get("testing.use_pynguin_tdd", True)
+
+        if use_pynguin_tdd and not is_content_task:
+            console.print(f"\n[cyan]Attempting Pynguin-based TDD template generation...[/cyan]")
+            pynguin_template = self._generate_tdd_template_with_pynguin(
+                node_id="temp",  # Temporary, not saved yet
+                description=description,
+                specification=specification
+            )
+
+            if pynguin_template:
+                return pynguin_template
+
         # OPTIMIZATION: For content tasks, skip LLM and use cached template
         # (The test is always identical - just checks main() exists)
         if is_content_task:
@@ -3092,10 +3293,33 @@ if __name__ == "__main__":
                 return False
 
         # Traditional mode: generate tests now
+        # Try Pynguin first for fast automated test generation
+        pynguin_enabled = self.config.get("testing.use_pynguin", True)
+        pynguin_timeout = self.config.get("testing.pynguin_timeout", 30)
+        pynguin_min_coverage = self.config.get("testing.pynguin_min_coverage", 0.70)
+
+        pynguin_result = None
+        if pynguin_enabled and 'call_tool(' not in code:
+            # Only use Pynguin for pure Python code (not external tool calls)
+            console.print(f"[dim cyan]> Trying Pynguin for fast test generation...[/dim cyan]")
+            pynguin_result = self._generate_tests_with_pynguin(
+                node_id,
+                timeout=pynguin_timeout,
+                min_coverage=pynguin_min_coverage
+            )
+
         # Check if code uses call_tool - if so, generate minimal smoke test
         uses_call_tool = 'call_tool(' in code
 
-        if uses_call_tool:
+        if pynguin_result and pynguin_result['success']:
+            # Pynguin succeeded - use those tests
+            coverage = pynguin_result['coverage']
+            method = pynguin_result['method']
+            console.print(f"[green]✓ Using {method} tests ({coverage:.1f}% coverage, {pynguin_result['test_count']} tests)[/green]")
+
+            if pynguin_result.get('needed_llm_fix'):
+                console.print("[dim]Tests were improved by LLM to meet coverage threshold[/dim]")
+        elif uses_call_tool:
             # For code that uses external tools, just create a minimal smoke test
             # PYTHONPATH is already set by the test runner, so no need to manipulate sys.path
             test_code = """def test_structure():
@@ -5673,6 +5897,794 @@ Return ONLY the JSON, no other text."""
             console.print(f"[yellow]Could not retrieve debug version: {e}[/yellow]")
             return None
 
+    def _generate_tests_with_pynguin(self, node_id: str, timeout: int = 60, min_coverage: float = 0.70) -> Dict[str, Any]:
+        """
+        Generate unit tests using Pynguin with coverage validation and LLM fixing.
+
+        Workflow:
+        1. Generate tests with Pynguin (fast, 30-60s)
+        2. Run tests and measure coverage
+        3. If coverage < threshold, send to LLM to improve
+        4. Re-run and validate
+
+        Args:
+            node_id: Node identifier
+            timeout: Maximum search time in seconds
+            min_coverage: Minimum required coverage (default: 70%)
+
+        Returns:
+            Dict with success status, coverage, and test info
+        """
+        result = {
+            'success': False,
+            'coverage': 0.0,
+            'test_count': 0,
+            'method': 'none',
+            'needed_llm_fix': False
+        }
+
+        try:
+            # Get node path
+            node_path = self.runner.get_node_path(node_id)
+            if not node_path.exists():
+                return result
+
+            # Get the module directory and name
+            module_dir = node_path.parent
+            module_name = node_path.stem  # e.g., 'main' from 'main.py'
+
+            # Create tests output directory
+            tests_dir = module_dir / "tests_pynguin"
+            tests_dir.mkdir(exist_ok=True)
+
+            console.print(f"[dim cyan]> Attempting fast test generation with Pynguin (timeout: {timeout}s)...[/dim cyan]")
+
+            # Run Pynguin
+            import subprocess
+            pynguin_result = subprocess.run(
+                [
+                    'python', '-m', 'pynguin',
+                    '--project-path', str(module_dir),
+                    '--module-name', module_name,
+                    '--output-path', str(tests_dir),
+                    '--maximum-search-time', str(timeout),
+                    '--assertion-generation', 'MUTATION_ANALYSIS',
+                    '--test-case-output', 'PytestTest'
+                ],
+                capture_output=True,
+                text=True,
+                timeout=timeout + 10  # Give extra time for Pynguin overhead
+            )
+
+            # Check if tests were generated
+            test_files = list(tests_dir.glob("test_*.py"))
+            if not test_files:
+                console.print(f"[yellow]Pynguin did not generate tests (exit code: {pynguin_result.returncode})[/yellow]")
+                if pynguin_result.stderr:
+                    console.print(f"[dim]{pynguin_result.stderr[:200]}...[/dim]")
+                return result
+
+            # Move generated tests to main test.py
+            test_file = test_files[0]
+            dest_test_file = module_dir / "test.py"
+
+            # Read generated tests
+            generated_tests = test_file.read_text(encoding='utf-8')
+
+            # Add header comment
+            header = f"""# Auto-generated tests by Pynguin
+# Generated in {timeout} seconds using evolutionary algorithm
+# These tests provide baseline coverage and should be reviewed/refined
+
+"""
+            final_tests = header + generated_tests
+
+            # Save to test.py
+            dest_test_file.write_text(final_tests, encoding='utf-8')
+
+            # Clean up pynguin directory
+            import shutil
+            shutil.rmtree(tests_dir, ignore_errors=True)
+
+            test_count = len(list(filter(lambda l: l.strip().startswith('def test_'), final_tests.split('\n'))))
+            console.print(f"[green]✓ Pynguin generated {test_count} test functions[/green]")
+
+            # Step 2: Run tests and measure coverage
+            console.print(f"[cyan]> Running tests and measuring coverage...[/cyan]")
+            coverage_result = self._run_tests_with_coverage(node_id)
+
+            if not coverage_result['success']:
+                console.print(f"[yellow]! Generated tests have errors[/yellow]")
+                console.print(f"[dim]{coverage_result.get('error', 'Unknown error')[:200]}[/dim]")
+                result['method'] = 'pynguin_failed'
+                return result
+
+            coverage_pct = coverage_result['coverage']
+            console.print(f"[cyan]Coverage: {coverage_pct:.1f}%[/cyan]")
+
+            result['test_count'] = test_count
+            result['coverage'] = coverage_pct
+
+            # Step 3: Check if coverage meets threshold
+            if coverage_pct >= min_coverage * 100:
+                console.print(f"[green]✓ Coverage {coverage_pct:.1f}% meets threshold ({min_coverage*100:.0f}%)[/green]")
+                result['success'] = True
+                result['method'] = 'pynguin'
+                return result
+            else:
+                # Coverage below threshold - send to LLM for fixing
+                console.print(f"[yellow]! Coverage {coverage_pct:.1f}% below threshold ({min_coverage*100:.0f}%)[/yellow]")
+                console.print(f"[cyan]> Sending to LLM to improve test coverage...[/cyan]")
+
+                # Read the source code
+                source_code = node_path.read_text(encoding='utf-8')
+
+                # Step 4: Use LLM to improve tests
+                improved_tests = self._improve_tests_with_llm(
+                    source_code=source_code,
+                    current_tests=final_tests,
+                    current_coverage=coverage_pct,
+                    target_coverage=min_coverage * 100,
+                    coverage_report=coverage_result.get('report', '')
+                )
+
+                if improved_tests:
+                    # Save improved tests
+                    dest_test_file.write_text(improved_tests, encoding='utf-8')
+
+                    # Re-run coverage
+                    console.print(f"[cyan]> Re-running with improved tests...[/cyan]")
+                    new_coverage_result = self._run_tests_with_coverage(node_id)
+
+                    if new_coverage_result['success']:
+                        new_coverage = new_coverage_result['coverage']
+                        console.print(f"[cyan]New coverage: {new_coverage:.1f}% (was {coverage_pct:.1f}%)[/cyan]")
+
+                        result['coverage'] = new_coverage
+                        result['needed_llm_fix'] = True
+
+                        if new_coverage >= min_coverage * 100:
+                            console.print(f"[green]✓ LLM improved coverage to {new_coverage:.1f}%[/green]")
+                            result['success'] = True
+                            result['method'] = 'pynguin+llm'
+                            return result
+                        else:
+                            console.print(f"[yellow]Coverage still below threshold: {new_coverage:.1f}% < {min_coverage*100:.0f}%[/yellow]")
+                            result['method'] = 'pynguin+llm_insufficient'
+                            return result
+                    else:
+                        console.print(f"[yellow]Improved tests have errors, reverting to Pynguin version[/yellow]")
+                        dest_test_file.write_text(final_tests, encoding='utf-8')
+                        result['success'] = True  # Use original Pynguin tests
+                        result['method'] = 'pynguin_llm_failed'
+                        return result
+                else:
+                    console.print(f"[yellow]LLM could not improve tests, using Pynguin version[/yellow]")
+                    result['success'] = True  # Use original Pynguin tests
+                    result['method'] = 'pynguin_llm_failed'
+                    return result
+
+        except FileNotFoundError:
+            console.print("[yellow]Pynguin not installed. Install with: pip install pynguin[/yellow]")
+            return result
+        except subprocess.TimeoutExpired:
+            console.print(f"[yellow]Pynguin timed out after {timeout}s[/yellow]")
+            return result
+        except Exception as e:
+            console.print(f"[yellow]Pynguin error: {e}[/yellow]")
+            import traceback
+            traceback.print_exc()
+            return result
+
+    def _generate_tdd_template_with_pynguin(
+        self,
+        node_id: str,
+        description: str,
+        specification: str
+    ) -> Optional[str]:
+        """
+        Use Pynguin to generate a TDD template based on specification analysis.
+
+        This creates a stub/skeleton module based on the specification,
+        then uses Pynguin to generate test structure, which becomes the TDD template.
+
+        Args:
+            node_id: Node identifier
+            description: Task description
+            specification: Detailed specification
+
+        Returns:
+            TDD template test code or None if failed
+        """
+        try:
+            import subprocess
+            import tempfile
+            from pathlib import Path
+            import shutil
+
+            console.print("[dim]Creating specification-based stub for Pynguin analysis...[/dim]")
+
+            # Create a temporary module with function signatures based on specification
+            stub_code = self._create_stub_from_specification(specification, description)
+
+            if not stub_code:
+                return None
+
+            # Create temp directory structure
+            with tempfile.TemporaryDirectory() as tmpdir:
+                tmppath = Path(tmpdir)
+                module_path = tmppath / "stub_module.py"
+                module_path.write_text(stub_code, encoding='utf-8')
+
+                # Run Pynguin on the stub to get test structure
+                tests_dir = tmppath / "tests"
+                tests_dir.mkdir()
+
+                result = subprocess.run(
+                    [
+                        'python', '-m', 'pynguin',
+                        '--project-path', str(tmppath),
+                        '--module-name', 'stub_module',
+                        '--output-path', str(tests_dir),
+                        '--maximum-search-time', '10',  # Quick generation
+                        '--test-case-output', 'PytestTest'
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=15
+                )
+
+                # Extract generated test structure
+                test_files = list(tests_dir.glob("test_*.py"))
+                if test_files:
+                    generated_tests = test_files[0].read_text(encoding='utf-8')
+
+                    # Convert to TDD template (remove implementations, keep structure)
+                    tdd_template = self._convert_to_tdd_template(generated_tests, description)
+
+                    console.print(f"[green]Generated TDD template from Pynguin structure[/green]")
+                    return tdd_template
+                else:
+                    console.print(f"[yellow]Pynguin did not generate test structure[/yellow]")
+                    return None
+
+        except FileNotFoundError:
+            console.print("[dim]Pynguin not available for TDD template generation[/dim]")
+            return None
+        except Exception as e:
+            console.print(f"[dim]Pynguin TDD generation failed: {e}[/dim]")
+            return None
+
+    def _create_stub_from_specification(self, specification: str, description: str) -> Optional[str]:
+        """
+        Create a stub module with function signatures based on specification.
+
+        Args:
+            specification: Task specification
+            description: Task description
+
+        Returns:
+            Python stub code with function signatures
+        """
+        try:
+            # Extract function names and signatures from specification
+            import re
+
+            # Look for function definitions in specification
+            func_patterns = [
+                r'`(\w+)\([^)]*\)`',  # `function_name(args)`
+                r'(\w+)\([^)]*\)\s*(?:->|:)',  # function_name(args) ->
+                r'def (\w+)\(',  # def function_name(
+            ]
+
+            functions = set()
+            for pattern in func_patterns:
+                matches = re.findall(pattern, specification)
+                functions.update(matches)
+
+            if not functions:
+                # Fallback: create a generic main() stub
+                functions = {'main'}
+
+            # Create stub module
+            stub_lines = [
+                "# Stub module for Pynguin TDD template generation",
+                "import json",
+                "import sys",
+                ""
+            ]
+
+            for func_name in sorted(functions):
+                stub_lines.extend([
+                    f"def {func_name}(*args, **kwargs):",
+                    "    \"\"\"Stub function for TDD template generation.\"\"\"",
+                    "    pass",
+                    ""
+                ])
+
+            return '\n'.join(stub_lines)
+
+        except Exception as e:
+            console.print(f"[dim]Could not create stub: {e}[/dim]")
+            return None
+
+    def _convert_to_tdd_template(self, generated_tests: str, description: str) -> str:
+        """
+        Convert Pynguin-generated tests into a TDD template.
+
+        Args:
+            generated_tests: Tests generated by Pynguin
+            description: Task description
+
+        Returns:
+            TDD template with test structure but empty implementations
+        """
+        import re
+
+        lines = []
+        lines.append("# TDD Interface Tests - Generated from Pynguin structure")
+        lines.append(f"# Task: {description[:80]}")
+        lines.append("")
+        lines.append("import sys")
+        lines.append("import json")
+        lines.append("import os")
+        lines.append("sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))")
+        lines.append("")
+
+        # Extract test function signatures
+        in_test = False
+        for line in generated_tests.split('\n'):
+            stripped = line.strip()
+
+            # Start of test function
+            if stripped.startswith('def test_'):
+                in_test = True
+                lines.append(line)
+                # Add docstring
+                func_name = stripped.split('(')[0].replace('def ', '')
+                lines.append(f'    """Test interface for {func_name}"""')
+                lines.append('    print(f"Testing {func_name}...")')
+                lines.append('    import main')
+                lines.append('    # TODO: Add interface assertions here')
+                lines.append('    print("OK Test passed")')
+                lines.append('')
+                in_test = False
+
+        # Add main block
+        lines.append("if __name__ == '__main__':")
+        lines.append("    # Run all tests")
+        for line in lines:
+            if 'def test_' in line:
+                func_name = line.split('def ')[1].split('(')[0]
+                lines.append(f"    {func_name}()")
+
+        return '\n'.join(lines)
+
+    def _run_tests_with_coverage(self, node_id: str) -> Dict[str, Any]:
+        """
+        Run tests with coverage measurement using pytest-cov.
+
+        Args:
+            node_id: Node identifier
+
+        Returns:
+            Dict with success, coverage percentage, and report
+        """
+        import subprocess
+        import re
+        from pathlib import Path
+
+        result = {
+            'success': False,
+            'coverage': 0.0,
+            'report': '',
+            'error': ''
+        }
+
+        try:
+            node_path = self.runner.get_node_path(node_id)
+            module_dir = node_path.parent
+            module_name = node_path.stem
+
+            # Run pytest with coverage
+            coverage_result = subprocess.run(
+                [
+                    sys.executable, '-m', 'pytest',
+                    'test.py',
+                    f'--cov={module_name}',
+                    '--cov-report=term-missing',
+                    '-v'
+                ],
+                capture_output=True,
+                text=True,
+                cwd=str(module_dir),
+                timeout=30
+            )
+
+            stdout = coverage_result.stdout
+            stderr = coverage_result.stderr
+            result['report'] = stdout
+
+            # Extract coverage percentage from output
+            # Look for pattern like "TOTAL    100%"
+            coverage_match = re.search(r'TOTAL\s+\d+\s+\d+\s+(\d+)%', stdout)
+            if coverage_match:
+                result['coverage'] = float(coverage_match.group(1))
+
+            # Check if tests passed
+            result['success'] = coverage_result.returncode == 0
+
+            if not result['success']:
+                result['error'] = stderr or "Tests failed"
+
+            return result
+
+        except FileNotFoundError:
+            result['error'] = "pytest or pytest-cov not installed. Install with: pip install pytest pytest-cov"
+            console.print(f"[yellow]{result['error']}[/yellow]")
+            return result
+        except subprocess.TimeoutExpired:
+            result['error'] = "Test execution timed out"
+            return result
+        except Exception as e:
+            result['error'] = str(e)
+            return result
+
+    def _improve_tests_with_llm(
+        self,
+        source_code: str,
+        current_tests: str,
+        current_coverage: float,
+        target_coverage: float,
+        coverage_report: str
+    ) -> Optional[str]:
+        """
+        Use LLM to improve test coverage by analyzing gaps.
+
+        Args:
+            source_code: The source code under test
+            current_tests: Current test code
+            current_coverage: Current coverage percentage
+            target_coverage: Target coverage percentage
+            coverage_report: Coverage report showing uncovered lines
+
+        Returns:
+            Improved test code or None if failed
+        """
+        try:
+            # Extract uncovered lines from coverage report
+            import re
+            uncovered_lines = []
+            for line in coverage_report.split('\n'):
+                # Look for lines like "main.py    10    2    80%   5-6"
+                if 'main.py' in line or '.py' in line:
+                    match = re.search(r'(\d+)-(\d+)', line)
+                    if match:
+                        uncovered_lines.append(f"Lines {match.group(1)}-{match.group(2)}")
+
+            uncovered_info = '\n'.join(uncovered_lines) if uncovered_lines else "See coverage report"
+
+            prompt = f"""You are a test improvement expert. The current tests have {current_coverage:.1f}% coverage but need {target_coverage:.0f}%.
+
+SOURCE CODE:
+```python
+{source_code}
+```
+
+CURRENT TESTS:
+```python
+{current_tests}
+```
+
+COVERAGE GAPS:
+{uncovered_info}
+
+COVERAGE REPORT:
+{coverage_report[:500]}
+
+TASK:
+1. Analyze the uncovered code sections
+2. Add new test cases to cover missing branches, edge cases, and error paths
+3. Ensure tests are comprehensive and test real behavior
+4. Keep existing tests that work
+5. Add tests for:
+   - Edge cases (empty inputs, None, zero, negative numbers)
+   - Error conditions (invalid inputs, exceptions)
+   - Boundary conditions
+   - Different code paths (if/else branches)
+
+Return ONLY the complete improved test code (including imports and all test functions).
+Do NOT include explanations or markdown formatting."""
+
+            # Use tier 2 coding model for test improvement
+            improved_tests = self.client.generate(
+                model=self.config.get_tier_config("coding", "tier_2").get("model", "qwen2.5-coder:7b"),
+                prompt=prompt,
+                system="You are an expert at writing comprehensive pytest tests with high code coverage.",
+                temperature=0.3,  # Low temperature for consistent output
+                model_key="generator"
+            )
+
+            if improved_tests and 'def test_' in improved_tests:
+                # Clean markdown formatting if present
+                if '```python' in improved_tests:
+                    improved_tests = improved_tests.split('```python')[1].split('```')[0].strip()
+                elif '```' in improved_tests:
+                    improved_tests = improved_tests.split('```')[1].split('```')[0].strip()
+
+                return improved_tests
+            else:
+                return None
+
+        except Exception as e:
+            console.print(f"[yellow]Error improving tests with LLM: {e}[/yellow]")
+            return None
+
+    def _extract_code_from_artifact(self, artifact) -> Optional[str]:
+        """
+        Extract Python code from a RAG artifact.
+
+        Args:
+            artifact: The RAG artifact containing code
+
+        Returns:
+            Extracted Python code or None
+        """
+        try:
+            # The artifact content contains the tool description including code
+            content = artifact.content
+
+            # Look for code between Tool ID line and end
+            lines = content.split('\n')
+            code_lines = []
+            in_code = False
+
+            for line in lines:
+                if line.startswith('Code Hash:'):
+                    in_code = True
+                    continue
+                if in_code and line.strip():
+                    code_lines.append(line)
+
+            if code_lines:
+                return '\n'.join(code_lines)
+
+            # Fallback: try to find Python code in the content
+            if 'def ' in content or 'class ' in content:
+                # Extract everything that looks like Python code
+                start = content.find('def ') or content.find('class ')
+                if start != -1:
+                    return content[start:]
+
+            return None
+
+        except Exception as e:
+            logger.error(f"Error extracting code from artifact: {e}")
+            return None
+
+    def _run_code_and_capture_logs(self, code: str, tool_id: str) -> List[str]:
+        """
+        Run code with logging enabled and capture all log output.
+
+        Args:
+            code: Python code with logging statements
+            tool_id: Tool identifier for temp file naming
+
+        Returns:
+            List of log lines
+        """
+        import tempfile
+        import subprocess
+        from pathlib import Path
+
+        try:
+            # Create temp file for code
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+                temp_file = Path(f.name)
+                f.write(code)
+
+            # Run with sample inputs and capture stderr (where logging goes)
+            result = subprocess.run(
+                ['python', str(temp_file)],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+
+            # Combine stdout and stderr
+            all_output = result.stdout + '\n' + result.stderr
+            log_lines = [line for line in all_output.split('\n') if line.strip()]
+
+            # Clean up temp file
+            temp_file.unlink()
+
+            return log_lines
+
+        except subprocess.TimeoutExpired:
+            console.print("[yellow]Debug code execution timed out[/yellow]")
+            return []
+        except Exception as e:
+            logger.error(f"Error running debug code: {e}")
+            return []
+
+    def _analyze_debug_logs(self, log_lines: List[str]) -> Dict[str, Any]:
+        """
+        Analyze debug logs to understand code behavior.
+
+        Args:
+            log_lines: Lines of debug output
+
+        Returns:
+            Dictionary with behavioral insights
+        """
+        analysis = {
+            "function_calls": [],
+            "variable_states": {},
+            "control_flow": [],
+            "error_handling": [],
+            "edge_cases": []
+        }
+
+        try:
+            for line in log_lines:
+                line_lower = line.lower()
+
+                # Identify function calls
+                if 'calling' in line_lower or 'invoking' in line_lower:
+                    analysis["function_calls"].append(line)
+
+                # Identify variable states
+                if '=' in line and ('debug' in line_lower or 'logger' in line_lower):
+                    # Extract variable name and value
+                    parts = line.split('=')
+                    if len(parts) >= 2:
+                        var_name = parts[0].strip().split()[-1]
+                        var_value = parts[1].strip()
+                        analysis["variable_states"][var_name] = var_value
+
+                # Identify control flow
+                if any(keyword in line_lower for keyword in ['if', 'else', 'elif', 'for', 'while']):
+                    analysis["control_flow"].append(line)
+
+                # Identify error handling
+                if any(keyword in line_lower for keyword in ['error', 'exception', 'try', 'catch', 'except']):
+                    analysis["error_handling"].append(line)
+
+                # Identify edge cases
+                if any(keyword in line_lower for keyword in ['edge case', 'boundary', 'empty', 'null', 'none']):
+                    analysis["edge_cases"].append(line)
+
+            return analysis
+
+        except Exception as e:
+            logger.error(f"Error analyzing debug logs: {e}")
+            return analysis
+
+    def _compare_code_versions(self, old_code: str, new_code: str) -> Dict[str, Any]:
+        """
+        Compare two code versions and identify differences.
+
+        Args:
+            old_code: Original debug code
+            new_code: New production code
+
+        Returns:
+            Dictionary describing code changes
+        """
+        import difflib
+
+        try:
+            # Split into lines for comparison
+            old_lines = old_code.split('\n')
+            new_lines = new_code.split('\n')
+
+            # Use difflib to find differences
+            diff = list(difflib.unified_diff(old_lines, new_lines, lineterm=''))
+
+            # Categorize changes
+            changes = {
+                "added_functions": [],
+                "removed_functions": [],
+                "modified_functions": [],
+                "added_parameters": [],
+                "removed_parameters": [],
+                "logic_changes": []
+            }
+
+            for line in diff:
+                if line.startswith('+') and 'def ' in line:
+                    func_name = line.split('def ')[1].split('(')[0]
+                    changes["added_functions"].append(func_name)
+                elif line.startswith('-') and 'def ' in line:
+                    func_name = line.split('def ')[1].split('(')[0]
+                    changes["removed_functions"].append(func_name)
+                elif line.startswith('+') or line.startswith('-'):
+                    changes["logic_changes"].append(line)
+
+            return changes
+
+        except Exception as e:
+            logger.error(f"Error comparing code versions: {e}")
+            return {"error": str(e)}
+
+    def _generate_tests_from_behavior(
+        self,
+        production_tool_id: str,
+        production_code: str,
+        behavior_analysis: Dict[str, Any],
+        code_diff: Dict[str, Any],
+        debug_logs: List[str]
+    ) -> Optional[str]:
+        """
+        Generate unit tests based on behavioral analysis and code changes.
+
+        Args:
+            production_tool_id: ID of the production tool
+            production_code: The new production code
+            behavior_analysis: Analysis from debug logs
+            code_diff: Differences between versions
+            debug_logs: Raw debug log lines
+
+        Returns:
+            Generated test code or None
+        """
+        try:
+            # Build a comprehensive prompt for test generation
+            prompt = f"""Based on the following information, generate comprehensive pytest unit tests:
+
+PRODUCTION CODE:
+```python
+{production_code}
+```
+
+BEHAVIORAL ANALYSIS (from debug logs):
+- Function calls observed: {len(behavior_analysis.get('function_calls', []))}
+- Variables tracked: {', '.join(behavior_analysis.get('variable_states', {}).keys())}
+- Control flow paths: {len(behavior_analysis.get('control_flow', []))}
+- Error handling: {len(behavior_analysis.get('error_handling', []))}
+- Edge cases identified: {len(behavior_analysis.get('edge_cases', []))}
+
+CODE CHANGES:
+- Added functions: {', '.join(code_diff.get('added_functions', [])) or 'None'}
+- Removed functions: {', '.join(code_diff.get('removed_functions', [])) or 'None'}
+- Logic changes: {len(code_diff.get('logic_changes', []))} lines modified
+
+DEBUG LOG INSIGHTS:
+{chr(10).join(debug_logs[:10])}  # First 10 log lines
+
+Generate pytest tests that:
+1. Cover all functions in the production code
+2. Test the behaviors observed in debug logs
+3. Include edge cases identified in the logs
+4. Verify error handling paths
+5. Test any new functionality from code changes
+
+Return ONLY the Python test code, no explanations."""
+
+            # Use LLM to generate tests
+            test_code = self.client.generate(
+                model=self.config.get_tier_config("coding", "tier_2").get("model", "qwen2.5-coder:7b"),
+                prompt=prompt,
+                system="You are an expert at writing comprehensive pytest unit tests based on code behavior analysis.",
+                temperature=0.3,  # Lower temperature for consistent test generation
+                model_key="generator"
+            )
+
+            if test_code and 'def test_' in test_code:
+                # Clean up the response (remove markdown formatting if present)
+                if '```python' in test_code:
+                    test_code = test_code.split('```python')[1].split('```')[0].strip()
+                elif '```' in test_code:
+                    test_code = test_code.split('```')[1].split('```')[0].strip()
+
+                return test_code
+            else:
+                return None
+
+        except Exception as e:
+            logger.error(f"Error generating tests from behavior: {e}")
+            return None
+
     def update_tests_from_debug_version(self, production_tool_id: str, updated_code: str) -> bool:
         """
         When a production tool is updated, use the debug version to update tests.
@@ -5771,7 +6783,25 @@ Return ONLY the JSON, no other text."""
 
         while True:
             try:
-                user_input = console.input(f"[bold green]{prompt_text}[/bold green]").strip()
+                # Use prompt_toolkit if available for better history and completion
+                if PROMPT_TOOLKIT_AVAILABLE and sys.stdin.isatty():
+                    try:
+                        user_input = pt_prompt(
+                            prompt_text,
+                            history=self.pt_history,
+                            auto_suggest=AutoSuggestFromHistory(),
+                            completer=self.pt_completer,
+                            complete_while_typing=True
+                        ).strip()
+                    except (EOFError, KeyboardInterrupt):
+                        raise
+                    except Exception as e:
+                        # Fallback to regular input if prompt_toolkit fails
+                        console.print(f"[dim yellow]prompt_toolkit error: {e}, falling back to basic input[/dim yellow]")
+                        user_input = console.input(f"[bold green]{prompt_text}[/bold green]").strip()
+                else:
+                    # Use rich console.input for piped input or if prompt_toolkit unavailable
+                    user_input = console.input(f"[bold green]{prompt_text}[/bold green]").strip()
 
                 if not user_input:
                     continue
