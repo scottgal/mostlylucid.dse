@@ -47,7 +47,14 @@
       "Bash(git reset:*)",
       "Bash(timeout 5 python:*)",
       "Bash(timeout 10 python:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(cd:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(ollama show:*)",
+      "Bash(for model in \"qwen2.5-coder:3b\" \"codellama:7b\" \"deepseek-coder-v2:16b\")",
+      "Bash(do echo \"=== $model ===\")",
+      "Bash(done)",
+      "Bash(ollama list:*)"
     ],
     "deny": [],
     "ask": []

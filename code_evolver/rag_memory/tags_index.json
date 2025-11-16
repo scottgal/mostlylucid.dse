@@ -48,7 +48,9 @@
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
     "invocation_general_1763255215302",
-    "invocation_general_1763255986610"
+    "invocation_general_1763255986610",
+    "invocation_general_1763256515448",
+    "invocation_general_1763256869304"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -146,7 +148,9 @@
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
     "invocation_general_1763255215302",
-    "invocation_general_1763255986610"
+    "invocation_general_1763255986610",
+    "invocation_general_1763256515448",
+    "invocation_general_1763256869304"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -244,7 +248,9 @@
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
     "invocation_general_1763255215302",
-    "invocation_general_1763255986610"
+    "invocation_general_1763255986610",
+    "invocation_general_1763256515448",
+    "invocation_general_1763256869304"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -473,7 +479,9 @@
     "spec_write_a_haiku_about_codin",
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
-    "spec_write_me_a_poem_1763255171"
+    "spec_write_me_a_poem_1763255171",
+    "spec_fetch_the_data_at_and_give_me",
+    "spec_write_a_file_with_the_name_bu"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -700,7 +708,9 @@
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
     "spec_write_me_a_poem_1763255171",
-    "spec_implement_binary_search_1763255952"
+    "spec_implement_binary_search_1763255952",
+    "spec_fetch_the_data_at_and_give_me",
+    "spec_write_a_file_with_the_name_bu"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -1013,7 +1023,8 @@
     "func_add_1_5",
     "workflow_add_1_5",
     "tool_add_1_5",
-    "tool_basic_calculator"
+    "tool_basic_calculator",
+    "spec_fetch_the_data_at_and_give_me"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763174017457",
@@ -1235,7 +1246,9 @@
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
     "spec_write_me_a_poem_1763255171",
-    "spec_implement_binary_search_1763255952"
+    "spec_implement_binary_search_1763255952",
+    "spec_fetch_the_data_at_and_give_me",
+    "spec_write_a_file_with_the_name_bu"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1321,7 +1334,9 @@
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
     "spec_write_me_a_poem_1763255171",
-    "spec_implement_binary_search_1763255952"
+    "spec_implement_binary_search_1763255952",
+    "spec_fetch_the_data_at_and_give_me",
+    "spec_write_a_file_with_the_name_bu"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1407,7 +1422,9 @@
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
     "spec_write_me_a_poem_1763255171",
-    "spec_implement_binary_search_1763255952"
+    "spec_implement_binary_search_1763255952",
+    "spec_fetch_the_data_at_and_give_me",
+    "spec_write_a_file_with_the_name_bu"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -2216,7 +2233,9 @@
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
     "invocation_general_1763255215302",
-    "invocation_general_1763255986610"
+    "invocation_general_1763255986610",
+    "invocation_general_1763256515448",
+    "invocation_general_1763256869304"
   ],
   "translate": [
     "workflow_1763251699"

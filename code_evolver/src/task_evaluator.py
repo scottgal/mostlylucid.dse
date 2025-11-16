@@ -103,7 +103,11 @@ class TaskEvaluator:
 Classify as ONE:
 creative_content, arithmetic, data_processing, code_generation, translation, question_answering, formatting, conversion, unknown
 
-CATEGORY: [pick one only]"""
+Also rate COMPLEXITY:
+simple, moderate, complex
+
+CATEGORY: [pick one]
+COMPLEXITY: [pick one]"""
 
         try:
             response = self.client.generate(
@@ -112,45 +116,60 @@ CATEGORY: [pick one only]"""
                 model_key="triage"
             )
 
-            # Parse structured response - just extract category
+            # Parse structured response - extract category and complexity
             lines = response.strip().split('\n')
             category_line = next((l for l in lines if l.startswith('CATEGORY:')), '')
+            complexity_line = next((l for l in lines if l.startswith('COMPLEXITY:')), '')
 
             category = category_line.replace('CATEGORY:', '').strip().lower().replace("-", "_")
+            complexity = complexity_line.replace('COMPLEXITY:', '').strip().lower()
 
             # Don't try to parse understanding or key_aspects - tinyllama is too unreliable
             understanding = ""
             key_aspects = ""
 
-            # Fallback: Try to extract category from unstructured response
-            if not category:
+            # Fallback: Try to extract from unstructured response
+            if not category or not complexity:
                 # Try to infer from response content
                 response_lower = response.lower()
 
                 # Extract category from keywords
-                if any(word in response_lower for word in ['joke', 'story', 'poem', 'creative', 'article', 'content']):
-                    category = 'creative_content'
-                elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
-                    category = 'arithmetic'
-                elif any(word in response_lower for word in ['code', 'function', 'program']):
-                    category = 'code_generation'
-                elif any(word in response_lower for word in ['question', 'answer', 'explain']):
-                    category = 'question_answering'
-                elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
-                    category = 'accidental'
-                else:
-                    category = 'unknown'
+                if not category:
+                    if any(word in response_lower for word in ['joke', 'story', 'poem', 'creative', 'article', 'content']):
+                        category = 'creative_content'
+                    elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
+                        category = 'arithmetic'
+                    elif any(word in response_lower for word in ['code', 'function', 'program']):
+                        category = 'code_generation'
+                    elif any(word in response_lower for word in ['question', 'answer', 'explain']):
+                        category = 'question_answering'
+                    elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
+                        category = 'accidental'
+                    else:
+                        category = 'unknown'
+
+                # Extract complexity from keywords if not found
+                if not complexity:
+                    desc_lower = description.lower()
+                    # Keyword-based complexity detection
+                    if any(word in desc_lower for word in ['simple', 'basic', 'quick', 'small', 'easy']):
+                        complexity = 'simple'
+                    elif any(word in desc_lower for word in ['complex', 'advanced', 'system', 'architecture', 'multi', 'design']):
+                        complexity = 'complex'
+                    else:
+                        complexity = 'moderate'
 
             # Map to TaskType
             task_type = self._parse_task_type(category)
 
-            # Determine requirements
-            routing = self._determine_routing(task_type, description)
+            # Determine requirements (pass complexity for better routing)
+            routing = self._determine_routing(task_type, description, complexity)
 
-            logger.info(f"Task classified as: {task_type.value} → {routing['recommended_tier']}")
+            logger.info(f"Task classified as: {task_type.value} (complexity: {complexity}) → {routing['recommended_tier']}")
 
             return {
                 "task_type": task_type,
+                "complexity": complexity,
                 "understanding": understanding,
                 "key_aspects": key_aspects,
                 "input_length": input_length,
@@ -163,12 +182,13 @@ CATEGORY: [pick one only]"""
             # Safe default: assume needs LLM
             return {
                 "task_type": TaskType.UNKNOWN,
+                "complexity": "moderate",
                 "understanding": "Unable to evaluate task due to an error",
                 "key_aspects": "error, unknown",
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,
-                "recommended_tier": "medium",
+                "recommended_tier": "coding.tier_2",
                 "reason": f"Error during evaluation: {e}",
                 "input_length": input_length,
                 "evaluation_model": "none"
@@ -270,9 +290,14 @@ CATEGORY: [pick one only]"""
             else:
                 return TaskType.UNKNOWN
 
-    def _determine_routing(self, task_type: TaskType, description: str) -> Dict[str, Any]:
+    def _determine_routing(self, task_type: TaskType, description: str, complexity: str = "moderate") -> Dict[str, Any]:
         """
-        Determine routing requirements based on task type.
+        Determine routing requirements based on task type and complexity.
+
+        Args:
+            task_type: The type of task
+            description: Task description
+            complexity: Task complexity (simple, moderate, complex)
 
         Returns:
             Dict with requires_llm, requires_content_llm, can_use_tools, recommended_tier, reason
@@ -307,14 +332,25 @@ CATEGORY: [pick one only]"""
                 "reason": "Question answering requires LLM knowledge"
             }
 
-        # Code generation needs coding LLM
+        # Code generation needs coding LLM - tier based on complexity
         elif task_type == TaskType.CODE_GENERATION:
+            # Select tier based on complexity assessment
+            if complexity == "simple":
+                tier = "coding.tier_1"
+                reason = "Simple code generation (basic functions, straightforward logic)"
+            elif complexity == "complex":
+                tier = "coding.tier_3"
+                reason = "Complex code generation (advanced algorithms, system design)"
+            else:  # moderate
+                tier = "coding.tier_2"
+                reason = "Standard code generation (multi-step workflows, moderate complexity)"
+
             return {
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,
-                "recommended_tier": "coding.tier_2",
-                "reason": "Code generation requires coding LLM"
+                "recommended_tier": tier,
+                "reason": reason
             }
 
         # Arithmetic can use calculator tools
