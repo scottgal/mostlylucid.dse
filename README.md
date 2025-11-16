@@ -57,6 +57,18 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
   - 92% cost reduction, 31% quality improvement demonstrated
   - Future research directions
 
+- **[ADAPTIVE_TIMEOUT.md](code_evolver/ADAPTIVE_TIMEOUT.md)** - Self-adjusting response time management
+  - Learns optimal timeouts from actual performance (95th percentile + 20% buffer)
+  - Automatic fallback to smaller models on timeout
+  - Tracks per-model metrics in RAG memory
+  - Works across all backends (Ollama, OpenAI, Anthropic, Azure, LM Studio)
+
+- **[SPECIFICATION_BASED_SELECTION.md](code_evolver/SPECIFICATION_BASED_SELECTION.md)** - Future: Constraint-driven model selection
+  - Specify requirements: "within 10 seconds", "cost under $0.01", "quality > 90"
+  - System automatically selects optimal model to meet specifications
+  - Validates constraints and adapts over time
+  - Designed for Claude Code CLI integration
+
 - **[Complete Demo](code_evolver/examples/complete_workflow_evolution_demo.py)** - End-to-end demonstration
   - Runs all 6 evolution phases
   - Shows auto-evolution, pressure management, platform variants
@@ -83,7 +95,11 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
   - Moderate tasks → tier_2 (balanced: codellama:7b local OR gpt-4-turbo cloud)
   - Complex tasks → tier_3 (powerful: deepseek-coder-v2:16b local OR claude-3.5-sonnet cloud)
   - With frontier models, often succeeds on first try (no escalation needed)
-- **Timeout Fallback** - Automatic progressive fallback to smaller/faster models on timeout (tier_3 → tier_2 → tier_1)
+- **Adaptive Timeout System** - Self-adjusting response time management ([see details](code_evolver/ADAPTIVE_TIMEOUT.md))
+  - Learns optimal timeouts from actual performance (95th percentile + 20% buffer)
+  - Automatic progressive fallback to smaller/faster models on timeout (tier_3 → tier_2 → tier_1)
+  - Per-model metrics stored in RAG for continuous improvement
+  - Adapts to your infrastructure automatically (GPU/CPU/Cloud)
 
 ### 🔧 Advanced Code Generation & Fixing
 - **6-Stage Adaptive Escalation** - Progressive code fixing with increasing model power and temperature
