@@ -95,13 +95,24 @@
       "output_key": "docker_compose"
     },
     {
+      "step_id": "generate_config_file",
+      "tool": "config_file_generator",
+      "description": "Generate config.yaml with Ollama defaults and instructions",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"mode\": \"docker\", \"default_model\": \"llama3\"}"
+      },
+      "output_key": "config_file",
+      "parallel_group": "config"
+    },
+    {
       "step_id": "generate_env_files",
       "tool": "env_file_generator",
       "description": "Generate .env and .env.example files with configuration",
       "input": {
-        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"qwen2.5-coder:3b\", \"base_url\": \"http://localhost:11434\"}}"
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"llama3:latest\", \"base_url\": \"http://host.docker.internal:11434\"}}"
       },
-      "output_key": "env_files"
+      "output_key": "env_files",
+      "parallel_group": "config"
     },
     {
       "step_id": "generate_helper_scripts",
@@ -149,6 +160,7 @@
     "api_wrapper": "str - Generated API wrapper script",
     "dockerfile": "str - Generated Dockerfile",
     "docker_compose": "str - Generated docker-compose.yml",
+    "config_file": "dict - Generated config.yaml with Ollama defaults and configuration instructions",
     "env_files": "dict - Generated .env and .env.example files with instructions",
     "helper_scripts": "dict - Generated helper scripts (build.sh, run.sh, test.sh, stop.sh)",
     "copy_results": "dict - File copy results and size statistics",

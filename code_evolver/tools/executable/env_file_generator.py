@@ -30,36 +30,71 @@ def generate_env_file(config: Dict[str, Any]) -> str:
     env_lines = [
         "# Environment Configuration",
         f"# Generated for tool: {tool_id}",
+        "# HOW TO USE: Copy to .env and edit values as needed",
         "",
+        "# ======================",
         "# Application Settings",
+        "# ======================",
         f"TOOL_ID={tool_id}",
         f"API_PORT={port}",
         "API_HOST=0.0.0.0",
         "PYTHONUNBUFFERED=1",
         "",
+        "# ======================",
         "# Flask Settings",
+        "# ======================",
         "FLASK_ENV=production",
         "FLASK_DEBUG=false",
         "",
+        "# ======================",
         "# LLM Configuration",
+        "# ======================",
+        "# Provider: ollama (local), openai, anthropic, azure",
         f"LLM_PROVIDER={llm_config.get('provider', 'ollama')}",
-        f"LLM_MODEL={llm_config.get('model', 'qwen2.5-coder:3b')}",
+        "",
+        "# Model to use (for Ollama):",
+        "# - tinyllama:latest (fast, lightweight, good for testing)",
+        "# - llama3:latest (balanced quality/speed, recommended)",
+        "# - qwen2.5-coder:3b (best for code generation)",
+        f"LLM_MODEL={llm_config.get('model', 'llama3:latest')}",
+        "",
+        "# Ollama API base URL",
+        "# Docker Mac/Windows: http://host.docker.internal:11434",
+        "# Docker Linux: http://172.17.0.1:11434",
+        "# Standalone: http://localhost:11434",
         f"LLM_BASE_URL={llm_config.get('base_url', 'http://localhost:11434')}",
+        "",
         f"LLM_TEMPERATURE={llm_config.get('temperature', '0.7')}",
         "",
-        "# Vector Database Configuration",
+        "# API Keys (uncomment if using cloud providers)",
+        "# OPENAI_API_KEY=sk-your-key-here",
+        "# ANTHROPIC_API_KEY=sk-ant-your-key-here",
+        "# AZURE_API_KEY=your-key-here",
+        "",
+        "# ======================",
+        "# Vector Database",
+        "# ======================",
         "VECTOR_DB_TYPE=chromadb",
         "VECTOR_DB_PATH=./rag_memory",
         "",
+        "# ======================",
         "# Logging",
+        "# ======================",
         "LOG_LEVEL=INFO",
         "LOG_FORMAT=%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "",
-        "# Security (Change in production!)",
+        "# ======================",
+        "# Security",
+        "# ======================",
+        "# IMPORTANT: Change in production!",
         "# SECRET_KEY=change-this-in-production",
         "",
+        "# ======================",
         "# CORS Settings",
+        "# ======================",
         "ENABLE_CORS=true",
+        "# In production, set to specific domains:",
+        "# CORS_ORIGINS=https://yourdomain.com,https://app.yourdomain.com",
         "CORS_ORIGINS=*",
         "",
     ]
@@ -120,16 +155,25 @@ FLASK_DEBUG=false
 # LLM Configuration
 # ======================
 
-# LLM provider: ollama, openai, anthropic, azure
+# LLM provider: ollama (local), openai, anthropic, azure
 LLM_PROVIDER=ollama
 
-# Model to use
-LLM_MODEL=qwen2.5-coder:3b
+# Model to use (for Ollama):
+# RECOMMENDED OPTIONS:
+# - tinyllama:latest       # Fast, lightweight (1.1B) - good for testing/development
+# - llama3:latest          # Balanced (8B) - RECOMMENDED for production
+# - qwen2.5-coder:3b       # Code specialist (3B) - best for code tasks
+# - codellama:7b           # Code-focused (7B) - advanced coding
+LLM_MODEL=llama3:latest
 
 # LLM API base URL
+# For Ollama on Docker (Mac/Windows): http://host.docker.internal:11434
+# For Ollama on Docker (Linux): http://172.17.0.1:11434
+# For Ollama standalone: http://localhost:11434
 LLM_BASE_URL=http://localhost:11434
 
 # Temperature for LLM responses (0.0-1.0)
+# Lower = more focused/deterministic, Higher = more creative
 LLM_TEMPERATURE=0.7
 
 # API keys (if using cloud providers)

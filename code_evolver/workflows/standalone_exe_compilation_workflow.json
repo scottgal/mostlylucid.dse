@@ -80,10 +80,10 @@
     },
     {
       "step_id": "generate_config",
-      "tool": "general_code_generator",
-      "description": "Generate configuration file",
+      "tool": "config_file_generator",
+      "description": "Generate config.yaml with Ollama defaults and comprehensive instructions",
       "input": {
-        "prompt": "Generate a YAML configuration file (config.yaml) for tool '{tool_id}' with commented options for: LLM provider, model selection, API keys, timeout settings, logging level, and any tool-specific settings. Include helpful comments."
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"mode\": \"standalone\", \"default_model\": \"llama3\"}"
       },
       "output_key": "config",
       "parallel_group": "generation",
@@ -94,7 +94,7 @@
       "tool": "env_file_generator",
       "description": "Generate .env and .env.example",
       "input": {
-        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"qwen2.5-coder:3b\"}}"
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"llama3:latest\", \"base_url\": \"http://localhost:11434\"}}"
       },
       "output_key": "env_files",
       "parallel_group": "generation",
