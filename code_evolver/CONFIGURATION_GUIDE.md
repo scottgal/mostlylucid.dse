@@ -2,15 +2,134 @@
 
 Complete guide to configuring the Code Evolver system for different LLM backends, execution environments, and optimization strategies.
 
+> **⚠️ IMPORTANT: New Configuration System**
+>
+> The system now uses a **role-based and tier-based configuration architecture** for improved flexibility and maintainability.
+>
+> - **See [NEW_CONFIG_ARCHITECTURE.md](NEW_CONFIG_ARCHITECTURE.md)** for the complete new architecture
+> - **See [MODEL_TIERS.md](MODEL_TIERS.md)** for tier-based configuration details
+>
+> **Key changes:**
+> - Tools now reference **abstract roles** (fast, base, powerful) instead of hardcoded models
+> - Role mappings defined once in config, not duplicated in every tool
+> - Easy backend switching without changing tool definitions
+> - **This guide has been updated to reflect the new system**
+
 ## Table of Contents
 
-1. [Configuration Files](#configuration-files)
-2. [LLM Backend Configuration](#llm-backend-configuration)
-3. [Execution Settings](#execution-settings)
-4. [Testing & Code Quality](#testing--code-quality)
-5. [Auto-Evolution & Optimization](#auto-evolution--optimization)
-6. [Logging & Debugging](#logging--debugging)
-7. [Advanced Configurations](#advanced-configurations)
+1. [New Configuration Architecture](#new-configuration-architecture) ⭐ **NEW**
+2. [Configuration Files](#configuration-files)
+3. [LLM Backend Configuration](#llm-backend-configuration)
+4. [Execution Settings](#execution-settings)
+5. [Testing & Code Quality](#testing--code-quality)
+6. [Auto-Evolution & Optimization](#auto-evolution--optimization)
+7. [Logging & Debugging](#logging--debugging)
+8. [Advanced Configurations](#advanced-configurations)
+
+---
+
+## New Configuration Architecture
+
+### Role-Based Configuration
+
+The new system uses **abstract roles** that map to actual models:
+
+```yaml
+llm:
+  backend: "ollama"
+
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "qwen2.5-coder:3b"          # Fast, simple tasks
+    base: "codellama:7b"               # Most tasks (default)
+    powerful: "qwen2.5-coder:14b"      # Complex reasoning
+    god_level: "deepseek-coder-v2:16b" # Last resort
+    embedding: "nomic-embed-text"      # Vector embeddings
+
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
+```
+
+**Tools reference roles:**
+
+```yaml
+# tools/llm/general.yaml
+name: "General Code Generator"
+type: "llm"
+llm:
+  role: "base"  # Uses codellama:7b with above config
+```
+
+### Tier-Based Configuration
+
+For automatic escalation and context management:
+
+```yaml
+model_tiers:
+  coding:
+    tier_1:  # Fast coding
+      model: "qwen2.5-coder:3b"
+      context_window: 32768
+      timeout: 60
+      escalates_to: "tier_2"
+
+    tier_2:  # General coding (DEFAULT)
+      model: "codellama:7b"
+      context_window: 16384
+      timeout: 120
+      escalates_to: "tier_3"
+
+    tier_3:  # Complex coding
+      model: "qwen2.5-coder:14b"
+      context_window: 32768
+      timeout: 600
+      escalates_to: null
+```
+
+### Benefits of New System
+
+✅ **Zero Tool Duplication** - Tools defined once, work with any backend
+✅ **Easy Backend Switching** - Change role mappings, tools adapt automatically
+✅ **Clean Separation** - Backend metadata, tool definitions, and user config are separate
+✅ **Automatic Escalation** - Tiers escalate to more powerful models when needed
+✅ **Context Management** - Higher tiers get bigger context windows
+
+### Minimal Configuration Examples
+
+**Anthropic (Claude):**
+```yaml
+# config.anthropic.minimal.yaml
+llm:
+  backend: "anthropic"
+  model_roles:
+    fast: "claude-3-haiku-20240307"
+    base: "claude-3-5-sonnet-20241022"
+    powerful: "claude-3-opus-20240229"
+```
+
+**OpenAI:**
+```yaml
+# config.openai.minimal.yaml
+llm:
+  backend: "openai"
+  model_roles:
+    fast: "gpt-4o-mini"
+    base: "gpt-4o"
+    powerful: "o1-preview"
+```
+
+**Local Ollama:**
+```yaml
+# config.local.minimal.yaml
+llm:
+  backend: "ollama"
+  model_roles:
+    fast: "qwen2.5-coder:3b"
+    base: "codellama:7b"
+    powerful: "deepseek-coder-v2:16b"
+```
 
 ---
 
@@ -57,13 +176,43 @@ backend = config.get("llm.backend")  # "ollama", "openai", "anthropic", etc.
 
 ## LLM Backend Configuration
 
-### 1. Ollama (Local Models)
+> **Note:** The examples below show the **old configuration format** for reference.
+>
+> **The new recommended format** uses **role-based configuration** (see [New Configuration Architecture](#new-configuration-architecture) above).
+>
+> The old format still works for backward compatibility, but the new format is simpler and more flexible.
+
+### 1. Ollama (Local Models) - NEW FORMAT ⭐
 
 **Advantages**: Free, 100% private, no API keys needed
 **Setup**: [ollama.ai](https://ollama.ai)
 
+**Recommended (New Role-Based):**
+
 ```yaml
-# config.yaml
+# config.local.minimal.yaml
+llm:
+  backend: "ollama"
+
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "qwen2.5-coder:3b"          # Fast tasks
+    base: "codellama:7b"               # Default
+    powerful: "qwen2.5-coder:14b"      # Complex tasks
+    god_level: "deepseek-coder-v2:16b" # Last resort
+    embedding: "nomic-embed-text"      # Embeddings
+
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
+```
+
+<details>
+<summary><strong>Old Format (still supported, but deprecated)</strong></summary>
+
+```yaml
+# config.yaml - OLD FORMAT
 llm:
   backend: "ollama"
 
@@ -102,6 +251,8 @@ llm:
         timeout: 120
 ```
 
+</details>
+
 **Installation**:
 ```bash
 ollama pull tinyllama
@@ -115,13 +266,37 @@ ollama serve
 
 ---
 
-### 2. OpenAI (GPT Models)
+### 2. OpenAI (GPT Models) - NEW FORMAT ⭐
 
 **Advantages**: High quality, fast inference, frontier models
 **Cost**: Pay-per-use
 
+**Recommended (New Role-Based):**
+
 ```yaml
-# config.openai.yaml
+# config.openai.minimal.yaml
+llm:
+  backend: "openai"
+
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "gpt-4o-mini"     # Fast, cheap tasks
+    base: "gpt-4o"          # Default
+    powerful: "o1-preview"  # Complex reasoning
+    god_level: "o1"         # Most powerful
+
+  backends:
+    openai:
+      api_key: "${OPENAI_API_KEY}"
+      base_url: "https://api.openai.com/v1"
+      enabled: true
+```
+
+<details>
+<summary><strong>Old Format (still supported, but deprecated)</strong></summary>
+
+```yaml
+# config.openai.yaml - OLD FORMAT
 llm:
   backend: "openai"
 
@@ -157,6 +332,8 @@ llm:
         timeout: 60
 ```
 
+</details>
+
 **Setup**:
 ```bash
 export OPENAI_API_KEY="sk-..."
@@ -165,13 +342,36 @@ python chat_cli.py
 
 ---
 
-### 3. Anthropic (Claude)
+### 3. Anthropic (Claude) - NEW FORMAT ⭐
 
 **Advantages**: Strong reasoning, long context, excellent code understanding
 **Cost**: Pay-per-use
 
+**Recommended (New Role-Based):**
+
 ```yaml
-# config.anthropic.yaml
+# config.anthropic.minimal.yaml
+llm:
+  backend: "anthropic"
+
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "claude-3-haiku-20240307"       # Fast, cheap tasks
+    base: "claude-3-5-sonnet-20241022"    # Default (best balance)
+    powerful: "claude-3-opus-20240229"    # Complex reasoning
+    god_level: "claude-3-opus-20240229"   # Most powerful
+
+  backends:
+    anthropic:
+      api_key: "${ANTHROPIC_API_KEY}"
+      enabled: true
+```
+
+<details>
+<summary><strong>Old Format (still supported, but deprecated)</strong></summary>
+
+```yaml
+# config.anthropic.yaml - OLD FORMAT
 llm:
   backend: "anthropic"
 

@@ -391,23 +391,51 @@ docker run -p 6333:6333 qdrant/qdrant
 
 ### Backend Configuration
 
-Create or modify `config.yaml`:
+The new configuration system uses **roles** and **tiers** for flexible model management:
 
+**Role-based Configuration:**
 ```yaml
 llm:
   backend: "ollama"  # or "openai", "anthropic", "azure", "lmstudio"
+
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "qwen2.5-coder:3b"      # Fast, simple tasks
+    base: "codellama:7b"           # Most tasks (default)
+    powerful: "qwen2.5-coder:14b"  # Complex reasoning
+    god_level: "deepseek-coder-v2:16b"  # Last resort
+    embedding: "nomic-embed-text"  # Vector embeddings
 
   # For multi-backend with fallback
   fallback_backends: ["openai", "anthropic"]
 ```
 
+**Tier-based Configuration:**
+```yaml
+model_tiers:
+  coding:
+    tier_1:  # Fast, simple tasks
+      model: "qwen2.5-coder:3b"
+      context_window: 32768
+      timeout: 60
+    tier_2:  # General coding (DEFAULT)
+      model: "codellama:7b"
+      context_window: 16384
+      timeout: 120
+    tier_3:  # Complex coding
+      model: "qwen2.5-coder:14b"
+      context_window: 32768
+      timeout: 600
+```
+
 See example configs:
-- `config.ollama.yaml` - Local Ollama setup
-- `config.openai.yaml` - OpenAI GPT-4
-- `config.anthropic.yaml` - Anthropic Claude
-- `config.azure.yaml` - Azure OpenAI
-- `config.lmstudio.yaml` - LM Studio
-- `config.hybrid.yaml` - Multi-backend with fallback
+- `config.anthropic.minimal.yaml` - Claude with role mapping
+- `config.openai.minimal.yaml` - OpenAI with role mapping
+- `config.local.minimal.yaml` - Ollama with role mapping
+- `config.tiered.yaml` - Tier-based configuration
+- `config.unified.yaml` - Unified model registry
+
+See [NEW_CONFIG_ARCHITECTURE.md](code_evolver/NEW_CONFIG_ARCHITECTURE.md) and [MODEL_TIERS.md](code_evolver/MODEL_TIERS.md) for details.
 
 ### Basic Usage
 
@@ -727,43 +755,67 @@ sequenceDiagram
 
 ### Multi-Endpoint Setup
 
+With the new role-based system, you configure backends and map roles to models:
+
 ```yaml
 # config.yaml
-ollama:
-  base_url: "http://localhost:11434"
+llm:
+  backend: "ollama"
 
-  models:
-    overseer:
-      model: "llama3"
-      endpoint: "http://powerful-cpu-machine:11434"
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
 
-    generator:
-      model: "codellama"
-      endpoints:  # Round-robin load balancing
-        - "http://gpu-machine-1:11434"
-        - "http://gpu-machine-2:11434"
+  # Map roles to models (models reference backend automatically)
+  model_roles:
+    fast: "qwen2.5-coder:3b"      # Quick tasks
+    base: "codellama:7b"           # Default for most work
+    powerful: "qwen2.5-coder:14b"  # Complex tasks
+    god_level: "deepseek-coder-v2:16b"  # Last resort
+```
 
-    evaluator:
-      model: "llama3"
-      endpoint: "http://localhost:11434"
+Tools reference roles, not specific models:
+```yaml
+tools:
+  general:
+    llm:
+      role: "base"  # Uses codellama:7b with this config
+
+  security_auditor:
+    llm:
+      role: "powerful"  # Uses qwen2.5-coder:14b
 ```
 
 ### Tool Configuration
 
+**New Role-Based Tools:**
+
+Tools are now defined in the `tools/` directory and reference abstract roles:
+
 ```yaml
-tools:
-  content_generator:
-    name: "Content Generator"
-    type: "llm"
-    description: "Generates creative content (jokes, stories, articles)"
-    llm:
-      model: "llama3"
-      endpoint: null
-    cost_tier: "medium"
-    speed_tier: "fast"
-    quality_tier: "excellent"
-    tags: ["content", "creative", "writing"]
+# tools/llm/content_generator.yaml
+name: "Content Generator"
+type: "llm"
+description: "Generates creative content (jokes, stories, articles)"
+
+llm:
+  role: "base"  # References the "base" role from config
+
+# Metadata for tool selection
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+tags: ["content", "creative", "writing"]
 ```
+
+**Benefits:**
+- Tools defined once, work with any backend
+- Switch backends by changing role mapping in config
+- No tool duplication across configs
+- Backend-agnostic tool definitions
+
+See [NEW_CONFIG_ARCHITECTURE.md](code_evolver/NEW_CONFIG_ARCHITECTURE.md) for the complete architecture.
 
 ### OpenAPI-Based Tools
 
@@ -1012,7 +1064,7 @@ graph TB
 | **Azure OpenAI** | Enterprise OpenAI | Corporate compliance, SLAs |
 | **LM Studio** | Local GGUF models | Custom fine-tuned models |
 
-**Configuration Example:**
+**Configuration Example (Role-Based):**
 
 ```yaml
 # config.yaml
@@ -1020,25 +1072,53 @@ llm:
   backend: "ollama"  # Primary backend
   fallback_backends: ["openai", "anthropic"]  # Automatic fallback
 
-  ollama:
-    base_url: "http://localhost:11434"
+  # Map abstract roles to actual models
+  model_roles:
+    fast: "qwen2.5-coder:3b"      # Ollama model for fast tasks
+    base: "codellama:7b"           # Ollama model for general tasks
+    powerful: "qwen2.5-coder:14b"  # Ollama model for complex tasks
+    god_level: "deepseek-coder-v2:16b"  # Most powerful Ollama model
 
-  openai:
-    api_key: "${OPENAI_API_KEY}"
-    base_url: "https://api.openai.com/v1"
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
 
-  anthropic:
-    api_key: "${ANTHROPIC_API_KEY}"
-    base_url: "https://api.anthropic.com"
+    openai:
+      api_key: "${OPENAI_API_KEY}"
+      base_url: "https://api.openai.com/v1"
+      enabled: false
 
-  azure:
-    api_key: "${AZURE_OPENAI_API_KEY}"
-    endpoint: "${AZURE_OPENAI_ENDPOINT}"
-    deployment_name: "gpt-4"
+    anthropic:
+      api_key: "${ANTHROPIC_API_KEY}"
+      base_url: "https://api.anthropic.com"
+      enabled: false
 
-  lmstudio:
-    base_url: "http://localhost:1234/v1"
+    azure:
+      api_key: "${AZURE_OPENAI_API_KEY}"
+      endpoint: "${AZURE_OPENAI_ENDPOINT}"
+      deployment_name: "gpt-4"
+      enabled: false
+
+    lmstudio:
+      base_url: "http://localhost:1234/v1"
+      enabled: false
 ```
+
+**Switching Backends:**
+
+To switch from Ollama to Anthropic, just change role mappings:
+
+```yaml
+llm:
+  backend: "anthropic"
+  model_roles:
+    fast: "claude-3-haiku-20240307"
+    base: "claude-3-5-sonnet-20241022"
+    powerful: "claude-3-opus-20240229"
+```
+
+All tools automatically use the new models - no changes needed!
 
 **Using Multi-Backend Client:**
 

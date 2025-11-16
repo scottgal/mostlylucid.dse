@@ -1,6 +1,8 @@
 # Code Evolver - Claude Code CLI Documentation
 
-**AI-Powered Code Evolution System using Ollama**
+**AI-Powered Code Evolution System with Multi-Backend LLM Support**
+
+> **Note:** This system now uses a **role-based and tier-based configuration** for flexible model management. See [NEW_CONFIG_ARCHITECTURE.md](NEW_CONFIG_ARCHITECTURE.md) and [MODEL_TIERS.md](MODEL_TIERS.md) for details.
 
 ---
 
@@ -62,11 +64,10 @@ User Request
 # Step 1: User request arrives
 request = "Write a function that validates email addresses"
 
-# Step 2: Overseer plans approach
+# Step 2: Overseer plans approach (uses "base" role)
 overseer_response = client.generate(
-    model="llama3",
-    prompt=f"Plan how to solve: {request}",
-    model_key="overseer"
+    role="base",  # Maps to model based on config
+    prompt=f"Plan how to solve: {request}"
 )
 
 # Step 3: Store plan in RAG
@@ -78,11 +79,10 @@ rag.store_artifact(
     tags=["plan", "overseer"]
 )
 
-# Step 4: Generator uses plan
+# Step 4: Generator uses plan (uses "base" role or specific tier)
 code = client.generate(
-    model="codellama",
-    prompt=f"Based on this strategy:\n{overseer_response}\n\nWrite code for: {request}",
-    model_key="generator"
+    role="base",  # Or use tier: "coding.tier_2"
+    prompt=f"Based on this strategy:\n{overseer_response}\n\nWrite code for: {request}"
 )
 
 # Step 5: Store code in RAG
@@ -147,41 +147,78 @@ rag.store_artifact(
 
 ---
 
-## Multi-Endpoint Configuration
+## Configuration System
 
-Run different models on different machines for distributed inference:
+### Role-Based Configuration
+
+The new system uses **abstract roles** that map to actual models:
 
 ```yaml
-ollama:
-  base_url: "http://localhost:11434"  # Default
+llm:
+  backend: "ollama"
 
-  models:
-    # Strategy planning on powerful CPU machine
-    overseer:
-      model: "llama3"
-      endpoint: "http://machine1:11434"
+  # Map roles to models
+  model_roles:
+    fast: "qwen2.5-coder:3b"      # Fast, simple tasks
+    base: "codellama:7b"           # Most tasks (default)
+    powerful: "qwen2.5-coder:14b"  # Complex reasoning
+    god_level: "deepseek-coder-v2:16b"  # Last resort
+    embedding: "nomic-embed-text"  # Vector embeddings
 
-    # Code generation on GPU machine
-    generator:
-      model: "codellama"
-      endpoint: "http://machine2:11434"
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
+```
 
-    # Fast evaluation on local machine
-    evaluator:
-      model: "llama3"
-      endpoint: null  # Uses base_url
+**Tools reference roles, not models:**
 
-    # Quick triage on fast machine
-    triage:
-      model: "tiny"
-      endpoint: "http://machine3:11434"
+```yaml
+# tools/llm/general.yaml
+name: "General Code Generator"
+type: "llm"
+llm:
+  role: "base"  # Uses codellama:7b with above config
+
+# tools/llm/security_auditor.yaml
+name: "Security Auditor"
+type: "llm"
+llm:
+  role: "powerful"  # Uses qwen2.5-coder:14b
+```
+
+### Tier-Based Configuration
+
+For more granular control, use **model tiers**:
+
+```yaml
+model_tiers:
+  coding:
+    tier_1:  # Fast coding
+      model: "qwen2.5-coder:3b"
+      context_window: 32768
+      timeout: 60
+      escalates_to: "tier_2"
+
+    tier_2:  # General coding (DEFAULT)
+      model: "codellama:7b"
+      context_window: 16384
+      timeout: 120
+      escalates_to: "tier_3"
+
+    tier_3:  # Complex coding
+      model: "qwen2.5-coder:14b"
+      context_window: 32768
+      timeout: 600
+      escalates_to: null
 ```
 
 **Benefits:**
-- Put heavy models on powerful hardware
-- Distribute load across multiple machines
-- Use GPUs for code generation
-- Use CPUs for text analysis
+- **Backend-agnostic:** Tools work with any backend
+- **Easy switching:** Change all models by updating role mapping
+- **No duplication:** Tools defined once
+- **Automatic escalation:** Tiers escalate to more powerful models
+- **Context management:** Higher tiers get bigger context windows
 
 ---
 
@@ -356,9 +393,8 @@ task_id = "sort_dicts_v1"
 # 2. Consult overseer
 print("Step 1: Consulting overseer for strategy...")
 strategy = client.generate(
-    model=config.overseer_model,
-    prompt=f"How should I approach this problem: {request}",
-    model_key="overseer"
+    role="base",  # Uses model mapped to "base" role
+    prompt=f"How should I approach this problem: {request}"
 )
 
 # 3. Store plan in RAG
@@ -387,9 +423,8 @@ Include:
 - Example usage in __main__"""
 
 code = client.generate(
-    model=config.generator_model,
-    prompt=code_prompt,
-    model_key="generator"
+    role="base",  # Or use tier: "coding.tier_2" for tier-based
+    prompt=code_prompt
 )
 
 # 5. Store code in RAG
@@ -496,35 +531,53 @@ evolver.monitor_and_evolve(interval_minutes=60, max_iterations=10)
 
 ## Tools System
 
-Define reusable tools with their own LLM endpoints:
+### Role-Based Tools
+
+Tools are now defined in `tools/` directory and reference abstract roles:
 
 ```yaml
-tools:
-  code_reviewer:
-    name: "Code Reviewer"
-    type: "llm"
-    description: "Reviews code for quality and bugs"
-    llm:
-      model: "llama3"
-      endpoint: "http://review-machine:11434"
-    tags: ["review", "quality"]
+# tools/llm/code_reviewer.yaml
+name: "Code Reviewer"
+type: "llm"
+description: "Reviews code for quality and bugs"
+
+llm:
+  role: "powerful"  # Uses powerful model for thorough review
+
+tags: ["review", "quality"]
 ```
+
+**Using tools:**
 
 ```python
-from src import ToolsManager
+from node_runtime import call_tool
 
-tools = ToolsManager(
-    config_manager=config,
-    ollama_client=client
-)
-
-# Invoke a tool
-result = tools.invoke_llm_tool(
+# Tool automatically uses the model mapped to "powerful" role
+result = call_tool(
     "code_reviewer",
-    prompt=f"Review this code:\n{code}",
-    system_prompt="You are an expert code reviewer"
+    f"Review this code:\n{code}"
 )
 ```
+
+### Switching Backends
+
+To switch from Ollama to Anthropic Claude:
+
+```yaml
+# Before (Ollama)
+llm:
+  backend: "ollama"
+  model_roles:
+    powerful: "qwen2.5-coder:14b"
+
+# After (Anthropic)
+llm:
+  backend: "anthropic"
+  model_roles:
+    powerful: "claude-3-opus-20240229"
+```
+
+All tools automatically use the new backend - **no tool changes needed!**
 
 ---
 
@@ -534,11 +587,24 @@ result = tools.invoke_llm_tool(
 
 ```python
 # ✅ Good: Ask overseer for strategy
-strategy = client.generate(model="llama3", prompt="How to solve...", model_key="overseer")
-code = client.generate(model="codellama", prompt=f"Based on: {strategy}...", model_key="generator")
+strategy = client.generate(role="base", prompt="How to solve...")
+code = client.generate(role="base", prompt=f"Based on: {strategy}...")
 
-# ❌ Bad: Generate code directly
-code = client.generate(model="codellama", prompt="Write code for...", model_key="generator")
+# ❌ Bad: Generate code directly without planning
+code = client.generate(role="base", prompt="Write code for...")
+```
+
+### 2. Use Roles and Tiers
+
+```python
+# ✅ Good: Use roles for backend flexibility
+result = client.generate(role="powerful", prompt="Complex task...")
+
+# ✅ Good: Use tiers for automatic escalation
+result = client.generate(tier="coding.tier_2", prompt="Code generation...")
+
+# ❌ Bad: Hardcode model names (ties you to one backend)
+result = client.generate(model="codellama", prompt="Code generation...")
 ```
 
 ### 2. Store Everything in RAG
