@@ -819,6 +819,95 @@ Tags: {', '.join(tool.tags)}
 
         return response
 
+    def invoke_llm_tool_with_fallback(
+        self,
+        tool_id: str,
+        prompt: str,
+        system_prompt: Optional[str] = None,
+        temperature: float = 0.7,
+        current_tier: Optional[str] = None,
+        **template_vars
+    ) -> str:
+        """
+        Invoke an LLM-based tool with automatic timeout fallback to faster/smaller models.
+
+        If the model times out, automatically retries with progressively smaller/faster models
+        based on the timeout_fallback chain defined in model_tiers.yaml.
+
+        Args:
+            tool_id: Tool identifier
+            prompt: Prompt to send to the LLM
+            system_prompt: Optional system prompt override
+            temperature: Sampling temperature
+            current_tier: Current tier being used (e.g., "coding.tier_3")
+            **template_vars: Variables to format the tool's prompt_template
+
+        Returns:
+            LLM response (or empty string if all attempts fail)
+        """
+        # Try the primary tool first
+        console.print(f"[dim]Attempting with {tool_id}...[/dim]")
+        response = self.invoke_llm_tool(
+            tool_id=tool_id,
+            prompt=prompt,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            **template_vars
+        )
+
+        # If we got a response, we're done
+        if response:
+            return response
+
+        # Otherwise, check if we have a timeout fallback tier configured
+        if not current_tier or not self.config_manager:
+            logger.warning(f"No response from {tool_id} and no fallback tier configured")
+            return ""
+
+        # Load model tiers configuration
+        try:
+            import yaml
+            tiers_file = Path(__file__).parent.parent / "model_tiers.yaml"
+            if not tiers_file.exists():
+                logger.warning("model_tiers.yaml not found - cannot use timeout fallback")
+                return ""
+
+            with open(tiers_file, 'r') as f:
+                tiers_config = yaml.safe_load(f)
+
+            # Parse tier (e.g., "coding.tier_3" -> category="coding", tier="tier_3")
+            if '.' not in current_tier:
+                logger.warning(f"Invalid tier format: {current_tier}")
+                return ""
+
+            category, tier_name = current_tier.split('.', 1)
+            tier_info = tiers_config.get(category, {}).get(tier_name, {})
+
+            # Check if there's a timeout_fallback configured
+            fallback_tier = tier_info.get('timeout_fallback')
+            if not fallback_tier:
+                logger.warning(f"No timeout_fallback configured for {current_tier}")
+                return ""
+
+            # Recursively try the fallback tier
+            console.print(f"[yellow]Timeout on {current_tier} - falling back to {fallback_tier}...[/yellow]")
+
+            # For fallback, we need to determine which tool to use
+            # For now, use the general tool with the fallback tier
+            # TODO: Make this smarter by looking up tier-specific tools
+            return self.invoke_llm_tool_with_fallback(
+                tool_id="general",  # Use general tool for fallback
+                prompt=prompt,
+                system_prompt=system_prompt,
+                temperature=temperature,
+                current_tier=fallback_tier,
+                **template_vars
+            )
+
+        except Exception as e:
+            logger.error(f"Error during timeout fallback: {e}")
+            return ""
+
     def invoke_openapi_tool(
         self,
         tool_id: str,

@@ -32,6 +32,7 @@ coding:
     quality: "excellent"
     context_window: 16384  # CodeLlama 7B has 16K context
     escalation_threshold: 0.70  # If confidence < 70%, escalate to tier_3
+    timeout_fallback: "coding.tier_1"  # On timeout, fall back to faster tier
 
   tier_3:  # Advanced coding (god-level)
     name: "Advanced Coding (Tier 3)"
@@ -44,6 +45,7 @@ coding:
     quality: "exceptional"
     context_window: 131072  # DeepSeek Coder V2 has 128K context
     escalation_threshold: null  # No further escalation (top tier)
+    timeout_fallback: "coding.tier_2"  # On timeout, fall back to faster tier
 
 # Content Generation Tiers (for text, articles, creative writing)
 content:
@@ -70,6 +72,7 @@ content:
     quality: "excellent"
     context_window: 8192
     escalation_threshold: 0.75
+    timeout_fallback: "content.tier_1"  # On timeout, fall back to faster tier
 
   tier_3:  # Long-form, high-quality content
     name: "Premium Content (Tier 3)"
@@ -82,6 +85,7 @@ content:
     quality: "exceptional"
     context_window: 128000
     escalation_threshold: null
+    timeout_fallback: "content.tier_2"  # On timeout, fall back to faster tier
 
 # Analysis/Reasoning Tiers (for planning, strategy, evaluation)
 analysis:
