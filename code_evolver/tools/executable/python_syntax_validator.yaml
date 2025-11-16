@@ -1,0 +1,11 @@
+name: "Python Syntax Validator"
+type: "executable"
+description: "Fast syntax check using Python's AST parser - catches syntax errors before expensive LLM tools"
+executable:
+  command: "python"
+  args: ["{tool_dir}/python_syntax_validator.py", "{source_file}"]
+  install_command: null  # Built-in Python module
+tags: ["python", "syntax", "validation", "static-analysis", "fast"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 200  # Run very early - before everything else

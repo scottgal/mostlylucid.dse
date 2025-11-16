@@ -1,0 +1,18 @@
+{
+  "undefined_names": {
+    "validator": "undefined_names",
+    "category": "imports",
+    "priority": 120,
+    "passed": false,
+    "output": "test_broken_indent.py:12: [F821] undefined name 'input_data'",
+    "execution_time_ms": 179.81481552124023,
+    "supports_autofix": false,
+    "description": "Detects undefined variables and missing imports"
+  },
+  "_summary": {
+    "total_validators": 0,
+    "passed": 0,
+    "failed": 1,
+    "total_time_ms": 179.81481552124023
+  }
+}

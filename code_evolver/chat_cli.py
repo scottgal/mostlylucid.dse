@@ -21,15 +21,65 @@ import re
 import unicodedata
 
 # Disable all debug/info logging for clean chat experience
-logging.basicConfig(level=logging.ERROR)
-logging.getLogger("src").setLevel(logging.ERROR)
-logging.getLogger("httpx").setLevel(logging.ERROR)
-logging.getLogger("httpcore").setLevel(logging.ERROR)
-logging.getLogger("urllib3").setLevel(logging.ERROR)
-logging.getLogger("src.ollama_client").setLevel(logging.ERROR)
-logging.getLogger("src.node_runner").setLevel(logging.ERROR)
-logging.getLogger("src.tools_manager").setLevel(logging.ERROR)
-logging.getLogger("src.qdrant_rag_memory").setLevel(logging.ERROR)
+# Use force=True to override any previous logging configurations from imported modules
+
+# Configure logging with ASCII-safe formatting to avoid Windows console encoding errors
+import sys
+import io
+
+# Create a custom stream handler that handles Unicode encoding gracefully
+class SafeStreamHandler(logging.StreamHandler):
+    """Stream handler that gracefully handles Unicode encoding on Windows."""
+    def __init__(self):
+        # Use stderr with UTF-8 encoding, falling back to ASCII if needed
+        try:
+            stream = io.TextIOWrapper(
+                sys.stderr.buffer,
+                encoding='utf-8',
+                errors='replace'  # Replace unencodable characters instead of crashing
+            )
+        except (AttributeError, io.UnsupportedOperation):
+            stream = sys.stderr
+        super().__init__(stream)
+
+    def emit(self, record):
+        try:
+            super().emit(record)
+        except UnicodeEncodeError:
+            # If Unicode error occurs, try ASCII-only output
+            try:
+                record.msg = str(record.msg).encode('ascii', errors='replace').decode('ascii')
+                super().emit(record)
+            except Exception:
+                pass  # Silently ignore logging errors
+
+# Configure root logger
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.ERROR)
+root_logger.handlers.clear()  # Clear any existing handlers
+root_logger.addHandler(SafeStreamHandler())
+
+# Set specific loggers to ERROR level to suppress debug output
+for logger_name in [
+    "src",
+    "httpx",
+    "httpcore",
+    "urllib3",
+    "src.ollama_client",
+    "src.node_runner",
+    "src.tools_manager",
+    "src.qdrant_rag_memory",
+    "src.config_manager",
+    "src.registry",
+    "src.evaluator",
+    "src.auto_evolver",
+    "qdrant_client",
+    "anthropic"
+]:
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.ERROR)
+    logger.propagate = False  # Don't propagate to root logger
+    logger.handlers.clear()  # Clear any existing handlers
 
 # Command history support - use prompt_toolkit for cross-platform compatibility
 PROMPT_TOOLKIT_AVAILABLE = False
@@ -451,7 +501,7 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
             model=self.config.generator_model,
             prompt=fix_prompt,
             temperature=0.1,  # Low temperature for precise fixes
-            model_key="generator"
+            model_key=self.config.generator_model_key  # Use actual model key for routing
         )
 
         # Clean the response aggressively
@@ -650,7 +700,7 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
                 model=self.config.overseer_model,
                 prompt=workflow_prompt,
                 temperature=0.7,
-                model_key="overseer"
+                model_key=self.config.overseer_model_key  # Use actual model key for routing
             )
 
         self.display.complete_stage("Planning", "Workflow decomposed")
@@ -1178,7 +1228,7 @@ Answer:"""
                             model=self.config.triage_model,
                             prompt=semantic_check_prompt,
                             temperature=0.1,  # Low temperature for consistent classification
-                            model_key="triage"
+                            model_key=self.config.triage_model_key  # Use actual model key for routing
                         ).strip().upper()
 
                         if "SAME" in semantic_response:
@@ -1316,7 +1366,7 @@ Answer:"""
                     model=self.config.triage_model,
                     prompt=semantic_check_prompt,
                     temperature=0.1,
-                    model_key="triage"
+                    model_key=self.config.triage_model_key  # Use actual model key for routing
                 ).strip().upper()
 
                 if "SAME" in semantic_response:
@@ -1645,7 +1695,7 @@ The code generator will follow this specification EXACTLY, so include ALL critic
                 model=self.config.overseer_model,
                 prompt=overseer_prompt,
                 temperature=0.7,
-                model_key="overseer"
+                model_key=self.config.overseer_model_key  # Use actual model key for routing
             )
 
         self.display.complete_stage("Thinking", "Specification complete")
@@ -1695,7 +1745,7 @@ ALGORITHM: fibonacci computation"""
             model="llama3",  # Better at understanding complexity and nuance
             prompt=classification_prompt,
             temperature=0.1,
-            model_key="triage"
+            model_key=self.config.triage_model_key  # Use actual model key for routing
         ).strip()
 
         # Parse response
@@ -2142,7 +2192,7 @@ Return ONLY the JSON object, nothing else."""
                             model=self.config.generator_model,
                             prompt=code_prompt,
                             temperature=0.2 + (attempt * 0.05),
-                            model_key="generator"
+                            model_key=self.config.generator_model_key  # Use actual model key for routing
                         )
 
                     # Validate response
@@ -2273,25 +2323,117 @@ Return ONLY the JSON object, nothing else."""
         needs_json = 'json.load' in code or 'json.dump' in code
         needs_sys = 'sys.stdin' in code or 'sys.stdout' in code or 'sys.stderr' in code
 
-        # CRITICAL: If code uses call_tool, it MUST have the import
-        if needs_call_tool and 'from node_runtime import call_tool' not in code:
-            # Add complete path setup block at the top
-            path_setup = """from pathlib import Path
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from node_runtime import call_tool
-"""
-            # Find where imports start and inject before them
+        # CRITICAL: Fix import order if node_runtime import comes before path setup
+        if needs_call_tool:
             lines = code.split('\n')
-            import_start = 0
-            for i, line in enumerate(lines):
-                if line.strip().startswith('import ') or line.strip().startswith('from '):
-                    import_start = i
-                    break
+            node_runtime_line_idx = None
+            path_setup_line_idx = None
 
-            # Insert path setup at the beginning
-            code = path_setup + code
-            console.print("[green]Added path setup for node_runtime import[/green]")
+            for i, line in enumerate(lines):
+                stripped = line.strip()
+                if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
+                    node_runtime_line_idx = i
+                if 'sys.path.insert(0, str(Path(__file__).parent.parent.parent))' in stripped:
+                    path_setup_line_idx = i
+
+            # Case 1: node_runtime import exists but NO path setup - ADD path setup before import
+            if node_runtime_line_idx is not None and path_setup_line_idx is None:
+                console.print("[yellow]node_runtime import found but missing path setup - adding it[/yellow]")
+
+                # Extract the node_runtime import line
+                node_runtime_import = lines[node_runtime_line_idx].strip()
+
+                # Remove it from current position
+                lines.pop(node_runtime_line_idx)
+
+                # Build path setup block (includes Path and sys imports if missing)
+                path_setup_lines = []
+
+                # Check if we need to add Path import
+                if 'from pathlib import Path' not in code and 'import pathlib' not in code:
+                    path_setup_lines.append('from pathlib import Path')
+
+                # Check if we need to add sys import
+                if 'import sys' not in code:
+                    path_setup_lines.append('import sys')
+
+                # Add the path setup line
+                path_setup_lines.append('')  # Blank line for readability
+                path_setup_lines.append('sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
+
+                # Add the node_runtime import
+                path_setup_lines.append(node_runtime_import)
+
+                # Find where to insert (after existing imports)
+                insert_idx = 0
+                for i, line in enumerate(lines):
+                    stripped = line.strip()
+                    if stripped.startswith('import ') or stripped.startswith('from '):
+                        insert_idx = i + 1
+                    elif stripped and not stripped.startswith('#'):
+                        # Hit non-import, non-comment line
+                        break
+
+                # Insert path setup block
+                for j, setup_line in enumerate(path_setup_lines):
+                    lines.insert(insert_idx + j, setup_line)
+
+                code = '\n'.join(lines)
+                console.print("[green]✓ Added path setup before node_runtime import[/green]")
+
+            # Case 2: Both exist but import comes BEFORE path setup - reorder
+            elif node_runtime_line_idx is not None and path_setup_line_idx is not None:
+                if node_runtime_line_idx < path_setup_line_idx:
+                    console.print("[yellow]Fixing import order: moving node_runtime import after path setup[/yellow]")
+
+                    # Extract the node_runtime import line
+                    node_runtime_import = lines[node_runtime_line_idx]
+
+                    # Remove it from its current position
+                    lines.pop(node_runtime_line_idx)
+
+                    # Adjust path_setup_line_idx since we removed a line before it
+                    path_setup_line_idx -= 1
+
+                    # Insert it right after the path setup line
+                    lines.insert(path_setup_line_idx + 1, node_runtime_import)
+
+                    code = '\n'.join(lines)
+                    console.print("[green]✓ Fixed import order: path setup now comes first[/green]")
+
+            # Case 3: Code uses call_tool but has NO node_runtime import at all - add complete setup
+            elif 'from node_runtime import call_tool' not in code and 'import node_runtime' not in code:
+                # Add complete path setup block at the top (after any existing imports)
+                console.print("[yellow]call_tool() used but no node_runtime import - adding complete setup[/yellow]")
+
+                lines = code.split('\n')
+
+                # Find insertion point (after existing imports)
+                insert_idx = 0
+                for i, line in enumerate(lines):
+                    stripped = line.strip()
+                    if stripped.startswith('import ') or stripped.startswith('from '):
+                        insert_idx = i + 1
+                    elif stripped and not stripped.startswith('#'):
+                        break
+
+                # Build setup block
+                setup_lines = []
+                if 'from pathlib import Path' not in code:
+                    setup_lines.append('from pathlib import Path')
+                if 'import sys' not in code:
+                    setup_lines.append('import sys')
+                setup_lines.append('')
+                setup_lines.append('sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
+                setup_lines.append('from node_runtime import call_tool')
+                setup_lines.append('')
+
+                # Insert
+                for j, line in enumerate(setup_lines):
+                    lines.insert(insert_idx + j, line)
+
+                code = '\n'.join(lines)
+                console.print("[green]✓ Added complete path setup and node_runtime import[/green]")
 
         # Add other missing imports
         if needs_json and 'import json' not in code:
@@ -2584,7 +2726,7 @@ This workflow successfully completed with passing tests.
                         "question": description,
                         "specification": specification,  # Store full spec in metadata
                         "specification_hash": hash(specification[:200]),
-                        "specification_file": str(spec_path.relative_to(self.nodes_path.parent)),
+                        "specification_file": str(spec_path.relative_to(self.runner.nodes_dir.parent)),
                         "tools_used": available_tools if "No specific tools" not in available_tools else "general",
                         "tests_passed": True,
                         "workflow_json": json.dumps(workflow_content)  # Keep original structure
@@ -2661,111 +2803,11 @@ This workflow successfully completed with passing tests.
 
         console.print(f"\n[green]OK Node '{node_id}' created successfully![/green]")
 
-        # Step 9: Initial optimization loop (3 iterations max)
-        max_optimization_iterations = self.config.get("testing.initial_optimization_iterations", 3)
-        if max_optimization_iterations > 0 and test_success:
-            console.print(f"\n[cyan]Starting initial optimization ({max_optimization_iterations} iterations)...[/cyan]")
-            workflow.add_step("optimization", "optimize", f"Initial optimization loop (up to {max_optimization_iterations} iterations)")
-            workflow.start_step("optimization")
-
-            best_code = code
-            best_score = 0.0
-            iterations_performed = 0
-
-            for iteration in range(max_optimization_iterations):
-                console.print(f"\n[cyan]Optimization iteration {iteration + 1}/{max_optimization_iterations}...[/cyan]")
-
-                # Run the current code
-                test_input = {"input": description, "task": description, "description": description,
-                             "query": description, "topic": description, "prompt": description}
-                stdout, stderr, metrics = self.runner.run_node(node_id, test_input)
-
-                if not metrics["success"]:
-                    console.print(f"[yellow]Execution failed, skipping this iteration[/yellow]")
-                    continue
-
-                # Evaluate the result
-                score = 1.0 if metrics["success"] else 0.0
-                # Bonus for good performance
-                if metrics.get("latency_ms", 999999) < 100:
-                    score += 0.1
-                if metrics.get("memory_mb_peak", 999999) < 10:
-                    score += 0.1
-
-                console.print(f"[dim]Score: {score:.2f} (latency: {metrics.get('latency_ms', 0)}ms, memory: {metrics.get('memory_mb_peak', 0):.2f}MB)[/dim]")
-                iterations_performed += 1
-
-                if score > best_score:
-                    best_score = score
-                    best_code = code
-                    console.print(f"[green]OK New best score: {best_score:.2f}[/green]")
-
-                    # Ask LLM for improvement suggestions
-                    if iteration < max_optimization_iterations - 1:  # Don't optimize on last iteration
-                        feedback_prompt = f"""Review this code and suggest ONE specific optimization:
-
-Code:
-```python
-{code}
-```
-
-Execution metrics:
-- Latency: {metrics.get('latency_ms', 0)}ms
-- Memory: {metrics.get('memory_mb_peak', 0):.2f}MB
-- Success: {metrics['success']}
-
-Output:
-{stdout[:500] if stdout else "No output"}
-
-Suggest ONE concrete improvement for performance, memory usage, or code quality.
-Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
-
-                        improvement_response = self.client.generate(
-                            model=self.config.generator_model,
-                            prompt=feedback_prompt,
-                            temperature=0.4,
-                            model_key="generator"
-                        )
-
-                        # Try to parse improvement
-                        try:
-                            import json
-                            improvement_response = improvement_response.strip()
-                            if improvement_response.startswith('```json'):
-                                improvement_response = improvement_response.split('```json')[1].split('```')[0].strip()
-                            elif improvement_response.startswith('```'):
-                                improvement_response = improvement_response.split('```')[1].split('```')[0].strip()
-
-                            improvement_data = json.loads(improvement_response)
-                            improved_code = improvement_data.get("improved_code", "")
-                            change_desc = improvement_data.get("change_description", "No description")
-
-                            if improved_code and len(improved_code) > 50:
-                                console.print(f"[dim]Applying: {change_desc}[/dim]")
-                                cleaned_code = self._clean_code(improved_code)
-                                # Validate code before saving
-                                if cleaned_code and len(cleaned_code.strip()) > 20:
-                                    code = cleaned_code
-                                    self.runner.save_code(node_id, code)
-                                else:
-                                    console.print(f"[yellow]Warning: Cleaned code is empty, keeping previous version[/yellow]")
-                                    break
-                            else:
-                                console.print(f"[dim]No valid improvement suggested[/dim]")
-                                break  # No more improvements
-                        except Exception as e:
-                            console.print(f"[dim]Could not parse improvement: {e}[/dim]")
-                            break
-                else:
-                    console.print(f"[dim]No improvement (score: {score:.2f} vs best: {best_score:.2f})[/dim]")
-                    # Revert to best code
-                    if best_code and len(best_code.strip()) > 20:
-                        code = best_code
-                        self.runner.save_code(node_id, code)
-                    break  # No improvement, stop optimizing
-
-            workflow.complete_step("optimization", f"Completed {iterations_performed} iterations, best score: {best_score:.2f}")
-            console.print(f"[green]OK Optimization complete (best score: {best_score:.2f})[/green]")
+        # Step 9: Optimization is now OFFLINE ONLY
+        # Inline optimization removed for faster first-shot results
+        # Static validators catch most issues upfront
+        # Offline optimization runs hourly to improve prompts based on patterns
+        # See: STREAMLINED_WORKFLOW.md for details
 
         # Auto-run the newly created workflow
         workflow.add_step("execution", "run", "Execute the generated workflow")
@@ -3037,7 +3079,7 @@ Return ONLY the JSON, no explanations."""
                 model="llama3",
                 prompt=interface_prompt,
                 temperature=0.1,
-                model_key="overseer"
+                model_key=self.config.overseer_model_key  # Use actual model key for routing
             )
 
             # Extract JSON from response
@@ -3244,7 +3286,7 @@ if __name__ == "__main__":
                 model=self.config.generator_model,
                 prompt=test_prompt,
                 temperature=0.3,  # Lower temperature for test generation
-                model_key="generator"
+                model_key=self.config.generator_model_key  # Use actual model key for routing
             )
 
             # Clean the test code
@@ -3367,13 +3409,24 @@ if __name__ == "__main__":
         pynguin_min_coverage = self.config.get("testing.pynguin_min_coverage", 0.70)
 
         pynguin_result = None
-        if pynguin_enabled and 'call_tool(' not in code:
-            # Only use Pynguin for pure Python code (not external tool calls)
+        # Check if code uses node_runtime
+        has_node_runtime = (
+            'from node_runtime import' in code or
+            'import node_runtime' in code or
+            'call_tool(' in code
+        )
+
+        if pynguin_enabled:
+            # Try Pynguin even for code with node_runtime (we'll use a mock)
             console.print(f"[dim cyan]> Trying Pynguin for fast test generation...[/dim cyan]")
+            if has_node_runtime:
+                console.print(f"[dim]Using mock node_runtime for test generation[/dim]")
+
             pynguin_result = self._generate_tests_with_pynguin(
                 node_id,
                 timeout=pynguin_timeout,
-                min_coverage=pynguin_min_coverage
+                min_coverage=pynguin_min_coverage,
+                use_mock_runtime=has_node_runtime
             )
 
         # Check if code uses call_tool - if so, generate minimal smoke test
@@ -3499,7 +3552,7 @@ Return valid Python test code only - nothing else."""
                     model=self.config.generator_model,
                     prompt=test_prompt,
                     temperature=0.3,
-                    model_key="generator"
+                    model_key=self.config.generator_model_key  # Use actual model key for routing
                 )
             except Exception as e:
                 console.print(f"[red]Error generating tests: {e}[/red]")
@@ -3794,7 +3847,7 @@ Return ONLY the JSON object, nothing else."""
                 model=current_model,
                 prompt=fix_prompt,
                 temperature=temperature,  # Adaptive temperature
-                model_key="generator" if current_model == fast_model else "escalation"
+                model_key=self.config.generator_model_key if current_model == fast_model else self.config.escalation_model_key  # Use actual model key for routing
             )
 
             if not response:
@@ -4149,7 +4202,7 @@ Return ONLY the JSON object."""
                 model=god_model,
                 prompt=god_prompt,
                 temperature=0.1,  # Ultra-focused for final attempt
-                model_key="generator"  # Use generator endpoint (localhost)
+                model_key=self.config.generator_model_key  # Use actual model key for routing  # Use generator endpoint (localhost)
             )
 
             if not response:
@@ -4275,7 +4328,7 @@ Return ONLY the JSON object, nothing else."""
                 model=self.config.escalation_model,  # More powerful model for difficult fixes
                 prompt=fix_prompt,
                 temperature=0.2,  # Lower temperature for more focused fixes
-                model_key="escalation"  # Use escalation endpoint
+                model_key=self.config.escalation_model_key  # Use actual model key for routing
             )
 
             if not response:
@@ -5965,20 +6018,29 @@ Return ONLY the JSON, no other text."""
             console.print(f"[yellow]Could not retrieve debug version: {e}[/yellow]")
             return None
 
-    def _generate_tests_with_pynguin(self, node_id: str, timeout: int = 60, min_coverage: float = 0.70) -> Dict[str, Any]:
+    def _generate_tests_with_pynguin(
+        self,
+        node_id: str,
+        timeout: int = 60,
+        min_coverage: float = 0.70,
+        use_mock_runtime: bool = False
+    ) -> Dict[str, Any]:
         """
         Generate unit tests using Pynguin with coverage validation and LLM fixing.
 
         Workflow:
-        1. Generate tests with Pynguin (fast, 30-60s)
-        2. Run tests and measure coverage
-        3. If coverage < threshold, send to LLM to improve
-        4. Re-run and validate
+        1. Create mock node_runtime if code uses external tools (optional)
+        2. Generate tests with Pynguin (fast, 30-60s)
+        3. Run tests and measure coverage
+        4. If coverage < threshold, send to LLM to improve
+        5. Re-run and validate
+        6. Clean up mock
 
         Args:
             node_id: Node identifier
             timeout: Maximum search time in seconds
             min_coverage: Minimum required coverage (default: 70%)
+            use_mock_runtime: Create temporary mock node_runtime for testing (default: False)
 
         Returns:
             Dict with success status, coverage, and test info
@@ -6000,6 +6062,35 @@ Return ONLY the JSON, no other text."""
             # Get the module directory and name
             module_dir = node_path.parent
             module_name = node_path.stem  # e.g., 'main' from 'main.py'
+
+            # Create temporary mock node_runtime if needed
+            mock_runtime_path = None
+            if use_mock_runtime:
+                mock_runtime_path = module_dir / "node_runtime.py"
+                mock_runtime_code = '''"""Mock node_runtime for test generation."""
+from typing import Any
+
+def call_tool(tool_name: str, prompt_or_data: Any = None, **kwargs) -> Any:
+    """Mock call_tool that returns sensible defaults."""
+    # Content generation tools
+    if any(name in tool_name for name in ['generator', 'writer', 'translator']):
+        return "Mock generated content"
+    # Database/storage tools
+    if any(name in tool_name for name in ['database', 'storage', 'save', 'load']):
+        return {"status": "success", "id": "mock_123"}
+    # Default
+    return {"status": "success", "result": f"Mock {tool_name}"}
+
+def call_llm(model: str, prompt: str, **kwargs) -> str:
+    """Mock LLM call."""
+    return "Mock LLM response"
+
+def call_tools_parallel(tool_calls: list) -> list:
+    """Mock parallel tool calls."""
+    return [call_tool(call[0] if isinstance(call, tuple) else call['tool'], "")
+            for call in tool_calls]
+'''
+                mock_runtime_path.write_text(mock_runtime_code, encoding='utf-8')
 
             # Create tests output directory
             tests_dir = module_dir / "tests_pynguin"
@@ -6028,8 +6119,22 @@ Return ONLY the JSON, no other text."""
             test_files = list(tests_dir.glob("test_*.py"))
             if not test_files:
                 console.print(f"[yellow]Pynguin did not generate tests (exit code: {pynguin_result.returncode})[/yellow]")
-                if pynguin_result.stderr:
-                    console.print(f"[dim]{pynguin_result.stderr[:200]}...[/dim]")
+
+                # Analyze common failure reasons
+                stderr_lower = pynguin_result.stderr.lower() if pynguin_result.stderr else ""
+                if "importerror" in stderr_lower or "modulenotfounderror" in stderr_lower:
+                    console.print(f"[dim yellow]Reason: Import errors (code may have external dependencies)[/dim yellow]")
+                elif "timeout" in stderr_lower:
+                    console.print(f"[dim yellow]Reason: Analysis timeout[/dim yellow]")
+                elif "no such file" in stderr_lower or "cannot find" in stderr_lower:
+                    console.print(f"[dim yellow]Reason: Module not found[/dim yellow]")
+                elif pynguin_result.stderr:
+                    # Show first line of actual error
+                    error_lines = pynguin_result.stderr.strip().split('\n')
+                    first_error = next((line for line in error_lines if 'error' in line.lower() or 'exception' in line.lower()), error_lines[0] if error_lines else "")
+                    console.print(f"[dim]{first_error[:150]}[/dim]")
+
+                console.print(f"[dim]Falling back to LLM-based test generation...[/dim]")
                 return result
 
             # Move generated tests to main test.py
@@ -6143,6 +6248,14 @@ Return ONLY the JSON, no other text."""
             import traceback
             traceback.print_exc()
             return result
+        finally:
+            # Clean up mock node_runtime if we created it
+            if use_mock_runtime and mock_runtime_path and mock_runtime_path.exists():
+                try:
+                    mock_runtime_path.unlink()
+                    console.print(f"[dim]Cleaned up mock node_runtime[/dim]")
+                except Exception:
+                    pass  # Ignore cleanup errors
 
     def _generate_tdd_template_with_pynguin(
         self,
@@ -6470,7 +6583,7 @@ Do NOT include explanations or markdown formatting."""
                 prompt=prompt,
                 system="You are an expert at writing comprehensive pytest tests with high code coverage.",
                 temperature=0.3,  # Low temperature for consistent output
-                model_key="generator"
+                model_key=self.config.generator_model_key  # Use actual model key for routing
             )
 
             if improved_tests and 'def test_' in improved_tests:
@@ -6735,7 +6848,7 @@ Return ONLY the Python test code, no explanations."""
                 prompt=prompt,
                 system="You are an expert at writing comprehensive pytest unit tests based on code behavior analysis.",
                 temperature=0.3,  # Lower temperature for consistent test generation
-                model_key="generator"
+                model_key=self.config.generator_model_key  # Use actual model key for routing
             )
 
             if test_code and 'def test_' in test_code:
@@ -6823,7 +6936,7 @@ Return ONLY the Python test code, no explanations."""
 
             if test_code:
                 # Save the test file
-                test_file_path = self.nodes_path / production_tool_id / "test.py"
+                test_file_path = self.runner.nodes_dir / production_tool_id / "test.py"
                 test_file_path.parent.mkdir(parents=True, exist_ok=True)
                 test_file_path.write_text(test_code, encoding='utf-8')
 
@@ -6995,9 +7108,11 @@ Return ONLY the Python test code, no explanations."""
         """
         # Define the most useful static analysis tools to run
         # (lighter/faster tools for normal workflow; heavy tools for optimization later)
+        # Note: Use run_static_analysis tool for comprehensive checking or these individually
         essential_tools = [
-            "flake8_linter",      # Fast PEP 8 style checker
-            "pylint_checker",     # Comprehensive quality checker
+            "python_syntax_validator",        # Fast AST-based syntax check
+            "undefined_name_checker",         # Flake8-based undefined names check
+            "node_runtime_import_validator",  # Validate import order (has auto-fix)
             # mypy requires type hints which generated code may not have
             # bandit for security is important but can be slow
         ]

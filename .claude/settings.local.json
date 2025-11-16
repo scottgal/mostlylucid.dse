@@ -61,7 +61,8 @@
       "Bash(for f in config.yaml config.local.yaml config.anthropic.yaml config.anthropic.simple.yaml config.unified.yaml)",
       "Bash(do echo \"=== Testing $f ===\")",
       "Bash(echo:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []

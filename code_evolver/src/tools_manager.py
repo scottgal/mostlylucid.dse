@@ -13,9 +13,12 @@ from enum import Enum
 from rich.console import Console
 from .openapi_tool import OpenAPITool
 
-logging.basicConfig(level=logging.INFO)
+# Don't configure basicConfig here - let the main application control logging level
+# logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-console = Console()
+
+# Configure console with ASCII-safe output for Windows compatibility
+console = Console(legacy_windows=True, no_color=False)
 
 # Import status manager for live status updates
 try:
@@ -262,6 +265,26 @@ Tags: {', '.join(self.tags)}{params_str}
     @staticmethod
     def from_dict(data: Dict[str, Any], implementation: Any = None) -> 'Tool':
         """Create tool from dictionary."""
+        # For executable tools, reconstruct implementation from metadata if not provided
+        if implementation is None and data.get("tool_type") == "executable":
+            metadata = data.get("metadata", {})
+            if "command" in metadata:
+                implementation = {
+                    "command": metadata["command"],
+                    "args": metadata.get("args", []),
+                    "install_command": metadata.get("install_command")
+                }
+
+        # For LLM tools, reconstruct from metadata
+        if implementation is None and data.get("tool_type") == "llm":
+            metadata = data.get("metadata", {})
+            implementation = {
+                "tier": metadata.get("llm_tier"),
+                "role": metadata.get("llm_role"),
+                "system_prompt": metadata.get("system_prompt"),
+                "prompt_template": metadata.get("prompt_template")
+            }
+
         tool = Tool(
             tool_id=data["tool_id"],
             name=data["name"],

@@ -1,0 +1,11 @@
+name: "Main Function Checker"
+type: "executable"
+description: "Validates that node code has a proper main() function and __main__ block"
+executable:
+  command: "python"
+  args: ["{tool_dir}/main_function_checker.py", "{source_file}"]
+  install_command: null
+tags: ["python", "structure", "validation", "main", "static-analysis"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 180  # Run early, after syntax check

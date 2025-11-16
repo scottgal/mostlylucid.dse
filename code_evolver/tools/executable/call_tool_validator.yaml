@@ -1,0 +1,11 @@
+name: "call_tool() Usage Validator"
+type: "executable"
+description: "Validates that call_tool() is used correctly with proper arguments (tool_name, prompt)"
+executable:
+  command: "python"
+  args: ["{tool_dir}/call_tool_validator.py", "{source_file}"]
+  install_command: null
+tags: ["python", "validation", "call_tool", "node_runtime", "static-analysis"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 90  # Run after import validator

@@ -329,6 +329,11 @@ class ConfigManager:
         return model
 
     @property
+    def overseer_model_key(self) -> Optional[str]:
+        """Get overseer model key for routing."""
+        return self.get_model(role="default", level="general")
+
+    @property
     def generator_model(self) -> str:
         """Get code generator model name (uses general level for code role)."""
         # Use unified config system: get general model for code role
@@ -342,6 +347,11 @@ class ConfigManager:
         return model
 
     @property
+    def generator_model_key(self) -> Optional[str]:
+        """Get generator model key for routing."""
+        return self.get_model(role="code", level="general")
+
+    @property
     def evaluator_model(self) -> str:
         """Get evaluator model name (uses general level from unified config)."""
         # Use unified config system: get general model for default role
@@ -353,6 +363,11 @@ class ConfigManager:
         # Fallback to legacy config
         model, _ = self._parse_model_config("evaluator", "llama3")
         return model
+
+    @property
+    def evaluator_model_key(self) -> Optional[str]:
+        """Get evaluator model key for routing."""
+        return self.get_model(role="default", level="general")
 
     @property
     def triage_model(self) -> str:
@@ -369,6 +384,11 @@ class ConfigManager:
         return model
 
     @property
+    def triage_model_key(self) -> Optional[str]:
+        """Get triage model key for routing."""
+        return self.get_model(role="default", level="veryfast")
+
+    @property
     def escalation_model(self) -> str:
         """Get escalation model name for fixing issues (uses escalation level)."""
         # Use unified config system: get escalation model for default role
@@ -380,6 +400,11 @@ class ConfigManager:
         # Fallback to legacy config
         model, _ = self._parse_model_config("escalation", "qwen2.5-coder:14b")
         return model
+
+    @property
+    def escalation_model_key(self) -> Optional[str]:
+        """Get escalation model key for routing."""
+        return self.get_model(role="default", level="escalation")
 
     @property
     def embedding_model(self) -> str:

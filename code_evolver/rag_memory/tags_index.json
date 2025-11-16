@@ -91,7 +91,18 @@
     "tool_pyinstrument_profiler",
     "tool_code_optimizer",
     "tool_performance_profiler",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "tool_run_static_analysis",
+    "tool_write_a_technical_story",
+    "tool_translate_the_story_into_frenc",
+    "tool_translate_the_story_into_germa"
   ],
   "llm": [
     "tool_general",
@@ -121,7 +132,19 @@
   ],
   "general": [
     "tool_general",
-    "invocation_general_1763277296689"
+    "invocation_general_1763277296689",
+    "invocation_general_1763277905955",
+    "invocation_general_1763278285243",
+    "invocation_general_1763279895126",
+    "invocation_general_1763280429292",
+    "invocation_general_1763280601408",
+    "invocation_general_1763281399446",
+    "invocation_general_1763281466017",
+    "invocation_general_1763281850099",
+    "invocation_general_1763282125435",
+    "invocation_general_1763282162457",
+    "invocation_general_1763282326277",
+    "invocation_general_1763282491366"
   ],
   "fallback": [
     "tool_general"
@@ -144,7 +167,8 @@
     "tool_code_reviewer",
     "tool_proofreader",
     "tool_pylint_checker",
-    "tool_flake8_linter"
+    "tool_flake8_linter",
+    "tool_run_static_analysis"
   ],
   "security": [
     "tool_security_auditor",
@@ -158,7 +182,8 @@
     "tool_pyinstrument_profiler",
     "tool_code_optimizer",
     "tool_performance_profiler",
-    "timeout_stats_codellama"
+    "timeout_stats_codellama",
+    "timeout_stats_llama3"
   ],
   "optimization": [
     "tool_performance_optimizer",
@@ -184,7 +209,16 @@
     "spec_write_a_poem_1763275528",
     "spec_write_a_poem_1763275775",
     "spec_write_a_poem_1763276188",
-    "spec_write_a_poem_1763277263"
+    "spec_write_a_poem_1763277263",
+    "spec_write_a_poem_1763277877",
+    "spec_write_some_code_to_write_a_poe",
+    "spec_write_a_poem_1763279860",
+    "spec_write_a_poem_1763280574",
+    "spec_write_a_technical_story",
+    "spec_translate_the_story_into_frenc",
+    "spec_translate_the_story_into_germa",
+    "spec_write_a_fractal_builder",
+    "spec_write_the_outline_for_a_horror"
   ],
   "technical": [
     "tool_technical_writer"
@@ -245,7 +279,8 @@
     "tool_outline_generator"
   ],
   "structure": [
-    "tool_outline_generator"
+    "tool_outline_generator",
+    "tool_main_function_checker"
   ],
   "planning": [
     "tool_outline_generator",
@@ -319,7 +354,17 @@
     "tool_write_me_a_poem_1763255171",
     "tool_write_a_poem_and_translate_it",
     "tool_translate_the_work_boob_to_f",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "workflow_1763280509",
+    "workflow_write_a_technical_story",
+    "tool_write_a_technical_story",
+    "workflow_translate_the_story_into_frenc",
+    "tool_translate_the_story_into_frenc",
+    "workflow_translate_the_story_into_germa",
+    "tool_translate_the_story_into_germa",
+    "workflow_1763282170",
+    "workflow_write_a_fractal_builder",
+    "workflow_write_the_outline_for_a_horror"
   ],
   "generated": [
     "tool_write_a_technical_story_and_tr",
@@ -337,7 +382,33 @@
     "spec_write_a_poem_1763275528",
     "spec_write_a_poem_1763275775",
     "spec_write_a_poem_1763276188",
-    "spec_write_a_poem_1763277263"
+    "spec_write_a_poem_1763277263",
+    "spec_write_a_poem_1763277877",
+    "spec_write_some_code_to_write_a_poe",
+    "spec_write_a_poem_1763279860",
+    "spec_translate_the_poem_into_welsh",
+    "spec_write_a_poem_1763280574",
+    "spec_create_employee_account_in_hr",
+    "func_create_employee_account_in_hr",
+    "spec_verify_employee_s_identity_and",
+    "spec_write_a_technical_story",
+    "func_write_a_technical_story",
+    "workflow_write_a_technical_story",
+    "tool_write_a_technical_story",
+    "spec_translate_the_story_into_frenc",
+    "func_translate_the_story_into_frenc",
+    "workflow_translate_the_story_into_frenc",
+    "tool_translate_the_story_into_frenc",
+    "spec_translate_the_story_into_germa",
+    "func_translate_the_story_into_germa",
+    "workflow_translate_the_story_into_germa",
+    "tool_translate_the_story_into_germa",
+    "spec_write_a_fractal_builder",
+    "func_write_a_fractal_builder",
+    "workflow_write_a_fractal_builder",
+    "spec_write_the_outline_for_a_horror",
+    "func_write_the_outline_for_a_horror",
+    "workflow_write_the_outline_for_a_horror"
   ],
   "chat": [
     "tool_write_a_technical_story_and_tr",
@@ -350,7 +421,21 @@
     "tool_add_5_and_3_1763184838",
     "tool_accept_input_from_user",
     "tool_save_input_to_database",
-    "tool_write_a_poem_1763241023"
+    "tool_write_a_poem_1763241023",
+    "func_create_employee_account_in_hr",
+    "func_write_a_technical_story",
+    "workflow_write_a_technical_story",
+    "tool_write_a_technical_story",
+    "func_translate_the_story_into_frenc",
+    "workflow_translate_the_story_into_frenc",
+    "tool_translate_the_story_into_frenc",
+    "func_translate_the_story_into_germa",
+    "workflow_translate_the_story_into_germa",
+    "tool_translate_the_story_into_germa",
+    "func_write_a_fractal_builder",
+    "workflow_write_a_fractal_builder",
+    "func_write_the_outline_for_a_horror",
+    "workflow_write_the_outline_for_a_horror"
   ],
   "auto-generated": [
     "tool_write_a_technical_story_and_tr",
@@ -399,7 +484,10 @@
     "tool_write_me_a_poem_1763255171",
     "tool_write_a_poem_and_translate_it",
     "tool_translate_the_work_boob_to_f",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "tool_write_a_technical_story",
+    "tool_translate_the_story_into_frenc",
+    "tool_translate_the_story_into_germa"
   ],
   "python": [
     "tool_add_5_and_8",
@@ -434,7 +522,17 @@
     "tool_write_a_poem_and_translate_it",
     "tool_translate_the_work_boob_to_f",
     "tool_pyinstrument_profiler",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "func_translate_the_poem_into_welsh",
+    "tool_run_static_analysis",
+    "func_write_a_poem_1763280574"
   ],
   "addition": [
     "tool_add_5_and_8",
@@ -468,11 +566,27 @@
     "tool_text_formatter",
     "tool_unit_converter",
     "tool_pynguin_test_generator",
-    "tool_pyinstrument_profiler"
+    "tool_pyinstrument_profiler",
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "tool_run_static_analysis"
   ],
   "static-analysis": [
     "tool_pylint_checker",
-    "tool_mypy_type_checker"
+    "tool_mypy_type_checker",
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "tool_run_static_analysis"
   ],
   "linting": [
     "tool_pylint_checker",
@@ -496,7 +610,8 @@
     "tool_black_formatter"
   ],
   "vulnerability": [
-    "tool_bandit_security"
+    "tool_bandit_security",
+    "tool_security_auditor"
   ],
   "scanning": [
     "tool_bandit_security"
@@ -505,7 +620,8 @@
     "tool_pytest_runner",
     "tool_pytest_coverage",
     "tool_pynguin_test_generator",
-    "tool_code_optimizer"
+    "tool_code_optimizer",
+    "tool_run_static_analysis"
   ],
   "pytest": [
     "tool_pytest_runner",
@@ -542,13 +658,16 @@
     "tool_pydocstyle_checker"
   ],
   "imports": [
-    "tool_isort_import_checker"
+    "tool_isort_import_checker",
+    "tool_node_runtime_import_validator",
+    "tool_undefined_name_checker"
   ],
   "spellcheck": [
     "tool_quick_feedback"
   ],
   "syntax": [
-    "tool_quick_feedback"
+    "tool_quick_feedback",
+    "tool_python_syntax_validator"
   ],
   "quick-feedback": [
     "tool_quick_feedback"
@@ -562,7 +681,8 @@
     "tool_basic_calculator",
     "tool_text_formatter",
     "tool_unit_converter",
-    "tool_pynguin_test_generator"
+    "tool_pynguin_test_generator",
+    "tool_python_syntax_validator"
   ],
   "chunking": [
     "tool_quick_feedback"
@@ -589,7 +709,8 @@
     "tool_write_a_joke_and_translate_to_1763216276",
     "tool_translate_the_poem_to_french",
     "tool_quick_translator",
-    "tool_write_a_poem_and_translate_it"
+    "tool_write_a_poem_and_translate_it",
+    "func_translate_the_poem_into_welsh"
   ],
   "nmt": [
     "tool_nmt_translator"
@@ -608,7 +729,15 @@
   "validation": [
     "tool_translation_quality_checker",
     "tool_code_translation_validator",
-    "tool_review_this_code_usr_bin_en"
+    "tool_review_this_code_usr_bin_en",
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "tool_run_static_analysis"
   ],
   "quality-check": [
     "tool_translation_quality_checker"
@@ -621,7 +750,8 @@
     "tool_calculate_5_plus_5",
     "tool_multiply_6_and_7_1763228888",
     "tool_http_content_fetcher",
-    "tool_http_server"
+    "tool_http_server",
+    "tool_json_output_validator"
   ],
   "creative-writing": [
     "tool_long_form_writer"
@@ -631,7 +761,8 @@
   ],
   "story": [
     "tool_long_form_writer",
-    "tool_fast_content_writer"
+    "tool_fast_content_writer",
+    "workflow_1763282170"
   ],
   "long-form": [
     "tool_long_form_writer"
@@ -722,14 +853,17 @@
     "tool_save_to_disk"
   ],
   "write": [
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "workflow_1763280509",
+    "workflow_1763282170"
   ],
   "disk": [
     "tool_save_to_disk",
     "tool_load_from_disk"
   ],
   "output": [
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "tool_json_output_validator"
   ],
   "storage": [
     "tool_save_to_disk"
@@ -741,7 +875,8 @@
     "tool_load_from_disk"
   ],
   "input": [
-    "tool_load_from_disk"
+    "tool_load_from_disk",
+    "tool_stdin_usage_validator"
   ],
   "dependencies": [
     "tool_pip_install"
@@ -785,7 +920,8 @@
     "tool_write_a_poem",
     "tool_write_me_a_poem",
     "tool_write_me_a_poem_1763255171",
-    "tool_write_a_poem_and_translate_it"
+    "tool_write_a_poem_and_translate_it",
+    "func_translate_the_poem_into_welsh"
   ],
   "content_creation": [
     "tool_write_a_joke_1763181926"
@@ -919,7 +1055,8 @@
     "tool_model_selector"
   ],
   "poem": [
-    "tool_translate_the_poem_to_french"
+    "tool_translate_the_poem_to_french",
+    "workflow_1763280509"
   ],
   "French": [
     "tool_translate_the_poem_to_french"
@@ -962,7 +1099,8 @@
   "natural language processing": [
     "tool_write_a_haiku_about_coding",
     "tool_translate_the_work_boob_to_f",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "func_write_a_poem_1763280574"
   ],
   "programming": [
     "tool_write_a_haiku_about_coding"
@@ -973,10 +1111,12 @@
   "machine learning": [
     "tool_write_me_a_poem",
     "tool_translate_the_work_boob_to_f",
-    "tool_write_a_poem_1763277263"
+    "tool_write_a_poem_1763277263",
+    "func_write_a_poem_1763280574"
   ],
   "machine-learning": [
-    "tool_write_me_a_poem_1763255171"
+    "tool_write_me_a_poem_1763255171",
+    "func_translate_the_poem_into_welsh"
   ],
   "test-generation": [
     "tool_pynguin_test_generator"
@@ -1010,21 +1150,57 @@
     "spec_write_a_poem_1763275528",
     "spec_write_a_poem_1763275775",
     "spec_write_a_poem_1763276188",
-    "spec_write_a_poem_1763277263"
+    "spec_write_a_poem_1763277263",
+    "spec_write_a_poem_1763277877",
+    "spec_write_some_code_to_write_a_poe",
+    "spec_write_a_poem_1763279860",
+    "spec_translate_the_poem_into_welsh",
+    "spec_write_a_poem_1763280574",
+    "spec_create_employee_account_in_hr",
+    "spec_verify_employee_s_identity_and",
+    "spec_write_a_technical_story",
+    "spec_translate_the_story_into_frenc",
+    "spec_translate_the_story_into_germa",
+    "spec_write_a_fractal_builder",
+    "spec_write_the_outline_for_a_horror"
   ],
   "plan": [
     "spec_compress_this_string_hello_ho_1763271093",
     "spec_write_a_poem_1763275528",
     "spec_write_a_poem_1763275775",
     "spec_write_a_poem_1763276188",
-    "spec_write_a_poem_1763277263"
+    "spec_write_a_poem_1763277263",
+    "spec_write_a_poem_1763277877",
+    "spec_write_some_code_to_write_a_poe",
+    "spec_write_a_poem_1763279860",
+    "spec_translate_the_poem_into_welsh",
+    "spec_write_a_poem_1763280574",
+    "spec_create_employee_account_in_hr",
+    "spec_verify_employee_s_identity_and",
+    "spec_write_a_technical_story",
+    "spec_translate_the_story_into_frenc",
+    "spec_translate_the_story_into_germa",
+    "spec_write_a_fractal_builder",
+    "spec_write_the_outline_for_a_horror"
   ],
   "overseer": [
     "spec_compress_this_string_hello_ho_1763271093",
     "spec_write_a_poem_1763275528",
     "spec_write_a_poem_1763275775",
     "spec_write_a_poem_1763276188",
-    "spec_write_a_poem_1763277263"
+    "spec_write_a_poem_1763277263",
+    "spec_write_a_poem_1763277877",
+    "spec_write_some_code_to_write_a_poe",
+    "spec_write_a_poem_1763279860",
+    "spec_translate_the_poem_into_welsh",
+    "spec_write_a_poem_1763280574",
+    "spec_create_employee_account_in_hr",
+    "spec_verify_employee_s_identity_and",
+    "spec_write_a_technical_story",
+    "spec_translate_the_story_into_frenc",
+    "spec_translate_the_story_into_germa",
+    "spec_write_a_fractal_builder",
+    "spec_write_the_outline_for_a_horror"
   ],
   "claude-sonnet": [
     "tool_general",
@@ -1040,19 +1216,197 @@
     "tool_fast_code_generator"
   ],
   "timeout_stats": [
-    "timeout_stats_codellama"
+    "timeout_stats_codellama",
+    "timeout_stats_llama3"
   ],
   "adaptive": [
-    "timeout_stats_codellama"
+    "timeout_stats_codellama",
+    "timeout_stats_llama3"
   ],
   "codellama": [
     "timeout_stats_codellama",
-    "invocation_general_1763277296689"
+    "invocation_general_1763277296689",
+    "invocation_general_1763277905955",
+    "invocation_general_1763278285243",
+    "invocation_general_1763279895126",
+    "invocation_general_1763280429292",
+    "invocation_general_1763280601408"
   ],
   "tool_invocation": [
-    "invocation_general_1763277296689"
+    "invocation_general_1763277296689",
+    "invocation_general_1763277905955",
+    "invocation_content_generator_1763278040988",
+    "invocation_general_1763278285243",
+    "invocation_general_1763279895126",
+    "invocation_general_1763280429292",
+    "invocation_general_1763280601408",
+    "invocation_content_generator_1763280669198",
+    "invocation_general_1763281399446",
+    "invocation_general_1763281466017",
+    "invocation_general_1763281850099",
+    "invocation_general_1763282125435",
+    "invocation_general_1763282162457",
+    "invocation_general_1763282326277",
+    "invocation_general_1763282491366",
+    "invocation_long_form_writer_1763282532779",
+    "invocation_outline_generator_1763282547737"
   ],
   "prompt": [
-    "invocation_general_1763277296689"
+    "invocation_general_1763277296689",
+    "invocation_general_1763277905955",
+    "invocation_content_generator_1763278040988",
+    "invocation_general_1763278285243",
+    "invocation_general_1763279895126",
+    "invocation_general_1763280429292",
+    "invocation_general_1763280601408",
+    "invocation_content_generator_1763280669198",
+    "invocation_general_1763281399446",
+    "invocation_general_1763281466017",
+    "invocation_general_1763281850099",
+    "invocation_general_1763282125435",
+    "invocation_general_1763282162457",
+    "invocation_general_1763282326277",
+    "invocation_general_1763282491366",
+    "invocation_long_form_writer_1763282532779",
+    "invocation_outline_generator_1763282547737"
+  ],
+  "llama3": [
+    "timeout_stats_llama3",
+    "invocation_content_generator_1763278040988",
+    "invocation_content_generator_1763280669198",
+    "invocation_general_1763281399446",
+    "invocation_general_1763281466017",
+    "invocation_general_1763281850099",
+    "invocation_general_1763282125435",
+    "invocation_general_1763282162457",
+    "invocation_general_1763282326277",
+    "invocation_general_1763282491366",
+    "invocation_long_form_writer_1763282532779",
+    "invocation_outline_generator_1763282547737"
+  ],
+  "content_generator": [
+    "invocation_content_generator_1763278040988",
+    "invocation_content_generator_1763280669198"
+  ],
+  "yaml-defined": [
+    "tool_call_tool_validator",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_node_runtime_import_validator",
+    "tool_python_syntax_validator",
+    "tool_stdin_usage_validator",
+    "tool_undefined_name_checker",
+    "tool_http_server",
+    "tool_bandit_security",
+    "tool_basic_calculator",
+    "tool_black_formatter",
+    "tool_isort_import_checker",
+    "tool_load_from_disk",
+    "tool_mypy_type_checker",
+    "tool_pip_install",
+    "tool_pydocstyle_checker",
+    "tool_pyinstrument_profiler",
+    "tool_pynguin_test_generator",
+    "tool_pytest_coverage",
+    "tool_pytest_runner",
+    "tool_radon_complexity",
+    "tool_run_static_analysis",
+    "tool_save_to_disk",
+    "tool_text_formatter",
+    "tool_unit_converter",
+    "tool_vulture_deadcode",
+    "tool_article_analyzer",
+    "tool_code_explainer",
+    "tool_code_optimizer",
+    "tool_code_reviewer",
+    "tool_code_translation_validator",
+    "tool_content_generator",
+    "tool_doc_generator",
+    "tool_fast_code_generator",
+    "tool_general",
+    "tool_long_form_writer",
+    "tool_outline_generator",
+    "tool_performance_optimizer",
+    "tool_performance_profiler",
+    "tool_proofreader",
+    "tool_quick_feedback",
+    "tool_quick_translator",
+    "tool_security_auditor",
+    "tool_seo_optimizer",
+    "tool_summarizer",
+    "tool_technical_writer",
+    "tool_translation_quality_checker",
+    "tool_nmt_translator"
+  ],
+  "call_tool": [
+    "tool_call_tool_validator"
+  ],
+  "node_runtime": [
+    "tool_call_tool_validator",
+    "tool_node_runtime_import_validator"
+  ],
+  "main": [
+    "tool_main_function_checker"
+  ],
+  "auto-fix": [
+    "tool_node_runtime_import_validator"
+  ],
+  "stdin": [
+    "tool_stdin_usage_validator"
+  ],
+  "undefined": [
+    "tool_undefined_name_checker"
+  ],
+  "multi-step": [
+    "workflow_1763280509",
+    "workflow_1763282170"
+  ],
+  "a": [
+    "workflow_1763280509",
+    "workflow_1763282170"
+  ],
+  "comprehensive": [
+    "tool_run_static_analysis"
+  ],
+  "code-analysis": [
+    "tool_code_reviewer"
+  ],
+  "best-practices": [
+    "tool_code_reviewer"
+  ],
+  "assessment": [
+    "tool_code_reviewer"
+  ],
+  "articles": [
+    "tool_content_generator"
+  ],
+  "stories": [
+    "tool_content_generator"
+  ],
+  "powerful-model": [
+    "tool_security_auditor"
+  ],
+  "key-points": [
+    "tool_summarizer"
+  ],
+  "complete": [
+    "workflow_write_a_technical_story",
+    "workflow_translate_the_story_into_frenc",
+    "workflow_translate_the_story_into_germa",
+    "workflow_write_a_fractal_builder",
+    "workflow_write_the_outline_for_a_horror"
+  ],
+  "tested": [
+    "workflow_write_a_technical_story",
+    "workflow_translate_the_story_into_frenc",
+    "workflow_translate_the_story_into_germa",
+    "workflow_write_a_fractal_builder",
+    "workflow_write_the_outline_for_a_horror"
+  ],
+  "long_form_writer": [
+    "invocation_long_form_writer_1763282532779"
+  ],
+  "outline_generator": [
+    "invocation_outline_generator_1763282547737"
   ]
 }

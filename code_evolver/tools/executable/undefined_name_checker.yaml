@@ -1,0 +1,11 @@
+name: "Undefined Name Checker"
+type: "executable"
+description: "Fast check for undefined variables/imports using flake8 (F821 errors)"
+executable:
+  command: "flake8"
+  args: ["--select=F821,F401,F811,E999", "--format=pylint", "{source_file}"]
+  install_command: "pip install flake8"
+tags: ["python", "validation", "imports", "static-analysis", "undefined"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 120  # Run after syntax, before import order
