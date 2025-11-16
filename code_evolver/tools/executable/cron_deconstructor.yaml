@@ -1,0 +1,267 @@
+name: cron_deconstructor
+description: |
+  Deconstructs cron expressions into rich structured metadata for semantic embedding.
+
+  This tool analyzes a cron expression and generates detailed metadata including:
+  - Human-readable description
+  - Frequency classification (daily, weekly, monthly, etc.)
+  - Time of day categorization (morning, afternoon, evening, night)
+  - Day names (Monday, Tuesday, etc.)
+  - Next scheduled run times
+  - Semantic tags for RAG embedding
+  - Inferred task grouping (reports, backups, monitoring, etc.)
+
+  The structured output is designed to be embedded in RAG storage for better
+  semantic search and grouping of scheduled tasks.
+
+type: executable
+category: scheduling
+
+parameters:
+  cron:
+    type: string
+    description: Cron expression to deconstruct (5 fields: minute hour day month weekday)
+    required: true
+    examples:
+      - "0 9 * * MON"
+      - "*/5 * * * *"
+      - "0 2 * * *"
+      - "0 12 * * SUN"
+
+  tool_name:
+    type: string
+    description: Name of the tool/function that will be executed
+    required: false
+    examples:
+      - "bugcatcher_logs"
+      - "generate_weekly_report"
+      - "cleanup_old_data"
+
+  description:
+    type: string
+    description: Optional human description (will be generated if not provided)
+    required: false
+
+  metadata:
+    type: object
+    description: Additional metadata (can include explicit group)
+    required: false
+    properties:
+      group:
+        type: string
+        description: Explicit task group/category
+      category:
+        type: string
+        description: Task category
+
+returns:
+  type: object
+  description: Structured cron metadata for semantic embedding
+  properties:
+    cron:
+      type: string
+      description: Original cron expression
+      example: "0 9 * * MON"
+
+    description:
+      type: string
+      description: Human-readable description
+      example: "Run bugcatcher logs every Monday at 9am"
+
+    tool:
+      type: string
+      description: Tool/function name
+      example: "bugcatcher_logs"
+
+    group:
+      type: string
+      description: Inferred or explicit task group
+      example: "weekly_reports"
+      enum:
+        - reports
+        - backups
+        - maintenance
+        - monitoring
+        - synchronization
+        - notifications
+        - general
+
+    pattern:
+      type: object
+      description: Parsed cron fields
+      properties:
+        minute: {type: string, example: "0"}
+        hour: {type: string, example: "9"}
+        day_of_month: {type: string, example: "*"}
+        month: {type: string, example: "*"}
+        day_of_week: {type: string, example: "MON"}
+
+    frequency:
+      type: string
+      description: Execution frequency classification
+      example: "weekly"
+      enum:
+        - every_minute
+        - every_N_minutes
+        - hourly
+        - daily
+        - weekly
+        - monthly
+        - yearly
+        - custom
+
+    time_of_day:
+      type: string
+      description: Time of day categorization
+      example: "morning"
+      enum: [night, morning, afternoon, evening]
+
+    day_names:
+      type: array
+      description: Day names if weekly schedule
+      items: {type: string}
+      example: ["Monday"]
+
+    next_runs:
+      type: array
+      description: Next 3 scheduled run times (ISO format)
+      items: {type: string}
+      example:
+        - "2025-01-20T09:00:00"
+        - "2025-01-27T09:00:00"
+        - "2025-02-03T09:00:00"
+
+    semantic_tags:
+      type: array
+      description: Tags for semantic embedding and search
+      items: {type: string}
+      example: ["weekly", "morning", "monday", "reports", "bugcatcher"]
+
+examples:
+  - name: Weekly report on Monday morning
+    input:
+      cron: "0 9 * * MON"
+      tool_name: "bugcatcher_logs"
+      description: "Generate bugcatcher report"
+    output:
+      cron: "0 9 * * MON"
+      description: "Run bugcatcher logs every Monday at 9am"
+      tool: "bugcatcher_logs"
+      group: "reports"
+      pattern:
+        minute: "0"
+        hour: "9"
+        day_of_month: "*"
+        month: "*"
+        day_of_week: "MON"
+      frequency: "weekly"
+      time_of_day: "morning"
+      day_names: ["Monday"]
+      semantic_tags: ["weekly", "morning", "monday", "reports", "bugcatcher"]
+
+  - name: Every 5 minutes polling
+    input:
+      cron: "*/5 * * * *"
+      tool_name: "poll_api_events"
+    output:
+      cron: "*/5 * * * *"
+      description: "Run every 5 minutes"
+      tool: "poll_api_events"
+      group: "monitoring"
+      frequency: "every_5_minutes"
+      time_of_day: null
+      semantic_tags: ["every_5_minutes", "monitoring", "poll"]
+
+  - name: Nightly backup at 2am
+    input:
+      cron: "0 2 * * *"
+      tool_name: "backup_database"
+    output:
+      cron: "0 2 * * *"
+      description: "Run daily at 2am"
+      tool: "backup_database"
+      group: "backups"
+      frequency: "daily"
+      time_of_day: "night"
+      semantic_tags: ["daily", "night", "backups", "backup"]
+
+  - name: Monthly cleanup
+    input:
+      cron: "0 3 1 * *"
+      tool_name: "cleanup_old_logs"
+    output:
+      cron: "0 3 1 * *"
+      description: "Run monthly on the 1st at 3am"
+      tool: "cleanup_old_logs"
+      group: "maintenance"
+      frequency: "monthly"
+      time_of_day: "night"
+      semantic_tags: ["monthly", "night", "maintenance", "clean"]
+
+usage_notes:
+  - The tool automatically generates a human description if not provided
+  - Group is inferred from tool_name and description using keyword matching
+  - Semantic tags are extracted from all fields for better RAG embedding
+  - Next run times help with scheduling visualization
+  - Time of day is categorized: night (0-5), morning (6-11), afternoon (12-17), evening (18-23)
+  - Use this tool before storing scheduled tasks in RAG for better semantic search
+
+rag_integration:
+  purpose: "Create rich embeddings for scheduled task search"
+  embedding_fields:
+    - description
+    - tool name
+    - group
+    - frequency
+    - time_of_day
+    - day_names
+    - semantic_tags
+
+  search_examples:
+    - query: "weekly reports"
+      matches: Tasks with group="reports" and frequency="weekly"
+
+    - query: "morning tasks"
+      matches: Tasks with time_of_day="morning"
+
+    - query: "backup jobs"
+      matches: Tasks with group="backups" or semantic_tags containing "backup"
+
+    - query: "tasks running on monday"
+      matches: Tasks with day_names containing "Monday"
+
+template_structure: |
+  Use this template when creating scheduled tasks:
+
+  {
+    "cron": "0 9 * * MON",
+    "description": "Run bugcatcher logs every Monday at 9am",
+    "tool": "bugcatcher_logs",
+    "group": "weekly_reports",
+    "pattern": {
+      "minute": "0",
+      "hour": "9",
+      "day_of_month": "*",
+      "month": "*",
+      "day_of_week": "MON"
+    },
+    "frequency": "weekly",
+    "time_of_day": "morning",
+    "day_names": ["Monday"],
+    "next_runs": ["2025-01-20T09:00:00", "2025-01-27T09:00:00"],
+    "semantic_tags": ["weekly", "morning", "monday", "reports"]
+  }
+
+  This structure should be:
+  1. Generated using cron_deconstructor for any new scheduled task
+  2. Embedded as a single combined string in RAG:
+     "description [TOOL:tool] [GROUP:group] [FREQ:frequency] [TIME:time_of_day] [DAYS:day_names] [TAGS:semantic_tags]"
+  3. Stored with the cron expression for manual checking
+  4. Used for semantic search: "find all weekly reports" or "morning tasks"
+
+best_practices:
+  - Always deconstruct cron before RAG storage
+  - Include tool_name for better group inference
+  - Use explicit group in metadata if automatic inference is wrong
+  - Semantic tags enable flexible querying beyond exact cron matching
+  - Description should be concise but descriptive

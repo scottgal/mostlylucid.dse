@@ -415,14 +415,19 @@ class ScheduledTaskManager:
     def get_tasks_due_now(
         self,
         current_time: Optional[datetime] = None,
-        window_minutes: int = 0
+        window_minutes: int = 0,
+        use_rag_hint: bool = True
     ) -> List[ScheduledTask]:
         """
         Get all tasks that should run now (or within a time window).
 
+        Can optionally use RAG semantic search as a hint to narrow down
+        candidates before checking exact cron times.
+
         Args:
             current_time: Current time (defaults to now)
             window_minutes: Look ahead window in minutes
+            use_rag_hint: Use RAG to find candidate tasks (faster for large task sets)
 
         Returns:
             List of tasks that should run
@@ -430,9 +435,20 @@ class ScheduledTaskManager:
         current_time = current_time or datetime.now()
         end_time = current_time + timedelta(minutes=window_minutes)
 
+        # Optional: Use RAG to find candidates based on semantic time hints
+        candidate_tasks = None
+        if use_rag_hint and self.rag and window_minutes > 0:
+            candidate_tasks = self._find_tasks_by_time_window_rag(
+                current_time,
+                window_minutes
+            )
+
+        # Check all tasks (or just candidates from RAG)
         due_tasks = []
         with self._tasks_lock:
-            for task in self._tasks.values():
+            tasks_to_check = candidate_tasks if candidate_tasks else self._tasks.values()
+
+            for task in tasks_to_check:
                 if not task.enabled:
                     continue
 
@@ -448,6 +464,152 @@ class ScheduledTaskManager:
                         due_tasks.append(task)
 
         return due_tasks
+
+    def search_tasks(
+        self,
+        query: str,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[ScheduledTask]:
+        """
+        Search for tasks using semantic RAG search.
+
+        Args:
+            query: Natural language query (e.g., "weekly reports", "morning tasks")
+            filters: Optional filters (group, frequency, time_of_day)
+
+        Returns:
+            List of matching tasks
+
+        Examples:
+            - search_tasks("weekly reports")
+            - search_tasks("backup jobs", {"time_of_day": "night"})
+            - search_tasks("monitoring tasks", {"frequency": "every_5_minutes"})
+        """
+        if not self.rag:
+            logger.warning("RAG not available, falling back to simple search")
+            return self._simple_search(query, filters)
+
+        try:
+            from .rag_memory import ArtifactType
+
+            # Build tag filters
+            tags = ['scheduled_task']
+            if filters:
+                if 'group' in filters:
+                    tags.append(filters['group'])
+                if 'frequency' in filters:
+                    tags.append(filters['frequency'])
+                if 'time_of_day' in filters:
+                    tags.append(filters['time_of_day'])
+
+            # Search RAG
+            similar = self.rag.find_similar(
+                artifact_type=ArtifactType.PLAN,
+                query=query,
+                tags=tags if len(tags) > 1 else ['scheduled_task'],
+                limit=20,
+                min_similarity=0.3
+            )
+
+            # Extract task IDs from RAG results
+            task_ids = []
+            for artifact in similar:
+                task_id = artifact.get('metadata', {}).get('task_id')
+                if task_id:
+                    task_ids.append(task_id)
+
+            # Get actual tasks
+            tasks = []
+            with self._tasks_lock:
+                for task_id in task_ids:
+                    task = self._tasks.get(task_id)
+                    if task:
+                        tasks.append(task)
+
+            return tasks
+
+        except Exception as e:
+            logger.warning(f"RAG search failed: {e}, falling back to simple search")
+            return self._simple_search(query, filters)
+
+    def _find_tasks_by_time_window_rag(
+        self,
+        current_time: datetime,
+        window_minutes: int
+    ) -> List[ScheduledTask]:
+        """
+        Use RAG to find tasks likely to run in the time window.
+
+        This is a hint/optimization - still need to check exact cron times.
+        """
+        if not self.rag:
+            return list(self._tasks.values())
+
+        try:
+            # Determine time of day for semantic search
+            hour = current_time.hour
+            if 0 <= hour < 6:
+                time_hint = "night"
+            elif 6 <= hour < 12:
+                time_hint = "morning"
+            elif 12 <= hour < 18:
+                time_hint = "afternoon"
+            else:
+                time_hint = "evening"
+
+            # Get day name
+            day_name = current_time.strftime("%A")
+
+            # Search for tasks matching this time window
+            query = f"tasks running in the {time_hint} on {day_name}"
+
+            # Use semantic search to find candidates
+            candidates = self.search_tasks(
+                query,
+                filters={"time_of_day": time_hint}
+            )
+
+            # Also include tasks that run very frequently (every minute, every 5 minutes)
+            frequent = self.search_tasks(
+                "frequent monitoring polling tasks",
+                filters={"frequency": "every_5_minutes"}
+            )
+
+            # Combine and deduplicate
+            all_candidates = {t.task_id: t for t in candidates + frequent}
+            return list(all_candidates.values())
+
+        except Exception as e:
+            logger.warning(f"RAG time window search failed: {e}")
+            return list(self._tasks.values())
+
+    def _simple_search(
+        self,
+        query: str,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[ScheduledTask]:
+        """Simple keyword-based search fallback."""
+        query_lower = query.lower()
+        results = []
+
+        with self._tasks_lock:
+            for task in self._tasks.values():
+                # Check name and description
+                if query_lower in task.name.lower() or query_lower in task.description.lower():
+                    results.append(task)
+                    continue
+
+                # Check filters
+                if filters:
+                    matches = True
+                    for key, value in filters.items():
+                        if key in task.metadata and task.metadata[key] != value:
+                            matches = False
+                            break
+                    if matches:
+                        results.append(task)
+
+        return results
 
     def mark_task_run(
         self,
@@ -555,40 +717,83 @@ class ScheduledTaskManager:
             return False
 
     def _store_task_in_rag(self, task: ScheduledTask):
-        """Store task in RAG with cron embedding."""
+        """Store task in RAG with rich cron embedding."""
         if not self.rag:
             return
 
         try:
-            # Create content for embedding
-            # Include cron pattern in a way that can be semantically searched
-            content = f"""
-Task: {task.name}
-Description: {task.description}
-Schedule: {task.cron_expression}
-Schedule Description: {task.metadata.get('schedule_description', 'cron expression')}
-When: {task.metadata.get('cron_explanation', 'see cron expression')}
-Next Run: {task.get_next_run_time().isoformat()}
-"""
+            # Deconstruct cron expression for rich semantic embedding
+            from tools.executable.cron_deconstructor import deconstruct_cron
+
+            cron_meta = deconstruct_cron(
+                cron_expression=task.cron_expression,
+                tool_name=task.func_name,
+                description=task.description,
+                metadata=task.metadata,
+                llm_client=self.ollama_client
+            )
+
+            # Create rich content for embedding combining all semantic fields
+            # This format makes semantic search much more effective
+            content_parts = [
+                f"Task: {task.name}",
+                f"Description: {cron_meta['description']}",
+                f"Tool: {cron_meta['tool']}",
+                f"Group: {cron_meta['group']}",
+                f"Frequency: {cron_meta['frequency']}",
+            ]
+
+            if cron_meta['time_of_day']:
+                content_parts.append(f"Time of Day: {cron_meta['time_of_day']}")
+
+            if cron_meta['day_names']:
+                content_parts.append(f"Days: {', '.join(cron_meta['day_names'])}")
+
+            content_parts.append(f"Cron: {task.cron_expression}")
+            content_parts.append(f"Next Runs: {', '.join(cron_meta['next_runs'][:2])}")
+
+            # Add semantic tags for better embedding
+            if cron_meta['semantic_tags']:
+                content_parts.append(f"Tags: {', '.join(cron_meta['semantic_tags'])}")
+
+            content = "\n".join(content_parts)
 
             # Store as a PLAN artifact (using existing RAG system)
             from .rag_memory import ArtifactType
 
+            # Enhanced tags including semantic tags
+            tags = ['scheduled_task', cron_meta['frequency'], cron_meta['group']]
+            if cron_meta['time_of_day']:
+                tags.append(cron_meta['time_of_day'])
+            tags.extend(cron_meta['semantic_tags'][:5])  # Top 5 semantic tags
+            tags.append(f"cron_{task.cron_expression}")
+
+            # Enhanced metadata with cron deconstruction
+            metadata = {
+                'task_id': task.task_id,
+                'cron_expression': task.cron_expression,
+                'cron_metadata': cron_meta,  # Full deconstructed data
+                'next_run': task.get_next_run_time().isoformat(),
+                'enabled': task.enabled,
+                'group': cron_meta['group'],
+                'frequency': cron_meta['frequency'],
+                'time_of_day': cron_meta['time_of_day']
+            }
+
             artifact_id = self.rag.store_artifact(
                 artifact_type=ArtifactType.PLAN,
                 name=task.name,
-                description=task.description,
+                description=cron_meta['description'],  # Use generated description
                 content=content,
-                tags=['scheduled_task', 'cron', task.cron_expression],
-                metadata={
-                    'task_id': task.task_id,
-                    'cron_expression': task.cron_expression,
-                    'next_run': task.get_next_run_time().isoformat(),
-                    'enabled': task.enabled
-                }
+                tags=tags,
+                metadata=metadata
             )
 
-            logger.debug(f"Stored task in RAG: {task.name} (artifact: {artifact_id})")
+            logger.debug(
+                f"Stored task in RAG: {task.name} "
+                f"(artifact: {artifact_id}, group: {cron_meta['group']}, "
+                f"frequency: {cron_meta['frequency']})"
+            )
 
         except Exception as e:
             logger.warning(f"Failed to store task in RAG: {e}")
