@@ -2,6 +2,7 @@ name: "Text Formatter"
 type: "executable"
 description: "Fast text formatting operations (uppercase, lowercase, title case, reverse, trim, etc.). Direct Python execution - instant results."
 
+priority: 100  # Highest priority - static execution, zero cost
 cost_tier: "free"
 speed_tier: "very-fast"
 quality_tier: "excellent"

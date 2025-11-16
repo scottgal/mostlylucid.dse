@@ -2,6 +2,7 @@ name: "Unit Converter"
 type: "executable"
 description: "Fast unit conversions (length, weight, temperature, time). Direct Python execution. Supports common units like meters/feet, kg/lbs, celsius/fahrenheit, etc."
 
+priority: 100  # Highest priority - static execution, zero cost
 cost_tier: "free"
 speed_tier: "very-fast"
 quality_tier: "excellent"

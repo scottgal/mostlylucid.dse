@@ -2,6 +2,7 @@ name: "Basic Calculator"
 type: "executable"
 description: "Fast arithmetic operations (add, subtract, multiply, divide, power, modulo). Direct Python execution - no LLM needed. Use for simple math."
 
+priority: 100  # Highest priority - static execution, zero cost
 cost_tier: "free"
 speed_tier: "very-fast"
 quality_tier: "excellent"
