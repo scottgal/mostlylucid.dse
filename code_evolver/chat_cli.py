@@ -42,6 +42,7 @@ from src import (
 )
 from src.config_manager import ConfigManager
 from src.tools_manager import ToolsManager, ToolType
+from src.task_evaluator import TaskEvaluator
 
 console = Console()
 
@@ -155,6 +156,9 @@ class ChatCLI:
             ollama_client=self.client,
             rag_memory=self.rag
         )
+
+        # Initialize task evaluator for routing decisions
+        self.task_evaluator = TaskEvaluator(self.client)
 
         # Register model selector tool if multi-backend support is enabled
         try:
@@ -894,7 +898,18 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # Start clean workflow display
         self.display.start_workflow(description)
 
-        # Step 0: Check for existing solutions in RAG (both code and workflows)
+        # Step 0: Evaluate task type using tinyllama (fast preprocessing)
+        console.print("[dim cyan]> Evaluating task type...[/dim cyan]")
+        task_evaluation = self.task_evaluator.evaluate_task_type(description)
+
+        console.print(f"[dim]Task type: {task_evaluation['task_type'].value}[/dim]")
+        console.print(f"[dim]Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
+
+        # CRITICAL: If task requires content LLM, ensure we don't over-optimize
+        if task_evaluation['requires_content_llm']:
+            console.print("[yellow]→ Creative content task detected - will use LLM content generator[/yellow]")
+
+        # Step 1: Check for existing solutions in RAG (both code and workflows)
         workflow.add_step("check_existing", "rag", "Check for existing solutions in RAG")
         from src.rag_memory import ArtifactType
 
