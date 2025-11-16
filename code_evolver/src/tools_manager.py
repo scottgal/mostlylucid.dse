@@ -9,10 +9,12 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
 from datetime import datetime
 from enum import Enum
+from rich.console import Console
 from .openapi_tool import OpenAPITool
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+console = Console()
 
 
 class ToolType(Enum):
@@ -320,6 +322,8 @@ class ToolsManager:
             logger.debug("No YAML tool files found in tools/ directory")
             return
 
+        console.print(f"[dim cyan]> Loading {len(yaml_files)} tool(s) from YAML files...[/dim cyan]")
+
         for yaml_file in yaml_files:
             try:
                 with open(yaml_file, 'r', encoding='utf-8') as f:
@@ -368,6 +372,7 @@ class ToolsManager:
                     )
                     self.tools[tool_id] = tool
                     logger.info(f"✓ Loaded LLM tool from YAML: {tool_id}")
+                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan](llm)[/dim cyan]")
 
                 # Handle Executable tools
                 elif tool_type == ToolType.EXECUTABLE:
@@ -394,6 +399,7 @@ class ToolsManager:
                     )
                     self.tools[tool_id] = tool
                     logger.info(f"✓ Loaded executable tool from YAML: {tool_id}")
+                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim green](executable)[/dim green]")
 
                 # Handle other tool types
                 else:
@@ -411,6 +417,7 @@ class ToolsManager:
                     )
                     self.tools[tool_id] = tool
                     logger.info(f"✓ Loaded {tool_type.value} tool from YAML: {tool_id}")
+                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan]({tool_type.value})[/dim cyan]")
 
             except Exception as e:
                 logger.error(f"Error loading tool from {yaml_file}: {e}")

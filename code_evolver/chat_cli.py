@@ -122,6 +122,7 @@ class ChatCLI:
         Args:
             config_path: Path to configuration file
         """
+        console.print("[dim cyan]> Processing configuration...[/dim cyan]")
         self.config = ConfigManager(config_path)
 
         # Use LLM client factory if backend is configured, otherwise default to Ollama
