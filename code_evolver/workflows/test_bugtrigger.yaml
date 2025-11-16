@@ -1,0 +1,94 @@
+# Test BugTrigger Workflow - Validates BugCatcher functionality
+#
+# This workflow triggers exceptions and validates they are captured by BugCatcher.
+# Run with: /test bugtrigger or python cli.py --workflow workflows/test_bugtrigger.yaml
+
+workflow_id: "test_bugtrigger"
+description: "Test BugCatcher by triggering exceptions and validating capture"
+priority: "medium"
+quality_level: "testing"
+
+steps:
+  # Step 1: Validate Loki is running
+  - step_id: "validate_loki"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_loki_connection"
+    description: "Validate Loki connection"
+    inputs: {}
+    validation:
+      required: true
+      error_action: "fail"
+
+  # Step 2: Trigger ValueError
+  - step_id: "trigger_value_error"
+    tool_type: "python"
+    tool_name: "bug_trigger.trigger_value_error"
+    description: "Trigger ValueError"
+    inputs:
+      message: "Test ValueError for BugCatcher validation"
+    expects_exception: true  # Tell workflow this exception is expected
+
+  # Step 3: Validate ValueError was captured
+  - step_id: "validate_value_error"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_exception_captured"
+    description: "Validate ValueError was captured"
+    inputs:
+      tool_name: "bug_trigger"
+      exception_type: "ValueError"
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+  # Step 4: Trigger KeyError
+  - step_id: "trigger_key_error"
+    tool_type: "python"
+    tool_name: "bug_trigger.trigger_key_error"
+    description: "Trigger KeyError"
+    inputs:
+      key: "missing_test_key"
+    expects_exception: true
+
+  # Step 5: Validate KeyError was captured
+  - step_id: "validate_key_error"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_exception_captured"
+    description: "Validate KeyError was captured"
+    inputs:
+      tool_name: "bug_trigger"
+      exception_type: "KeyError"
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+  # Step 6: Trigger TypeError
+  - step_id: "trigger_type_error"
+    tool_type: "python"
+    tool_name: "bug_trigger.trigger_type_error"
+    description: "Trigger TypeError"
+    inputs:
+      value: 42
+    expects_exception: true
+
+  # Step 7: Validate TypeError was captured
+  - step_id: "validate_type_error"
+    tool_type: "python"
+    tool_name: "monitoring_validator.validate_exception_captured"
+    description: "Validate TypeError was captured"
+    inputs:
+      tool_name: "bug_trigger"
+      exception_type: "TypeError"
+      timeout: 5
+    validation:
+      success_field: "success"
+      required: true
+
+success_criteria:
+  all_steps_complete: true
+  min_steps_success: 6  # Loki validation + 3 trigger/validate pairs
+
+outputs:
+  - "All exception types were captured by BugCatcher"
+  - "Validation passed for ValueError, KeyError, TypeError"
