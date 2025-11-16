@@ -5,6 +5,7 @@ Future: Will integrate with RAG for semantic search.
 """
 import json
 import logging
+import hashlib
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
 from datetime import datetime
@@ -15,6 +16,46 @@ from .openapi_tool import OpenAPITool
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 console = Console()
+
+
+def calculate_tool_hash(tool_def: Dict[str, Any]) -> str:
+    """
+    Calculate SHA256 hash of tool definition for change detection.
+
+    Args:
+        tool_def: Tool definition dictionary (from YAML)
+
+    Returns:
+        Hexadecimal hash string
+    """
+    # Create a stable JSON representation (sorted keys for consistency)
+    stable_json = json.dumps(tool_def, sort_keys=True)
+    return hashlib.sha256(stable_json.encode('utf-8')).hexdigest()
+
+
+def bump_version(current_version: str, change_type: str = "patch") -> str:
+    """
+    Bump semantic version based on change type.
+
+    Args:
+        current_version: Current version (e.g., "1.2.3")
+        change_type: Type of change: "major", "minor", or "patch"
+
+    Returns:
+        New version string
+    """
+    try:
+        major, minor, patch = map(int, current_version.split('.'))
+
+        if change_type == "major":
+            return f"{major + 1}.0.0"
+        elif change_type == "minor":
+            return f"{major}.{minor + 1}.0"
+        else:  # patch
+            return f"{major}.{minor}.{patch + 1}"
+    except:
+        # Invalid version format, start fresh
+        return "1.0.0"
 
 
 class ToolType(Enum):
@@ -89,6 +130,11 @@ class Tool:
         self.constraints = constraints or {}
         self.created_at = datetime.utcnow().isoformat() + "Z"
         self.usage_count = 0
+
+        # Versioning for tool evolution
+        self.version = metadata.get("version", "1.0.0")
+        self.definition_hash = metadata.get("definition_hash", "")
+        self.breaking_changes = metadata.get("breaking_changes", [])
 
         # Current usage tracking (for constraint checking)
         self.current_usage = {
@@ -181,7 +227,10 @@ class Tool:
             "constraints": self.constraints,
             "current_usage": self.current_usage,
             "created_at": self.created_at,
-            "usage_count": self.usage_count
+            "usage_count": self.usage_count,
+            "version": self.version,
+            "definition_hash": self.definition_hash,
+            "breaking_changes": self.breaking_changes
         }
 
     def to_prompt_format(self) -> str:
@@ -218,6 +267,9 @@ Tags: {', '.join(self.tags)}{params_str}
         )
         tool.created_at = data.get("created_at", tool.created_at)
         tool.usage_count = data.get("usage_count", 0)
+        tool.version = data.get("version", "1.0.0")
+        tool.definition_hash = data.get("definition_hash", "")
+        tool.breaking_changes = data.get("breaking_changes", [])
         return tool
 
 
@@ -332,10 +384,33 @@ class ToolsManager:
                 # Generate tool_id from filename (without extension)
                 tool_id = yaml_file.stem
 
-                # Skip if already loaded
+                # Calculate hash of tool definition for change detection
+                new_hash = calculate_tool_hash(tool_def)
+
+                # Check if tool exists and handle versioning
+                version = tool_def.get("version", "1.0.0")
+                breaking_changes = tool_def.get("breaking_changes", [])
+
                 if tool_id in self.tools:
-                    logger.debug(f"Tool {tool_id} already loaded, skipping YAML file")
-                    continue
+                    existing_tool = self.tools[tool_id]
+                    old_hash = existing_tool.definition_hash
+
+                    # If hash changed, this is an update
+                    if old_hash and old_hash != new_hash:
+                        # Determine change type from YAML or auto-detect
+                        change_type = tool_def.get("change_type", "patch")
+                        version = bump_version(existing_tool.version, change_type)
+
+                        console.print(f"  [yellow]↻ Updated {tool_id} v{existing_tool.version} → v{version} ({change_type})[/yellow]")
+
+                        if change_type == "major" and breaking_changes:
+                            console.print(f"    [red]! Breaking changes:[/red]")
+                            for change in breaking_changes:
+                                console.print(f"      - {change}")
+                    else:
+                        # No changes, skip reload
+                        logger.debug(f"Tool {tool_id} unchanged, skipping")
+                        continue
 
                 # Parse tool type
                 tool_type_str = tool_def.get("type", "custom")
@@ -358,7 +433,10 @@ class ToolsManager:
                         "cost_tier": tool_def.get("cost_tier", "medium"),
                         "speed_tier": tool_def.get("speed_tier", "medium"),
                         "quality_tier": tool_def.get("quality_tier", "good"),
-                        "max_output_length": tool_def.get("max_output_length", "medium")
+                        "max_output_length": tool_def.get("max_output_length", "medium"),
+                        "version": version,
+                        "definition_hash": new_hash,
+                        "breaking_changes": breaking_changes
                     }
 
                     tool = Tool(
@@ -394,7 +472,10 @@ class ToolsManager:
                             "output_schema": tool_def.get("output_schema"),
                             "cost_tier": tool_def.get("cost_tier", "free"),
                             "speed_tier": tool_def.get("speed_tier", "medium"),
-                            "quality_tier": tool_def.get("quality_tier", "good")
+                            "quality_tier": tool_def.get("quality_tier", "good"),
+                            "version": version,
+                            "definition_hash": new_hash,
+                            "breaking_changes": breaking_changes
                         }
                     )
                     self.tools[tool_id] = tool
@@ -412,7 +493,10 @@ class ToolsManager:
                         implementation=tool_def,
                         metadata={
                             "from_yaml": True,
-                            "yaml_file": str(yaml_file.relative_to(self.tools_path))
+                            "yaml_file": str(yaml_file.relative_to(self.tools_path)),
+                            "version": version,
+                            "definition_hash": new_hash,
+                            "breaking_changes": breaking_changes
                         }
                     )
                     self.tools[tool_id] = tool
