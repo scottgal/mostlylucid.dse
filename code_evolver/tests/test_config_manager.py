@@ -39,8 +39,8 @@ class TestConfigManager(unittest.TestCase):
             "ollama": {
                 "base_url": "http://custom:11434",
                 "models": {
-                    "overseer": {"model": "llama3", "endpoint": null},
-                    "generator": {"model": "codellama", "endpoint": null}
+                    "overseer": {"model": "llama3", "endpoint": None},
+                    "generator": {"model": "codellama", "endpoint": None}
                 }
             },
             "registry": {
@@ -114,7 +114,7 @@ class TestConfigManager(unittest.TestCase):
                     },
                     "generator": {
                         "model": "codellama",
-                        "endpoint": null
+                        "endpoint": None
                     }
                 }
             }
