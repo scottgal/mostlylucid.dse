@@ -660,10 +660,48 @@ class QdrantRAGMemory:
         return True
 
     def clear_collection(self):
-        """Clear all vectors from Qdrant collection (use with caution!)."""
+        """
+        Clear all vectors from Qdrant collection AND all file-based metadata (use with caution!).
+
+        This completely resets the RAG memory to an empty state, including:
+        - Qdrant collection vectors
+        - File-based artifact metadata
+        - Tags index
+        - All stored artifacts on disk
+        """
+        import shutil
+
         try:
+            # Clear Qdrant collection
             self.qdrant.delete_collection(self.collection_name)
             self._init_collection()
-            logger.info(f"✓ Cleared Qdrant collection: {self.collection_name}")
+            logger.info(f"OK Cleared Qdrant collection: {self.collection_name}")
         except Exception as e:
-            logger.error(f"Error clearing collection: {e}")
+            logger.error(f"Error clearing Qdrant collection: {e}")
+
+        # Clear all file-based metadata and artifacts
+        try:
+            # Clear in-memory artifacts dict
+            self.artifacts.clear()
+            self.tags_index.clear()
+
+            # Clear artifacts directory (contains actual artifact JSON files)
+            if self.artifacts_path.exists():
+                shutil.rmtree(self.artifacts_path)
+                self.artifacts_path.mkdir(parents=True, exist_ok=True)
+                logger.info(f"OK Cleared artifacts directory: {self.artifacts_path}")
+
+            # Reset index.json
+            with open(self.index_path, 'w', encoding='utf-8') as f:
+                json.dump({"artifacts": []}, f, indent=2)
+            logger.info(f"OK Reset metadata index: {self.index_path}")
+
+            # Reset tags_index.json
+            with open(self.tags_index_path, 'w', encoding='utf-8') as f:
+                json.dump({}, f, indent=2)
+            logger.info(f"OK Reset tags index: {self.tags_index_path}")
+
+            logger.info("OK ALL RAG memory cleared (vectors + metadata + artifacts)")
+
+        except Exception as e:
+            logger.error(f"Error clearing file-based metadata: {e}")

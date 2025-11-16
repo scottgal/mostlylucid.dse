@@ -615,3 +615,48 @@ class RAGMemory:
 
         logger.info(f"✓ Deleted artifact: {artifact_id}")
         return True
+
+    def clear_collection(self):
+        """
+        Clear all artifacts and reset RAG memory to empty state (use with caution!).
+
+        This completely resets the RAG memory to an empty state, including:
+        - All artifacts in memory
+        - Tags index
+        - Embedding vectors
+        - All stored data files
+        """
+        import shutil
+        import numpy as np
+
+        try:
+            # Clear in-memory structures
+            self.artifacts.clear()
+            self.tags_index.clear()
+            self.embeddings_matrix = np.array([])
+            self.artifact_id_list = []
+
+            # Clear artifacts directory (contains actual artifact JSON files)
+            if self.artifacts_path.exists():
+                shutil.rmtree(self.artifacts_path)
+                self.artifacts_path.mkdir(parents=True, exist_ok=True)
+                logger.info(f"OK Cleared artifacts directory: {self.artifacts_path}")
+
+            # Reset index.json
+            with open(self.index_path, 'w', encoding='utf-8') as f:
+                json.dump({"artifacts": []}, f, indent=2)
+            logger.info(f"OK Reset metadata index: {self.index_path}")
+
+            # Reset embeddings.npy
+            np.save(self.embeddings_path, np.array([]))
+            logger.info(f"OK Reset embeddings: {self.embeddings_path}")
+
+            # Reset tags_index.json
+            with open(self.tags_index_path, 'w', encoding='utf-8') as f:
+                json.dump({}, f, indent=2)
+            logger.info(f"OK Reset tags index: {self.tags_index_path}")
+
+            logger.info("OK ALL RAG memory cleared (artifacts + embeddings + metadata)")
+
+        except Exception as e:
+            logger.error(f"Error clearing RAG memory: {e}")

@@ -774,6 +774,10 @@ Tags: {', '.join(tool.tags)}
         # Log tool invocation
         logger.info(f"Invoking LLM tool '{tool.name}' (model: {model}, endpoint: {endpoint or 'default'})")
 
+        # Track response time for adaptive timeout learning
+        import time
+        start_time = time.time()
+
         # Invoke the LLM
         response = self.ollama_client.generate(
             model=model,
@@ -782,6 +786,20 @@ Tags: {', '.join(tool.tags)}
             temperature=temperature,
             endpoint=endpoint
         )
+
+        # Calculate actual response time
+        response_time = time.time() - start_time
+        timed_out = (response == "")  # Empty response indicates timeout
+
+        # Store performance metrics in RAG for adaptive timeout learning
+        if self.rag_memory:
+            self._update_adaptive_timeout(
+                model=model,
+                tool_id=tool_id,
+                response_time=response_time,
+                timed_out=timed_out,
+                prompt_length=len(prompt)
+            )
 
         # Store the actual prompt used in RAG for learning and optimization
         if self.rag_memory and response:
@@ -1941,3 +1959,115 @@ Tags: {', '.join(tool.tags)}
 
         logger.info(f"✓ Deleted tool: {tool_id}")
         return True
+
+    def _update_adaptive_timeout(
+        self,
+        model: str,
+        tool_id: str,
+        response_time: float,
+        timed_out: bool,
+        prompt_length: int
+    ) -> None:
+        """
+        Update adaptive timeout tracking in RAG memory.
+
+        Stores performance metrics and calculates recommended timeout
+        based on historical response times.
+
+        Args:
+            model: Model name
+            tool_id: Tool identifier
+            response_time: Actual response time in seconds
+            timed_out: Whether the request timed out
+            prompt_length: Length of prompt in characters
+        """
+        try:
+            from .rag_memory import ArtifactType
+            import statistics
+
+            # Create artifact ID for this model's timeout stats
+            stats_id = f"timeout_stats_{model.replace(':', '_')}"
+
+            # Try to get existing stats
+            existing = self.rag_memory.get_artifact(stats_id)
+
+            if existing:
+                # Parse existing stats
+                stats = existing.metadata
+                response_times = stats.get("response_times", [])
+                timeout_count = stats.get("timeout_count", 0)
+                success_count = stats.get("success_count", 0)
+            else:
+                response_times = []
+                timeout_count = 0
+                success_count = 0
+
+            # Update stats
+            if timed_out:
+                timeout_count += 1
+                logger.warning(f"Timeout recorded for {model} (total timeouts: {timeout_count})")
+            else:
+                success_count += 1
+                response_times.append(response_time)
+                # Keep only last 50 response times for rolling average
+                response_times = response_times[-50:]
+                logger.debug(f"Response time for {model}: {response_time:.2f}s")
+
+            # Calculate recommended timeout (95th percentile + 20% buffer)
+            if response_times:
+                sorted_times = sorted(response_times)
+                p95_index = int(len(sorted_times) * 0.95)
+                p95_time = sorted_times[min(p95_index, len(sorted_times) - 1)]
+                recommended_timeout = int(p95_time * 1.2)  # 20% buffer
+
+                avg_time = statistics.mean(response_times)
+                median_time = statistics.median(response_times)
+            else:
+                recommended_timeout = None
+                avg_time = None
+                median_time = None
+
+            # Store updated stats in RAG
+            stats_content = f"""Adaptive Timeout Statistics for {model}
+
+Success Count: {success_count}
+Timeout Count: {timeout_count}
+Timeout Rate: {(timeout_count / (success_count + timeout_count) * 100):.1f}%
+
+Response Times (last {len(response_times)} successful calls):
+- Average: {avg_time:.2f}s (if avg_time else 'N/A')
+- Median: {median_time:.2f}s (if median_time else 'N/A')
+- 95th percentile: {p95_time:.2f}s (if response_times else 'N/A')
+
+Recommended Timeout: {recommended_timeout}s (if recommended_timeout else 'Use default')
+
+Last Updated: {datetime.now().isoformat()}
+"""
+
+            self.rag_memory.store_artifact(
+                artifact_id=stats_id,
+                artifact_type=ArtifactType.PATTERN,
+                name=f"Timeout Stats: {model}",
+                description=f"Adaptive timeout statistics for {model}",
+                content=stats_content,
+                tags=["timeout_stats", "adaptive", "performance", model],
+                metadata={
+                    "model": model,
+                    "tool_id": tool_id,
+                    "response_times": response_times,
+                    "timeout_count": timeout_count,
+                    "success_count": success_count,
+                    "recommended_timeout": recommended_timeout,
+                    "avg_response_time": avg_time,
+                    "median_response_time": median_time,
+                    "last_prompt_length": prompt_length,
+                    "last_updated": datetime.now().isoformat()
+                },
+                auto_embed=False  # Don't need semantic search for stats
+            )
+
+            if recommended_timeout:
+                logger.info(f"Adaptive timeout for {model}: {recommended_timeout}s (based on {len(response_times)} samples)")
+
+        except Exception as e:
+            logger.warning(f"Could not update adaptive timeout stats: {e}")

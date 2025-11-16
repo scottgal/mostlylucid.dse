@@ -829,7 +829,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 [dim]Examples:[/dim]
   write a haiku about coding
   implement binary search
-  /list                    [dim](special command)[/dim]
+  /tools                      [dim](list all available tools)[/dim]
+  /manual tool save_to_disk   [dim](show tool documentation)[/dim]
         """
         console.print(Panel(welcome, box=box.ROUNDED))
 
@@ -853,6 +854,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/tools", "List all available tools (LLM, code, and community tools)"),
             ("/tool info <tool_name>", "Get intelligent description of a tool (uses tinyllama)"),
             ("/tool run <tool_name> [input]", "Execute a tool directly with input and see results"),
+            ("/tools [category]", "List all tools or filter by category (llm, executable, custom, openapi)"),
+            ("/tool <tool_id>", "Show detailed documentation for a specific tool"),
             ("/tool list", "List available tools (same as /tools)"),
             ("/backends [--test]", "Check status of all LLM backends (API keys, connectivity)"),
             ("/mutate tool <tool_id> <instructions>", "Improve a tool based on instructions"),
@@ -865,7 +868,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/config [key] [value]", "Show or update configuration"),
             ("/status", "Show system status"),
             ("/clear", "Clear the screen"),
-            ("/clear_rag", "Clear RAG memory and reset test data (WARNING: destructive!)"),
+            ("/clear_rag", "Clear ALL RAG memory including non-YAML tools (WARNING: destructive!)"),
+            ("/manual [search]", "Search manual with intelligent fuzzy matching (aliases: /man, /m)"),
             ("/help", "Show this help message"),
             ("exit, quit, /exit, /quit", "Exit the CLI (/ optional)")
         ]
@@ -3565,12 +3569,19 @@ Return ONLY the JSON object, nothing else."""
 
     def _remove_debug_logging(self, code: str) -> str:
         """
-        Remove debug logging statements added during escalation attempts 3-6.
+        COMPREHENSIVELY remove ALL debug logging statements from code.
 
         Removes:
         - import logging
+        - from logging import ...
+        - import logger
         - logging.basicConfig(...)
-        - logging.debug(...), logging.info(...), logging.exception(...) calls
+        - logging.getLogger(...)
+        - logger = logging.getLogger(...)
+        - logging.debug/info/warning/error/exception/critical(...) calls
+        - logger.debug/info/warning/error/exception/critical(...) calls
+        - print(..., file=sys.stderr) debug statements
+        - # DEBUG comments
         - Empty lines left behind
 
         Returns cleaned code.
@@ -3584,20 +3595,49 @@ Return ONLY the JSON object, nothing else."""
         for line in lines:
             stripped = line.strip()
 
-            # Skip logging imports
-            if stripped.startswith('import logging') or stripped.startswith('from logging import'):
+            # Skip logging imports (ALL variations)
+            if (stripped.startswith('import logging') or
+                stripped.startswith('from logging import') or
+                'import logging' in stripped):
+                skip_next_blank = True
+                continue
+
+            # Skip logger variable assignments
+            if re.match(r'\s*logger\s*=\s*logging\.getLogger', stripped):
                 skip_next_blank = True
                 continue
 
             # Skip logging configuration
-            if 'logging.basicConfig' in stripped:
+            if ('logging.basicConfig' in stripped or
+                'logging.getLogger' in stripped):
                 skip_next_blank = True
                 continue
 
-            # Skip logging calls
-            if re.match(r'\s*logging\.(debug|info|warning|error|exception|critical)\(', stripped):
+            # Skip ALL logging module calls (logging.*)
+            if re.match(r'\s*logging\.(debug|info|warning|error|exception|critical|log)\(', stripped):
                 skip_next_blank = True
                 continue
+
+            # Skip ALL logger object calls (logger.*)
+            if re.match(r'\s*logger\.(debug|info|warning|error|exception|critical|log)\(', stripped):
+                skip_next_blank = True
+                continue
+
+            # Skip debug print statements to stderr
+            if 'print(' in stripped and 'sys.stderr' in stripped and ('DEBUG' in stripped or 'debug' in line):
+                skip_next_blank = True
+                continue
+
+            # Skip lines with DEBUG comments (but not docstrings)
+            if stripped.startswith('# DEBUG') or stripped.startswith('#DEBUG'):
+                skip_next_blank = True
+                continue
+
+            # Skip try/except blocks that ONLY wrap logging
+            if stripped.startswith('try:') and len(cleaned_lines) > 0:
+                # Look ahead to see if this is just for logging
+                continue_check = False
+                # Don't skip try blocks - they might be legitimate error handling
 
             # Skip blank line after removed logging (for cleanliness)
             if not stripped and skip_next_blank:
@@ -3607,7 +3647,27 @@ Return ONLY the JSON object, nothing else."""
             cleaned_lines.append(line)
             skip_next_blank = False
 
-        return '\n'.join(cleaned_lines)
+        # Second pass: Remove any remaining logger references
+        code = '\n'.join(cleaned_lines)
+
+        # Remove logger. references that might have multi-line statements
+        code = re.sub(r'logger\.(debug|info|warning|error|exception|critical)\([^)]*\)', '', code)
+        code = re.sub(r'logging\.(debug|info|warning|error|exception|critical)\([^)]*\)', '', code)
+
+        # Remove empty lines that result from removal (but keep single blank lines)
+        lines = code.split('\n')
+        final_lines = []
+        prev_blank = False
+        for line in lines:
+            if not line.strip():
+                if not prev_blank:
+                    final_lines.append(line)
+                    prev_blank = True
+            else:
+                final_lines.append(line)
+                prev_blank = False
+
+        return '\n'.join(final_lines)
 
     def _god_level_fix(
         self,
@@ -4118,10 +4178,13 @@ Return ONLY the JSON object, nothing else."""
             console.print("[dim]Multi-backend support may not be installed[/dim]")
             return False
 
-    def handle_tools(self) -> bool:
-        """Handle tools command - list all available tools."""
-        console.print("\n[bold cyan]Available Tools[/bold cyan]\n")
+    def handle_tools(self, category: str = None) -> bool:
+        """
+        Handle tools command - list all available tools or filter by category.
 
+        Args:
+            category: Optional category to filter by (llm, executable, custom, openapi)
+        """
         all_tools = self.tools_manager.get_all_tools()
 
         if not all_tools:
@@ -4135,9 +4198,25 @@ Return ONLY the JSON object, nothing else."""
         for tool in all_tools:
             tools_by_type[tool.tool_type.value].append(tool)
 
+        # If category specified, filter to that category
+        if category:
+            category_lower = category.lower()
+            if category_lower not in tools_by_type:
+                console.print(f"[yellow]No tools found in category: {category}[/yellow]")
+                console.print(f"[dim]Available categories: {', '.join(sorted(tools_by_type.keys()))}[/dim]\n")
+                return False
+
+            # Show only the specified category
+            console.print(f"\n[bold cyan]{category_lower.upper()} Tools[/bold cyan]\n")
+            tools_to_show = {category_lower: tools_by_type[category_lower]}
+        else:
+            # Show all categories
+            console.print("\n[bold cyan]Available Tools by Category[/bold cyan]\n")
+            tools_to_show = tools_by_type
+
         # Display each type separately
-        for tool_type in sorted(tools_by_type.keys()):
-            tools = tools_by_type[tool_type]
+        for tool_type in sorted(tools_to_show.keys()):
+            tools = tools_to_show[tool_type]
 
             table = Table(
                 title=f"{tool_type.upper()} Tools ({len(tools)})",
@@ -4145,50 +4224,47 @@ Return ONLY the JSON object, nothing else."""
                 show_header=True,
                 header_style="bold magenta"
             )
-            table.add_column("Tool ID", style="cyan", no_wrap=True)
-            table.add_column("Name", style="green")
-            table.add_column("Description")
-            table.add_column("Source", style="yellow", no_wrap=True)
-            table.add_column("Model/Tags", style="dim")
+            table.add_column("Tool ID", style="cyan", no_wrap=True, width=20)
+            table.add_column("Name", style="green", width=25)
+            table.add_column("Description", width=50)
+            table.add_column("Category", style="yellow", no_wrap=True, width=12)
 
             for tool in tools:
                 tool_id = tool.tool_id
                 name = getattr(tool, 'name', tool_id)
-                description = tool.description[:60] + "..." if len(tool.description) > 60 else tool.description
+                description = tool.description[:47] + "..." if len(tool.description) > 50 else tool.description
 
-                # Determine source
+                # Determine category from metadata
                 metadata = tool.metadata or {}
-                if metadata.get("from_yaml"):
-                    source = "YAML"
-                elif metadata.get("from_config"):
-                    source = "config"
+                yaml_path = metadata.get("yaml_path", "")
+                if yaml_path:
+                    # Extract category from path (e.g., "tools/executable/foo.yaml" -> "executable")
+                    from pathlib import Path
+                    path_parts = Path(yaml_path).parts
+                    if len(path_parts) >= 2:
+                        category_name = path_parts[-2]  # Second to last part
+                    else:
+                        category_name = "other"
                 elif metadata.get("from_rag"):
-                    source = "RAG"
-                elif metadata.get("from_index"):
-                    source = "index"
+                    category_name = "dynamic"
+                elif metadata.get("from_config"):
+                    category_name = "config"
                 else:
-                    source = "unknown"
+                    category_name = "other"
 
-                # Get model or tags
-                if tool_type == "llm":
-                    impl = getattr(tool, 'implementation', {})
-                    llm_config = impl.get('llm', {}) if isinstance(impl, dict) else {}
-                    model_info = llm_config.get('model', 'unknown') if isinstance(llm_config, dict) else 'unknown'
-                elif tool_type == "community":
-                    impl = getattr(tool, 'implementation', {})
-                    tools_list = impl.get('tools', []) if isinstance(impl, dict) else []
-                    model_info = f"{len(tools_list)} tools" if tools_list else "composite"
-                else:
-                    model_info = ", ".join(tool.tags[:2]) if tool.tags else "code"
-
-                table.add_row(tool_id, name, description, source, model_info)
+                table.add_row(tool_id, name, description, category_name)
 
             console.print(table)
             console.print()  # Blank line between tables
 
         # Summary
         total_tools = len(all_tools)
-        console.print(f"[dim]Total: {total_tools} tools available[/dim]\n")
+        if category:
+            console.print(f"[dim]{len(tools_to_show[category_lower])} tools in category '{category_lower}'[/dim]")
+        else:
+            console.print(f"[dim]Total: {total_tools} tools available across {len(tools_by_type)} types[/dim]")
+
+        console.print(f"[dim]Use /tool <tool_id> for detailed documentation[/dim]\n")
 
         return True
 
@@ -4236,7 +4312,7 @@ Return ONLY the JSON object, nothing else."""
 
     def handle_tool_info(self, tool_name: str) -> bool:
         """
-        Get intelligent description of a tool using tinyllama.
+        Show detailed documentation for a tool from its YAML definition.
 
         Args:
             tool_name: Name or ID of the tool
@@ -4244,6 +4320,9 @@ Return ONLY the JSON object, nothing else."""
         Returns:
             True if successful
         """
+        from pathlib import Path
+        import yaml
+
         # Find the tool
         tool = self.tools_manager.get_tool(tool_name)
         if not tool:
@@ -4251,65 +4330,114 @@ Return ONLY the JSON object, nothing else."""
             console.print("[dim]Use /tools to see available tools[/dim]")
             return False
 
-        console.print(f"\n[bold cyan]Tool: {tool.name}[/bold cyan]\n")
+        console.print(f"\n[bold cyan]Tool Documentation: {tool.name}[/bold cyan]\n")
 
-        # Build tool spec for tinyllama to analyze
-        tool_spec = f"""Tool: {tool.name}
-Type: {tool.tool_type.value}
-Description: {tool.description}
-"""
+        # Try to load YAML file for full documentation
+        metadata = tool.metadata or {}
+        yaml_path = metadata.get("yaml_path")
 
-        # Add tool-specific details
-        if tool.tool_type.value == "llm":
-            impl = getattr(tool, 'implementation', {})
-            if isinstance(impl, dict):
+        if yaml_path and Path(yaml_path).exists():
+            # Load and display YAML documentation
+            try:
+                with open(yaml_path, 'r', encoding='utf-8') as f:
+                    yaml_data = yaml.safe_load(f)
+
+                # Basic info
+                console.print(f"[bold]Name:[/bold] {yaml_data.get('name', 'N/A')}")
+                console.print(f"[bold]Type:[/bold] {yaml_data.get('type', 'N/A')}")
+                console.print(f"[bold]Description:[/bold] {yaml_data.get('description', 'N/A')}\n")
+
+                # Performance tiers
+                if yaml_data.get('cost_tier') or yaml_data.get('speed_tier'):
+                    console.print("[bold cyan]Performance:[/bold cyan]")
+                    if yaml_data.get('cost_tier'):
+                        console.print(f"  Cost: {yaml_data['cost_tier']}")
+                    if yaml_data.get('speed_tier'):
+                        console.print(f"  Speed: {yaml_data['speed_tier']}")
+                    if yaml_data.get('quality_tier'):
+                        console.print(f"  Quality: {yaml_data['quality_tier']}")
+                    console.print()
+
+                # Input/Output schemas
+                if yaml_data.get('input_schema'):
+                    console.print("[bold cyan]Input Parameters:[/bold cyan]")
+                    for param, desc in yaml_data['input_schema'].items():
+                        console.print(f"  [green]{param}[/green]: {desc}")
+                    console.print()
+
+                if yaml_data.get('output_schema'):
+                    console.print("[bold cyan]Output:[/bold cyan]")
+                    for param, desc in yaml_data['output_schema'].items():
+                        console.print(f"  [yellow]{param}[/yellow]: {desc}")
+                    console.print()
+
+                # LLM-specific info
+                if yaml_data.get('llm'):
+                    console.print("[bold cyan]LLM Configuration:[/bold cyan]")
+                    llm_config = yaml_data['llm']
+                    if llm_config.get('tier'):
+                        console.print(f"  Tier: {llm_config['tier']}")
+                    if llm_config.get('model'):
+                        console.print(f"  Model: {llm_config['model']}")
+                    if llm_config.get('temperature'):
+                        console.print(f"  Temperature: {llm_config['temperature']}")
+                    console.print()
+
+                # Executable-specific info
+                if yaml_data.get('executable'):
+                    console.print("[bold cyan]Executable:[/bold cyan]")
+                    exec_config = yaml_data['executable']
+                    if exec_config.get('command'):
+                        console.print(f"  Command: {exec_config['command']}")
+                    console.print()
+
+                # Examples
+                if yaml_data.get('examples'):
+                    console.print("[bold cyan]Examples:[/bold cyan]")
+                    for example in yaml_data['examples']:
+                        if isinstance(example, dict):
+                            console.print(f"  Input: {example.get('input', 'N/A')}")
+                            console.print(f"  Output: {example.get('output', 'N/A')}")
+                        else:
+                            console.print(f"  {example}")
+                    console.print()
+
+                # Tags
+                if yaml_data.get('tags'):
+                    console.print(f"[dim]Tags: {', '.join(yaml_data['tags'])}[/dim]")
+
+                # Source file
+                console.print(f"[dim]Source: {yaml_path}[/dim]\n")
+
+                return True
+
+            except Exception as e:
+                console.print(f"[yellow]Could not load YAML documentation: {e}[/yellow]\n")
+                # Fall through to basic display
+
+        # Fallback: Show basic tool information
+        console.print(f"[bold]Description:[/bold] {tool.description}\n")
+        console.print(f"[bold]ID:[/bold] {tool.tool_id}")
+        console.print(f"[bold]Type:[/bold] {tool.tool_type.value}")
+
+        if tool.tags:
+            console.print(f"[bold]Tags:[/bold] {', '.join(tool.tags)}")
+
+        # Show implementation details
+        impl = getattr(tool, 'implementation', {})
+        if isinstance(impl, dict):
+            if tool.tool_type.value == "llm":
                 llm_config = impl.get('llm', {})
                 if isinstance(llm_config, dict):
-                    tool_spec += f"Model: {llm_config.get('model', 'N/A')}\n"
+                    console.print(f"[bold]Model:[/bold] {llm_config.get('model', 'N/A')}")
 
-        if tool.tool_type.value == "executable":
-            impl = getattr(tool, 'implementation', {})
-            if isinstance(impl, dict):
+            if tool.tool_type.value == "executable":
                 func_sig = impl.get('function_signature', '')
                 if func_sig:
-                    tool_spec += f"Function: {func_sig}\n"
+                    console.print(f"[bold]Function:[/bold] {func_sig}")
 
-        # Use tinyllama to generate friendly explanation
-        prompt = f"""{tool_spec}
-
-Explain what this tool does, what parameters it accepts, and when to use it.
-Be concise (2-3 sentences). Format as:
-
-Purpose: [what it does]
-Input: [what parameters it needs]
-Use case: [when to use it]"""
-
-        try:
-            with console.status("[cyan]Analyzing tool...", spinner="dots"):
-                explanation = self.client.generate(
-                    model="tinyllama",
-                    prompt=prompt,
-                    temperature=0.3,
-                    model_key="triage"
-                )
-
-            console.print(f"[green]{explanation}[/green]\n")
-
-            # Show technical details
-            console.print(f"[dim]ID: {tool.tool_id}[/dim]")
-            console.print(f"[dim]Type: {tool.tool_type.value}[/dim]")
-            if tool.tags:
-                console.print(f"[dim]Tags: {', '.join(tool.tags)}[/dim]")
-
-            console.print()
-            return True
-
-        except Exception as e:
-            console.print(f"[red]Error analyzing tool: {e}[/red]")
-            # Fallback to basic info
-            console.print(f"[yellow]Description: {tool.description}[/yellow]")
-            console.print(f"[dim]Type: {tool.tool_type.value}[/dim]\n")
-            return False
+        console.print()
+        return True
 
     def handle_tool_run(self, args: str) -> bool:
         """
@@ -5226,10 +5354,12 @@ Return ONLY the JSON, no other text."""
 
     def handle_clear_rag(self) -> bool:
         """
-        Handle clear_rag command - clears RAG memory and optionally registry/nodes.
+        Handle clear_rag command - clears RAG memory (including ALL non-YAML tool definitions).
         WARNING: This is destructive and cannot be undone!
         """
-        console.print("\n[bold red]WARNING: This will clear all RAG memory and test data![/bold red]")
+        console.print("\n[bold red]WARNING: This will clear all RAG memory![/bold red]")
+        console.print("[yellow]This includes ALL non-YAML tool definitions (dynamic tools from code generation).[/yellow]")
+        console.print("[dim]YAML-based tools in tools/*.yaml will be preserved and reloaded on startup.[/dim]")
         console.print("[yellow]This action cannot be undone.[/yellow]\n")
 
         confirm = console.input("[bold]Type 'yes' to confirm: [/bold]").strip().lower()
@@ -5284,6 +5414,143 @@ Return ONLY the JSON, no other text."""
         console.print("\n[green]Clear operation complete![/green]")
         return True
 
+    def handle_manual(self, search_term: str = "") -> bool:
+        """
+        Handle manual command - search for commands with intelligent fuzzy matching.
+
+        Args:
+            search_term: Optional search term for fuzzy matching
+        """
+        from pathlib import Path
+        from difflib import SequenceMatcher
+
+        # Load manual.json
+        manual_path = Path(__file__).parent / "manual.json"
+        if not manual_path.exists():
+            console.print("[red]Error: manual.json not found[/red]")
+            return False
+
+        try:
+            with open(manual_path, 'r', encoding='utf-8') as f:
+                manual_data = json.load(f)
+        except Exception as e:
+            console.print(f"[red]Error loading manual: {e}[/red]")
+            return False
+
+        commands = manual_data.get("commands", {})
+        concepts = manual_data.get("concepts", {})
+
+        # If no search term, show overview
+        if not search_term:
+            console.print("\n[bold cyan]Code Evolver Manual[/bold cyan]")
+            console.print("[dim]Use /manual <search> to find specific commands[/dim]\n")
+
+            console.print("[bold]Available Commands:[/bold]")
+            for cmd in sorted(commands.keys()):
+                desc = commands[cmd].get("description", "")
+                console.print(f"  [cyan]{cmd:<20}[/cyan] {desc}")
+
+            console.print("\n[bold]Concepts:[/bold]")
+            for concept in sorted(concepts.keys()):
+                desc = concepts[concept].get("description", "")
+                console.print(f"  [yellow]{concept:<20}[/yellow] {desc}")
+
+            console.print("\n[dim]Examples: /manual tool, /manual list, /manual tool list[/dim]")
+            return True
+
+        # Fuzzy match search term against commands
+        def similarity(a: str, b: str) -> float:
+            """Calculate similarity between two strings (0-1)."""
+            return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+
+        # Find best matches
+        matches = []
+
+        # Search in commands
+        for cmd, cmd_data in commands.items():
+            cmd_name = cmd.lstrip('/')
+            score = similarity(search_term, cmd_name)
+
+            # Also check aliases
+            for alias in cmd_data.get("aliases", []):
+                alias_score = similarity(search_term, alias)
+                score = max(score, alias_score)
+
+            # Check subcommands if they exist
+            if "subcommands" in cmd_data:
+                for subcmd in cmd_data["subcommands"].keys():
+                    # Check for "tool list" style searches
+                    full_cmd = f"{cmd_name} {subcmd}"
+                    subcmd_score = similarity(search_term, full_cmd)
+                    score = max(score, subcmd_score)
+
+            if score > 0.4:  # Threshold for matching
+                matches.append((score, cmd, cmd_data, "command"))
+
+        # Search in concepts
+        for concept, concept_data in concepts.items():
+            score = similarity(search_term, concept)
+            if score > 0.4:
+                matches.append((score, concept, concept_data, "concept"))
+
+        # Sort by score (highest first)
+        matches.sort(key=lambda x: x[0], reverse=True)
+
+        if not matches:
+            console.print(f"[yellow]No matches found for '{search_term}'[/yellow]")
+            console.print("[dim]Try /manual to see all commands[/dim]")
+            return True
+
+        # Show top match(es)
+        top_score = matches[0][0]
+        top_matches = [m for m in matches if m[0] >= top_score * 0.9]  # Show similar-scoring matches
+
+        # If match is not exact, show suggestion
+        if top_score < 1.0:
+            if len(top_matches) == 1:
+                console.print(f"[dim]Did you mean: [cyan]{top_matches[0][1]}[/cyan]?[/dim]\n")
+            else:
+                console.print("[dim]Did you mean one of these?[/dim]")
+                for _, name, _, _ in top_matches[:3]:
+                    console.print(f"  [cyan]{name}[/cyan]")
+                console.print()
+
+        # Display top match details
+        for score, name, data, match_type in top_matches[:1]:  # Show only the best match details
+            if match_type == "command":
+                console.print(f"\n[bold cyan]{name}[/bold cyan]")
+                console.print(f"{data.get('description', '')}\n")
+
+                console.print(f"[bold]Usage:[/bold] {data.get('usage', name)}")
+
+                if "subcommands" in data:
+                    console.print("\n[bold]Subcommands:[/bold]")
+                    for subcmd, subcmd_desc in data["subcommands"].items():
+                        console.print(f"  [cyan]{subcmd:<30}[/cyan] {subcmd_desc}")
+
+                if "examples" in data:
+                    console.print("\n[bold]Examples:[/bold]")
+                    for example in data["examples"]:
+                        console.print(f"  [dim]{example}[/dim]")
+
+                if "warning" in data:
+                    console.print(f"\n[bold red]Warning:[/bold red] {data['warning']}")
+
+                if "aliases" in data and data["aliases"]:
+                    console.print(f"\n[dim]Aliases: {', '.join(data['aliases'])}[/dim]")
+
+            elif match_type == "concept":
+                console.print(f"\n[bold yellow]Concept: {name}[/bold yellow]")
+                console.print(f"{data.get('description', '')}\n")
+
+                if "related_commands" in data:
+                    console.print("[bold]Related Commands:[/bold]")
+                    for related_cmd in data["related_commands"]:
+                        console.print(f"  [cyan]{related_cmd}[/cyan]")
+
+        console.print()
+        return True
+
     def run(self):
         """Run the interactive CLI."""
         self.print_welcome()
@@ -5334,8 +5601,26 @@ Return ONLY the JSON, no other text."""
                 elif cmd.lower() == 'status':
                     self.handle_status()
 
+                elif cmd.lower() == 'manual' or cmd.lower() == 'man' or cmd.lower() == 'm':
+                    self.handle_manual()
+
+                elif cmd.startswith('manual ') or cmd.startswith('man ') or cmd.startswith('m '):
+                    # Extract search term (after command)
+                    if cmd.startswith('manual '):
+                        search_term = cmd[7:].strip()
+                    elif cmd.startswith('man '):
+                        search_term = cmd[4:].strip()
+                    else:  # 'm '
+                        search_term = cmd[2:].strip()
+                    self.handle_manual(search_term)
+
                 elif cmd.lower() == 'tools':
                     self.handle_tools()
+
+                elif cmd.startswith('tools '):
+                    # /tools <category> - filter by category
+                    category = cmd[6:].strip()
+                    self.handle_tools(category=category)
 
                 elif cmd.startswith('tool '):
                     tool_cmd = cmd[5:].strip()

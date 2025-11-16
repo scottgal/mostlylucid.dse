@@ -157,7 +157,7 @@ rag_memory:
   # Set to false to use simple NumPy-based storage
   use_qdrant: true
   qdrant_url: "http://localhost:6333"
-  collection_name: "code_evolver_artifacts"
+  collection_name: "mostlylucid-dse-tools-rag"
   # Embedding model from ollama.embedding section will be used
   # Max content length for embeddings (longer content will be truncated)
   max_embedding_content_length: 1000
