@@ -314,6 +314,41 @@ class ChatCLI:
         self.history = []
         self.display = WorkflowDisplay(console)
 
+        # Initialize scheduler service
+        try:
+            from src.scheduler_service import SchedulerService
+            self.scheduler = SchedulerService()
+
+            # Set up tool executor for scheduler
+            def tool_executor(tool_name: str, tool_inputs: dict):
+                """Execute a tool for the scheduler."""
+                # Determine tool type and invoke appropriately
+                try:
+                    # Try LLM tool first
+                    result = self.tools_manager.invoke_llm_tool(tool_name, **tool_inputs)
+                    if result and result.get('success'):
+                        return result
+                except:
+                    pass
+
+                try:
+                    # Try executable tool
+                    result = self.tools_manager.invoke_executable_tool(tool_name, **tool_inputs)
+                    if result and result.get('success'):
+                        return result
+                except:
+                    pass
+
+                # Fall back to error
+                return {'success': False, 'error': f'Tool {tool_name} not found or failed'}
+
+            self.scheduler.set_tool_executor(tool_executor)
+            self.scheduler.start()
+            console.print("[dim]OK Scheduler service started[/dim]")
+        except Exception as e:
+            console.print(f"[yellow]WARNING Scheduler service failed to start: {e}[/yellow]")
+            self.scheduler = None
+
         # Set up command history
         self.history_file = Path(self.config.get("chat.history_file", ".code_evolver_history"))
 
@@ -324,7 +359,7 @@ class ChatCLI:
             slash_commands = [
                 '/generate', '/tools', '/tool', '/status', '/clear', '/clear_rag',
                 '/help', '/manual', '/config', '/auto', '/delete', '/evolve',
-                '/list', '/exit', '/quit'
+                '/schedule', '/list', '/exit', '/quit'
             ]
             self.pt_completer = WordCompleter(slash_commands, ignore_case=True)
         else:
@@ -1020,6 +1055,13 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/delete <node_id>", "Delete a node"),
             ("/evolve <node_id>", "Manually trigger evolution for a node"),
             ("/auto on|off", "Enable/disable auto-evolution"),
+            ("/schedule create '<desc>' <tool> [params]", "Create scheduled task (e.g., 'every 20 minutes')"),
+            ("/schedule list [status]", "List schedules (filter by active/paused/error)"),
+            ("/schedule trigger <id>", "Run a schedule immediately"),
+            ("/schedule pause <id>", "Pause a schedule"),
+            ("/schedule resume <id>", "Resume a paused schedule"),
+            ("/schedule delete <id>", "Delete a schedule permanently"),
+            ("/schedule history <id>", "View execution history for a schedule"),
             ("/config [key] [value]", "Show or update configuration"),
             ("/status", "Show system status"),
             ("/clear", "Clear the screen"),
@@ -4985,6 +5027,295 @@ Return ONLY the JSON object, nothing else."""
 
         return True
 
+    def handle_schedule(self, args: str) -> bool:
+        """
+        Handle schedule command - manage scheduled tasks and workflows.
+
+        Args:
+            args: Command arguments (create, list, trigger, pause, resume, delete, history)
+        """
+        parts = args.split(None, 1)
+        if not parts:
+            console.print("[red]Error: Schedule command requires arguments[/red]")
+            console.print("[dim]Usage: /schedule <create|list|trigger|pause|resume|delete|history> [args][/dim]")
+            return False
+
+        subcmd = parts[0].lower()
+
+        # List schedules
+        if subcmd == 'list':
+            status = parts[1].strip() if len(parts) > 1 else None
+            params = {'status': status} if status else {}
+
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='list',
+                params_json=json.dumps(params)
+            )
+
+            if result.get('success'):
+                data = result.get('data', {})
+                schedules = data.get('schedules', [])
+
+                if not schedules:
+                    console.print("[yellow]No schedules found[/yellow]")
+                    return True
+
+                table = Table(title=f"Schedules ({len(schedules)})", box=box.ROUNDED, show_header=True)
+                table.add_column("ID", style="cyan", no_wrap=True, width=16)
+                table.add_column("Name", style="green", width=20)
+                table.add_column("Description", width=20)
+                table.add_column("CRON", style="yellow", width=15)
+                table.add_column("Tool", style="magenta", width=15)
+                table.add_column("Status", width=8)
+                table.add_column("Runs", justify="right", width=6)
+                table.add_column("Next Run", width=18)
+
+                for sched in schedules:
+                    status_color = "green" if sched['status'] == 'active' else "yellow" if sched['status'] == 'paused' else "red"
+                    next_run = sched.get('next_run', 'N/A')
+                    if next_run and next_run != 'N/A':
+                        try:
+                            next_run = datetime.fromisoformat(next_run).strftime('%Y-%m-%d %H:%M')
+                        except:
+                            pass
+
+                    table.add_row(
+                        sched['id'],
+                        sched['name'][:18],
+                        sched.get('description', '')[:18],
+                        sched['cron_expression'],
+                        sched['tool_name'][:13],
+                        f"[{status_color}]{sched['status']}[/{status_color}]",
+                        str(sched.get('run_count', 0)),
+                        next_run
+                    )
+
+                console.print(table)
+                console.print(f"[dim]Use /schedule history <id> to view execution history[/dim]\n")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # Create schedule
+        elif subcmd == 'create':
+            if len(parts) < 2:
+                console.print("[red]Error: create requires arguments[/red]")
+                console.print("[dim]Usage: /schedule create '<description>' <tool_name> [params_json][/dim]")
+                console.print("[dim]Example: /schedule create 'every 20 minutes' my_tool '{\"input\": \"value\"}'[/dim]")
+                return False
+
+            # Parse: create 'description' tool_name [params]
+            import shlex
+            try:
+                tokens = shlex.split(parts[1])
+            except ValueError as e:
+                console.print(f"[red]Error parsing arguments: {e}[/red]")
+                return False
+
+            if len(tokens) < 2:
+                console.print("[red]Error: create requires description and tool_name[/red]")
+                return False
+
+            description = tokens[0]
+            tool_name = tokens[1]
+            tool_inputs = json.loads(tokens[2]) if len(tokens) > 2 else {}
+
+            # Convert natural language to CRON using the cron_converter LLM tool
+            console.print(f"[dim]Converting '{description}' to CRON expression...[/dim]")
+            cron_result = self.tools_manager.invoke_llm_tool(
+                'cron_converter',
+                description=description
+            )
+
+            if not cron_result.get('success'):
+                console.print(f"[red]Failed to convert description to CRON: {cron_result.get('error', 'Unknown error')}[/red]")
+                return False
+
+            cron_expression = cron_result.get('result', '').strip()
+            console.print(f"[green]CRON expression: {cron_expression}[/green]")
+
+            # Create the schedule
+            params = {
+                'name': f"{tool_name} - {description}",
+                'description': description,
+                'cron_expression': cron_expression,
+                'tool_name': tool_name,
+                'tool_inputs': tool_inputs
+            }
+
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='create',
+                params_json=json.dumps(params)
+            )
+
+            if result.get('success'):
+                schedule = result.get('data', {})
+                console.print(f"[bold green]Schedule created successfully![/bold green]")
+                console.print(f"  ID: {schedule['id']}")
+                console.print(f"  Name: {schedule['name']}")
+                console.print(f"  CRON: {schedule['cron_expression']}")
+                console.print(f"  Next run: {schedule.get('next_run', 'N/A')}")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # Trigger schedule
+        elif subcmd == 'trigger':
+            if len(parts) < 2:
+                console.print("[red]Error: trigger requires schedule ID[/red]")
+                return False
+
+            schedule_id = parts[1].strip()
+            console.print(f"[dim]Triggering schedule {schedule_id}...[/dim]")
+
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='trigger',
+                params_json=json.dumps({'schedule_id': schedule_id})
+            )
+
+            if result.get('success'):
+                data = result.get('data', {})
+                if data.get('status') == 'success':
+                    console.print(f"[bold green]Schedule executed successfully![/bold green]")
+                    console.print(f"  Execution ID: {data.get('execution_id')}")
+                    if 'result' in data:
+                        console.print(f"  Result: {data['result']}")
+                else:
+                    console.print(f"[red]Schedule execution failed[/red]")
+                    console.print(f"  Error: {data.get('error', 'Unknown error')}")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # Pause schedule
+        elif subcmd == 'pause':
+            if len(parts) < 2:
+                console.print("[red]Error: pause requires schedule ID[/red]")
+                return False
+
+            schedule_id = parts[1].strip()
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='pause',
+                params_json=json.dumps({'schedule_id': schedule_id})
+            )
+
+            if result.get('success'):
+                console.print(f"[green]Schedule {schedule_id} paused[/green]")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # Resume schedule
+        elif subcmd == 'resume':
+            if len(parts) < 2:
+                console.print("[red]Error: resume requires schedule ID[/red]")
+                return False
+
+            schedule_id = parts[1].strip()
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='resume',
+                params_json=json.dumps({'schedule_id': schedule_id})
+            )
+
+            if result.get('success'):
+                console.print(f"[green]Schedule {schedule_id} resumed[/green]")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # Delete schedule
+        elif subcmd == 'delete':
+            if len(parts) < 2:
+                console.print("[red]Error: delete requires schedule ID[/red]")
+                return False
+
+            schedule_id = parts[1].strip()
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='delete',
+                params_json=json.dumps({'schedule_id': schedule_id})
+            )
+
+            if result.get('success'):
+                console.print(f"[green]Schedule {schedule_id} deleted[/green]")
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        # View history
+        elif subcmd == 'history':
+            if len(parts) < 2:
+                console.print("[red]Error: history requires schedule ID[/red]")
+                return False
+
+            schedule_id = parts[1].strip()
+            result = self.tools_manager.invoke_executable_tool(
+                'schedule_manager',
+                operation='history',
+                params_json=json.dumps({'schedule_id': schedule_id, 'limit': 20})
+            )
+
+            if result.get('success'):
+                data = result.get('data', {})
+                executions = data.get('executions', [])
+
+                if not executions:
+                    console.print(f"[yellow]No execution history for schedule {schedule_id}[/yellow]")
+                    return True
+
+                table = Table(title=f"Execution History ({len(executions)})", box=box.ROUNDED, show_header=True)
+                table.add_column("ID", justify="right", width=6)
+                table.add_column("Started", width=18)
+                table.add_column("Finished", width=18)
+                table.add_column("Status", width=10)
+                table.add_column("Error", width=40)
+
+                for exec in executions:
+                    started = exec.get('started_at', 'N/A')
+                    finished = exec.get('finished_at', 'N/A')
+
+                    try:
+                        if started and started != 'N/A':
+                            started = datetime.fromisoformat(started).strftime('%Y-%m-%d %H:%M:%S')
+                        if finished and finished != 'N/A':
+                            finished = datetime.fromisoformat(finished).strftime('%Y-%m-%d %H:%M:%S')
+                    except:
+                        pass
+
+                    status = exec.get('status', 'unknown')
+                    status_color = "green" if status == 'success' else "red" if status == 'failed' else "yellow"
+                    error = exec.get('error', '')[:38] if exec.get('error') else ''
+
+                    table.add_row(
+                        str(exec['id']),
+                        started,
+                        finished,
+                        f"[{status_color}]{status}[/{status_color}]",
+                        error
+                    )
+
+                console.print(table)
+                return True
+            else:
+                console.print(f"[red]Error: {result.get('error', 'Unknown error')}[/red]")
+                return False
+
+        else:
+            console.print(f"[red]Unknown schedule command: {subcmd}[/red]")
+            console.print("[dim]Valid commands: create, list, trigger, pause, resume, delete, history[/dim]")
+            return False
+
     def handle_tool_command(self, args: str) -> bool:
         """
         Handle tool subcommands: info, run, list.
@@ -7282,6 +7613,10 @@ Return ONLY the Python test code, no explanations."""
 
                 # Check for "exit" without slash (immediate exit)
                 if user_input.lower() in ['exit', 'quit', 'q']:
+                    # Stop scheduler if running
+                    if hasattr(self, 'scheduler') and self.scheduler:
+                        console.print("[dim]Stopping scheduler...[/dim]")
+                        self.scheduler.stop()
                     console.print("[cyan]Goodbye![/cyan]")
                     break
 
@@ -7297,6 +7632,10 @@ Return ONLY the Python test code, no explanations."""
                 cmd = user_input[1:].strip()
 
                 if cmd.lower() in ['exit', 'quit', 'q']:
+                    # Stop scheduler if running
+                    if hasattr(self, 'scheduler') and self.scheduler:
+                        console.print("[dim]Stopping scheduler...[/dim]")
+                        self.scheduler.stop()
                     console.print("[cyan]Goodbye![/cyan]")
                     break
 
@@ -7368,6 +7707,10 @@ Return ONLY the Python test code, no explanations."""
                 elif cmd.startswith('optimize tool '):
                     args = cmd[14:].strip()
                     self.handle_optimize_tool(args)
+
+                elif cmd.startswith('schedule '):
+                    args = cmd[9:].strip()
+                    self.handle_schedule(args)
 
                 else:
                     console.print(f"[red]Unknown command: /{cmd}[/red]")

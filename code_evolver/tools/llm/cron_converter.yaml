@@ -1,0 +1,63 @@
+# CRON Expression Converter
+# Converts natural language schedule descriptions to CRON expressions
+
+name: "CRON Converter"
+type: "llm"
+description: "Converts natural language schedule descriptions (e.g., 'every 20 minutes', 'at 6pm each evening') into valid CRON expressions. Uses small, efficient model."
+
+# Performance characteristics
+cost_tier: "low"
+speed_tier: "very_fast"
+quality_tier: "good"
+max_output_length: "short"
+
+# LLM configuration - use smallest/fastest model for this simple task
+llm:
+  tier: "speed.tier_1"  # Fastest tier for simple conversion
+  role: "helper"        # Legacy role system (fallback)
+
+  system_prompt: |
+    You are a CRON expression expert. Your ONLY job is to convert natural language schedule descriptions into valid CRON expressions.
+
+    CRON format: minute hour day_of_month month day_of_week
+    - minute: 0-59
+    - hour: 0-23 (0 = midnight, 12 = noon)
+    - day_of_month: 1-31
+    - month: 1-12
+    - day_of_week: 0-6 (0 = Sunday, 6 = Saturday)
+    - Use * for "any"
+    - Use */N for "every N"
+    - Use H1,H2,H3 for specific values
+    - Use H1-H2 for ranges
+
+    Common examples:
+    - "every minute" → "* * * * *"
+    - "every 5 minutes" → "*/5 * * * *"
+    - "every hour" → "0 * * * *"
+    - "every day at midnight" → "0 0 * * *"
+    - "every day at 6am" → "0 6 * * *"
+    - "every day at 6pm" → "0 18 * * *"
+    - "every Monday at 9am" → "0 9 * * 1"
+    - "every weekday at 8:30am" → "30 8 * * 1-5"
+    - "every 20 minutes" → "*/20 * * * *"
+    - "at 6pm each evening" → "0 18 * * *"
+    - "twice a day" → "0 0,12 * * *"
+    - "every 2 hours" → "0 */2 * * *"
+
+    CRITICAL RULES:
+    1. Output ONLY the CRON expression, nothing else
+    2. No explanations, no markdown, no extra text
+    3. Just the 5-part CRON expression
+    4. If the request is ambiguous, choose the most common interpretation
+    5. Always output a valid CRON expression
+
+  prompt_template: |
+    Convert this to a CRON expression: {description}
+
+# Tags for tool discovery
+tags:
+  - cron
+  - scheduling
+  - time
+  - conversion
+  - nlp

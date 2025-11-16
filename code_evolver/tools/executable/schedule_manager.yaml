@@ -1,0 +1,75 @@
+name: "Schedule Manager"
+type: "executable"
+description: "Manages scheduled tasks and workflows. Create, list, pause, resume, delete, and trigger schedules. Uses CRON expressions for timing. System-scoped singleton service."
+
+# Scope configuration - new concept for shared resources
+scope: "system"  # Single instance across all workflows and tools
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/schedule_manager.py", "{operation}", "{params_json}"]
+
+input_schema:
+  operation: "str - Operation: 'create', 'list', 'get', 'pause', 'resume', 'delete', 'trigger', 'history'"
+  params_json: "str - JSON parameters for the operation"
+
+# Operation-specific parameters:
+# create: {name, description, cron_expression, tool_name, tool_inputs}
+# list: {status} (optional: 'active', 'paused', 'error')
+# get: {schedule_id}
+# pause: {schedule_id}
+# resume: {schedule_id}
+# delete: {schedule_id}
+# trigger: {schedule_id}
+# history: {schedule_id, limit}
+
+output_schema:
+  success: "bool - Whether operation succeeded"
+  data: "object - Operation result data"
+  error: "str - Error message if operation failed"
+
+tags:
+  - scheduling
+  - cron
+  - automation
+  - background
+  - tasks
+  - system
+
+examples:
+  - input:
+      operation: "create"
+      params_json: '{"name": "Daily backup", "description": "every day at 2am", "cron_expression": "0 2 * * *", "tool_name": "backup_tool", "tool_inputs": {"target": "/data"}}'
+    output:
+      success: true
+      data:
+        id: "schedule_abc123"
+        name: "Daily backup"
+        status: "active"
+        next_run: "2024-01-15T02:00:00"
+
+  - input:
+      operation: "list"
+      params_json: '{"status": "active"}'
+    output:
+      success: true
+      data:
+        schedules:
+          - id: "schedule_abc123"
+            name: "Daily backup"
+            cron_expression: "0 2 * * *"
+            status: "active"
+
+  - input:
+      operation: "trigger"
+      params_json: '{"schedule_id": "schedule_abc123"}'
+    output:
+      success: true
+      data:
+        execution_id: 42
+        status: "success"
