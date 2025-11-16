@@ -113,7 +113,8 @@
     "tool_translate_and_output_sentence",
     "tool_take_in_long_text",
     "tool_nmt_translate",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_task_daily_team_meetin"
   ],
   "llm": [
     "tool_general",
@@ -171,7 +172,9 @@
     "invocation_general_1763285791023",
     "invocation_general_1763285966571",
     "invocation_general_1763286518186",
-    "invocation_general_1763286619148"
+    "invocation_general_1763286619148",
+    "invocation_general_1763287442727",
+    "invocation_general_1763287678669"
   ],
   "fallback": [
     "tool_general"
@@ -250,7 +253,8 @@
     "spec_split_text_into_sentences",
     "spec_take_in_long_text",
     "spec_split_text_into_chunks_for_nmt",
-    "spec_translate_text_with_nmt_and_ou"
+    "spec_translate_text_with_nmt_and_ou",
+    "spec_write_a_poem_and_translate_it"
   ],
   "technical": [
     "tool_technical_writer"
@@ -424,7 +428,12 @@
     "workflow_hello_how_are_you",
     "workflow_translate_hello_how_are_you",
     "workflow_1763286644",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "workflow_task_daily_team_meetin",
+    "tool_task_daily_team_meetin",
+    "workflow_1763287570",
+    "workflow_write_a_poem_and_translate_it",
+    "workflow_1763287739"
   ],
   "generated": [
     "tool_write_a_technical_story_and_tr",
@@ -514,7 +523,14 @@
     "spec_translate_hello_how_are_you",
     "func_translate_hello_how_are_you",
     "workflow_translate_hello_how_are_you",
-    "spec_task_daily_team_meetin"
+    "spec_task_daily_team_meetin",
+    "func_task_daily_team_meetin",
+    "workflow_task_daily_team_meetin",
+    "tool_task_daily_team_meetin",
+    "spec_write_a_poem_and_translate_it",
+    "func_write_a_poem_and_translate_it",
+    "workflow_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it"
   ],
   "chat": [
     "tool_write_a_technical_story_and_tr",
@@ -573,7 +589,13 @@
     "func_hello_how_are_you",
     "workflow_hello_how_are_you",
     "func_translate_hello_how_are_you",
-    "workflow_translate_hello_how_are_you"
+    "workflow_translate_hello_how_are_you",
+    "func_task_daily_team_meetin",
+    "workflow_task_daily_team_meetin",
+    "tool_task_daily_team_meetin",
+    "func_write_a_poem_and_translate_it",
+    "workflow_write_a_poem_and_translate_it",
+    "tool_write_a_poem_and_translate_it"
   ],
   "auto-generated": [
     "tool_write_a_technical_story_and_tr",
@@ -633,7 +655,8 @@
     "tool_input_long_text",
     "tool_prepare_input_for_nmt_service",
     "tool_translate_and_output_sentence",
-    "tool_take_in_long_text"
+    "tool_take_in_long_text",
+    "tool_task_daily_team_meetin"
   ],
   "python": [
     "tool_add_5_and_8",
@@ -708,7 +731,11 @@
     "exec_invocation_python_syntax_validator_1763286621130",
     "exec_invocation_node_runtime_import_validator_1763286621717",
     "exec_invocation_nmt_translate_1763286880284",
-    "exec_invocation_nmt_translate_1763286942818"
+    "exec_invocation_nmt_translate_1763286942818",
+    "exec_invocation_python_syntax_validator_1763287564688",
+    "exec_invocation_node_runtime_import_validator_1763287569011",
+    "exec_invocation_python_syntax_validator_1763287692800",
+    "exec_invocation_node_runtime_import_validator_1763287693375"
   ],
   "addition": [
     "tool_add_5_and_8",
@@ -1042,7 +1069,8 @@
   "write": [
     "tool_save_to_disk",
     "workflow_1763280509",
-    "workflow_1763282170"
+    "workflow_1763282170",
+    "workflow_1763287739"
   ],
   "disk": [
     "tool_save_to_disk",
@@ -1244,7 +1272,8 @@
   ],
   "poem": [
     "tool_translate_the_poem_to_french",
-    "workflow_1763280509"
+    "workflow_1763280509",
+    "workflow_1763287739"
   ],
   "French": [
     "tool_translate_the_poem_to_french"
@@ -1364,7 +1393,8 @@
     "spec_translate_text_with_nmt_and_ou",
     "spec_hello_how_are_you",
     "spec_translate_hello_how_are_you",
-    "spec_task_daily_team_meetin"
+    "spec_task_daily_team_meetin",
+    "spec_write_a_poem_and_translate_it"
   ],
   "plan": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1397,7 +1427,8 @@
     "spec_translate_text_with_nmt_and_ou",
     "spec_hello_how_are_you",
     "spec_translate_hello_how_are_you",
-    "spec_task_daily_team_meetin"
+    "spec_task_daily_team_meetin",
+    "spec_write_a_poem_and_translate_it"
   ],
   "overseer": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1430,7 +1461,8 @@
     "spec_translate_text_with_nmt_and_ou",
     "spec_hello_how_are_you",
     "spec_translate_hello_how_are_you",
-    "spec_task_daily_team_meetin"
+    "spec_task_daily_team_meetin",
+    "spec_write_a_poem_and_translate_it"
   ],
   "claude-sonnet": [
     "tool_general",
@@ -1495,7 +1527,9 @@
     "invocation_general_1763285791023",
     "invocation_general_1763285966571",
     "invocation_general_1763286518186",
-    "invocation_general_1763286619148"
+    "invocation_general_1763286619148",
+    "invocation_general_1763287442727",
+    "invocation_general_1763287678669"
   ],
   "prompt": [
     "invocation_general_1763277296689",
@@ -1530,7 +1564,9 @@
     "invocation_general_1763285791023",
     "invocation_general_1763285966571",
     "invocation_general_1763286518186",
-    "invocation_general_1763286619148"
+    "invocation_general_1763286619148",
+    "invocation_general_1763287442727",
+    "invocation_general_1763287678669"
   ],
   "llama3": [
     "timeout_stats_llama3",
@@ -1560,7 +1596,9 @@
     "invocation_general_1763285791023",
     "invocation_general_1763285966571",
     "invocation_general_1763286518186",
-    "invocation_general_1763286619148"
+    "invocation_general_1763286619148",
+    "invocation_general_1763287442727",
+    "invocation_general_1763287678669"
   ],
   "content_generator": [
     "invocation_content_generator_1763278040988",
@@ -1646,13 +1684,16 @@
     "workflow_1763284721",
     "workflow_1763285378",
     "workflow_1763285977",
-    "workflow_1763286644"
+    "workflow_1763286644",
+    "workflow_1763287570",
+    "workflow_1763287739"
   ],
   "a": [
     "workflow_1763280509",
     "workflow_1763282170",
     "workflow_1763285378",
-    "workflow_1763285977"
+    "workflow_1763285977",
+    "workflow_1763287739"
   ],
   "comprehensive": [
     "tool_run_static_analysis"
@@ -1695,7 +1736,9 @@
     "workflow_split_text_into_chunks_for_nmt",
     "workflow_translate_text_with_nmt_and_ou",
     "workflow_hello_how_are_you",
-    "workflow_translate_hello_how_are_you"
+    "workflow_translate_hello_how_are_you",
+    "workflow_task_daily_team_meetin",
+    "workflow_write_a_poem_and_translate_it"
   ],
   "tested": [
     "workflow_write_a_technical_story",
@@ -1714,7 +1757,9 @@
     "workflow_split_text_into_chunks_for_nmt",
     "workflow_translate_text_with_nmt_and_ou",
     "workflow_hello_how_are_you",
-    "workflow_translate_hello_how_are_you"
+    "workflow_translate_hello_how_are_you",
+    "workflow_task_daily_team_meetin",
+    "workflow_write_a_poem_and_translate_it"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763282532779"
@@ -1766,7 +1811,13 @@
     "exec_invocation_undefined_name_checker_1763286621484",
     "exec_invocation_node_runtime_import_validator_1763286621717",
     "exec_invocation_nmt_translate_1763286880284",
-    "exec_invocation_nmt_translate_1763286942818"
+    "exec_invocation_nmt_translate_1763286942818",
+    "exec_invocation_python_syntax_validator_1763287564688",
+    "exec_invocation_undefined_name_checker_1763287568752",
+    "exec_invocation_node_runtime_import_validator_1763287569011",
+    "exec_invocation_python_syntax_validator_1763287692800",
+    "exec_invocation_undefined_name_checker_1763287693148",
+    "exec_invocation_node_runtime_import_validator_1763287693375"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -1812,7 +1863,13 @@
     "exec_invocation_undefined_name_checker_1763286621484",
     "exec_invocation_node_runtime_import_validator_1763286621717",
     "exec_invocation_nmt_translate_1763286880284",
-    "exec_invocation_nmt_translate_1763286942818"
+    "exec_invocation_nmt_translate_1763286942818",
+    "exec_invocation_python_syntax_validator_1763287564688",
+    "exec_invocation_undefined_name_checker_1763287568752",
+    "exec_invocation_node_runtime_import_validator_1763287569011",
+    "exec_invocation_python_syntax_validator_1763287692800",
+    "exec_invocation_undefined_name_checker_1763287693148",
+    "exec_invocation_node_runtime_import_validator_1763287693375"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -1828,7 +1885,9 @@
     "exec_invocation_python_syntax_validator_1763285887381",
     "exec_invocation_python_syntax_validator_1763285975380",
     "exec_invocation_python_syntax_validator_1763286564642",
-    "exec_invocation_python_syntax_validator_1763286621130"
+    "exec_invocation_python_syntax_validator_1763286621130",
+    "exec_invocation_python_syntax_validator_1763287564688",
+    "exec_invocation_python_syntax_validator_1763287692800"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -1844,7 +1903,9 @@
     "exec_invocation_undefined_name_checker_1763285893566",
     "exec_invocation_undefined_name_checker_1763285975709",
     "exec_invocation_undefined_name_checker_1763286568648",
-    "exec_invocation_undefined_name_checker_1763286621484"
+    "exec_invocation_undefined_name_checker_1763286621484",
+    "exec_invocation_undefined_name_checker_1763287568752",
+    "exec_invocation_undefined_name_checker_1763287693148"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -1860,7 +1921,9 @@
     "exec_invocation_undefined_name_checker_1763285893566",
     "exec_invocation_undefined_name_checker_1763285975709",
     "exec_invocation_undefined_name_checker_1763286568648",
-    "exec_invocation_undefined_name_checker_1763286621484"
+    "exec_invocation_undefined_name_checker_1763286621484",
+    "exec_invocation_undefined_name_checker_1763287568752",
+    "exec_invocation_undefined_name_checker_1763287693148"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763283458929",
@@ -1876,7 +1939,9 @@
     "exec_invocation_node_runtime_import_validator_1763285893836",
     "exec_invocation_node_runtime_import_validator_1763285975902",
     "exec_invocation_node_runtime_import_validator_1763286568873",
-    "exec_invocation_node_runtime_import_validator_1763286621717"
+    "exec_invocation_node_runtime_import_validator_1763286621717",
+    "exec_invocation_node_runtime_import_validator_1763287569011",
+    "exec_invocation_node_runtime_import_validator_1763287693375"
   ],
   "so": [
     "workflow_1763283819",
@@ -1888,7 +1953,8 @@
   ],
   "{": [
     "workflow_1763283819",
-    "workflow_1763284641"
+    "workflow_1763284641",
+    "workflow_1763287570"
   ],
   "datastore": [
     "tool_workflow_datastore"
@@ -1935,5 +2001,11 @@
   "nmt_translate": [
     "exec_invocation_nmt_translate_1763286880284",
     "exec_invocation_nmt_translate_1763286942818"
+  ],
+  "\"task\":": [
+    "workflow_1763287570"
+  ],
+  "\"daily": [
+    "workflow_1763287570"
   ]
 }

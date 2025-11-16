@@ -474,7 +474,7 @@
       "last_reset": "2025-11-16T10:01:29.132315Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 13,
+    "usage_count": 15,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -833,7 +833,7 @@
       "last_reset": "2025-11-16T10:01:29.132343Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 13,
+    "usage_count": 15,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -1108,7 +1108,7 @@
       "last_reset": "2025-11-16T10:01:29.132371Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 13,
+    "usage_count": 15,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1566,7 +1566,7 @@
       "last_reset": "2025-11-16T10:01:29.132418Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 24,
+    "usage_count": 25,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -3454,30 +3454,34 @@
   },
   "write_a_poem_and_translate_it": {
     "tool_id": "write_a_poem_and_translate_it",
-    "name": "Python code that generates a French translation of an English poem using the NMT Translation Service and post-processing techniques to refine the translation.",
+    "name": "write a  poem and translate it to french and german",
     "tool_type": "workflow",
-    "description": "write a poem and translate it to french",
+    "description": "write a  poem and translate it to french and german",
     "tags": [
-      "python",
-      "nlp",
-      "translation",
-      "poetry",
-      "auto-generated"
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
     ],
     "parameters": {},
     "metadata": {
-      "from_rag": true,
-      "quality_score": 0.0,
-      "usage_count": 0
+      "node_id": "write_a_poem_and_translate_it",
+      "quality_score": 1.1,
+      "latency_ms": 45553,
+      "memory_mb_peak": 1.93,
+      "created_at": "2025-11-16T10:08:59.498311+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write a  poem and translate it to french and german"
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:01:29.132638Z"
+      "last_reset": "2025-11-16T10:08:59.498337Z"
     },
-    "created_at": "2025-11-16T08:22:06.626624Z",
+    "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -4256,6 +4260,41 @@
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "dfcbc9c80c85c4904cb96457ae817f66ad904165a51b3883ad36933a348a29a8",
+    "breaking_changes": []
+  },
+  "task_daily_team_meetin": {
+    "tool_id": "task_daily_team_meetin",
+    "name": "{\n  \"task\": \"Daily Team Meeting\",\n  \"steps\": [\n    {\n      \"stepId\": 1,\n      \"description\": \"Send meeting invite to all team members\"\n    },\n    {\n      \"stepId\": 2,\n      \"description\": \"Prepare and distribute meeting agenda\"\n    },\n    {\n      \"stepId\": 3,\n      \"description\": \"Take minutes during the meeting\"\n    },\n    {\n      \"stepId\": 4,\n      \"description\": \"Send meeting minutes to all team members after the meeting\"\n    }\n  ]\n}",
+    "tool_type": "workflow",
+    "description": "{\n  \"task\": \"Daily Team Meeting\",\n  \"steps\": [\n    {\n      \"stepId\": 1,\n      \"description\": \"Send meeting invite to all team members\"\n    },\n    {\n      \"stepId\": 2,\n      \"description\": \"Prepare and distribute meeting agenda\"\n    },\n    {\n      \"stepId\": 3,\n      \"description\": \"Take minutes during the meeting\"\n    },\n    {\n      \"stepId\": 4,\n      \"description\": \"Send meeting minutes to all team members after the meeting\"\n    }\n  ]\n}",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "task_daily_team_meetin",
+      "quality_score": 1.1,
+      "latency_ms": 751,
+      "memory_mb_peak": 1.93,
+      "created_at": "2025-11-16T10:06:10.391796+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "{\n  \"task\": \"Daily Team Meeting\",\n  \"steps\": [\n    {\n      \"stepId\": 1,\n      \"description\": \"Send meeting invite to all team members\"\n    },\n    {\n      \"stepId\": 2,\n      \"description\": \"Prepare and distribute meeting agenda\"\n    },\n    {\n      \"stepId\": 3,\n      \"description\": \"Take minutes during the meeting\"\n    },\n    {\n      \"stepId\": 4,\n      \"description\": \"Send meeting minutes to all team members after the meeting\"\n    }\n  ]\n}"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T10:06:10.391817Z"
+    },
+    "created_at": "2025-11-16T10:06:10.391814Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
     "breaking_changes": []
   }
 }
