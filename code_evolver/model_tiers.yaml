@@ -13,8 +13,8 @@ coding:
     name: "Fast Coding (Tier 1)"
     description: "Simple functions, basic algorithms, straightforward code"
     models:
-      primary: "gemma3:4b"
-      fallback: ["codellama", "qwen2.5-coder:3b"]
+      primary: "qwen2.5-coder:3b"
+      fallback: ["gemma3:4b", "tinyllama"]
     cost: "low"
     speed: "very-fast"
     quality: "good"
@@ -25,7 +25,7 @@ coding:
     name: "Standard Coding (Tier 2)"
     description: "Complex logic, multi-step workflows, moderate algorithms"
     models:
-      primary: "codellama"
+      primary: "codellama:7b"
       fallback: ["qwen2.5-coder:7b", "deepseek-coder:6.7b"]
     cost: "medium"
     speed: "fast"
