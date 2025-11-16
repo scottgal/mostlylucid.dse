@@ -60,10 +60,10 @@ class NodeRuntime:
 
     def call_tool(self, tool_name: str, prompt: str, **kwargs) -> str:
         """
-        Call an LLM tool by name.
+        Call any tool by name (LLM, OpenAPI, or Executable).
 
         Args:
-            tool_name: Name of the tool (e.g., "technical_writer", "code_explainer")
+            tool_name: Name of the tool (e.g., "technical_writer", "nmt_translator")
             prompt: The prompt to send to the tool (or template variables)
             **kwargs: Additional arguments (temperature, system_prompt, template variables)
 
@@ -73,43 +73,74 @@ class NodeRuntime:
         Examples:
             runtime = NodeRuntime.get_instance()
 
-            # Simple usage (prompt as-is)
+            # LLM tool usage
             article = runtime.call_tool(
                 "technical_writer",
                 "Write a blog post about Python decorators",
                 temperature=0.7
             )
 
-            # Using prompt template variables
-            article = runtime.call_tool(
-                "technical_writer",
-                topic="Python decorators and metaclasses",
-                audience="intermediate developers",
-                length="1500 words",
-                temperature=0.7
+            # OpenAPI tool usage
+            translation = runtime.call_tool(
+                "nmt_translator",
+                "Translate to German: Hello"
             )
 
-            # Proofreading with template
-            corrected = runtime.call_tool(
-                "proofreader",
-                content=my_article_text
+            # Executable tool usage
+            test_data = runtime.call_tool(
+                "random_data_generator",
+                "Generate test data for translation"
             )
         """
+        from src.tools_manager import ToolType
+
         # Find tool
         tool = self.tools.get_tool(tool_name)
         if not tool:
-            # Try to find best matching tool
+            # Try to find best matching tool (LLM only)
             tool = self.tools.get_best_llm_for_task(prompt)
 
         if not tool:
             raise ValueError(f"Tool '{tool_name}' not found")
 
-        # Call tool (supports both prompt string and template variables)
-        return self.tools.invoke_llm_tool(
-            tool.tool_id,
-            prompt=prompt,
-            **kwargs
-        )
+        # Route to appropriate invoke method based on tool type
+        if tool.tool_type == ToolType.LLM:
+            return self.tools.invoke_llm_tool(
+                tool.tool_id,
+                prompt=prompt,
+                **kwargs
+            )
+        elif tool.tool_type == ToolType.OPENAPI:
+            # For OpenAPI tools, we need to parse the prompt
+            # For now, use a simple approach - look for the NMT translator
+            if "nmt" in tool_name.lower() or "translat" in tool_name.lower():
+                # Use the executable wrapper instead
+                exec_tool = self.tools.get_tool("nmt_translate")
+                if exec_tool:
+                    result = self.tools.invoke_executable_tool(
+                        exec_tool.tool_id,
+                        source_file="",  # Not used, prompt is used instead
+                        prompt=prompt,
+                        **kwargs
+                    )
+                    return result.get("stdout", "").strip() or result.get("stderr", "")
+
+            # Generic OpenAPI tool - needs proper implementation
+            raise NotImplementedError(
+                f"OpenAPI tool '{tool_name}' cannot be called with simple prompt. "
+                f"Use the executable wrapper if available."
+            )
+        elif tool.tool_type == ToolType.EXECUTABLE:
+            result = self.tools.invoke_executable_tool(
+                tool.tool_id,
+                source_file="",  # Not used for prompt-based tools
+                prompt=prompt,
+                **kwargs
+            )
+            # Extract stdout from result
+            return result.get("stdout", "").strip() or result.get("stderr", "")
+        else:
+            raise ValueError(f"Unknown tool type: {tool.tool_type}")
 
     def call_llm(self, model: str, prompt: str, **kwargs) -> str:
         """

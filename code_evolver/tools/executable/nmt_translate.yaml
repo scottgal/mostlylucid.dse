@@ -1,0 +1,26 @@
+name: "NMT Translator"
+type: "executable"
+description: "Fast neural machine translation using the NMT service at localhost:8000. Supports many languages. Use format: 'Translate to <language>: <text>' or 'Translate from <src> to <tgt>: <text>'"
+executable:
+  command: "python"
+  args: ["{tool_dir}/nmt_translate.py", "{prompt}"]
+  install_command: "pip install requests"
+input_schema:
+  prompt:
+    type: "string"
+    description: "Translation request in natural language. Examples: 'Translate to German: Hello', 'Translate from English to French: Hello, world!'"
+    required: true
+output_schema:
+  type: "string"
+  description: "Translated text (plain string) or JSON error object if translation fails"
+tags: ["translation", "nmt", "neural", "languages", "fast", "api"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 80
+examples:
+  - prompt: "Translate to German: Hello"
+    output: "Hallo"
+  - prompt: "Translate from English to French: Hello, world!"
+    output: "Bonjour, monde!"
+  - prompt: "Translate 'Goodbye' to Spanish"
+    output: "Adiós"

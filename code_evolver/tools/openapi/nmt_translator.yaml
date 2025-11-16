@@ -1,6 +1,6 @@
 name: "NMT Translation Service"
 type: "openapi"
-description: "Neural Machine Translation service for translating text between languages. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses ISO 639 two-letter language codes (e.g., 'en', 'es', 'fr', 'de'). Get supported languages from GET /languages endpoint. Uses OpenAPI spec from http://localhost:8000/openapi.json."
+description: "Neural Machine Translation service for translating text between languages using GET requests. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses ISO 639 two-letter language codes (e.g., 'en', 'es', 'fr', 'de'). Get supported languages from GET /languages endpoint. API returns 'translations' array. Uses OpenAPI spec from http://localhost:8000/openapi.json."
 cost_tier: "low"
 speed_tier: "very-fast"
 quality_tier: "good"
@@ -26,51 +26,73 @@ code_template: |
       response.raise_for_status()
       return response.json()
 
-  def translate_text(text, source_lang="en", target_lang="es"):
+  def translate_text(text, source_lang="en", target_lang="de", beam_size=5, perform_sentence_splitting=True):
       """
       Translate text using the NMT service.
 
       Args:
-          text: Text to translate
+          text: Text to translate (string)
           source_lang: ISO 639 two-letter source language code (e.g., 'en', 'es', 'fr', 'de')
           target_lang: ISO 639 two-letter target language code
+          beam_size: Beam search size for translation quality (default: 5)
+          perform_sentence_splitting: Split into sentences before translation (default: True)
 
       Returns:
           Translated text (string)
 
       Response Format:
-          The API returns: {"translations": ["translated text"]}
-          This function extracts and returns the first translation.
+          The API returns:
+          {
+            "translations": ["Guten Tag."],
+            "pivot_path": "de->en->de",
+            "error": null
+          }
 
       Note:
+          - API uses GET requests with query parameters
+          - Response has "translations" array
           - Use get_supported_languages() to see all available language codes
-          - Language codes must be ISO 639 two-letter codes
-          - Response contains "translations" array, not "translated_text"
       """
       url = "http://localhost:8000/translate"
 
-      payload = {
+      params = {
           "text": text,
           "source_lang": source_lang,
-          "target_lang": target_lang
+          "target_lang": target_lang,
+          "beam_size": beam_size,
+          "perform_sentence_splitting": "true" if perform_sentence_splitting else "false"
       }
 
-      response = requests.post(url, json=payload)
+      response = requests.get(url, params=params)
       response.raise_for_status()
 
       result = response.json()
+
+      # Check for errors
+      if result.get("error"):
+          raise Exception(f"Translation error: {result['error']}")
+
       # Response has "translations" array
       translations = result.get("translations", [])
+
       if translations:
           return translations[0]  # Return first translation
-      return ""
+      return ""  # Return empty string if no translation
 
-  # Usage example:
+  # Usage examples:
   # Get supported languages first
   # languages = get_supported_languages()
   # print(f"Supported languages: {languages}")
 
-  # Translate with ISO 639 two-letter codes
-  # translated = translate_text("Hello, world!", source_lang="en", target_lang="es")
+  # Example 1: Translate single text
+  # translated = translate_text("hello", source_lang="en", target_lang="de")
+  # print(translated)  # Output: "Guten Tag."
+
+  # Example 2: Translate with custom beam size
+  # translated = translate_text("Hello, world!", source_lang="en", target_lang="es", beam_size=10)
   # print(translated)  # Output: "Hola, mundo!"
+
+  # Example 3: Translate without sentence splitting
+  # translated = translate_text("Hello friend", source_lang="en", target_lang="fr", perform_sentence_splitting=False)
+  # print(translated)  # Output: "Bonjour ami"
 tags: ["translation", "nmt", "neural", "languages", "openapi", "api"]

@@ -1698,36 +1698,7 @@ Create a comprehensive specification that will guide the code generator. Include
    - Data structures to use
    - Key functions and their signatures (with types)
    - Which LLM tools (if any) should be called and when
-
-3a. **Parallel Execution Optimization** (CRITICAL FOR PERFORMANCE!)
-   - Identify tool calls that can run in PARALLEL (no dependencies)
-   - Group independent operations together
-   - Example: If fetching 3 translations independently → run in parallel!
-   - Example: If generating joke AND poem separately → run in parallel!
-   - Specify dependencies: which operations must wait for others
-   - IMPORTANT: Parallel execution can dramatically reduce latency!
-
-   PARALLEL EXECUTION PATTERN:
-   ```python
-   # ✅ GOOD - Run independent calls in parallel
-   results = call_tools_parallel([
-       ("content_generator", "Write a joke about cats"),
-       ("content_generator", "Write a poem about dogs"),
-       ("quick_translator", "Translate 'hello' to French")
-   ])
-   joke, poem, translation = results
-
-   # ❌ BAD - Run sequentially (slow!)
-   joke = call_tool("content_generator", "Write a joke about cats")
-   poem = call_tool("content_generator", "Write a poem about dogs")  # Waits for joke!
-   translation = call_tool("quick_translator", "Translate 'hello' to French")  # Waits for both!
-   ```
-
-   When to use parallel execution:
-   - Multiple translations of different texts
-   - Generating multiple independent pieces of content
-   - Fetching data from multiple independent sources
-   - Any operations where output of one doesn't depend on output of another
+   - Execution order (which operations must be sequential)
 
 4. **Input/Output Interface**
    - What JSON fields will the code read from stdin?
@@ -2120,17 +2091,10 @@ USAGE GUIDELINES:
    - DO NOT create stub functions or placeholder implementations
    - DO NOT use undefined tools - only use tools that exist in the system
 4. For complex data processing, use input_data["input"] as the main data field
-5. **PARALLEL EXECUTION OPTIMIZATION** (CRITICAL FOR PERFORMANCE!):
-   - When making MULTIPLE INDEPENDENT tool calls, use call_tools_parallel() for dramatic speedup
-   - Example: Translating 3 texts → 3x faster with parallel execution!
-   - Example: Generating joke + poem + article → 3x faster!
-   - ONLY works when operations don't depend on each other
-   - Import: from node_runtime import call_tools_parallel
-6. ALWAYS include these standard imports at the top:
+5. ALWAYS include these standard imports at the top:
    - import json
    - import sys
    - from node_runtime import call_tool (REQUIRED for content generation and project management tasks)
-   - from node_runtime import call_tools_parallel (OPTIONAL - use for parallel operations)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -2249,83 +2213,58 @@ if __name__ == "__main__":
     main()
 ```
 
-Example for PARALLEL EXECUTION (multiple independent operations):
+**CRITICAL: call_tool() SIGNATURE**
+
+The call_tool() function has this EXACT signature:
 ```python
-import json
-import sys
-from pathlib import Path
-
-# CRITICAL: Add path setup BEFORE node_runtime import
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from node_runtime import call_tools_parallel
-
-def main():
-    input_data = json.load(sys.stdin)
-
-    # Extract list of items to process
-    texts_to_translate = input_data.get("texts", ["Hello", "Goodbye", "Thank you"])
-    target_languages = input_data.get("languages", ["french", "spanish", "german"])
-
-    # ✅ GOOD: Run all translations in PARALLEL (3x faster!)
-    # Build list of parallel tool calls
-    parallel_calls = []
-    for text in texts_to_translate:
-        for lang in target_languages:
-            parallel_calls.append((
-                "nmt_translator",
-                f"Translate to {{lang}}: {{text}}"
-            ))
-
-    # Execute ALL translations in parallel
-    results = call_tools_parallel(parallel_calls)
-
-    # Process results
-    translations = {{}}
-    result_idx = 0
-    for text in texts_to_translate:
-        translations[text] = {{}}
-        for lang in target_languages:
-            translations[text][lang] = results[result_idx]
-            result_idx += 1
-
-    print(json.dumps({{"translations": translations}}))
-
-if __name__ == "__main__":
-    main()
+def call_tool(tool_name: str, prompt: str, **kwargs) -> str
 ```
 
-Example for PARALLEL content generation (joke + poem + article):
+**CORRECT USAGE:**
 ```python
-import json
-import sys
-from pathlib import Path
+# ✅ Simple call with prompt
+result = call_tool("content_generator", "Write a joke about cats")
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from node_runtime import call_tools_parallel
+# ✅ Call with formatted prompt
+topic = "dogs"
+result = call_tool("content_generator", f"Write a poem about {{topic}}")
 
-def main():
-    input_data = json.load(sys.stdin)
+# ✅ Translation with prompt
+text = "Hello"
+translated = call_tool("nmt_translator", f"Translate to French: {{text}}")
 
-    topic = input_data.get("topic", "technology")
-
-    # ✅ PARALLEL: Generate joke, poem, and article simultaneously (3x faster!)
-    results = call_tools_parallel([
-        ("content_generator", f"Write a funny joke about {{topic}}"),
-        ("content_generator", f"Write a short poem about {{topic}}"),
-        ("content_generator", f"Write a brief article about {{topic}}")
-    ])
-
-    joke, poem, article = results
-
-    print(json.dumps({{
-        "joke": joke,
-        "poem": poem,
-        "article": article
-    }}))
-
-if __name__ == "__main__":
-    main()
+# ✅ With keyword arguments (if tool supports them)
+result = call_tool("content_generator", "Write an article", temperature=0.7, max_length=500)
 ```
+
+**WRONG USAGE (WILL FAIL!):**
+```python
+# ❌ WRONG - Passing dict as positional argument
+result = call_tool("tool", "action", {{"text": "hello", "lang": "fr"}})  # TypeError!
+
+# ❌ WRONG - Too many positional arguments
+result = call_tool("tool", "action", "param1", "param2")  # TypeError!
+
+# ❌ WRONG - Dict instead of kwargs
+result = call_tool("tool", "prompt", {{"temperature": 0.7}})  # TypeError!
+```
+
+**CORRECT FIX FOR ABOVE:**
+```python
+# ✅ Build the prompt with the data
+text = "hello"
+lang = "fr"
+result = call_tool("nmt_translator", f"Translate to {{lang}}: {{text}}")
+
+# ✅ Use kwargs, not dict
+result = call_tool("content_generator", "Write article", temperature=0.7)
+```
+
+**KEY RULES:**
+1. call_tool() takes EXACTLY 2 positional arguments: (tool_name, prompt)
+2. Additional parameters MUST be keyword arguments (**kwargs), NOT a dict
+3. Build complex prompts using f-strings, don't pass separate parameters
+4. The prompt should be a complete, descriptive string
 
 CRITICAL REQUIREMENTS:
 - The "code" field must contain ONLY executable Python code

@@ -62,7 +62,9 @@
       "Bash(do echo \"=== Testing $f ===\")",
       "Bash(echo:*)",
       "Bash(findstr:*)",
-      "Bash(del:*)"
+      "Bash(del:*)",
+      "Bash(2)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,8 +1,12 @@
-# Parallel Execution Optimization
+# Parallel Execution Optimization (ADVANCED FEATURE)
+
+## ⚠️ Status: Optional/Advanced Feature
+
+**Note:** Parallel execution is an **advanced optimization** for workflows with multiple independent tool calls. It is **NOT automatically used** in code generation to avoid complexity. Use it **manually** when you have specific performance requirements.
 
 ## Overview
 
-The overseer now actively identifies opportunities for **parallel execution** of tool calls, which can dramatically reduce workflow latency.
+The `call_tools_parallel()` function enables **parallel execution** of tool calls, which can dramatically reduce workflow latency for independent operations.
 
 ## Performance Impact
 

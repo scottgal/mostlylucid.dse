@@ -1,0 +1,28 @@
+name: "Random Test Data Generator"
+type: "executable"
+description: "Generates random test data for workflows based on schemas or natural language descriptions. Context-aware for common fields like email, name, age, translation text, etc. Use this when you need test data to validate workflows."
+executable:
+  command: "python"
+  args: ["{tool_dir}/random_data_generator.py", "{prompt}"]
+  install_command: null
+input_schema:
+  prompt:
+    type: "string"
+    description: "JSON schema or natural language description of the data needed. Examples: '{\"name\": \"string\", \"age\": \"number\"}' or 'Generate test data for translation with text and target language'"
+    required: true
+output_schema:
+  type: "object"
+  description: "JSON object containing randomly generated test data matching the requested schema"
+tags: ["testing", "data", "random", "generator", "workflow", "validation"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 70
+examples:
+  - prompt: '{"name": "string", "email": "string", "age": "number"}'
+    output: '{"name": "Alice Smith", "email": "alice.smith@gmail.com", "age": 32}'
+  - prompt: "Generate test data for translation"
+    output: '{"text": "hello world test sample", "source_lang": "en", "target_lang": "fr"}'
+  - prompt: "I need data for a user profile"
+    output: '{"name": "Bob Johnson", "email": "bob.johnson@yahoo.com"}'
+  - prompt: '{"title": "string", "content": "string", "author": "string"}'
+    output: '{"title": "Diana Brown", "content": "Quick brown fox jumps over lazy dog.", "author": "Frank Garcia"}'

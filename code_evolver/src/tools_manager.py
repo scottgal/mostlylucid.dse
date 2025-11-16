@@ -1263,10 +1263,16 @@ Tags: {', '.join(tool.tags)}
             raise ValueError(f"Tool {tool_id} missing command")
 
         # Build arguments with placeholder substitution
-        substitutions = {"source_file": source_file, **kwargs}
+        # Add tool_dir to substitutions (directory containing executable tools)
+        tool_dir = str(self.tools_path / "executable")
+        substitutions = {
+            "source_file": source_file,
+            "tool_dir": tool_dir,
+            **kwargs
+        }
         args = []
         for arg in args_template:
-            # Replace placeholders like {source_file}, {test_file}, {source_module}
+            # Replace placeholders like {source_file}, {test_file}, {source_module}, {tool_dir}, {prompt}
             for key, value in substitutions.items():
                 arg = arg.replace(f"{{{key}}}", str(value))
             args.append(arg)
