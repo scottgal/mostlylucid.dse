@@ -18,7 +18,7 @@ coding:
     cost: "low"
     speed: "very-fast"
     quality: "good"
-    context_window: 8192
+    context_window: 32768  # Qwen 2.5 Coder has 32K context
     escalation_threshold: 0.65  # If confidence < 65%, escalate to tier_2
 
   tier_2:  # Standard coding tasks
@@ -30,7 +30,7 @@ coding:
     cost: "medium"
     speed: "fast"
     quality: "excellent"
-    context_window: 16384
+    context_window: 16384  # CodeLlama 7B has 16K context
     escalation_threshold: 0.70  # If confidence < 70%, escalate to tier_3
 
   tier_3:  # Advanced coding (god-level)
@@ -42,7 +42,7 @@ coding:
     cost: "high"
     speed: "slow"
     quality: "exceptional"
-    context_window: 32768
+    context_window: 131072  # DeepSeek Coder V2 has 128K context
     escalation_threshold: null  # No further escalation (top tier)
 
 # Content Generation Tiers (for text, articles, creative writing)
