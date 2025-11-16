@@ -77,22 +77,32 @@ class TaskEvaluator:
 
         logger.info(f"Evaluating task type with {model} (input length: {input_length} chars)")
 
-        prompt = f"""Classify this task into ONE category. Respond with ONLY the category name.
+        prompt = f"""You are analyzing a user's task request to understand what they want.
 
-Task: {description}
+Task: "{description}"
+
+Provide a response in this format:
+CATEGORY: [one category from the list below]
+UNDERSTANDING: [One sentence explaining what you think the user wants]
+KEY_ASPECTS: [Comma-separated list of important aspects: complexity, creativity, data, etc.]
 
 Categories:
-- creative_content: Writing stories, jokes, poems, articles, creative text (MUST use LLM)
-- arithmetic: Math calculations, numerical operations (can use calculator tool)
-- data_processing: Transform/filter/sort data, manipulate structures (can use code)
-- code_generation: Write code/functions (MUST use LLM)
-- translation: Translate text between languages (simple: tool, complex: LLM)
-- question_answering: Answer questions, explain concepts (MUST use LLM)
-- formatting: Format text (uppercase, lowercase, etc.) (can use tool)
-- conversion: Convert units, formats (can use tool)
-- unknown: Unclear or complex task (needs LLM analysis)
+- creative_content: Writing stories, jokes, poems, articles, creative text
+- arithmetic: Math calculations, numerical operations
+- data_processing: Transform/filter/sort data, manipulate structures
+- code_generation: Write code/functions/programs
+- translation: Translate text between languages
+- question_answering: Answer questions, explain concepts
+- formatting: Format text (uppercase, lowercase, etc.)
+- conversion: Convert units, formats
+- unknown: Unclear or complex task
 
-Category:"""
+Example:
+CATEGORY: creative_content
+UNDERSTANDING: User wants me to generate a creative joke about artificial intelligence
+KEY_ASPECTS: creativity, humor, storytelling
+
+Your analysis:"""
 
         try:
             response = self.client.generate(
@@ -101,8 +111,21 @@ Category:"""
                 model_key="triage"
             )
 
-            # Parse response
-            category = response.strip().lower().replace("-", "_")
+            # Parse structured response
+            lines = response.strip().split('\n')
+            category_line = next((l for l in lines if l.startswith('CATEGORY:')), '')
+            understanding_line = next((l for l in lines if l.startswith('UNDERSTANDING:')), '')
+            aspects_line = next((l for l in lines if l.startswith('KEY_ASPECTS:')), '')
+
+            category = category_line.replace('CATEGORY:', '').strip().lower().replace("-", "_")
+            understanding = understanding_line.replace('UNDERSTANDING:', '').strip()
+            key_aspects = aspects_line.replace('KEY_ASPECTS:', '').strip()
+
+            # Fallback if structured parsing failed
+            if not category:
+                category = response.strip().lower().replace("-", "_")
+                understanding = "Unable to parse task understanding"
+                key_aspects = "unknown"
 
             # Map to TaskType
             task_type = self._parse_task_type(category)
@@ -114,6 +137,8 @@ Category:"""
 
             return {
                 "task_type": task_type,
+                "understanding": understanding,
+                "key_aspects": key_aspects,
                 "input_length": input_length,
                 "evaluation_model": model,
                 **routing
@@ -124,6 +149,8 @@ Category:"""
             # Safe default: assume needs LLM
             return {
                 "task_type": TaskType.UNKNOWN,
+                "understanding": "Unable to evaluate task due to an error",
+                "key_aspects": "error, unknown",
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,

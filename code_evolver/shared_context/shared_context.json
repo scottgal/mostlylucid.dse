@@ -264,6 +264,50 @@
         "confidence": 0.8319999999999999,
         "usage_count": 0,
         "success_rate": 1.0
+      },
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code for better performance; Consider profiling to identify bottlenecks",
+        "quality_achieved": 0.8739999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.8739999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Consider optimizing code for better performance",
+        "quality_achieved": 0.8739999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Consider optimizing code for better performance",
+        "confidence": 0.8739999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "stats_test",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code for better performance; Consider increasing memory allocation to meet target",
+        "quality_achieved": 0.8319999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.8319999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "test_node",
+        "context_signature": "8024c70b7fa402c1",
+        "lesson": "Optimize code to reduce memory usage and improve execution speed",
+        "quality_achieved": 0.8319999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code to reduce memory usage and improve execution speed",
+        "confidence": 0.8319999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
       }
     ],
     "6ee389394d77cb9d": [
@@ -332,6 +376,63 @@
         "confidence": 0.853,
         "usage_count": 0,
         "success_rate": 1.0
+      },
+      {
+        "node_id": "parent",
+        "context_signature": "6ee389394d77cb9d",
+        "lesson": "Optimize memory allocation to meet target; Consider further performance optimization",
+        "quality_achieved": 0.937,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize memory allocation to meet target",
+        "confidence": 0.937,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "parent",
+        "context_signature": "6ee389394d77cb9d",
+        "lesson": "Optimize memory usage to meet target; Investigate performance optimization techniques",
+        "quality_achieved": 0.8319999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize memory usage to meet target",
+        "confidence": 0.8319999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "parent",
+        "context_signature": "6ee389394d77cb9d",
+        "lesson": "Consider optimizing code for better performance; Monitor memory usage and adjust as needed",
+        "quality_achieved": 0.937,
+        "speed_achieved": 1000,
+        "recommendation": "Consider optimizing code for better performance",
+        "confidence": 0.937,
+        "usage_count": 0,
+        "success_rate": 1.0
+      }
+    ],
+    "3ed33eea95318ace": [
+      {
+        "node_id": "child",
+        "context_signature": "3ed33eea95318ace",
+        "lesson": "Optimize code for better performance",
+        "quality_achieved": 0.853,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize code for better performance",
+        "confidence": 0.853,
+        "usage_count": 0,
+        "success_rate": 1.0
+      },
+      {
+        "node_id": "child",
+        "context_signature": "3ed33eea95318ace",
+        "lesson": "Optimize memory usage to meet target; Consider improving quality by adding more robust error handling",
+        "quality_achieved": 0.8319999999999999,
+        "speed_achieved": 1000,
+        "recommendation": "Optimize memory usage to meet target",
+        "confidence": 0.8319999999999999,
+        "usage_count": 0,
+        "success_rate": 1.0
       }
     ]
   },
@@ -363,6 +464,18 @@
         "timestamp": "2025-11-15T22:55:36.126678Z"
       },
       {
+        "strategy": "Heuristic search with pruning, leveraging learnings from similar past plans",
+        "quality": 0.8739999999999999,
+        "speed": 1000,
+        "timestamp": "2025-11-16T00:16:18.327050Z"
+      },
+      {
+        "strategy": "Heuristic search with pruning, leveraging learnings from similar past plans and adapting to the provided constraints",
+        "quality": 0.8739999999999999,
+        "speed": 1000,
+        "timestamp": "2025-11-16T00:16:54.069351Z"
+      },
+      {
         "strategy": "Heuristic search with pruning, focusing on optimizing memory usage to meet target and leveraging best practices for performance optimization",
         "quality": 0.853,
         "speed": 1000,
@@ -385,20 +498,36 @@
         "quality": 0.853,
         "speed": 1000,
         "timestamp": "2025-11-15T22:56:35.189829Z"
+      }
+    ],
+    "6ee389394d77cb9d": [
+      {
+        "strategy": "Optimize code for better performance by applying existing lessons and ensuring it meets the quality target",
+        "quality": 0.937,
+        "speed": 1000,
+        "timestamp": "2025-11-16T00:18:18.318085Z"
       },
       {
-        "strategy": "Heuristic search with pruning, leveraging learnings from similar past plans (although none were found) and focusing on optimizing code for better performance",
+        "strategy": "Optimize code for better performance by applying existing lessons",
         "quality": 0.8319999999999999,
         "speed": 1000,
-        "timestamp": "2025-11-14T19:31:44.378383Z"
+        "timestamp": "2025-11-16T00:13:37.346048Z"
+      }
+    ],
+    "3ed33eea95318ace": [
+      {
+        "strategy": "Apply existing lessons and optimize code for better performance",
+        "quality": 0.853,
+        "speed": 1000,
+        "timestamp": "2025-11-16T00:14:06.346210Z"
       },
       {
-        "strategy": "Heuristic search with pruning, focusing on optimizing memory usage to meet target and leveraging best practices for performance optimization",
+        "strategy": "Apply existing lessons and optimize code for better performance, building upon the successful 'Parent task' plan",
         "quality": 0.8319999999999999,
         "speed": 1000,
-        "timestamp": "2025-11-15T21:25:47.487654Z"
+        "timestamp": "2025-11-16T00:18:32.921339Z"
       }
     ]
   },
-  "updated_at": "2025-11-15T22:58:04.792394Z"
+  "updated_at": "2025-11-16T00:19:24.873579Z"
 }

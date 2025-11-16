@@ -28,10 +28,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580140Z"
+      "last_reset": "2025-11-16T00:32:05.783638Z"
     },
     "created_at": "2025-11-15T23:05:48.995172Z",
-    "usage_count": 5
+    "usage_count": 8,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "code_reviewer": {
     "tool_id": "code_reviewer",
@@ -59,10 +62,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580150Z"
+      "last_reset": "2025-11-16T00:32:05.783649Z"
     },
     "created_at": "2025-11-15T23:05:48.995188Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "security_auditor": {
     "tool_id": "security_auditor",
@@ -90,10 +96,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580155Z"
+      "last_reset": "2025-11-16T00:32:05.783655Z"
     },
     "created_at": "2025-11-15T23:05:48.995193Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "performance_optimizer": {
     "tool_id": "performance_optimizer",
@@ -121,10 +130,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580159Z"
+      "last_reset": "2025-11-16T00:32:05.783659Z"
     },
     "created_at": "2025-11-15T23:05:48.995198Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "doc_generator": {
     "tool_id": "doc_generator",
@@ -152,10 +164,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580162Z"
+      "last_reset": "2025-11-16T00:32:05.783663Z"
     },
     "created_at": "2025-11-15T23:05:48.995202Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "technical_writer": {
     "tool_id": "technical_writer",
@@ -187,10 +202,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580165Z"
+      "last_reset": "2025-11-16T00:32:05.783667Z"
     },
     "created_at": "2025-11-15T23:05:48.995206Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "article_analyzer": {
     "tool_id": "article_analyzer",
@@ -222,10 +240,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580169Z"
+      "last_reset": "2025-11-16T00:32:05.783670Z"
     },
     "created_at": "2025-11-15T23:05:48.995211Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "seo_optimizer": {
     "tool_id": "seo_optimizer",
@@ -256,10 +277,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580172Z"
+      "last_reset": "2025-11-16T00:32:05.783674Z"
     },
     "created_at": "2025-11-15T23:05:48.995215Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "code_explainer": {
     "tool_id": "code_explainer",
@@ -290,10 +314,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580175Z"
+      "last_reset": "2025-11-16T00:32:05.783678Z"
     },
     "created_at": "2025-11-15T23:05:48.995220Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "outline_generator": {
     "tool_id": "outline_generator",
@@ -324,10 +351,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580178Z"
+      "last_reset": "2025-11-16T00:32:05.783682Z"
     },
     "created_at": "2025-11-15T23:05:48.995224Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "proofreader": {
     "tool_id": "proofreader",
@@ -358,10 +388,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580181Z"
+      "last_reset": "2025-11-16T00:32:05.783686Z"
     },
     "created_at": "2025-11-15T23:05:48.995229Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_technical_story_and_tr": {
     "tool_id": "write_a_technical_story_and_tr",
@@ -390,10 +423,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580185Z"
+      "last_reset": "2025-11-16T00:32:05.783690Z"
     },
     "created_at": "2025-11-15T00:29:22.122018Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_me_a_technical_article_1763166799": {
     "tool_id": "write_me_a_technical_article_1763166799",
@@ -422,10 +458,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580189Z"
+      "last_reset": "2025-11-16T00:32:05.783694Z"
     },
     "created_at": "2025-11-15T00:33:43.019137Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_5_and_8": {
     "tool_id": "add_5_and_8",
@@ -455,10 +494,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580193Z"
+      "last_reset": "2025-11-16T00:32:05.783699Z"
     },
     "created_at": "2025-11-15T00:45:30.312391Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "pylint_checker": {
     "tool_id": "pylint_checker",
@@ -488,10 +530,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580197Z"
+      "last_reset": "2025-11-16T00:32:05.783703Z"
     },
     "created_at": "2025-11-15T23:05:48.995234Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "mypy_type_checker": {
     "tool_id": "mypy_type_checker",
@@ -520,10 +565,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580200Z"
+      "last_reset": "2025-11-16T00:32:05.783707Z"
     },
     "created_at": "2025-11-15T23:05:48.995240Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "flake8_linter": {
     "tool_id": "flake8_linter",
@@ -553,10 +601,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580203Z"
+      "last_reset": "2025-11-16T00:32:05.783710Z"
     },
     "created_at": "2025-11-15T23:05:48.995245Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "black_formatter": {
     "tool_id": "black_formatter",
@@ -585,10 +636,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580207Z"
+      "last_reset": "2025-11-16T00:32:05.783714Z"
     },
     "created_at": "2025-11-15T23:05:48.995249Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "bandit_security": {
     "tool_id": "bandit_security",
@@ -616,10 +670,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580210Z"
+      "last_reset": "2025-11-16T00:32:05.783717Z"
     },
     "created_at": "2025-11-15T23:05:48.995255Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "pytest_runner": {
     "tool_id": "pytest_runner",
@@ -648,10 +705,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580214Z"
+      "last_reset": "2025-11-16T00:32:05.783721Z"
     },
     "created_at": "2025-11-15T23:05:48.995259Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "pytest_coverage": {
     "tool_id": "pytest_coverage",
@@ -681,10 +741,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580217Z"
+      "last_reset": "2025-11-16T00:32:05.783724Z"
     },
     "created_at": "2025-11-15T23:05:48.995264Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "radon_complexity": {
     "tool_id": "radon_complexity",
@@ -714,10 +777,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580220Z"
+      "last_reset": "2025-11-16T00:32:05.783727Z"
     },
     "created_at": "2025-11-15T23:05:48.995268Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "vulture_deadcode": {
     "tool_id": "vulture_deadcode",
@@ -744,10 +810,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580224Z"
+      "last_reset": "2025-11-16T00:32:05.783731Z"
     },
     "created_at": "2025-11-15T23:05:48.995272Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "pydocstyle_checker": {
     "tool_id": "pydocstyle_checker",
@@ -774,10 +843,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580227Z"
+      "last_reset": "2025-11-16T00:32:05.783735Z"
     },
     "created_at": "2025-11-15T23:05:48.995276Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "isort_import_checker": {
     "tool_id": "isort_import_checker",
@@ -806,10 +878,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580230Z"
+      "last_reset": "2025-11-16T00:32:05.783738Z"
     },
     "created_at": "2025-11-15T23:05:48.995280Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "quick_feedback": {
     "tool_id": "quick_feedback",
@@ -842,10 +917,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580233Z"
+      "last_reset": "2025-11-16T00:32:05.783743Z"
     },
     "created_at": "2025-11-15T23:05:48.995177Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "summarizer": {
     "tool_id": "summarizer",
@@ -876,10 +954,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580237Z"
+      "last_reset": "2025-11-16T00:32:05.783747Z"
     },
     "created_at": "2025-11-15T23:05:48.995183Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "nmt_translator": {
     "tool_id": "nmt_translator",
@@ -911,10 +992,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580240Z"
+      "last_reset": "2025-11-16T00:32:05.783750Z"
     },
     "created_at": "2025-11-15T23:05:49.011665Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "translation_quality_checker": {
     "tool_id": "translation_quality_checker",
@@ -945,10 +1029,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580243Z"
+      "last_reset": "2025-11-16T00:32:05.783754Z"
     },
     "created_at": "2025-11-15T23:05:49.011690Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_100_and_200": {
     "tool_id": "add_100_and_200",
@@ -978,10 +1065,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580246Z"
+      "last_reset": "2025-11-16T00:32:05.783757Z"
     },
     "created_at": "2025-11-15T01:17:53.285112Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "long_form_writer": {
     "tool_id": "long_form_writer",
@@ -1014,10 +1104,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580250Z"
+      "last_reset": "2025-11-16T00:32:05.783761Z"
     },
     "created_at": "2025-11-15T23:05:49.011698Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_me_code_to_do_a_fibonacc": {
     "tool_id": "write_me_code_to_do_a_fibonacc",
@@ -1047,10 +1140,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580253Z"
+      "last_reset": "2025-11-16T00:32:05.783764Z"
     },
     "created_at": "2025-11-15T01:45:38.026107Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "code_translation_validator": {
     "tool_id": "code_translation_validator",
@@ -1081,10 +1177,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580257Z"
+      "last_reset": "2025-11-16T00:32:05.783768Z"
     },
     "created_at": "2025-11-15T23:05:49.011706Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_10_and_20_1763173231": {
     "tool_id": "add_10_and_20_1763173231",
@@ -1115,10 +1214,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580260Z"
+      "last_reset": "2025-11-16T00:32:05.783771Z"
     },
     "created_at": "2025-11-15T02:21:46.594132Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "what_is_1_plus_1": {
     "tool_id": "what_is_1_plus_1",
@@ -1148,10 +1250,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580264Z"
+      "last_reset": "2025-11-16T00:32:05.783775Z"
     },
     "created_at": "2025-11-15T02:30:39.242608Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculate_the_fibonacci_sequen": {
     "tool_id": "calculate_the_fibonacci_sequen",
@@ -1181,10 +1286,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580268Z"
+      "last_reset": "2025-11-16T00:32:05.783778Z"
     },
     "created_at": "2025-11-15T03:01:26.867706Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "sum_4_and_6": {
     "tool_id": "sum_4_and_6",
@@ -1213,10 +1321,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580272Z"
+      "last_reset": "2025-11-16T00:32:05.783783Z"
     },
     "created_at": "2025-11-15T03:43:47.333782Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculate_a_fibonaccie_sequenc": {
     "tool_id": "calculate_a_fibonaccie_sequenc",
@@ -1246,10 +1357,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580275Z"
+      "last_reset": "2025-11-16T00:32:05.783786Z"
     },
     "created_at": "2025-11-15T03:10:01.000404Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculate_5_plus_10": {
     "tool_id": "calculate_5_plus_10",
@@ -1279,10 +1393,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580278Z"
+      "last_reset": "2025-11-16T00:32:05.783790Z"
     },
     "created_at": "2025-11-15T03:20:30.324266Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_the_most_optimal_code_to": {
     "tool_id": "write_the_most_optimal_code_to",
@@ -1312,10 +1429,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580281Z"
+      "last_reset": "2025-11-16T00:32:05.783793Z"
     },
     "created_at": "2025-11-15T03:27:58.781005Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "tell_me_a_joke": {
     "tool_id": "tell_me_a_joke",
@@ -1345,10 +1465,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580285Z"
+      "last_reset": "2025-11-16T00:32:05.783797Z"
     },
     "created_at": "2025-11-15T03:37:23.056616Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "fast_code_generator": {
     "tool_id": "fast_code_generator",
@@ -1379,10 +1502,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580288Z"
+      "last_reset": "2025-11-16T00:32:05.783801Z"
     },
     "created_at": "2025-11-15T23:05:48.995158Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "save_to_disk": {
     "tool_id": "save_to_disk",
@@ -1412,10 +1538,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580291Z"
+      "last_reset": "2025-11-16T00:32:05.783805Z"
     },
     "created_at": "2025-11-15T23:05:49.011712Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "load_from_disk": {
     "tool_id": "load_from_disk",
@@ -1444,10 +1573,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580295Z"
+      "last_reset": "2025-11-16T00:32:05.783809Z"
     },
     "created_at": "2025-11-15T23:05:49.011719Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculate_15_plus_25": {
     "tool_id": "calculate_15_plus_25",
@@ -1476,10 +1608,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580298Z"
+      "last_reset": "2025-11-16T00:32:05.783812Z"
     },
     "created_at": "2025-11-15T03:59:07.086285Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_code_to_do_one_plus_rand": {
     "tool_id": "write_code_to_do_one_plus_rand",
@@ -1508,10 +1643,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580301Z"
+      "last_reset": "2025-11-16T00:32:05.783817Z"
     },
     "created_at": "2025-11-15T04:08:37.271301Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_technical_article_on_n": {
     "tool_id": "write_a_technical_article_on_n",
@@ -1540,10 +1678,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580304Z"
+      "last_reset": "2025-11-16T00:32:05.783821Z"
     },
     "created_at": "2025-11-15T04:16:26.611410Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "pip_install": {
     "tool_id": "pip_install",
@@ -1572,10 +1713,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580307Z"
+      "last_reset": "2025-11-16T00:32:05.783825Z"
     },
     "created_at": "2025-11-15T23:05:49.011725Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "fast_content_writer": {
     "tool_id": "fast_content_writer",
@@ -1607,10 +1751,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580310Z"
+      "last_reset": "2025-11-16T00:32:05.783828Z"
     },
     "created_at": "2025-11-15T04:29:01.140398Z",
-    "usage_count": 5
+    "usage_count": 5,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_joke": {
     "tool_id": "write_a_joke",
@@ -1640,10 +1787,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580313Z"
+      "last_reset": "2025-11-16T00:32:05.783831Z"
     },
     "created_at": "2025-11-15T04:33:08.225941Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "wtie_mea_joke_about_the_welsh": {
     "tool_id": "wtie_mea_joke_about_the_welsh",
@@ -1672,10 +1822,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580317Z"
+      "last_reset": "2025-11-16T00:32:05.783835Z"
     },
     "created_at": "2025-11-15T04:37:52.223369Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_joke_1763181926": {
     "tool_id": "write_a_joke_1763181926",
@@ -1707,10 +1860,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580321Z"
+      "last_reset": "2025-11-16T00:32:05.783838Z"
     },
     "created_at": "2025-11-15T04:47:11.727855Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_me_a_joke": {
     "tool_id": "write_me_a_joke",
@@ -1741,10 +1897,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580324Z"
+      "last_reset": "2025-11-16T00:32:05.783842Z"
     },
     "created_at": "2025-11-15T04:51:25.425885Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_me_a_joke_1763182563": {
     "tool_id": "write_me_a_joke_1763182563",
@@ -1775,10 +1934,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580327Z"
+      "last_reset": "2025-11-16T00:32:05.783845Z"
     },
     "created_at": "2025-11-15T04:56:34.138310Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "content_generator": {
     "tool_id": "content_generator",
@@ -1809,10 +1971,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580330Z"
+      "last_reset": "2025-11-16T00:32:05.783849Z"
     },
     "created_at": "2025-11-15T23:05:48.995166Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_5_and_3_1763184838": {
     "tool_id": "add_5_and_3_1763184838",
@@ -1842,10 +2007,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580335Z"
+      "last_reset": "2025-11-16T00:32:05.783852Z"
     },
     "created_at": "2025-11-15T05:34:25.206297Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "multiply_6_by_7": {
     "tool_id": "multiply_6_by_7",
@@ -1876,10 +2044,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580339Z"
+      "last_reset": "2025-11-16T00:32:05.783857Z"
     },
     "created_at": "2025-11-15T05:39:37.051531Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_poem": {
     "tool_id": "write_a_poem",
@@ -1911,10 +2082,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580342Z"
+      "last_reset": "2025-11-16T00:32:05.783860Z"
     },
     "created_at": "2025-11-15T05:43:05.313587Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_7_and_9": {
     "tool_id": "add_7_and_9",
@@ -1945,10 +2119,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580345Z"
+      "last_reset": "2025-11-16T00:32:05.783864Z"
     },
     "created_at": "2025-11-15T05:48:46.152626Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculat_1_1": {
     "tool_id": "calculat_1_1",
@@ -1979,10 +2156,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580348Z"
+      "last_reset": "2025-11-16T00:32:05.783867Z"
     },
     "created_at": "2025-11-15T06:12:04.938129Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "calculate_5_plus_5": {
     "tool_id": "calculate_5_plus_5",
@@ -2014,10 +2194,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580352Z"
+      "last_reset": "2025-11-16T00:32:05.783871Z"
     },
     "created_at": "2025-11-15T06:14:46.234019Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_then_translate_a_poen": {
     "tool_id": "write_then_translate_a_poen",
@@ -2047,10 +2230,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580355Z"
+      "last_reset": "2025-11-16T00:32:05.783874Z"
     },
     "created_at": "2025-11-15T06:22:10.129256Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "tell_a_joke": {
     "tool_id": "tell_a_joke",
@@ -2081,10 +2267,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580358Z"
+      "last_reset": "2025-11-16T00:32:05.783878Z"
     },
     "created_at": "2025-11-15T06:24:41.879945Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "tell_me_a_joke_about_programmi": {
     "tool_id": "tell_me_a_joke_about_programmi",
@@ -2115,10 +2304,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580361Z"
+      "last_reset": "2025-11-16T00:32:05.783881Z"
     },
     "created_at": "2025-11-15T12:52:01.973353Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_joke_and_translate_to_1763216276": {
     "tool_id": "write_a_joke_and_translate_to_1763216276",
@@ -2150,10 +2342,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580365Z"
+      "last_reset": "2025-11-16T00:32:05.783885Z"
     },
     "created_at": "2025-11-15T14:19:42.965761Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "multiply_6_and_7_1763228888": {
     "tool_id": "multiply_6_and_7_1763228888",
@@ -2185,10 +2380,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580368Z"
+      "last_reset": "2025-11-16T00:32:05.783889Z"
     },
     "created_at": "2025-11-15T17:49:29.207608Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "http_content_fetcher": {
     "tool_id": "http_content_fetcher",
@@ -2347,10 +2545,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580371Z"
+      "last_reset": "2025-11-16T00:32:05.783893Z"
     },
     "created_at": "2025-11-15T18:53:13.571594+00:00",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "accept_input_from_user": {
     "tool_id": "accept_input_from_user",
@@ -2380,10 +2581,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580375Z"
+      "last_reset": "2025-11-16T00:32:05.783897Z"
     },
     "created_at": "2025-11-15T19:00:00.330968Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "save_input_to_database": {
     "tool_id": "save_input_to_database",
@@ -2413,10 +2617,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580378Z"
+      "last_reset": "2025-11-16T00:32:05.783900Z"
     },
     "created_at": "2025-11-15T19:05:48.796125Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "http_server": {
     "tool_id": "http_server",
@@ -2451,10 +2658,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580381Z"
+      "last_reset": "2025-11-16T00:32:05.783904Z"
     },
     "created_at": "2025-11-15T23:05:49.011732Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "review_this_code_usr_bin_en": {
     "tool_id": "review_this_code_usr_bin_en",
@@ -2485,10 +2695,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580385Z"
+      "last_reset": "2025-11-16T00:32:05.783907Z"
     },
     "created_at": "2025-11-15T19:50:03.317127Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "install_python_package": {
     "tool_id": "install_python_package",
@@ -2519,10 +2732,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580388Z"
+      "last_reset": "2025-11-16T00:32:05.783910Z"
     },
     "created_at": "2025-11-15T19:59:19.151824Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "model_selector": {
     "tool_id": "model_selector",
@@ -2570,10 +2786,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:53:18.096322Z"
+      "last_reset": "2025-11-16T00:32:12.135946Z"
     },
-    "created_at": "2025-11-15T23:53:18.096317Z",
-    "usage_count": 0
+    "created_at": "2025-11-16T00:32:12.135940Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "write_a_poem_1763241023": {
     "tool_id": "write_a_poem_1763241023",
@@ -2603,10 +2822,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580394Z"
+      "last_reset": "2025-11-16T00:32:05.783919Z"
     },
     "created_at": "2025-11-15T21:13:03.025275Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "translate_the_poem_to_french": {
     "tool_id": "translate_the_poem_to_french",
@@ -2637,10 +2859,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580398Z"
+      "last_reset": "2025-11-16T00:32:05.783922Z"
     },
     "created_at": "2025-11-15T21:16:36.803465Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "add_1_5": {
     "tool_id": "add_1_5",
@@ -2672,10 +2897,13 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-15T23:52:49.580401Z"
+      "last_reset": "2025-11-16T00:32:05.783926Z"
     },
     "created_at": "2025-11-15T22:28:13.519050Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   },
   "get_english_word": {
     "tool_id": "get_english_word",
@@ -2697,16 +2925,235 @@
       "created_at": "2025-11-16T00:00:05.281771+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code that generates a single English word from an input string, given the user's request \"get english word\"."
+      "full_title": "Python code that generates a single English word from an input string, given the user's request \"get english word\".",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:00:05.281795Z"
+      "last_reset": "2025-11-16T00:32:05.783929Z"
     },
     "created_at": "2025-11-16T00:00:05.281792Z",
-    "usage_count": 0
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "basic_calculator": {
+    "tool_id": "basic_calculator",
+    "name": "Basic Calculator",
+    "tool_type": "executable",
+    "description": "Fast arithmetic operations (add, subtract, multiply, divide, power, modulo). Direct Python execution - no LLM needed. Use for simple math.",
+    "tags": [
+      "math",
+      "arithmetic",
+      "calculator",
+      "fast",
+      "deterministic"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\basic_calculator.yaml",
+      "command": "python",
+      "args": [
+        "-c",
+        "import sys, json; data=json.load(sys.stdin); ops={'add': lambda a,b: a+b, 'subtract': lambda a,b: a-b, 'multiply': lambda a,b: a*b, 'divide': lambda a,b: a/b if b!=0 else float('inf'), 'power': lambda a,b: a**b, 'modulo': lambda a,b: a%b if b!=0 else 0}; result=ops.get(data['operation'], ops['add'])(data.get('a', 0), data.get('b', 0)); print(json.dumps({'result': result, 'operation': data.get('operation', 'add')}))"
+      ],
+      "input_schema": {
+        "operation": "str - Operation: 'add', 'subtract', 'multiply', 'divide', 'power', 'modulo'",
+        "a": "number - First operand",
+        "b": "number - Second operand"
+      },
+      "output_schema": {
+        "result": "number - Result of the operation",
+        "operation": "str - Operation performed"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T00:32:05.783933Z"
+    },
+    "created_at": "2025-11-16T00:20:57.633389Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "text_formatter": {
+    "tool_id": "text_formatter",
+    "name": "Text Formatter",
+    "tool_type": "executable",
+    "description": "Fast text formatting operations (uppercase, lowercase, title case, reverse, trim, etc.). Direct Python execution - instant results.",
+    "tags": [
+      "text",
+      "formatting",
+      "string",
+      "fast",
+      "deterministic"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\text_formatter.yaml",
+      "command": "python",
+      "args": [
+        "-c",
+        "import sys, json; data=json.load(sys.stdin); text=data.get('text', ''); ops={'upper': str.upper, 'lower': str.lower, 'title': str.title, 'capitalize': str.capitalize, 'reverse': lambda s: s[::-1], 'trim': str.strip, 'remove_spaces': lambda s: s.replace(' ', '')}; result=ops.get(data.get('operation', 'lower'), ops['lower'])(text); print(json.dumps({'result': result, 'operation': data.get('operation', 'lower'), 'original': text}))"
+      ],
+      "input_schema": {
+        "text": "str - Text to format",
+        "operation": "str - Operation: 'upper', 'lower', 'title', 'capitalize', 'reverse', 'trim', 'remove_spaces'"
+      },
+      "output_schema": {
+        "result": "str - Formatted text",
+        "operation": "str - Operation performed",
+        "original": "str - Original text"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T00:32:05.783937Z"
+    },
+    "created_at": "2025-11-16T00:20:57.640199Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "unit_converter": {
+    "tool_id": "unit_converter",
+    "name": "Unit Converter",
+    "tool_type": "executable",
+    "description": "Fast unit conversions (length, weight, temperature, time). Direct Python execution. Supports common units like meters/feet, kg/lbs, celsius/fahrenheit, etc.",
+    "tags": [
+      "conversion",
+      "units",
+      "measurement",
+      "fast",
+      "deterministic"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\unit_converter.yaml",
+      "command": "python",
+      "args": [
+        "-c",
+        "import sys, json; data=json.load(sys.stdin); conversions={'m_to_ft': lambda x: x*3.28084, 'ft_to_m': lambda x: x/3.28084, 'kg_to_lbs': lambda x: x*2.20462, 'lbs_to_kg': lambda x: x/2.20462, 'c_to_f': lambda x: x*9/5+32, 'f_to_c': lambda x: (x-32)*5/9, 'km_to_mi': lambda x: x*0.621371, 'mi_to_km': lambda x: x/0.621371}; conv=data.get('conversion', 'm_to_ft'); result=conversions.get(conv, conversions['m_to_ft'])(data.get('value', 0)); print(json.dumps({'result': result, 'conversion': conv, 'original_value': data.get('value', 0)}))"
+      ],
+      "input_schema": {
+        "conversion": "str - Conversion type: 'm_to_ft', 'ft_to_m', 'kg_to_lbs', 'lbs_to_kg', 'c_to_f', 'f_to_c', 'km_to_mi', 'mi_to_km'",
+        "value": "number - Value to convert"
+      },
+      "output_schema": {
+        "result": "number - Converted value",
+        "conversion": "str - Conversion performed",
+        "original_value": "number - Original value"
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T00:32:05.783941Z"
+    },
+    "created_at": "2025-11-16T00:20:57.641535Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "quick_translator": {
+    "tool_id": "quick_translator",
+    "name": "Quick Translator",
+    "tool_type": "llm",
+    "description": "Direct translation for words and short phrases. Returns immediate results without code generation. For longer translations (paragraphs, documents), use NMT translator or full translation workflow instead.",
+    "tags": [
+      "translation",
+      "quick",
+      "words",
+      "phrases",
+      "llm"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\quick_translator.yaml",
+      "llm_tier": "content.tier_2",
+      "llm_role": "translator",
+      "system_prompt": "You are a translator. Translate text accurately and concisely.\n\nPriority: {priority}\nQuality: {quality_level}\nSpeed: {speed_requirement}\n",
+      "prompt_template": "Translate the following from {source_lang} to {target_lang}:\n\n\"{text}\"\n\nProvide ONLY the translation, no explanations or alternatives.\n",
+      "cost_tier": "medium",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "short"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T00:32:05.783944Z"
+    },
+    "created_at": "2025-11-16T00:20:57.648576Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_a_haiku_about_coding": {
+    "tool_id": "write_a_haiku_about_coding",
+    "name": "Python code that generates a Haiku about coding using natural language processing and programming concepts.",
+    "tool_type": "workflow",
+    "description": "write a haiku about coding",
+    "tags": [
+      "python",
+      "natural language processing",
+      "programming",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_haiku_about_coding",
+      "quality_score": 1.1,
+      "latency_ms": 863,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-16T00:36:08.122382+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Python code that generates a Haiku about coding using natural language processing and programming concepts."
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T00:36:08.122404Z"
+    },
+    "created_at": "2025-11-16T00:36:08.122401Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
   }
 }

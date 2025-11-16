@@ -902,8 +902,15 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         console.print("[dim cyan]> Evaluating task type...[/dim cyan]")
         task_evaluation = self.task_evaluator.evaluate_task_type(description)
 
-        console.print(f"[dim]Task type: {task_evaluation['task_type'].value}[/dim]")
-        console.print(f"[dim]Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
+        # Show friendly feedback about what we understood
+        if task_evaluation.get('understanding'):
+            console.print(f"[cyan]→ Understanding: {task_evaluation['understanding']}[/cyan]")
+
+        if task_evaluation.get('key_aspects'):
+            console.print(f"[dim]→ Key aspects: {task_evaluation['key_aspects']}[/dim]")
+
+        console.print(f"[dim]→ Task type: {task_evaluation['task_type'].value}[/dim]")
+        console.print(f"[dim]→ Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:

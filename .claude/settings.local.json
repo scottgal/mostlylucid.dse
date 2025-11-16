@@ -43,7 +43,10 @@
       "Bash(git fetch:*)",
       "Bash(git stash:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git reset:*)",
+      "Bash(timeout 5 python:*)",
+      "Bash(timeout 10 python:*)"
     ],
     "deny": [],
     "ask": []

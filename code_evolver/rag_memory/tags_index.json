@@ -37,7 +37,14 @@
     "invocation_general_1763237557005",
     "invocation_general_1763241124754",
     "invocation_general_1763241341265",
-    "invocation_general_1763248069168"
+    "invocation_general_1763248069168",
+    "invocation_general_1763250244946",
+    "invocation_general_1763250756661",
+    "invocation_general_1763250883658",
+    "invocation_general_1763251289020",
+    "invocation_general_1763252173397",
+    "invocation_general_1763253219663",
+    "invocation_general_1763253723820"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -124,7 +131,14 @@
     "invocation_general_1763241341265",
     "invocation_seo_optimizer_1763244445429",
     "invocation_fast_code_generator_1763245268273",
-    "invocation_general_1763248069168"
+    "invocation_general_1763248069168",
+    "invocation_general_1763250244946",
+    "invocation_general_1763250756661",
+    "invocation_general_1763250883658",
+    "invocation_general_1763251289020",
+    "invocation_general_1763252173397",
+    "invocation_general_1763253219663",
+    "invocation_general_1763253723820"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -211,7 +225,14 @@
     "invocation_general_1763241341265",
     "invocation_seo_optimizer_1763244445429",
     "invocation_fast_code_generator_1763245268273",
-    "invocation_general_1763248069168"
+    "invocation_general_1763248069168",
+    "invocation_general_1763250244946",
+    "invocation_general_1763250756661",
+    "invocation_general_1763250883658",
+    "invocation_general_1763251289020",
+    "invocation_general_1763252173397",
+    "invocation_general_1763253219663",
+    "invocation_general_1763253723820"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -351,7 +372,13 @@
     "tool_model_selector",
     "tool_write_a_poem_1763241023",
     "tool_translate_the_poem_to_french",
-    "tool_add_1_5"
+    "tool_add_1_5",
+    "tool_get_english_word",
+    "tool_basic_calculator",
+    "tool_text_formatter",
+    "tool_unit_converter",
+    "tool_quick_translator",
+    "tool_write_a_haiku_about_coding"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
@@ -381,7 +408,8 @@
     "tool_content_generator",
     "func_tell_me_a_joke_about_programmi",
     "workflow_tell_me_a_joke_about_programmi",
-    "tool_tell_me_a_joke_about_programmi"
+    "tool_tell_me_a_joke_about_programmi",
+    "tool_quick_translator"
   ],
   "writing": [
     "spec_write_me_a_story",
@@ -423,7 +451,10 @@
     "spec_write_me_a_story_and_translate",
     "spec_write_a_poem_1763237468",
     "spec_write_a_poem_1763241023",
-    "spec_write_a_haiku"
+    "spec_write_a_haiku",
+    "spec_write_a_haiku_about_codin",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_letter_to_santa_and_ta"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -507,7 +538,11 @@
     "tool_translate_the_poem_to_french",
     "workflow_1763241398",
     "workflow_add_1_5",
-    "tool_add_1_5"
+    "tool_add_1_5",
+    "workflow_get_english_word",
+    "tool_get_english_word",
+    "workflow_1763251699",
+    "tool_write_a_haiku_about_coding"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -631,7 +666,14 @@
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
     "spec_add_1_5",
-    "spec_write_a_haiku"
+    "spec_write_a_haiku",
+    "spec_exit",
+    "spec_write_a_haiku_about_codin",
+    "spec_get_english_word",
+    "spec_translate_the_word_poop_to_fre",
+    "spec_exit_1763253041",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_letter_to_santa_and_ta"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -722,7 +764,9 @@
     "tool_install_python_package",
     "tool_write_a_poem_1763241023",
     "tool_translate_the_poem_to_french",
-    "tool_add_1_5"
+    "tool_add_1_5",
+    "tool_get_english_word",
+    "tool_write_a_haiku_about_coding"
   ],
   "python": [
     "func_add_100_and_200",
@@ -777,7 +821,11 @@
     "tool_review_this_code_usr_bin_en",
     "func_install_python_package",
     "workflow_install_python_package",
-    "tool_install_python_package"
+    "tool_install_python_package",
+    "func_get_english_word",
+    "workflow_get_english_word",
+    "tool_get_english_word",
+    "tool_write_a_haiku_about_coding"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -844,7 +892,8 @@
     "workflow_review_this_code_usr_bin_en",
     "workflow_install_python_package",
     "workflow_write_a_poem_1763241023",
-    "workflow_add_1_5"
+    "workflow_add_1_5",
+    "workflow_get_english_word"
   ],
   "fibonacci": [
     "func_write_me_code_to_do_a_fibonacc",
@@ -925,7 +974,8 @@
     "spec_add_1_5",
     "func_add_1_5",
     "workflow_add_1_5",
-    "tool_add_1_5"
+    "tool_add_1_5",
+    "tool_basic_calculator"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763174017457",
@@ -1137,7 +1187,14 @@
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
     "spec_add_1_5",
-    "spec_write_a_haiku"
+    "spec_write_a_haiku",
+    "spec_exit",
+    "spec_write_a_haiku_about_codin",
+    "spec_get_english_word",
+    "spec_translate_the_word_poop_to_fre",
+    "spec_exit_1763253041",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_letter_to_santa_and_ta"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1213,7 +1270,14 @@
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
     "spec_add_1_5",
-    "spec_write_a_haiku"
+    "spec_write_a_haiku",
+    "spec_exit",
+    "spec_write_a_haiku_about_codin",
+    "spec_get_english_word",
+    "spec_translate_the_word_poop_to_fre",
+    "spec_exit_1763253041",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_letter_to_santa_and_ta"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1289,7 +1353,14 @@
     "spec_translate_the_poem_to_french_1763243681",
     "spec_implement_binary_search",
     "spec_add_1_5",
-    "spec_write_a_haiku"
+    "spec_write_a_haiku",
+    "spec_exit",
+    "spec_write_a_haiku_about_codin",
+    "spec_get_english_word",
+    "spec_translate_the_word_poop_to_fre",
+    "spec_exit_1763253041",
+    "spec_write_a_haiku_about_coding",
+    "spec_write_a_letter_to_santa_and_ta"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -1390,7 +1461,10 @@
   ],
   "code generation": [
     "func_write_me_a_story_with_a_plot_a_1763182054",
-    "tool_write_a_joke_and_translate_to_1763216276"
+    "tool_write_a_joke_and_translate_to_1763216276",
+    "func_get_english_word",
+    "workflow_get_english_word",
+    "tool_get_english_word"
   ],
   "LLM": [
     "func_write_me_a_story_with_a_plot_a_1763182054",
@@ -1548,10 +1622,12 @@
     "workflow_review_this_code_usr_bin_en",
     "workflow_install_python_package",
     "workflow_write_a_poem_1763241023",
-    "workflow_add_1_5"
+    "workflow_add_1_5",
+    "workflow_get_english_word"
   ],
   "calculator": [
-    "tool_calculat_1_1"
+    "tool_calculat_1_1",
+    "tool_basic_calculator"
   ],
   "content generation": [
     "tool_write_then_translate_a_poen",
@@ -1713,7 +1789,10 @@
     "tool_isort_import_checker",
     "tool_save_to_disk",
     "tool_load_from_disk",
-    "tool_pip_install"
+    "tool_pip_install",
+    "tool_basic_calculator",
+    "tool_text_formatter",
+    "tool_unit_converter"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -1734,7 +1813,8 @@
     "tool_mypy_type_checker"
   ],
   "formatting": [
-    "tool_black_formatter"
+    "tool_black_formatter",
+    "tool_text_formatter"
   ],
   "black": [
     "tool_black_formatter"
@@ -1797,7 +1877,10 @@
     "tool_translation_quality_checker",
     "tool_code_translation_validator",
     "tool_fast_code_generator",
-    "tool_fast_content_writer"
+    "tool_fast_content_writer",
+    "tool_basic_calculator",
+    "tool_text_formatter",
+    "tool_unit_converter"
   ],
   "chunking": [
     "tool_quick_feedback"
@@ -1822,7 +1905,8 @@
     "tool_translation_quality_checker",
     "tool_code_translation_validator",
     "tool_write_a_joke_and_translate_to_1763216276",
-    "tool_translate_the_poem_to_french"
+    "tool_translate_the_poem_to_french",
+    "tool_quick_translator"
   ],
   "nmt": [
     "tool_nmt_translator"
@@ -1943,7 +2027,8 @@
     "workflow_1763233548",
     "workflow_1763234819",
     "workflow_1763237229",
-    "workflow_1763241398"
+    "workflow_1763241398",
+    "workflow_1763251699"
   ],
   "a": [
     "workflow_1763216384",
@@ -2063,6 +2148,60 @@
     "invocation_seo_optimizer_1763244445429"
   ],
   "codellama": [
-    "invocation_general_1763248069168"
+    "invocation_general_1763248069168",
+    "invocation_general_1763250244946",
+    "invocation_general_1763250756661",
+    "invocation_general_1763250883658",
+    "invocation_general_1763251289020",
+    "invocation_general_1763252173397",
+    "invocation_general_1763253219663",
+    "invocation_general_1763253723820"
+  ],
+  "translate": [
+    "workflow_1763251699"
+  ],
+  "the": [
+    "workflow_1763251699"
+  ],
+  "word": [
+    "workflow_1763251699"
+  ],
+  "math": [
+    "tool_basic_calculator"
+  ],
+  "deterministic": [
+    "tool_basic_calculator",
+    "tool_text_formatter",
+    "tool_unit_converter"
+  ],
+  "text": [
+    "tool_text_formatter"
+  ],
+  "string": [
+    "tool_text_formatter"
+  ],
+  "conversion": [
+    "tool_unit_converter"
+  ],
+  "units": [
+    "tool_unit_converter"
+  ],
+  "measurement": [
+    "tool_unit_converter"
+  ],
+  "quick": [
+    "tool_quick_translator"
+  ],
+  "words": [
+    "tool_quick_translator"
+  ],
+  "phrases": [
+    "tool_quick_translator"
+  ],
+  "natural language processing": [
+    "tool_write_a_haiku_about_coding"
+  ],
+  "programming": [
+    "tool_write_a_haiku_about_coding"
   ]
 }
