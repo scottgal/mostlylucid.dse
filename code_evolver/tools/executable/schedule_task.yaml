@@ -1,0 +1,103 @@
+name: schedule_task
+description: |
+  Schedule a task to run at specific times using cron expressions or natural language descriptions.
+
+  This tool is IMMUTABLE - scheduled tasks persist across sessions and run automatically
+  in the background. Use this for polling events, periodic checks, or recurring operations.
+
+  Examples:
+  - "Check for new emails every 5 minutes"
+  - "Generate report every Sunday at noon"
+  - "Backup data daily at 2am"
+
+  The scheduler uses low priority execution to avoid interfering with active workflows.
+
+type: executable
+category: scheduling
+
+immutable: true  # Scheduled tasks persist and cannot be modified by LLM context
+
+parameters:
+  name:
+    type: string
+    description: Human-readable task name
+    required: true
+
+  description:
+    type: string
+    description: Detailed description of what the task does
+    required: true
+
+  schedule:
+    type: string
+    description: |
+      When to run the task. Can be either:
+      - Cron expression (e.g., "0 12 * * 0" for noon every Sunday)
+      - Natural language (e.g., "every sunday at noon", "every 5 minutes")
+    required: true
+
+  function_name:
+    type: string
+    description: |
+      Name of the function to execute (must be registered in the system)
+    required: true
+
+  arguments:
+    type: object
+    description: Arguments to pass to the function (as JSON object)
+    required: false
+    default: {}
+
+  enabled:
+    type: boolean
+    description: Whether the task should be enabled immediately
+    required: false
+    default: true
+
+returns:
+  type: object
+  properties:
+    task_id:
+      type: string
+      description: Unique task identifier
+    cron_expression:
+      type: string
+      description: Converted cron expression
+    next_run:
+      type: string
+      description: ISO timestamp of next scheduled run
+    status:
+      type: string
+      description: Task status (enabled/disabled)
+
+implementation:
+  module: src.scheduled_tasks
+  function: get_global_task_manager().create_task
+
+examples:
+  - name: Poll for events every 5 minutes
+    input:
+      name: "event_poller"
+      description: "Poll external API for new events"
+      schedule: "every 5 minutes"
+      function_name: "poll_events"
+      arguments:
+        api_url: "https://api.example.com/events"
+        timeout: 30
+
+  - name: Weekly report generation
+    input:
+      name: "weekly_report"
+      description: "Generate and email weekly analytics report"
+      schedule: "every sunday at noon"
+      function_name: "generate_weekly_report"
+      arguments:
+        format: "pdf"
+        recipients: ["admin@example.com"]
+
+notes:
+  - Scheduled tasks run with BACKGROUND priority (lowest)
+  - Tasks are paused when high-priority workflows are active
+  - Failed tasks are automatically disabled after 5 consecutive errors
+  - Task schedules and execution history are stored in RAG for semantic search
+  - Use natural language for easier scheduling - it will be converted to cron automatically
