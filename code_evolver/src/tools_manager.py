@@ -452,6 +452,9 @@ class ToolsManager:
                     logger.info(f"✓ Loaded LLM tool from YAML: {tool_id}")
                     console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan](llm)[/dim cyan]")
 
+                    # Store YAML tool in RAG for semantic search
+                    self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
+
                 # Handle Executable tools
                 elif tool_type == ToolType.EXECUTABLE:
                     executable_config = tool_def.get("executable", {})
@@ -482,6 +485,9 @@ class ToolsManager:
                     logger.info(f"✓ Loaded executable tool from YAML: {tool_id}")
                     console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim green](executable)[/dim green]")
 
+                    # Store YAML tool in RAG for semantic search
+                    self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
+
                 # Handle other tool types
                 else:
                     tool = Tool(
@@ -503,10 +509,17 @@ class ToolsManager:
                     logger.info(f"✓ Loaded {tool_type.value} tool from YAML: {tool_id}")
                     console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan]({tool_type.value})[/dim cyan]")
 
+                    # Store YAML tool in RAG for semantic search
+                    self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
+
             except Exception as e:
                 logger.error(f"Error loading tool from {yaml_file}: {e}")
 
         logger.info(f"✓ Loaded {len(yaml_files)} tool(s) from YAML files")
+
+        # Log RAG storage summary
+        if self.rag_memory:
+            logger.info(f"✓ Stored {len(yaml_files)} YAML tool(s) in RAG memory for semantic search")
 
     def _load_tools_from_rag(self):
         """Load tools stored in RAG memory."""
@@ -673,6 +686,102 @@ class ToolsManager:
 
             self.tools[tool_id] = tool
             logger.info(f"✓ Loaded tool from config: {tool_id}")
+
+    def _store_yaml_tool_in_rag(self, tool: Tool, tool_def: dict, yaml_path: str):
+        """
+        Store a YAML-defined tool in RAG memory at load time.
+
+        Args:
+            tool: The Tool object
+            tool_def: The YAML definition dictionary
+            yaml_path: Path to the YAML file
+        """
+        if not self.rag_memory:
+            return
+
+        try:
+            from .rag_memory import ArtifactType
+            import yaml
+
+            # Build comprehensive content for semantic search
+            content_parts = [
+                f"Tool: {tool.name}",
+                f"ID: {tool.tool_id}",
+                f"Type: {tool.tool_type.value}",
+                f"Description: {tool.description}",
+                f"Tags: {', '.join(tool.tags)}",
+                ""
+            ]
+
+            # Add input/output schemas if available
+            if tool_def.get("input_schema"):
+                content_parts.append("Input Parameters:")
+                for param, desc in tool_def["input_schema"].items():
+                    content_parts.append(f"  - {param}: {desc}")
+                content_parts.append("")
+
+            if tool_def.get("output_schema"):
+                content_parts.append("Output:")
+                for param, desc in tool_def["output_schema"].items():
+                    content_parts.append(f"  - {param}: {desc}")
+                content_parts.append("")
+
+            # Add examples if available
+            if tool_def.get("examples"):
+                content_parts.append("Examples:")
+                for example in tool_def["examples"]:
+                    content_parts.append(f"  {example}")
+                content_parts.append("")
+
+            # Add performance tiers
+            if tool_def.get("cost_tier"):
+                content_parts.append("Performance:")
+                content_parts.append(f"  Cost: {tool_def['cost_tier']}")
+                content_parts.append(f"  Speed: {tool_def['speed_tier']}")
+                content_parts.append(f"  Quality: {tool_def['quality_tier']}")
+                content_parts.append("")
+
+            # Add full YAML for reference
+            content_parts.append("Full YAML Definition:")
+            content_parts.append(yaml.dump(tool_def, default_flow_style=False))
+
+            tool_content = "\n".join(content_parts)
+
+            # Extract category from YAML path (e.g., tools/llm/general.yaml -> llm)
+            from pathlib import Path
+            path_parts = Path(yaml_path).parts
+            category = path_parts[-2] if len(path_parts) >= 2 else "other"
+
+            # Store in RAG with comprehensive metadata
+            self.rag_memory.store_artifact(
+                artifact_id=f"tool_{tool.tool_id}",
+                artifact_type=ArtifactType.PATTERN,
+                name=tool.name,
+                description=tool.description,
+                content=tool_content,
+                tags=["tool", "yaml-defined", tool.tool_type.value, category] + tool.tags,
+                metadata={
+                    "tool_id": tool.tool_id,
+                    "tool_type": tool.tool_type.value,
+                    "is_tool": True,
+                    "yaml_path": yaml_path,
+                    "category": category,
+                    "version": tool_def.get("version", "1.0.0"),
+                    "definition_hash": tool.definition_hash,
+                    "cost_tier": tool_def.get("cost_tier"),
+                    "speed_tier": tool_def.get("speed_tier"),
+                    "quality_tier": tool_def.get("quality_tier"),
+                    "input_schema": tool_def.get("input_schema"),
+                    "output_schema": tool_def.get("output_schema"),
+                    "examples": tool_def.get("examples")
+                },
+                auto_embed=True
+            )
+
+            logger.debug(f"Stored YAML tool in RAG: {tool.tool_id} (category: {category})")
+
+        except Exception as e:
+            logger.warning(f"Could not store YAML tool {tool.tool_id} in RAG: {e}")
 
     def _index_tools_in_rag(self):
         """Index all tools in RAG memory for semantic search."""

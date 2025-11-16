@@ -1,0 +1,150 @@
+﻿{
+  "commands": {
+    "/generate": {
+      "usage": "/generate <description>",
+      "description": "Generate new code from a description",
+      "examples": [
+        "/generate write a function that sorts a list",
+        "/generate create a fibonacci calculator",
+        "/generate write a function to validate email addresses"
+      ],
+      "aliases": ["gen", "create", "make"]
+    },
+    "/tools": {
+      "usage": "/tools [category]",
+      "description": "List all available tools organized by type, or filter by category",
+      "examples": [
+        "/tools",
+        "/tools executable",
+        "/tools llm"
+      ],
+      "aliases": []
+    },
+    "/tool": {
+      "usage": "/tool <tool_id> OR /tool <subcommand> [args]",
+      "description": "Show detailed YAML documentation for a tool, or manage tools",
+      "subcommands": {
+        "list": "List all available tools (same as /tools)",
+        "info <tool_id>": "Show detailed information about a tool",
+        "<tool_id>": "Show full YAML documentation with examples, parameters, and usage",
+        "invoke <tool_id> <prompt>": "Invoke a specific tool",
+        "reload": "Reload tools from disk and RAG"
+      },
+      "examples": [
+        "/tool save_to_disk",
+        "/tool list",
+        "/tool info general",
+        "/tool invoke translator translate 'hello' to french"
+      ],
+      "aliases": ["t"]
+    },
+    "/status": {
+      "usage": "/status",
+      "description": "Show system status including Ollama connection, models, and configuration",
+      "examples": [
+        "/status"
+      ],
+      "aliases": ["s", "stat"]
+    },
+    "/clear": {
+      "usage": "/clear",
+      "description": "Clear the terminal screen",
+      "examples": [
+        "/clear"
+      ],
+      "aliases": ["cls"]
+    },
+    "/clear_rag": {
+      "usage": "/clear_rag",
+      "description": "Clear ALL RAG memory including non-YAML tool definitions (WARNING: destructive!)",
+      "warning": "This will delete all dynamically generated tools, code artifacts, plans, and workflows stored in RAG memory. YAML-based tools will be preserved.",
+      "examples": [
+        "/clear_rag"
+      ],
+      "aliases": []
+    },
+    "/help": {
+      "usage": "/help",
+      "description": "Show help message with all available commands",
+      "examples": [
+        "/help"
+      ],
+      "aliases": ["h", "?"]
+    },
+    "/manual": {
+      "usage": "/manual [search_term]",
+      "description": "Search the manual for commands and help. Uses intelligent fuzzy matching.",
+      "examples": [
+        "/manual",
+        "/manual tool",
+        "/manual list",
+        "/manual tool list"
+      ],
+      "aliases": ["man", "m"]
+    },
+    "/config": {
+      "usage": "/config [key] [value]",
+      "description": "Show or update configuration settings",
+      "examples": [
+        "/config",
+        "/config auto_evolution.enabled true",
+        "/config chat.prompt 'MyPrompt> '"
+      ],
+      "aliases": ["cfg"]
+    },
+    "/auto": {
+      "usage": "/auto on|off",
+      "description": "Enable or disable auto-evolution of code",
+      "examples": [
+        "/auto on",
+        "/auto off"
+      ],
+      "aliases": []
+    },
+    "/delete": {
+      "usage": "/delete <node_id>",
+      "description": "Delete a generated code node",
+      "examples": [
+        "/delete fibonacci_v1"
+      ],
+      "aliases": ["rm", "remove"]
+    },
+    "/evolve": {
+      "usage": "/evolve <node_id>",
+      "description": "Manually trigger evolution for a specific node",
+      "examples": [
+        "/evolve fibonacci_v1"
+      ],
+      "aliases": []
+    },
+    "exit": {
+      "usage": "exit | quit | /exit | /quit",
+      "description": "Exit the CLI (/ is optional)",
+      "examples": [
+        "exit",
+        "quit",
+        "/exit",
+        "/quit"
+      ],
+      "aliases": ["q", "quit", "bye"]
+    }
+  },
+  "concepts": {
+    "tools": {
+      "description": "Reusable components that can be invoked to perform specific tasks. Tools can be LLM-based (use language models) or executable (run code).",
+      "related_commands": ["/tool", "/tool list", "/tool info", "/tool invoke"]
+    },
+    "rag": {
+      "description": "RAG (Retrieval-Augmented Generation) memory system stores code artifacts, plans, workflows, and tools for semantic search and reuse.",
+      "related_commands": ["/clear_rag", "/status"]
+    },
+    "evolution": {
+      "description": "Automatic code improvement system that monitors performance and generates improved versions when code underperforms.",
+      "related_commands": ["/auto", "/evolve"]
+    },
+    "tiers": {
+      "description": "Model tier system with tier_1 (fast), tier_2 (standard), tier_3 (god-level) for coding, content, and analysis tasks.",
+      "related_commands": ["/status", "/config"]
+    }
+  }
+}

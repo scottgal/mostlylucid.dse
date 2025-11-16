@@ -1,6 +1,6 @@
-# Code Evolver: Self-Optimizing Multi-LLM Workflow System
+# mostlylucid-dse : Self-Optimizing, Self-Evolving, Self-Composing, code generating Multi-LLM Workflow System
 
-> **An experiment in Directed Synthetic Evolution** - accompanying the blog series at [mostlylucid.net](https://www.mostlylucid.net/blog/category/Emergent%20Intelligence)
+> **An experiment in Directed Synthetic Evolution** - going with the blog series at [mostlylucid.net](https://www.mostlylucid.net/blog/category/Emergent%20Intelligence)
 
 An AI-powered system that generates, executes, evaluates, and optimizes Python code using multiple LLM models. Features intelligent task classification, RAG-powered tool selection, automatic code generation, and self-optimization through iterative improvement.
 

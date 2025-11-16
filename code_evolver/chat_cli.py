@@ -2100,11 +2100,18 @@ from node_runtime import call_tool
                 console.print("[dim yellow]Added missing import: sys[/dim yellow]")
 
         # CRITICAL: Strip out any logging calls that LLM might have added
+        # UNLESS the user explicitly requested logging/debugging functionality
         # This prevents "NameError: name 'logger' is not defined" errors
-        if 'logger' in code or 'logging' in code:
+        logging_keywords = ['with logging', 'with full logging', 'debug version', 'logging enabled',
+                           'include logging', 'add logging', 'logging layer', 'debug layer']
+        user_wants_logging = any(keyword in description.lower() for keyword in logging_keywords)
+
+        if ('logger' in code or 'logging' in code) and not user_wants_logging:
             console.print("[cyan]Removing logging calls from generated code...[/cyan]")
             code = self._remove_debug_logging(code)
             console.print("[dim]Logging calls removed[/dim]")
+        elif user_wants_logging and ('logger' in code or 'logging' in code):
+            console.print("[yellow]NOTE Logging preserved as explicitly requested in task[/yellow]")
 
         # SAFETY NET: Add dummy logger if code still references logger
         # This catches any logging calls that slipped through
@@ -2620,22 +2627,93 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
                 # Store tool in RAG for semantic search
                 if self.rag:
                     from src.rag_memory import ArtifactType
+                    import hashlib
+
+                    # Determine if this is a DEBUG version (contains logging)
+                    is_debug_version = ('import logging' in code or 'logger.' in code)
+                    tool_tags = ["tool", "workflow", "auto-generated"] + code_tags
+
+                    # Generate version info based on code hash
+                    code_hash = hashlib.sha256(code.encode()).hexdigest()[:12]
+                    version = "1.0.0"  # Start with v1.0.0, can be incremented on updates
+
+                    # Determine base tool name (without _debug suffix if present)
+                    base_tool_id = node_id.replace("_debug", "").replace("_DEBUG", "")
+
+                    # If this is a DEBUG version, also store the production version
+                    production_tool_id = None
+                    debug_tool_id = None
+
+                    if is_debug_version:
+                        tool_tags.append("DEBUG")
+                        tool_tags.append("debug-version")
+                        debug_tool_id = node_id
+                        # Link to production version (if it doesn't already have _debug)
+                        if "_debug" not in node_id and "_DEBUG" not in node_id:
+                            production_tool_id = base_tool_id + "_prod"
+                        else:
+                            production_tool_id = base_tool_id
+                        console.print(f"[yellow]WARNING This tool contains logging - tagged as DEBUG version[/yellow]")
+                        console.print(f"[dim]Debug version linked to production tool: {production_tool_id}[/dim]")
+                    else:
+                        # This is a production version
+                        production_tool_id = node_id
+                        # Check if a debug version exists or should be created
+                        debug_tool_id = base_tool_id + "_debug"
+
+                    tool_name_prefix = "[DEBUG] " if is_debug_version else ""
+
+                    # Store tool with versioning and linking metadata
                     self.rag.store_artifact(
                         artifact_id=f"tool_{node_id}",
                         artifact_type=ArtifactType.PATTERN,
-                        name=f"Tool: {code_description[:80]}",
-                        description=f"Reusable workflow tool: {description}",
-                        content=f"Tool ID: {node_id}\nDescription: {description}\nQuality Score: {quality_score:.2f}",
-                        tags=["tool", "workflow", "auto-generated"] + code_tags,
+                        name=f"{tool_name_prefix}Tool: {code_description[:80]}",
+                        description=f"{'DEBUG VERSION - ' if is_debug_version else ''}Reusable workflow tool: {description}",
+                        content=f"""Tool ID: {node_id}
+Description: {description}
+Quality Score: {quality_score:.2f}
+Debug Version: {is_debug_version}
+Code Hash: {code_hash}
+Version: {version}
+Production Tool: {production_tool_id}
+Debug Tool: {debug_tool_id}
+Linked Pair: {production_tool_id} <-> {debug_tool_id}
+""",
+                        tags=tool_tags,
                         metadata={
                             "tool_id": node_id,
                             "quality_score": quality_score,
-                            "is_tool": True
+                            "is_tool": True,
+                            "is_debug": is_debug_version,
+                            "has_logging": is_debug_version,
+                            "version": version,
+                            "code_hash": code_hash,
+                            "production_tool_id": production_tool_id,
+                            "debug_tool_id": debug_tool_id,
+                            "linked_pair": f"{production_tool_id}<->{debug_tool_id}",
+                            "base_tool_id": base_tool_id,
+                            "created_at": __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()
                         },
                         auto_embed=True
                     )
 
+                    # If this is a production version, also check for and link existing debug version
+                    if not is_debug_version:
+                        # Look for existing debug version
+                        debug_artifacts = self.rag.find_by_tags(["DEBUG", "tool"])
+                        for artifact in debug_artifacts:
+                            if artifact.metadata.get("base_tool_id") == base_tool_id:
+                                console.print(f"[dim]Found existing debug version: {artifact.metadata.get('tool_id')}[/dim]")
+                                console.print(f"[dim]Production <-> Debug pair: {node_id} <-> {artifact.metadata.get('tool_id')}[/dim]")
+
                 console.print(f"[green]OK Registered as tool '{node_id}' (quality: {quality_score:.2f})[/green]")
+
+                # Print versioning summary
+                if is_debug_version:
+                    console.print(f"[dim]Version: {version} | Hash: {code_hash} | Pair: {production_tool_id} <-> {debug_tool_id}[/dim]")
+                else:
+                    console.print(f"[dim]Version: {version} | Hash: {code_hash} | Debug counterpart: {debug_tool_id}[/dim]")
+
             except Exception as e:
                 console.print(f"[dim yellow]Note: Could not register as tool: {e}[/dim yellow]")
 
@@ -4236,6 +4314,15 @@ Return ONLY the JSON object, nothing else."""
 
                 # Determine category from metadata
                 metadata = tool.metadata or {}
+
+                # Check if this is a DEBUG version
+                is_debug = metadata.get("is_debug", False) or "DEBUG" in tool.tags
+                if is_debug:
+                    # Prepend [DEBUG] tag to name
+                    name = f"[DEBUG] {name}"
+                    # Highlight in description
+                    description = f"DEBUG VERSION - {description[:30]}..."
+
                 yaml_path = metadata.get("yaml_path", "")
                 if yaml_path:
                     # Extract category from path (e.g., "tools/executable/foo.yaml" -> "executable")
@@ -5550,6 +5637,126 @@ Return ONLY the JSON, no other text."""
 
         console.print()
         return True
+
+    def get_debug_version(self, production_tool_id: str) -> Optional[dict]:
+        """
+        Retrieve the debug version of a production tool.
+
+        Args:
+            production_tool_id: ID of the production tool
+
+        Returns:
+            Dictionary with debug tool metadata, or None if not found
+        """
+        if not self.rag:
+            return None
+
+        try:
+            # Search for debug versions linked to this production tool
+            debug_artifacts = self.rag.find_by_tags(["DEBUG", "tool"])
+
+            for artifact in debug_artifacts:
+                metadata = artifact.metadata or {}
+                if metadata.get("production_tool_id") == production_tool_id:
+                    return {
+                        "tool_id": metadata.get("tool_id"),
+                        "debug_tool_id": metadata.get("debug_tool_id"),
+                        "version": metadata.get("version"),
+                        "code_hash": metadata.get("code_hash"),
+                        "created_at": metadata.get("created_at"),
+                        "artifact": artifact
+                    }
+
+            return None
+
+        except Exception as e:
+            console.print(f"[yellow]Could not retrieve debug version: {e}[/yellow]")
+            return None
+
+    def update_tests_from_debug_version(self, production_tool_id: str, updated_code: str) -> bool:
+        """
+        When a production tool is updated, use the debug version to update tests.
+
+        The debug version has logging that can help understand what changed and
+        update the unit tests accordingly.
+
+        Args:
+            production_tool_id: ID of the updated production tool
+            updated_code: The new production code
+
+        Returns:
+            True if tests were successfully updated
+        """
+        if not self.rag:
+            console.print("[yellow]RAG not available for test updates[/yellow]")
+            return False
+
+        try:
+            # Find the debug version
+            debug_info = self.get_debug_version(production_tool_id)
+
+            if not debug_info:
+                console.print(f"[yellow]No debug version found for {production_tool_id}[/yellow]")
+                console.print("[dim]Tests will be regenerated from scratch[/dim]")
+                return False
+
+            console.print(f"[cyan]Found debug version: {debug_info['tool_id']}[/cyan]")
+            console.print(f"[dim]Using debug logs to understand code changes...[/dim]")
+
+            # Get the debug version's code (with logging)
+            debug_artifact = debug_info['artifact']
+            debug_tool_id = debug_info['tool_id']
+
+            # Step 1: Load the debug version's code from RAG
+            debug_code = self._extract_code_from_artifact(debug_artifact)
+            if not debug_code:
+                console.print("[yellow]Could not extract code from debug artifact[/yellow]")
+                return False
+
+            # Step 2: Run debug version with test inputs to capture logging output
+            console.print("[cyan]Running debug version to capture behavior...[/cyan]")
+            debug_logs = self._run_code_and_capture_logs(debug_code, debug_tool_id)
+
+            if not debug_logs:
+                console.print("[yellow]No debug logs captured[/yellow]")
+                return False
+
+            console.print(f"[green]Captured {len(debug_logs)} lines of debug output[/green]")
+
+            # Step 3: Analyze logs to understand behavior
+            console.print("[cyan]Analyzing debug logs...[/cyan]")
+            behavior_analysis = self._analyze_debug_logs(debug_logs)
+
+            # Step 4: Compare with new production code to identify changes
+            console.print("[cyan]Comparing with new production code...[/cyan]")
+            code_diff = self._compare_code_versions(debug_code, updated_code)
+
+            # Step 5: Generate updated tests based on behavioral differences
+            console.print("[cyan]Generating updated tests...[/cyan]")
+            test_code = self._generate_tests_from_behavior(
+                production_tool_id=production_tool_id,
+                production_code=updated_code,
+                behavior_analysis=behavior_analysis,
+                code_diff=code_diff,
+                debug_logs=debug_logs
+            )
+
+            if test_code:
+                # Save the test file
+                test_file_path = self.nodes_path / production_tool_id / "test.py"
+                test_file_path.parent.mkdir(parents=True, exist_ok=True)
+                test_file_path.write_text(test_code, encoding='utf-8')
+
+                console.print(f"[green]✓ Updated tests saved to: {test_file_path}[/green]")
+                console.print(f"[dim]Debug tool: {debug_info['tool_id']} | Version: {debug_info['version']}[/dim]")
+                return True
+            else:
+                console.print("[yellow]Could not generate tests from debug version[/yellow]")
+                return False
+
+        except Exception as e:
+            console.print(f"[red]Error updating tests from debug version: {e}[/red]")
+            return False
 
     def run(self):
         """Run the interactive CLI."""
