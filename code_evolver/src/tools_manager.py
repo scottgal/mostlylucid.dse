@@ -388,7 +388,7 @@ class ToolsManager:
             index = {tool_id: tool.to_dict() for tool_id, tool in self.tools.items()}
 
             with open(self.index_path, 'w', encoding='utf-8') as f:
-                json.dump(index, f, indent=2)
+                json.dump(index, f, indent=2, ensure_ascii=False)
 
         except Exception as e:
             logger.error(f"Error saving tools index: {e}")
@@ -547,6 +547,9 @@ class ToolsManager:
                 logger.error(f"Error loading tool from {yaml_file}: {e}")
 
         logger.info(f"✓ Loaded {len(yaml_files)} tool(s) from YAML files")
+
+        # Save index after loading tools from YAML
+        self._save_index()
 
         # Log RAG storage summary
         if self.rag_memory:

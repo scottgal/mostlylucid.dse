@@ -1430,12 +1430,64 @@ Answer:"""
 
                         # Auto-run the reused workflow with the new description as input
                         with self.display.start_stage("Execute", "Running workflow"):
+                            # Detect what input fields the code expects
+                            import re
+                            expected_fields = set()
+                            if code_content:
+                                code_lines = code_content.split('\n')
+                                for line in code_lines:
+                                    # Look for patterns like: input_data.get("field_name", ...)
+                                    matches = re.findall(r'input_data\.get\(["\']([^"\']+)["\']', line)
+                                    expected_fields.update(matches)
+
                             # Pass multiple common keys for compatibility with different workflows
                             input_data = {
                                 "input": description,
+                                "task": description,
                                 "description": description,
-                                "prompt": description
+                                "query": description,
+                                "topic": description,
+                                "prompt": description,
+                                "question": description,
+                                "request": description
                             }
+
+                            # If code expects specific fields, try to auto-generate data
+                            generic_fields = {"input", "task", "description", "query", "topic", "prompt", "question", "request"}
+                            specific_fields_needed = expected_fields - generic_fields
+
+                            if specific_fields_needed:
+                                console.print(f"[yellow]→ Detected specific input fields: {', '.join(specific_fields_needed)}[/yellow]")
+                                console.print(f"[yellow]→ Auto-generating test data...[/yellow]")
+
+                                try:
+                                    # Build a schema from the detected fields
+                                    schema = {}
+                                    for field in specific_fields_needed:
+                                        if any(word in field.lower() for word in ['lang', 'language']):
+                                            schema[field] = "string"
+                                        elif any(word in field.lower() for word in ['text', 'article', 'content', 'message']):
+                                            schema[field] = "string"
+                                        elif any(word in field.lower() for word in ['age', 'count', 'number', 'size']):
+                                            schema[field] = "number"
+                                        else:
+                                            schema[field] = "string"
+
+                                    # Generate test data
+                                    schema_json = json.dumps(schema)
+                                    test_data_result = self.tools.invoke_executable_tool(
+                                        tool_id="random_data_generator",
+                                        source_file="",
+                                        prompt=schema_json
+                                    )
+
+                                    if test_data_result.get("success"):
+                                        test_data = json.loads(test_data_result["stdout"])
+                                        console.print(f"[green]→ Generated test data: {json.dumps(test_data, indent=2)}[/green]")
+                                        input_data.update(test_data)
+                                except Exception as e:
+                                    console.print(f"[yellow]→ Could not auto-generate test data: {e}[/yellow]")
+
                             stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
                         # Display results - ALWAYS show output prominently
@@ -1450,22 +1502,43 @@ Answer:"""
                             if stdout and stdout.strip():
                                 # Try to extract and show the actual result prominently
                                 result_extracted = False
+                                has_empty_output = False
                                 try:
                                     # Try to parse as JSON first
                                     output_data = json.loads(stdout.strip())
                                     if isinstance(output_data, dict):
-                                        # Show the actual result clearly
-                                        if 'result' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['result']}\n")
-                                            result_extracted = True
-                                        elif 'output' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['output']}\n")
-                                            result_extracted = True
-                                        elif 'answer' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['answer']}\n")
-                                            result_extracted = True
-                                        elif 'content' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}\n")
+                                        # Check for common result field names
+                                        result_fields = ['result', 'output', 'answer', 'content', 'translated_article',
+                                                         'summary', 'text', 'data', 'response']
+
+                                        for field in result_fields:
+                                            if field in output_data:
+                                                result_content = output_data[field]
+                                                # Check if result is empty
+                                                if not result_content or (isinstance(result_content, str) and not result_content.strip()):
+                                                    has_empty_output = True
+                                                    console.print(f"[yellow]⚠ Warning: Field '{field}' is empty![/yellow]")
+                                                    console.print(f"[dim]Full output: {json.dumps(output_data, indent=2)}[/dim]")
+                                                else:
+                                                    console.print(f"\n[bold green]RESULT:[/bold green]")
+                                                    if isinstance(result_content, str):
+                                                        console.print(result_content + "\n")
+                                                    else:
+                                                        console.print(json.dumps(result_content, indent=2) + "\n")
+                                                result_extracted = True
+                                                break
+
+                                        # If no recognized field found, show all non-empty values
+                                        if not result_extracted and output_data:
+                                            console.print("\n[bold green]RESULT:[/bold green]")
+                                            console.print("[bold]Output fields:[/bold]")
+                                            for key, value in output_data.items():
+                                                if value and (not isinstance(value, str) or value.strip()):
+                                                    console.print(f"  {key}: {value}")
+                                                else:
+                                                    has_empty_output = True
+                                                    console.print(f"  [dim]{key}: (empty)[/dim]")
+                                            console.print()
                                             result_extracted = True
                                     elif isinstance(output_data, str):
                                         # JSON string output (like from json.dumps(string))
@@ -1483,6 +1556,14 @@ Answer:"""
                                         console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
                                     else:
                                         console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
+
+                                # If output was empty, show helpful message
+                                if has_empty_output:
+                                    console.print("\n[yellow]━" * 40 + "[/yellow]")
+                                    console.print("[yellow]⚠ The workflow produced empty output![/yellow]")
+                                    console.print("[yellow]This usually means the workflow needs specific input data.[/yellow]")
+                                    console.print("[yellow]The system tried to auto-generate test data, but it may not have been sufficient.[/yellow]")
+                                    console.print("[yellow]━" * 40 + "[/yellow]")
                             else:
                                 console.print("[yellow]Note: Code executed successfully but produced no output[/yellow]")
                         else:
@@ -2947,9 +3028,17 @@ This workflow successfully completed with passing tests.
         workflow.start_step("execution")
         console.print(f"\n[cyan]Running workflow...[/cyan]")
 
+        # Detect what input fields the generated code expects
+        import re
+        expected_fields = set()
+        code_lines = code.split('\n')
+        for line in code_lines:
+            # Look for patterns like: input_data.get("field_name", ...)
+            matches = re.findall(r'input_data\.get\(["\']([^"\']+)["\']', line)
+            expected_fields.update(matches)
+
         # Create flexible input data that works with different code patterns
-        # Pass the description as "input", "task", "description", "query", "topic", "prompt"
-        # so generated code can use whichever field name it expects
+        # Start with generic fields
         input_data = {
             "input": description,
             "task": description,
@@ -2960,6 +3049,47 @@ This workflow successfully completed with passing tests.
             "question": description,
             "request": description
         }
+
+        # If code expects specific fields not in our generic list, try to auto-generate data
+        generic_fields = {"input", "task", "description", "query", "topic", "prompt", "question", "request"}
+        specific_fields_needed = expected_fields - generic_fields
+
+        if specific_fields_needed:
+            console.print(f"[yellow]→ Detected specific input fields needed: {', '.join(specific_fields_needed)}[/yellow]")
+            console.print(f"[yellow]→ Auto-generating test data...[/yellow]")
+
+            # Try to use random_data_generator to create test data
+            try:
+                # Build a schema from the detected fields
+                schema = {}
+                for field in specific_fields_needed:
+                    # Guess type based on field name
+                    if any(word in field.lower() for word in ['lang', 'language']):
+                        schema[field] = "string"  # Will generate language code
+                    elif any(word in field.lower() for word in ['text', 'article', 'content', 'message']):
+                        schema[field] = "string"  # Will generate text
+                    elif any(word in field.lower() for word in ['age', 'count', 'number', 'size']):
+                        schema[field] = "number"
+                    else:
+                        schema[field] = "string"
+
+                # Generate test data
+                schema_json = json.dumps(schema)
+                test_data_result = self.tools.invoke_executable_tool(
+                    tool_id="random_data_generator",
+                    source_file="",
+                    prompt=schema_json
+                )
+
+                if test_data_result.get("success"):
+                    test_data = json.loads(test_data_result["stdout"])
+                    console.print(f"[green]→ Generated test data: {json.dumps(test_data, indent=2)}[/green]")
+                    # Merge generated data into input_data
+                    input_data.update(test_data)
+            except Exception as e:
+                console.print(f"[yellow]→ Could not auto-generate test data: {e}[/yellow]")
+                console.print(f"[yellow]→ Running with generic input only (may produce empty output)[/yellow]")
+
         stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
         # CRITICAL: Display output IMMEDIATELY and PROMINENTLY
@@ -2971,26 +3101,40 @@ This workflow successfully completed with passing tests.
 
             # Try to extract and show the actual result prominently
             result_displayed = False
+            has_empty_output = False
             try:
                 # Try to parse as JSON first
                 output_data = json.loads(stdout.strip())
                 if isinstance(output_data, dict):
-                    # Show the actual result clearly
-                    if 'result' in output_data:
-                        result_content = output_data['result']
-                        if isinstance(result_content, str):
-                            console.print(result_content)
-                        else:
-                            console.print(json.dumps(result_content, indent=2))
-                        result_displayed = True
-                    elif 'output' in output_data:
-                        console.print(output_data['output'])
-                        result_displayed = True
-                    elif 'answer' in output_data:
-                        console.print(output_data['answer'])
-                        result_displayed = True
-                    elif 'content' in output_data:
-                        console.print(output_data['content'])
+                    # Check for common result field names
+                    result_fields = ['result', 'output', 'answer', 'content', 'translated_article',
+                                     'summary', 'text', 'data', 'response']
+
+                    for field in result_fields:
+                        if field in output_data:
+                            result_content = output_data[field]
+                            # Check if result is empty
+                            if not result_content or (isinstance(result_content, str) and not result_content.strip()):
+                                has_empty_output = True
+                                console.print(f"[yellow]⚠ Warning: Field '{field}' is empty![/yellow]")
+                                console.print(f"[dim]Full output: {json.dumps(output_data, indent=2)}[/dim]")
+                            else:
+                                if isinstance(result_content, str):
+                                    console.print(result_content)
+                                else:
+                                    console.print(json.dumps(result_content, indent=2))
+                            result_displayed = True
+                            break
+
+                    # If no recognized field found, show all non-empty values
+                    if not result_displayed and output_data:
+                        console.print("[bold]Output fields:[/bold]")
+                        for key, value in output_data.items():
+                            if value and (not isinstance(value, str) or value.strip()):
+                                console.print(f"  {key}: {value}")
+                            else:
+                                has_empty_output = True
+                                console.print(f"  [dim]{key}: (empty)[/dim]")
                         result_displayed = True
             except:
                 pass
@@ -2998,6 +3142,14 @@ This workflow successfully completed with passing tests.
             # If we couldn't extract a specific result, show full output
             if not result_displayed:
                 console.print(stdout)
+
+            # If output was empty, show helpful message
+            if has_empty_output:
+                console.print("\n[yellow]━" * 40 + "[/yellow]")
+                console.print("[yellow]⚠ The workflow produced empty output![/yellow]")
+                console.print("[yellow]This usually means the workflow needs specific input data.[/yellow]")
+                console.print("[yellow]Try providing input fields or use test data generation.[/yellow]")
+                console.print("[yellow]━" * 40 + "[/yellow]")
 
             console.print("\n" + "="*80 + "\n")
 

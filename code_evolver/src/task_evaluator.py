@@ -101,7 +101,18 @@ class TaskEvaluator:
         prompt = f"""Task: "{description}"
 
 Classify as ONE:
-creative_content, arithmetic, data_processing, code_generation, translation, question_answering, formatting, conversion, unknown
+- creative_content: stories, jokes, articles, poems, OR GENERATING SAMPLE/TEST/RANDOM DATA
+- arithmetic: math calculations, number operations
+- data_processing: filtering, sorting, transforming EXISTING data (NOT generating new data)
+- code_generation: writing functions, programs
+- translation: language translation
+- question_answering: answering questions, explaining concepts
+- formatting: changing text format/case
+- conversion: converting between formats
+- unknown: unclear tasks
+
+IMPORTANT: "generate data", "create sample data", "random data" → creative_content (needs LLM)
+           "filter data", "sort data" → data_processing (can use code)
 
 Also rate COMPLEXITY:
 simple, moderate, complex
@@ -123,6 +134,17 @@ COMPLEXITY: [pick one]"""
 
             category = category_line.replace('CATEGORY:', '').strip().lower().replace("-", "_")
             complexity = complexity_line.replace('COMPLEXITY:', '').strip().lower()
+
+            # CRITICAL: Override category for data GENERATION requests
+            # (even if tinyllama classified it as data_processing)
+            desc_lower = description.lower()
+            if any(keyword in desc_lower for keyword in ["generate data", "create data", "sample data",
+                                                         "random data", "fake data", "mock data",
+                                                         "test data", "dummy data", "synthetic data",
+                                                         "generate sample", "create sample", "make up data"]):
+                # Data generation needs LLM, not code loops
+                logger.info(f"Detected data generation request - overriding to creative_content")
+                category = 'creative_content'
 
             # Don't try to parse understanding or key_aspects - tinyllama is too unreliable
             understanding = ""
@@ -188,7 +210,7 @@ COMPLEXITY: [pick one]"""
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,
-                "recommended_tier": "coding.tier_2",
+                "recommended_tier": "code.general",  # Updated from coding.tier_2
                 "reason": f"Error during evaluation: {e}",
                 "input_length": input_length,
                 "evaluation_model": "none"
@@ -271,11 +293,19 @@ COMPLEXITY: [pick one]"""
             return TaskType(category)
         except ValueError:
             # Try fuzzy matching
-            if "creative" in category or "content" in category or "story" in category or "joke" in category:
+            # IMPORTANT: Check for data GENERATION first (needs LLM)
+            # before generic data processing (can use code)
+            if any(keyword in category for keyword in ["generate data", "create data", "sample data",
+                                                       "random data", "fake data", "mock data",
+                                                       "test data", "dummy data", "synthetic data"]):
+                # Data generation needs LLM for realistic results
+                return TaskType.CREATIVE_CONTENT
+            elif "creative" in category or "content" in category or "story" in category or "joke" in category:
                 return TaskType.CREATIVE_CONTENT
             elif "math" in category or "arithmetic" in category or "calculate" in category:
                 return TaskType.ARITHMETIC
             elif "data" in category or "process" in category:
+                # Generic data processing (filter, sort, transform) can use code
                 return TaskType.DATA_PROCESSING
             elif "code" in category or "function" in category or "program" in category:
                 return TaskType.CODE_GENERATION
@@ -318,7 +348,7 @@ COMPLEXITY: [pick one]"""
                 "requires_llm": True,
                 "requires_content_llm": True,
                 "can_use_tools": False,
-                "recommended_tier": "content.tier_2",  # Medium content LLM
+                "recommended_tier": "content.general",  # Updated from content.tier_2
                 "reason": "Creative content requires LLM generation (stories, jokes, poems, articles)"
             }
 
@@ -328,7 +358,7 @@ COMPLEXITY: [pick one]"""
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,
-                "recommended_tier": "content.tier_2",
+                "recommended_tier": "content.general",  # Updated from content.tier_2
                 "reason": "Question answering requires LLM knowledge"
             }
 
@@ -336,13 +366,13 @@ COMPLEXITY: [pick one]"""
         elif task_type == TaskType.CODE_GENERATION:
             # Select tier based on complexity assessment
             if complexity == "simple":
-                tier = "coding.tier_1"
+                tier = "code.fast"  # Updated from coding.tier_1
                 reason = "Simple code generation (basic functions, straightforward logic)"
             elif complexity == "complex":
-                tier = "coding.tier_3"
+                tier = "code.escalation"  # Updated from coding.tier_3
                 reason = "Complex code generation (advanced algorithms, system design)"
             else:  # moderate
-                tier = "coding.tier_2"
+                tier = "code.general"  # Updated from coding.tier_2
                 reason = "Standard code generation (multi-step workflows, moderate complexity)"
 
             return {
@@ -400,7 +430,7 @@ COMPLEXITY: [pick one]"""
                     "requires_llm": True,
                     "requires_content_llm": True,
                     "can_use_tools": False,
-                    "recommended_tier": "content.tier_2",
+                    "recommended_tier": "content.general",  # Updated from content.tier_2
                     "reason": "Complex translation requires LLM for context/nuance"
                 }
 
@@ -410,7 +440,7 @@ COMPLEXITY: [pick one]"""
                 "requires_llm": False,
                 "requires_content_llm": False,
                 "can_use_tools": True,
-                "recommended_tier": "coding.tier_1",
+                "recommended_tier": "code.fast",  # Updated from coding.tier_1
                 "reason": "Data processing can use generated code"
             }
 
@@ -420,6 +450,6 @@ COMPLEXITY: [pick one]"""
                 "requires_llm": True,
                 "requires_content_llm": False,
                 "can_use_tools": False,
-                "recommended_tier": "content.tier_2",
+                "recommended_tier": "content.general",  # Updated from content.tier_2
                 "reason": "Unknown task type, defaulting to LLM for safety"
             }

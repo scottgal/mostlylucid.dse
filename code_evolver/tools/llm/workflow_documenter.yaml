@@ -1,0 +1,368 @@
+name: "Workflow Documenter"
+type: "llm"
+description: "Generates comprehensive 'How to Use' documentation for workflows by analyzing code, inputs, outputs, and purpose. Creates user-friendly guides for front-end generation and API consumption."
+llm:
+  model_tier: "general"  # Medium-tier model for balanced quality and speed
+  temperature: 0.3  # Lower temperature for consistent, factual documentation
+  max_tokens: 6000  # Limit output to ~6000 tokens to fit in context window
+  system_prompt: |
+    You are a technical documentation expert specializing in workflow and API documentation.
+
+    Your task is to create clear, comprehensive "How to Use" documentation for workflows that will:
+    1. Be displayed in auto-generated front-ends
+    2. Help users understand what the workflow does
+    3. Show exactly what inputs are required
+    4. Explain what outputs to expect
+    5. Provide usage examples
+
+    IMPORTANT RULES:
+    - Write for non-technical users when possible
+    - Be specific about input requirements (types, formats, required vs optional)
+    - Include example inputs and expected outputs
+    - Mention any limitations or edge cases
+    - Keep it concise but complete (max ~3000 words)
+    - Use markdown formatting
+    - Include code examples where helpful
+    - Focus on practical usage over theoretical details
+
+  prompt_template: |
+    Generate concise "How to Use" documentation for this workflow (max 3000 words):
+
+    **Workflow Name:** {workflow_name}
+    **Description:** {description}
+    **Source Code:**
+    ```python
+    {code}
+    ```
+    **Context:** {context}
+
+    Create documentation with these sections (be concise):
+
+    ## Overview
+    [1-2 sentences: what it does and who it's for]
+
+    ## What It Does
+    [2-3 paragraphs: purpose, value, and key features]
+
+    ## Required Inputs
+    [Table format with Field, Type, Required, Description, Example]
+
+    ## Expected Outputs
+    [Table format with Field, Type, Description, Example]
+    [Include 1 sample JSON output]
+
+    ## How to Use
+
+    ### Quick Start (30 seconds)
+    [3-5 bullet points for immediate usage]
+
+    ### Via API
+    ```bash
+    curl -X POST http://api.example.com/workflow \\
+      -H "Content-Type: application/json" \\
+      -d '{{"field1": "value", "field2": 123}}'
+    ```
+
+    ### Via Python
+    ```python
+    import json, subprocess
+    result = subprocess.run(["python", "workflow.py"],
+                          input=json.dumps({{"field1": "value"}}),
+                          capture_output=True, text=True)
+    output = json.loads(result.stdout)
+    ```
+
+    ## Examples
+
+    ### Example 1: Basic Usage
+    **Input:** [JSON]
+    **Output:** [JSON]
+    **Explanation:** [1-2 sentences]
+
+    ### Example 2: Advanced (if applicable)
+    **Input:** [JSON]
+    **Output:** [JSON]
+    **Explanation:** [1-2 sentences]
+
+    ## Process Flow (Mermaid)
+    ```mermaid
+    flowchart TD
+        A[Input] --> B[Process]
+        B --> C[Output]
+    ```
+    [Keep diagram simple - max 5-7 nodes]
+
+    ## Limitations
+    - [List 3-5 key limitations/constraints]
+    - [Include performance, input size, accuracy notes]
+
+    ## Error Handling
+    [Table: Error | Cause | Solution]
+    [List 3-5 common errors]
+
+    ## Technical Details
+    - **Language**: Python 3.x
+    - **Dependencies**: [List if any]
+    - **Tools Used**: [From context]
+    - **Speed**: [From context]
+
+    ## FAQ
+    [2-3 most common questions with brief answers]
+
+    IMPORTANT: Keep total output under 3000 words. Focus on practical usage.
+
+input_schema:
+  workflow_name:
+    type: string
+    description: "Name of the workflow being documented"
+    required: true
+  description:
+    type: string
+    description: "High-level description of what the workflow does"
+    required: true
+  code:
+    type: string
+    description: "The complete workflow source code"
+    required: true
+  context:
+    type: string
+    description: "Additional context: input fields detected, tools used, etc."
+    required: false
+    default: "No additional context provided"
+
+output_schema:
+  type: string
+  description: "Markdown-formatted documentation ready for display or API docs"
+
+tags: ["documentation", "workflow", "api", "guide", "tutorial", "how-to", "frontend"]
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 75
+
+examples:
+  - inputs:
+      workflow_name: "Email Validator"
+      description: "Validates email addresses and checks if they're from a specific domain"
+      code: |
+        import json
+        import sys
+        import re
+
+        def main():
+            input_data = json.load(sys.stdin)
+            email = input_data.get("email", "")
+            domain = input_data.get("domain", "")
+
+            is_valid = bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
+            is_domain_match = email.endswith(f"@{domain}") if domain else False
+
+            print(json.dumps({
+                "is_valid": is_valid,
+                "is_domain_match": is_domain_match,
+                "email": email
+            }))
+      context: |
+        Detected inputs: email (string), domain (string, optional)
+        Tools used: None (pure Python regex)
+        Estimated speed: Very fast
+    output: |
+      ## Overview
+      Validates email addresses and optionally checks if they belong to a specific domain.
+
+      ## What It Does
+      This workflow checks if an email address is valid using regex pattern matching. If you provide a domain name, it will also check if the email address belongs to that domain.
+
+      ## Required Inputs
+
+      - **email** (string, required)
+        - The email address to validate
+        - Example: `"user@example.com"`
+
+      - **domain** (string, optional)
+        - The domain to check against (without @)
+        - Example: `"example.com"`
+        - If not provided, only validates email format
+
+      ## Expected Outputs
+
+      Returns a JSON object with:
+      - **is_valid** (boolean): Whether the email format is valid
+      - **is_domain_match** (boolean): Whether the email matches the specified domain
+      - **email** (string): The email address that was checked
+
+      Example output:
+      ```json
+      {
+        "is_valid": true,
+        "is_domain_match": true,
+        "email": "user@example.com"
+      }
+      ```
+
+      ## How to Use
+
+      ### Via API
+      ```json
+      {
+        "email": "john.doe@company.com",
+        "domain": "company.com"
+      }
+      ```
+
+      ### Via Front-End
+      1. Enter the email address you want to validate
+      2. (Optional) Enter a domain name to check against
+      3. Click "Validate"
+      4. View the validation results
+
+      ## Examples
+
+      ### Example 1: Valid Email with Domain Check
+      **Input:**
+      ```json
+      {
+        "email": "sarah@techcorp.com",
+        "domain": "techcorp.com"
+      }
+      ```
+      **Output:**
+      ```json
+      {
+        "is_valid": true,
+        "is_domain_match": true,
+        "email": "sarah@techcorp.com"
+      }
+      ```
+
+      ### Example 2: Invalid Email Format
+      **Input:**
+      ```json
+      {
+        "email": "not-an-email",
+        "domain": "example.com"
+      }
+      ```
+      **Output:**
+      ```json
+      {
+        "is_valid": false,
+        "is_domain_match": false,
+        "email": "not-an-email"
+      }
+      ```
+
+      ## Limitations
+      - Uses basic regex validation (not comprehensive email RFC compliance)
+      - Does not verify if the email address actually exists
+      - Does not check DNS records or MX records
+      - Domain checking is case-sensitive
+
+      ## Technical Details
+      - **Tools Used:** Python regex (re module)
+      - **Processing Time:** Very fast (< 100ms)
+      - **Model:** None (pure Python logic)
+
+      ## Error Handling
+      - If no email is provided, `is_valid` will be `false`
+      - If no domain is provided, `is_domain_match` will be `false`
+      - Malformed input will result in validation failure
+
+  - inputs:
+      workflow_name: "Article Translator"
+      description: "Translates articles to different languages while preserving formatting"
+      code: |
+        from node_runtime import call_tool
+
+        def main():
+            input_data = json.load(sys.stdin)
+            article = input_data.get("article", "")
+            target_language = input_data.get("target_language", "Spanish")
+
+            prompt = f"Translate to {target_language}: {article}"
+            translated = call_tool("nmt_translate", prompt)
+
+            print(json.dumps({"translated_article": translated}))
+      context: |
+        Detected inputs: article (string), target_language (string)
+        Tools used: nmt_translate (NMT API)
+        Estimated speed: Fast (1-3 seconds)
+    output: |
+      ## Overview
+      Translates articles to your chosen language using neural machine translation.
+
+      ## What It Does
+      This workflow takes an article in any language and translates it to your target language using advanced AI translation. It works with most major languages and preserves the general structure of the text.
+
+      ## Required Inputs
+
+      - **article** (string, required)
+        - The article text to translate
+        - Can be any length (short paragraph to full article)
+        - Example: `"Hello, this is a test article about AI."`
+
+      - **target_language** (string, optional)
+        - The language to translate to
+        - Example: `"French"`, `"German"`, `"Spanish"`
+        - Default: `"Spanish"` if not provided
+
+      ## Expected Outputs
+
+      Returns a JSON object with:
+      - **translated_article** (string): The translated text
+
+      Example output:
+      ```json
+      {
+        "translated_article": "Hola, este es un artículo de prueba sobre IA."
+      }
+      ```
+
+      ## How to Use
+
+      ### Via API
+      ```json
+      {
+        "article": "Artificial intelligence is transforming technology.",
+        "target_language": "German"
+      }
+      ```
+
+      ### Via Front-End
+      1. Paste or type your article in the input field
+      2. Select your target language from the dropdown
+      3. Click "Translate"
+      4. View the translated article
+
+      ## Examples
+
+      ### Example 1: Translate to French
+      **Input:**
+      ```json
+      {
+        "article": "The weather is beautiful today.",
+        "target_language": "French"
+      }
+      ```
+      **Output:**
+      ```json
+      {
+        "translated_article": "Le temps est magnifique aujourd'hui."
+      }
+      ```
+
+      ## Limitations
+      - Translation quality depends on language pair (some languages translate better than others)
+      - Very technical or domain-specific terms may not translate accurately
+      - Formatting (bold, italics, etc.) is not preserved
+      - Maximum recommended length: ~5000 words for best results
+
+      ## Technical Details
+      - **Tools Used:** NMT Translator (Neural Machine Translation API)
+      - **Processing Time:** Fast (1-3 seconds for typical articles)
+      - **Model:** NMT service at localhost:8000
+
+      ## Error Handling
+      - If article is empty, returns empty translation
+      - If NMT service is unavailable, returns error message
+      - Unsupported languages will fall back to best available match

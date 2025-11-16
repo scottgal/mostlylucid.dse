@@ -56,7 +56,7 @@ class NodeRunner:
         self,
         node_id: str,
         input_payload: Dict[str, Any],
-        timeout_ms: int = 60000,
+        timeout_ms: int = 600000,  # 10 minutes default (was 60s, too short for LLM workflows)
         filename: str = "main.py"
     ) -> Tuple[str, str, Dict[str, Any]]:
         """
@@ -65,7 +65,7 @@ class NodeRunner:
         Args:
             node_id: Node identifier
             input_payload: Input data as dictionary
-            timeout_ms: Execution timeout in milliseconds
+            timeout_ms: Execution timeout in milliseconds (default: 600000ms = 10 minutes)
             filename: Code filename to execute
 
         Returns:
