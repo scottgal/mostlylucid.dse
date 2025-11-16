@@ -1,0 +1,118 @@
+name: "PDF Text Extractor"
+type: "executable"
+version: "1.0.0"
+description: "Extract text content from PDF files with optional OCR support. Handles multi-page documents, preserves structure, and supports encrypted PDFs."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 110
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/pdf_reader.py", "{pdf_file}"]
+  install_command: "pip install PyPDF2 pdfplumber pillow pytesseract"
+
+# Resource constraints
+constraints:
+  timeout_ms: 180000  # 3 minutes for large PDFs
+  max_memory_mb: 1024
+  max_cpu_percent: 70
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    pdf_file:
+      type: string
+      description: "Path to PDF file"
+      required: true
+    pages:
+      type: string
+      description: "Pages to extract (e.g., '1-5', 'all')"
+      default: "all"
+    ocr:
+      type: boolean
+      description: "Use OCR for scanned PDFs"
+      default: false
+    preserve_layout:
+      type: boolean
+      description: "Preserve text layout and formatting"
+      default: true
+    password:
+      type: string
+      description: "Password for encrypted PDFs"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    text:
+      type: string
+      description: "Extracted text content"
+    page_count:
+      type: integer
+      description: "Total number of pages"
+    metadata:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        subject:
+          type: string
+        creation_date:
+          type: string
+    pages:
+      type: array
+      items:
+        type: object
+        properties:
+          page_number:
+            type: integer
+          text:
+            type: string
+          images_count:
+            type: integer
+
+tags: ["pdf", "document", "text-extraction", "ocr", "file-processing", "reading"]
+
+examples:
+  - input:
+      pdf_file: "document.pdf"
+      pages: "all"
+    output:
+      success: true
+      text: "Extracted content..."
+      page_count: 10
+      metadata:
+        title: "My Document"
+
+usage_notes: |
+  ## Overview
+  Extracts text from PDF files with support for encrypted PDFs and OCR.
+
+  ## Features
+  - Multi-page extraction
+  - Layout preservation
+  - OCR for scanned documents
+  - Encrypted PDF support
+  - Metadata extraction
+
+  ## Use Cases
+  - Document processing pipelines
+  - Content indexing
+  - Data extraction
+  - Text analysis workflows
+  - Archive digitization
+
+  ## Performance
+  - ~1-2 seconds per page (text)
+  - ~5-10 seconds per page (OCR)
+  - Memory scales with page count

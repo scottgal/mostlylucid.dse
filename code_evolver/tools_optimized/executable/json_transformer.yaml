@@ -1,0 +1,106 @@
+name: "JSON Transformer"
+type: "executable"
+version: "1.0.0"
+description: "Transform JSON data structures using JSONPath and JMESPath queries. Filter, map, reduce, and reshape JSON. Essential for data pipeline workflows."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 140
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/json_transformer.py"]
+  install_command: "pip install jmespath jsonpath-ng"
+
+# Resource constraints
+constraints:
+  timeout_ms: 30000
+  max_memory_mb: 512
+  max_cpu_percent: 50
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    data:
+      type: object
+      description: "Input JSON data"
+      required: true
+    operation:
+      type: string
+      enum: ["query", "transform", "filter", "map", "merge", "validate"]
+      required: true
+    query:
+      type: string
+      description: "JMESPath or JSONPath query"
+      required: false
+    schema:
+      type: object
+      description: "JSON Schema for validation"
+      required: false
+    transform_rules:
+      type: object
+      description: "Transformation rules"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    result:
+      type: any
+      description: "Transformed data"
+    original_size:
+      type: integer
+    result_size:
+      type: integer
+    error:
+      type: string
+
+tags: ["json", "data-transformation", "query", "jmespath", "jsonpath", "etl"]
+
+examples:
+  - input:
+      data:
+        users:
+          - name: "Alice"
+            age: 30
+          - name: "Bob"
+            age: 25
+      operation: "query"
+      query: "users[?age > `26`].name"
+    output:
+      success: true
+      result: ["Alice"]
+
+usage_notes: |
+  ## Overview
+  Powerful JSON transformation tool for data pipelines.
+
+  ## Operations
+  - **query**: Extract data using JMESPath
+  - **transform**: Reshape data structure
+  - **filter**: Filter arrays/objects
+  - **map**: Apply transformations
+  - **merge**: Combine JSON objects
+  - **validate**: Validate against schema
+
+  ## Use Cases
+  - API response transformation
+  - Data pipeline processing
+  - ETL workflows
+  - Configuration manipulation
+  - Report generation
+
+  ## Query Syntax (JMESPath)
+  ```
+  users[*].name           # All names
+  users[?age > 25]        # Filter by age
+  users[0].email          # First user email
+  length(users)           # Count users
+  ```

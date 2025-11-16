@@ -1,0 +1,99 @@
+name: "Multi-Language Code Formatter"
+type: "executable"
+version: "1.0.0"
+description: "Format code in multiple languages (Python, JavaScript, TypeScript, Java, C++, Go, Rust, etc.) using language-specific formatters. Ensures consistent code style."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 130
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/code_formatter.py"]
+  install_command: "pip install black autopep8 prettier-cli clang-format"
+
+# Resource constraints
+constraints:
+  timeout_ms: 30000
+  max_memory_mb: 256
+  max_cpu_percent: 50
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    code:
+      type: string
+      description: "Code to format"
+      required: true
+    language:
+      type: string
+      enum: ["python", "javascript", "typescript", "java", "cpp", "go", "rust", "json", "yaml", "markdown"]
+      required: true
+    style:
+      type: string
+      description: "Code style/formatter to use"
+      enum: ["default", "google", "pep8", "airbnb", "standard"]
+      default: "default"
+    line_length:
+      type: integer
+      description: "Maximum line length"
+      default: 88
+    options:
+      type: object
+      description: "Language-specific formatter options"
+      default: {}
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    formatted_code:
+      type: string
+    changes_made:
+      type: boolean
+    error:
+      type: string
+
+tags: ["formatting", "code-style", "linting", "beautify", "multi-language"]
+
+examples:
+  - input:
+      code: "def foo(x,y):return x+y"
+      language: "python"
+      style: "pep8"
+    output:
+      success: true
+      formatted_code: "def foo(x, y):\n    return x + y"
+      changes_made: true
+
+usage_notes: |
+  ## Supported Languages
+  - **Python**: black, autopep8, yapf
+  - **JavaScript/TypeScript**: prettier, standard
+  - **Java**: google-java-format
+  - **C/C++**: clang-format
+  - **Go**: gofmt
+  - **Rust**: rustfmt
+  - **JSON**: json.tool
+  - **YAML**: yamllint
+  - **Markdown**: prettier
+
+  ## Styles
+  - **default**: Language-recommended style
+  - **google**: Google style guide
+  - **pep8**: PEP 8 (Python)
+  - **airbnb**: Airbnb style (JS)
+  - **standard**: StandardJS
+
+  ## Use Cases
+  - Pre-commit formatting
+  - Code cleanup
+  - Style enforcement
+  - Team collaboration
+  - CI/CD integration

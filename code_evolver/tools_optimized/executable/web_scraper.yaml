@@ -1,0 +1,126 @@
+name: "Web Scraper"
+type: "executable"
+version: "1.0.0"
+description: "Extract content from web pages using CSS selectors or XPath. Handles JavaScript-rendered pages, respects robots.txt, includes rate limiting and caching."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "good"
+max_output_length: "very-long"
+priority: 100
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/web_scraper.py"]
+  install_command: "pip install beautifulsoup4 requests playwright"
+
+# Resource constraints
+constraints:
+  timeout_ms: 60000
+  max_memory_mb: 512
+  max_cpu_percent: 60
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    url:
+      type: string
+      description: "URL to scrape"
+      required: true
+    selectors:
+      type: object
+      description: "CSS selectors for elements to extract"
+      required: true
+    javascript:
+      type: boolean
+      description: "Render JavaScript (slower)"
+      default: false
+    wait_for:
+      type: string
+      description: "CSS selector to wait for (if javascript=true)"
+      required: false
+    headers:
+      type: object
+      description: "Custom HTTP headers"
+      default: {}
+    respect_robots:
+      type: boolean
+      description: "Respect robots.txt"
+      default: true
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    url:
+      type: string
+    data:
+      type: object
+      description: "Extracted data matching selectors"
+    metadata:
+      type: object
+      properties:
+        status_code:
+          type: integer
+        content_type:
+          type: string
+        response_time_ms:
+          type: integer
+    error:
+      type: string
+
+tags: ["web", "scraping", "extraction", "html", "css-selector", "data-collection"]
+
+examples:
+  - input:
+      url: "https://example.com/products"
+      selectors:
+        title: "h1.product-title"
+        price: "span.price"
+        description: "div.description"
+    output:
+      success: true
+      data:
+        title: "Product Name"
+        price: "$99.99"
+        description: "Product description..."
+
+usage_notes: |
+  ## Overview
+  Extract structured data from web pages.
+
+  ## Features
+  - CSS selector support
+  - JavaScript rendering
+  - Rate limiting
+  - Response caching
+  - robots.txt compliance
+  - Custom headers
+
+  ## Selectors
+  ```python
+  selectors = {
+      "title": "h1",                    # Single element
+      "prices": "span.price",           # Multiple elements
+      "links": "a[href]@href",          # Extract attribute
+      "text": "p::text"                 # Text content only
+  }
+  ```
+
+  ## Use Cases
+  - Price monitoring
+  - Content aggregation
+  - Data collection
+  - Market research
+  - Competitive analysis
+
+  ## Ethical Scraping
+  - Respect robots.txt
+  - Use rate limiting
+  - Cache responses
+  - Set User-Agent
+  - Follow terms of service

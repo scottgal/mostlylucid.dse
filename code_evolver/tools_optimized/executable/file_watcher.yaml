@@ -1,0 +1,120 @@
+name: "File System Watcher"
+type: "executable"
+version: "1.0.0"
+description: "Monitor files and directories for changes. Trigger workflows on create, modify, delete, or move events. Supports filtering by pattern and recursive monitoring."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 120
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/file_watcher.py"]
+  install_command: "pip install watchdog"
+
+# Resource constraints
+constraints:
+  timeout_ms: 300000  # 5 minutes (long-running)
+  max_memory_mb: 128
+  max_cpu_percent: 20
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    path:
+      type: string
+      description: "Path to watch"
+      required: true
+    events:
+      type: array
+      items:
+        type: string
+        enum: ["created", "modified", "deleted", "moved"]
+      default: ["created", "modified"]
+    patterns:
+      type: array
+      items:
+        type: string
+      description: "File patterns to watch (e.g., '*.py', '*.txt')"
+      default: ["*"]
+    recursive:
+      type: boolean
+      description: "Watch subdirectories recursively"
+      default: true
+    action:
+      type: string
+      enum: ["start", "stop", "status"]
+      default: "start"
+    callback_workflow:
+      type: string
+      description: "Workflow to trigger on events"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    status:
+      type: string
+      enum: ["watching", "stopped"]
+    path:
+      type: string
+    events_detected:
+      type: array
+      items:
+        type: object
+        properties:
+          event_type:
+            type: string
+          file_path:
+            type: string
+          timestamp:
+            type: string
+          file_size:
+            type: integer
+
+tags: ["filesystem", "monitoring", "events", "automation", "triggers", "watch"]
+
+examples:
+  - input:
+      path: "/data/uploads"
+      events: ["created"]
+      patterns: ["*.pdf", "*.docx"]
+      recursive: true
+    output:
+      status: "watching"
+      path: "/data/uploads"
+      events_detected: []
+
+usage_notes: |
+  ## Overview
+  Monitor filesystem for changes and trigger automated workflows.
+
+  ## Events
+  - **created**: New file/directory created
+  - **modified**: File/directory modified
+  - **deleted**: File/directory deleted
+  - **moved**: File/directory moved/renamed
+
+  ## Use Cases
+  - Auto-process uploaded files
+  - Sync directories
+  - Build automation
+  - Log monitoring
+  - Backup triggers
+  - Hot-reload development
+
+  ## Patterns
+  - `*.py`: Python files
+  - `*.{jpg,png}`: Images
+  - `test_*`: Files starting with "test_"
+  - `**/*.txt`: All text files (recursive)
+
+  ## Performance
+  - Low overhead (~5-10MB RAM)
+  - Near real-time detection
+  - Efficient for 1000s of files

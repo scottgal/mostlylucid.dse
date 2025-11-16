@@ -1,0 +1,181 @@
+name: "Image Vision Analyzer"
+type: "llm"
+version: "1.0.0"
+description: "Analyze and describe images using vision-capable AI models. Extract information, identify objects, read text (OCR), and answer questions about image content."
+
+# Performance metadata
+cost_tier: "high"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+priority: 100
+
+# LLM configuration
+llm:
+  tier: "vision.tier_1"  # Vision-capable model
+  fallback_tiers:
+    - "vision.tier_2"
+    - "multimodal"
+
+  # Vision model parameters
+  temperature: 0.4
+  max_tokens: 2000
+  timeout_seconds: 60
+
+  # Retry configuration
+  retry_config:
+    max_attempts: 3
+    backoff_factor: 2
+    retry_on: ["timeout", "rate_limit", "server_error"]
+
+  system_prompt: |
+    You are an expert image analyst with capabilities to:
+    - Describe image content in detail
+    - Identify objects, people, scenes
+    - Read and extract text (OCR)
+    - Answer questions about images
+    - Detect emotions and sentiments
+    - Identify brands and logos
+    - Assess image quality and composition
+
+  prompt_template: |
+    # IMAGE ANALYSIS TASK
+
+    Analyze this image: {image_path}
+
+    ## Analysis Type
+    {analysis_type}
+
+    ## Specific Questions
+    {questions}
+
+    ## Output Format
+    Provide a JSON response:
+    {{
+      "description": "<detailed description>",
+      "objects": ["<list of detected objects>"],
+      "text_content": "<any text found in image>",
+      "scene": "<scene type>",
+      "people_count": <number>,
+      "colors": ["<dominant colors>"],
+      "quality_assessment": {{
+        "resolution": "<high/medium/low>",
+        "clarity": "<clear/blurry>",
+        "composition": "<good/average/poor>"
+      }},
+      "answers": {{
+        "<question>": "<answer>"
+      }}
+    }}
+
+# Resource constraints
+constraints:
+  max_memory_mb: 2048
+  max_execution_time_ms: 90000
+  max_cost_per_request_usd: 0.50
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    image_path:
+      type: string
+      description: "Path to image file or URL"
+      required: true
+    analysis_type:
+      type: string
+      enum: ["describe", "ocr", "objects", "scene", "comprehensive", "custom"]
+      default: "comprehensive"
+    questions:
+      type: array
+      items:
+        type: string
+      description: "Specific questions about the image"
+      default: []
+    detail_level:
+      type: string
+      enum: ["brief", "detailed", "comprehensive"]
+      default: "detailed"
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    description:
+      type: string
+    objects:
+      type: array
+      items:
+        type: string
+    text_content:
+      type: string
+    scene:
+      type: string
+    people_count:
+      type: integer
+    colors:
+      type: array
+      items:
+        type: string
+    quality_assessment:
+      type: object
+    answers:
+      type: object
+
+tags: ["vision", "image", "ocr", "object-detection", "multimodal", "analysis", "ai"]
+
+examples:
+  - input:
+      image_path: "photo.jpg"
+      analysis_type: "comprehensive"
+    output:
+      description: "A sunny beach scene with people playing volleyball"
+      objects: ["beach", "volleyball", "people", "ocean", "sand"]
+      scene: "outdoor recreational"
+      people_count: 6
+      colors: ["blue", "yellow", "white"]
+
+  - input:
+      image_path: "document.jpg"
+      analysis_type: "ocr"
+    output:
+      text_content: "Invoice #12345\nTotal: $150.00"
+      description: "A scanned invoice document"
+
+usage_notes: |
+  ## Overview
+  AI-powered image analysis using vision-capable models.
+
+  ## Analysis Types
+  - **describe**: General description
+  - **ocr**: Text extraction
+  - **objects**: Object detection
+  - **scene**: Scene classification
+  - **comprehensive**: All of the above
+  - **custom**: Answer specific questions
+
+  ## Capabilities
+  - Object and scene recognition
+  - Text extraction (OCR)
+  - People and face detection
+  - Color analysis
+  - Quality assessment
+  - Custom Q&A about images
+
+  ## Supported Formats
+  - JPEG, PNG, GIF, BMP, TIFF
+  - URL or local file path
+  - Max size: 20MB
+  - Max resolution: 4096x4096
+
+  ## Use Cases
+  - Content moderation
+  - Product cataloging
+  - Document processing
+  - Accessibility (image descriptions)
+  - Quality control
+  - Social media analysis
+
+  ## Cost
+  Vision models are more expensive (~$0.01-$0.50 per image)
+  Use wisely and consider caching results.

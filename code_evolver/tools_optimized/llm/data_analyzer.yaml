@@ -1,0 +1,162 @@
+name: "Data Analyzer"
+type: "llm"
+version: "1.0.0"
+description: "Analyze datasets and generate insights using AI. Detects patterns, anomalies, correlations, and provides statistical summaries. Supports CSV, JSON, and tabular data."
+
+# Performance metadata
+cost_tier: "medium"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+priority: 100
+
+# LLM configuration
+llm:
+  tier: "analysis.tier_2"
+  fallback_tiers:
+    - "analysis.tier_3"
+    - "general"
+
+  temperature: 0.2  # Low temperature for analytical consistency
+  max_tokens: 3000
+  timeout_seconds: 90
+
+  retry_config:
+    max_attempts: 3
+    backoff_factor: 2
+    retry_on: ["timeout", "rate_limit"]
+
+  system_prompt: |
+    You are an expert data analyst with skills in:
+    - Statistical analysis
+    - Pattern recognition
+    - Anomaly detection
+    - Trend analysis
+    - Data visualization recommendations
+    - Predictive insights
+
+  prompt_template: |
+    # DATA ANALYSIS TASK
+
+    Analyze this dataset:
+
+    {data_summary}
+
+    ## Dataset Characteristics
+    - Rows: {row_count}
+    - Columns: {column_count}
+    - Types: {data_types}
+
+    ## Analysis Request
+    {analysis_type}
+
+    ## Output Format
+    Provide a JSON response:
+    {{
+      "summary": "<high-level findings>",
+      "statistics": {{
+        "<column>": {{
+          "mean": <value>,
+          "median": <value>,
+          "std_dev": <value>,
+          "min": <value>,
+          "max": <value>
+        }}
+      }},
+      "patterns": ["<detected patterns>"],
+      "anomalies": ["<unusual data points>"],
+      "correlations": [
+        {{"columns": ["col1", "col2"], "strength": "strong|moderate|weak", "type": "positive|negative"}}
+      ],
+      "insights": ["<actionable insights>"],
+      "recommendations": ["<next steps>"]
+    }}
+
+# Resource constraints
+constraints:
+  max_memory_mb: 1024
+  max_execution_time_ms: 120000
+  max_cost_per_request_usd: 0.30
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    data:
+      type: any
+      description: "Dataset to analyze (array of objects or CSV string)"
+      required: true
+    analysis_type:
+      type: string
+      enum: ["summary", "patterns", "anomalies", "correlations", "comprehensive"]
+      default: "comprehensive"
+    columns:
+      type: array
+      items:
+        type: string
+      description: "Specific columns to analyze"
+      default: []
+    focus_area:
+      type: string
+      description: "Specific area to focus on"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    summary:
+      type: string
+    statistics:
+      type: object
+    patterns:
+      type: array
+      items:
+        type: string
+    anomalies:
+      type: array
+    correlations:
+      type: array
+    insights:
+      type: array
+    recommendations:
+      type: array
+
+tags: ["data-analysis", "statistics", "insights", "patterns", "ai-analytics"]
+
+examples:
+  - input:
+      data: [{"age": 25, "salary": 50000}, {"age": 30, "salary": 60000}]
+      analysis_type: "comprehensive"
+    output:
+      summary: "Small dataset showing positive correlation between age and salary"
+      patterns: ["Salary increases with age"]
+      correlations: [{"columns": ["age", "salary"], "strength": "strong", "type": "positive"}]
+
+usage_notes: |
+  ## Overview
+  AI-powered data analysis for quick insights and pattern detection.
+
+  ## Analysis Types
+  - **summary**: Statistical summary
+  - **patterns**: Trend and pattern detection
+  - **anomalies**: Outlier identification
+  - **correlations**: Relationship analysis
+  - **comprehensive**: All of the above
+
+  ## Input Formats
+  - JSON array of objects
+  - CSV string
+  - Pandas DataFrame (via JSON)
+
+  ## Use Cases
+  - Exploratory data analysis
+  - Quality assurance
+  - Trend detection
+  - Business intelligence
+  - Research analysis
+
+  ## Limitations
+  - Best for datasets < 10,000 rows
+  - Summary statistics for large datasets
+  - Not a replacement for specialized tools

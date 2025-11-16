@@ -1,0 +1,112 @@
+name: "Bandit Security Scanner"
+type: "executable"
+version: "1.0.1"
+description: "Runs bandit security scanner to find common security issues in Python code (SQL injection, hardcoded passwords, etc.)"
+
+# Performance metadata (NEW - was missing)
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "good"
+max_output_length: "long"
+priority: 120  # Run early in validation pipeline
+
+executable:
+  command: "bandit"
+  args: ["-r", "{source_file}", "-f", "json"]
+  install_command: "pip install bandit"
+
+# Resource constraints (NEW)
+constraints:
+  timeout_ms: 60000  # 1 minute
+  max_memory_mb: 256
+  max_cpu_percent: 50
+
+# Structured input schema (NEW)
+input_schema:
+  type: object
+  properties:
+    source_file:
+      type: string
+      description: "Path to Python file or directory to scan"
+      required: true
+    severity_level:
+      type: string
+      description: "Minimum severity level to report"
+      enum: ["LOW", "MEDIUM", "HIGH"]
+      default: "MEDIUM"
+    confidence_level:
+      type: string
+      description: "Minimum confidence level to report"
+      enum: ["LOW", "MEDIUM", "HIGH"]
+      default: "MEDIUM"
+
+# Structured output schema (NEW)
+output_schema:
+  type: object
+  properties:
+    issues_found:
+      type: integer
+      description: "Number of security issues found"
+    issues:
+      type: array
+      description: "List of security issues"
+      items:
+        type: object
+        properties:
+          test_id:
+            type: string
+          issue_severity:
+            type: string
+          issue_confidence:
+            type: string
+          issue_text:
+            type: string
+          line_number:
+            type: integer
+          filename:
+            type: string
+
+tags: ["python", "security", "vulnerability", "scanning", "static-analysis", "SAST"]
+
+# Examples (NEW)
+examples:
+  - input: {"source_file": "src/app.py"}
+    output: {"issues_found": 0}
+  - input: {"source_file": "src/", "severity_level": "HIGH"}
+    output: {"issues_found": 2, "issues": [...]}
+
+# Usage documentation (NEW)
+usage_notes: |
+  ## Overview
+  Bandit is a tool designed to find common security issues in Python code.
+
+  ## Security Checks
+  Bandit checks for issues such as:
+  - SQL injection vulnerabilities
+  - Hardcoded passwords and secrets
+  - Use of insecure functions (eval, exec, pickle)
+  - Weak cryptography
+  - Shell injection
+  - Path traversal
+  - XML vulnerabilities (XXE)
+
+  ## Severity Levels
+  - **LOW**: Minor issues, may be false positives
+  - **MEDIUM**: Moderate risk, should be reviewed
+  - **HIGH**: Serious security issues, must fix
+
+  ## Confidence Levels
+  - **LOW**: May be false positive
+  - **MEDIUM**: Likely an issue
+  - **HIGH**: Almost certainly an issue
+
+  ## Integration
+  - Run before deployment
+  - Add to CI/CD pipeline
+  - Review HIGH confidence issues first
+  - Use with other security tools for comprehensive coverage
+
+  ## Performance
+  - Typical scan: 5-30 seconds
+  - Scales with codebase size
+  - No external dependencies required

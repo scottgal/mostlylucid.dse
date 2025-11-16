@@ -1,0 +1,229 @@
+# General Code Generator - Optimized Version
+# Backend-agnostic tool for general purpose code generation
+
+name: "General Code Generator"
+type: "llm"
+version: "1.1.0"  # Version bump for optimization
+description: "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 50  # Medium priority - specialized tools run first
+
+# LLM configuration (ENHANCED)
+llm:
+  # Tiered system with fallback chain
+  tier: "coding.tier_2"   # Balanced code generation
+  fallback_tiers:
+    - "coding.tier_3"     # If tier_2 unavailable
+    - "general"           # Last resort
+
+  # Legacy support
+  role: "base"
+
+  # LLM parameters (NEW)
+  temperature: 0.4        # Balanced creativity/consistency
+  max_tokens: 4000        # Large outputs for complex code
+  top_p: 0.9
+  timeout_seconds: 90
+
+  # Retry configuration (NEW)
+  retry_config:
+    max_attempts: 3
+    backoff_factor: 2
+    retry_on: ["timeout", "rate_limit", "server_error"]
+
+  system_prompt: |
+    You are an expert software engineer. Write clean, efficient, well-documented code following best practices.
+
+    IMPORTANT CODE GENERATION RULES:
+    1. For content generation tasks (stories, articles, jokes), write Python code that DIRECTLY creates the content as a string in the main() function
+    2. DO NOT use call_tool() - that function doesn't exist in the runtime
+    3. Just create the content as a string variable and output it
+    4. Always include error handling where appropriate
+    5. Add helpful comments for complex logic
+    6. Follow language-specific conventions and idioms
+
+    Context Variables:
+    - Priority: {priority} (determines speed vs quality tradeoff)
+    - Quality expectation: {quality_level} (draft/good/production/perfect)
+    - Speed requirement: {speed_requirement} (fast/balanced/thorough)
+
+  prompt_template: |
+    # CODE GENERATION TASK
+
+    Generate code for the following task:
+
+    {task}
+
+    ## Workflow Context
+    - **Priority**: {priority} (determines speed vs quality tradeoff)
+    - **Quality level**: {quality_level} (draft/good/production/perfect)
+    - **Speed**: {speed_requirement} (fast/balanced/thorough)
+
+    ## Requirements
+    1. Write clean, readable code
+    2. Include error handling
+    3. Add docstrings/comments
+    4. Follow best practices
+    5. Make it production-ready if quality_level is "production" or "perfect"
+
+    ## Special Instructions for Content Generation
+    For content generation tasks (stories, articles, jokes, etc.):
+    - Write a simple main() function that DIRECTLY creates the content
+    - DO NOT use call_tool() - it doesn't exist in the runtime
+    - Just create the content as a string variable and output it
+    - Example:
+    ```python
+    def main():
+        joke = "Why did the programmer quit? Because they didn't get arrays!"
+        print(joke)
+        return joke
+    ```
+
+    ## Output Format
+    Provide only the code, properly formatted and ready to run.
+
+# Resource constraints (NEW)
+constraints:
+  max_memory_mb: 1024
+  max_execution_time_ms: 120000  # 2 minutes
+  max_cost_per_request_usd: 0.25
+
+# Cost management (NEW)
+cost_management:
+  max_daily_budget_usd: 10.0
+  fallback_on_budget_exceeded: "coding.tier_3"
+  warn_at_percent: 80
+
+# Structured input schema (NEW)
+input_schema:
+  type: object
+  properties:
+    task:
+      type: string
+      description: "Description of the code to generate"
+      required: true
+    language:
+      type: string
+      description: "Target programming language"
+      default: "python"
+    priority:
+      type: string
+      enum: ["low", "medium", "high"]
+      default: "medium"
+    quality_level:
+      type: string
+      enum: ["draft", "good", "production", "perfect"]
+      default: "good"
+    speed_requirement:
+      type: string
+      enum: ["fast", "balanced", "thorough"]
+      default: "balanced"
+
+# Structured output schema (NEW)
+output_schema:
+  type: object
+  properties:
+    code:
+      type: string
+      description: "Generated code"
+    language:
+      type: string
+      description: "Programming language used"
+    explanation:
+      type: string
+      description: "Brief explanation of the code"
+    warnings:
+      type: array
+      items:
+        type: string
+      description: "Any warnings or caveats"
+
+# Tags for tool discovery
+tags:
+  - general
+  - fallback
+  - code-generation
+  - any-task
+  - complex
+  - multi-language
+
+# Examples (NEW)
+examples:
+  - input:
+      task: "Create a function that checks if a number is prime"
+      language: "python"
+      quality_level: "good"
+    output:
+      code: |
+        def is_prime(n):
+            """Check if a number is prime."""
+            if n < 2:
+                return False
+            for i in range(2, int(n ** 0.5) + 1):
+                if n % i == 0:
+                    return False
+            return True
+
+  - input:
+      task: "Write a joke"
+      language: "python"
+    output:
+      code: |
+        def main():
+            joke = "Why do programmers prefer dark mode? Because light attracts bugs!"
+            print(joke)
+            return joke
+
+# Usage documentation (ENHANCED)
+usage_notes: |
+  ## Overview
+  General purpose code generator for any programming task. Automatically
+  selected as fallback when no specialized tool matches.
+
+  ## Capabilities
+  - Multi-language code generation
+  - Complex algorithms and data structures
+  - Content generation (stories, articles, jokes)
+  - API clients and integrations
+  - Data processing and transformation
+  - Workflow orchestration
+
+  ## Quality Levels
+  - **draft**: Quick, basic implementation
+  - **good**: Well-structured, documented code
+  - **production**: Production-ready with error handling
+  - **perfect**: Optimized, comprehensive, battle-tested
+
+  ## Speed Requirements
+  - **fast**: Quick generation, may sacrifice quality
+  - **balanced**: Good balance of speed and quality
+  - **thorough**: Comprehensive analysis, best quality
+
+  ## Content Generation Special Case
+  For content tasks (jokes, stories, articles):
+  1. Generates Python code that creates content directly
+  2. Does NOT use call_tool() (doesn't exist in runtime)
+  3. Simple main() function pattern
+  4. Content as string variable
+
+  ## Best Practices
+  1. Use specialized tools when available (faster, cheaper)
+  2. Set appropriate quality level for your needs
+  3. Provide clear, specific task descriptions
+  4. Review generated code before use
+  5. Test thoroughly for production use
+
+  ## Performance
+  - Generation time: 5-30 seconds (depends on complexity)
+  - Cost: $0.01-$0.25 per request (depends on tier)
+  - Quality: Excellent for most tasks
+
+  ## Integration
+  - Primary fallback tool in routing system
+  - Used when no specialized tool matches
+  - Handles edge cases and unusual requests

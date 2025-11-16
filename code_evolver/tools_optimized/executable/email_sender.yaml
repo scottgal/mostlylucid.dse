@@ -1,0 +1,152 @@
+name: "Email Sender"
+type: "executable"
+version: "1.0.0"
+description: "Send emails via SMTP with support for attachments, HTML content, templates, and bulk sending. Includes retry logic and delivery tracking."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "short"
+priority: 110
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/email_sender.py"]
+  install_command: "pip install smtplib email jinja2"
+
+# Resource constraints
+constraints:
+  timeout_ms: 30000
+  max_memory_mb: 256
+  max_cpu_percent: 30
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    to:
+      type: array
+      items:
+        type: string
+      description: "Recipient email addresses"
+      required: true
+    subject:
+      type: string
+      description: "Email subject"
+      required: true
+    body:
+      type: string
+      description: "Email body (text or HTML)"
+      required: true
+    from_address:
+      type: string
+      description: "Sender email address"
+      required: false
+    cc:
+      type: array
+      items:
+        type: string
+      description: "CC recipients"
+      default: []
+    bcc:
+      type: array
+      items:
+        type: string
+      description: "BCC recipients"
+      default: []
+    attachments:
+      type: array
+      items:
+        type: string
+      description: "File paths to attach"
+      default: []
+    html:
+      type: boolean
+      description: "Body is HTML content"
+      default: false
+    template:
+      type: string
+      description: "Template name (if using templates)"
+      required: false
+    template_vars:
+      type: object
+      description: "Variables for template"
+      default: {}
+    smtp_config:
+      type: object
+      properties:
+        host:
+          type: string
+        port:
+          type: integer
+        username:
+          type: string
+        password:
+          type: string
+        use_tls:
+          type: boolean
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    message_id:
+      type: string
+    recipients_count:
+      type: integer
+    sent_at:
+      type: string
+    error:
+      type: string
+
+tags: ["email", "smtp", "notification", "communication", "messaging"]
+
+examples:
+  - input:
+      to: ["user@example.com"]
+      subject: "Workflow Complete"
+      body: "Your workflow has finished successfully."
+      html: false
+    output:
+      success: true
+      message_id: "<abc123@mail.example.com>"
+      recipients_count: 1
+      sent_at: "2025-11-16T10:30:00Z"
+
+usage_notes: |
+  ## Overview
+  Send emails from workflows with templates and attachments.
+
+  ## Configuration
+  Set environment variables:
+  ```
+  SMTP_HOST=smtp.gmail.com
+  SMTP_PORT=587
+  SMTP_USERNAME=your@email.com
+  SMTP_PASSWORD=app_password
+  SMTP_USE_TLS=true
+  ```
+
+  ## Features
+  - Multiple recipients
+  - HTML emails
+  - Template support
+  - File attachments
+  - Retry on failure
+  - Delivery tracking
+
+  ## Use Cases
+  - Workflow notifications
+  - Report delivery
+  - Alert systems
+  - Automated communications
+  - Status updates
+
+  ## Security
+  - Use app passwords (not account password)
+  - Store credentials in environment variables
+  - Use TLS encryption
+  - Validate recipient addresses

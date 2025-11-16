@@ -1,0 +1,340 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/tool-schema.json",
+  "title": "Tool Definition Schema",
+  "description": "Standard schema for all tool definitions in the code evolver system",
+  "type": "object",
+  "required": ["name", "type", "description", "version"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable tool name (Title Case)",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "type": {
+      "type": "string",
+      "enum": ["executable", "llm", "custom", "openapi", "workflow"],
+      "description": "Tool category/type"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (X.Y.Z)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500,
+      "description": "Clear description of tool functionality"
+    },
+    "cost_tier": {
+      "type": "string",
+      "enum": ["free", "low", "medium", "high", "variable"],
+      "description": "Cost tier for execution"
+    },
+    "speed_tier": {
+      "type": "string",
+      "enum": ["very-fast", "fast", "medium", "slow"],
+      "description": "Execution speed characteristic"
+    },
+    "quality_tier": {
+      "type": "string",
+      "enum": ["basic", "good", "excellent", "perfect"],
+      "description": "Output quality characteristic"
+    },
+    "max_output_length": {
+      "type": "string",
+      "enum": ["short", "medium", "long", "very-long"],
+      "description": "Expected output length"
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "description": "Execution priority (higher runs earlier)"
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Resource constraints and limits",
+      "properties": {
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "description": "Maximum execution time in milliseconds"
+        },
+        "max_memory_mb": {
+          "type": "integer",
+          "minimum": 64,
+          "description": "Maximum memory usage in megabytes"
+        },
+        "max_cpu_percent": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 100,
+          "description": "Maximum CPU usage percentage"
+        },
+        "max_concurrent": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum concurrent executions"
+        }
+      }
+    },
+    "input_schema": {
+      "$ref": "#/definitions/jsonSchema",
+      "description": "JSON Schema for input validation"
+    },
+    "output_schema": {
+      "$ref": "#/definitions/jsonSchema",
+      "description": "JSON Schema for output validation"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Tags for tool discovery and categorization"
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["input"],
+        "properties": {
+          "input": {
+            "type": "object",
+            "description": "Example input"
+          },
+          "output": {
+            "type": "object",
+            "description": "Example output"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the example"
+          }
+        }
+      },
+      "description": "Usage examples"
+    },
+    "usage_notes": {
+      "type": "string",
+      "description": "Detailed usage documentation in Markdown format"
+    },
+    "executable": {
+      "type": "object",
+      "description": "Configuration for executable tools",
+      "required": ["command", "args"],
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Command to execute"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Command arguments"
+        },
+        "install_command": {
+          "type": "string",
+          "description": "Installation command for dependencies"
+        }
+      }
+    },
+    "llm": {
+      "type": "object",
+      "description": "Configuration for LLM tools",
+      "properties": {
+        "tier": {
+          "type": "string",
+          "description": "LLM tier to use"
+        },
+        "fallback_tiers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Fallback tiers if primary unavailable"
+        },
+        "role": {
+          "type": "string",
+          "description": "Legacy role system (deprecated)"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "description": "LLM temperature parameter"
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum tokens in response"
+        },
+        "top_p": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Nucleus sampling parameter"
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Request timeout in seconds"
+        },
+        "retry_config": {
+          "type": "object",
+          "properties": {
+            "max_attempts": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "backoff_factor": {
+              "type": "number",
+              "minimum": 1
+            },
+            "retry_on": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "system_prompt": {
+          "type": "string",
+          "description": "System prompt template"
+        },
+        "prompt_template": {
+          "type": "string",
+          "description": "User prompt template"
+        }
+      }
+    },
+    "custom": {
+      "type": "object",
+      "description": "Configuration for custom tools",
+      "required": ["module", "class"],
+      "properties": {
+        "module": {
+          "type": "string",
+          "description": "Python module path"
+        },
+        "class": {
+          "type": "string",
+          "description": "Class name"
+        },
+        "config": {
+          "type": "object",
+          "description": "Tool-specific configuration"
+        }
+      }
+    },
+    "openapi": {
+      "type": "object",
+      "description": "Configuration for OpenAPI tools",
+      "properties": {
+        "spec_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "OpenAPI specification URL"
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API base URL"
+        },
+        "auth": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["bearer", "apikey", "basic", "none"]
+            },
+            "token": {
+              "type": "string"
+            },
+            "header": {
+              "type": "string"
+            }
+          }
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retry_config": {
+          "type": "object"
+        },
+        "rate_limit": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "jsonSchema": {
+      "type": "object",
+      "required": ["type", "properties"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["object"]
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/property"
+          }
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "property": {
+      "type": "object",
+      "required": ["type", "description"],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "default": {},
+        "enum": {
+          "type": "array"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "integer"
+        },
+        "maxLength": {
+          "type": "integer"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "items": {
+          "$ref": "#/definitions/property"
+        }
+      }
+    }
+  }
+}

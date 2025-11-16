@@ -1,0 +1,349 @@
+name: "NMT Translator"
+type: "openapi"
+version: "1.0.1"  # Version bump for optimization
+description: "Neural Machine Translation API for translating text between languages. High-quality translation using state-of-the-art NMT models. Supports 100+ language pairs."
+
+# Performance metadata
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+priority: 100
+
+# OpenAPI configuration (ENHANCED)
+openapi:
+  spec_url: "${NMT_API_SPEC_URL:-https://api.example.com/nmt/openapi.json}"
+  base_url: "${NMT_API_BASE_URL:-https://api.example.com/nmt/v1}"
+
+  # Authentication (NEW)
+  auth:
+    type: "bearer"
+    token: "${NMT_API_KEY}"
+    header: "Authorization"
+
+  # Request configuration (NEW)
+  timeout_seconds: 30
+  retry_config:
+    max_attempts: 3
+    backoff_factor: 2
+    retry_on_status: [429, 500, 502, 503, 504]
+
+  # Rate limiting (NEW)
+  rate_limit:
+    max_requests_per_second: 10
+    max_requests_per_minute: 100
+    max_concurrent: 5
+
+  # Circuit breaker (NEW)
+  circuit_breaker:
+    failure_threshold: 5
+    timeout_seconds: 60
+    half_open_timeout: 30
+
+# Resource constraints (NEW)
+constraints:
+  timeout_ms: 45000  # 45 seconds
+  max_memory_mb: 128
+  max_cpu_percent: 30
+
+# Structured input schema (IMPROVED)
+input_schema:
+  type: object
+  properties:
+    text:
+      type: string
+      description: "Text to translate"
+      required: true
+      minLength: 1
+      maxLength: 10000
+    source_language:
+      type: string
+      description: "Source language code (ISO 639-1)"
+      required: true
+      pattern: "^[a-z]{2}$"
+    target_language:
+      type: string
+      description: "Target language code (ISO 639-1)"
+      required: true
+      pattern: "^[a-z]{2}$"
+    model:
+      type: string
+      description: "Translation model to use"
+      enum: ["standard", "fast", "accurate"]
+      default: "standard"
+    preserve_formatting:
+      type: boolean
+      description: "Preserve line breaks and formatting"
+      default: true
+
+# Structured output schema (IMPROVED)
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether translation succeeded"
+    translated_text:
+      type: string
+      description: "Translated text"
+    source_language:
+      type: string
+      description: "Detected or specified source language"
+    target_language:
+      type: string
+      description: "Target language"
+    confidence:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: "Translation confidence score"
+    model_used:
+      type: string
+      description: "Translation model used"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["translation", "nmt", "language", "localization", "i18n", "multilingual", "api", "openapi"]
+
+# Examples (EXPANDED)
+examples:
+  - input:
+      text: "Hello, world!"
+      source_language: "en"
+      target_language: "es"
+    output:
+      success: true
+      translated_text: "¡Hola, mundo!"
+      source_language: "en"
+      target_language: "es"
+      confidence: 0.95
+      model_used: "standard"
+
+  - input:
+      text: "Bonjour le monde"
+      source_language: "fr"
+      target_language: "en"
+      model: "accurate"
+    output:
+      success: true
+      translated_text: "Hello world"
+      source_language: "fr"
+      target_language: "en"
+      confidence: 0.98
+      model_used: "accurate"
+
+  - input:
+      text: "こんにちは世界"
+      source_language: "ja"
+      target_language: "en"
+    output:
+      success: true
+      translated_text: "Hello world"
+      source_language: "ja"
+      target_language: "en"
+      confidence: 0.92
+      model_used: "standard"
+
+# Code template for usage (ENHANCED)
+code_template: |
+  import requests
+  import time
+  import os
+  from typing import Dict, Any, Optional
+
+  class NMTTranslator:
+      """Neural Machine Translation API client with retry logic."""
+
+      BASE_URL = "{base_url}"
+      TIMEOUT = {timeout}
+      MAX_RETRIES = {max_retries}
+      RETRY_STATUS_CODES = {retry_on_status}
+
+      def __init__(self, api_token: Optional[str] = None):
+          """Initialize translator with optional API token."""
+          self.api_token = api_token or os.getenv("NMT_API_KEY")
+          self.session = requests.Session()
+
+          if self.api_token:
+              self.session.headers.update({
+                  "Authorization": f"Bearer {self.api_token}",
+                  "Content-Type": "application/json"
+              })
+
+      def _request(self, method: str, endpoint: str, **kwargs) -> Dict[str, Any]:
+          """Make API request with retry logic."""
+          url = f"{self.BASE_URL}{endpoint}"
+
+          for attempt in range(self.MAX_RETRIES):
+              try:
+                  response = self.session.request(
+                      method, url,
+                      timeout=self.TIMEOUT,
+                      **kwargs
+                  )
+                  response.raise_for_status()
+                  return response.json()
+
+              except requests.exceptions.Timeout:
+                  if attempt == self.MAX_RETRIES - 1:
+                      raise
+                  time.sleep(2 ** attempt)  # Exponential backoff
+
+              except requests.exceptions.HTTPError as e:
+                  if e.response.status_code in self.RETRY_STATUS_CODES:
+                      if attempt == self.MAX_RETRIES - 1:
+                          raise
+                      time.sleep(2 ** attempt)
+                  else:
+                      raise
+
+          raise Exception(f"Failed after {self.MAX_RETRIES} attempts")
+
+      def translate(self, text: str, source_lang: str, target_lang: str,
+                   model: str = "standard", preserve_formatting: bool = True) -> Dict[str, Any]:
+          """
+          Translate text from source language to target language.
+
+          Args:
+              text: Text to translate
+              source_lang: Source language code (ISO 639-1)
+              target_lang: Target language code (ISO 639-1)
+              model: Translation model ("standard", "fast", "accurate")
+              preserve_formatting: Preserve line breaks and formatting
+
+          Returns:
+              Translation result dictionary
+
+          Raises:
+              requests.exceptions.HTTPError: If API request fails
+              requests.exceptions.Timeout: If request times out
+          """
+          payload = {
+              "text": text,
+              "source_language": source_lang,
+              "target_language": target_lang,
+              "model": model,
+              "preserve_formatting": preserve_formatting
+          }
+
+          result = self._request("POST", "/translate", json=payload)
+          return result
+
+      def detect_language(self, text: str) -> str:
+          """
+          Detect the language of the given text.
+
+          Args:
+              text: Text to analyze
+
+          Returns:
+              Detected language code (ISO 639-1)
+          """
+          payload = {"text": text}
+          result = self._request("POST", "/detect", json=payload)
+          return result.get("language", "unknown")
+
+      def get_supported_languages(self) -> list:
+          """
+          Get list of supported language pairs.
+
+          Returns:
+              List of supported language codes
+          """
+          result = self._request("GET", "/languages")
+          return result.get("languages", [])
+
+# Usage documentation (ENHANCED)
+usage_notes: |
+  ## Overview
+  High-quality neural machine translation using state-of-the-art NMT models.
+  Supports 100+ language pairs with confidence scoring.
+
+  ## Features
+  - **100+ Languages**: Major world languages supported
+  - **Multiple Models**: Standard, fast, and accurate models
+  - **Confidence Scores**: Translation quality estimation
+  - **Format Preservation**: Maintains line breaks and formatting
+  - **Auto-retry**: Automatic retry on transient failures
+  - **Rate Limiting**: Built-in rate limit handling
+
+  ## Models
+  - **standard**: Balanced speed and quality (default)
+  - **fast**: Optimized for speed, good quality
+  - **accurate**: Best quality, slower processing
+
+  ## Language Codes
+  Use ISO 639-1 two-letter codes:
+  - English: en
+  - Spanish: es
+  - French: fr
+  - German: de
+  - Japanese: ja
+  - Chinese: zh
+  - And 100+ more...
+
+  ## Configuration
+  Set environment variables:
+  - `NMT_API_KEY`: Your API key (required)
+  - `NMT_API_BASE_URL`: Custom API endpoint (optional)
+  - `NMT_API_SPEC_URL`: OpenAPI spec URL (optional)
+
+  ## Error Handling
+  - **429**: Rate limit exceeded - automatic retry with backoff
+  - **500-504**: Server errors - automatic retry
+  - **400**: Invalid input - check language codes and text
+  - **401**: Authentication failed - check API key
+  - **Timeout**: Request timed out - retry or use smaller text
+
+  ## Rate Limits
+  - 10 requests per second
+  - 100 requests per minute
+  - 5 concurrent requests
+
+  ## Best Practices
+  1. Cache translations to reduce API calls
+  2. Use appropriate model for your use case
+  3. Batch translations when possible
+  4. Handle errors gracefully
+  5. Monitor confidence scores
+  6. Respect rate limits
+
+  ## Performance
+  - Typical latency: 200-500ms
+  - Max text length: 10,000 characters
+  - Throughput: 10 req/sec
+
+  ## Use Cases
+  - Content localization
+  - Real-time chat translation
+  - Document translation
+  - Multilingual support
+  - International communication
+
+  ## Example Usage
+  ```python
+  # Basic translation
+  translator = NMTTranslator(api_token="your_api_key")
+  result = translator.translate(
+      text="Hello, world!",
+      source_lang="en",
+      target_lang="es"
+  )
+  print(result["translated_text"])  # "¡Hola, mundo!"
+
+  # With quality model
+  result = translator.translate(
+      text="Professional translation needed",
+      source_lang="en",
+      target_lang="fr",
+      model="accurate"
+  )
+
+  # Detect language
+  lang = translator.detect_language("Bonjour")
+  print(lang)  # "fr"
+
+  # Get supported languages
+  languages = translator.get_supported_languages()
+  ```
