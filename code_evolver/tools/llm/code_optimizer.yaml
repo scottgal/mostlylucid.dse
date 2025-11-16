@@ -1,0 +1,316 @@
+name: "Code Optimizer"
+type: "llm"
+version: "1.0.0"
+description: "Comprehensive code optimization tool with profiling, hierarchical optimization (local → cloud → deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle."
+
+llm:
+  model_key: "escalation"  # Use the god-mode code LLM for optimization
+  endpoint: null
+  system_prompt: |
+    You are an expert code optimizer. When asked to optimize code, follow this workflow:
+
+    PHASE 1: ANALYSIS
+    1. Profile current code to establish baseline
+    2. Identify bottlenecks (CPU, I/O, memory)
+    3. Analyze algorithm complexity
+    4. Check for obvious inefficiencies
+
+    PHASE 2: OPTIMIZATION HIERARCHY
+
+    Level 1 - LOCAL (Fast, Free, 10-20% improvement):
+    - Use local model (qwen2.5-coder:14b)
+    - Quick wins: remove redundancy, fix O(n²) loops
+    - Improve algorithms (use sets instead of lists for lookups)
+    - Add caching for repeated computations
+    - Optimize string concatenation
+
+    Level 2 - CLOUD (Expensive, 20-40% improvement):
+    - Triggered if local < 15% improvement OR code is critical
+    - Use cloud LLM (GPT-4/Claude) with RAG context
+    - Advanced optimizations: async/await, multiprocessing
+    - Data structure redesign
+    - Memory layout optimization
+
+    Level 3 - DEEP (Very Expensive, System-level):
+    - Triggered for workflows/systems, not individual functions
+    - Analyze entire call graph
+    - Identify architectural bottlenecks
+    - Suggest tool replacements (faster libraries)
+    - Recommend breaking changes if necessary
+
+    PHASE 3: TEST UPDATING
+    1. Identify existing tests for the code
+    2. Update tests to match new implementation
+    3. Add performance regression tests
+    4. Ensure all tests pass
+
+    PHASE 4: VALIDATION
+    1. Profile optimized code
+    2. Compare before/after metrics
+    3. Verify correctness (tests pass)
+    4. Calculate improvement %
+
+    PHASE 5: DECISION
+    - If improvement >= 10%: ACCEPT
+    - If improvement < 10%: REJECT (keep original)
+    - If tests fail: FIX or ROLLBACK
+
+    OUTPUT FORMAT:
+    ```
+    ## Optimization Report
+
+    ### Baseline Performance
+    - Duration: X.XXs
+    - Bottlenecks: [list]
+
+    ### Optimization Level: [LOCAL|CLOUD|DEEP]
+    - Strategy: [description]
+    - Changes: [list of modifications]
+
+    ### Optimized Code
+    ```python
+    [optimized code]
+    ```
+
+    ### Updated Tests
+    ```python
+    [updated test code]
+    ```
+
+    ### Performance Comparison
+    - Before: X.XXs
+    - After: Y.XXs
+    - Improvement: Z.Z%
+    - Recommendation: [ACCEPT|REJECT]
+
+    ### Breaking Changes
+    - [None or list of breaking changes]
+    ```
+
+  temperature: 0.4
+
+tags: ["optimization", "performance", "refactoring", "testing", "profiling"]
+
+constraints:
+  max_memory_mb: 2048
+  max_execution_time_ms: 600000  # 10 minutes for deep optimization
+  max_cost_per_optimization: 5.0  # USD
+
+metadata:
+  speed_tier: "slow"
+  cost_tier: "variable"  # Free for local, expensive for cloud/deep
+  reliability: "high"
+
+  optimization_levels:
+    - name: "local"
+      model_key: "escalation"  # Local god-mode code LLM
+      cost_usd: 0.0
+      expected_improvement: 0.10  # 10%
+      time_seconds: 30
+      triggers:
+        - "Default level for all optimizations"
+        - "Quick wins and obvious inefficiencies"
+
+    - name: "cloud"
+      model_key: "cloud_optimizer"  # Cloud optimization LLM from config
+      cost_usd: 0.50
+      expected_improvement: 0.30  # 30%
+      time_seconds: 60
+      triggers:
+        - "Local improvement < 15%"
+        - "Code is critical path (high reuse count)"
+        - "User explicitly requests thorough optimization"
+
+    - name: "deep"
+      model_key: "deep_analyzer"  # Deep analysis LLM from config
+      cost_usd: 5.0
+      expected_improvement: 0.50  # 50%
+      time_seconds: 300
+      triggers:
+        - "Workflow or system-level optimization"
+        - "Cloud improvement < 25%"
+        - "Architectural changes needed"
+
+workflow:
+  steps:
+    - id: "1_profile_baseline"
+      action: "profile_code"
+      description: "Profile current code to establish baseline"
+      tool: "performance_profiler"
+      output: "baseline_profile"
+
+    - id: "2_analyze_bottlenecks"
+      action: "analyze"
+      description: "Identify optimization opportunities"
+      code: |
+        # Extract bottlenecks from profile
+        # Categorize: CPU-bound, I/O-bound, memory-bound
+        # Prioritize by impact (time × frequency)
+
+    - id: "3_select_optimization_level"
+      action: "decide_level"
+      description: "Choose optimization level based on context"
+      logic: |
+        if is_workflow or is_system:
+            level = "deep"
+        elif reuse_count > 100 or is_critical_path:
+            level = "cloud"
+        else:
+            level = "local"
+
+    - id: "4_optimize_code"
+      action: "optimize"
+      description: "Apply optimizations at selected level"
+      depends_on: ["1_profile_baseline", "2_analyze_bottlenecks", "3_select_optimization_level"]
+
+    - id: "5_update_tests"
+      action: "update_tests"
+      description: "Update unit tests to match new implementation"
+      code: |
+        # Find existing tests
+        # Update assertions if needed
+        # Add performance regression test
+        # Run all tests
+
+    - id: "6_profile_optimized"
+      action: "profile_code"
+      description: "Profile optimized version"
+      tool: "performance_profiler"
+      output: "optimized_profile"
+
+    - id: "7_compare_results"
+      action: "compare"
+      description: "Calculate improvement percentage"
+      code: |
+        improvement_pct = (
+            (baseline_time - optimized_time) / baseline_time
+        ) * 100
+
+    - id: "8_validate_tests"
+      action: "run_tests"
+      description: "Ensure all tests pass"
+      tool: "pytest_runner"
+
+    - id: "9_make_decision"
+      action: "decide"
+      description: "Accept or reject optimization"
+      logic: |
+        if improvement_pct >= 10 and tests_pass:
+            decision = "ACCEPT"
+        elif tests_fail:
+            decision = "FIX_OR_ROLLBACK"
+        else:
+            decision = "REJECT"
+
+    - id: "10_update_version"
+      action: "version"
+      description: "Update tool version if accepted"
+      condition: "decision == 'ACCEPT'"
+      code: |
+        # Increment version (semver)
+        # Update metadata
+        # Mark breaking changes if any
+
+    - id: "11_migrate_code"
+      action: "migrate"
+      description: "Auto-migrate usage if no breaking changes"
+      condition: "decision == 'ACCEPT' and no_breaking_changes"
+      code: |
+        # Find all usages of old version
+        # Update to new version
+        # Verify migrations
+
+cost_management:
+  max_daily_budget: 50.0  # USD
+  fallback_on_budget_exceeded: "local"
+  cost_tracking:
+    - track_per_optimization
+    - aggregate_daily
+    - warn_at_80_percent
+
+  optimization_strategy: |
+    1. Always try LOCAL first (free)
+    2. Escalate to CLOUD if:
+       - Local improvement < 15%
+       - Reuse count > 100
+       - User requests it
+    3. Escalate to DEEP if:
+       - Cloud improvement < 25%
+       - System-level changes needed
+       - Budget allows
+
+test_integration:
+  auto_update: true
+  test_types:
+    - unit_tests
+    - integration_tests
+    - performance_regression_tests
+
+  test_discovery:
+    - "Find test_*.py in tests/"
+    - "Look for TestCase classes"
+    - "Identify tests for specific functions"
+
+  test_generation:
+    - "Generate missing tests for new code paths"
+    - "Add performance assertions"
+    - "Create regression test with baseline timing"
+
+version_management:
+  semver: true
+  breaking_change_detection:
+    - "Function signature changed"
+    - "Return type changed"
+    - "Dependencies added/removed"
+    - "Behavior fundamentally different"
+
+  auto_migration:
+    enabled: true
+    conditions:
+      - "No breaking changes"
+      - "All tests pass"
+      - "Improvement >= 10%"
+
+  rollback_support:
+    enabled: true
+    keep_versions: 3  # Keep last 3 versions
+
+example_usage: |
+  # Simple optimization request
+  "Optimize this function to run faster"
+
+  # Specific level
+  "Use cloud optimization to improve this code"
+
+  # With context
+  "This code is in the critical path, optimize it thoroughly"
+
+  # Comparison
+  "Compare performance of these two implementations"
+
+  # Full workflow
+  "Profile, optimize, and update tests for this module"
+
+integration:
+  profiling_module: "src/profiling.py"
+  optimization_pipeline: "src/optimization_pipeline.py"
+  test_runner: "tools/executable/pytest_runner.yaml"
+  rag_memory: "src/rag_memory.py"
+
+output:
+  formats:
+    - "markdown_report"
+    - "json_metrics"
+    - "optimized_code"
+    - "updated_tests"
+    - "version_metadata"
+
+  includes:
+    - baseline_profile
+    - optimization_strategy
+    - code_changes
+    - test_updates
+    - performance_comparison
+    - decision_rationale
+    - breaking_changes
+    - migration_guide

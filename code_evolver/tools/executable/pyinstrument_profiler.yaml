@@ -1,0 +1,37 @@
+name: "PyInstrument Profiler"
+type: "executable"
+version: "1.0.0"
+description: "Performance profiling using PyInstrument - provides detailed call stack analysis, line-level timing, and performance bottleneck identification. Generates text, HTML, and JSON reports for optimization analysis."
+executable:
+  command: "pyinstrument"
+  args: ["-r", "text", "--show-all", "{script_path}"]
+  install_command: "pip install pyinstrument"
+tags: ["python", "profiling", "performance", "optimization", "pyinstrument"]
+constraints:
+  max_memory_mb: 512
+  max_execution_time_ms: 300000  # 5 minutes
+metadata:
+  speed_tier: "medium"
+  cost_tier: "free"
+  reliability: "high"
+  breaking_changes: []
+  alternatives: ["cProfile", "line_profiler", "scalene"]
+optimization:
+  use_cases:
+    - "Identify performance bottlenecks in Python code"
+    - "Compare performance of different tool versions"
+    - "Analyze LLM invocation overhead (network vs inference)"
+    - "Evaluate workflow parallelization efficiency"
+    - "Profile RAG operations (embedding generation, search)"
+    - "Measure subprocess overhead in node execution"
+  integration_points:
+    - "ollama_client.generate() - LLM calls (70-90% of total latency)"
+    - "node_runner.run_node() - subprocess execution"
+    - "rag_memory.find_similar() - RAG search operations"
+    - "workflow_distributor.execute_workflow() - workflow execution"
+    - "optimization_pipeline.optimize_artifact() - optimization overhead"
+  output_formats:
+    - "text"    # Console output
+    - "html"    # Interactive HTML report
+    - "json"    # Machine-readable for automation
+    - "speedscope"  # Flamegraph visualization
