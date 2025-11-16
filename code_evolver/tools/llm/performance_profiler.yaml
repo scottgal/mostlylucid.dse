@@ -3,7 +3,7 @@ type: "llm"
 version: "1.0.0"
 description: "Analyzes code performance using PyInstrument profiling and provides detailed performance metrics, bottleneck identification, and optimization recommendations. Use this when asked to profile code, find performance issues, or analyze execution time."
 llm:
-  model: "qwen2.5-coder:14b"
+  model_key: "escalation"  # Use the god-mode code LLM
   endpoint: null
   system_prompt: |
     You are a performance profiling expert. When given code to analyze:

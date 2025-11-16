@@ -4,7 +4,7 @@ version: "1.0.0"
 description: "Comprehensive code optimization tool with profiling, hierarchical optimization (local → cloud → deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle."
 
 llm:
-  model: "qwen2.5-coder:14b"
+  model_key: "escalation"  # Use the god-mode code LLM for optimization
   endpoint: null
   system_prompt: |
     You are an expert code optimizer. When asked to optimize code, follow this workflow:
@@ -103,7 +103,7 @@ metadata:
 
   optimization_levels:
     - name: "local"
-      model: "qwen2.5-coder:14b"
+      model_key: "escalation"  # Local god-mode code LLM
       cost_usd: 0.0
       expected_improvement: 0.10  # 10%
       time_seconds: 30
@@ -112,7 +112,7 @@ metadata:
         - "Quick wins and obvious inefficiencies"
 
     - name: "cloud"
-      model: "gpt-4"  # or claude-sonnet
+      model_key: "cloud_optimizer"  # Cloud optimization LLM from config
       cost_usd: 0.50
       expected_improvement: 0.30  # 30%
       time_seconds: 60
@@ -122,7 +122,7 @@ metadata:
         - "User explicitly requests thorough optimization"
 
     - name: "deep"
-      model: "claude-sonnet-200k"
+      model_key: "deep_analyzer"  # Deep analysis LLM from config
       cost_usd: 5.0
       expected_improvement: 0.50  # 50%
       time_seconds: 300
