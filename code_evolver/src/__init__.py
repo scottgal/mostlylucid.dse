@@ -67,6 +67,72 @@ def create_rag_memory(config_manager, ollama_client):
             embedding_model=embedding_model_name
         )
 
+
+def create_loki_manager(config_manager, scope="global"):
+    """
+    Factory function to create LokiManager instance.
+
+    This function creates a LokiManager instance configured from the
+    config_manager settings. It checks for existing instances and reuses
+    them if available.
+
+    Args:
+        config_manager: ConfigManager instance
+        scope: Deployment scope ('global', 'tool', or custom name)
+
+    Returns:
+        LokiManager instance or None if Loki is disabled
+
+    Example:
+        >>> config = ConfigManager()
+        >>> loki = create_loki_manager(config, scope='global')
+        >>> if loki:
+        ...     loki.start()
+        ...     loki.push(logs=[{"message": "Hello"}])
+    """
+    if not config_manager.loki_enabled:
+        return None
+
+    try:
+        # Import here to avoid circular dependency
+        import sys
+        from pathlib import Path
+
+        # Add tools/executable to path if not already there
+        tools_path = Path(__file__).parent.parent / 'tools' / 'executable'
+        if str(tools_path) not in sys.path:
+            sys.path.insert(0, str(tools_path))
+
+        from loki_manager import LokiManager
+
+        # Get or create instance for this scope
+        loki = LokiManager.get_instance(
+            scope=scope,
+            url=config_manager.loki_url,
+            data_path=config_manager.loki_data_path,
+            docker_image=config_manager.loki_docker_image,
+            container_name=config_manager.loki_container_name,
+            port=config_manager.loki_port,
+            config_file=config_manager.loki_config_file,
+            default_labels=config_manager.loki_default_labels,
+            batch_size=config_manager.loki_batch_size,
+            timeout_seconds=config_manager.loki_batch_timeout
+        )
+
+        return loki
+
+    except ImportError as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Loki requested but loki_manager not available: {e}")
+        return None
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Failed to create LokiManager: {e}")
+        return None
+
+
 # New hierarchical evolution system
 from .overseer_llm import OverseerLlm, ExecutionPlan
 from .evaluator_llm import EvaluatorLlm, FitnessEvaluation
@@ -99,6 +165,7 @@ __all__ = [
     "ArtifactType",
     "OpenAPITool",
     "create_rag_memory",  # Factory function for RAG
+    "create_loki_manager",  # Factory function for Loki
     # New exports
     "OverseerLlm",
     "ExecutionPlan",
