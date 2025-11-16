@@ -46,7 +46,8 @@
       "Bash(git commit:*)",
       "Bash(git reset:*)",
       "Bash(timeout 5 python:*)",
-      "Bash(timeout 10 python:*)"
+      "Bash(timeout 10 python:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

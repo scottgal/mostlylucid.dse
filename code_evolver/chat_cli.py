@@ -2472,6 +2472,45 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
         }
         stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
+        # CRITICAL: Display output IMMEDIATELY and PROMINENTLY
+        # This is what the user wants to see!
+        if stdout and stdout.strip():
+            console.print("\n" + "="*80)
+            console.print("[bold magenta on white]  YOUR RESULT  [/bold magenta on white]")
+            console.print("="*80 + "\n")
+
+            # Try to extract and show the actual result prominently
+            result_displayed = False
+            try:
+                # Try to parse as JSON first
+                output_data = json.loads(stdout.strip())
+                if isinstance(output_data, dict):
+                    # Show the actual result clearly
+                    if 'result' in output_data:
+                        result_content = output_data['result']
+                        if isinstance(result_content, str):
+                            console.print(result_content)
+                        else:
+                            console.print(json.dumps(result_content, indent=2))
+                        result_displayed = True
+                    elif 'output' in output_data:
+                        console.print(output_data['output'])
+                        result_displayed = True
+                    elif 'answer' in output_data:
+                        console.print(output_data['answer'])
+                        result_displayed = True
+                    elif 'content' in output_data:
+                        console.print(output_data['content'])
+                        result_displayed = True
+            except:
+                pass
+
+            # If we couldn't extract a specific result, show full output
+            if not result_displayed:
+                console.print(stdout)
+
+            console.print("\n" + "="*80 + "\n")
+
         # Display results - ALWAYS show output, even if there were errors
         console.print("\n" + "="*70)
         console.print("[bold cyan]WORKFLOW RESULT:[/bold cyan]")
@@ -2483,39 +2522,9 @@ Return JSON: {{"improved_code": "...", "change_description": "..."}}"""
                 "exit_code": metrics["exit_code"],
                 "latency_ms": metrics["latency_ms"]
             })
-            if stdout and stdout.strip():
-                # Try to extract and show the actual result prominently
-                result_extracted = False
-                try:
-                    # Try to parse as JSON first
-                    output_data = json.loads(stdout.strip())
-                    if isinstance(output_data, dict):
-                        # Show the actual result clearly
-                        if 'result' in output_data:
-                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['result']}[/bold white]")
-                            result_extracted = True
-                        elif 'output' in output_data:
-                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['output']}[/bold white]")
-                            result_extracted = True
-                        elif 'answer' in output_data:
-                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['answer']}[/bold white]")
-                            result_extracted = True
-                        elif 'content' in output_data:
-                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}")
-                            result_extracted = True
-                except:
-                    pass
-
-                # If we couldn't extract a specific result, show full output
-                if not result_extracted:
-                    # Check if it's plain text (like an article or story)
-                    if not stdout.strip().startswith('{'):
-                        console.print(f"\n[bold green]RESULT:[/bold green]")
-                        console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
-                    else:
-                        console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
-            else:
+            if not stdout or not stdout.strip():
                 console.print("[yellow]Note: Code executed successfully but produced no output[/yellow]")
+                console.print("[dim]This usually means the code didn't print anything to stdout[/dim]")
         else:
             console.print(f"[red]FAIL Execution failed (exit code: {metrics['exit_code']})[/red]")
             workflow.fail_step("execution", f"Exit code {metrics['exit_code']}")

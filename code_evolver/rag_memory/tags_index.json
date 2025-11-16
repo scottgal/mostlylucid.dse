@@ -46,7 +46,8 @@
     "invocation_general_1763253219663",
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
-    "invocation_general_1763254526404"
+    "invocation_general_1763254526404",
+    "invocation_general_1763255215302"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -142,7 +143,8 @@
     "invocation_general_1763253219663",
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
-    "invocation_general_1763254526404"
+    "invocation_general_1763254526404",
+    "invocation_general_1763255215302"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -238,7 +240,8 @@
     "invocation_general_1763253219663",
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
-    "invocation_general_1763254526404"
+    "invocation_general_1763254526404",
+    "invocation_general_1763255215302"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -385,7 +388,8 @@
     "tool_unit_converter",
     "tool_quick_translator",
     "tool_write_a_haiku_about_coding",
-    "tool_exit_1763253889"
+    "tool_exit_1763253889",
+    "tool_write_me_a_poem"
   ],
   "llm": [
     "func_write_me_a_joke_1763182748",
@@ -416,7 +420,10 @@
     "func_tell_me_a_joke_about_programmi",
     "workflow_tell_me_a_joke_about_programmi",
     "tool_tell_me_a_joke_about_programmi",
-    "tool_quick_translator"
+    "tool_quick_translator",
+    "func_write_me_a_poem",
+    "workflow_write_me_a_poem",
+    "tool_write_me_a_poem"
   ],
   "writing": [
     "spec_write_me_a_story",
@@ -461,7 +468,8 @@
     "spec_write_a_haiku",
     "spec_write_a_haiku_about_codin",
     "spec_write_a_haiku_about_coding",
-    "spec_write_a_letter_to_santa_and_ta"
+    "spec_write_a_letter_to_santa_and_ta",
+    "spec_write_me_a_poem_1763255171"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -552,7 +560,8 @@
     "tool_write_a_haiku_about_coding",
     "workflow_write_a_letter_to_santa_and_ta",
     "workflow_1763253780",
-    "tool_exit_1763253889"
+    "tool_exit_1763253889",
+    "tool_write_me_a_poem"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -684,7 +693,8 @@
     "spec_exit_1763253041",
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
-    "spec_exit_1763253889"
+    "spec_exit_1763253889",
+    "spec_write_me_a_poem_1763255171"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -778,7 +788,8 @@
     "tool_add_1_5",
     "tool_get_english_word",
     "tool_write_a_haiku_about_coding",
-    "tool_exit_1763253889"
+    "tool_exit_1763253889",
+    "tool_write_me_a_poem"
   ],
   "python": [
     "func_add_100_and_200",
@@ -840,7 +851,10 @@
     "tool_write_a_haiku_about_coding",
     "func_write_a_letter_to_santa_and_ta",
     "workflow_write_a_letter_to_santa_and_ta",
-    "tool_exit_1763253889"
+    "tool_exit_1763253889",
+    "func_write_me_a_poem",
+    "workflow_write_me_a_poem",
+    "tool_write_me_a_poem"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -1211,7 +1225,8 @@
     "spec_exit_1763253041",
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
-    "spec_exit_1763253889"
+    "spec_exit_1763253889",
+    "spec_write_me_a_poem_1763255171"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1295,7 +1310,8 @@
     "spec_exit_1763253041",
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
-    "spec_exit_1763253889"
+    "spec_exit_1763253889",
+    "spec_write_me_a_poem_1763255171"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1379,13 +1395,17 @@
     "spec_exit_1763253041",
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
-    "spec_exit_1763253889"
+    "spec_exit_1763253889",
+    "spec_write_me_a_poem_1763255171"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
     "func_write_a_poem",
     "workflow_write_a_poem",
-    "tool_write_a_poem"
+    "tool_write_a_poem",
+    "func_write_me_a_poem",
+    "workflow_write_me_a_poem",
+    "tool_write_me_a_poem"
   ],
   "robert burns": [
     "func_write_a_poem_in_the_style_of_r"
@@ -1643,7 +1663,8 @@
     "workflow_write_a_poem_1763241023",
     "workflow_add_1_5",
     "workflow_get_english_word",
-    "workflow_write_a_letter_to_santa_and_ta"
+    "workflow_write_a_letter_to_santa_and_ta",
+    "workflow_write_me_a_poem"
   ],
   "calculator": [
     "tool_calculat_1_1",
@@ -2180,7 +2201,8 @@
     "invocation_general_1763253219663",
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
-    "invocation_general_1763254526404"
+    "invocation_general_1763254526404",
+    "invocation_general_1763255215302"
   ],
   "translate": [
     "workflow_1763251699"
