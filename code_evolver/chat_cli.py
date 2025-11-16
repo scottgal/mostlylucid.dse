@@ -2059,28 +2059,40 @@ Return ONLY the JSON object, nothing else."""
             console.print(f"[yellow]Will attempt to fix via adaptive escalation...[/yellow]")
 
         # Check for required imports and add if missing
-        required_imports = []
-        if 'json.load' in code or 'json.dump' in code:
-            required_imports.append('import json')
-        if 'sys.stdin' in code or 'sys.stdout' in code or 'sys.stderr' in code:
-            required_imports.append('import sys')
-        if 'call_tool(' in code:
-            required_imports.append('from node_runtime import call_tool')
+        needs_call_tool = 'call_tool(' in code
+        needs_json = 'json.load' in code or 'json.dump' in code
+        needs_sys = 'sys.stdin' in code or 'sys.stdout' in code or 'sys.stderr' in code
 
-        # Add missing imports at the top
-        for required in required_imports:
-            if required.split()[-1] not in code.split('\n')[0]:  # Simple check
-                # More robust check
-                if required.startswith('from'):
-                    module = required.split()[-1]
-                    if f'import {module}' not in code and f'from node_runtime import {module}' not in code:
-                        code = required + '\n' + code
-                        console.print(f"[dim yellow]Added missing import: {required}[/dim yellow]")
-                else:
-                    module = required.split()[-1]
-                    if f'import {module}' not in code:
-                        code = required + '\n' + code
-                        console.print(f"[dim yellow]Added missing import: {required}[/dim yellow]")
+        # CRITICAL: If code uses call_tool, it MUST have the path setup
+        if needs_call_tool and 'sys.path.insert' not in code:
+            # Add complete path setup block at the top
+            path_setup = """from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from node_runtime import call_tool
+"""
+            # Find where imports start and inject before them
+            lines = code.split('\n')
+            import_start = 0
+            for i, line in enumerate(lines):
+                if line.strip().startswith('import ') or line.strip().startswith('from '):
+                    import_start = i
+                    break
+
+            # Insert path setup at the beginning
+            code = path_setup + code
+            console.print("[green]Added path setup for node_runtime import[/green]")
+
+        # Add other missing imports
+        if needs_json and 'import json' not in code:
+            code = 'import json\n' + code
+            console.print("[dim yellow]Added missing import: json[/dim yellow]")
+
+        if needs_sys and 'import sys' not in code and 'sys.path.insert' not in code:
+            # sys might already be imported in path setup
+            if 'import sys' not in code:
+                code = 'import sys\n' + code
+                console.print("[dim yellow]Added missing import: sys[/dim yellow]")
 
         # Validate and fix code if needed
         is_valid, error_msg = self._validate_python_code(code)
