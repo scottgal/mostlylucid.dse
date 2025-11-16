@@ -2094,6 +2094,12 @@ from node_runtime import call_tool
                 code = 'import sys\n' + code
                 console.print("[dim yellow]Added missing import: sys[/dim yellow]")
 
+        # CRITICAL: Strip out any logging calls that LLM might have added
+        # This prevents "NameError: name 'logger' is not defined" errors
+        if 'logger.' in code or 'logging.' in code:
+            console.print("[cyan]Removing logging calls from generated code...[/cyan]")
+            code = self._remove_debug_logging(code)
+
         # Validate and fix code if needed
         is_valid, error_msg = self._validate_python_code(code)
         if not is_valid:

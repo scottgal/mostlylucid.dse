@@ -28,10 +28,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052318Z"
+      "last_reset": "2025-11-16T01:18:18.356532Z"
     },
     "created_at": "2025-11-15T23:05:48.995172Z",
-    "usage_count": 11,
+    "usage_count": 12,
     "version": "1.0.0",
     "definition_hash": "",
     "breaking_changes": []
@@ -62,7 +62,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052333Z"
+      "last_reset": "2025-11-16T01:18:18.356543Z"
     },
     "created_at": "2025-11-15T23:05:48.995188Z",
     "usage_count": 0,
@@ -96,7 +96,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052340Z"
+      "last_reset": "2025-11-16T01:18:18.356549Z"
     },
     "created_at": "2025-11-15T23:05:48.995193Z",
     "usage_count": 0,
@@ -130,7 +130,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052345Z"
+      "last_reset": "2025-11-16T01:18:18.356554Z"
     },
     "created_at": "2025-11-15T23:05:48.995198Z",
     "usage_count": 0,
@@ -164,7 +164,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052350Z"
+      "last_reset": "2025-11-16T01:18:18.356557Z"
     },
     "created_at": "2025-11-15T23:05:48.995202Z",
     "usage_count": 0,
@@ -202,7 +202,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052354Z"
+      "last_reset": "2025-11-16T01:18:18.356561Z"
     },
     "created_at": "2025-11-15T23:05:48.995206Z",
     "usage_count": 0,
@@ -240,7 +240,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052357Z"
+      "last_reset": "2025-11-16T01:18:18.356565Z"
     },
     "created_at": "2025-11-15T23:05:48.995211Z",
     "usage_count": 0,
@@ -277,7 +277,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052361Z"
+      "last_reset": "2025-11-16T01:18:18.356569Z"
     },
     "created_at": "2025-11-15T23:05:48.995215Z",
     "usage_count": 0,
@@ -314,7 +314,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052364Z"
+      "last_reset": "2025-11-16T01:18:18.356572Z"
     },
     "created_at": "2025-11-15T23:05:48.995220Z",
     "usage_count": 0,
@@ -351,7 +351,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052367Z"
+      "last_reset": "2025-11-16T01:18:18.356576Z"
     },
     "created_at": "2025-11-15T23:05:48.995224Z",
     "usage_count": 0,
@@ -388,7 +388,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052370Z"
+      "last_reset": "2025-11-16T01:18:18.356579Z"
     },
     "created_at": "2025-11-15T23:05:48.995229Z",
     "usage_count": 0,
@@ -423,7 +423,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052374Z"
+      "last_reset": "2025-11-16T01:18:18.356583Z"
     },
     "created_at": "2025-11-15T00:29:22.122018Z",
     "usage_count": 0,
@@ -458,7 +458,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052378Z"
+      "last_reset": "2025-11-16T01:18:18.356587Z"
     },
     "created_at": "2025-11-15T00:33:43.019137Z",
     "usage_count": 0,
@@ -494,7 +494,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052383Z"
+      "last_reset": "2025-11-16T01:18:18.356590Z"
     },
     "created_at": "2025-11-15T00:45:30.312391Z",
     "usage_count": 0,
@@ -530,7 +530,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052386Z"
+      "last_reset": "2025-11-16T01:18:18.356594Z"
     },
     "created_at": "2025-11-15T23:05:48.995234Z",
     "usage_count": 0,
@@ -565,7 +565,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052390Z"
+      "last_reset": "2025-11-16T01:18:18.356598Z"
     },
     "created_at": "2025-11-15T23:05:48.995240Z",
     "usage_count": 0,
@@ -601,7 +601,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052394Z"
+      "last_reset": "2025-11-16T01:18:18.356601Z"
     },
     "created_at": "2025-11-15T23:05:48.995245Z",
     "usage_count": 0,
@@ -636,7 +636,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052397Z"
+      "last_reset": "2025-11-16T01:18:18.356605Z"
     },
     "created_at": "2025-11-15T23:05:48.995249Z",
     "usage_count": 0,
@@ -670,7 +670,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052402Z"
+      "last_reset": "2025-11-16T01:18:18.356608Z"
     },
     "created_at": "2025-11-15T23:05:48.995255Z",
     "usage_count": 0,
@@ -705,7 +705,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052405Z"
+      "last_reset": "2025-11-16T01:18:18.356611Z"
     },
     "created_at": "2025-11-15T23:05:48.995259Z",
     "usage_count": 0,
@@ -741,7 +741,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052408Z"
+      "last_reset": "2025-11-16T01:18:18.356614Z"
     },
     "created_at": "2025-11-15T23:05:48.995264Z",
     "usage_count": 0,
@@ -777,7 +777,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052411Z"
+      "last_reset": "2025-11-16T01:18:18.356618Z"
     },
     "created_at": "2025-11-15T23:05:48.995268Z",
     "usage_count": 0,
@@ -810,7 +810,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052415Z"
+      "last_reset": "2025-11-16T01:18:18.356621Z"
     },
     "created_at": "2025-11-15T23:05:48.995272Z",
     "usage_count": 0,
@@ -843,7 +843,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052418Z"
+      "last_reset": "2025-11-16T01:18:18.356624Z"
     },
     "created_at": "2025-11-15T23:05:48.995276Z",
     "usage_count": 0,
@@ -878,7 +878,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052421Z"
+      "last_reset": "2025-11-16T01:18:18.356628Z"
     },
     "created_at": "2025-11-15T23:05:48.995280Z",
     "usage_count": 0,
@@ -917,7 +917,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052425Z"
+      "last_reset": "2025-11-16T01:18:18.356631Z"
     },
     "created_at": "2025-11-15T23:05:48.995177Z",
     "usage_count": 0,
@@ -954,7 +954,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052428Z"
+      "last_reset": "2025-11-16T01:18:18.356634Z"
     },
     "created_at": "2025-11-15T23:05:48.995183Z",
     "usage_count": 0,
@@ -992,7 +992,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052432Z"
+      "last_reset": "2025-11-16T01:18:18.356638Z"
     },
     "created_at": "2025-11-15T23:05:49.011665Z",
     "usage_count": 0,
@@ -1029,7 +1029,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052435Z"
+      "last_reset": "2025-11-16T01:18:18.356643Z"
     },
     "created_at": "2025-11-15T23:05:49.011690Z",
     "usage_count": 0,
@@ -1065,7 +1065,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052438Z"
+      "last_reset": "2025-11-16T01:18:18.356646Z"
     },
     "created_at": "2025-11-15T01:17:53.285112Z",
     "usage_count": 0,
@@ -1104,7 +1104,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052441Z"
+      "last_reset": "2025-11-16T01:18:18.356650Z"
     },
     "created_at": "2025-11-15T23:05:49.011698Z",
     "usage_count": 0,
@@ -1140,7 +1140,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052445Z"
+      "last_reset": "2025-11-16T01:18:18.356654Z"
     },
     "created_at": "2025-11-15T01:45:38.026107Z",
     "usage_count": 0,
@@ -1177,7 +1177,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052448Z"
+      "last_reset": "2025-11-16T01:18:18.356657Z"
     },
     "created_at": "2025-11-15T23:05:49.011706Z",
     "usage_count": 0,
@@ -1214,7 +1214,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052452Z"
+      "last_reset": "2025-11-16T01:18:18.356660Z"
     },
     "created_at": "2025-11-15T02:21:46.594132Z",
     "usage_count": 0,
@@ -1250,7 +1250,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052456Z"
+      "last_reset": "2025-11-16T01:18:18.356664Z"
     },
     "created_at": "2025-11-15T02:30:39.242608Z",
     "usage_count": 0,
@@ -1286,7 +1286,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052460Z"
+      "last_reset": "2025-11-16T01:18:18.356667Z"
     },
     "created_at": "2025-11-15T03:01:26.867706Z",
     "usage_count": 0,
@@ -1321,7 +1321,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052464Z"
+      "last_reset": "2025-11-16T01:18:18.356670Z"
     },
     "created_at": "2025-11-15T03:43:47.333782Z",
     "usage_count": 0,
@@ -1357,7 +1357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052467Z"
+      "last_reset": "2025-11-16T01:18:18.356674Z"
     },
     "created_at": "2025-11-15T03:10:01.000404Z",
     "usage_count": 0,
@@ -1393,7 +1393,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052470Z"
+      "last_reset": "2025-11-16T01:18:18.356677Z"
     },
     "created_at": "2025-11-15T03:20:30.324266Z",
     "usage_count": 0,
@@ -1429,7 +1429,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052473Z"
+      "last_reset": "2025-11-16T01:18:18.356680Z"
     },
     "created_at": "2025-11-15T03:27:58.781005Z",
     "usage_count": 0,
@@ -1465,7 +1465,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052477Z"
+      "last_reset": "2025-11-16T01:18:18.356684Z"
     },
     "created_at": "2025-11-15T03:37:23.056616Z",
     "usage_count": 0,
@@ -1502,7 +1502,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052480Z"
+      "last_reset": "2025-11-16T01:18:18.356688Z"
     },
     "created_at": "2025-11-15T23:05:48.995158Z",
     "usage_count": 0,
@@ -1538,7 +1538,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052483Z"
+      "last_reset": "2025-11-16T01:18:18.356691Z"
     },
     "created_at": "2025-11-15T23:05:49.011712Z",
     "usage_count": 0,
@@ -1573,7 +1573,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052487Z"
+      "last_reset": "2025-11-16T01:18:18.356695Z"
     },
     "created_at": "2025-11-15T23:05:49.011719Z",
     "usage_count": 0,
@@ -1608,7 +1608,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052490Z"
+      "last_reset": "2025-11-16T01:18:18.356699Z"
     },
     "created_at": "2025-11-15T03:59:07.086285Z",
     "usage_count": 0,
@@ -1643,7 +1643,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052494Z"
+      "last_reset": "2025-11-16T01:18:18.356702Z"
     },
     "created_at": "2025-11-15T04:08:37.271301Z",
     "usage_count": 0,
@@ -1678,7 +1678,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052497Z"
+      "last_reset": "2025-11-16T01:18:18.356705Z"
     },
     "created_at": "2025-11-15T04:16:26.611410Z",
     "usage_count": 0,
@@ -1713,7 +1713,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052500Z"
+      "last_reset": "2025-11-16T01:18:18.356709Z"
     },
     "created_at": "2025-11-15T23:05:49.011725Z",
     "usage_count": 0,
@@ -1751,7 +1751,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052504Z"
+      "last_reset": "2025-11-16T01:18:18.356712Z"
     },
     "created_at": "2025-11-15T04:29:01.140398Z",
     "usage_count": 5,
@@ -1787,7 +1787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052507Z"
+      "last_reset": "2025-11-16T01:18:18.356717Z"
     },
     "created_at": "2025-11-15T04:33:08.225941Z",
     "usage_count": 0,
@@ -1822,7 +1822,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052511Z"
+      "last_reset": "2025-11-16T01:18:18.356720Z"
     },
     "created_at": "2025-11-15T04:37:52.223369Z",
     "usage_count": 0,
@@ -1860,7 +1860,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052514Z"
+      "last_reset": "2025-11-16T01:18:18.356723Z"
     },
     "created_at": "2025-11-15T04:47:11.727855Z",
     "usage_count": 0,
@@ -1897,7 +1897,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052517Z"
+      "last_reset": "2025-11-16T01:18:18.356727Z"
     },
     "created_at": "2025-11-15T04:51:25.425885Z",
     "usage_count": 0,
@@ -1934,7 +1934,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052521Z"
+      "last_reset": "2025-11-16T01:18:18.356730Z"
     },
     "created_at": "2025-11-15T04:56:34.138310Z",
     "usage_count": 0,
@@ -1971,7 +1971,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052524Z"
+      "last_reset": "2025-11-16T01:18:18.356734Z"
     },
     "created_at": "2025-11-15T23:05:48.995166Z",
     "usage_count": 0,
@@ -2007,7 +2007,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052529Z"
+      "last_reset": "2025-11-16T01:18:18.356737Z"
     },
     "created_at": "2025-11-15T05:34:25.206297Z",
     "usage_count": 0,
@@ -2044,7 +2044,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052532Z"
+      "last_reset": "2025-11-16T01:18:18.356740Z"
     },
     "created_at": "2025-11-15T05:39:37.051531Z",
     "usage_count": 0,
@@ -2082,7 +2082,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052536Z"
+      "last_reset": "2025-11-16T01:18:18.356744Z"
     },
     "created_at": "2025-11-15T05:43:05.313587Z",
     "usage_count": 0,
@@ -2119,7 +2119,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052539Z"
+      "last_reset": "2025-11-16T01:18:18.356747Z"
     },
     "created_at": "2025-11-15T05:48:46.152626Z",
     "usage_count": 0,
@@ -2156,7 +2156,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052542Z"
+      "last_reset": "2025-11-16T01:18:18.356751Z"
     },
     "created_at": "2025-11-15T06:12:04.938129Z",
     "usage_count": 0,
@@ -2194,7 +2194,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052546Z"
+      "last_reset": "2025-11-16T01:18:18.356755Z"
     },
     "created_at": "2025-11-15T06:14:46.234019Z",
     "usage_count": 0,
@@ -2230,7 +2230,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052549Z"
+      "last_reset": "2025-11-16T01:18:18.356758Z"
     },
     "created_at": "2025-11-15T06:22:10.129256Z",
     "usage_count": 0,
@@ -2267,7 +2267,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052553Z"
+      "last_reset": "2025-11-16T01:18:18.356761Z"
     },
     "created_at": "2025-11-15T06:24:41.879945Z",
     "usage_count": 0,
@@ -2304,7 +2304,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052556Z"
+      "last_reset": "2025-11-16T01:18:18.356765Z"
     },
     "created_at": "2025-11-15T12:52:01.973353Z",
     "usage_count": 0,
@@ -2342,7 +2342,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052559Z"
+      "last_reset": "2025-11-16T01:18:18.356768Z"
     },
     "created_at": "2025-11-15T14:19:42.965761Z",
     "usage_count": 0,
@@ -2380,7 +2380,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052562Z"
+      "last_reset": "2025-11-16T01:18:18.356772Z"
     },
     "created_at": "2025-11-15T17:49:29.207608Z",
     "usage_count": 0,
@@ -2545,7 +2545,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052566Z"
+      "last_reset": "2025-11-16T01:18:18.356775Z"
     },
     "created_at": "2025-11-15T18:53:13.571594+00:00",
     "usage_count": 0,
@@ -2581,7 +2581,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052570Z"
+      "last_reset": "2025-11-16T01:18:18.356779Z"
     },
     "created_at": "2025-11-15T19:00:00.330968Z",
     "usage_count": 0,
@@ -2617,7 +2617,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052573Z"
+      "last_reset": "2025-11-16T01:18:18.356782Z"
     },
     "created_at": "2025-11-15T19:05:48.796125Z",
     "usage_count": 0,
@@ -2658,7 +2658,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052578Z"
+      "last_reset": "2025-11-16T01:18:18.356787Z"
     },
     "created_at": "2025-11-15T23:05:49.011732Z",
     "usage_count": 0,
@@ -2695,7 +2695,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052581Z"
+      "last_reset": "2025-11-16T01:18:18.356791Z"
     },
     "created_at": "2025-11-15T19:50:03.317127Z",
     "usage_count": 0,
@@ -2732,7 +2732,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052584Z"
+      "last_reset": "2025-11-16T01:18:18.356794Z"
     },
     "created_at": "2025-11-15T19:59:19.151824Z",
     "usage_count": 0,
@@ -2786,9 +2786,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:20.956278Z"
+      "last_reset": "2025-11-16T01:18:27.727323Z"
     },
-    "created_at": "2025-11-16T00:53:20.956271Z",
+    "created_at": "2025-11-16T01:18:27.727316Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2822,7 +2822,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052591Z"
+      "last_reset": "2025-11-16T01:18:18.356801Z"
     },
     "created_at": "2025-11-15T21:13:03.025275Z",
     "usage_count": 0,
@@ -2859,7 +2859,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052595Z"
+      "last_reset": "2025-11-16T01:18:18.356804Z"
     },
     "created_at": "2025-11-15T21:16:36.803465Z",
     "usage_count": 0,
@@ -2897,7 +2897,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052599Z"
+      "last_reset": "2025-11-16T01:18:18.356808Z"
     },
     "created_at": "2025-11-15T22:28:13.519050Z",
     "usage_count": 0,
@@ -2933,7 +2933,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052602Z"
+      "last_reset": "2025-11-16T01:18:18.356811Z"
     },
     "created_at": "2025-11-16T00:00:05.281792Z",
     "usage_count": 0,
@@ -2980,7 +2980,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052606Z"
+      "last_reset": "2025-11-16T01:18:18.356815Z"
     },
     "created_at": "2025-11-16T00:20:57.633389Z",
     "usage_count": 0,
@@ -3027,7 +3027,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052610Z"
+      "last_reset": "2025-11-16T01:18:18.356818Z"
     },
     "created_at": "2025-11-16T00:20:57.640199Z",
     "usage_count": 0,
@@ -3074,7 +3074,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052613Z"
+      "last_reset": "2025-11-16T01:18:18.356821Z"
     },
     "created_at": "2025-11-16T00:20:57.641535Z",
     "usage_count": 0,
@@ -3112,7 +3112,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052616Z"
+      "last_reset": "2025-11-16T01:18:18.356825Z"
     },
     "created_at": "2025-11-16T00:20:57.648576Z",
     "usage_count": 0,
@@ -3149,7 +3149,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052619Z"
+      "last_reset": "2025-11-16T01:18:18.356828Z"
     },
     "created_at": "2025-11-16T00:36:08.122401Z",
     "usage_count": 0,
@@ -3185,7 +3185,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T00:53:12.052624Z"
+      "last_reset": "2025-11-16T01:18:18.356831Z"
     },
     "created_at": "2025-11-16T00:46:00.821348Z",
     "usage_count": 0,
@@ -3214,14 +3214,15 @@
       "created_at": "2025-11-16T01:04:54.024940+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code that generates a poem based on user input using LLM tools."
+      "full_title": "Python code that generates a poem based on user input using LLM tools.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T01:04:54.024992Z"
+      "last_reset": "2025-11-16T01:18:18.356835Z"
     },
     "created_at": "2025-11-16T01:04:54.024984Z",
     "usage_count": 0,
@@ -3251,14 +3252,15 @@
       "created_at": "2025-11-16T01:09:17.223041+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Python code that generates a poem based on user input using natural language processing and machine learning techniques."
+      "full_title": "Python code that generates a poem based on user input using natural language processing and machine learning techniques.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T01:09:17.223070Z"
+      "last_reset": "2025-11-16T01:18:18.356838Z"
     },
     "created_at": "2025-11-16T01:09:17.223066Z",
     "usage_count": 0,

@@ -47,7 +47,8 @@
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
-    "invocation_general_1763255215302"
+    "invocation_general_1763255215302",
+    "invocation_general_1763255986610"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -144,7 +145,8 @@
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
-    "invocation_general_1763255215302"
+    "invocation_general_1763255215302",
+    "invocation_general_1763255986610"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -241,7 +243,8 @@
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
-    "invocation_general_1763255215302"
+    "invocation_general_1763255215302",
+    "invocation_general_1763255986610"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -696,7 +699,8 @@
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
-    "spec_write_me_a_poem_1763255171"
+    "spec_write_me_a_poem_1763255171",
+    "spec_implement_binary_search_1763255952"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -1230,7 +1234,8 @@
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
-    "spec_write_me_a_poem_1763255171"
+    "spec_write_me_a_poem_1763255171",
+    "spec_implement_binary_search_1763255952"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1315,7 +1320,8 @@
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
-    "spec_write_me_a_poem_1763255171"
+    "spec_write_me_a_poem_1763255171",
+    "spec_implement_binary_search_1763255952"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1400,7 +1406,8 @@
     "spec_write_a_haiku_about_coding",
     "spec_write_a_letter_to_santa_and_ta",
     "spec_exit_1763253889",
-    "spec_write_me_a_poem_1763255171"
+    "spec_write_me_a_poem_1763255171",
+    "spec_implement_binary_search_1763255952"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -2208,7 +2215,8 @@
     "invocation_general_1763253723820",
     "invocation_general_1763253927777",
     "invocation_general_1763254526404",
-    "invocation_general_1763255215302"
+    "invocation_general_1763255215302",
+    "invocation_general_1763255986610"
   ],
   "translate": [
     "workflow_1763251699"
