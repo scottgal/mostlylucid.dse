@@ -819,7 +819,8 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
 [dim]AI-powered code generation and evolution[/dim]
 
 Just type what you want to create - it will generate and run automatically!
-Type [bold]/help[/bold] for special commands, or [bold]/exit[/bold] to quit.
+Type [bold]/help[/bold] for special commands, or [bold]exit[/bold] to quit.
+Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
 [dim]Examples:[/dim]
   write a haiku about coding
@@ -832,7 +833,9 @@ Type [bold]/help[/bold] for special commands, or [bold]/exit[/bold] to quit.
         """Print help message."""
         console.print("\n[bold cyan]Usage:[/bold cyan]")
         console.print("  [bold]Just type what you want![/bold] - Automatically generates and runs code")
-        console.print("  [dim]Example: write a joke about AI[/dim]\n")
+        console.print("  [dim]Example: write a joke about AI[/dim]")
+        console.print("  Type [bold]exit[/bold] (or [bold]quit[/bold]) to exit immediately")
+        console.print("  Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt\n")
 
         table = Table(title="Special Commands (prefix with /)", box=box.ROUNDED)
         table.add_column("Command", style="cyan", no_wrap=True)
@@ -858,7 +861,7 @@ Type [bold]/help[/bold] for special commands, or [bold]/exit[/bold] to quit.
             ("/clear", "Clear the screen"),
             ("/clear_rag", "Clear RAG memory and reset test data (WARNING: destructive!)"),
             ("/help", "Show this help message"),
-            ("/exit, /quit", "Exit the CLI")
+            ("exit, quit, /exit, /quit", "Exit the CLI (/ optional)")
         ]
 
         for cmd, desc in commands:
@@ -4941,13 +4944,6 @@ Return ONLY the JSON, no other text."""
 
     def run(self):
         """Run the interactive CLI."""
-        # Set up signal handler for Ctrl-C (immediate exit)
-        def signal_handler(sig, frame):
-            console.print("\n[yellow]Interrupted! Exiting...[/yellow]")
-            sys.exit(0)
-
-        signal.signal(signal.SIGINT, signal_handler)
-
         self.print_welcome()
 
         # Check status first
@@ -4963,6 +4959,11 @@ Return ONLY the JSON, no other text."""
 
                 if not user_input:
                     continue
+
+                # Check for "exit" without slash (immediate exit)
+                if user_input.lower() in ['exit', 'quit', 'q']:
+                    console.print("[cyan]Goodbye![/cyan]")
+                    break
 
                 self.history.append(user_input)
 
@@ -5034,9 +5035,9 @@ Return ONLY the JSON, no other text."""
                     console.print("[dim]Type /help to see available commands[/dim]")
 
             except KeyboardInterrupt:
-                # Ctrl-C should immediately stop
-                console.print("\n[yellow]Interrupted! Exiting...[/yellow]")
-                break
+                # Ctrl-C should cancel current task and return to prompt
+                console.print("\n[yellow]Interrupted! Cancelling task...[/yellow]")
+                continue
 
             except EOFError:
                 break
