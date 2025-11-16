@@ -1,0 +1,31 @@
+name: "Selective File Copier"
+type: "executable"
+description: "Copies only required files based on dependency analysis for tree-shaken deployments. Maintains directory structure and creates Python package init files."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/selective_file_copier.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON with: file_list (required list of files), source_root (default: .), dest_root (required destination)"
+
+output_schema:
+  success: "bool - Whether copy was successful"
+  copied_files: "list - List of copied files with sizes"
+  failed_files: "list - List of files that failed to copy"
+  created_dirs: "list - Directories created"
+  total_size_bytes: "int - Total bytes copied"
+  stats: "dict - Statistics: {total_files, copied, failed, total_size_mb}"
+  error: "str - Error message if copy failed"
+
+tags:
+  - file-operations
+  - tree-shaking
+  - optimization
+  - deployment
+  - packaging

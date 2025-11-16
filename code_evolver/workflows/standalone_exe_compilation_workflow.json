@@ -1,0 +1,151 @@
+{
+  "workflow_id": "standalone_exe_compilation_workflow",
+  "name": "Standalone Executable Compilation Workflow",
+  "description": "Compiles any tool into a standalone executable with complete support files (exe, README, config, .env) - all tree-shaken and optimized",
+  "version": "1.0",
+  "priority": "medium",
+  "quality_level": "production",
+  "tags": ["standalone", "executable", "compilation", "pyinstaller", "tree-shaking"],
+
+  "input_parameters": {
+    "tool_id": {
+      "type": "string",
+      "required": true,
+      "description": "ID of the tool or workflow to compile"
+    },
+    "output_path": {
+      "type": "string",
+      "required": false,
+      "default": "./standalone-build",
+      "description": "Output directory for generated executable and files"
+    },
+    "output_name": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Name for the executable (defaults to tool_id)"
+    },
+    "mode": {
+      "type": "string",
+      "required": false,
+      "default": "cli",
+      "description": "Execution mode: 'cli' or 'api'"
+    },
+    "port": {
+      "type": "integer",
+      "required": false,
+      "default": 8080,
+      "description": "Port for API mode"
+    },
+    "include_source": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Include source files alongside executable"
+    }
+  },
+
+  "steps": [
+    {
+      "step_id": "analyze_dependencies",
+      "tool": "dependency_analyzer",
+      "description": "Analyze tool dependencies for tree shaking",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"tools_root\": \"code_evolver/tools\", \"include_rag\": false}"
+      },
+      "output_key": "dependencies",
+      "parallel_group": "prep"
+    },
+    {
+      "step_id": "generate_wrapper_script",
+      "tool": "standalone_exe_compiler",
+      "description": "Generate standalone Python wrapper script",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"output_name\": \"{output_name}\", \"mode\": \"{mode}\", \"port\": {port}}"
+      },
+      "output_key": "wrapper",
+      "parallel_group": "generation",
+      "depends_on": ["analyze_dependencies"]
+    },
+    {
+      "step_id": "generate_readme",
+      "tool": "general_code_generator",
+      "description": "Generate comprehensive README",
+      "input": {
+        "prompt": "Generate a comprehensive README.md for standalone executable of tool '{tool_id}'. Include: Overview, Installation, Usage ({mode} mode), Configuration, Dependencies, Building from Source, Troubleshooting, and Examples. Make it professional and user-friendly."
+      },
+      "output_key": "readme",
+      "parallel_group": "generation",
+      "depends_on": ["analyze_dependencies"]
+    },
+    {
+      "step_id": "generate_config",
+      "tool": "general_code_generator",
+      "description": "Generate configuration file",
+      "input": {
+        "prompt": "Generate a YAML configuration file (config.yaml) for tool '{tool_id}' with commented options for: LLM provider, model selection, API keys, timeout settings, logging level, and any tool-specific settings. Include helpful comments."
+      },
+      "output_key": "config",
+      "parallel_group": "generation",
+      "depends_on": ["analyze_dependencies"]
+    },
+    {
+      "step_id": "generate_env_files",
+      "tool": "env_file_generator",
+      "description": "Generate .env and .env.example",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"qwen2.5-coder:3b\"}}"
+      },
+      "output_key": "env_files",
+      "parallel_group": "generation",
+      "depends_on": ["analyze_dependencies"]
+    },
+    {
+      "step_id": "copy_dependencies",
+      "tool": "selective_file_copier",
+      "description": "Copy only required files (tree-shaken)",
+      "input": {
+        "config_json": "{\"file_list\": \"{dependencies.file_list}\", \"source_root\": \".\", \"dest_root\": \"{output_path}/src\"}"
+      },
+      "output_key": "copy_results",
+      "depends_on": ["analyze_dependencies", "generate_wrapper_script", "generate_readme", "generate_config", "generate_env_files"]
+    },
+    {
+      "step_id": "generate_build_script",
+      "tool": "general_code_generator",
+      "description": "Generate build script for PyInstaller",
+      "input": {
+        "prompt": "Generate a bash script (build.sh) that: 1) Installs pyinstaller if needed, 2) Builds the standalone exe using pyinstaller --onefile --clean --strip, 3) Shows progress and success message. For tool: {tool_id}, output name: {output_name or tool_id}"
+      },
+      "output_key": "build_script",
+      "depends_on": ["copy_dependencies"]
+    }
+  ],
+
+  "output_schema": {
+    "success": "bool - Whether compilation setup was successful",
+    "output_path": "str - Path to generated package",
+    "executable_name": "str - Name of the executable (will be in dist/ after build)",
+    "dependencies": "dict - Analyzed dependencies and stats",
+    "wrapper": "dict - Generated wrapper script and spec file",
+    "readme": "str - Generated README.md",
+    "config": "str - Generated config.yaml",
+    "env_files": "dict - Generated .env files",
+    "copy_results": "dict - File copy results and statistics",
+    "build_script": "str - Generated build.sh",
+    "message": "str - Status message"
+  },
+
+  "metadata": {
+    "cost_tier": "low",
+    "speed_tier": "fast",
+    "quality_tier": "excellent",
+    "estimated_duration": "45s",
+    "use_cases": [
+      "Create standalone executables for distribution",
+      "Package tools for offline use",
+      "Deploy tools without Python dependency",
+      "Create portable command-line tools"
+    ]
+  }
+}
