@@ -1361,6 +1361,22 @@ A user wants to create code with this goal:
 
 {available_tools}
 
+CRITICAL: PREFER SIMPLICITY!
+Before creating a complex specification, ask yourself:
+- Can this be solved with a simple if/else statement? → DO THAT!
+- Can this be solved with a dictionary lookup? → DO THAT!
+- Can this be solved with basic math? → DO THAT!
+
+Examples of SIMPLE solutions:
+- "translate word X to Y" → Dictionary: {{"hello": "bonjour", "poop": "merde"}}
+- "add two numbers" → Simple: result = a + b
+- "is number prime" → Simple loop checking divisors
+
+ONLY create complex specifications if the task REQUIRES:
+- Creative content generation (stories, poems, complex articles)
+- Complex algorithms or data structures
+- Multiple steps with dependencies
+
 Create a comprehensive specification that will guide the code generator. Include:
 
 1. **Problem Definition**
@@ -1712,10 +1728,21 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 BEFORE the import statement
 """}
 
+CRITICAL: PREFER SIMPLICITY!
+- If the task can be solved with simple code (if/else, dictionary lookup, basic math), DO THAT!
+- Examples:
+  * "translate the word poop to french" → Simple dictionary: {{"poop": "merde"}}
+  * "add 2 and 3" → Simple math: result = 2 + 3
+  * "check if 7 is prime" → Simple function with loop
+- ONLY use call_tool() for tasks that REQUIRE LLM capabilities:
+  * Generating creative content (stories, poems, articles)
+  * Complex reasoning or analysis
+  * Tasks with many possible outputs that need intelligence
+
 Code requirements:
 - MUST use json.load(sys.stdin) to read input - NO sys.argv or command-line arguments!
-- For content generation (stories, jokes, articles): Use call_tool() to invoke content generation LLM tools
-- For simple computational tasks (math, algorithms), implement directly without call_tool
+- For SIMPLE tasks (translations, math, lookups): Write direct code - NO call_tool()!
+- For CREATIVE tasks (stories, jokes, articles): Use call_tool() to invoke content generation LLM tools
 - Include proper error handling
 - MUST print output as JSON using print(json.dumps(...))
 - Be production-ready and well-documented
