@@ -17,6 +17,26 @@ Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 7. **Serves** workflows as HTTP APIs for integration with other systems
 8. **Adapts** tools through mutation and targeted optimization commands
 
+### 🔄 Auto-Scaling Architecture
+
+**Works on ANY infrastructure** - from a single laptop to cloud frontier models:
+
+- **Local Setup** (Ollama): Uses qwen2.5-coder:3b → codellama:7b → deepseek-coder-v2:16b
+  - Cost: $0 (all free)
+  - Privacy: 100% local, no data leaves your machine
+  - Performance: Good for most tasks, escalation handles complex cases
+
+- **Cloud Setup** (OpenAI/Anthropic): Uses gpt-3.5-turbo → gpt-4-turbo → claude-3.5-sonnet
+  - Cost: Pay-per-use (but often succeeds first try = less total cost)
+  - Performance: Frontier models rarely need escalation
+  - Speed: Faster inference, fewer retry cycles
+
+- **Hybrid Setup**: Local for simple tasks, cloud for complex
+  - Best of both worlds: privacy + power when needed
+  - Smart routing minimizes cloud costs
+
+**Key Insight**: More powerful models = less escalation. A local "god-level" model (deepseek-coder:6.7b) is actually a minor deity compared to cloud frontier models (GPT-4, Claude 3.5 Sonnet). The system automatically adapts its escalation strategy based on what models you have available.
+
 ##  Comprehensive Documentation
 
 **New: Complete DSE Framework Documentation**
@@ -54,6 +74,31 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
 
 **Recent Feature Additions:**
 
+### 🎯 Intelligent Task Processing
+- **Accidental Input Detection** - Detects nonsense/test inputs (e.g., "test", "asdf") and provides helpful suggestions
+- **Smart Pre-Classification** - Uses tinyllama/phi3/gemma based on input length for efficient triage
+- **Complexity Assessment** - Automatically evaluates task complexity (simple/moderate/complex) for smart tier routing
+  - **Auto-scales to your infrastructure** - uses local models (Ollama) or cloud frontier models (GPT-4, Claude)
+  - Simple tasks → tier_1 (fast model: qwen2.5-coder:3b local OR gpt-3.5-turbo cloud)
+  - Moderate tasks → tier_2 (balanced: codellama:7b local OR gpt-4-turbo cloud)
+  - Complex tasks → tier_3 (powerful: deepseek-coder-v2:16b local OR claude-3.5-sonnet cloud)
+  - With frontier models, often succeeds on first try (no escalation needed)
+- **Timeout Fallback** - Automatic progressive fallback to smaller/faster models on timeout (tier_3 → tier_2 → tier_1)
+
+### 🔧 Advanced Code Generation & Fixing
+- **6-Stage Adaptive Escalation** - Progressive code fixing with increasing model power and temperature
+  - **Auto-scales from single PC to cloud frontier models** - uses whatever models you have available
+  - More powerful models = less escalation needed (GPT-4/Claude may succeed on first try)
+  - Local setup example: codellama → qwen2.5-coder:14b → deepseek-coder:6.7b (god-mode for local)
+  - Cloud setup example: gpt-3.5-turbo → gpt-4 → claude-3.5-sonnet (true frontier models)
+  - Stages 1-2: Fast model with low temperature (conservative fixes)
+  - Stages 3-4: Add debug logging for visibility
+  - Stages 5-6: Escalate to powerful model with full context
+  - Stage 7: "God-level" tool (best available model - relative to your setup)
+- **Automatic Logging Management** - Adds debug logging during fixing, auto-removes after success
+- **Code Simplification** - Preference for simpler, more readable code and specifications
+
+### 🚀 System Features
 - **Multi-Backend LLM Support** - Use Ollama, OpenAI, Anthropic, Azure OpenAI, or LM Studio with automatic fallback
 - **HTTP Server Tool** - Expose workflows as REST APIs with dynamic routing and CORS support
 - **HTTP Content Fetcher** - Comprehensive HTTP client with all methods, auth types, and response formats
@@ -66,21 +111,29 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
 
 ```mermaid
 graph TD
-    A[User Request] --> B[Task Classification]
-    B --> C{Task Type?}
-    C -->|ARITHMETIC| D[Fast Code Generator<br/>gemma3:4b]
-    C -->|SIMPLE_CONTENT| E[Content Generator<br/>llama3 via call_tool]
-    C -->|COMPLEX_CONTENT| E
-    C -->|ALGORITHM| F[Powerful Model<br/>codellama/qwen]
+    A[User Request] --> A1{Accidental Input?}
+    A1 -->|Yes| A2[Show Suggestions]
+    A1 -->|No| B[Task Classification<br/>tinyllama/phi3/gemma]
+    B --> B1[Complexity Assessment<br/>simple/moderate/complex]
+    B1 --> C{Task Type?}
+    C -->|ARITHMETIC| D[Fast Code Generator<br/>tier_1]
+    C -->|SIMPLE_CONTENT| E[Content Generator<br/>tier_2 via call_tool]
+    C -->|CODE: Simple| F1[Tier 1: qwen2.5-coder:3b]
+    C -->|CODE: Moderate| F2[Tier 2: codellama:7b]
+    C -->|CODE: Complex| F3[Tier 3: deepseek-coder-v2:16b]
 
     D --> G[Code Generation]
     E --> G
-    F --> G
+    F1 --> G
+    F2 --> G
+    F3 --> G
 
     G --> H[Unit Tests]
     H --> I{Tests Pass?}
-    I -->|No| J[Adaptive Escalation<br/>3 attempts]
-    J --> G
+    I -->|No| J[6-Stage Adaptive Escalation<br/>+ Logging + God-level]
+    J --> J1{Fixed?}
+    J1 -->|Yes| K
+    J1 -->|No| G
     I -->|Yes| K[Static Analysis<br/>flake8, pylint]
     K --> L[Optimization Loop<br/>3 iterations]
     L --> M[RAG Storage]
