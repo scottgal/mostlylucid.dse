@@ -32,7 +32,7 @@ class TestDynamicTimeout:
     def test_timeout_for_qwen(self):
         """Test that qwen2.5-coder:14b gets a long timeout."""
         timeout = self.client.calculate_timeout("qwen2.5-coder:14b")
-        assert timeout == 240, "qwen2.5-coder:14b should have 240s timeout"
+        assert timeout == 600, "qwen2.5-coder:14b should have 600s timeout (10 minutes for large model)"
 
     def test_timeout_for_mistral_nemo(self):
         """Test that mistral-nemo gets appropriate timeout."""
