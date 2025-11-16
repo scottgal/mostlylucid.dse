@@ -1,0 +1,40 @@
+name: "Quick Translator"
+type: "llm"
+description: "Direct translation for words and short phrases. Returns immediate results without code generation. For longer translations (paragraphs, documents), use NMT translator or full translation workflow instead."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+llm:
+  tier: "content.tier_2"  # Mid-tier content LLM
+  role: "translator"       # Fallback role
+
+  system_prompt: |
+    You are a translator. Translate text accurately and concisely.
+
+    Priority: {priority}
+    Quality: {quality_level}
+    Speed: {speed_requirement}
+
+  prompt_template: |
+    Translate the following from {source_lang} to {target_lang}:
+
+    "{text}"
+
+    Provide ONLY the translation, no explanations or alternatives.
+
+# Fallback strategy if this tool fails or is unavailable
+fallback:
+  tools:
+    - "nmt_translator"  # Use NMT API as fallback (faster but may need validation)
+  strategy: "cascade"   # Try each fallback in order until one succeeds
+
+tags:
+  - translation
+  - quick
+  - words
+  - phrases
+  - llm
