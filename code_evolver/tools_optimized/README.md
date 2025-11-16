@@ -6,8 +6,8 @@ This directory contains brand new creative workflow tools that expand the capabi
 
 ## Summary
 
-- **15 New Executable Tools** - Document processing, data manipulation, integrations
-- **2 New LLM Tools** - AI-powered image and data analysis
+- **18 New Executable Tools** - Document processing, data manipulation, integrations, storage
+- **3 New LLM Tools** - AI-powered image and data analysis
 - **100% New** - No modifications to existing tools
 - **Production Ready** - Complete with specs, examples, documentation
 
@@ -117,7 +117,7 @@ Multi-language code formatting.
 - Multiple style guides
 - Format-on-save
 
-### 🤖 AI-Powered Tools (2 LLM tools)
+### 🤖 AI-Powered Tools (3 LLM tools)
 
 #### 14. Image Vision Analyzer
 AI-powered image analysis and description.
@@ -133,11 +133,60 @@ AI-powered data analysis and insights.
 - Anomaly identification
 - Correlation analysis
 
+#### 16. Smart Image Processor
+ImageMagick-equivalent with natural language interface.
+- Natural language prompts ("take screenshot and resize to half")
+- Chains multiple image operations
+- Combines webpage_screenshot and image_converter
+- AI parses and executes complex workflows
+
+### 🌐 Web Automation (1 tool)
+
+#### 17. Webpage Screenshot
+Capture screenshots of web pages with browser automation.
+- Full page screenshots
+- Element selection
+- Mobile device emulation
+- JavaScript rendering
+- Wait strategies
+
+### ⏰ Task Scheduling (2 tools)
+
+#### 18. Task Scheduler
+Schedule recurring tasks with cron syntax.
+- Standard cron expressions
+- One-time and recurring tasks
+- Auto-start background worker
+- Pause/resume/trigger tasks
+
+#### 19. Background Task Runner
+Global singleton background worker for all tools.
+- Shared worker pool (4 threads)
+- Auto-start when tasks registered
+- All tools use same runner (no duplication)
+- Queue management and monitoring
+
+### 💾 Storage & State (2 tools)
+
+#### 20. Tool-Scoped Storage
+Per-tool isolated key-value storage.
+- Each tool has separate namespace
+- File-based persistence (shelve)
+- Tool state, config, cache
+- Thread-safe with file locking
+
+#### 21. Global-Scoped Storage
+System-wide shared key-value storage.
+- Shared across all tools
+- Cross-tool communication
+- Workflow coordination
+- Shared configuration
+
 ## Directory Structure
 
 ```
 tools_optimized/
-├── executable/      # 13 new executable tools
+├── executable/      # 18 new executable tools
 │   ├── pdf_reader.yaml
 │   ├── word_processor.yaml
 │   ├── excel_processor.yaml
@@ -150,11 +199,17 @@ tools_optimized/
 │   ├── database_connector.yaml
 │   ├── email_sender.yaml
 │   ├── image_converter.yaml
-│   └── code_formatter.yaml
+│   ├── code_formatter.yaml
+│   ├── webpage_screenshot.yaml           # NEW: Web automation
+│   ├── task_scheduler.yaml               # NEW: Cron scheduling
+│   ├── background_task_runner.yaml       # NEW: Global worker
+│   ├── tool_scoped_storage.yaml          # NEW: Per-tool storage
+│   └── global_scoped_storage.yaml        # NEW: Shared storage
 │
-├── llm/             # 2 new LLM tools
+├── llm/             # 3 new LLM tools
 │   ├── image_vision_analyzer.yaml
-│   └── data_analyzer.yaml
+│   ├── data_analyzer.yaml
+│   └── smart_image_processor.yaml        # NEW: AI image workflow
 │
 ├── lib/             # Shared libraries
 │   ├── base_tool.py
@@ -187,6 +242,221 @@ result = call_tool("pdf_reader", {
 # Result contains extracted text
 print(result["text"])
 ```
+
+## Storage Scope Concept
+
+The system provides two types of persistent storage for tools:
+
+### Tool-Scoped Storage (`tool_scoped_storage`)
+
+**Purpose**: Per-tool isolated key-value storage
+
+**When to use**:
+- Tool needs to store its own configuration
+- Tool needs to maintain internal state
+- Tool needs cache that shouldn't be shared
+- Data belongs to one specific tool
+
+**Example**:
+```python
+# Store tool-specific configuration
+call_tool("tool_scoped_storage", {
+    "operation": "set",
+    "tool_name": "my_analyzer",
+    "key": "config",
+    "value": {
+        "threshold": 0.8,
+        "enabled": true,
+        "last_run": "2025-11-16T10:30:00"
+    }
+})
+
+# Retrieve tool-specific configuration
+config = call_tool("tool_scoped_storage", {
+    "operation": "get",
+    "tool_name": "my_analyzer",
+    "key": "config",
+    "default": {}
+})
+```
+
+**Isolation**: Tool A cannot access Tool B's storage. Each tool has its own isolated namespace.
+
+**Storage location**: `~/.code_evolver/storage/tool_scoped/{tool_name}.db`
+
+### Global-Scoped Storage (`global_scoped_storage`)
+
+**Purpose**: System-wide shared key-value storage accessible by all tools
+
+**When to use**:
+- Multiple tools need to access the same data
+- Cross-tool communication required
+- Workflow coordination between tools
+- Shared system configuration
+- Feature flags that affect multiple tools
+
+**Example**:
+```python
+# Store system-wide configuration (all tools can access)
+call_tool("global_scoped_storage", {
+    "operation": "set",
+    "key": "system.api_endpoint",
+    "value": "https://api.example.com"
+})
+
+# Any tool can retrieve shared configuration
+endpoint = call_tool("global_scoped_storage", {
+    "operation": "get",
+    "key": "system.api_endpoint",
+    "default": "https://default.example.com"
+})
+
+# Workflow coordination: Tool A stores results for Tool B
+call_tool("global_scoped_storage", {
+    "operation": "set",
+    "key": "workflow.extraction.results",
+    "value": extraction_data
+})
+
+# Tool B retrieves results from Tool A
+data = call_tool("global_scoped_storage", {
+    "operation": "get",
+    "key": "workflow.extraction.results"
+})
+```
+
+**Shared Access**: All tools can read/write the same keys. Use naming conventions to avoid conflicts.
+
+**Storage location**: `~/.code_evolver/storage/global/global.db`
+
+### Storage Operations
+
+Both storage tools support the same operations:
+
+- **get**: Retrieve value (with optional default)
+- **set**: Store value (JSON-serializable)
+- **delete**: Remove key
+- **exists**: Check if key exists
+- **list/keys**: List all keys
+- **size**: Count number of keys
+- **clear**: Remove all data (use with caution!)
+
+### Key Naming Best Practices
+
+**Tool-Scoped Storage**:
+```python
+# Good: Descriptive keys
+"config"
+"last_run_timestamp"
+"cache:user:123"
+"state:processing"
+
+# Bad: Unclear keys
+"c"
+"lrt"
+"d"
+```
+
+**Global-Scoped Storage**:
+```python
+# Good: Namespaced with dots
+"system.api_endpoint"
+"workflow.step1.results"
+"credentials.api_key"
+"feature.new_ui_enabled"
+"shared.config.timeout"
+
+# Bad: No namespace
+"endpoint"
+"results"
+"key"
+```
+
+### Storage Use Cases
+
+**Tool State Persistence**:
+```python
+# Analyzer remembers last run
+call_tool("tool_scoped_storage", {
+    "operation": "set",
+    "tool_name": "data_analyzer",
+    "key": "last_run",
+    "value": {
+        "timestamp": now(),
+        "records_processed": 1000,
+        "status": "success"
+    }
+})
+```
+
+**Cross-Tool Workflow**:
+```python
+# Step 1: Extractor stores results in global scope
+call_tool("global_scoped_storage", {
+    "operation": "set",
+    "key": "workflow.extracted_data",
+    "value": extracted_data
+})
+
+# Step 2: Processor retrieves from global scope
+data = call_tool("global_scoped_storage", {
+    "operation": "get",
+    "key": "workflow.extracted_data"
+})
+
+# Step 3: Clean up after workflow
+call_tool("global_scoped_storage", {
+    "operation": "delete",
+    "key": "workflow.extracted_data"
+})
+```
+
+**Shared Configuration**:
+```python
+# Setup tool configures system
+call_tool("global_scoped_storage", {
+    "operation": "set",
+    "key": "config.database",
+    "value": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "myapp"
+    }
+})
+
+# All tools use same configuration
+db_config = call_tool("global_scoped_storage", {
+    "operation": "get",
+    "key": "config.database"
+})
+```
+
+**Feature Flags**:
+```python
+# Enable feature globally
+call_tool("global_scoped_storage", {
+    "operation": "set",
+    "key": "feature.beta_mode",
+    "value": true
+})
+
+# Tools check feature flag
+if call_tool("global_scoped_storage", {
+    "operation": "get",
+    "key": "feature.beta_mode",
+    "default": false
+})["value"]:
+    enable_beta_features()
+```
+
+### Technical Details
+
+- **File-based**: Uses Python's `shelve` module (proven, lightweight, built-in)
+- **Persistence**: Data survives process restarts
+- **Thread-safe**: File locking prevents corruption
+- **Performance**: Read < 1ms, Write < 5ms
+- **Limits**: Max 256 char keys, 10 MB per value
+- **Security**: File permissions 0600 (owner read/write only)
 
 ### Example Workflows
 
@@ -243,29 +513,33 @@ email_sender.send(to=["admin@example.com"], subject="New data available")
 
 **Data Manipulation**: json_transformer, csv_processor, database_connector
 
-**Automation**: file_watcher, webhook_sender, email_sender
+**Automation**: file_watcher, webhook_sender, email_sender, task_scheduler, background_task_runner
 
-**Web Integration**: web_scraper, webhook_sender
+**Web Integration**: web_scraper, webhook_sender, webpage_screenshot
 
-**Media**: image_converter, image_vision_analyzer
+**Media**: image_converter, image_vision_analyzer, smart_image_processor
 
 **Code Quality**: code_formatter
 
-**AI Analysis**: image_vision_analyzer, data_analyzer
+**AI Analysis**: image_vision_analyzer, data_analyzer, smart_image_processor
+
+**Storage & State**: tool_scoped_storage, global_scoped_storage
 
 ### By Speed
 
-**Very Fast (< 1s)**: json_transformer, file_watcher, csv_processor, webhook_sender, code_formatter
+**Very Fast (< 1s)**: json_transformer, file_watcher, csv_processor, webhook_sender, code_formatter, tool_scoped_storage, global_scoped_storage
 
-**Fast (1-5s)**: excel_processor, database_connector, email_sender, image_converter
+**Fast (1-5s)**: excel_processor, database_connector, email_sender, image_converter, task_scheduler, background_task_runner
 
-**Medium (5-30s)**: pdf_reader, word_processor, web_scraper, data_analyzer, image_vision_analyzer
+**Medium (5-30s)**: pdf_reader, word_processor, web_scraper, data_analyzer, image_vision_analyzer, webpage_screenshot
 
-**Variable**: universal_document_parser (depends on format/size)
+**Workflow (Variable)**: smart_image_processor (depends on operations chained), universal_document_parser (depends on format/size)
 
 ### By Cost
 
-**Free**: All executable tools
+**Free**: All executable tools (18 tools)
+
+**Low**: smart_image_processor (uses tier_3 coding model)
 
 **Medium**: data_analyzer
 

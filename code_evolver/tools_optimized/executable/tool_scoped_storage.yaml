@@ -1,0 +1,502 @@
+name: "Tool-Scoped Storage"
+type: "executable"
+version: "1.0.0"
+description: "Per-tool isolated key-value storage. Each tool gets its own isolated storage namespace. Perfect for tool state, configuration, cache, and data persistence. File-based, lightweight, automatic persistence."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 150
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/tool_scoped_storage.py"]
+  install_command: "pip install filelock"
+
+# Resource constraints
+constraints:
+  timeout_ms: 5000
+  max_memory_mb: 128
+  max_cpu_percent: 20
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["get", "set", "delete", "list", "clear", "exists", "keys", "size"]
+      required: true
+      description: "Storage operation"
+    tool_name:
+      type: string
+      required: true
+      description: "Name of tool (defines scope)"
+    key:
+      type: string
+      description: "Storage key"
+      required: false
+    value:
+      type: any
+      description: "Value to store (JSON-serializable)"
+      required: false
+    default:
+      type: any
+      description: "Default value if key doesn't exist (for get)"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    tool_name:
+      type: string
+    key:
+      type: string
+    value:
+      type: any
+    exists:
+      type: boolean
+    keys:
+      type: array
+      items:
+        type: string
+    size:
+      type: integer
+    error:
+      type: string
+
+tags: ["storage", "state", "persistence", "cache", "kv-store", "scoped"]
+
+examples:
+  - input:
+      operation: "set"
+      tool_name: "my_analyzer"
+      key: "last_run"
+      value: "2025-11-16T10:30:00"
+    output:
+      success: true
+      operation: "set"
+      tool_name: "my_analyzer"
+      key: "last_run"
+
+  - input:
+      operation: "get"
+      tool_name: "my_analyzer"
+      key: "last_run"
+    output:
+      success: true
+      key: "last_run"
+      value: "2025-11-16T10:30:00"
+      exists: true
+
+  - input:
+      operation: "list"
+      tool_name: "my_analyzer"
+    output:
+      success: true
+      keys: ["last_run", "config", "cache"]
+      size: 3
+
+usage_notes: |
+  ## Overview
+  **Tool-scoped storage** provides isolated key-value storage for each tool.
+
+  ### Scope Concept
+  - **Tool Scope**: Each tool gets its own isolated storage namespace
+  - **Isolation**: Tool A cannot access Tool B's data
+  - **Persistence**: Data survives process restarts
+  - **File-based**: Uses Python's shelve (built-in, proven, lightweight)
+
+  ## Storage Location
+  ```
+  ~/.code_evolver/storage/tool_scoped/{tool_name}.db
+  ```
+
+  ## Operations
+
+  ### set
+  Store a value in tool's scope.
+  ```python
+  {
+    "operation": "set",
+    "tool_name": "my_tool",
+    "key": "config",
+    "value": {"threshold": 0.8, "enabled": true}
+  }
+  ```
+
+  ### get
+  Retrieve a value from tool's scope.
+  ```python
+  # Get with default
+  {
+    "operation": "get",
+    "tool_name": "my_tool",
+    "key": "config",
+    "default": {}
+  }
+
+  # Get without default (returns null if missing)
+  {
+    "operation": "get",
+    "tool_name": "my_tool",
+    "key": "config"
+  }
+  ```
+
+  ### exists
+  Check if key exists in tool's scope.
+  ```python
+  {
+    "operation": "exists",
+    "tool_name": "my_tool",
+    "key": "config"
+  }
+  # Returns: {"exists": true}
+  ```
+
+  ### delete
+  Remove a key from tool's scope.
+  ```python
+  {
+    "operation": "delete",
+    "tool_name": "my_tool",
+    "key": "old_data"
+  }
+  ```
+
+  ### list / keys
+  List all keys in tool's scope.
+  ```python
+  {
+    "operation": "list",
+    "tool_name": "my_tool"
+  }
+  # Returns: {"keys": ["config", "cache", "state"]}
+  ```
+
+  ### size
+  Get number of keys in tool's scope.
+  ```python
+  {
+    "operation": "size",
+    "tool_name": "my_tool"
+  }
+  # Returns: {"size": 3}
+  ```
+
+  ### clear
+  Remove all data from tool's scope.
+  ```python
+  {
+    "operation": "clear",
+    "tool_name": "my_tool"
+  }
+  ```
+
+  ## Use Cases
+
+  ### Tool Configuration
+  ```python
+  # Save tool settings
+  store("my_tool", "config", {
+    "api_key": "...",
+    "endpoint": "https://api.example.com",
+    "timeout": 30
+  })
+
+  # Load tool settings
+  config = get("my_tool", "config", default={})
+  ```
+
+  ### Tool State
+  ```python
+  # Track last execution
+  store("scheduler", "last_run", {
+    "timestamp": "2025-11-16T10:30:00",
+    "status": "success",
+    "duration_ms": 1250
+  })
+
+  # Check last execution
+  last_run = get("scheduler", "last_run")
+  ```
+
+  ### Caching
+  ```python
+  # Cache expensive computation
+  cache_key = f"result_{hash(input)}"
+
+  if exists("analyzer", cache_key):
+    return get("analyzer", cache_key)
+
+  result = expensive_computation(input)
+  store("analyzer", cache_key, result)
+  return result
+  ```
+
+  ### Progress Tracking
+  ```python
+  # Track processing progress
+  store("batch_processor", "progress", {
+    "total": 1000,
+    "processed": 250,
+    "failed": 5,
+    "current_batch": 3
+  })
+  ```
+
+  ### Rate Limiting
+  ```python
+  # Track API calls
+  calls = get("api_tool", "calls_today", default=0)
+
+  if calls >= 1000:
+    raise Exception("Rate limit exceeded")
+
+  store("api_tool", "calls_today", calls + 1)
+  ```
+
+  ## Data Types
+
+  All JSON-serializable types supported:
+  - **Strings**: "hello"
+  - **Numbers**: 42, 3.14
+  - **Booleans**: true, false
+  - **Arrays**: [1, 2, 3]
+  - **Objects**: {"key": "value"}
+  - **Null**: null
+
+  ## Scope Isolation
+
+  ### Example: Multiple Tools
+  ```python
+  # Tool A stores data
+  store("tool_a", "config", {"mode": "fast"})
+
+  # Tool B stores data (different scope)
+  store("tool_b", "config", {"mode": "accurate"})
+
+  # Tool A retrieves its own data
+  config_a = get("tool_a", "config")  # {"mode": "fast"}
+
+  # Tool B retrieves its own data
+  config_b = get("tool_b", "config")  # {"mode": "accurate"}
+
+  # Each tool has isolated storage
+  ```
+
+  ## Comparison: Tool vs Global Scope
+
+  ### Tool-Scoped Storage (this tool)
+  - **Isolation**: Each tool has separate storage
+  - **Use for**: Tool-specific config, state, cache
+  - **Example**: Scheduler's task list, Analyzer's cache
+
+  ### Global-Scoped Storage (global_scoped_storage)
+  - **Shared**: All tools access same storage
+  - **Use for**: Cross-tool communication, shared config
+  - **Example**: System settings, shared credentials
+
+  ### When to Use Which?
+
+  **Use Tool-Scoped Storage when:**
+  - Data belongs to one tool
+  - Tool needs its own configuration
+  - Tool needs internal state/cache
+  - Isolation is important
+
+  **Use Global-Scoped Storage when:**
+  - Multiple tools need same data
+  - Cross-tool communication needed
+  - Shared system configuration
+  - Workflow coordination
+
+  ## Integration Patterns
+
+  ### Tool Initialization
+  ```python
+  def initialize_tool():
+    # Load or create default config
+    config = get("my_tool", "config", default={
+      "enabled": true,
+      "threshold": 0.8,
+      "max_retries": 3
+    })
+
+    # Store if not exists
+    if not exists("my_tool", "config"):
+      store("my_tool", "config", config)
+
+    return config
+  ```
+
+  ### Stateful Workflows
+  ```python
+  # Step 1: Store intermediate results
+  store("workflow", "step1_results", data)
+
+  # Step 2: Retrieve and continue
+  step1_data = get("workflow", "step1_results")
+  step2_data = process(step1_data)
+  store("workflow", "step2_results", step2_data)
+
+  # Cleanup after workflow
+  delete("workflow", "step1_results")
+  delete("workflow", "step2_results")
+  ```
+
+  ### Error Recovery
+  ```python
+  # Store checkpoint before risky operation
+  store("processor", "checkpoint", current_state)
+
+  try:
+    risky_operation()
+    delete("processor", "checkpoint")  # Success, clear checkpoint
+  except Exception as e:
+    # Restore from checkpoint
+    state = get("processor", "checkpoint")
+    restore_state(state)
+  ```
+
+  ## Performance
+  - **Read**: < 1ms
+  - **Write**: < 5ms
+  - **List**: < 10ms
+  - **File-based**: Automatic persistence
+  - **Thread-safe**: File locking enabled
+
+  ## Storage Limits
+  - **Key size**: Max 256 characters
+  - **Value size**: Max 10 MB per value
+  - **Total size**: Unlimited (file-based)
+  - **Keys per tool**: Unlimited
+
+  ## Best Practices
+
+  1. **Use meaningful keys**: "last_run_timestamp" not "lrt"
+  2. **Namespace within tool**: "cache:user:123" for hierarchical data
+  3. **Clean up old data**: Delete unused keys
+  4. **Use defaults**: Always provide default values for get()
+  5. **Validate data**: Check data integrity after retrieval
+  6. **Don't store secrets**: Use secure credential storage
+  7. **Monitor size**: Large storage can slow down operations
+
+  ## Security
+  - **File permissions**: 0600 (owner read/write only)
+  - **Location**: User's home directory
+  - **Isolation**: Tools cannot access other tool's data
+  - **No encryption**: Don't store sensitive data
+
+  ## Troubleshooting
+
+  ### Key Not Found
+  ```python
+  # Always use default values
+  value = get("tool", "key", default=None)
+  if value is None:
+    # Handle missing key
+  ```
+
+  ### Storage Full
+  ```python
+  # Clear old cache entries
+  clear("tool")  # Remove all data for tool
+  ```
+
+  ### Corrupted Storage
+  ```bash
+  # Delete storage file (will recreate)
+  rm ~/.code_evolver/storage/tool_scoped/my_tool.db
+  ```
+
+  ## Advanced Usage
+
+  ### Versioned Storage
+  ```python
+  # Store with version
+  store("tool", "config:v2", new_config)
+
+  # Try new version, fallback to old
+  config = get("tool", "config:v2")
+  if not config:
+    config = get("tool", "config:v1", default={})
+  ```
+
+  ### Namespaced Keys
+  ```python
+  # Use colons for hierarchy
+  store("analyzer", "cache:user:123", user_data)
+  store("analyzer", "cache:user:456", user_data)
+  store("analyzer", "config:ui", ui_settings)
+
+  # List all cache keys
+  all_keys = list("analyzer")
+  cache_keys = [k for k in all_keys if k.startswith("cache:")]
+  ```
+
+  ### TTL-like Behavior
+  ```python
+  # Store with timestamp
+  store("tool", "cache:item", {
+    "data": result,
+    "timestamp": time.time(),
+    "ttl": 3600  # 1 hour
+  })
+
+  # Retrieve with TTL check
+  cached = get("tool", "cache:item")
+  if cached and (time.time() - cached["timestamp"]) < cached["ttl"]:
+    return cached["data"]
+  else:
+    delete("tool", "cache:item")
+    return None
+  ```
+
+  ## Examples
+
+  ### Complete Tool with Storage
+  ```python
+  # Tool: my_analyzer.py
+  import json
+  from node_runtime import call_tool
+
+  def get_storage(key, default=None):
+    result = call_tool("tool_scoped_storage", {
+      "operation": "get",
+      "tool_name": "my_analyzer",
+      "key": key,
+      "default": default
+    })
+    return result.get("value", default)
+
+  def set_storage(key, value):
+    call_tool("tool_scoped_storage", {
+      "operation": "set",
+      "tool_name": "my_analyzer",
+      "key": key,
+      "value": value
+    })
+
+  # Load config on startup
+  config = get_storage("config", default={
+    "threshold": 0.8,
+    "enabled": True
+  })
+
+  # Store results
+  results = analyze_data(input_data)
+  set_storage("last_results", results)
+  set_storage("last_run", {
+    "timestamp": datetime.now().isoformat(),
+    "status": "success"
+  })
+  ```

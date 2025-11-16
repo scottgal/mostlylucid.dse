@@ -1,0 +1,577 @@
+name: "Smart Image Processor"
+type: "llm"
+version: "1.0.0"
+description: "AI-powered image processing with natural language interface. Just describe what you want: 'take a screenshot of example.com, resize to half size, and optimize'. Understands chained operations and executes them. ImageMagick-equivalent with conversational interface."
+
+# Performance metadata
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 100
+
+# LLM configuration
+llm:
+  tier: "coding.tier_3"  # Fast local model for parsing
+  fallback_tiers:
+    - "general"
+
+  temperature: 0.2  # Low temperature for consistent parsing
+  max_tokens: 1500
+  timeout_seconds: 30
+
+  retry_config:
+    max_attempts: 2
+    backoff_factor: 2
+    retry_on: ["timeout"]
+
+  system_prompt: |
+    You are an expert image processing assistant. Parse natural language requests into executable image operations.
+
+    Available operations:
+    1. **screenshot**: Capture webpage screenshot
+       - Tools: webpage_screenshot
+       - Params: url, output_path, full_page, width, height
+
+    2. **resize**: Change image dimensions
+       - Tools: image_converter
+       - Params: width, height, maintain_aspect, percentage
+
+    3. **convert**: Change format
+       - Tools: image_converter
+       - Params: input_path, output_path, format (png/jpg/webp/gif/pdf)
+
+    4. **compress/optimize**: Reduce file size
+       - Tools: image_converter
+       - Params: quality (1-100), optimize=true
+
+    5. **crop**: Crop image
+       - Tools: image_converter
+       - Params: crop_box [left, top, right, bottom]
+
+    6. **rotate**: Rotate image
+       - Tools: image_converter
+       - Params: rotation (degrees)
+
+    7. **watermark**: Add watermark
+       - Tools: image_converter
+       - Params: watermark_text, watermark_position
+
+    8. **thumbnail**: Create thumbnail
+       - Tools: image_converter
+       - Params: width, height (small sizes)
+
+    Parse the user's request into a sequence of operations and generate Python code to execute them.
+
+  prompt_template: |
+    # IMAGE PROCESSING REQUEST
+
+    User request: "{prompt}"
+
+    ## Your Task
+    Parse this natural language request into executable image operations.
+
+    ## Output Format
+    Generate Python code that executes the requested operations using available tools.
+
+    ```python
+    # Parse operations and execute
+    result = None
+
+    # Operation 1: [description]
+    result = call_tool("tool_name", {{
+        "param1": "value1",
+        "param2": "value2"
+    }})
+
+    # Operation 2: [description]
+    # Use result from previous operation if needed
+    result = call_tool("tool_name", {{
+        "input_path": result.get("output_path"),
+        "param1": "value1"
+    }})
+
+    # Return final result
+    print(json.dumps(result))
+    ```
+
+    ## Examples
+
+    ### Request: "take a screenshot of example.com and resize it to half size"
+    ```python
+    import json
+    from node_runtime import call_tool
+
+    # Step 1: Take screenshot
+    screenshot = call_tool("webpage_screenshot", {{
+        "url": "https://example.com",
+        "output_path": "temp_screenshot.png",
+        "full_page": False
+    }})
+
+    # Step 2: Get dimensions and resize to half
+    width = screenshot['dimensions']['width'] // 2
+    height = screenshot['dimensions']['height'] // 2
+
+    result = call_tool("image_converter", {{
+        "operation": "resize",
+        "input_path": screenshot['output_path'],
+        "output_path": "screenshot_resized.png",
+        "width": width,
+        "height": height
+    }})
+
+    print(json.dumps(result))
+    ```
+
+    ### Request: "convert image.png to jpg and compress to 80% quality"
+    ```python
+    import json
+    from node_runtime import call_tool
+
+    result = call_tool("image_converter", {{
+        "operation": "convert",
+        "input_path": "image.png",
+        "output_path": "image.jpg",
+        "format": "jpg",
+        "quality": 80
+    }})
+
+    print(json.dumps(result))
+    ```
+
+    ### Request: "get a screenshot of google.com, make it 800px wide, and optimize it"
+    ```python
+    import json
+    from node_runtime import call_tool
+
+    # Step 1: Screenshot
+    screenshot = call_tool("webpage_screenshot", {{
+        "url": "https://google.com",
+        "output_path": "temp_google.png"
+    }})
+
+    # Step 2: Resize to 800px width (maintain aspect ratio)
+    resized = call_tool("image_converter", {{
+        "operation": "resize",
+        "input_path": screenshot['output_path'],
+        "output_path": "temp_google_resized.png",
+        "width": 800,
+        "maintain_aspect": True
+    }})
+
+    # Step 3: Optimize
+    result = call_tool("image_converter", {{
+        "operation": "compress",
+        "input_path": resized['output_path'],
+        "output_path": "google_optimized.png",
+        "quality": 85,
+        "optimize": True
+    }})
+
+    print(json.dumps(result))
+    ```
+
+    Now generate code for the user's request above.
+
+# Resource constraints
+constraints:
+  max_memory_mb: 512
+  max_execution_time_ms: 60000
+  max_cost_per_request_usd: 0.05
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    prompt:
+      type: string
+      description: "Natural language description of image operations"
+      required: true
+    output_file:
+      type: string
+      description: "Final output file path (optional, will be inferred)"
+      required: false
+    execute:
+      type: boolean
+      description: "Execute the generated code (default true)"
+      default: true
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operations:
+      type: array
+      items:
+        type: string
+      description: "List of operations parsed"
+    code:
+      type: string
+      description: "Generated Python code"
+    result:
+      type: object
+      description: "Execution result (if execute=true)"
+    output_path:
+      type: string
+      description: "Path to final output file"
+    error:
+      type: string
+
+tags: ["image", "ai", "natural-language", "imagemagick", "processing", "smart", "automation"]
+
+examples:
+  - input:
+      prompt: "take a screenshot of example.com and resize it to half size"
+      execute: true
+    output:
+      success: true
+      operations: ["screenshot", "resize"]
+      output_path: "screenshot_resized.png"
+
+  - input:
+      prompt: "convert photo.png to jpg with 80% quality"
+      execute: true
+    output:
+      success: true
+      operations: ["convert", "compress"]
+      output_path: "photo.jpg"
+
+  - input:
+      prompt: "get a picture of this web page and compress it down to half size and optimize"
+      execute: true
+    output:
+      success: true
+      operations: ["screenshot", "resize", "optimize"]
+
+usage_notes: |
+  ## Overview
+  ImageMagick-equivalent with natural language interface. Just describe what you want!
+
+  ## How It Works
+
+  1. **You describe** what you want in natural language
+  2. **AI parses** your request into operations
+  3. **System executes** the operations using image tools
+  4. **You get** the result
+
+  ## Example Requests
+
+  ### Screenshots
+  ```python
+  # Simple screenshot
+  "take a screenshot of example.com"
+
+  # Full page screenshot
+  "capture full page screenshot of github.com"
+
+  # Screenshot and resize
+  "screenshot google.com and make it 800px wide"
+
+  # Screenshot specific element
+  "take a screenshot of the header on example.com"
+  ```
+
+  ### Resizing
+  ```python
+  # Resize to specific dimensions
+  "resize image.png to 800x600"
+
+  # Resize to half size
+  "make photo.jpg half its current size"
+
+  # Resize to percentage
+  "reduce image.png to 50% of original size"
+
+  # Resize width only (maintain aspect ratio)
+  "resize photo.jpg to 1000 pixels wide"
+  ```
+
+  ### Format Conversion
+  ```python
+  # Simple conversion
+  "convert image.png to jpg"
+
+  # Convert with compression
+  "convert photo.png to webp with 85% quality"
+
+  # Convert to PDF
+  "convert screenshot.png to pdf"
+  ```
+
+  ### Compression & Optimization
+  ```python
+  # Compress image
+  "compress photo.jpg to 70% quality"
+
+  # Optimize file size
+  "optimize image.png"
+
+  # Compress and resize
+  "make photo.jpg smaller - resize to 1000px and compress to 80%"
+  ```
+
+  ### Complex Operations
+  ```python
+  # Multiple operations
+  "take a screenshot of example.com, resize to 800px wide, convert to jpg, and compress to 85% quality"
+
+  # Screenshot with processing
+  "get a picture of this web page and compress it down to half size and optimize"
+
+  # Batch-like operations
+  "screenshot google.com, crop to 1920x1080, and save as thumbnail at 200x200"
+  ```
+
+  ### Watermarking
+  ```python
+  # Add watermark
+  "add watermark 'Copyright 2025' to image.jpg"
+
+  # Watermark position
+  "add watermark 'DRAFT' in bottom-right corner of photo.png"
+  ```
+
+  ### Thumbnails
+  ```python
+  # Create thumbnail
+  "create 150x150 thumbnail of photo.jpg"
+
+  # Profile picture size
+  "make a 256x256 profile pic from avatar.png"
+  ```
+
+  ## Chained Operations
+
+  The tool automatically chains operations:
+
+  ```python
+  prompt = """
+  take a screenshot of example.com,
+  resize it to 1000 pixels wide,
+  convert to jpg,
+  compress to 80% quality,
+  and save as final.jpg
+  """
+
+  result = smart_image_processor.process(prompt)
+  # Executes: screenshot → resize → convert → compress
+  # Output: final.jpg
+  ```
+
+  ## Understanding Your Request
+
+  The AI understands:
+  - **Implicit operations**: "make it smaller" = resize + compress
+  - **Percentages**: "half size" = 50%, "quarter size" = 25%
+  - **Quality levels**: "high quality" = 95%, "web quality" = 85%
+  - **Common sizes**: "thumbnail" = 150x150, "profile pic" = 256x256
+  - **URLs**: Automatically adds https:// if missing
+
+  ## Advantages Over Traditional Tools
+
+  ### Traditional ImageMagick
+  ```bash
+  # Complex command
+  convert input.png -resize 50% -quality 85 -strip output.jpg
+  ```
+
+  ### Smart Image Processor
+  ```python
+  "resize input.png to half size, optimize, and save as jpg"
+  ```
+
+  ## Integration with Other Tools
+
+  ### With Scheduler
+  ```python
+  # Schedule daily screenshots with processing
+  scheduler.schedule(
+      name="Daily processed screenshot",
+      tool="smart_image_processor",
+      params={
+          "prompt": "screenshot example.com, resize to 800px, compress to 80%"
+      },
+      cron="0 0 * * *"
+  )
+  ```
+
+  ### With Webhook
+  ```python
+  # Process and notify
+  result = smart_image_processor.process(
+      "screenshot dashboard.example.com, optimize"
+  )
+
+  webhook_sender.send(
+      service="slack",
+      message=f"Screenshot ready: {result['output_path']}"
+  )
+  ```
+
+  ### With File Watcher
+  ```python
+  # Auto-process uploaded images
+  file_watcher.watch(
+      path="/uploads",
+      pattern="*.png",
+      callback=lambda file: smart_image_processor.process(
+          f"resize {file} to 1000px wide, convert to webp, optimize"
+      )
+  )
+  ```
+
+  ## Advanced Features
+
+  ### Variables in Prompts
+  ```python
+  url = "https://example.com"
+  width = 1920
+
+  prompt = f"screenshot {url}, resize to {width}px wide, optimize"
+  ```
+
+  ### Conditional Processing
+  ```python
+  # AI understands conditions
+  "if image is larger than 2000px, resize to 2000px, otherwise leave as is"
+  ```
+
+  ### Batch Operations
+  ```python
+  files = ["photo1.jpg", "photo2.jpg", "photo3.jpg"]
+
+  for file in files:
+      smart_image_processor.process(
+          f"resize {file} to 800px, compress to 85%, save as processed/{file}"
+      )
+  ```
+
+  ## Output Files
+
+  ### Automatic Naming
+  If you don't specify output file:
+  ```python
+  "screenshot example.com and optimize"
+  # Creates: screenshot_optimized.png
+  ```
+
+  ### Explicit Naming
+  ```python
+  "screenshot example.com and save as my_screenshot.png"
+  # Creates: my_screenshot.png
+  ```
+
+  ## Error Handling
+
+  The tool handles:
+  - Invalid URLs → Error message
+  - Missing files → Error message
+  - Impossible operations → Suggests alternatives
+  - Ambiguous requests → Asks for clarification
+
+  ## Performance
+
+  - Parsing: 1-3 seconds (AI processing)
+  - Execution: Depends on operations
+  - Total: Usually 5-15 seconds for simple operations
+
+  ## Use Cases
+
+  ### Web Monitoring
+  ```python
+  "daily screenshot of homepage, resize to 1920px, compress, store in archive"
+  ```
+
+  ### Image Optimization Pipeline
+  ```python
+  "for all images in uploads/, resize to max 2000px, convert to webp, compress to 85%"
+  ```
+
+  ### Documentation
+  ```python
+  "screenshot app dashboard, crop to content area, add watermark 'v1.0', save as docs/dashboard.png"
+  ```
+
+  ### Social Media
+  ```python
+  "resize profile.jpg to 500x500, optimize for web, save as profile_sm.jpg"
+  ```
+
+  ### Email Attachments
+  ```python
+  "compress report_image.png to under 500KB for email attachment"
+  ```
+
+  ## Best Practices
+
+  1. **Be specific**: "resize to 800px wide" vs "make it smaller"
+  2. **Include format**: "save as jpg" vs leaving format ambiguous
+  3. **Specify quality**: "compress to 85%" vs "compress"
+  4. **Use full URLs**: "https://example.com" vs "example"
+  5. **Test first**: Try prompts manually before automating
+
+  ## Limitations
+
+  - Cannot understand extremely complex requests
+  - May need clarification for ambiguous prompts
+  - Limited to available image operations
+  - Requires well-formed URLs for screenshots
+
+  ## Tips for Best Results
+
+  1. **Use clear action verbs**: screenshot, resize, convert, compress
+  2. **Include numbers**: 800px, 50%, 85% quality
+  3. **Specify output**: "save as output.jpg"
+  4. **Order matters**: Operations execute in sequence
+  5. **Test prompts**: Try before automating
+
+  ## Example Workflows
+
+  ### Complete Screenshot Workflow
+  ```python
+  prompt = """
+  1. Take full page screenshot of https://example.com/dashboard
+  2. Resize to 1920 pixels wide
+  3. Convert to JPG format
+  4. Compress to 85% quality
+  5. Add watermark 'Confidential' in bottom-right
+  6. Save as dashboard_report.jpg
+  """
+
+  result = smart_image_processor.process(prompt)
+  # All steps executed automatically
+  ```
+
+  ### Optimization Pipeline
+  ```python
+  prompt = """
+  Optimize image.png for web:
+  - Resize to max 2000px wide
+  - Convert to WebP
+  - Compress to 80% quality
+  - Save as image_optimized.webp
+  """
+
+  result = smart_image_processor.process(prompt)
+  ```
+
+  ## Debugging
+
+  ### View Generated Code
+  ```python
+  result = smart_image_processor.process(prompt, execute=False)
+  print(result['code'])  # See what it would execute
+  ```
+
+  ### Step-by-step Execution
+  Break complex requests into steps to debug.
+
+  ## Future Enhancements
+
+  - Support for filters (blur, sharpen, etc.)
+  - Batch processing syntax
+  - Template prompts
+  - Custom operation plugins

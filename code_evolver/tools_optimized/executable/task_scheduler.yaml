@@ -1,0 +1,601 @@
+name: "Task Scheduler"
+type: "executable"
+version: "1.0.0"
+description: "Schedule and manage recurring tasks with cron-like syntax. Automatically starts background worker to execute scheduled tasks. Perfect for automated workflows, monitoring, and periodic operations."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 150
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/task_scheduler.py"]
+  install_command: "pip install apscheduler croniter"
+
+# Resource constraints
+constraints:
+  timeout_ms: 10000  # 10 seconds for scheduling operations
+  max_memory_mb: 256
+  max_cpu_percent: 20
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["schedule", "unschedule", "list", "status", "trigger", "pause", "resume", "start_worker", "stop_worker"]
+      required: true
+      description: "Operation to perform"
+
+    # Schedule parameters
+    task_id:
+      type: string
+      description: "Unique task identifier"
+      required: false
+    name:
+      type: string
+      description: "Human-readable task name"
+      required: false
+    tool:
+      type: string
+      description: "Tool to execute"
+      required: false
+    params:
+      type: object
+      description: "Parameters to pass to tool"
+      default: {}
+
+    # Schedule timing
+    cron:
+      type: string
+      description: "Cron expression (e.g., '0 0 * * *' for daily at midnight)"
+      required: false
+    interval_seconds:
+      type: integer
+      description: "Interval in seconds (alternative to cron)"
+      required: false
+    start_time:
+      type: string
+      description: "ISO 8601 datetime to start (optional)"
+      required: false
+    end_time:
+      type: string
+      description: "ISO 8601 datetime to end (optional)"
+      required: false
+
+    # Task configuration
+    enabled:
+      type: boolean
+      description: "Whether task is enabled"
+      default: true
+    max_instances:
+      type: integer
+      description: "Max concurrent instances"
+      default: 1
+    retry_on_failure:
+      type: boolean
+      description: "Retry if task fails"
+      default: false
+    retry_count:
+      type: integer
+      description: "Number of retries"
+      default: 3
+    retry_delay:
+      type: integer
+      description: "Delay between retries (seconds)"
+      default: 60
+
+    # Worker configuration
+    background:
+      type: boolean
+      description: "Auto-start background worker"
+      default: true
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    task_id:
+      type: string
+    tasks:
+      type: array
+      items:
+        type: object
+        properties:
+          task_id:
+            type: string
+          name:
+            type: string
+          tool:
+            type: string
+          schedule:
+            type: string
+          enabled:
+            type: boolean
+          next_run:
+            type: string
+          last_run:
+            type: string
+          run_count:
+            type: integer
+    worker_status:
+      type: object
+      properties:
+        running:
+          type: boolean
+        pid:
+          type: integer
+        uptime_seconds:
+          type: integer
+        tasks_scheduled:
+          type: integer
+        tasks_executed:
+          type: integer
+    error:
+      type: string
+
+tags: ["scheduler", "cron", "automation", "tasks", "background", "periodic", "jobs"]
+
+examples:
+  - input:
+      operation: "schedule"
+      name: "Daily screenshot"
+      tool: "webpage_screenshot"
+      params:
+        url: "https://example.com"
+        output_path: "screenshots/daily.png"
+        full_page: true
+      cron: "0 0 * * *"
+      background: true
+    output:
+      success: true
+      task_id: "task_123"
+      worker_status:
+        running: true
+        tasks_scheduled: 1
+
+  - input:
+      operation: "schedule"
+      name: "Check API every 5 minutes"
+      tool: "web_scraper"
+      params:
+        url: "https://api.example.com/status"
+      interval_seconds: 300
+    output:
+      success: true
+      task_id: "task_124"
+
+  - input:
+      operation: "list"
+    output:
+      success: true
+      tasks:
+        - task_id: "task_123"
+          name: "Daily screenshot"
+          tool: "webpage_screenshot"
+          schedule: "0 0 * * *"
+          enabled: true
+          next_run: "2025-11-17T00:00:00Z"
+
+usage_notes: |
+  ## Overview
+  Full-featured task scheduler with automatic background worker management.
+  Automatically starts a background process to execute scheduled tasks.
+
+  ## Key Features
+  - ✅ **Auto-start Background Worker**: Automatically spins up when tasks scheduled
+  - ✅ **Cron Expressions**: Standard cron syntax
+  - ✅ **Interval Scheduling**: Simple interval-based scheduling
+  - ✅ **Task Management**: Pause, resume, trigger manually
+  - ✅ **Retry Logic**: Automatic retry on failure
+  - ✅ **Persistence**: Schedules survive restarts
+  - ✅ **Monitoring**: Track execution history
+
+  ## Operations
+
+  ### schedule
+  Schedule a new task (auto-starts worker if not running):
+  ```python
+  scheduler.schedule(
+      name="Daily backup",
+      tool="database_connector",
+      params={"operation": "backup"},
+      cron="0 2 * * *",  # 2 AM daily
+      background=True  # Auto-start worker
+  )
+  ```
+
+  ### list
+  List all scheduled tasks:
+  ```python
+  scheduler.list()
+  # Returns: All tasks with status, next run time, etc.
+  ```
+
+  ### status
+  Check worker and tasks status:
+  ```python
+  scheduler.status()
+  # Returns: Worker status, task statistics
+  ```
+
+  ### unschedule
+  Remove a scheduled task:
+  ```python
+  scheduler.unschedule(task_id="task_123")
+  ```
+
+  ### trigger
+  Manually trigger a task now:
+  ```python
+  scheduler.trigger(task_id="task_123")
+  ```
+
+  ### pause / resume
+  Pause or resume a task:
+  ```python
+  scheduler.pause(task_id="task_123")
+  scheduler.resume(task_id="task_123")
+  ```
+
+  ## Cron Syntax
+
+  ### Format
+  ```
+  ┌───────────── minute (0 - 59)
+  │ ┌───────────── hour (0 - 23)
+  │ │ ┌───────────── day of month (1 - 31)
+  │ │ │ ┌───────────── month (1 - 12)
+  │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday = 0)
+  │ │ │ │ │
+  * * * * *
+  ```
+
+  ### Common Examples
+  ```python
+  # Every minute
+  cron = "* * * * *"
+
+  # Every hour at minute 0
+  cron = "0 * * * *"
+
+  # Daily at midnight
+  cron = "0 0 * * *"
+
+  # Daily at 9 AM
+  cron = "0 9 * * *"
+
+  # Every Monday at 9 AM
+  cron = "0 9 * * 1"
+
+  # First day of month at midnight
+  cron = "0 0 1 * *"
+
+  # Every weekday at 6 PM
+  cron = "0 18 * * 1-5"
+
+  # Every 15 minutes
+  cron = "*/15 * * * *"
+
+  # Twice daily (9 AM and 6 PM)
+  cron = "0 9,18 * * *"
+  ```
+
+  ## Interval Scheduling
+
+  Alternative to cron for simple intervals:
+  ```python
+  # Every 5 minutes
+  interval_seconds = 300
+
+  # Every hour
+  interval_seconds = 3600
+
+  # Every day
+  interval_seconds = 86400
+  ```
+
+  ## Background Worker
+
+  ### Automatic Start
+  Worker automatically starts when you schedule a task:
+  ```python
+  # Worker starts automatically when background=true
+  scheduler.schedule(
+      name="My task",
+      tool="my_tool",
+      params={...},
+      cron="0 * * * *",
+      background=True  # Auto-starts worker
+  )
+  ```
+
+  ### Manual Control
+  ```python
+  # Start worker manually
+  scheduler.start_worker()
+
+  # Stop worker
+  scheduler.stop_worker()
+
+  # Check worker status
+  status = scheduler.status()
+  print(f"Worker running: {status['worker_status']['running']}")
+  ```
+
+  ### Worker Features
+  - Runs in background as daemon process
+  - Survives parent process termination
+  - Automatically restarts failed tasks (if retry enabled)
+  - Logs all executions
+  - Persists state to disk
+
+  ## Use Cases
+
+  ### 1. Daily Website Monitoring
+  ```python
+  scheduler.schedule(
+      name="Monitor homepage",
+      tool="webpage_screenshot",
+      params={
+          "url": "https://example.com",
+          "output_path": f"screenshots/{date}.png",
+          "full_page": True
+      },
+      cron="0 0 * * *",  # Daily at midnight
+      background=True
+  )
+  ```
+
+  ### 2. Periodic Data Sync
+  ```python
+  scheduler.schedule(
+      name="Sync database",
+      tool="database_connector",
+      params={
+          "operation": "sync",
+          "source": "postgres://...",
+          "destination": "mongodb://..."
+      },
+      cron="0 */6 * * *",  # Every 6 hours
+      retry_on_failure=True,
+      retry_count=3
+  )
+  ```
+
+  ### 3. Hourly API Health Check
+  ```python
+  scheduler.schedule(
+      name="API health check",
+      tool="web_scraper",
+      params={
+          "url": "https://api.example.com/health",
+          "selectors": {"status": ".health-status"}
+      },
+      interval_seconds=3600,  # Every hour
+      background=True
+  )
+  ```
+
+  ### 4. Weekly Report Generation
+  ```python
+  scheduler.schedule(
+      name="Weekly sales report",
+      tool="excel_processor",
+      params={
+          "operation": "generate_report",
+          "template": "weekly_sales.xlsx",
+          "output_path": f"reports/week_{week}.xlsx"
+      },
+      cron="0 9 * * 1",  # Monday at 9 AM
+      background=True
+  )
+  ```
+
+  ### 5. Real-time File Monitoring
+  ```python
+  # Start file watcher, scheduled tasks get triggered
+  scheduler.schedule(
+      name="Process uploads",
+      tool="file_watcher",
+      params={
+          "path": "/uploads",
+          "pattern": "*.pdf",
+          "callback_tool": "pdf_reader"
+      },
+      cron="@reboot",  # Start on scheduler start
+      background=True
+  )
+  ```
+
+  ## Retry Logic
+
+  ### Enable Retries
+  ```python
+  scheduler.schedule(
+      name="Flaky API call",
+      tool="web_scraper",
+      params={"url": "https://unreliable-api.com"},
+      cron="0 * * * *",
+      retry_on_failure=True,
+      retry_count=3,
+      retry_delay=60  # Wait 60s between retries
+  )
+  ```
+
+  ### Retry Behavior
+  - Task fails → Wait retry_delay seconds
+  - Retry up to retry_count times
+  - If all retries fail → Log error
+  - Next scheduled run proceeds normally
+
+  ## Time Windows
+
+  ### Start and End Times
+  ```python
+  scheduler.schedule(
+      name="Limited time offer",
+      tool="webhook_sender",
+      params={"service": "slack", "message": "Flash sale!"},
+      interval_seconds=3600,
+      start_time="2025-11-16T09:00:00Z",
+      end_time="2025-11-16T17:00:00Z"
+  )
+  ```
+
+  ## Task Management
+
+  ### List All Tasks
+  ```python
+  tasks = scheduler.list()
+  for task in tasks['tasks']:
+      print(f"{task['name']}: next run at {task['next_run']}")
+  ```
+
+  ### Pause Task
+  ```python
+  # Temporarily disable without deleting
+  scheduler.pause(task_id="task_123")
+  ```
+
+  ### Resume Task
+  ```python
+  scheduler.resume(task_id="task_123")
+  ```
+
+  ### Trigger Immediately
+  ```python
+  # Run task now (doesn't affect schedule)
+  scheduler.trigger(task_id="task_123")
+  ```
+
+  ### Update Task
+  ```python
+  # Unschedule old, schedule new
+  scheduler.unschedule(task_id="old_id")
+  scheduler.schedule(name="Updated task", ...)
+  ```
+
+  ## Monitoring
+
+  ### Check Status
+  ```python
+  status = scheduler.status()
+
+  print(f"Worker running: {status['worker_status']['running']}")
+  print(f"Tasks scheduled: {status['worker_status']['tasks_scheduled']}")
+  print(f"Tasks executed: {status['worker_status']['tasks_executed']}")
+  print(f"Uptime: {status['worker_status']['uptime_seconds']}s")
+  ```
+
+  ### View Logs
+  Logs are stored in: `logs/scheduler.log`
+  ```python
+  # Tail logs
+  tail -f logs/scheduler.log
+  ```
+
+  ## Persistence
+
+  ### State Storage
+  Scheduled tasks persist across restarts in:
+  ```
+  data/scheduler_tasks.json
+  ```
+
+  ### Worker Recovery
+  If worker crashes:
+  1. Tasks remain scheduled in database
+  2. Worker auto-restarts on next schedule operation
+  3. Missed tasks are not executed (by default)
+
+  ## Best Practices
+
+  1. **Use background=True**: Auto-starts worker when needed
+  2. **Unique Names**: Use descriptive, unique task names
+  3. **Monitor Logs**: Check logs for errors
+  4. **Set Timeouts**: Configure tool timeouts appropriately
+  5. **Enable Retries**: For unreliable operations
+  6. **Test First**: Trigger manually before scheduling
+  7. **Clean Up**: Remove old tasks periodically
+
+  ## Integration Example
+
+  ### Complete Monitoring System
+  ```python
+  # 1. Schedule screenshot
+  scheduler.schedule(
+      name="Homepage screenshot",
+      tool="webpage_screenshot",
+      params={
+          "url": "https://example.com",
+          "output_path": f"screenshots/{timestamp}.png"
+      },
+      cron="0 */4 * * *",  # Every 4 hours
+      background=True  # Auto-start worker
+  )
+
+  # 2. Schedule comparison
+  scheduler.schedule(
+      name="Compare screenshots",
+      tool="image_converter",
+      params={
+          "operation": "compare",
+          "baseline": "screenshots/baseline.png",
+          "current": f"screenshots/{timestamp}.png"
+      },
+      cron="5 */4 * * *",  # 5 min after screenshot
+      background=True
+  )
+
+  # 3. Schedule alert
+  scheduler.schedule(
+      name="Alert if changed",
+      tool="webhook_sender",
+      params={
+          "service": "slack",
+          "message": "Website changed!"
+      },
+      cron="10 */4 * * *",  # 10 min after screenshot
+      background=True
+  )
+  ```
+
+  ## Security
+
+  - Tasks run with same permissions as scheduler
+  - No privilege escalation
+  - State files protected
+  - Worker process isolated
+
+  ## Troubleshooting
+
+  ### Worker Not Starting
+  - Check logs: `logs/scheduler.log`
+  - Verify permissions
+  - Try manual start: `scheduler.start_worker()`
+
+  ### Task Not Running
+  - Verify cron syntax
+  - Check if task is enabled
+  - Verify worker is running
+  - Check tool exists
+
+  ### Missed Executions
+  - Default: Missed tasks are skipped
+  - If you need to catch up, trigger manually
+
+  ## Performance
+
+  - Worker uses minimal resources (~10-20 MB RAM)
+  - Supports 1000s of scheduled tasks
+  - Sub-second scheduling precision
+  - Efficient cron expression evaluation

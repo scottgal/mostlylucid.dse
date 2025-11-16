@@ -1,0 +1,632 @@
+name: "Background Task Runner"
+type: "executable"
+version: "1.0.0"
+description: "Global background task execution service. Single instance shared across all tools. Tools register tasks here instead of starting their own workers. Manages task queue, execution, retry, and monitoring."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 200  # Highest priority - infrastructure tool
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/background_task_runner.py"]
+  install_command: "pip install apscheduler redis python-daemon"
+
+# Resource constraints
+constraints:
+  timeout_ms: 5000  # Quick operations
+  max_memory_mb: 512  # Shared worker
+  max_cpu_percent: 30
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["register", "unregister", "list", "status", "start", "stop", "restart", "execute_now"]
+      required: true
+
+    # Task registration
+    task_id:
+      type: string
+      description: "Unique task ID (auto-generated if not provided)"
+      required: false
+    tool_name:
+      type: string
+      description: "Tool to execute"
+      required: false
+    tool_params:
+      type: object
+      description: "Parameters for tool"
+      default: {}
+    schedule:
+      type: string
+      description: "Cron expression or '@startup', '@hourly', '@daily'"
+      required: false
+    owner_tool:
+      type: string
+      description: "Tool that registered this task"
+      required: false
+
+    # Task configuration
+    enabled:
+      type: boolean
+      default: true
+    max_concurrent:
+      type: integer
+      description: "Max concurrent executions"
+      default: 1
+    timeout_seconds:
+      type: integer
+      description: "Task execution timeout"
+      default: 300
+    retry_on_failure:
+      type: boolean
+      default: false
+    max_retries:
+      type: integer
+      default: 3
+
+    # Worker configuration
+    auto_start:
+      type: boolean
+      description: "Auto-start worker if not running"
+      default: true
+    workers:
+      type: integer
+      description: "Number of worker threads"
+      default: 4
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    task_id:
+      type: string
+    worker_status:
+      type: object
+      properties:
+        running:
+          type: boolean
+        pid:
+          type: integer
+        uptime_seconds:
+          type: integer
+        worker_threads:
+          type: integer
+        tasks_registered:
+          type: integer
+        tasks_running:
+          type: integer
+        tasks_completed_total:
+          type: integer
+        tasks_failed_total:
+          type: integer
+    tasks:
+      type: array
+      items:
+        type: object
+    error:
+      type: string
+
+tags: ["background", "worker", "queue", "daemon", "scheduler", "global", "infrastructure"]
+
+examples:
+  - input:
+      operation: "register"
+      tool_name: "webpage_screenshot"
+      tool_params:
+        url: "https://example.com"
+        output_path: "screenshots/monitor.png"
+      schedule: "@hourly"
+      owner_tool: "monitoring_system"
+      auto_start: true
+    output:
+      success: true
+      task_id: "bg_task_001"
+      worker_status:
+        running: true
+        tasks_registered: 1
+
+  - input:
+      operation: "status"
+    output:
+      success: true
+      worker_status:
+        running: true
+        pid: 12345
+        uptime_seconds: 86400
+        tasks_registered: 5
+        tasks_running: 2
+        tasks_completed_total: 1250
+
+usage_notes: |
+  ## Overview
+
+  **GLOBAL SINGLETON SERVICE**
+
+  This is a shared background task runner that ALL tools should use.
+  - ONE instance runs for the entire system
+  - All tools register their tasks here
+  - Automatically starts on first task registration
+  - Persistent across tool executions
+  - Shared resource - efficient and coordinated
+
+  ## Architecture
+
+  ```
+  ┌─────────────────────────────────────────────────┐
+  │         Background Task Runner                   │
+  │              (Global Singleton)                  │
+  │                                                  │
+  │  ┌──────────────────────────────────────────┐  │
+  │  │   Worker Pool (4 threads)                │  │
+  │  ├──────────────────────────────────────────┤  │
+  │  │   Task Queue                              │  │
+  │  │   • Scheduled tasks                       │  │
+  │  │   • On-demand tasks                       │  │
+  │  │   • Retry queue                           │  │
+  │  └──────────────────────────────────────────┘  │
+  └─────────────────────────────────────────────────┘
+              ▲         ▲         ▲
+              │         │         │
+      ┌───────┴───┐ ┌───┴────┐ ┌─┴──────┐
+      │  Tool A   │ │ Tool B │ │ Tool C │
+      │(registers)│ │(registers)│(registers)│
+      └───────────┘ └────────┘ └────────┘
+  ```
+
+  ## For Tool Developers
+
+  ### Register a Background Task
+
+  When your tool needs background execution, register with the global runner:
+
+  ```python
+  # In your tool code
+  def setup_background_task():
+      # Register with global background runner
+      result = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "my_tool",
+          "tool_params": {
+              "operation": "my_background_operation",
+              "param1": "value1"
+          },
+          "schedule": "@hourly",  # or cron expression
+          "owner_tool": "my_tool",
+          "auto_start": True  # Auto-starts worker if needed
+      })
+
+      return result["task_id"]  # Save this to unregister later
+  ```
+
+  ### Task Schedule Options
+
+  ```python
+  # Cron expression
+  schedule = "0 * * * *"  # Every hour at minute 0
+
+  # Predefined schedules
+  schedule = "@startup"   # Run once at worker startup
+  schedule = "@hourly"    # Every hour
+  schedule = "@daily"     # Daily at midnight
+  schedule = "@weekly"    # Weekly on Sunday
+  schedule = "@monthly"   # Monthly on 1st
+
+  # Interval (via cron)
+  schedule = "*/15 * * * *"  # Every 15 minutes
+  ```
+
+  ### Unregister When Done
+
+  ```python
+  # Clean up when tool no longer needs background execution
+  def cleanup():
+      call_tool("background_task_runner", {
+          "operation": "unregister",
+          "task_id": saved_task_id
+      })
+  ```
+
+  ## Operations
+
+  ### register
+  Register a new background task:
+  ```python
+  {
+      "operation": "register",
+      "tool_name": "webpage_screenshot",
+      "tool_params": {...},
+      "schedule": "@daily",
+      "owner_tool": "monitoring",
+      "auto_start": True
+  }
+  ```
+
+  ### unregister
+  Remove a background task:
+  ```python
+  {
+      "operation": "unregister",
+      "task_id": "bg_task_001"
+  }
+  ```
+
+  ### list
+  List all registered tasks:
+  ```python
+  {
+      "operation": "list"
+  }
+  # Returns: All tasks with status, next run, etc.
+  ```
+
+  ### status
+  Check worker status:
+  ```python
+  {
+      "operation": "status"
+  }
+  # Returns: Worker health, statistics, current tasks
+  ```
+
+  ### execute_now
+  Trigger a task immediately (doesn't affect schedule):
+  ```python
+  {
+      "operation": "execute_now",
+      "task_id": "bg_task_001"
+  }
+  ```
+
+  ### start/stop/restart
+  Control the worker (usually automatic):
+  ```python
+  {"operation": "start"}    # Start worker
+  {"operation": "stop"}     # Stop worker gracefully
+  {"operation": "restart"}  # Restart worker
+  ```
+
+  ## Tool Integration Patterns
+
+  ### Pattern 1: Tool with Background Component
+
+  ```python
+  # File Watcher Tool
+  class FileWatcher:
+      def start_watching(self, path, pattern):
+          # Register continuous background task
+          task_id = call_tool("background_task_runner", {
+              "operation": "register",
+              "tool_name": "file_watcher",
+              "tool_params": {
+                  "path": path,
+                  "pattern": pattern,
+                  "check_interval": 5
+              },
+              "schedule": "* * * * *",  # Every minute
+              "owner_tool": "file_watcher",
+              "auto_start": True
+          })["task_id"]
+
+          return {"watching": True, "task_id": task_id}
+
+      def stop_watching(self, task_id):
+          # Unregister when done
+          call_tool("background_task_runner", {
+              "operation": "unregister",
+              "task_id": task_id
+          })
+  ```
+
+  ### Pattern 2: Scheduled Monitoring
+
+  ```python
+  # Monitoring Tool
+  def monitor_website(url, schedule="@hourly"):
+      # Register screenshot task
+      screenshot_task = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "webpage_screenshot",
+          "tool_params": {
+              "url": url,
+              "output_path": f"monitor/{timestamp}.png"
+          },
+          "schedule": schedule,
+          "owner_tool": "monitoring",
+          "auto_start": True
+      })
+
+      # Register alert task (runs 5 min after screenshot)
+      alert_task = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "webhook_sender",
+          "tool_params": {
+              "service": "slack",
+              "message": "Screenshot complete"
+          },
+          "schedule": "5 * * * *",  # 5 min after hour
+          "owner_tool": "monitoring",
+          "auto_start": True
+      })
+
+      return {
+          "screenshot_task": screenshot_task["task_id"],
+          "alert_task": alert_task["task_id"]
+      }
+  ```
+
+  ### Pattern 3: Event-Driven Background Processing
+
+  ```python
+  # Queue Processor
+  def process_queue():
+      # Register queue processor
+      task_id = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "queue_processor",
+          "tool_params": {
+              "queue": "uploads",
+              "processor": "pdf_reader"
+          },
+          "schedule": "* * * * *",  # Check every minute
+          "owner_tool": "queue_system",
+          "max_concurrent": 5,  # Process 5 at a time
+          "auto_start": True
+      })["task_id"]
+
+      return task_id
+  ```
+
+  ## Global vs Tool-Level Background Tasks
+
+  ### Use Global Runner When:
+  - ✅ Task needs to run on schedule
+  - ✅ Task is periodic/recurring
+  - ✅ Task needs to survive tool execution
+  - ✅ Multiple tools coordinate tasks
+  - ✅ Resource sharing is important
+
+  ### Start Own Background Process When:
+  - ❌ **DON'T** - Use global runner instead
+  - ❌ Wastes resources
+  - ❌ Complex to coordinate
+  - ❌ Duplicate infrastructure
+
+  **Rule: ALWAYS use the global background runner**
+
+  ## Worker Management
+
+  ### Automatic Start
+  Worker automatically starts when first task registered:
+  ```python
+  # This auto-starts the worker
+  call_tool("background_task_runner", {
+      "operation": "register",
+      "tool_name": "my_tool",
+      "tool_params": {...},
+      "schedule": "@hourly",
+      "auto_start": True  # Worker starts if not running
+  })
+  ```
+
+  ### Manual Control
+  ```python
+  # Manually start worker (rarely needed)
+  call_tool("background_task_runner", {"operation": "start"})
+
+  # Stop worker (all tasks pause)
+  call_tool("background_task_runner", {"operation": "stop"})
+
+  # Restart worker (reloads tasks)
+  call_tool("background_task_runner", {"operation": "restart"})
+  ```
+
+  ### Worker Features
+  - **Persistent**: Survives system restarts
+  - **Multi-threaded**: 4 worker threads by default
+  - **Load Balanced**: Tasks distributed across threads
+  - **Fault Tolerant**: Failed tasks retry automatically
+  - **Monitored**: Health checks and logging
+
+  ## Monitoring
+
+  ### Check Status
+  ```python
+  status = call_tool("background_task_runner", {
+      "operation": "status"
+  })
+
+  print(f"Running: {status['worker_status']['running']}")
+  print(f"Tasks registered: {status['worker_status']['tasks_registered']}")
+  print(f"Tasks running: {status['worker_status']['tasks_running']}")
+  print(f"Completed: {status['worker_status']['tasks_completed_total']}")
+  print(f"Failed: {status['worker_status']['tasks_failed_total']}")
+  ```
+
+  ### List All Tasks
+  ```python
+  tasks = call_tool("background_task_runner", {
+      "operation": "list"
+  })
+
+  for task in tasks['tasks']:
+      print(f"{task['task_id']}: {task['tool_name']} - {task['schedule']}")
+  ```
+
+  ### View Logs
+  ```
+  tail -f logs/background_runner.log
+  ```
+
+  ## Task Lifecycle
+
+  ```
+  1. Tool registers task
+        ↓
+  2. Task added to queue
+        ↓
+  3. Worker picks up task at scheduled time
+        ↓
+  4. Worker executes tool with params
+        ↓
+  5. Result logged
+        ↓
+  6. Next execution scheduled
+  ```
+
+  ## Error Handling
+
+  ### Automatic Retry
+  ```python
+  {
+      "operation": "register",
+      "tool_name": "unreliable_tool",
+      "tool_params": {...},
+      "schedule": "@hourly",
+      "retry_on_failure": True,
+      "max_retries": 3  # Retry up to 3 times
+  }
+  ```
+
+  ### Retry Behavior
+  - Task fails → Retry #1 (immediate)
+  - Fails again → Retry #2 (after 1 minute)
+  - Fails again → Retry #3 (after 2 minutes)
+  - Still fails → Log error, wait for next schedule
+
+  ## Resource Management
+
+  ### Concurrent Execution
+  ```python
+  {
+      "operation": "register",
+      "tool_name": "batch_processor",
+      "tool_params": {...},
+      "schedule": "@hourly",
+      "max_concurrent": 5  # Allow 5 instances to run simultaneously
+  }
+  ```
+
+  ### Timeout
+  ```python
+  {
+      "operation": "register",
+      "tool_name": "long_running_task",
+      "tool_params": {...},
+      "schedule": "@daily",
+      "timeout_seconds": 3600  # Kill after 1 hour
+  }
+  ```
+
+  ## Persistence
+
+  ### State Storage
+  - Tasks stored in: `data/background_tasks.json`
+  - Worker state in: `data/background_worker.state`
+  - Logs in: `logs/background_runner.log`
+
+  ### Restart Behavior
+  - Tasks survive worker restart
+  - Worker auto-recovers from crashes
+  - Missed tasks logged (not executed by default)
+
+  ## Best Practices
+
+  1. **Always use auto_start=True**
+  2. **Use unique task_ids** (auto-generated is fine)
+  3. **Set appropriate timeouts**
+  4. **Enable retry for unreliable operations**
+  5. **Clean up tasks when done** (unregister)
+  6. **Monitor worker status** periodically
+  7. **Check logs** for errors
+
+  ## Security
+
+  - Worker runs with same permissions as system
+  - Tasks isolated in threads
+  - No privilege escalation
+  - State files protected
+
+  ## Performance
+
+  - Minimal overhead (~50-100 MB RAM)
+  - Supports 1000s of tasks
+  - Efficient task scheduling
+  - Thread pool for concurrency
+  - Redis-backed queue (optional)
+
+  ## Example: Complete Monitoring System
+
+  ```python
+  # Register multiple coordinated tasks
+  def setup_monitoring():
+      # 1. Screenshot every 4 hours
+      screenshot = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "webpage_screenshot",
+          "tool_params": {
+              "url": "https://example.com",
+              "output_path": f"screenshots/{timestamp}.png",
+              "full_page": True
+          },
+          "schedule": "0 */4 * * *",
+          "owner_tool": "monitoring",
+          "auto_start": True
+      })
+
+      # 2. Compare screenshots hourly
+      comparison = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "image_converter",
+          "tool_params": {
+              "operation": "compare",
+              "baseline": "screenshots/baseline.png",
+              "current": f"screenshots/latest.png"
+          },
+          "schedule": "0 * * * *",
+          "owner_tool": "monitoring",
+          "auto_start": True
+      })
+
+      # 3. Alert if differences found
+      alert = call_tool("background_task_runner", {
+          "operation": "register",
+          "tool_name": "webhook_sender",
+          "tool_params": {
+              "service": "slack",
+              "webhook_url": os.getenv("SLACK_WEBHOOK"),
+              "message": "Website changed detected!"
+          },
+          "schedule": "5 * * * *",  # 5 min after comparison
+          "owner_tool": "monitoring",
+          "auto_start": True
+      })
+
+      return {
+          "screenshot_task": screenshot["task_id"],
+          "comparison_task": comparison["task_id"],
+          "alert_task": alert["task_id"]
+      }
+  ```
+
+  ## Comparison with task_scheduler
+
+  | Feature | background_task_runner | task_scheduler |
+  |---------|------------------------|----------------|
+  | Scope | Global (all tools) | Per-workflow |
+  | Workers | Shared thread pool | Own process |
+  | Resources | Efficient | Duplicated |
+  | Use Case | Infrastructure | Simple scheduling |
+  | Recommendation | ✅ Preferred | Legacy |
+
+  **Always use background_task_runner for new tools**

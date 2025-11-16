@@ -1,0 +1,546 @@
+name: "Global-Scoped Storage"
+type: "executable"
+version: "1.0.0"
+description: "System-wide shared key-value storage accessible by all tools. Perfect for cross-tool communication, shared configuration, workflow coordination, and system-level state. File-based, lightweight, automatic persistence."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 150
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/global_scoped_storage.py"]
+  install_command: "pip install filelock"
+
+# Resource constraints
+constraints:
+  timeout_ms: 5000
+  max_memory_mb: 128
+  max_cpu_percent: 20
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["get", "set", "delete", "list", "clear", "exists", "keys", "size"]
+      required: true
+      description: "Storage operation"
+    key:
+      type: string
+      description: "Storage key"
+      required: false
+    value:
+      type: any
+      description: "Value to store (JSON-serializable)"
+      required: false
+    default:
+      type: any
+      description: "Default value if key doesn't exist (for get)"
+      required: false
+    namespace:
+      type: string
+      description: "Optional namespace for organization"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    key:
+      type: string
+    value:
+      type: any
+    exists:
+      type: boolean
+    keys:
+      type: array
+      items:
+        type: string
+    size:
+      type: integer
+    error:
+      type: string
+
+tags: ["storage", "global", "shared", "persistence", "cache", "kv-store", "coordination"]
+
+examples:
+  - input:
+      operation: "set"
+      key: "system.api_endpoint"
+      value: "https://api.example.com"
+    output:
+      success: true
+      operation: "set"
+      key: "system.api_endpoint"
+
+  - input:
+      operation: "get"
+      key: "system.api_endpoint"
+    output:
+      success: true
+      key: "system.api_endpoint"
+      value: "https://api.example.com"
+      exists: true
+
+  - input:
+      operation: "list"
+    output:
+      success: true
+      keys: ["system.api_endpoint", "workflow.status", "shared.config"]
+      size: 3
+
+usage_notes: |
+  ## Overview
+  **Global-scoped storage** provides system-wide key-value storage shared by all tools.
+
+  ### Scope Concept
+  - **Global Scope**: Single shared storage for entire system
+  - **Shared Access**: All tools can read/write same data
+  - **Persistence**: Data survives process restarts
+  - **File-based**: Uses Python's shelve (built-in, proven, lightweight)
+
+  ## Storage Location
+  ```
+  ~/.code_evolver/storage/global/global.db
+  ```
+
+  ## Operations
+
+  ### set
+  Store a value in global scope.
+  ```python
+  {
+    "operation": "set",
+    "key": "system.api_endpoint",
+    "value": "https://api.example.com"
+  }
+  ```
+
+  ### get
+  Retrieve a value from global scope.
+  ```python
+  # Get with default
+  {
+    "operation": "get",
+    "key": "system.api_endpoint",
+    "default": "https://default.example.com"
+  }
+
+  # Get without default (returns null if missing)
+  {
+    "operation": "get",
+    "key": "system.api_endpoint"
+  }
+  ```
+
+  ### exists
+  Check if key exists in global scope.
+  ```python
+  {
+    "operation": "exists",
+    "key": "system.api_endpoint"
+  }
+  # Returns: {"exists": true}
+  ```
+
+  ### delete
+  Remove a key from global scope.
+  ```python
+  {
+    "operation": "delete",
+    "key": "old_config"
+  }
+  ```
+
+  ### list / keys
+  List all keys in global scope.
+  ```python
+  {
+    "operation": "list"
+  }
+  # Returns: {"keys": ["system.api_endpoint", "workflow.status", ...]}
+  ```
+
+  ### size
+  Get number of keys in global scope.
+  ```python
+  {
+    "operation": "size"
+  }
+  # Returns: {"size": 42}
+  ```
+
+  ### clear
+  Remove all data from global scope (use with caution!).
+  ```python
+  {
+    "operation": "clear"
+  }
+  ```
+
+  ## Use Cases
+
+  ### System Configuration
+  ```python
+  # Store system-wide settings
+  store_global("system.api_endpoint", "https://api.example.com")
+  store_global("system.timeout", 30)
+  store_global("system.max_retries", 3)
+
+  # All tools can access
+  endpoint = get_global("system.api_endpoint")
+  ```
+
+  ### Shared Credentials
+  ```python
+  # Store API keys (shared by multiple tools)
+  store_global("credentials.api_key", "sk-...")
+  store_global("credentials.database_url", "postgresql://...")
+
+  # Any tool can retrieve
+  api_key = get_global("credentials.api_key")
+  ```
+
+  ### Workflow Coordination
+  ```python
+  # Tool A starts workflow
+  store_global("workflow.data_extraction.status", "running")
+  store_global("workflow.data_extraction.started_at", timestamp())
+
+  # Tool B checks if Tool A finished
+  status = get_global("workflow.data_extraction.status")
+  if status == "completed":
+    data = get_global("workflow.data_extraction.results")
+    process_data(data)
+  ```
+
+  ### Cross-Tool Communication
+  ```python
+  # Analyzer stores results for Reporter
+  store_global("shared.analysis_results", {
+    "total": 1000,
+    "passed": 950,
+    "failed": 50
+  })
+
+  # Reporter retrieves results
+  results = get_global("shared.analysis_results")
+  generate_report(results)
+  ```
+
+  ### Feature Flags
+  ```python
+  # Enable/disable features system-wide
+  store_global("feature.new_ui", true)
+  store_global("feature.beta_api", false)
+
+  # Tools check flags
+  if get_global("feature.new_ui", default=false):
+    use_new_ui()
+  ```
+
+  ### Rate Limiting (Global)
+  ```python
+  # Track API calls across all tools
+  calls = get_global("rate_limit.api_calls_today", default=0)
+
+  if calls >= 10000:
+    raise Exception("Global rate limit exceeded")
+
+  store_global("rate_limit.api_calls_today", calls + 1)
+  ```
+
+  ## Data Types
+
+  All JSON-serializable types supported:
+  - **Strings**: "hello"
+  - **Numbers**: 42, 3.14
+  - **Booleans**: true, false
+  - **Arrays**: [1, 2, 3]
+  - **Objects**: {"key": "value"}
+  - **Null**: null
+
+  ## Key Naming Conventions
+
+  Use dot notation for organization:
+  ```python
+  # System configuration
+  "system.api_endpoint"
+  "system.timeout"
+  "system.debug_mode"
+
+  # Credentials
+  "credentials.api_key"
+  "credentials.database_url"
+
+  # Workflow state
+  "workflow.step1.status"
+  "workflow.step1.results"
+
+  # Shared data
+  "shared.config"
+  "shared.cache"
+
+  # Feature flags
+  "feature.new_ui"
+  "feature.beta_mode"
+
+  # Rate limiting
+  "rate_limit.api_calls"
+  "rate_limit.requests_today"
+  ```
+
+  ## Comparison: Tool vs Global Scope
+
+  ### Tool-Scoped Storage (tool_scoped_storage)
+  - **Isolation**: Each tool has separate storage
+  - **Use for**: Tool-specific config, state, cache
+  - **Example**: Scheduler's task list, Analyzer's cache
+  - **Privacy**: Tools cannot access each other's data
+
+  ### Global-Scoped Storage (this tool)
+  - **Shared**: All tools access same storage
+  - **Use for**: Cross-tool communication, shared config
+  - **Example**: System settings, shared credentials
+  - **Coordination**: Tools can communicate via storage
+
+  ### When to Use Which?
+
+  **Use Global-Scoped Storage when:**
+  - Multiple tools need same data
+  - Cross-tool communication needed
+  - Shared system configuration
+  - Workflow coordination
+  - Feature flags affect multiple tools
+  - Global rate limiting
+
+  **Use Tool-Scoped Storage when:**
+  - Data belongs to one tool
+  - Tool needs its own configuration
+  - Tool needs internal state/cache
+  - Isolation is important
+  - Privacy required
+
+  ## Integration Patterns
+
+  ### Shared Configuration
+  ```python
+  # Setup tool stores config
+  store_global("config.database", {
+    "host": "localhost",
+    "port": 5432,
+    "database": "myapp"
+  })
+
+  # All tools use same config
+  db_config = get_global("config.database")
+  connect_to_database(db_config)
+  ```
+
+  ### Workflow State Machine
+  ```python
+  # Initialize workflow
+  store_global("workflow.status", "pending")
+  store_global("workflow.current_step", 0)
+
+  # Step 1: Extract data
+  store_global("workflow.status", "extracting")
+  data = extract_data()
+  store_global("workflow.step1.results", data)
+  store_global("workflow.current_step", 1)
+
+  # Step 2: Process data
+  store_global("workflow.status", "processing")
+  results = process(get_global("workflow.step1.results"))
+  store_global("workflow.step2.results", results)
+  store_global("workflow.current_step", 2)
+
+  # Complete
+  store_global("workflow.status", "completed")
+  ```
+
+  ### Event Broadcasting
+  ```python
+  # Tool A publishes event
+  store_global("events.data_updated", {
+    "timestamp": now(),
+    "source": "tool_a",
+    "data": new_data
+  })
+
+  # Tool B subscribes (polling)
+  event = get_global("events.data_updated")
+  if event["timestamp"] > last_check:
+    handle_update(event["data"])
+  ```
+
+  ### Shared Cache
+  ```python
+  # Multiple tools share expensive computation
+  cache_key = f"cache.expensive_result:{hash(input)}"
+
+  # Try cache first
+  result = get_global(cache_key)
+  if result:
+    return result
+
+  # Compute and cache
+  result = expensive_computation(input)
+  store_global(cache_key, result)
+  return result
+  ```
+
+  ## Performance
+  - **Read**: < 1ms
+  - **Write**: < 5ms
+  - **List**: < 10ms
+  - **File-based**: Automatic persistence
+  - **Thread-safe**: File locking enabled
+
+  ## Storage Limits
+  - **Key size**: Max 256 characters
+  - **Value size**: Max 10 MB per value
+  - **Total size**: Unlimited (file-based)
+  - **Total keys**: Unlimited
+
+  ## Best Practices
+
+  1. **Use namespaces**: Prefix keys with category (system., config., workflow.)
+  2. **Document shared keys**: Maintain list of global keys and their purpose
+  3. **Avoid conflicts**: Coordinate key names between tools
+  4. **Clean up**: Delete temporary workflow data after completion
+  5. **Use defaults**: Always provide default values for get()
+  6. **Validate data**: Check data integrity after retrieval
+  7. **Don't store secrets**: Use secure credential storage instead
+  8. **Monitor size**: Large storage can slow down operations
+
+  ## Security
+  - **File permissions**: 0600 (owner read/write only)
+  - **Location**: User's home directory
+  - **Shared access**: All tools can access all data
+  - **No encryption**: Don't store sensitive data
+  - **Audit trail**: Consider logging access to sensitive keys
+
+  ## Troubleshooting
+
+  ### Key Not Found
+  ```python
+  # Always use default values
+  value = get_global("key", default=None)
+  if value is None:
+    # Handle missing key
+  ```
+
+  ### Storage Full
+  ```python
+  # Clean up old entries
+  delete_global("old_cache_entry")
+
+  # Or clear entire storage (careful!)
+  clear_global()
+  ```
+
+  ### Corrupted Storage
+  ```bash
+  # Delete storage file (will recreate)
+  rm ~/.code_evolver/storage/global/global.db
+  ```
+
+  ### Race Conditions
+  ```python
+  # Use atomic operations
+  # Bad: Read, modify, write (race condition)
+  count = get_global("counter", default=0)
+  count += 1
+  store_global("counter", count)
+
+  # Better: Use tool-scoped storage for per-tool counters
+  # Or implement locking mechanism
+  ```
+
+  ## Advanced Usage
+
+  ### Namespaces
+  ```python
+  # Organize keys by namespace
+  namespace = "workflow.data_processing"
+
+  store_global(f"{namespace}.status", "running")
+  store_global(f"{namespace}.progress", 0.5)
+  store_global(f"{namespace}.results", data)
+
+  # List all keys in namespace
+  all_keys = list_global()
+  namespace_keys = [k for k in all_keys if k.startswith(namespace)]
+  ```
+
+  ### Versioned Configuration
+  ```python
+  # Store config with version
+  store_global("config.api:v2", new_config)
+
+  # Try new version, fallback to old
+  config = get_global("config.api:v2")
+  if not config:
+    config = get_global("config.api:v1", default={})
+  ```
+
+  ### Distributed Lock (Simple)
+  ```python
+  # Acquire lock
+  if get_global("lock.resource_name"):
+    raise Exception("Resource locked")
+
+  store_global("lock.resource_name", {
+    "owner": "tool_name",
+    "acquired_at": now()
+  })
+
+  try:
+    # Critical section
+    use_resource()
+  finally:
+    # Release lock
+    delete_global("lock.resource_name")
+  ```
+
+  ## Examples
+
+  ### Complete Workflow with Global Storage
+  ```python
+  # Tool 1: Data Extractor
+  data = extract_data()
+  store_global("workflow.extracted_data", data)
+  store_global("workflow.step1_complete", True)
+
+  # Tool 2: Data Processor (waits for Tool 1)
+  while not get_global("workflow.step1_complete", default=False):
+    time.sleep(1)
+
+  data = get_global("workflow.extracted_data")
+  results = process(data)
+  store_global("workflow.processed_results", results)
+  store_global("workflow.step2_complete", True)
+
+  # Tool 3: Reporter (waits for Tool 2)
+  while not get_global("workflow.step2_complete", default=False):
+    time.sleep(1)
+
+  results = get_global("workflow.processed_results")
+  report = generate_report(results)
+
+  # Cleanup
+  delete_global("workflow.extracted_data")
+  delete_global("workflow.processed_results")
+  delete_global("workflow.step1_complete")
+  delete_global("workflow.step2_complete")
+  ```

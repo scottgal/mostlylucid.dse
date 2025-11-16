@@ -2,11 +2,11 @@
 
 ## Overview
 
-Added 15 brand new workflow tools to expand system capabilities. All are new tools - **no existing tools were modified**.
+Added 21 brand new workflow tools to expand system capabilities. All are new tools - **no existing tools were modified**.
 
 ## What Was Created
 
-### NEW Tools (15 total)
+### NEW Tools (21 total)
 
 #### Document Processing (4 tools)
 1. **PDF Reader** - Extract text from PDFs with OCR
@@ -18,26 +18,34 @@ Added 15 brand new workflow tools to expand system capabilities. All are new too
 5. **JSON Transformer** - Transform JSON data structures
 6. **CSV Processor** - Advanced CSV processing
 
-#### Automation (2 tools)
+#### Automation (5 tools)
 7. **File Watcher** - Monitor filesystem changes
 8. **Webhook Sender** - Send Slack/Discord/Teams webhooks
+9. **Task Scheduler** - Cron-based task scheduling
+10. **Background Task Runner** - Global background worker (singleton)
+11. **Webpage Screenshot** - Capture web page screenshots
 
 #### Web & Network (2 tools)
-9. **Web Scraper** - Extract web content
-10. **Database Connector** - Connect to databases
+12. **Web Scraper** - Extract web content
+13. **Database Connector** - Connect to databases
 
 #### Communication (1 tool)
-11. **Email Sender** - Send emails with templates
+14. **Email Sender** - Send emails with templates
 
 #### Media (1 tool)
-12. **Image Converter** - Convert/resize/optimize images
+15. **Image Converter** - Convert/resize/optimize images
 
 #### Code Quality (1 tool)
-13. **Code Formatter** - Multi-language formatting
+16. **Code Formatter** - Multi-language formatting
 
-#### AI Tools (2 LLM tools)
-14. **Image Vision Analyzer** - AI image analysis
-15. **Data Analyzer** - AI data insights
+#### Storage & State (2 tools)
+17. **Tool-Scoped Storage** - Per-tool isolated key-value storage
+18. **Global-Scoped Storage** - System-wide shared key-value storage
+
+#### AI Tools (3 LLM tools)
+19. **Image Vision Analyzer** - AI image analysis
+20. **Data Analyzer** - AI data insights
+21. **Smart Image Processor** - Natural language image workflow ("take screenshot and resize to half")
 
 ## Key Features
 
@@ -51,13 +59,52 @@ Added 15 brand new workflow tools to expand system capabilities. All are new too
 
 ```
 code_evolver/tools_optimized/
-├── executable/          # 13 new executable tools
-├── llm/                 # 2 new LLM tools
+├── executable/          # 18 new executable tools
+│   ├── [Document Processing: 4 tools]
+│   ├── [Data Processing: 2 tools]
+│   ├── [Automation: 5 tools]
+│   ├── [Web & Network: 2 tools]
+│   ├── [Communication: 1 tool]
+│   ├── [Media: 1 tool]
+│   ├── [Code Quality: 1 tool]
+│   └── [Storage & State: 2 tools]
+├── llm/                 # 3 new LLM tools
 ├── lib/                 # Shared libraries
 ├── schemas/             # Tool schemas
 ├── validators/          # Validation suite
-└── README.md           # Documentation
+└── README.md           # Comprehensive documentation
 ```
+
+## Key New Capabilities
+
+### 🎯 Storage Scope System
+Revolutionary persistent storage system with two scopes:
+
+**Tool-Scoped Storage**: Per-tool isolated key-value storage
+- Each tool has its own namespace
+- Store tool config, state, cache
+- File-based persistence
+- Example: `tool_scoped_storage`
+
+**Global-Scoped Storage**: System-wide shared storage
+- All tools can access same data
+- Cross-tool communication
+- Workflow coordination
+- Example: `global_scoped_storage`
+
+### 🤖 Natural Language Workflows
+**Smart Image Processor**: Just describe what you want!
+```
+"take a screenshot of example.com and resize it to half size and optimize"
+```
+AI parses the request and executes the operations automatically.
+
+### ⏰ Background Task Scheduling
+**Global Task Runner**: Single shared background worker
+- All tools use same runner (no duplication)
+- Auto-starts when tasks scheduled
+- 4-thread worker pool
+- Cron-based scheduling
 
 ## Example Use Cases
 
@@ -71,9 +118,16 @@ file_watcher → pdf_reader → data_analyzer → webhook_sender
 excel_processor → json_transformer → data_analyzer → word_processor
 ```
 
-### Web Monitoring
+### Web Monitoring with Screenshots
 ```
-web_scraper → csv_processor → database_connector → email_sender
+task_scheduler → webpage_screenshot → smart_image_processor → webhook_sender
+```
+
+### Stateful Workflow with Storage
+```
+tool_a: extract_data() → store in global_scoped_storage
+tool_b: get from global_scoped_storage → process() → store results
+tool_c: get results from global_scoped_storage → generate_report()
 ```
 
 ## Installation
@@ -92,20 +146,25 @@ python validators/tool_validator.py
 
 ## What Changed
 
-- ✅ Added 15 new workflow tools
-- ✅ Created comprehensive documentation
+- ✅ Added 21 new workflow tools (18 executable + 3 LLM)
+- ✅ Implemented storage scope system (tool-scoped + global-scoped)
+- ✅ Added background task scheduling with global worker
+- ✅ Created natural language image workflow tool
+- ✅ Added web automation (screenshots, scraping)
+- ✅ Created comprehensive documentation with scope concept
 - ✅ Added validation suite
-- ✅ Included usage examples
+- ✅ Included extensive usage examples
 - ❌ **NO existing tools modified**
 - ❌ **NO breaking changes**
 
 ## Files Created
 
-- 15 tool YAML files
+- 21 tool YAML files (18 executable + 3 LLM)
+- 18 Python implementation files for executable tools
 - Base class libraries
 - Tool schema standard
 - Validation scripts
-- Documentation files
+- Comprehensive documentation (README.md + NEW_TOOLS_SUMMARY.md)
 
 ## Next Steps
 

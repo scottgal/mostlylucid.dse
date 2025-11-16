@@ -1,0 +1,464 @@
+name: "Webpage Screenshot"
+type: "executable"
+version: "1.0.0"
+description: "Capture screenshots of web pages with full page support, element selection, and JavaScript rendering. Perfect for monitoring, testing, and documentation. Supports headless browser automation."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "short"
+priority: 100
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/webpage_screenshot.py"]
+  install_command: "pip install playwright selenium-wire pillow && playwright install chromium"
+
+# Resource constraints
+constraints:
+  timeout_ms: 60000  # 1 minute for slow pages
+  max_memory_mb: 1024
+  max_cpu_percent: 70
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    url:
+      type: string
+      description: "URL of webpage to capture"
+      required: true
+    output_path:
+      type: string
+      description: "Path to save screenshot"
+      required: true
+    full_page:
+      type: boolean
+      description: "Capture entire scrollable page"
+      default: false
+    width:
+      type: integer
+      description: "Viewport width"
+      default: 1920
+    height:
+      type: integer
+      description: "Viewport height"
+      default: 1080
+    wait_for:
+      type: string
+      description: "CSS selector to wait for before screenshot"
+      required: false
+    wait_time:
+      type: integer
+      description: "Seconds to wait after page load"
+      default: 2
+    selector:
+      type: string
+      description: "CSS selector of element to screenshot"
+      required: false
+    format:
+      type: string
+      enum: ["png", "jpg", "pdf"]
+      default: "png"
+    quality:
+      type: integer
+      description: "Image quality 1-100 (for jpg)"
+      default: 90
+      minimum: 1
+      maximum: 100
+    headers:
+      type: object
+      description: "Custom HTTP headers"
+      default: {}
+    javascript:
+      type: boolean
+      description: "Enable JavaScript execution"
+      default: true
+    cookies:
+      type: array
+      items:
+        type: object
+      description: "Cookies to set"
+      default: []
+    mobile:
+      type: boolean
+      description: "Emulate mobile device"
+      default: false
+    device:
+      type: string
+      description: "Device to emulate (iPhone 12, iPad, etc.)"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    output_path:
+      type: string
+      description: "Path to saved screenshot"
+    url:
+      type: string
+    dimensions:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+    file_size:
+      type: integer
+      description: "File size in bytes"
+    format:
+      type: string
+    load_time_ms:
+      type: integer
+      description: "Page load time"
+    error:
+      type: string
+
+tags: ["screenshot", "webpage", "browser", "automation", "testing", "monitoring", "playwright"]
+
+examples:
+  - input:
+      url: "https://example.com"
+      output_path: "screenshot.png"
+      full_page: false
+    output:
+      success: true
+      output_path: "screenshot.png"
+      dimensions: {"width": 1920, "height": 1080}
+      load_time_ms: 1250
+
+  - input:
+      url: "https://example.com/dashboard"
+      output_path: "dashboard.png"
+      full_page: true
+      wait_for: ".data-loaded"
+    output:
+      success: true
+      output_path: "dashboard.png"
+      dimensions: {"width": 1920, "height": 3500}
+
+  - input:
+      url: "https://example.com"
+      output_path: "mobile.png"
+      mobile: true
+      device: "iPhone 12"
+    output:
+      success: true
+      output_path: "mobile.png"
+      dimensions: {"width": 390, "height": 844}
+
+usage_notes: |
+  ## Overview
+  Capture high-quality screenshots of web pages with full browser automation.
+  Uses Playwright for reliable, headless browser control.
+
+  ## Features
+
+  ### Basic Screenshot
+  ```python
+  screenshot("https://example.com", "output.png")
+  ```
+
+  ### Full Page Capture
+  Capture entire scrollable page (not just viewport):
+  ```python
+  screenshot("https://example.com", "full.png", full_page=True)
+  ```
+
+  ### Wait for Element
+  Wait for specific element before capturing:
+  ```python
+  screenshot(
+      url="https://app.example.com",
+      output_path="ready.png",
+      wait_for=".data-loaded"  # Wait for this selector
+  )
+  ```
+
+  ### Element Screenshot
+  Capture specific element only:
+  ```python
+  screenshot(
+      url="https://example.com",
+      output_path="header.png",
+      selector="header.main-header"
+  )
+  ```
+
+  ### Mobile Screenshots
+  Emulate mobile devices:
+  ```python
+  screenshot(
+      url="https://example.com",
+      output_path="mobile.png",
+      mobile=True,
+      device="iPhone 12"
+  )
+  ```
+
+  ### Custom Viewport
+  Set specific viewport size:
+  ```python
+  screenshot(
+      url="https://example.com",
+      output_path="custom.png",
+      width=1366,
+      height=768
+  )
+  ```
+
+  ### Authenticated Pages
+  Include cookies for authenticated pages:
+  ```python
+  screenshot(
+      url="https://app.example.com/dashboard",
+      output_path="dashboard.png",
+      cookies=[
+          {"name": "session", "value": "abc123", "domain": ".example.com"}
+      ]
+  )
+  ```
+
+  ### PDF Export
+  Export page as PDF:
+  ```python
+  screenshot(
+      url="https://example.com",
+      output_path="page.pdf",
+      format="pdf",
+      full_page=True
+  )
+  ```
+
+  ## Supported Devices
+
+  ### Mobile
+  - iPhone 12, iPhone 12 Pro, iPhone 12 Pro Max
+  - iPhone 13, iPhone 13 Pro
+  - iPhone SE
+  - Pixel 5, Pixel 4
+
+  ### Tablets
+  - iPad, iPad Pro, iPad Mini
+  - Galaxy Tab
+
+  ### Desktop
+  - Custom viewport sizes
+  - Retina displays
+
+  ## Wait Strategies
+
+  ### Wait for Selector
+  ```python
+  wait_for=".content-loaded"  # CSS selector
+  ```
+
+  ### Wait Time
+  ```python
+  wait_time=5  # Seconds after page load
+  ```
+
+  ### Network Idle
+  Automatically waits for network to be idle before screenshot.
+
+  ## Output Formats
+
+  ### PNG (default)
+  - Lossless quality
+  - Transparency support
+  - Best for UI screenshots
+
+  ### JPG
+  - Smaller file size
+  - Adjustable quality
+  - Best for photos/images
+  ```python
+  format="jpg", quality=85
+  ```
+
+  ### PDF
+  - Perfect for documentation
+  - Printable format
+  - Full page capture
+  ```python
+  format="pdf", full_page=True
+  ```
+
+  ## Use Cases
+
+  ### Website Monitoring
+  Schedule regular screenshots to monitor changes:
+  ```python
+  # Monitor homepage daily
+  scheduler.schedule(
+      tool="webpage_screenshot",
+      params={
+          "url": "https://example.com",
+          "output_path": f"screenshots/{date}.png",
+          "full_page": True
+      },
+      cron="0 0 * * *"  # Daily at midnight
+  )
+  ```
+
+  ### Visual Regression Testing
+  Compare screenshots before/after changes:
+  ```python
+  # Before deployment
+  screenshot("https://staging.example.com", "before.png")
+
+  # After deployment
+  screenshot("https://staging.example.com", "after.png")
+
+  # Compare images
+  diff = compare_images("before.png", "after.png")
+  ```
+
+  ### Documentation
+  Capture UI states for documentation:
+  ```python
+  # Capture different states
+  screenshot(url, "state-empty.png", selector=".dashboard")
+  screenshot(url, "state-loading.png", selector=".dashboard")
+  screenshot(url, "state-loaded.png", selector=".dashboard")
+  ```
+
+  ### Competitor Monitoring
+  Track competitor website changes:
+  ```python
+  competitors = [
+      "https://competitor1.com",
+      "https://competitor2.com",
+      "https://competitor3.com"
+  ]
+
+  for url in competitors:
+      screenshot(url, f"{domain}_{date}.png", full_page=True)
+  ```
+
+  ### Email Reports
+  Generate screenshots for email reports:
+  ```python
+  # Capture dashboard
+  screenshot("https://dashboard.example.com", "report.png")
+
+  # Email screenshot
+  email_sender.send(
+      to=["team@example.com"],
+      subject="Daily Report",
+      body="Dashboard screenshot attached",
+      attachments=["report.png"]
+  )
+  ```
+
+  ## Advanced Features
+
+  ### Custom Headers
+  ```python
+  headers={
+      "Authorization": "Bearer token123",
+      "User-Agent": "Custom Bot"
+  }
+  ```
+
+  ### Cookies
+  ```python
+  cookies=[
+      {
+          "name": "session_id",
+          "value": "abc123",
+          "domain": ".example.com",
+          "path": "/",
+          "secure": True
+      }
+  ]
+  ```
+
+  ### JavaScript Disabled
+  Capture with JS disabled:
+  ```python
+  javascript=False
+  ```
+
+  ### Stealth Mode
+  Avoid detection as bot (automatic).
+
+  ## Performance
+
+  ### Load Times
+  - Simple page: 1-3 seconds
+  - Complex page: 3-10 seconds
+  - Full page scroll: +2-5 seconds
+
+  ### File Sizes
+  - PNG viewport: 100-500 KB
+  - PNG full page: 500 KB - 2 MB
+  - JPG (quality 85): 50-300 KB
+  - PDF: 200 KB - 5 MB
+
+  ## Troubleshooting
+
+  ### Timeout
+  - Increase `wait_time`
+  - Increase `timeout_ms` in constraints
+  - Check if page loads properly
+
+  ### Element Not Found
+  - Verify selector is correct
+  - Increase `wait_time`
+  - Use `wait_for` to wait for element
+
+  ### Blank Screenshot
+  - Page might be loading slowly
+  - Try increasing `wait_time`
+  - Check if JavaScript is required
+
+  ### Authentication Required
+  - Use `cookies` parameter
+  - Include authentication headers
+  - Consider using session cookies
+
+  ## Best Practices
+
+  1. **Use wait_for for dynamic content**
+  2. **Set appropriate timeout for slow pages**
+  3. **Use full_page for complete captures**
+  4. **Optimize quality vs file size**
+  5. **Clean up old screenshots periodically**
+  6. **Use meaningful filenames with timestamps**
+  7. **Test selectors before scheduling**
+
+  ## Integration with Scheduler
+
+  ```python
+  # Schedule daily screenshots
+  scheduler.schedule(
+      name="homepage_monitor",
+      tool="webpage_screenshot",
+      params={
+          "url": "https://example.com",
+          "output_path": f"screenshots/homepage_{date}.png",
+          "full_page": True
+      },
+      schedule="0 0 * * *",  # Daily at midnight
+      enabled=True
+  )
+  ```
+
+  ## Security
+
+  - Runs in sandboxed browser
+  - No cookies persisted by default
+  - Custom headers for API access
+  - Stealth mode to avoid bot detection
+  - No local storage access
+
+  ## Dependencies
+  - Playwright (recommended)
+  - Chromium browser (auto-installed)
+  - Pillow for image processing
