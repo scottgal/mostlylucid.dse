@@ -1,0 +1,31 @@
+name: "Standalone Executable Compiler"
+type: "executable"
+description: "Compiles tools/workflows into standalone executables (.exe, .app) using PyInstaller. Generates wrapper script, spec file, and build instructions"
+
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/standalone_exe_compiler.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON configuration with: tool_id (required), output_name (optional), mode ('cli' or 'api', default: cli), port (for API mode, default: 8080)"
+
+output_schema:
+  success: "bool - Whether generation was successful"
+  wrapper_script: "str - Generated standalone Python wrapper script"
+  spec_file: "str - PyInstaller .spec file"
+  build_instructions: "str - Build instructions in markdown"
+  output_name: "str - Name of the output executable"
+  error: "str - Error message if generation failed"
+
+tags:
+  - compiler
+  - executable
+  - pyinstaller
+  - standalone
+  - packaging
+  - distribution

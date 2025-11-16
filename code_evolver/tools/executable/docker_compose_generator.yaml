@@ -1,0 +1,27 @@
+name: "Docker Compose Generator"
+type: "executable"
+description: "Generates docker-compose.yml configuration for containerized tool API wrappers"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/docker_compose_generator.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON configuration with: service_name, image_name, port, env_vars (optional), volumes (optional), depends_on (optional)"
+
+output_schema:
+  success: "bool - Whether generation was successful"
+  docker_compose: "str - Generated docker-compose.yml content"
+  error: "str - Error message if generation failed"
+
+tags:
+  - docker
+  - docker-compose
+  - orchestration
+  - containerization
+  - devops

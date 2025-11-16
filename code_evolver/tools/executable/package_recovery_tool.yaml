@@ -1,0 +1,30 @@
+name: "Package Recovery Tool"
+type: "executable"
+description: "Automatically detects missing packages from error messages and installs them. Supports Python packages (via pip) and system commands (via apt). Enables self-healing workflows."
+
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/package_recovery_tool.py", "{input_json}"]
+
+input_schema:
+  input_json: "str - JSON with: error_output (error message to analyze), auto_install (bool, default: true), install_system (bool, default: false)"
+
+output_schema:
+  success: "bool - Whether recovery was successful"
+  detected: "dict - Detected missing packages: {python_packages: [...], system_commands: [...]}"
+  installation_results: "dict - Installation results for Python and system packages"
+  message: "str - Status message"
+  error: "str - Error message if recovery failed"
+
+tags:
+  - recovery
+  - dependencies
+  - error-handling
+  - self-healing
+  - package-management
+  - resilience
