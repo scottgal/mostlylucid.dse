@@ -102,7 +102,12 @@
     "tool_run_static_analysis",
     "tool_write_a_technical_story",
     "tool_translate_the_story_into_frenc",
-    "tool_translate_the_story_into_germa"
+    "tool_translate_the_story_into_germa",
+    "tool_create_a_work_breakdown_struct",
+    "tool_develop_a_project_schedule_and",
+    "tool_workflow_datastore",
+    "tool_define_project_scope_and_goals",
+    "tool_translate_the_word_boobies_f"
   ],
   "llm": [
     "tool_general",
@@ -144,7 +149,15 @@
     "invocation_general_1763282125435",
     "invocation_general_1763282162457",
     "invocation_general_1763282326277",
-    "invocation_general_1763282491366"
+    "invocation_general_1763282491366",
+    "invocation_general_1763283455451",
+    "invocation_general_1763283536579",
+    "invocation_general_1763283753942",
+    "invocation_general_1763284276177",
+    "invocation_general_1763284409222",
+    "invocation_general_1763284521512",
+    "invocation_general_1763284691561",
+    "invocation_general_1763284934052"
   ],
   "fallback": [
     "tool_general"
@@ -218,7 +231,8 @@
     "spec_translate_the_story_into_frenc",
     "spec_translate_the_story_into_germa",
     "spec_write_a_fractal_builder",
-    "spec_write_the_outline_for_a_horror"
+    "spec_write_the_outline_for_a_horror",
+    "spec_input_long_text"
   ],
   "technical": [
     "tool_technical_writer"
@@ -364,7 +378,19 @@
     "tool_translate_the_story_into_germa",
     "workflow_1763282170",
     "workflow_write_a_fractal_builder",
-    "workflow_write_the_outline_for_a_horror"
+    "workflow_write_the_outline_for_a_horror",
+    "workflow_define_project_scope_and_goals",
+    "workflow_create_a_work_breakdown_struct",
+    "tool_create_a_work_breakdown_struct",
+    "tool_develop_a_project_schedule_and",
+    "workflow_1763283819",
+    "tool_workflow_datastore",
+    "tool_define_project_scope_and_goals",
+    "workflow_develop_a_project_schedule_and",
+    "workflow_1763284641",
+    "workflow_translate_the_word_boobies_f",
+    "tool_translate_the_word_boobies_f",
+    "workflow_1763284721"
   ],
   "generated": [
     "tool_write_a_technical_story_and_tr",
@@ -408,7 +434,24 @@
     "workflow_write_a_fractal_builder",
     "spec_write_the_outline_for_a_horror",
     "func_write_the_outline_for_a_horror",
-    "workflow_write_the_outline_for_a_horror"
+    "workflow_write_the_outline_for_a_horror",
+    "spec_define_project_scope_and_goals",
+    "func_define_project_scope_and_goals",
+    "workflow_define_project_scope_and_goals",
+    "spec_create_a_work_breakdown_struct",
+    "func_create_a_work_breakdown_struct",
+    "workflow_create_a_work_breakdown_struct",
+    "tool_create_a_work_breakdown_struct",
+    "spec_develop_a_project_schedule_and",
+    "tool_develop_a_project_schedule_and",
+    "tool_define_project_scope_and_goals",
+    "func_develop_a_project_schedule_and",
+    "workflow_develop_a_project_schedule_and",
+    "spec_translate_the_word_boobies_f",
+    "func_translate_the_word_boobies_f",
+    "workflow_translate_the_word_boobies_f",
+    "tool_translate_the_word_boobies_f",
+    "spec_input_long_text"
   ],
   "chat": [
     "tool_write_a_technical_story_and_tr",
@@ -435,7 +478,19 @@
     "func_write_a_fractal_builder",
     "workflow_write_a_fractal_builder",
     "func_write_the_outline_for_a_horror",
-    "workflow_write_the_outline_for_a_horror"
+    "workflow_write_the_outline_for_a_horror",
+    "func_define_project_scope_and_goals",
+    "workflow_define_project_scope_and_goals",
+    "func_create_a_work_breakdown_struct",
+    "workflow_create_a_work_breakdown_struct",
+    "tool_create_a_work_breakdown_struct",
+    "tool_develop_a_project_schedule_and",
+    "tool_define_project_scope_and_goals",
+    "func_develop_a_project_schedule_and",
+    "workflow_develop_a_project_schedule_and",
+    "func_translate_the_word_boobies_f",
+    "workflow_translate_the_word_boobies_f",
+    "tool_translate_the_word_boobies_f"
   ],
   "auto-generated": [
     "tool_write_a_technical_story_and_tr",
@@ -487,7 +542,11 @@
     "tool_write_a_poem_1763277263",
     "tool_write_a_technical_story",
     "tool_translate_the_story_into_frenc",
-    "tool_translate_the_story_into_germa"
+    "tool_translate_the_story_into_germa",
+    "tool_create_a_work_breakdown_struct",
+    "tool_develop_a_project_schedule_and",
+    "tool_define_project_scope_and_goals",
+    "tool_translate_the_word_boobies_f"
   ],
   "python": [
     "tool_add_5_and_8",
@@ -532,7 +591,19 @@
     "tool_undefined_name_checker",
     "func_translate_the_poem_into_welsh",
     "tool_run_static_analysis",
-    "func_write_a_poem_1763280574"
+    "func_write_a_poem_1763280574",
+    "exec_invocation_python_syntax_validator_1763283458450",
+    "exec_invocation_node_runtime_import_validator_1763283458929",
+    "exec_invocation_python_syntax_validator_1763283628979",
+    "exec_invocation_node_runtime_import_validator_1763283633099",
+    "exec_invocation_python_syntax_validator_1763284358640",
+    "exec_invocation_node_runtime_import_validator_1763284363856",
+    "exec_invocation_python_syntax_validator_1763284454583",
+    "exec_invocation_node_runtime_import_validator_1763284459017",
+    "exec_invocation_python_syntax_validator_1763284636062",
+    "exec_invocation_node_runtime_import_validator_1763284640217",
+    "exec_invocation_python_syntax_validator_1763284717241",
+    "exec_invocation_node_runtime_import_validator_1763284720562"
   ],
   "addition": [
     "tool_add_5_and_8",
@@ -574,7 +645,8 @@
     "tool_python_syntax_validator",
     "tool_stdin_usage_validator",
     "tool_undefined_name_checker",
-    "tool_run_static_analysis"
+    "tool_run_static_analysis",
+    "tool_workflow_datastore"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -866,7 +938,8 @@
     "tool_json_output_validator"
   ],
   "storage": [
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "tool_workflow_datastore"
   ],
   "load": [
     "tool_load_from_disk"
@@ -1162,7 +1235,12 @@
     "spec_translate_the_story_into_frenc",
     "spec_translate_the_story_into_germa",
     "spec_write_a_fractal_builder",
-    "spec_write_the_outline_for_a_horror"
+    "spec_write_the_outline_for_a_horror",
+    "spec_define_project_scope_and_goals",
+    "spec_create_a_work_breakdown_struct",
+    "spec_develop_a_project_schedule_and",
+    "spec_translate_the_word_boobies_f",
+    "spec_input_long_text"
   ],
   "plan": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1181,7 +1259,12 @@
     "spec_translate_the_story_into_frenc",
     "spec_translate_the_story_into_germa",
     "spec_write_a_fractal_builder",
-    "spec_write_the_outline_for_a_horror"
+    "spec_write_the_outline_for_a_horror",
+    "spec_define_project_scope_and_goals",
+    "spec_create_a_work_breakdown_struct",
+    "spec_develop_a_project_schedule_and",
+    "spec_translate_the_word_boobies_f",
+    "spec_input_long_text"
   ],
   "overseer": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1200,7 +1283,12 @@
     "spec_translate_the_story_into_frenc",
     "spec_translate_the_story_into_germa",
     "spec_write_a_fractal_builder",
-    "spec_write_the_outline_for_a_horror"
+    "spec_write_the_outline_for_a_horror",
+    "spec_define_project_scope_and_goals",
+    "spec_create_a_work_breakdown_struct",
+    "spec_develop_a_project_schedule_and",
+    "spec_translate_the_word_boobies_f",
+    "spec_input_long_text"
   ],
   "claude-sonnet": [
     "tool_general",
@@ -1249,7 +1337,15 @@
     "invocation_general_1763282326277",
     "invocation_general_1763282491366",
     "invocation_long_form_writer_1763282532779",
-    "invocation_outline_generator_1763282547737"
+    "invocation_outline_generator_1763282547737",
+    "invocation_general_1763283455451",
+    "invocation_general_1763283536579",
+    "invocation_general_1763283753942",
+    "invocation_general_1763284276177",
+    "invocation_general_1763284409222",
+    "invocation_general_1763284521512",
+    "invocation_general_1763284691561",
+    "invocation_general_1763284934052"
   ],
   "prompt": [
     "invocation_general_1763277296689",
@@ -1268,7 +1364,15 @@
     "invocation_general_1763282326277",
     "invocation_general_1763282491366",
     "invocation_long_form_writer_1763282532779",
-    "invocation_outline_generator_1763282547737"
+    "invocation_outline_generator_1763282547737",
+    "invocation_general_1763283455451",
+    "invocation_general_1763283536579",
+    "invocation_general_1763283753942",
+    "invocation_general_1763284276177",
+    "invocation_general_1763284409222",
+    "invocation_general_1763284521512",
+    "invocation_general_1763284691561",
+    "invocation_general_1763284934052"
   ],
   "llama3": [
     "timeout_stats_llama3",
@@ -1282,7 +1386,15 @@
     "invocation_general_1763282326277",
     "invocation_general_1763282491366",
     "invocation_long_form_writer_1763282532779",
-    "invocation_outline_generator_1763282547737"
+    "invocation_outline_generator_1763282547737",
+    "invocation_general_1763283455451",
+    "invocation_general_1763283536579",
+    "invocation_general_1763283753942",
+    "invocation_general_1763284276177",
+    "invocation_general_1763284409222",
+    "invocation_general_1763284521512",
+    "invocation_general_1763284691561",
+    "invocation_general_1763284934052"
   ],
   "content_generator": [
     "invocation_content_generator_1763278040988",
@@ -1336,7 +1448,8 @@
     "tool_summarizer",
     "tool_technical_writer",
     "tool_translation_quality_checker",
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_workflow_datastore"
   ],
   "call_tool": [
     "tool_call_tool_validator"
@@ -1359,7 +1472,10 @@
   ],
   "multi-step": [
     "workflow_1763280509",
-    "workflow_1763282170"
+    "workflow_1763282170",
+    "workflow_1763283819",
+    "workflow_1763284641",
+    "workflow_1763284721"
   ],
   "a": [
     "workflow_1763280509",
@@ -1394,19 +1510,129 @@
     "workflow_translate_the_story_into_frenc",
     "workflow_translate_the_story_into_germa",
     "workflow_write_a_fractal_builder",
-    "workflow_write_the_outline_for_a_horror"
+    "workflow_write_the_outline_for_a_horror",
+    "workflow_define_project_scope_and_goals",
+    "workflow_create_a_work_breakdown_struct",
+    "workflow_develop_a_project_schedule_and",
+    "workflow_translate_the_word_boobies_f"
   ],
   "tested": [
     "workflow_write_a_technical_story",
     "workflow_translate_the_story_into_frenc",
     "workflow_translate_the_story_into_germa",
     "workflow_write_a_fractal_builder",
-    "workflow_write_the_outline_for_a_horror"
+    "workflow_write_the_outline_for_a_horror",
+    "workflow_define_project_scope_and_goals",
+    "workflow_create_a_work_breakdown_struct",
+    "workflow_develop_a_project_schedule_and",
+    "workflow_translate_the_word_boobies_f"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763282532779"
   ],
   "outline_generator": [
     "invocation_outline_generator_1763282547737"
+  ],
+  "executable_invocation": [
+    "exec_invocation_python_syntax_validator_1763283458450",
+    "exec_invocation_undefined_name_checker_1763283458773",
+    "exec_invocation_node_runtime_import_validator_1763283458929",
+    "exec_invocation_python_syntax_validator_1763283628979",
+    "exec_invocation_undefined_name_checker_1763283632916",
+    "exec_invocation_node_runtime_import_validator_1763283633099",
+    "exec_invocation_python_syntax_validator_1763284358640",
+    "exec_invocation_undefined_name_checker_1763284363649",
+    "exec_invocation_node_runtime_import_validator_1763284363856",
+    "exec_invocation_python_syntax_validator_1763284454583",
+    "exec_invocation_undefined_name_checker_1763284458834",
+    "exec_invocation_node_runtime_import_validator_1763284459017",
+    "exec_invocation_python_syntax_validator_1763284636062",
+    "exec_invocation_undefined_name_checker_1763284640029",
+    "exec_invocation_node_runtime_import_validator_1763284640217",
+    "exec_invocation_python_syntax_validator_1763284717241",
+    "exec_invocation_undefined_name_checker_1763284720383",
+    "exec_invocation_node_runtime_import_validator_1763284720562"
+  ],
+  "tool_execution": [
+    "exec_invocation_python_syntax_validator_1763283458450",
+    "exec_invocation_undefined_name_checker_1763283458773",
+    "exec_invocation_node_runtime_import_validator_1763283458929",
+    "exec_invocation_python_syntax_validator_1763283628979",
+    "exec_invocation_undefined_name_checker_1763283632916",
+    "exec_invocation_node_runtime_import_validator_1763283633099",
+    "exec_invocation_python_syntax_validator_1763284358640",
+    "exec_invocation_undefined_name_checker_1763284363649",
+    "exec_invocation_node_runtime_import_validator_1763284363856",
+    "exec_invocation_python_syntax_validator_1763284454583",
+    "exec_invocation_undefined_name_checker_1763284458834",
+    "exec_invocation_node_runtime_import_validator_1763284459017",
+    "exec_invocation_python_syntax_validator_1763284636062",
+    "exec_invocation_undefined_name_checker_1763284640029",
+    "exec_invocation_node_runtime_import_validator_1763284640217",
+    "exec_invocation_python_syntax_validator_1763284717241",
+    "exec_invocation_undefined_name_checker_1763284720383",
+    "exec_invocation_node_runtime_import_validator_1763284720562"
+  ],
+  "python_syntax_validator": [
+    "exec_invocation_python_syntax_validator_1763283458450",
+    "exec_invocation_python_syntax_validator_1763283628979",
+    "exec_invocation_python_syntax_validator_1763284358640",
+    "exec_invocation_python_syntax_validator_1763284454583",
+    "exec_invocation_python_syntax_validator_1763284636062",
+    "exec_invocation_python_syntax_validator_1763284717241"
+  ],
+  "undefined_name_checker": [
+    "exec_invocation_undefined_name_checker_1763283458773",
+    "exec_invocation_undefined_name_checker_1763283632916",
+    "exec_invocation_undefined_name_checker_1763284363649",
+    "exec_invocation_undefined_name_checker_1763284458834",
+    "exec_invocation_undefined_name_checker_1763284640029",
+    "exec_invocation_undefined_name_checker_1763284720383"
+  ],
+  "flake8": [
+    "exec_invocation_undefined_name_checker_1763283458773",
+    "exec_invocation_undefined_name_checker_1763283632916",
+    "exec_invocation_undefined_name_checker_1763284363649",
+    "exec_invocation_undefined_name_checker_1763284458834",
+    "exec_invocation_undefined_name_checker_1763284640029",
+    "exec_invocation_undefined_name_checker_1763284720383"
+  ],
+  "node_runtime_import_validator": [
+    "exec_invocation_node_runtime_import_validator_1763283458929",
+    "exec_invocation_node_runtime_import_validator_1763283633099",
+    "exec_invocation_node_runtime_import_validator_1763284363856",
+    "exec_invocation_node_runtime_import_validator_1763284459017",
+    "exec_invocation_node_runtime_import_validator_1763284640217",
+    "exec_invocation_node_runtime_import_validator_1763284720562"
+  ],
+  "so": [
+    "workflow_1763283819",
+    "workflow_1763284641"
+  ],
+  "this": [
+    "workflow_1763283819",
+    "workflow_1763284641"
+  ],
+  "{": [
+    "workflow_1763283819",
+    "workflow_1763284641"
+  ],
+  "datastore": [
+    "tool_workflow_datastore"
+  ],
+  "persistence": [
+    "tool_workflow_datastore"
+  ],
+  "state": [
+    "tool_workflow_datastore"
+  ],
+  "translate": [
+    "workflow_1763284721"
+  ],
+  "the": [
+    "workflow_1763284721"
+  ],
+  "word": [
+    "workflow_1763284721"
   ]
 }

@@ -5,12 +5,26 @@ Provides access to LLM tools and other nodes from generated code.
 import os
 import sys
 import json
+import logging
 from pathlib import Path
+
+# Suppress debug logging BEFORE importing anything
+# This prevents DEBUG logs from polluting workflow output
+logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
+for logger_name in ["src", "httpx", "httpcore", "urllib3", "qdrant_client", "anthropic"]:
+    logging.getLogger(logger_name).setLevel(logging.WARNING)
 
 # Add parent directory to path to import src
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src import OllamaClient, ToolsManager, ConfigManager, create_rag_memory
+
+# Disable status manager updates during workflow execution (keep output clean)
+try:
+    from src.status_manager import get_status_manager
+    get_status_manager().set_enabled(False)
+except:
+    pass
 
 
 class NodeRuntime:

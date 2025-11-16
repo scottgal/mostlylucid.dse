@@ -1,0 +1,27 @@
+name: "Workflow Datastore"
+type: "executable"
+description: "Save and retrieve workflow data persistently. Allows workflows to store project schedules, task lists, and other structured data."
+executable:
+  command: "python"
+  args: ["{tool_dir}/workflow_datastore.py", "{action}", "{key}", "{data}"]
+  install_command: null  # No external dependencies
+input_schema:
+  action:
+    type: "string"
+    description: "Action to perform: 'save' or 'load'"
+    required: true
+  key:
+    type: "string"
+    description: "Unique key to store/retrieve data (e.g., 'project_schedule_001')"
+    required: true
+  data:
+    type: "any"
+    description: "Data to save (for 'save' action only)"
+    required: false
+output_schema:
+  type: "object"
+  description: "For 'load': returns stored data. For 'save': returns confirmation."
+tags: ["workflow", "datastore", "persistence", "storage", "state"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 50

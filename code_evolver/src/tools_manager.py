@@ -404,7 +404,8 @@ class ToolsManager:
             logger.debug("No YAML tool files found in tools/ directory")
             return
 
-        console.print(f"[dim cyan]> Loading {len(yaml_files)} tool(s) from YAML files...[/dim cyan]")
+        # Log loading message (don't print to console to keep output clean)
+        logger.info(f"Loading {len(yaml_files)} tool(s) from YAML files...")
 
         for yaml_file in yaml_files:
             try:

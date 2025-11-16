@@ -263,7 +263,7 @@ rag_memory:
   max_embedding_content_length: 1000
 
 logging:
-  level: "INFO"
+  level: "WARNING"
   file: "code_evolver.log"
   max_file_size_mb: 10
   backup_count: 5
@@ -298,6 +298,10 @@ testing:
   test_driven_development: true
   initial_optimization_iterations: 3
   optimization_score_threshold: 0.1
+  use_pynguin: false  # Disabled by default (incompatible with Windows)
+  use_pynguin_tdd: false
+  pynguin_timeout: 30
+  pynguin_min_coverage: 0.70
 
 optimization:
   enabled: true

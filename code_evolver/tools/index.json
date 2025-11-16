@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696524Z"
+      "last_reset": "2025-11-16T09:19:39.397775Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696535Z"
+      "last_reset": "2025-11-16T09:19:39.397788Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696541Z"
+      "last_reset": "2025-11-16T09:19:39.397795Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696545Z"
+      "last_reset": "2025-11-16T09:19:39.397800Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696549Z"
+      "last_reset": "2025-11-16T09:19:39.397804Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696552Z"
+      "last_reset": "2025-11-16T09:19:39.397809Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696556Z"
+      "last_reset": "2025-11-16T09:19:39.397813Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696559Z"
+      "last_reset": "2025-11-16T09:19:39.397816Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696563Z"
+      "last_reset": "2025-11-16T09:19:39.397821Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696566Z"
+      "last_reset": "2025-11-16T09:19:39.397826Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696570Z"
+      "last_reset": "2025-11-16T09:19:39.397830Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 0,
+    "usage_count": 6,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696574Z"
+      "last_reset": "2025-11-16T09:19:39.397834Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696577Z"
+      "last_reset": "2025-11-16T09:19:39.397837Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696580Z"
+      "last_reset": "2025-11-16T09:19:39.397841Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696584Z"
+      "last_reset": "2025-11-16T09:19:39.397844Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696587Z"
+      "last_reset": "2025-11-16T09:19:39.397848Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696591Z"
+      "last_reset": "2025-11-16T09:19:39.397852Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696595Z"
+      "last_reset": "2025-11-16T09:19:39.397855Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 0,
+    "usage_count": 6,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696599Z"
+      "last_reset": "2025-11-16T09:19:39.397859Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696602Z"
+      "last_reset": "2025-11-16T09:19:39.397862Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696606Z"
+      "last_reset": "2025-11-16T09:19:39.397866Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696609Z"
+      "last_reset": "2025-11-16T09:19:39.397870Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696613Z"
+      "last_reset": "2025-11-16T09:19:39.397875Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696616Z"
+      "last_reset": "2025-11-16T09:19:39.397878Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 0,
+    "usage_count": 6,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696620Z"
+      "last_reset": "2025-11-16T09:19:39.397883Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696623Z"
+      "last_reset": "2025-11-16T09:19:39.397886Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696627Z"
+      "last_reset": "2025-11-16T09:19:39.397891Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696630Z"
+      "last_reset": "2025-11-16T09:19:39.397895Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696634Z"
+      "last_reset": "2025-11-16T09:19:39.397899Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696637Z"
+      "last_reset": "2025-11-16T09:19:39.397903Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1402,7 +1402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696642Z"
+      "last_reset": "2025-11-16T09:19:39.397907Z"
     },
     "created_at": "2025-11-16T08:22:04.604169Z",
     "usage_count": 0,
@@ -1444,7 +1444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696645Z"
+      "last_reset": "2025-11-16T09:19:39.397910Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
     "usage_count": 0,
@@ -1482,7 +1482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696649Z"
+      "last_reset": "2025-11-16T09:19:39.397914Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
     "usage_count": 0,
@@ -1522,7 +1522,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696652Z"
+      "last_reset": "2025-11-16T09:19:39.397917Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
     "usage_count": 0,
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696655Z"
+      "last_reset": "2025-11-16T09:19:39.397921Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 7,
+    "usage_count": 15,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696659Z"
+      "last_reset": "2025-11-16T09:19:39.397924Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696663Z"
+      "last_reset": "2025-11-16T09:19:39.397928Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696666Z"
+      "last_reset": "2025-11-16T09:19:39.397931Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1726,7 +1726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696670Z"
+      "last_reset": "2025-11-16T09:19:39.397936Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
     "usage_count": 0,
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696674Z"
+      "last_reset": "2025-11-16T09:19:39.397939Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696678Z"
+      "last_reset": "2025-11-16T09:19:39.397945Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,7 +1849,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696681Z"
+      "last_reset": "2025-11-16T09:19:39.397948Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
     "usage_count": 0,
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696684Z"
+      "last_reset": "2025-11-16T09:19:39.397952Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,7 +1930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696688Z"
+      "last_reset": "2025-11-16T09:19:39.397956Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
     "usage_count": 0,
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696692Z"
+      "last_reset": "2025-11-16T09:19:39.397959Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696695Z"
+      "last_reset": "2025-11-16T09:19:39.397963Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2053,7 +2053,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696698Z"
+      "last_reset": "2025-11-16T09:19:39.397966Z"
     },
     "created_at": "2025-11-16T08:22:06.400998Z",
     "usage_count": 0,
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696702Z"
+      "last_reset": "2025-11-16T09:19:39.397970Z"
     },
     "created_at": "2025-11-16T08:22:06.499681Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696706Z"
+      "last_reset": "2025-11-16T09:19:39.397974Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696710Z"
+      "last_reset": "2025-11-16T09:19:39.397978Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696713Z"
+      "last_reset": "2025-11-16T09:19:39.397981Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696717Z"
+      "last_reset": "2025-11-16T09:19:39.397985Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696720Z"
+      "last_reset": "2025-11-16T09:19:39.397988Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696724Z"
+      "last_reset": "2025-11-16T09:19:39.397991Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696727Z"
+      "last_reset": "2025-11-16T09:19:39.397995Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696747Z"
+      "last_reset": "2025-11-16T09:19:39.397998Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696751Z"
+      "last_reset": "2025-11-16T09:19:39.398002Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696755Z"
+      "last_reset": "2025-11-16T09:19:39.398005Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696758Z"
+      "last_reset": "2025-11-16T09:19:39.398009Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696762Z"
+      "last_reset": "2025-11-16T09:19:39.398014Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2507,17 +2507,16 @@
       "cost_tier": "free",
       "quality_tier": "excellent",
       "latency_ms": 50,
-      "capability": "Model and backend selection with multi-backend support",
-      "from_index": true
+      "capability": "Model and backend selection with multi-backend support"
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696767Z"
+      "last_reset": "2025-11-16T09:19:56.731098Z"
     },
-    "created_at": "2025-11-16T08:40:24.648796Z",
+    "created_at": "2025-11-16T09:19:56.731088Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2544,7 +2543,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696771Z"
+      "last_reset": "2025-11-16T09:19:39.398022Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2576,7 +2575,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696775Z"
+      "last_reset": "2025-11-16T09:19:39.398026Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2606,7 +2605,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696778Z"
+      "last_reset": "2025-11-16T09:19:39.398030Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2637,7 +2636,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696781Z"
+      "last_reset": "2025-11-16T09:19:39.398033Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2668,7 +2667,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696785Z"
+      "last_reset": "2025-11-16T09:19:39.398036Z"
     },
     "created_at": "2025-11-16T08:22:06.626451Z",
     "usage_count": 0,
@@ -2698,7 +2697,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696788Z"
+      "last_reset": "2025-11-16T09:19:39.398040Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2729,7 +2728,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696792Z"
+      "last_reset": "2025-11-16T09:19:39.398043Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2758,7 +2757,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696795Z"
+      "last_reset": "2025-11-16T09:19:39.398046Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2788,7 +2787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696798Z"
+      "last_reset": "2025-11-16T09:19:39.398050Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2817,7 +2816,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696801Z"
+      "last_reset": "2025-11-16T09:19:39.398053Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2848,7 +2847,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696805Z"
+      "last_reset": "2025-11-16T09:19:39.398057Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2878,7 +2877,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696808Z"
+      "last_reset": "2025-11-16T09:19:39.398060Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2909,7 +2908,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696812Z"
+      "last_reset": "2025-11-16T09:19:39.398063Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2938,7 +2937,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696816Z"
+      "last_reset": "2025-11-16T09:19:39.398067Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2968,7 +2967,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696819Z"
+      "last_reset": "2025-11-16T09:19:39.398070Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -2997,7 +2996,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696822Z"
+      "last_reset": "2025-11-16T09:19:39.398073Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3026,7 +3025,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696826Z"
+      "last_reset": "2025-11-16T09:19:39.398077Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3056,7 +3055,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696829Z"
+      "last_reset": "2025-11-16T09:19:39.398081Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3087,7 +3086,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696832Z"
+      "last_reset": "2025-11-16T09:19:39.398085Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3117,7 +3116,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696836Z"
+      "last_reset": "2025-11-16T09:19:39.398089Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3146,7 +3145,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696839Z"
+      "last_reset": "2025-11-16T09:19:39.398093Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3176,7 +3175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696843Z"
+      "last_reset": "2025-11-16T09:19:39.398096Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3206,7 +3205,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696847Z"
+      "last_reset": "2025-11-16T09:19:39.398100Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3236,7 +3235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696850Z"
+      "last_reset": "2025-11-16T09:19:39.398103Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3267,7 +3266,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696853Z"
+      "last_reset": "2025-11-16T09:19:39.398107Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3296,7 +3295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696857Z"
+      "last_reset": "2025-11-16T09:19:39.398111Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3326,7 +3325,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696860Z"
+      "last_reset": "2025-11-16T09:19:39.398114Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3355,7 +3354,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696864Z"
+      "last_reset": "2025-11-16T09:19:39.398117Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3385,7 +3384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696868Z"
+      "last_reset": "2025-11-16T09:19:39.398121Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3415,7 +3414,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696871Z"
+      "last_reset": "2025-11-16T09:19:39.398124Z"
     },
     "created_at": "2025-11-16T08:22:06.626612Z",
     "usage_count": 0,
@@ -3445,7 +3444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696875Z"
+      "last_reset": "2025-11-16T09:19:39.398128Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3476,7 +3475,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696878Z"
+      "last_reset": "2025-11-16T09:19:39.398132Z"
     },
     "created_at": "2025-11-16T08:22:06.626624Z",
     "usage_count": 0,
@@ -3506,7 +3505,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696882Z"
+      "last_reset": "2025-11-16T09:19:39.398135Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3535,7 +3534,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696886Z"
+      "last_reset": "2025-11-16T09:19:39.398139Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3564,7 +3563,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696890Z"
+      "last_reset": "2025-11-16T09:19:39.398142Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3594,7 +3593,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696893Z"
+      "last_reset": "2025-11-16T09:19:39.398146Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3625,7 +3624,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696896Z"
+      "last_reset": "2025-11-16T09:19:39.398150Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3655,7 +3654,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696900Z"
+      "last_reset": "2025-11-16T09:19:39.398153Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3685,7 +3684,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696903Z"
+      "last_reset": "2025-11-16T09:19:39.398156Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3721,7 +3720,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696906Z"
+      "last_reset": "2025-11-16T09:19:39.398160Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3757,7 +3756,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696910Z"
+      "last_reset": "2025-11-16T09:19:39.398165Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3793,9 +3792,217 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T08:41:37.696914Z"
+      "last_reset": "2025-11-16T09:19:39.398168Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_a_work_breakdown_struct": {
+    "tool_id": "create_a_work_breakdown_struct",
+    "name": "Create a work breakdown structure (WBS)",
+    "tool_type": "workflow",
+    "description": "Create a work breakdown structure (WBS)",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_a_work_breakdown_struct",
+      "quality_score": 1.1,
+      "latency_ms": 763,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T09:14:20.219623+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create a work breakdown structure (WBS)",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T09:19:39.398172Z"
+    },
+    "created_at": "2025-11-16T09:14:20.219639Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "develop_a_project_schedule_and": {
+    "tool_id": "develop_a_project_schedule_and",
+    "name": "Develop a project schedule and timeline",
+    "tool_type": "workflow",
+    "description": "Develop a project schedule and timeline",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "develop_a_project_schedule_and",
+      "quality_score": 1.1,
+      "latency_ms": 810,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T09:17:21.481798+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Develop a project schedule and timeline",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T09:19:39.398175Z"
+    },
+    "created_at": "2025-11-16T09:17:21.481820Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "workflow_datastore": {
+    "tool_id": "workflow_datastore",
+    "name": "Workflow Datastore",
+    "tool_type": "executable",
+    "description": "Save and retrieve workflow data persistently. Allows workflows to store project schedules, task lists, and other structured data.",
+    "tags": [
+      "workflow",
+      "datastore",
+      "persistence",
+      "storage",
+      "state"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\workflow_datastore.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/workflow_datastore.py",
+        "{action}",
+        "{key}",
+        "{data}"
+      ],
+      "input_schema": {
+        "action": {
+          "type": "string",
+          "description": "Action to perform: 'save' or 'load'",
+          "required": true
+        },
+        "key": {
+          "type": "string",
+          "description": "Unique key to store/retrieve data (e.g., 'project_schedule_001')",
+          "required": true
+        },
+        "data": {
+          "type": "any",
+          "description": "Data to save (for 'save' action only)",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "For 'load': returns stored data. For 'save': returns confirmation."
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "27bdf63bba3cd8e19054304b7bc4db250fc55e555399b2858f02af2cead2df84",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T09:19:39.398179Z"
+    },
+    "created_at": "2025-11-16T09:07:23.454598Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "27bdf63bba3cd8e19054304b7bc4db250fc55e555399b2858f02af2cead2df84",
+    "breaking_changes": []
+  },
+  "define_project_scope_and_goals": {
+    "tool_id": "define_project_scope_and_goals",
+    "name": "Define project scope and goals",
+    "tool_type": "workflow",
+    "description": "Define project scope and goals",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "define_project_scope_and_goals",
+      "quality_score": 1.1,
+      "latency_ms": 921,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-16T09:12:45.347983+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Define project scope and goals",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T09:19:39.398182Z"
+    },
+    "created_at": "2025-11-16T09:12:45.348005Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "translate_the_word_boobies_f": {
+    "tool_id": "translate_the_word_boobies_f",
+    "name": "Translate the word 'boobies' from English to French",
+    "tool_type": "workflow",
+    "description": "Translate the word 'boobies' from English to French",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "translate_the_word_boobies_f",
+      "quality_score": 1.1,
+      "latency_ms": 759,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T09:18:41.770674+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Translate the word 'boobies' from English to French",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T09:19:39.398186Z"
+    },
+    "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",

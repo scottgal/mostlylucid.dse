@@ -1110,13 +1110,23 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
                     workflow.complete_step("check_existing", f"Exact match: {node_id}", {"reused": True})
 
                     # Run the existing node immediately (fast path - no code generation!)
-                    input_data = {"input": description}
+                    # Pass multiple common keys for compatibility with different workflows
+                    input_data = {
+                        "input": description,
+                        "description": description,
+                        "prompt": description
+                    }
                     stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
                     # Display results prominently
                     if metrics["success"]:
                         console.print(f"\n[bold green]✓ Execution successful[/bold green]")
 
+                        # Show metrics FIRST (if enabled)
+                        if self.config.get("chat.show_metrics", True):
+                            self._display_metrics(metrics)
+
+                        # Show generated content LAST so it's immediately visible
                         if stdout and stdout.strip():
                             # Try to extract and show the actual result prominently
                             result_extracted = False
@@ -1126,17 +1136,22 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
                                 if isinstance(output_data, dict):
                                     # Show the actual result clearly
                                     if 'result' in output_data:
-                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['result']}[/bold white]\n")
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['result']}\n")
                                         result_extracted = True
                                     elif 'output' in output_data:
-                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['output']}[/bold white]\n")
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['output']}\n")
                                         result_extracted = True
                                     elif 'answer' in output_data:
-                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['answer']}[/bold white]\n")
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['answer']}\n")
                                         result_extracted = True
                                     elif 'content' in output_data:
                                         console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}\n")
                                         result_extracted = True
+                                elif isinstance(output_data, str):
+                                    # JSON string output (like from json.dumps(string))
+                                    console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                                    console.print(Panel(output_data, box=box.ROUNDED, border_style="green"))
+                                    result_extracted = True
                             except:
                                 pass
 
@@ -1144,15 +1159,12 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
                             if not result_extracted:
                                 # Check if it's plain text (like an article or story)
                                 if not stdout.strip().startswith('{'):
-                                    console.print(f"\n[bold green]RESULT:[/bold green]")
+                                    console.print(f"\n[bold green]RESULT:[/bold green]\n")
                                     console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
                                 else:
                                     console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
                         else:
                             console.print("[yellow]Note: Code executed successfully but produced no output[/yellow]")
-
-                        if self.config.get("chat.show_metrics", True):
-                            self._display_metrics(metrics)
 
                         return True
                     else:
@@ -1263,13 +1275,23 @@ Answer:"""
 
                             # Auto-run and finish
                             with self.display.start_stage("Execute", "Running code"):
-                                input_data = {"input": description}
+                                # Pass multiple common keys for compatibility with different workflows
+                                input_data = {
+                                    "input": description,
+                                    "description": description,
+                                    "prompt": description
+                                }
                                 stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
                             # Display results prominently
                             if metrics["success"]:
                                 self.display.complete_stage("Execute", "Success")
 
+                                # Show metrics FIRST (if enabled)
+                                if self.config.get("chat.show_metrics", True):
+                                    self._display_metrics(metrics)
+
+                                # Show generated content LAST so it's immediately visible
                                 if stdout and stdout.strip():
                                     # Try to extract and show the actual result prominently
                                     result_extracted = False
@@ -1279,17 +1301,22 @@ Answer:"""
                                         if isinstance(output_data, dict):
                                             # Show the actual result clearly
                                             if 'result' in output_data:
-                                                console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['result']}[/bold white]")
+                                                console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['result']}\n")
                                                 result_extracted = True
                                             elif 'output' in output_data:
-                                                console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['output']}[/bold white]")
+                                                console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['output']}\n")
                                                 result_extracted = True
                                             elif 'answer' in output_data:
-                                                console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['answer']}[/bold white]")
+                                                console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['answer']}\n")
                                                 result_extracted = True
                                             elif 'content' in output_data:
-                                                console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}")
+                                                console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}\n")
                                                 result_extracted = True
+                                        elif isinstance(output_data, str):
+                                            # JSON string output (like from json.dumps(string))
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                                            console.print(Panel(output_data, box=box.ROUNDED, border_style="green"))
+                                            result_extracted = True
                                     except:
                                         pass
 
@@ -1297,7 +1324,7 @@ Answer:"""
                                     if not result_extracted:
                                         # Check if it's plain text (like an article or story)
                                         if not stdout.strip().startswith('{'):
-                                            console.print(f"\n[bold green]RESULT:[/bold green]")
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n")
                                             console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
                                         else:
                                             console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
@@ -1307,9 +1334,6 @@ Answer:"""
                                 self.display.complete_stage("Execute", f"Failed (exit code: {metrics['exit_code']})")
                                 if stderr:
                                     console.print(Panel(stderr, title="[red]Error[/red]", border_style="red", box=box.ROUNDED))
-
-                            if self.config.get("chat.show_metrics", True):
-                                self._display_metrics(metrics)
 
                             return True
 
@@ -1406,13 +1430,23 @@ Answer:"""
 
                         # Auto-run the reused workflow with the new description as input
                         with self.display.start_stage("Execute", "Running workflow"):
-                            input_data = {"input": description}
+                            # Pass multiple common keys for compatibility with different workflows
+                            input_data = {
+                                "input": description,
+                                "description": description,
+                                "prompt": description
+                            }
                             stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
                         # Display results - ALWAYS show output prominently
                         if metrics["success"]:
                             self.display.complete_stage("Execute", "Success")
 
+                            # Show metrics FIRST (if enabled)
+                            if self.config.get("chat.show_metrics", True):
+                                self._display_metrics(metrics)
+
+                            # Show generated content LAST so it's immediately visible
                             if stdout and stdout.strip():
                                 # Try to extract and show the actual result prominently
                                 result_extracted = False
@@ -1422,17 +1456,22 @@ Answer:"""
                                     if isinstance(output_data, dict):
                                         # Show the actual result clearly
                                         if 'result' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['result']}[/bold white]")
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['result']}\n")
                                             result_extracted = True
                                         elif 'output' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['output']}[/bold white]")
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['output']}\n")
                                             result_extracted = True
                                         elif 'answer' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['answer']}[/bold white]")
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['answer']}\n")
                                             result_extracted = True
                                         elif 'content' in output_data:
-                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}")
+                                            console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}\n")
                                             result_extracted = True
+                                    elif isinstance(output_data, str):
+                                        # JSON string output (like from json.dumps(string))
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                                        console.print(Panel(output_data, box=box.ROUNDED, border_style="green"))
+                                        result_extracted = True
                                 except:
                                     pass
 
@@ -1440,7 +1479,7 @@ Answer:"""
                                 if not result_extracted:
                                     # Check if it's plain text (like an article or story)
                                     if not stdout.strip().startswith('{'):
-                                        console.print(f"\n[bold green]RESULT:[/bold green]")
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n")
                                         console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
                                     else:
                                         console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
@@ -1450,9 +1489,6 @@ Answer:"""
                             self.display.complete_stage("Execute", f"Failed (exit code: {metrics['exit_code']})")
                             if stderr:
                                 console.print(Panel(stderr, title="[red]Error[/red]", border_style="red", box=box.ROUNDED))
-
-                        if self.config.get("chat.show_metrics", True):
-                            self._display_metrics(metrics)
 
                         return True
 
@@ -1662,6 +1698,36 @@ Create a comprehensive specification that will guide the code generator. Include
    - Data structures to use
    - Key functions and their signatures (with types)
    - Which LLM tools (if any) should be called and when
+
+3a. **Parallel Execution Optimization** (CRITICAL FOR PERFORMANCE!)
+   - Identify tool calls that can run in PARALLEL (no dependencies)
+   - Group independent operations together
+   - Example: If fetching 3 translations independently → run in parallel!
+   - Example: If generating joke AND poem separately → run in parallel!
+   - Specify dependencies: which operations must wait for others
+   - IMPORTANT: Parallel execution can dramatically reduce latency!
+
+   PARALLEL EXECUTION PATTERN:
+   ```python
+   # ✅ GOOD - Run independent calls in parallel
+   results = call_tools_parallel([
+       ("content_generator", "Write a joke about cats"),
+       ("content_generator", "Write a poem about dogs"),
+       ("quick_translator", "Translate 'hello' to French")
+   ])
+   joke, poem, translation = results
+
+   # ❌ BAD - Run sequentially (slow!)
+   joke = call_tool("content_generator", "Write a joke about cats")
+   poem = call_tool("content_generator", "Write a poem about dogs")  # Waits for joke!
+   translation = call_tool("quick_translator", "Translate 'hello' to French")  # Waits for both!
+   ```
+
+   When to use parallel execution:
+   - Multiple translations of different texts
+   - Generating multiple independent pieces of content
+   - Fetching data from multiple independent sources
+   - Any operations where output of one doesn't depend on output of another
 
 4. **Input/Output Interface**
    - What JSON fields will the code read from stdin?
@@ -2047,11 +2113,24 @@ USAGE GUIDELINES:
    - NEVER generate hardcoded content (no hardcoded jokes, stories, or text)
    - ALWAYS use: content = call_tool("content_generator", prompt_describing_what_to_generate)
    - The system will handle invoking the appropriate LLM model
-3. For complex data processing, use input_data["input"] as the main data field
-4. ALWAYS include these standard imports at the top:
+3. For project management tasks (schedules, WBS, task lists, outlines), use call_tool() with existing tools:
+   - NEVER implement complex logic directly - ALWAYS delegate to tools
+   - Use: outline = call_tool("outline_generator", f"Create a schedule for: {{project_details}}")
+   - Use: wbs = call_tool("outline_generator", f"Create a work breakdown structure for: {{project_details}}")
+   - DO NOT create stub functions or placeholder implementations
+   - DO NOT use undefined tools - only use tools that exist in the system
+4. For complex data processing, use input_data["input"] as the main data field
+5. **PARALLEL EXECUTION OPTIMIZATION** (CRITICAL FOR PERFORMANCE!):
+   - When making MULTIPLE INDEPENDENT tool calls, use call_tools_parallel() for dramatic speedup
+   - Example: Translating 3 texts → 3x faster with parallel execution!
+   - Example: Generating joke + poem + article → 3x faster!
+   - ONLY works when operations don't depend on each other
+   - Import: from node_runtime import call_tools_parallel
+6. ALWAYS include these standard imports at the top:
    - import json
    - import sys
-   - from node_runtime import call_tool (REQUIRED for any content generation task)
+   - from node_runtime import call_tool (REQUIRED for content generation and project management tasks)
+   - from node_runtime import call_tools_parallel (OPTIONAL - use for parallel operations)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -2128,6 +2207,121 @@ def main():
     joke = call_tool("content_generator", joke_prompt)
 
     print(json.dumps({{"result": joke}}))
+
+if __name__ == "__main__":
+    main()
+```
+
+Example for project management tasks (schedules, WBS, outlines):
+```python
+import json
+import sys
+from pathlib import Path
+
+# CRITICAL: Add path setup BEFORE node_runtime import
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from node_runtime import call_tool
+
+def main():
+    input_data = json.load(sys.stdin)
+
+    # Extract project details from any of the common input fields
+    project_details = input_data.get("project_details",
+                      input_data.get("description",
+                      input_data.get("prompt", "")))
+
+    if not project_details:
+        print(json.dumps({{"error": "No project details provided"}}))
+        return
+
+    # CRITICAL: Use call_tool() to generate the schedule - DO NOT implement logic directly
+    schedule = call_tool("outline_generator", f"Create a detailed project schedule for: {{project_details}}")
+
+    # Return structured result
+    result = {{
+        "schedule": schedule,
+        "project_details": project_details
+    }}
+
+    print(json.dumps(result))
+
+if __name__ == "__main__":
+    main()
+```
+
+Example for PARALLEL EXECUTION (multiple independent operations):
+```python
+import json
+import sys
+from pathlib import Path
+
+# CRITICAL: Add path setup BEFORE node_runtime import
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from node_runtime import call_tools_parallel
+
+def main():
+    input_data = json.load(sys.stdin)
+
+    # Extract list of items to process
+    texts_to_translate = input_data.get("texts", ["Hello", "Goodbye", "Thank you"])
+    target_languages = input_data.get("languages", ["french", "spanish", "german"])
+
+    # ✅ GOOD: Run all translations in PARALLEL (3x faster!)
+    # Build list of parallel tool calls
+    parallel_calls = []
+    for text in texts_to_translate:
+        for lang in target_languages:
+            parallel_calls.append((
+                "nmt_translator",
+                f"Translate to {{lang}}: {{text}}"
+            ))
+
+    # Execute ALL translations in parallel
+    results = call_tools_parallel(parallel_calls)
+
+    # Process results
+    translations = {{}}
+    result_idx = 0
+    for text in texts_to_translate:
+        translations[text] = {{}}
+        for lang in target_languages:
+            translations[text][lang] = results[result_idx]
+            result_idx += 1
+
+    print(json.dumps({{"translations": translations}}))
+
+if __name__ == "__main__":
+    main()
+```
+
+Example for PARALLEL content generation (joke + poem + article):
+```python
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from node_runtime import call_tools_parallel
+
+def main():
+    input_data = json.load(sys.stdin)
+
+    topic = input_data.get("topic", "technology")
+
+    # ✅ PARALLEL: Generate joke, poem, and article simultaneously (3x faster!)
+    results = call_tools_parallel([
+        ("content_generator", f"Write a funny joke about {{topic}}"),
+        ("content_generator", f"Write a short poem about {{topic}}"),
+        ("content_generator", f"Write a brief article about {{topic}}")
+    ])
+
+    joke, poem, article = results
+
+    print(json.dumps({{
+        "joke": joke,
+        "poem": poem,
+        "article": article
+    }}))
 
 if __name__ == "__main__":
     main()
@@ -6118,6 +6312,14 @@ def call_tools_parallel(tool_calls: list) -> list:
             # Check if tests were generated
             test_files = list(tests_dir.glob("test_*.py"))
             if not test_files:
+                # Handle Windows pynguin crash (exit code -1 appears as 4294967295)
+                if pynguin_result.returncode in (-1, 4294967295):
+                    console.print(f"[yellow]Pynguin crashed (incompatible with Windows)[/yellow]")
+                    console.print(f"[dim]Falling back to LLM-based test generation...[/dim]")
+                    # Disable pynguin for the rest of this session
+                    self.config.set("testing.use_pynguin", False)
+                    return result
+
                 console.print(f"[yellow]Pynguin did not generate tests (exit code: {pynguin_result.returncode})[/yellow]")
 
                 # Analyze common failure reasons
