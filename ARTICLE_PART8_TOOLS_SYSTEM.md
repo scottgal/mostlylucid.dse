@@ -1884,6 +1884,239 @@ If tools can:
 5. **Meta-tools** - Tools that manage other tools
 6. **Tool migration** - Move popular tools to better backends automatically
 
+## Intelligent Packaging: Tree-Shaking for Deployment
+
+Here's another clever feature: **automatic tree-shaking for exe and Docker packaging**.
+
+When you package a workflow for deployment, the system doesn't blindly bundle everything. It **analyzes usage and pulls only what's needed**.
+
+**The Problem:**
+
+```
+Full DSE system:
+├── 53 tools (all versions)
+├── ~200 total tool variations
+├── Complete RAG memory database
+├── All LLM model definitions
+├── Full dependency tree
+
+Total size: ~500MB Docker image, 200MB exe
+```
+
+If you're deploying a single workflow that uses 3 tools, why ship 53?
+
+**The Solution: Intelligent Tree-Shaking**
+
+```python
+def package_workflow(workflow_id: str, target: str = "docker"):
+    """
+    Package workflow with only necessary tools.
+
+    Args:
+        workflow_id: Workflow to package
+        target: 'docker' or 'exe'
+
+    Returns:
+        Optimized package with minimal dependencies
+    """
+
+    # 1. Analyze workflow dependencies
+    deps = analyze_dependencies(workflow_id)
+    # deps = {
+    #     "tools": ["nmt_translator", "translation_quality_checker"],
+    #     "tool_versions": {"nmt_translator": "2.0.0", "translation_quality_checker": "1.2.0"},
+    #     "llm_models": ["general"],
+    #     "rag_artifacts": [...],  # Only artifacts this workflow references
+    #     "system_tools": ["buffer", "workflow_datastore"]
+    # }
+
+    # 2. Get LATEST versions of used tools only
+    tools_to_package = []
+    for tool_id in deps["tools"]:
+        latest_version = get_latest_tool_version(tool_id)
+        tool_def = load_tool(tool_id, latest_version)
+        tools_to_package.append(tool_def)
+
+    # 3. Recursively find transitive dependencies
+    # (tools used by the tools used by the workflow)
+    all_deps = get_transitive_dependencies(tools_to_package)
+
+    # 4. Extract minimal RAG subset
+    # Only artifacts referenced by this workflow
+    rag_subset = extract_rag_artifacts(deps["rag_artifacts"])
+
+    # 5. Build minimal package
+    package = {
+        "workflow": load_workflow(workflow_id),
+        "tools": all_deps["tools"],          # Only 5 tools, not 53
+        "models": all_deps["models"],        # Only 2 models, not 10
+        "rag_db": rag_subset,                # Only 47 artifacts, not 5000
+        "runtime": minimal_runtime(),        # Stripped runtime
+        "config": minimal_config(all_deps)   # Only relevant config
+    }
+
+    # 6. Package based on target
+    if target == "docker":
+        return build_docker_image(package)
+    elif target == "exe":
+        return build_executable(package)
+```
+
+**Real Example:**
+
+```
+Workflow: article_translator
+Uses tools:
+  - nmt_translator v2.0.0
+  - translation_quality_checker v1.2.0
+
+Dependency analysis:
+  Direct: 2 tools
+  Transitive: +1 (nmt_translator uses tokenizer_util)
+  Total: 3 tools
+
+Models needed:
+  - general (for error handling)
+  - (nmt_translator uses external API, no local model)
+
+RAG artifacts:
+  - 12 cached translations (for this workflow)
+  - 3 validation patterns
+  Total: 15 artifacts (not 5000!)
+
+Package size:
+  Full system: 500MB
+  Tree-shaken: 45MB (91% reduction!)
+```
+
+**Version Selection: Always Latest**
+
+The clever bit: **the packager always pulls the latest, highest-fitness version**.
+
+```python
+def get_latest_tool_version(tool_id: str) -> str:
+    """Get latest version with highest fitness."""
+
+    versions = get_all_versions(tool_id)
+    # versions = [
+    #     {"version": "1.0.0", "fitness": 0.73, "date": "2025-10-01"},
+    #     {"version": "1.5.0", "fitness": 0.81, "date": "2025-10-15"},
+    #     {"version": "2.0.0", "fitness": 0.88, "date": "2025-11-01"}
+    # ]
+
+    # Sort by fitness, then by date
+    sorted_versions = sorted(
+        versions,
+        key=lambda v: (v["fitness"], v["date"]),
+        reverse=True
+    )
+
+    latest = sorted_versions[0]
+
+    logger.info(
+        f"Selected {tool_id} v{latest['version']} "
+        f"(fitness: {latest['fitness']:.2f}, latest: {latest['date']})"
+    )
+
+    return latest["version"]
+```
+
+**Automatic Optimization:**
+
+```bash
+# Package workflow
+$ python package.py article_translator --target docker
+
+Analyzing dependencies...
+  ✓ Found 2 direct tool dependencies
+  ✓ Found 1 transitive dependency
+  ✓ Total tools: 3
+
+Selecting optimal versions...
+  ✓ nmt_translator: v2.0.0 (fitness: 0.88, latest)
+  ✓ translation_quality_checker: v1.2.0 (fitness: 0.91, latest)
+  ✓ tokenizer_util: v3.1.0 (fitness: 0.94, latest)
+
+Extracting minimal RAG subset...
+  ✓ 15 artifacts (vs 5,247 total in full DB)
+
+Building Docker image...
+  ✓ Base image: python:3.11-slim (150MB)
+  ✓ + Runtime: 20MB
+  ✓ + Tools: 8MB
+  ✓ + RAG DB: 12MB
+  ✓ + Config: 2MB
+  ───────────────────
+  Final size: 192MB (vs 650MB full system)
+  Reduction: 70%
+
+Image: article_translator:v1.0.0-20251116
+```
+
+**Executable Packaging:**
+
+```bash
+# Package as Windows/Linux exe
+$ python package.py article_translator --target exe
+
+Analyzing dependencies...
+  (same as above)
+
+Building executable with PyInstaller...
+  ✓ Workflow code: 15KB
+  ✓ Tools (3): 45KB
+  ✓ Runtime: 8MB
+  ✓ RAG DB (embedded SQLite): 2MB
+  ✓ Python interpreter: 12MB
+  ───────────────────
+  Final size: 22MB (vs 180MB full system)
+  Reduction: 88%
+
+Executable: article_translator.exe
+```
+
+**Why This Matters:**
+
+1. **Deployment efficiency** - Only ship what's needed
+2. **Always optimal** - Packages use latest, highest-fitness versions
+3. **Automatic updates** - Repackage = automatic upgrade to new tool versions
+4. **No bloat** - 53 tools in registry, 3 tools in package
+5. **Portable** - Small Docker images, lightweight executables
+
+**The Workflow Evolution Continues in Deployment:**
+
+Here's the wild part: when you repackage later, you automatically get evolved tools.
+
+```
+Day 1: Package article_translator
+  - Uses nmt_translator v2.0.0 (fitness: 0.88)
+  - Package size: 192MB
+
+Day 30: nmt_translator evolves to v3.0.0
+  - Fitness: 0.94 (+6% improvement)
+  - 25% faster
+
+Day 31: Repackage article_translator (no code changes!)
+  - Uses nmt_translator v3.0.0 (automatically!)
+  - Package size: 185MB (evolved tool is smaller!)
+  - Performance: 25% faster
+  - Zero code changes
+```
+
+**Your packaged workflow automatically benefits from tool evolution.**
+
+**Tree-Shaking is Also Directed Evolution:**
+
+Think about it:
+- System tracks which tools are actually used
+- Low-usage tools don't get packaged (selection pressure)
+- High-fitness tools get preferentially included
+- Specialized tools (like article_quality_checker) get selected over general tools
+
+**The packaging process is itself an evolutionary filter.**
+
+Only the fittest, most-used, most-specialized tools make it into production deployments.
+
 ## Conclusion: It's Tools All The Way Down
 
 Here's what Part 7 didn't fully explain:
