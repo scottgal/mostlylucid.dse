@@ -168,7 +168,7 @@ class TestSharedPlanContext(unittest.TestCase):
 
     def test_add_and_retrieve_learning(self):
         """Test adding and retrieving learnings."""
-        from hierarchical_evolver import NodeLearning
+        from src.hierarchical_evolver import NodeLearning
 
         learning = NodeLearning(
             node_id="test_node",
