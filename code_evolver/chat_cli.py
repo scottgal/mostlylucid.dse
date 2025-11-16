@@ -916,15 +916,9 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             console.print("\n[dim]Please try again with a clearer description.[/dim]\n")
             return  # Don't proceed with generation
 
-        # Show friendly feedback about what we understood
-        if task_evaluation.get('understanding'):
-            console.print(f"[cyan]> Understanding: {task_evaluation['understanding']}[/cyan]")
-
-        if task_evaluation.get('key_aspects'):
-            console.print(f"[dim]> Key aspects: {task_evaluation['key_aspects']}[/dim]")
-
-        console.print(f"[dim]> Task type: {task_evaluation['task_type'].value}[/dim]")
-        console.print(f"[dim]> Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
+        # Show task categorization (simplified - no unreliable LLM-generated descriptions)
+        console.print(f"[cyan]> Task type: {task_evaluation['task_type'].value}[/cyan]")
+        console.print(f"[dim]> Routing: {task_evaluation['recommended_tier']}[/dim]")
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:

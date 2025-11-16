@@ -37,8 +37,8 @@ coding:
     name: "Advanced Coding (Tier 3)"
     description: "Complex algorithms, system design, architectural decisions"
     models:
-      primary: "qwen2.5-coder:14b"
-      fallback: ["deepseek-coder:33b", "codellama:34b"]
+      primary: "deepseek-coder-v2:16b"
+      fallback: ["qwen2.5-coder:14b", "deepseek-coder:33b"]
     cost: "high"
     speed: "slow"
     quality: "exceptional"

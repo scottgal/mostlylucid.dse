@@ -103,9 +103,7 @@ class TaskEvaluator:
 Classify as ONE:
 creative_content, arithmetic, data_processing, code_generation, translation, question_answering, formatting, conversion, unknown
 
-CATEGORY: [pick one]
-UNDERSTANDING: [one sentence what user wants]
-KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
+CATEGORY: [pick one only]"""
 
         try:
             response = self.client.generate(
@@ -114,53 +112,34 @@ KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
                 model_key="triage"
             )
 
-            # Parse structured response
+            # Parse structured response - just extract category
             lines = response.strip().split('\n')
             category_line = next((l for l in lines if l.startswith('CATEGORY:')), '')
-            understanding_line = next((l for l in lines if l.startswith('UNDERSTANDING:')), '')
-            aspects_line = next((l for l in lines if l.startswith('KEY_ASPECTS:')), '')
 
             category = category_line.replace('CATEGORY:', '').strip().lower().replace("-", "_")
-            understanding = understanding_line.replace('UNDERSTANDING:', '').strip()
-            key_aspects = aspects_line.replace('KEY_ASPECTS:', '').strip()
 
-            # Fallback: Try to extract from unstructured response
-            if not category or not understanding:
+            # Don't try to parse understanding or key_aspects - tinyllama is too unreliable
+            understanding = ""
+            key_aspects = ""
+
+            # Fallback: Try to extract category from unstructured response
+            if not category:
                 # Try to infer from response content
                 response_lower = response.lower()
 
                 # Extract category from keywords
-                if not category:
-                    if any(word in response_lower for word in ['joke', 'story', 'poem', 'creative', 'article', 'content']):
-                        category = 'creative_content'
-                    elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
-                        category = 'arithmetic'
-                    elif any(word in response_lower for word in ['code', 'function', 'program']):
-                        category = 'code_generation'
-                    elif any(word in response_lower for word in ['question', 'answer', 'explain']):
-                        category = 'question_answering'
-                    elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
-                        category = 'accidental'
-                    else:
-                        category = 'unknown'
-
-                # Extract understanding from first sentence
-                if not understanding:
-                    sentences = response.split('.')
-                    if sentences:
-                        understanding = sentences[0].strip()
-                        # Limit length
-                        if len(understanding) > 150:
-                            understanding = understanding[:147] + "..."
-                    else:
-                        understanding = response[:150] if len(response) > 150 else response
-
-                # Extract key aspects from response
-                if not key_aspects:
-                    aspect_keywords = ['creativity', 'humor', 'complexity', 'data', 'algorithm',
-                                      'performance', 'accuracy', 'storytelling', 'logic']
-                    found_aspects = [kw for kw in aspect_keywords if kw in response_lower]
-                    key_aspects = ', '.join(found_aspects) if found_aspects else 'general task'
+                if any(word in response_lower for word in ['joke', 'story', 'poem', 'creative', 'article', 'content']):
+                    category = 'creative_content'
+                elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
+                    category = 'arithmetic'
+                elif any(word in response_lower for word in ['code', 'function', 'program']):
+                    category = 'code_generation'
+                elif any(word in response_lower for word in ['question', 'answer', 'explain']):
+                    category = 'question_answering'
+                elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
+                    category = 'accidental'
+                else:
+                    category = 'unknown'
 
             # Map to TaskType
             task_type = self._parse_task_type(category)
