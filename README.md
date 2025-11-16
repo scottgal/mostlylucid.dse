@@ -9,11 +9,13 @@ An AI-powered system that generates, executes, evaluates, and optimizes Python c
 Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 
 1. **Understands** your task using intelligent LLM-based classification
-2. **Plans** the optimal approach using an overseer model
-3. **Generates** Python code with appropriate tool selection
-4. **Tests** the code automatically with generated unit tests
-5. **Optimizes** performance through iterative improvement
+2. **Plans** the optimal approach using an overseer model with parallel execution support
+3. **Generates** Python code with appropriate tool selection from multiple LLM backends
+4. **Tests** the code automatically with BDD-enhanced specifications
+5. **Optimizes** performance through iterative improvement and pattern clustering
 6. **Learns** from successful solutions via RAG memory
+7. **Serves** workflows as HTTP APIs for integration with other systems
+8. **Adapts** tools through mutation and targeted optimization commands
 
 ##  Comprehensive Documentation
 
@@ -47,6 +49,20 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
 -  **Platform variants** (same workflow, optimized for Pi/Edge/Cloud)
 -  **Meta-optimization** (system optimizes itself)
 -  **Fine-tuned specialists** created from successful patterns
+
+##  What's New
+
+**Recent Feature Additions:**
+
+- **Multi-Backend LLM Support** - Use Ollama, OpenAI, Anthropic, Azure OpenAI, or LM Studio with automatic fallback
+- **HTTP Server Tool** - Expose workflows as REST APIs with dynamic routing and CORS support
+- **HTTP Content Fetcher** - Comprehensive HTTP client with all methods, auth types, and response formats
+- **Pattern Clustering** - Automatic RAG analysis to identify optimization opportunities and generate parameterized tools
+- **Parallel Execution** - Multi-level parallelism for workflow steps and code-level tool calls
+- **Slash Commands** - `/mutate` and `/optimize` commands for tool improvement and performance tuning
+- **BDD Specifications** - Behavior-driven development support for hierarchical workflow testing
+- **Pattern Recognizer** - Advanced time series analysis with peak detection, changepoints, and anomalies
+- **Optimization Pressure** - Target specific functions or code areas for focused optimization
 
 ```mermaid
 graph TD
@@ -84,14 +100,47 @@ cd code_evolver
 # Install dependencies
 pip install -r requirements.txt
 
-# Install Ollama models
+# Option 1: Use Ollama (local, free)
 ollama pull llama3
 ollama pull codellama
 ollama pull gemma3:4b
 
+# Option 2: Use OpenAI (requires API key)
+export OPENAI_API_KEY="your-api-key"
+
+# Option 3: Use Anthropic Claude (requires API key)
+export ANTHROPIC_API_KEY="your-api-key"
+
+# Option 4: Use Azure OpenAI (requires endpoint and key)
+export AZURE_OPENAI_API_KEY="your-api-key"
+export AZURE_OPENAI_ENDPOINT="your-endpoint"
+
+# Option 5: Use LM Studio (local GGUF models)
+# Start LM Studio server on port 1234
+
 # Optional: Install Qdrant for scalable RAG
 docker run -p 6333:6333 qdrant/qdrant
 ```
+
+### Backend Configuration
+
+Create or modify `config.yaml`:
+
+```yaml
+llm:
+  backend: "ollama"  # or "openai", "anthropic", "azure", "lmstudio"
+
+  # For multi-backend with fallback
+  fallback_backends: ["openai", "anthropic"]
+```
+
+See example configs:
+- `config.ollama.yaml` - Local Ollama setup
+- `config.openai.yaml` - OpenAI GPT-4
+- `config.anthropic.yaml` - Anthropic Claude
+- `config.azure.yaml` - Azure OpenAI
+- `config.lmstudio.yaml` - LM Studio
+- `config.hybrid.yaml` - Multi-backend with fallback
 
 ### Basic Usage
 
@@ -663,6 +712,777 @@ Best version selected: Iteration 3
 
 ##  Advanced Features
 
+### Multi-Backend LLM Support
+
+Code Evolver supports multiple LLM backends with automatic fallback:
+
+```mermaid
+graph TB
+    A[User Request] --> B{Backend Type}
+    B -->|Ollama| C[Local Models<br/>llama3, codellama]
+    B -->|OpenAI| D[GPT-4, GPT-3.5<br/>gpt-4-turbo]
+    B -->|Anthropic| E[Claude 3<br/>claude-3-opus]
+    B -->|Azure| F[Azure OpenAI<br/>Custom deployment]
+    B -->|LM Studio| G[Local LM Studio<br/>Any GGUF model]
+
+    C --> H[LLM Client Factory]
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+
+    H --> I[Unified Interface]
+    I --> J[Generate Response]
+```
+
+**Supported Backends:**
+
+| Backend | Description | Use Case |
+|---------|-------------|----------|
+| **Ollama** | Local open-source models | Privacy, offline, no API costs |
+| **OpenAI** | GPT-4, GPT-3.5 | High quality, fast inference |
+| **Anthropic** | Claude 3 Opus/Sonnet | Complex reasoning, long context |
+| **Azure OpenAI** | Enterprise OpenAI | Corporate compliance, SLAs |
+| **LM Studio** | Local GGUF models | Custom fine-tuned models |
+
+**Configuration Example:**
+
+```yaml
+# config.yaml
+llm:
+  backend: "ollama"  # Primary backend
+  fallback_backends: ["openai", "anthropic"]  # Automatic fallback
+
+  ollama:
+    base_url: "http://localhost:11434"
+
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    base_url: "https://api.openai.com/v1"
+
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    base_url: "https://api.anthropic.com"
+
+  azure:
+    api_key: "${AZURE_OPENAI_API_KEY}"
+    endpoint: "${AZURE_OPENAI_ENDPOINT}"
+    deployment_name: "gpt-4"
+
+  lmstudio:
+    base_url: "http://localhost:1234/v1"
+```
+
+**Using Multi-Backend Client:**
+
+```python
+from src.llm_client_factory import LLMClientFactory
+
+# Create client with fallback support
+client = LLMClientFactory.create_multi_backend_client(
+    config_manager=config,
+    primary_backend="ollama",
+    fallback_backends=["openai", "anthropic"]
+)
+
+# Automatically tries ollama first, falls back to openai/anthropic if unavailable
+response = client.generate(
+    model="llama3",
+    prompt="Explain quantum computing",
+    temperature=0.7
+)
+```
+
+### HTTP Server Tool: Workflows as APIs
+
+Expose your workflows as HTTP endpoints with automatic routing and request handling.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant HTTPServer as HTTP Server
+    participant Workflow as Workflow Engine
+    participant LLM
+    participant Database
+
+    Client->>HTTPServer: POST /api/translate
+    HTTPServer->>Workflow: Execute translation_workflow
+    Workflow->>LLM: Translate text
+    LLM-->>Workflow: Translation result
+    Workflow->>Database: Store in RAG
+    Workflow-->>HTTPServer: {"result": "translated"}
+    HTTPServer-->>Client: 200 OK + JSON response
+```
+
+**Features:**
+- Start/stop HTTP servers dynamically
+- Register routes with GET, POST, PUT, DELETE support
+- Route requests to workflow handlers
+- JSON and HTML response types
+- CORS support for web applications
+- Error handling and logging
+
+**Example Usage:**
+
+```python
+from src.http_server_tool import HTTPServerTool
+
+# Create HTTP server
+server = HTTPServerTool(host="0.0.0.0", port=8080)
+
+# Add JSON API endpoint
+server.add_route(
+    path="/api/translate",
+    methods=["POST"],
+    handler=lambda data: {
+        "result": translate_text(data["text"], data["target_lang"])
+    },
+    response_type="json"
+)
+
+# Add HTML endpoint
+server.add_route(
+    path="/",
+    methods=["GET"],
+    handler=lambda: "<h1>Translation API</h1><p>POST to /api/translate</p>",
+    response_type="html"
+)
+
+# Start server in background
+server.start(blocking=False)
+```
+
+**Workflow Integration:**
+
+```python
+from src.http_server_tool import WorkflowHTTPAdapter
+
+adapter = WorkflowHTTPAdapter(workflow_manager, tools_manager)
+
+# Create server for workflow
+server = adapter.create_server("api_server", port=8080)
+
+# Register workflow as endpoint
+adapter.register_workflow_endpoint(
+    server_id="api_server",
+    workflow_id="translation_pipeline",
+    path="/api/translate",
+    methods=["POST"]
+)
+
+adapter.start_server("api_server")
+```
+
+**Example API Response:**
+
+```bash
+curl -X POST http://localhost:8080/api/translate \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello", "target_lang": "es"}'
+
+# Response:
+{
+  "workflow_id": "translation_pipeline",
+  "status": "success",
+  "output": "Hola"
+}
+```
+
+### HTTP Content Fetcher: Comprehensive HTTP Client
+
+A powerful HTTP client supporting all methods, authentication types, and response formats.
+
+**Features:**
+- All HTTP methods: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
+- All body types: JSON, form-data, multipart, XML, text, binary
+- Authentication: Bearer, API Key, Basic, Digest, Custom Headers
+- Response formats: JSON, text, binary (auto-detect)
+- Retry logic with exponential backoff
+- File upload/download with streaming
+- Proxy support and SSL/TLS configuration
+
+**Example Usage:**
+
+```python
+from src.http_content_fetcher import HTTPContentFetcher
+
+# Initialize fetcher
+fetcher = HTTPContentFetcher(
+    default_timeout=30,
+    max_retries=3,
+    verify_ssl=True
+)
+
+# GET request with parameters
+result = fetcher.get(
+    url="https://api.example.com/data",
+    params={"limit": 10, "offset": 0},
+    headers={"Accept": "application/json"}
+)
+
+# POST with JSON body and Bearer auth
+result = fetcher.post(
+    url="https://api.example.com/create",
+    body={"name": "Test", "value": 123},
+    body_type="json",
+    auth={
+        "type": "bearer",
+        "token": "your-api-token"
+    }
+)
+
+# File upload
+result = fetcher.upload_file(
+    url="https://api.example.com/upload",
+    file_path="/path/to/file.pdf",
+    field_name="document",
+    additional_data={"description": "Important document"}
+)
+
+# File download with streaming
+result = fetcher.download_file(
+    url="https://example.com/large-file.zip",
+    save_path="/path/to/save/file.zip",
+    chunk_size=8192
+)
+```
+
+**Integration with Workflows:**
+
+```yaml
+# tools.yaml
+tools:
+  api_client:
+    name: "API Client"
+    type: "http_fetcher"
+    description: "Fetch data from REST APIs"
+    http:
+      default_timeout: 30
+      max_retries: 3
+      retry_backoff_factor: 0.3
+    tags: ["http", "api", "fetching"]
+```
+
+**Generated Code Example:**
+
+```python
+import json
+import sys
+from node_runtime import call_tool
+
+def main():
+    input_data = json.load(sys.stdin)
+    url = input_data.get("url")
+
+    # Use HTTP fetcher tool
+    result = call_tool("http_content_fetcher", {
+        "url": url,
+        "method": "GET",
+        "response_format": "json"
+    })
+
+    print(json.dumps({"result": result["data"]}))
+```
+
+### Pattern Clustering & RAG Optimization
+
+Automatically analyzes RAG memory to find patterns and suggest parameterized tools for optimization.
+
+```mermaid
+graph TB
+    A[RAG Memory] --> B[Pattern Clusterer]
+    B --> C{Analyze Artifacts}
+
+    C --> D[Cluster 1<br/>Translation Tasks]
+    C --> E[Cluster 2<br/>HTTP Fetching]
+    C --> F[Cluster 3<br/>Data Processing]
+
+    D --> G[Extract Parameters<br/>target_language]
+    E --> H[Extract Parameters<br/>source_url, method]
+    F --> I[Extract Parameters<br/>output_format]
+
+    G --> J[Suggested Tool<br/>translate_text]
+    H --> K[Suggested Tool<br/>fetch_from_url]
+    I --> L[Suggested Tool<br/>process_data]
+
+    J --> M[Tool Definition YAML]
+    K --> M
+    L --> M
+
+    M --> N[Register in Tools Manager]
+    N --> O[Reusable Across Workflows]
+```
+
+**How It Works:**
+
+1. **Analyze RAG memory** for similar operations
+2. **Cluster similar patterns** using cosine similarity
+3. **Extract common parameters** from descriptions
+4. **Generate parameterized tools** for reuse
+5. **Calculate optimization potential** based on frequency
+
+**Example Analysis:**
+
+```python
+from src.pattern_clusterer import PatternClusterer
+
+# Initialize with RAG memory
+clusterer = PatternClusterer(
+    rag_memory=rag,
+    min_cluster_size=3,
+    similarity_threshold=0.75
+)
+
+# Analyze patterns
+clusters = clusterer.analyze_patterns()
+
+for cluster in clusters:
+    print(f"Operation Type: {cluster.operation_type}")
+    print(f"Similarity: {cluster.similarity_score:.2f}")
+    print(f"Suggested Tool: {cluster.suggested_tool_name}")
+    print(f"Parameters: {cluster.suggested_parameters}")
+    print(f"Optimization Potential: {cluster.optimization_potential:.2f}")
+```
+
+**Example Output:**
+
+```
+Operation Type: translation
+Similarity: 0.87
+Suggested Tool: translate_text
+Parameters: ['target_language']
+Optimization Potential: 0.72
+Examples:
+  - Translate to French
+  - Translate to Spanish
+  - Translate to German
+```
+
+**Generate Tool Definition:**
+
+```python
+tool_def = clusterer.generate_tool_definition(cluster)
+
+# Results in:
+{
+  "name": "Translate Text",
+  "type": "llm",
+  "description": "Performs translation with parameterized inputs",
+  "parameters": ["target_language"],
+  "llm": {"model": "llama3"},
+  "tags": ["translation", "parameterized", "optimized"],
+  "cluster_info": {
+    "similarity_score": 0.87,
+    "artifact_count": 12
+  }
+}
+```
+
+**Optimization Pressure Targeting:**
+
+```python
+# Focus optimization on specific function/code
+clusters = clusterer.analyze_patterns(target_filter="translate")
+
+# Only analyzes artifacts related to translation
+# Applies "optimization pressure" to that specific area
+```
+
+### Parallel Workflow Execution
+
+Execute independent workflow steps concurrently for faster completion.
+
+```mermaid
+graph TB
+    subgraph "Sequential Execution (11s)"
+        S1[Step 1: Write joke<br/>5s] --> S2[Step 2: Translate FR<br/>3s]
+        S2 --> S3[Step 3: Translate ES<br/>3s]
+    end
+
+    subgraph "Parallel Execution (8s)"
+        P1[Step 1: Write joke<br/>5s] --> P2[Step 2: Translate FR<br/>3s]
+        P1 --> P3[Step 3: Translate ES<br/>3s]
+    end
+```
+
+**Multi-Level Parallelism:**
+
+**Level 1: Workflow Step Parallelism**
+
+```json
+{
+  "steps": [
+    {
+      "step_id": "step1",
+      "description": "Write a joke",
+      "parallel_group": null,
+      "depends_on": []
+    },
+    {
+      "step_id": "step2",
+      "description": "Translate to French",
+      "parallel_group": 1,
+      "depends_on": ["step1"]
+    },
+    {
+      "step_id": "step3",
+      "description": "Translate to Spanish",
+      "parallel_group": 1,
+      "depends_on": ["step1"]
+    }
+  ]
+}
+```
+
+**Level 2: Code-Level Parallelism**
+
+```python
+from node_runtime import call_tools_parallel
+
+def main():
+    input_data = json.load(sys.stdin)
+    content = input_data.get("content", "")
+
+    # Execute multiple tools in parallel
+    results = call_tools_parallel([
+        ("nmt_translator", f"Translate to french: {content}", {"target_lang": "fr"}),
+        ("nmt_translator", f"Translate to spanish: {content}", {"target_lang": "es"}),
+        ("nmt_translator", f"Translate to german: {content}", {"target_lang": "de"})
+    ])
+
+    french, spanish, german = results
+
+    return {
+        "french": french,
+        "spanish": spanish,
+        "german": german
+    }
+```
+
+**Dependency Analysis:**
+
+```mermaid
+graph LR
+    A[Analyze Task] --> B{Find Dependencies}
+    B -->|Data Dependency| C[Sequential: depends_on]
+    B -->|Independent| D[Parallel: same group]
+    C --> E[Execute in Order]
+    D --> F[Execute Concurrently]
+    F --> G[ThreadPoolExecutor]
+    G --> H[Wait for Completion]
+    H --> I[Next Group]
+```
+
+**Performance Benefits:**
+
+| Scenario | Sequential | Parallel | Speedup |
+|----------|-----------|----------|---------|
+| 3 independent jokes | 15s | 5s | 3× |
+| 1 joke + 3 translations | 14s | 8s | 1.75× |
+| 5 A/B test headlines | 25s | 5s | 5× |
+
+**Usage Example:**
+
+```bash
+CodeEvolver> write a joke and translate to french and spanish
+
+> Task classified as MULTI_STEP_WORKFLOW
+> Decomposing into parallel workflow...
+
+Workflow Plan (3 steps):
+  1. Write a joke [sequential]
+  2. Translate to French [parallel group 1]
+  3. Translate to Spanish [parallel group 1]
+
+Executing step 1: Write a joke
+✓ Completed in 5s
+
+Executing 2 steps in parallel:
+  - Translate to French
+  - Translate to Spanish
+✓ Both completed in 3s (parallel execution)
+
+Total time: 8s (vs 11s sequential)
+```
+
+### Slash Commands for Tool Management
+
+Powerful CLI commands for managing and optimizing tools.
+
+**Available Commands:**
+
+```bash
+/tools                                  # List all available tools
+/mutate tool <tool_id> <instructions>   # Improve a tool
+/optimize tool <tool_id> [target]       # Optimize for performance/quality
+/backends [--test]                      # Check LLM backend status
+/workflow <node_id>                     # Display workflow for node
+/list                                   # List all nodes in registry
+```
+
+**Command: /mutate tool**
+
+Improve a tool based on natural language instructions.
+
+```bash
+CodeEvolver> /mutate tool my_translator make it support more languages
+
+> Analyzing tool: my_translator
+> Current implementation: Supports English, French, Spanish
+> Applying mutation: "make it support more languages"
+
+Generating improved version:
+  ✓ Added support for German, Italian, Portuguese
+  ✓ Updated language detection
+  ✓ Improved error handling for unsupported languages
+
+Testing improved tool:
+  ✓ All existing tests pass
+  ✓ New language tests pass
+
+Optimization metrics:
+  Quality: 1.15× improvement
+  Coverage: 3 → 6 languages
+
+Tool updated successfully.
+```
+
+**Command: /optimize tool**
+
+Iteratively optimize a tool for specific targets.
+
+```bash
+CodeEvolver> /optimize tool data_processor performance
+
+> Starting optimization for 'data_processor'
+> Target: performance
+> Iterations: 3
+
+Iteration 1:
+  Current: 1200ms, 3.5MB
+  Optimization: Use list comprehension instead of loop
+  Result: 1100ms, 3.2MB (8% faster)
+
+Iteration 2:
+  Current: 1100ms, 3.2MB
+  Optimization: Add caching for repeated operations
+  Result: 850ms, 2.8MB (23% faster overall)
+
+Iteration 3:
+  Current: 850ms, 2.8MB
+  Optimization: Use generator for memory efficiency
+  Result: 820ms, 2.1MB (32% faster, 40% less memory)
+
+Best version selected: Iteration 3
+Performance improvement: 32%
+Memory improvement: 40%
+```
+
+**Optimization Targets:**
+
+| Target | Focus | Metrics |
+|--------|-------|---------|
+| `performance` | Speed | Latency, throughput |
+| `quality` | Accuracy | Correctness, robustness |
+| `memory` | Efficiency | Memory usage, allocations |
+| `latency` | Response time | Time to first output |
+
+**Command: /backends**
+
+Check status of all configured LLM backends.
+
+```bash
+CodeEvolver> /backends --test
+
+Checking backend configurations...
+
+✓ Ollama
+  Status: Connected
+  URL: http://localhost:11434
+  Models: llama3, codellama, gemma3:4b (3 models)
+
+✓ OpenAI
+  Status: Authenticated
+  Models: gpt-4, gpt-3.5-turbo
+  Organization: your-org-name
+
+✗ Anthropic
+  Status: Missing API key
+  Fix: Set ANTHROPIC_API_KEY environment variable
+
+✓ LM Studio
+  Status: Connected
+  URL: http://localhost:1234/v1
+  Models: custom-fine-tuned-model
+
+Summary: 3/4 backends operational
+```
+
+### BDD-Enhanced Workflow Specifications
+
+Behavior-driven development specifications for hierarchical testing.
+
+**Workflow Specification Structure:**
+
+```python
+from src.workflow_spec import WorkflowSpec, WorkflowStep, StepType
+
+# Define workflow
+spec = WorkflowSpec(
+    workflow_id="translation_pipeline",
+    name="Multi-Language Translation",
+    description="Translate content to multiple languages",
+    inputs=[
+        WorkflowInput("text", "string", required=True),
+        WorkflowInput("languages", "array", required=True)
+    ],
+    outputs=[
+        WorkflowOutput("translations", "object", source_reference="steps.combine.output")
+    ],
+    steps=[
+        WorkflowStep(
+            step_id="translate_fr",
+            step_type=StepType.LLM_CALL,
+            tool_name="nmt_translator",
+            input_mapping={"text": "${inputs.text}", "target_lang": "fr"},
+            parallel_group=1,
+            depends_on=[]
+        ),
+        WorkflowStep(
+            step_id="translate_es",
+            step_type=StepType.LLM_CALL,
+            tool_name="nmt_translator",
+            input_mapping={"text": "${inputs.text}", "target_lang": "es"},
+            parallel_group=1,
+            depends_on=[]
+        )
+    ]
+)
+
+# Export to JSON
+with open("translation_pipeline.json", "w") as f:
+    json.dump(spec.to_dict(), f, indent=2)
+```
+
+**BDD Test Specification:**
+
+```yaml
+# translation_pipeline.bdd.yaml
+feature: Multi-Language Translation Pipeline
+
+scenarios:
+  - name: Translate to multiple languages
+    given:
+      - Text input: "Hello, world!"
+      - Target languages: ["fr", "es", "de"]
+    when:
+      - Translation workflow executes
+    then:
+      - All translations are present
+      - French translation contains "Bonjour"
+      - Spanish translation contains "Hola"
+      - German translation contains "Hallo"
+      - Execution time < 10 seconds
+
+  - name: Handle empty input
+    given:
+      - Text input: ""
+      - Target languages: ["fr"]
+    when:
+      - Translation workflow executes
+    then:
+      - Returns empty translation
+      - No errors are raised
+```
+
+**Tool-Level BDD:**
+
+```yaml
+# nmt_translator.bdd.yaml
+tool: nmt_translator
+
+behaviors:
+  - behavior: Translate English to French
+    input:
+      text: "Good morning"
+      source_lang: "en"
+      target_lang: "fr"
+    expected:
+      result_contains: "Bonjour"
+      confidence: ">= 0.8"
+
+  - behavior: Preserve formatting
+    input:
+      text: "Line 1\nLine 2"
+      target_lang: "es"
+    expected:
+      result_contains: "\n"
+      line_count: 2
+
+  - behavior: Handle special characters
+    input:
+      text: "Price: $100.00"
+      target_lang: "de"
+    expected:
+      result_contains: "$"
+      result_contains: "100"
+```
+
+### Pattern Recognizer with Scikit-Learn
+
+Advanced pattern recognition for data streams with statistical analysis.
+
+**Features:**
+- Peak and valley detection
+- Trend and changepoint detection
+- Anomaly and outlier detection
+- Time series motif discovery
+
+**Example Usage:**
+
+```python
+from examples.pattern_recognizer import detect_patterns
+
+# Sample data
+data = [10, 12, 15, 13, 20, 25, 22, 18, 30, 15, 12]
+
+# Detect patterns
+results = detect_patterns(
+    data=data,
+    sensitivity=2.0  # Standard deviations for anomaly detection
+)
+
+print(results)
+# {
+#   "peaks": [4, 8],           # Indices of peaks
+#   "valleys": [0, 10],        # Indices of valleys
+#   "changepoints": [4, 8],    # Trend changes
+#   "anomalies": [8],          # Outliers
+#   "summary": {
+#     "total_patterns": 4,
+#     "peak_count": 2,
+#     "anomaly_count": 1
+#   }
+# }
+```
+
+**Integration with Workflows:**
+
+```yaml
+# tools.yaml
+tools:
+  pattern_analyzer:
+    name: "Pattern Analyzer"
+    type: "python"
+    description: "Detect patterns in time series data"
+    module: "examples.pattern_recognizer"
+    function: "detect_patterns"
+    parameters:
+      - data: array
+      - sensitivity: float
+    tags: ["analysis", "pattern-recognition", "statistics"]
+```
+
 ### Adaptive Escalation
 
 When code fails tests, the system automatically escalates through multiple attempts:
@@ -780,14 +1600,28 @@ pip install flake8 pylint mypy black
 
 This is an experimental project. Contributions welcome!
 
-### Areas for Improvement
+### Recent Improvements
 
-- [ ] More sophisticated optimization algorithms
-- [ ] Better error handling and recovery
-- [ ] Additional LLM tool integrations
+- [x] Multi-backend LLM support (Ollama, OpenAI, Anthropic, Azure, LM Studio)
+- [x] HTTP server tool for workflow-as-API
+- [x] Comprehensive HTTP client with all methods and auth types
+- [x] Pattern clustering for RAG optimization
+- [x] Parallel workflow execution (multi-level)
+- [x] Tool mutation and optimization commands
+- [x] BDD-enhanced workflow specifications
+- [x] Pattern recognizer with statistical analysis
+
+### Areas for Future Enhancement
+
+- [ ] Async/await support for I/O-bound operations
+- [ ] Resource-aware scheduling (limit concurrent LLM calls)
+- [ ] GPU-aware parallelism for local LLMs
 - [ ] Web UI for easier interaction
 - [ ] Distributed execution across machines
 - [ ] More comprehensive test coverage
+- [ ] GraphQL API support
+- [ ] Streaming response support for real-time workflows
+- [ ] Workflow visualization and debugging tools
 
 ##  License
 
