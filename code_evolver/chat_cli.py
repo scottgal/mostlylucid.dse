@@ -909,7 +909,7 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         # Check if input appears accidental
         if task_evaluation.get('is_accidental'):
-            console.print(f"\n[yellow]⚠ {task_evaluation['understanding']}[/yellow]\n")
+            console.print(f"\n[yellow]! {task_evaluation['understanding']}[/yellow]\n")
             console.print("[cyan]Did you mean to:[/cyan]")
             for suggestion in task_evaluation.get('suggestions', []):
                 console.print(f"  [dim]• {suggestion}[/dim]")
@@ -918,17 +918,17 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         # Show friendly feedback about what we understood
         if task_evaluation.get('understanding'):
-            console.print(f"[cyan]→ Understanding: {task_evaluation['understanding']}[/cyan]")
+            console.print(f"[cyan]> Understanding: {task_evaluation['understanding']}[/cyan]")
 
         if task_evaluation.get('key_aspects'):
-            console.print(f"[dim]→ Key aspects: {task_evaluation['key_aspects']}[/dim]")
+            console.print(f"[dim]> Key aspects: {task_evaluation['key_aspects']}[/dim]")
 
-        console.print(f"[dim]→ Task type: {task_evaluation['task_type'].value}[/dim]")
-        console.print(f"[dim]→ Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
+        console.print(f"[dim]> Task type: {task_evaluation['task_type'].value}[/dim]")
+        console.print(f"[dim]> Routing: {task_evaluation['recommended_tier']} ({task_evaluation['reason']})[/dim]")
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:
-            console.print("[yellow]→ Creative content task detected - will use LLM content generator[/yellow]")
+            console.print("[yellow]> Creative content task detected - will use LLM content generator[/yellow]")
 
         # Step 1: Check for existing solutions in RAG (both code and workflows)
         workflow.add_step("check_existing", "rag", "Check for existing solutions in RAG")
@@ -1474,8 +1474,13 @@ The code generator will follow this specification EXACTLY, so include ALL critic
         self.display.complete_stage("Thinking", "Specification complete")
 
         # Always show the specification to the user
-        console.print(f"\n[bold cyan]📋 Technical Specification ({len(specification)} chars):[/bold cyan]")
-        console.print(Panel(specification, title="Specification from Overseer", border_style="cyan", box=box.ROUNDED))
+        # Sanitize specification to remove Unicode characters that cause encoding issues on Windows
+        sanitized_spec = specification.replace('→', '->').replace('←', '<-').replace('↔', '<->').replace('⇒', '=>')
+        sanitized_spec = sanitized_spec.replace('•', '*').replace('…', '...').replace('—', '--').replace(''', "'").replace(''', "'")
+        sanitized_spec = sanitized_spec.replace('"', '"').replace('"', '"').replace('–', '-')
+
+        console.print(f"\n[bold cyan][SPEC] Technical Specification ({len(specification)} chars):[/bold cyan]")
+        console.print(Panel(sanitized_spec, title="Specification from Overseer", border_style="cyan", box=box.ROUNDED))
         console.print()
 
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
@@ -2096,9 +2101,28 @@ from node_runtime import call_tool
 
         # CRITICAL: Strip out any logging calls that LLM might have added
         # This prevents "NameError: name 'logger' is not defined" errors
-        if 'logger.' in code or 'logging.' in code:
+        if 'logger' in code or 'logging' in code:
             console.print("[cyan]Removing logging calls from generated code...[/cyan]")
             code = self._remove_debug_logging(code)
+            console.print("[dim]Logging calls removed[/dim]")
+
+        # SAFETY NET: Add dummy logger if code still references logger
+        # This catches any logging calls that slipped through
+        if 'logger' in code and 'import logging' not in code:
+            console.print("[yellow]Warning: Code references 'logger' - adding dummy logger safety net[/yellow]")
+            dummy_logger = """
+# DUMMY LOGGER - Catches accidental logging calls
+class _DummyLogger:
+    def __getattr__(self, name):
+        def dummy(*args, **kwargs):
+            import sys
+            print(f"[DEBUG] logger.{name} called (stripped in production)", file=sys.stderr)
+            return None
+        return dummy
+logger = _DummyLogger()
+
+"""
+            code = dummy_logger + code
 
         # Validate and fix code if needed
         is_valid, error_msg = self._validate_python_code(code)
@@ -2356,7 +2380,7 @@ from node_runtime import call_tool
                     auto_embed=True
                 )
 
-                console.print(f"[green]✨ Created reusable committee tool: {committee_id}[/green]")
+                console.print(f"[green]* Created reusable committee tool: {committee_id}[/green]")
                 console.print(f"[dim]This workflow can now be reused for similar tasks![/dim]")
 
             except Exception as e:
@@ -3743,7 +3767,7 @@ Return ONLY the JSON object."""
 
             if metrics["success"]:
                 console.print(f"\n[bold green]╔═══════════════════════════════════════╗[/bold green]")
-                console.print(f"[bold green]║   GOD-LEVEL FIX SUCCESSFUL! 🎉       ║[/bold green]")
+                console.print(f"[bold green]║   GOD-LEVEL FIX SUCCESSFUL! !       ║[/bold green]")
                 console.print(f"[bold green]║   The final boss has spoken.        ║[/bold green]")
                 console.print(f"[bold green]╚═══════════════════════════════════════╝[/bold green]\n")
                 return True
@@ -4073,9 +4097,9 @@ Return ONLY the JSON object, nothing else."""
             if primary_backend:
                 primary_result = results.get(primary_backend)
                 if primary_result and primary_result.ready:
-                    console.print(f"[green]✓ Primary backend ({primary_backend}) is ready[/green]")
+                    console.print(f"[green]OK Primary backend ({primary_backend}) is ready[/green]")
                 else:
-                    console.print(f"[yellow]⚠ Primary backend ({primary_backend}) is NOT ready[/yellow]")
+                    console.print(f"[yellow]! Primary backend ({primary_backend}) is NOT ready[/yellow]")
 
             console.print(f"\n[bold]Summary:[/bold] {len(ready_backends)}/{len(results)} backends ready")
 
@@ -4586,7 +4610,7 @@ Return ONLY the JSON, no other text."""
                 impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
                 with open(impl_file, 'w', encoding='utf-8') as f:
                     f.write(improved_data['implementation'])
-                console.print(f"[green]✓ Saved implementation to {impl_file}[/green]")
+                console.print(f"[green]OK Saved implementation to {impl_file}[/green]")
             else:
                 # Create a new implementation file
                 impl_filename = f"{tool_id}.py"
@@ -4594,12 +4618,12 @@ Return ONLY the JSON, no other text."""
                 with open(impl_file, 'w', encoding='utf-8') as f:
                     f.write(improved_data['implementation'])
                 tool.metadata["implementation_file"] = impl_filename
-                console.print(f"[green]✓ Created implementation file: {impl_file}[/green]")
+                console.print(f"[green]OK Created implementation file: {impl_file}[/green]")
 
         # Save the updated tool
         self.tools_manager.register_tool(tool)
 
-        console.print(f"\n[bold green]✓ Tool '{tool_id}' successfully updated![/bold green]\n")
+        console.print(f"\n[bold green]OK Tool '{tool_id}' successfully updated![/bold green]\n")
 
         return True
 
@@ -4727,7 +4751,7 @@ Format as Python code with pytest."""
             with open(test_file_path, 'w', encoding='utf-8') as f:
                 f.write(test_code)
 
-            console.print(f"[green]✓ Generated {len(test_code)} chars of tests[/green]\n")
+            console.print(f"[green]OK Generated {len(test_code)} chars of tests[/green]\n")
 
         except Exception as e:
             console.print(f"[yellow]Warning: Could not generate tests: {e}[/yellow]")
@@ -4748,7 +4772,7 @@ Format as Python code with pytest."""
 
             if metrics.get("exit_code") == 0:
                 baseline_metrics = metrics
-                console.print(f"[green]✓ Baseline metrics collected[/green]")
+                console.print(f"[green]OK Baseline metrics collected[/green]")
                 console.print(f"  Latency: {metrics.get('latency_ms', 0):.2f}ms")
                 console.print(f"  Memory: {metrics.get('memory_mb_peak', 0):.2f}MB")
                 console.print(f"  CPU: {metrics.get('cpu_percent', 0):.1f}%\n")
@@ -4877,7 +4901,7 @@ Return ONLY the JSON, no other text."""
             improvements = optimization_data.get('improvements', [])
             expected_impact = optimization_data.get('expected_impact', '')
 
-            console.print(f"[green]✓ Generated optimized version[/green]")
+            console.print(f"[green]OK Generated optimized version[/green]")
             console.print(f"[dim]Expected impact: {expected_impact}[/dim]")
 
             # Save and test optimized version
@@ -4900,9 +4924,9 @@ Return ONLY the JSON, no other text."""
                     tests_passed = result.returncode == 0
 
                     if tests_passed:
-                        console.print("[green]✓ All tests passed[/green]")
+                        console.print("[green]OK All tests passed[/green]")
                     else:
-                        console.print("[yellow]⚠ Some tests failed[/yellow]")
+                        console.print("[yellow]! Some tests failed[/yellow]")
                         console.print(f"[dim]{result.stdout[:200]}[/dim]")
 
                 except Exception as e:
@@ -4917,7 +4941,7 @@ Return ONLY the JSON, no other text."""
                 )
 
                 if new_metrics.get("exit_code") == 0:
-                    console.print(f"[green]✓ New metrics collected[/green]")
+                    console.print(f"[green]OK New metrics collected[/green]")
                     console.print(f"  Latency: {new_metrics.get('latency_ms', 0):.2f}ms")
                     console.print(f"  Memory: {new_metrics.get('memory_mb_peak', 0):.2f}MB")
                     console.print(f"  CPU: {new_metrics.get('cpu_percent', 0):.1f}%")
@@ -4972,7 +4996,7 @@ Return ONLY the JSON, no other text."""
                         current_code = optimized_code
                         current_metrics = new_metrics
                 else:
-                    console.print("[red]✗ Optimized code failed to execute[/red]")
+                    console.print("[red]X Optimized code failed to execute[/red]")
                     console.print(f"[dim]{stderr[:200]}[/dim]")
 
             except Exception as e:
@@ -5051,14 +5075,14 @@ Return ONLY the JSON, no other text."""
                     impl_file = Path(self.tools_manager.tools_path) / tool.metadata["implementation_file"]
                     with open(impl_file, 'w', encoding='utf-8') as f:
                         f.write(best_iteration['code'])
-                    console.print(f"[green]✓ Saved to {impl_file}[/green]")
+                    console.print(f"[green]OK Saved to {impl_file}[/green]")
                 else:
                     impl_filename = f"{tool_id}.py"
                     impl_file = Path(self.tools_manager.tools_path) / impl_filename
                     with open(impl_file, 'w', encoding='utf-8') as f:
                         f.write(best_iteration['code'])
                     tool.metadata["implementation_file"] = impl_filename
-                    console.print(f"[green]✓ Created {impl_file}[/green]")
+                    console.print(f"[green]OK Created {impl_file}[/green]")
 
                 # Update tool metadata with optimization info
                 tool.metadata["optimized"] = True
@@ -5072,7 +5096,7 @@ Return ONLY the JSON, no other text."""
 
                 # Save to registry
                 self.tools_manager.register_tool(tool)
-                console.print(f"[green]✓ Updated tool registry[/green]")
+                console.print(f"[green]OK Updated tool registry[/green]")
 
                 # Index in RAG if available
                 if self.rag:
@@ -5089,11 +5113,11 @@ Return ONLY the JSON, no other text."""
                                 "optimization_target": optimization_target
                             }
                         )
-                        console.print(f"[green]✓ Indexed in RAG memory[/green]")
+                        console.print(f"[green]OK Indexed in RAG memory[/green]")
                     except Exception as e:
                         console.print(f"[yellow]Warning: Could not index in RAG: {e}[/yellow]")
 
-                console.print(f"\n[bold green]✓ Tool '{tool_id}' successfully optimized![/bold green]\n")
+                console.print(f"\n[bold green]OK Tool '{tool_id}' successfully optimized![/bold green]\n")
             else:
                 console.print("[yellow]Optimization discarded[/yellow]\n")
         else:
