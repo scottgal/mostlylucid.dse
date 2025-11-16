@@ -101,7 +101,9 @@ class SharedPlanContext:
 
                 # Load stats and preferences
                 self.performance_stats = data.get("performance_stats", {})
-                self.strategy_preferences = data.get("strategy_preferences", {})
+                # Convert loaded dict back to defaultdict to maintain type
+                loaded_prefs = data.get("strategy_preferences", {})
+                self.strategy_preferences = defaultdict(list, loaded_prefs)
 
                 logger.info(f"✓ Loaded shared context with {len(self.learnings)} learning entries")
 
