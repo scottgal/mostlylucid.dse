@@ -905,6 +905,15 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         console.print("[dim cyan]> Evaluating task type...[/dim cyan]")
         task_evaluation = self.task_evaluator.evaluate_task_type(description)
 
+        # Check if input appears accidental
+        if task_evaluation.get('is_accidental'):
+            console.print(f"\n[yellow]⚠ {task_evaluation['understanding']}[/yellow]\n")
+            console.print("[cyan]Did you mean to:[/cyan]")
+            for suggestion in task_evaluation.get('suggestions', []):
+                console.print(f"  [dim]• {suggestion}[/dim]")
+            console.print("\n[dim]Please try again with a clearer description.[/dim]\n")
+            return  # Don't proceed with generation
+
         # Show friendly feedback about what we understood
         if task_evaluation.get('understanding'):
             console.print(f"[cyan]→ Understanding: {task_evaluation['understanding']}[/cyan]")

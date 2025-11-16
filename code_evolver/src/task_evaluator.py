@@ -20,6 +20,7 @@ class TaskType(Enum):
     QUESTION_ANSWERING = "question_answering"  # Answer questions → needs LLM
     FORMATTING = "formatting"                  # Text formatting → can use tools
     CONVERSION = "conversion"                  # Unit/format conversion → can use tools
+    ACCIDENTAL = "accidental"                  # Nonsense/accidental input → ask for clarification
     UNKNOWN = "unknown"                        # Needs LLM analysis
 
 
@@ -58,8 +59,28 @@ class TaskEvaluator:
                 - can_use_tools: bool
                 - recommended_tier: str
                 - reason: str
+                - is_accidental: bool
+                - suggestions: list (if accidental)
         """
         input_length = len(description)
+
+        # Quick check for obviously accidental input
+        accidental_check = self._check_if_accidental(description)
+        if accidental_check['is_accidental']:
+            return {
+                "task_type": TaskType.ACCIDENTAL,
+                "understanding": accidental_check['understanding'],
+                "key_aspects": "unclear, needs clarification",
+                "requires_llm": False,
+                "requires_content_llm": False,
+                "can_use_tools": False,
+                "recommended_tier": "none",
+                "reason": "Input appears accidental or unclear",
+                "is_accidental": True,
+                "suggestions": accidental_check['suggestions'],
+                "input_length": input_length,
+                "evaluation_model": "rule-based"
+            }
 
         # Choose model based on input length
         if input_length < self.SHORT_INPUT:
@@ -118,6 +139,8 @@ KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
                         category = 'code_generation'
                     elif any(word in response_lower for word in ['question', 'answer', 'explain']):
                         category = 'question_answering'
+                    elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
+                        category = 'accidental'
                     else:
                         category = 'unknown'
 
@@ -172,6 +195,76 @@ KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
                 "evaluation_model": "none"
             }
 
+    def _check_if_accidental(self, description: str) -> Dict[str, Any]:
+        """
+        Check if input appears to be accidental or nonsense.
+
+        Returns:
+            Dict with is_accidental, understanding, suggestions
+        """
+        desc_lower = description.lower().strip()
+        desc_clean = ''.join(c for c in desc_lower if c.isalnum() or c.isspace())
+        words = desc_lower.split()
+
+        # Patterns that suggest accidental input
+        accidental_patterns = [
+            # Very short nonsense (but allow short math tasks like "add 10 and 20")
+            len(description) <= 2,
+            # Common test inputs (single word only)
+            len(words) == 1 and desc_lower in ['test', 'testing', 'asdf', 'qwerty', 'hello', 'hi', 'abc'],
+            # Just numbers with no context (but allow "add 10 and 20")
+            len(words) == 1 and desc_clean.isdigit(),
+            # Random keypresses (3+ consecutive same char)
+            any(description.count(c * 3) > 0 for c in set(description) if c.isalpha()),
+            # Just punctuation
+            desc_clean == '',
+            # Mostly consonants with no real words (unlikely to be real)
+            len(desc_clean) > 3 and len(words) == 1 and sum(1 for c in desc_clean if c in 'aeiou') < len(desc_clean) * 0.2,
+        ]
+
+        is_accidental = any(accidental_patterns)
+
+        if is_accidental:
+            # Generate helpful suggestions based on what we detected
+            suggestions = []
+
+            if desc_lower in ['test', 'testing']:
+                suggestions = [
+                    "Try: 'write a function to add two numbers'",
+                    "Try: 'create a fibonacci sequence generator'",
+                    "Try: 'write a joke about programming'"
+                ]
+                understanding = "This looks like a test input"
+            elif len(description) <= 2:
+                suggestions = [
+                    "Describe what you want to create",
+                    "Try: 'sort a list of numbers'",
+                    "Try: 'translate text to french'"
+                ]
+                understanding = "Input is too short to understand"
+            elif desc_clean == '':
+                suggestions = [
+                    "Please enter a task description",
+                    "Example: 'write a story about a robot'",
+                    "Example: 'calculate prime numbers'"
+                ]
+                understanding = "No meaningful text detected"
+            else:
+                suggestions = [
+                    "Please rephrase your request more clearly",
+                    "Example: 'write a function that...'",
+                    "Example: 'create a program to...'"
+                ]
+                understanding = "Input is unclear or may be accidental"
+
+            return {
+                'is_accidental': True,
+                'understanding': understanding,
+                'suggestions': suggestions
+            }
+
+        return {'is_accidental': False}
+
     def _parse_task_type(self, category: str) -> TaskType:
         """Parse category string to TaskType enum."""
         try:
@@ -205,6 +298,16 @@ KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
         Returns:
             Dict with requires_llm, requires_content_llm, can_use_tools, recommended_tier, reason
         """
+        # Accidental input - should not proceed
+        if task_type == TaskType.ACCIDENTAL:
+            return {
+                "requires_llm": False,
+                "requires_content_llm": False,
+                "can_use_tools": False,
+                "recommended_tier": "none",
+                "reason": "Input appears accidental or unclear - needs clarification"
+            }
+
         # CRITICAL: Creative content ALWAYS needs LLM (medium+ tier)
         if task_type == TaskType.CREATIVE_CONTENT:
             return {
