@@ -4,6 +4,39 @@
 
 An AI-powered system that generates, executes, evaluates, and optimizes Python code using multiple LLM models. Features intelligent task classification, RAG-powered tool selection, automatic code generation, and self-optimization through iterative improvement.
 
+---
+
+## ⚠️ **IMPORTANT: Prototype/Concept Project - NOT for Production Use**
+
+**This is an experimental research project and proof-of-concept.** It is **NOT suitable for production environments** or scenarios involving untrusted code execution.
+
+### Security Limitations
+
+- **No sandboxing**: Generated code executes as Python subprocesses with full system access
+- **No network restrictions**: Code can make arbitrary HTTP requests and network connections
+- **No filesystem isolation**: Code can read/write any files accessible to the main process
+- **No resource enforcement**: Memory limits are monitored but not enforced
+- **Trusted code only**: System assumes all generated code is trustworthy
+
+### Suitable Use Cases
+
+✅ **Development and experimentation**
+✅ **Educational purposes and learning**
+✅ **Single-user local environments**
+✅ **Research and prototyping**
+
+### NOT Suitable For
+
+❌ **Production deployments**
+❌ **Multi-tenant environments**
+❌ **Untrusted code execution**
+❌ **Internet-facing services**
+❌ **Environments requiring security isolation**
+
+**Use at your own risk.** This project prioritizes rapid experimentation and AI research over security hardening.
+
+---
+
 ##  What It Does
 
 Code Evolver is a **self-assembling, self-optimizing workflow system** that:
