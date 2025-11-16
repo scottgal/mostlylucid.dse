@@ -77,32 +77,14 @@ class TaskEvaluator:
 
         logger.info(f"Evaluating task type with {model} (input length: {input_length} chars)")
 
-        prompt = f"""You are analyzing a user's task request to understand what they want.
+        prompt = f"""Task: "{description}"
 
-Task: "{description}"
+Classify as ONE:
+creative_content, arithmetic, data_processing, code_generation, translation, question_answering, formatting, conversion, unknown
 
-Provide a response in this format:
-CATEGORY: [one category from the list below]
-UNDERSTANDING: [One sentence explaining what you think the user wants]
-KEY_ASPECTS: [Comma-separated list of important aspects: complexity, creativity, data, etc.]
-
-Categories:
-- creative_content: Writing stories, jokes, poems, articles, creative text
-- arithmetic: Math calculations, numerical operations
-- data_processing: Transform/filter/sort data, manipulate structures
-- code_generation: Write code/functions/programs
-- translation: Translate text between languages
-- question_answering: Answer questions, explain concepts
-- formatting: Format text (uppercase, lowercase, etc.)
-- conversion: Convert units, formats
-- unknown: Unclear or complex task
-
-Example:
-CATEGORY: creative_content
-UNDERSTANDING: User wants me to generate a creative joke about artificial intelligence
-KEY_ASPECTS: creativity, humor, storytelling
-
-Your analysis:"""
+CATEGORY: [pick one]
+UNDERSTANDING: [one sentence what user wants]
+KEY_ASPECTS: [comma list: creativity, complexity, etc]"""
 
         try:
             response = self.client.generate(

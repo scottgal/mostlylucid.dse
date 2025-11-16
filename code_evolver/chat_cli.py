@@ -899,6 +899,9 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         self.display.start_workflow(description)
 
         # Step 0: Evaluate task type using tinyllama (fast preprocessing)
+        # NOTE: This is ONLY for routing hints - the original description is ALWAYS
+        # passed to overseer and code generators. task_evaluation just helps us
+        # choose the right tier/model, not replace the original instruction.
         console.print("[dim cyan]> Evaluating task type...[/dim cyan]")
         task_evaluation = self.task_evaluator.evaluate_task_type(description)
 
