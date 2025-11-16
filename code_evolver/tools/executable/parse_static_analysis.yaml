@@ -1,0 +1,82 @@
+name: "Parse Static Analysis Results"
+type: "executable"
+description: "Parse and aggregate static analysis results for test data generation and tool optimization"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/parse_static_analysis.py"
+  stdin_mode: true
+
+input_schema:
+  analysis_file:
+    type: "string"
+    description: "Path to static analysis JSON file"
+    required: false
+  registry_path:
+    type: "string"
+    description: "Path to registry directory with multiple analysis files"
+    required: false
+  extract_schemas:
+    type: "boolean"
+    description: "Extract JSON schemas from analysis for data generation"
+    required: false
+    default: true
+  extract_patterns:
+    type: "boolean"
+    description: "Extract code patterns and common values"
+    required: false
+    default: true
+
+output_schema:
+  schemas:
+    type: "array"
+    description: "Extracted JSON schemas for data generation"
+  patterns:
+    type: "object"
+    description: "Common code patterns and values"
+  quality_metrics:
+    type: "object"
+    description: "Aggregated quality metrics"
+  test_hints:
+    type: "object"
+    description: "Hints for test data generation"
+  success:
+    type: "boolean"
+    description: "Whether parsing succeeded"
+
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "good"
+max_output_length: "long"
+
+tags:
+  - "analysis"
+  - "static-analysis"
+  - "parsing"
+  - "quality-metrics"
+  - "test-data"
+  - "optimization"
+
+examples:
+  - "Parse static analysis for test data hints"
+  - "Extract schemas from analysis results"
+  - "Aggregate quality metrics across tools"
+
+use_cases:
+  - "Generate plausible test data from code analysis"
+  - "Feed analysis results to test generators"
+  - "Extract patterns for RAG storage"
+  - "Quality metrics for tool optimization"
+
+advantages:
+  - "Fast parsing and aggregation"
+  - "Extracts actionable test hints"
+  - "Supports multiple analysis formats"
+  - "RAG-compatible output"
+
+workflow_integration:
+  position: "analysis"
+  trigger: "after static analysis completion"
+  next_step: "feed to test generators or RAG storage"
