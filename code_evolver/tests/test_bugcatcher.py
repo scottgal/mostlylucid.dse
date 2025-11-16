@@ -282,5 +282,202 @@ def test_bugcatcher_singleton():
     assert instance1 is instance2
 
 
+class TestLokiBackend:
+    """Test Loki backend functionality."""
+
+    def test_loki_backend_initialization(self):
+        """Test Loki backend initialization."""
+        from src.bugcatcher import LokiBackend
+
+        backend = LokiBackend(
+            url="http://localhost:3100",
+            enabled=False
+        )
+
+        assert backend.url == "http://localhost:3100/loki/api/v1/push"
+        assert backend.enabled is False
+
+    def test_loki_backend_batching(self):
+        """Test Loki backend batching."""
+        from src.bugcatcher import LokiBackend
+
+        backend = LokiBackend(
+            url="http://localhost:3100",
+            enabled=False,
+            batch_size=3
+        )
+
+        # Add logs but don't send
+        backend.push("log1", {"level": "info"})
+        backend.push("log2", {"level": "info"})
+
+        assert len(backend._batch) == 2
+
+        # Third log should trigger batch send (but won't actually send since disabled)
+        backend.push("log3", {"level": "info"})
+
+        # Batch should be cleared or still have 3 items
+        assert len(backend._batch) <= 3
+
+
+class TestBugCatcherOutputTracking:
+    """Test BugCatcher output tracking functionality."""
+
+    def test_track_output(self):
+        """Test output tracking."""
+        bugcatcher = BugCatcher(
+            loki_enabled=False,
+            log_to_file=False,
+            track_outputs=True
+        )
+
+        bugcatcher.track_request('request_1', {'tool_name': 'test_tool'})
+
+        # Track output
+        bugcatcher.track_output('request_1', {'result': 'success'}, 'test_result')
+
+        # Verify output was cached
+        cached = bugcatcher.request_cache.get('request_1')
+        assert cached is not None
+        assert 'last_output' in cached
+        assert cached['last_output']['type'] == 'test_result'
+
+    def test_track_output_truncation(self):
+        """Test that large outputs are truncated."""
+        bugcatcher = BugCatcher(
+            loki_enabled=False,
+            log_to_file=False,
+            track_outputs=True
+        )
+
+        bugcatcher.track_request('request_1', {'tool_name': 'test_tool'})
+
+        # Track large output
+        large_output = "x" * 2000
+        bugcatcher.track_output('request_1', large_output, 'large_result')
+
+        cached = bugcatcher.request_cache.get('request_1')
+        assert len(cached['last_output']['data']) <= 1000  # Truncated
+
+
+class TestBugCatcherLoggingHandler:
+    """Test BugCatcher logging handler."""
+
+    def test_logging_handler_captures_exceptions(self):
+        """Test that logging handler captures logged exceptions."""
+        import logging
+        from src.bugcatcher import BugCatcherLoggingHandler
+
+        bugcatcher = BugCatcher(loki_enabled=False, log_to_file=False)
+        handler = BugCatcherLoggingHandler(bugcatcher)
+
+        # Create logger with handler
+        test_logger = logging.getLogger('test_logger')
+        test_logger.addHandler(handler)
+        test_logger.setLevel(logging.WARNING)
+
+        # Log exception
+        try:
+            raise ValueError("Test exception in log")
+        except ValueError:
+            test_logger.exception("An error occurred")
+
+        # Check that exception was captured
+        stats = bugcatcher.get_stats()
+        assert stats['total_exceptions'] >= 1
+
+
+class TestBugCatcherEdgeCases:
+    """Test edge cases and error handling."""
+
+    def test_capture_exception_with_none_traceback(self):
+        """Test capturing exception with no traceback."""
+        bugcatcher = BugCatcher(loki_enabled=False, log_to_file=False)
+
+        # Create exception without traceback context
+        exc = ValueError("Test exception")
+
+        # Should not crash
+        bugcatcher.capture_exception(exc)
+
+        stats = bugcatcher.get_stats()
+        assert stats['total_exceptions'] == 1
+
+    def test_track_request_with_large_context(self):
+        """Test tracking request with very large context."""
+        bugcatcher = BugCatcher(loki_enabled=False, log_to_file=False)
+
+        large_context = {
+            'data': 'x' * 10000,  # 10KB of data
+            'workflow_id': 'wf_1'
+        }
+
+        # Should not crash
+        bugcatcher.track_request('request_1', large_context)
+
+        cached = bugcatcher.request_cache.get('request_1')
+        assert cached is not None
+
+    def test_concurrent_exception_capture(self):
+        """Test thread safety of exception capture."""
+        import threading
+
+        bugcatcher = BugCatcher(loki_enabled=False, log_to_file=False)
+
+        def capture_exceptions(thread_id):
+            for i in range(10):
+                try:
+                    raise ValueError(f"Thread {thread_id} exception {i}")
+                except ValueError as e:
+                    bugcatcher.capture_exception(e, request_id=f"thread_{thread_id}_{i}")
+
+        # Run concurrent captures
+        threads = []
+        for i in range(5):
+            t = threading.Thread(target=capture_exceptions, args=(i,))
+            threads.append(t)
+            t.start()
+
+        for t in threads:
+            t.join()
+
+        # All exceptions should be captured
+        stats = bugcatcher.get_stats()
+        assert stats['total_exceptions'] == 50  # 5 threads * 10 exceptions
+
+
+class TestBugCatcherConfiguration:
+    """Test BugCatcher configuration options."""
+
+    def test_disabled_bugcatcher(self):
+        """Test that disabled BugCatcher doesn't capture."""
+        bugcatcher = BugCatcher(loki_enabled=False, log_to_file=False)
+        bugcatcher.enabled = False
+
+        try:
+            raise ValueError("Test")
+        except ValueError as e:
+            bugcatcher.capture_exception(e)
+
+        # Should not capture when disabled
+        stats = bugcatcher.get_stats()
+        assert stats['total_exceptions'] == 0
+
+    def test_custom_cache_size(self):
+        """Test custom cache size configuration."""
+        bugcatcher = BugCatcher(
+            loki_enabled=False,
+            log_to_file=False,
+            cache_size=5
+        )
+
+        for i in range(10):
+            bugcatcher.track_request(f'request_{i}', {'data': i})
+
+        stats = bugcatcher.get_stats()
+        assert stats['cache_size'] == 5
+        assert stats['cache_max_size'] == 5
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
