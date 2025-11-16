@@ -1,0 +1,29 @@
+name: "Environment File Generator"
+type: "executable"
+description: "Generates .env and .env.example files with complete configuration documentation for Docker containers"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/env_file_generator.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON configuration with: tool_id, port, llm_config (optional dict), additional_vars (optional dict)"
+
+output_schema:
+  success: "bool - Whether generation was successful"
+  env_file: "str - Generated .env file content"
+  env_example: "str - Generated .env.example file with documentation"
+  instructions: "str - Detailed configuration instructions"
+  error: "str - Error message if generation failed"
+
+tags:
+  - environment
+  - configuration
+  - docker
+  - dotenv
+  - settings

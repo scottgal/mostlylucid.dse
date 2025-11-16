@@ -1,0 +1,27 @@
+name: "Docker Helper Scripts Generator"
+type: "executable"
+description: "Generates helper scripts (build.sh, run.sh, test.sh, stop.sh) for Docker packages"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/docker_helper_scripts_generator.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON configuration with: service_name, port"
+
+output_schema:
+  success: "bool - Whether generation was successful"
+  scripts: "dict - Dictionary of script names to content"
+  error: "str - Error message if generation failed"
+
+tags:
+  - docker
+  - scripts
+  - automation
+  - devops
+  - helpers

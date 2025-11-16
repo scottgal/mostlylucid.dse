@@ -1,0 +1,32 @@
+name: "Dependency Analyzer"
+type: "executable"
+description: "Analyzes tool dependencies using RAG and metadata for tree shaking. Recursively resolves all required tools, files, and packages to create minimal deployments."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/dependency_analyzer.py", "{config_json}"]
+
+input_schema:
+  config_json: "str - JSON with: tool_id (required), tools_root (default: code_evolver/tools), include_rag (default: false)"
+
+output_schema:
+  success: "bool - Whether analysis was successful"
+  tool_id: "str - Analyzed tool ID"
+  dependencies: "dict - All dependencies: {tools, tool_files, python_files, python_packages, core_modules, llm_providers, config_files}"
+  requirements_txt: "str - Generated requirements.txt content"
+  file_list: "list - Complete list of files to copy"
+  stats: "dict - Statistics: {total_tools, total_files, total_packages, estimated_size_kb}"
+  error: "str - Error message if analysis failed"
+
+tags:
+  - dependencies
+  - tree-shaking
+  - optimization
+  - analysis
+  - packaging
+  - deployment

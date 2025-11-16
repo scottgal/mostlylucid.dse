@@ -1,0 +1,184 @@
+{
+  "workflow_id": "docker_packaging_workflow",
+  "name": "Docker API Packaging Workflow",
+  "description": "Packages any tool or workflow into a containerized API service with Dockerfile, docker-compose, and API wrapper. Uses dependency analysis and tree shaking to create minimal, optimized Docker images (50-100MB vs 500MB+).",
+  "version": "2.0",
+  "priority": "medium",
+  "quality_level": "production",
+  "tags": ["docker", "api", "containerization", "packaging", "devops"],
+
+  "input_parameters": {
+    "tool_id": {
+      "type": "string",
+      "required": true,
+      "description": "ID of the tool or workflow to package"
+    },
+    "service_name": {
+      "type": "string",
+      "required": false,
+      "default": "tool-api",
+      "description": "Name for the Docker service"
+    },
+    "output_path": {
+      "type": "string",
+      "required": false,
+      "default": "./docker-package",
+      "description": "Output directory for generated files"
+    },
+    "port": {
+      "type": "integer",
+      "required": false,
+      "default": 8080,
+      "description": "Port to expose for the API"
+    },
+    "base_image": {
+      "type": "string",
+      "required": false,
+      "default": "python:3.11-slim",
+      "description": "Base Docker image to use"
+    },
+    "enable_cors": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Enable CORS in the API"
+    },
+    "auto_build": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Automatically build the Docker image after generation"
+    }
+  },
+
+  "steps": [
+    {
+      "step_id": "analyze_dependencies",
+      "tool": "dependency_analyzer",
+      "description": "Analyze tool dependencies for tree shaking",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"tools_root\": \"code_evolver/tools\", \"include_rag\": false}"
+      },
+      "output_key": "dependencies"
+    },
+    {
+      "step_id": "generate_api_wrapper",
+      "tool": "api_wrapper_generator",
+      "description": "Generate Flask API wrapper script",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"host\": \"0.0.0.0\", \"enable_cors\": {enable_cors}}"
+      },
+      "output_key": "api_wrapper"
+    },
+    {
+      "step_id": "generate_dockerfile",
+      "tool": "dockerfile_generator",
+      "description": "Generate optimized Dockerfile",
+      "input": {
+        "base_image": "{base_image}",
+        "app_type": "python-flask-api",
+        "tool_id": "{tool_id}",
+        "port": "{port}",
+        "dependencies": "flask,flask-cors,pyyaml,chromadb",
+        "env_vars": "PYTHONUNBUFFERED=1",
+        "additional_requirements": "Multi-stage build with security hardening"
+      },
+      "output_key": "dockerfile"
+    },
+    {
+      "step_id": "generate_docker_compose",
+      "tool": "docker_compose_generator",
+      "description": "Generate docker-compose.yml",
+      "input": {
+        "config_json": "{\"service_name\": \"{service_name}\", \"image_name\": \"{service_name}:latest\", \"port\": {port}, \"env_vars\": {\"PYTHONUNBUFFERED\": \"1\"}}"
+      },
+      "output_key": "docker_compose"
+    },
+    {
+      "step_id": "generate_config_file",
+      "tool": "config_file_generator",
+      "description": "Generate config.yaml with Ollama defaults and instructions",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"mode\": \"docker\", \"default_model\": \"llama3\"}"
+      },
+      "output_key": "config_file",
+      "parallel_group": "config"
+    },
+    {
+      "step_id": "generate_env_files",
+      "tool": "env_file_generator",
+      "description": "Generate .env and .env.example files with configuration",
+      "input": {
+        "config_json": "{\"tool_id\": \"{tool_id}\", \"port\": {port}, \"llm_config\": {\"provider\": \"ollama\", \"model\": \"llama3:latest\", \"base_url\": \"http://host.docker.internal:11434\"}}"
+      },
+      "output_key": "env_files",
+      "parallel_group": "config"
+    },
+    {
+      "step_id": "generate_helper_scripts",
+      "tool": "docker_helper_scripts_generator",
+      "description": "Generate build, run, test, and stop scripts",
+      "input": {
+        "config_json": "{\"service_name\": \"{service_name}\", \"port\": {port}}"
+      },
+      "output_key": "helper_scripts"
+    },
+    {
+      "step_id": "copy_dependencies",
+      "tool": "selective_file_copier",
+      "description": "Copy only required files (tree-shaken deployment)",
+      "input": {
+        "config_json": "{\"file_list\": \"{dependencies.file_list}\", \"source_root\": \".\", \"dest_root\": \"{output_path}/code_evolver\"}"
+      },
+      "output_key": "copy_results"
+    },
+    {
+      "step_id": "generate_readme",
+      "tool": "general_code_generator",
+      "description": "Generate README with usage instructions",
+      "input": {
+        "prompt": "Generate a comprehensive README.md for a Dockerized API wrapper for tool '{tool_id}' running on port {port}. Include sections for: Overview, Prerequisites, Quick Start, API Endpoints, Building, Running, Testing, and Troubleshooting."
+      },
+      "output_key": "readme"
+    },
+    {
+      "step_id": "generate_gitignore",
+      "tool": "general_code_generator",
+      "description": "Generate .gitignore for Docker package",
+      "input": {
+        "prompt": "Generate a .gitignore file for a Docker project that includes: .env (but not .env.example), __pycache__, *.pyc, .DS_Store, rag_memory/, registry/, dist/, build/, *.egg-info, .pytest_cache/, .coverage"
+      },
+      "output_key": "gitignore"
+    }
+  ],
+
+  "output_schema": {
+    "success": "bool - Whether packaging was successful",
+    "output_path": "str - Path to generated package",
+    "service_name": "str - Name of the Docker service",
+    "dependencies": "dict - Analyzed dependencies with tree shaking stats",
+    "api_wrapper": "str - Generated API wrapper script",
+    "dockerfile": "str - Generated Dockerfile",
+    "docker_compose": "str - Generated docker-compose.yml",
+    "config_file": "dict - Generated config.yaml with Ollama defaults and configuration instructions",
+    "env_files": "dict - Generated .env and .env.example files with instructions",
+    "helper_scripts": "dict - Generated helper scripts (build.sh, run.sh, test.sh, stop.sh)",
+    "copy_results": "dict - File copy results and size statistics",
+    "readme": "str - Generated README.md",
+    "gitignore": "str - Generated .gitignore",
+    "message": "str - Status message"
+  },
+
+  "metadata": {
+    "cost_tier": "low",
+    "speed_tier": "fast",
+    "quality_tier": "excellent",
+    "estimated_duration": "60s",
+    "use_cases": [
+      "Package any tool as a containerized API service",
+      "Create microservices from workflows",
+      "Deploy tools as standalone services",
+      "Create REST APIs for command-line tools"
+    ]
+  }
+}

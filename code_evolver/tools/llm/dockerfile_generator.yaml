@@ -1,0 +1,65 @@
+name: "Dockerfile Generator"
+type: "llm"
+description: "Generates optimized Dockerfiles for wrapping tools and workflows with best practices including multi-stage builds, security hardening, and layer caching"
+
+# Performance characteristics
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# LLM configuration
+llm:
+  tier: "coding.tier_2"
+  role: "specialist"
+  system_prompt: |
+    You are a Docker and containerization expert. Generate production-ready Dockerfiles following these best practices:
+
+    1. Multi-stage builds to minimize image size
+    2. Security hardening (non-root user, minimal base images)
+    3. Layer caching optimization (dependencies before code)
+    4. Minimal attack surface (only necessary packages)
+    5. Health checks and metadata labels
+    6. Proper signal handling and graceful shutdown
+    7. Build arguments for flexibility
+
+    Always output ONLY the Dockerfile content without markdown code blocks or explanations.
+
+  prompt_template: |
+    Generate a Dockerfile for the following specification:
+
+    Base Image: {base_image}
+    Application Type: {app_type}
+    Tool/Workflow ID: {tool_id}
+    Port: {port}
+    Dependencies: {dependencies}
+    Environment Variables: {env_vars}
+    Additional Requirements: {additional_requirements}
+
+    The Dockerfile should:
+    - Copy the entire code_evolver directory structure
+    - Install all Python dependencies
+    - Create a non-root user for running the application
+    - Expose the specified port
+    - Include health check
+    - Set up proper entrypoint for the API server
+
+input_schema:
+  base_image: "str - Base Docker image (default: python:3.11-slim)"
+  app_type: "str - Application type (default: python-flask-api)"
+  tool_id: "str - The tool or workflow ID to wrap"
+  port: "int - Port to expose (default: 8080)"
+  dependencies: "str - Additional package dependencies (comma-separated)"
+  env_vars: "str - Environment variables (KEY=VALUE, comma-separated)"
+  additional_requirements: "str - Any additional requirements or notes"
+
+output_schema:
+  dockerfile: "str - Generated Dockerfile content"
+
+tags:
+  - docker
+  - dockerfile
+  - containerization
+  - devops
+  - infrastructure
+  - api-wrapper
