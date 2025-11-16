@@ -156,7 +156,7 @@ rag_memory:
   # Use Qdrant for scalable vector storage (requires qdrant-client and Qdrant server)
   # Set to false to use simple NumPy-based storage
   use_qdrant: true
-  qdrant_url: "http://192.168.0.76:6333"
+  qdrant_url: "http://localhost:6333"
   collection_name: "code_evolver_artifacts"
   # Embedding model from ollama.embedding section will be used
   # Max content length for embeddings (longer content will be truncated)

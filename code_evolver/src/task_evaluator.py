@@ -121,11 +121,41 @@ Your analysis:"""
             understanding = understanding_line.replace('UNDERSTANDING:', '').strip()
             key_aspects = aspects_line.replace('KEY_ASPECTS:', '').strip()
 
-            # Fallback if structured parsing failed
-            if not category:
-                category = response.strip().lower().replace("-", "_")
-                understanding = "Unable to parse task understanding"
-                key_aspects = "unknown"
+            # Fallback: Try to extract from unstructured response
+            if not category or not understanding:
+                # Try to infer from response content
+                response_lower = response.lower()
+
+                # Extract category from keywords
+                if not category:
+                    if any(word in response_lower for word in ['joke', 'story', 'poem', 'creative', 'article', 'content']):
+                        category = 'creative_content'
+                    elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
+                        category = 'arithmetic'
+                    elif any(word in response_lower for word in ['code', 'function', 'program']):
+                        category = 'code_generation'
+                    elif any(word in response_lower for word in ['question', 'answer', 'explain']):
+                        category = 'question_answering'
+                    else:
+                        category = 'unknown'
+
+                # Extract understanding from first sentence
+                if not understanding:
+                    sentences = response.split('.')
+                    if sentences:
+                        understanding = sentences[0].strip()
+                        # Limit length
+                        if len(understanding) > 150:
+                            understanding = understanding[:147] + "..."
+                    else:
+                        understanding = response[:150] if len(response) > 150 else response
+
+                # Extract key aspects from response
+                if not key_aspects:
+                    aspect_keywords = ['creativity', 'humor', 'complexity', 'data', 'algorithm',
+                                      'performance', 'accuracy', 'storytelling', 'logic']
+                    found_aspects = [kw for kw in aspect_keywords if kw in response_lower]
+                    key_aspects = ', '.join(found_aspects) if found_aspects else 'general task'
 
             # Map to TaskType
             task_type = self._parse_task_type(category)

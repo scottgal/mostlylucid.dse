@@ -542,7 +542,9 @@
     "workflow_get_english_word",
     "tool_get_english_word",
     "workflow_1763251699",
-    "tool_write_a_haiku_about_coding"
+    "tool_write_a_haiku_about_coding",
+    "workflow_write_a_letter_to_santa_and_ta",
+    "workflow_1763253780"
   ],
   "generated": [
     "func_write_a_story_about_the_sea",
@@ -825,7 +827,9 @@
     "func_get_english_word",
     "workflow_get_english_word",
     "tool_get_english_word",
-    "tool_write_a_haiku_about_coding"
+    "tool_write_a_haiku_about_coding",
+    "func_write_a_letter_to_santa_and_ta",
+    "workflow_write_a_letter_to_santa_and_ta"
   ],
   "addition": [
     "func_add_100_and_200",
@@ -893,7 +897,8 @@
     "workflow_install_python_package",
     "workflow_write_a_poem_1763241023",
     "workflow_add_1_5",
-    "workflow_get_english_word"
+    "workflow_get_english_word",
+    "workflow_write_a_letter_to_santa_and_ta"
   ],
   "fibonacci": [
     "func_write_me_code_to_do_a_fibonacc",
@@ -1623,7 +1628,8 @@
     "workflow_install_python_package",
     "workflow_write_a_poem_1763241023",
     "workflow_add_1_5",
-    "workflow_get_english_word"
+    "workflow_get_english_word",
+    "workflow_write_a_letter_to_santa_and_ta"
   ],
   "calculator": [
     "tool_calculat_1_1",
@@ -1973,7 +1979,8 @@
     "workflow_1763216384",
     "workflow_1763217386",
     "workflow_1763234819",
-    "workflow_1763241398"
+    "workflow_1763241398",
+    "workflow_1763253780"
   ],
   "disk": [
     "tool_save_to_disk",
@@ -2028,14 +2035,16 @@
     "workflow_1763234819",
     "workflow_1763237229",
     "workflow_1763241398",
-    "workflow_1763251699"
+    "workflow_1763251699",
+    "workflow_1763253780"
   ],
   "a": [
     "workflow_1763216384",
     "workflow_1763217386",
     "workflow_1763233548",
     "workflow_1763234819",
-    "workflow_1763241398"
+    "workflow_1763241398",
+    "workflow_1763253780"
   ],
   "quick_feedback": [
     "invocation_quick_feedback_1763233098416"
@@ -2203,5 +2212,14 @@
   ],
   "programming": [
     "tool_write_a_haiku_about_coding"
+  ],
+  "markdown": [
+    "func_write_a_letter_to_santa_and_ta",
+    "workflow_write_a_letter_to_santa_and_ta"
+  ],
+  "letter": [
+    "func_write_a_letter_to_santa_and_ta",
+    "workflow_write_a_letter_to_santa_and_ta",
+    "workflow_1763253780"
   ]
 }
