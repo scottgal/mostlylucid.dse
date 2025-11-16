@@ -1,0 +1,246 @@
+name: "Word Document Processor"
+type: "executable"
+version: "1.0.0"
+description: "Read and write Microsoft Word documents (.docx). Extract text, modify content, create new documents with formatting, tables, and images. Full read/write support for modern Word formats."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 110
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/word_processor.py"]
+  install_command: "pip install python-docx python-docx-template"
+
+# Resource constraints
+constraints:
+  timeout_ms: 60000  # 1 minute
+  max_memory_mb: 512
+  max_cpu_percent: 50
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["read", "write", "create", "modify", "extract_tables", "add_content"]
+      required: true
+      description: "Operation to perform"
+    file_path:
+      type: string
+      description: "Path to Word document"
+      required: true
+    content:
+      type: string
+      description: "Content to write (for write/create operations)"
+      required: false
+    template_vars:
+      type: object
+      description: "Variables for template substitution"
+      default: {}
+    formatting:
+      type: object
+      description: "Formatting options (font, size, bold, italic, color)"
+      properties:
+        font:
+          type: string
+          default: "Calibri"
+        size:
+          type: integer
+          default: 11
+        bold:
+          type: boolean
+          default: false
+        italic:
+          type: boolean
+          default: false
+        color:
+          type: string
+          default: "black"
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    text:
+      type: string
+      description: "Extracted text content"
+    paragraphs:
+      type: array
+      items:
+        type: string
+      description: "List of paragraphs"
+    tables:
+      type: array
+      items:
+        type: object
+      description: "Extracted tables as structured data"
+    metadata:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        created:
+          type: string
+        modified:
+          type: string
+        page_count:
+          type: integer
+    error:
+      type: string
+
+tags: ["word", "docx", "document", "microsoft", "office", "text-extraction", "document-generation"]
+
+examples:
+  - input:
+      operation: "read"
+      file_path: "document.docx"
+    output:
+      success: true
+      text: "Full document text..."
+      paragraphs: ["Para 1", "Para 2"]
+      metadata:
+        title: "My Document"
+        author: "John Doe"
+
+  - input:
+      operation: "create"
+      file_path: "output.docx"
+      content: "Hello World"
+      formatting:
+        font: "Arial"
+        size: 14
+        bold: true
+    output:
+      success: true
+      operation: "create"
+
+  - input:
+      operation: "extract_tables"
+      file_path: "data.docx"
+    output:
+      success: true
+      tables:
+        - headers: ["Name", "Age", "City"]
+          rows: [["Alice", 30, "NYC"], ["Bob", 25, "LA"]]
+
+usage_notes: |
+  ## Overview
+  Complete Word document processing with read and write capabilities.
+
+  ## Operations
+
+  ### read
+  Extract all text content from a Word document.
+  - Returns: Full text, paragraphs, tables, metadata
+  - Preserves structure and formatting information
+
+  ### write
+  Write/overwrite content to a Word document.
+  - Creates new document if doesn't exist
+  - Supports basic formatting
+
+  ### create
+  Create a new Word document from scratch.
+  - Full formatting support
+  - Add paragraphs, headings, tables
+  - Insert images
+
+  ### modify
+  Modify existing document.
+  - Append content
+  - Replace text
+  - Update formatting
+
+  ### extract_tables
+  Extract all tables as structured data.
+  - Returns: Array of table objects
+  - Each table has headers and rows
+  - Preserves cell values and structure
+
+  ### add_content
+  Add content to existing document.
+  - Append paragraphs
+  - Add tables
+  - Insert images
+
+  ## Features
+  - **Read**: Extract text, paragraphs, tables, metadata
+  - **Write**: Create and modify documents
+  - **Formatting**: Font, size, bold, italic, color, alignment
+  - **Tables**: Create and extract tables with formatting
+  - **Images**: Insert images into documents
+  - **Templates**: Variable substitution using {{placeholders}}
+  - **Metadata**: Title, author, creation date
+
+  ## Use Cases
+  - **Document Generation**: Create reports, invoices, contracts
+  - **Data Extraction**: Extract content for analysis
+  - **Template Processing**: Fill templates with data
+  - **Document Conversion**: Convert between formats
+  - **Automated Reporting**: Generate formatted reports
+  - **Content Management**: Batch process documents
+
+  ## Formatting Options
+  ```python
+  formatting = {
+      "font": "Arial|Calibri|Times New Roman|...",
+      "size": 8-72,
+      "bold": true|false,
+      "italic": true|false,
+      "underline": true|false,
+      "color": "black|red|blue|green|...",
+      "alignment": "left|center|right|justify"
+  }
+  ```
+
+  ## Template Variables
+  Use {{variable_name}} in document templates:
+  ```python
+  template_vars = {
+      "name": "John Doe",
+      "date": "2025-11-16",
+      "total": "$1,234.56"
+  }
+  ```
+
+  ## Table Creation
+  ```python
+  table_data = {
+      "headers": ["Column 1", "Column 2"],
+      "rows": [
+          ["Value 1", "Value 2"],
+          ["Value 3", "Value 4"]
+      ],
+      "style": "Light Grid Accent 1"
+  }
+  ```
+
+  ## Performance
+  - Read: ~100-500ms for typical documents
+  - Write: ~200-800ms
+  - Extract tables: ~100-300ms
+  - Create: ~500-1500ms with formatting
+
+  ## Limitations
+  - Modern .docx format only (not .doc)
+  - Large documents (>100 pages) may be slow
+  - Complex formatting may not be fully preserved
+  - Embedded objects have limited support
+
+  ## Best Practices
+  1. Use templates for consistent formatting
+  2. Extract tables for data analysis
+  3. Validate input documents
+  4. Handle errors gracefully
+  5. Consider document size for performance

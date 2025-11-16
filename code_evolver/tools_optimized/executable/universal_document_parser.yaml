@@ -1,0 +1,415 @@
+name: "Universal Document Parser"
+type: "executable"
+version: "1.0.0"
+description: "Parse ANY document format and extract text, metadata, and structure. Supports 100+ formats: PDF, Word, Excel, PowerPoint, images (OCR), HTML, XML, markdown, code files, archives, and more. One tool for all documents."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 100
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/universal_parser.py"]
+  install_command: "pip install textract python-magic pypandoc beautifulsoup4 pillow pytesseract pdfplumber python-docx openpyxl python-pptx markdown"
+
+# Resource constraints
+constraints:
+  timeout_ms: 180000  # 3 minutes for large/complex documents
+  max_memory_mb: 2048
+  max_cpu_percent: 70
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    file_path:
+      type: string
+      description: "Path to document file"
+      required: true
+    output_format:
+      type: string
+      enum: ["text", "json", "markdown", "html", "structured"]
+      default: "text"
+      description: "Output format"
+    extract_images:
+      type: boolean
+      description: "Extract embedded images"
+      default: false
+    ocr:
+      type: boolean
+      description: "Use OCR for image-based documents"
+      default: false
+    preserve_formatting:
+      type: boolean
+      description: "Preserve document formatting"
+      default: false
+    extract_metadata:
+      type: boolean
+      description: "Extract document metadata"
+      default: true
+    extract_tables:
+      type: boolean
+      description: "Extract tables as structured data"
+      default: false
+    language:
+      type: string
+      description: "Language for OCR (e.g., 'eng', 'spa', 'fra')"
+      default: "eng"
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    text:
+      type: string
+      description: "Extracted text content"
+    format:
+      type: string
+      description: "Detected document format"
+    metadata:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        created:
+          type: string
+        modified:
+          type: string
+        pages:
+          type: integer
+        format:
+          type: string
+        size_bytes:
+          type: integer
+    structure:
+      type: object
+      description: "Document structure (headings, sections, etc.)"
+    tables:
+      type: array
+      description: "Extracted tables"
+    images:
+      type: array
+      description: "Extracted images (base64 or paths)"
+    links:
+      type: array
+      description: "Extracted hyperlinks"
+    error:
+      type: string
+
+tags: ["parser", "document", "text-extraction", "ocr", "universal", "multi-format", "textract"]
+
+# Supported formats
+supported_formats:
+  office:
+    - ".docx" - Word documents
+    - ".doc" - Legacy Word
+    - ".xlsx" - Excel spreadsheets
+    - ".xls" - Legacy Excel
+    - ".pptx" - PowerPoint presentations
+    - ".ppt" - Legacy PowerPoint
+    - ".odt" - OpenOffice text
+    - ".ods" - OpenOffice spreadsheet
+
+  pdf:
+    - ".pdf" - PDF documents (text and OCR)
+
+  images:
+    - ".jpg/.jpeg" - JPEG images (OCR)
+    - ".png" - PNG images (OCR)
+    - ".tiff" - TIFF images (OCR)
+    - ".bmp" - Bitmap images (OCR)
+    - ".gif" - GIF images (OCR)
+
+  web:
+    - ".html" - HTML documents
+    - ".htm" - HTML documents
+    - ".xml" - XML documents
+    - ".json" - JSON data
+    - ".yaml/.yml" - YAML data
+
+  text:
+    - ".txt" - Plain text
+    - ".md" - Markdown
+    - ".rst" - ReStructuredText
+    - ".csv" - CSV data
+    - ".tsv" - TSV data
+
+  code:
+    - ".py" - Python
+    - ".js" - JavaScript
+    - ".java" - Java
+    - ".cpp" - C++
+    - ".c" - C
+    - ".go" - Go
+    - ".rs" - Rust
+    - (50+ more languages)
+
+  archives:
+    - ".zip" - ZIP archives (extracts and parses contents)
+    - ".tar" - TAR archives
+    - ".gz" - Gzipped files
+
+  ebooks:
+    - ".epub" - EPUB books
+    - ".mobi" - Mobi books
+
+  other:
+    - ".rtf" - Rich Text Format
+    - ".msg" - Outlook messages
+    - ".eml" - Email messages
+
+examples:
+  - input:
+      file_path: "document.pdf"
+      output_format: "text"
+    output:
+      success: true
+      text: "Extracted document content..."
+      format: "pdf"
+      metadata:
+        pages: 5
+        author: "John Doe"
+
+  - input:
+      file_path: "image.jpg"
+      ocr: true
+    output:
+      success: true
+      text: "Text extracted from image via OCR..."
+      format: "image/jpeg"
+
+  - input:
+      file_path: "data.xlsx"
+      extract_tables: true
+    output:
+      success: true
+      format: "spreadsheet"
+      tables: [{"headers": [...], "rows": [...]}]
+
+  - input:
+      file_path: "presentation.pptx"
+      extract_images: true
+    output:
+      success: true
+      text: "Slide content..."
+      images: ["slide1_img1.png", "slide2_img1.png"]
+
+usage_notes: |
+  ## Overview
+  Universal document parser that handles 100+ file formats automatically.
+  Powered by textract, python-magic, and format-specific libraries.
+
+  ## Auto-Detection
+  The tool automatically detects the document format and uses the appropriate
+  parser. No need to specify the format manually.
+
+  ## Supported Formats (100+)
+
+  ### Office Documents
+  - Microsoft Office: Word, Excel, PowerPoint (.docx, .xlsx, .pptx)
+  - Legacy Office: .doc, .xls, .ppt
+  - OpenOffice: .odt, .ods, .odp
+  - iWork: .pages, .numbers, .key (partial)
+
+  ### PDF & Images
+  - PDF documents (text and OCR)
+  - Images with OCR: JPG, PNG, TIFF, BMP, GIF
+  - Multi-page TIFF support
+
+  ### Web & Data
+  - HTML, XML, JSON, YAML
+  - CSV, TSV, and other delimited formats
+  - Markdown, RST
+
+  ### Code Files
+  - Python, JavaScript, Java, C++, Go, Rust
+  - 50+ programming languages
+  - Syntax highlighting preserved (optional)
+
+  ### Archives
+  - ZIP, TAR, GZ
+  - Automatically extracts and parses contents
+
+  ### Email
+  - Outlook messages (.msg)
+  - Email files (.eml)
+
+  ### Ebooks
+  - EPUB, MOBI
+  - PDF books
+
+  ### Other
+  - RTF (Rich Text Format)
+  - LaTeX documents
+  - SQLite databases
+  - Audio metadata (MP3, M4A)
+
+  ## Features
+
+  ### Text Extraction
+  - Extract all text content
+  - Preserve formatting (optional)
+  - Handle multi-language documents
+  - OCR for image-based content
+
+  ### Metadata Extraction
+  - Author, title, dates
+  - Page/slide count
+  - File properties
+  - Custom properties
+
+  ### Structure Extraction
+  - Headings and sections
+  - Tables of contents
+  - Lists and outlines
+  - Document hierarchy
+
+  ### Table Extraction
+  - Extract tables as structured data
+  - Preserve cell formatting
+  - Header detection
+  - Multi-sheet support (Excel)
+
+  ### Image Extraction
+  - Extract embedded images
+  - Save to files or return base64
+  - Preserve image metadata
+
+  ### Link Extraction
+  - HTTP/HTTPS links
+  - Internal references
+  - Email addresses
+  - File paths
+
+  ## Output Formats
+
+  ### text (default)
+  Plain text extraction, preserving paragraph structure.
+
+  ### json
+  Structured JSON with metadata, content, and extracted elements.
+  ```json
+  {
+    "text": "...",
+    "metadata": {...},
+    "tables": [...],
+    "images": [...],
+    "links": [...]
+  }
+  ```
+
+  ### markdown
+  Convert to Markdown format with preserved structure.
+
+  ### html
+  Convert to clean HTML.
+
+  ### structured
+  Fully structured output with sections, headings, and hierarchy.
+
+  ## OCR Support
+  For image-based documents:
+  - Scanned PDFs
+  - Images (JPG, PNG, TIFF)
+  - Screenshots
+  - Photos of documents
+
+  Requires: `tesseract-ocr` installed
+
+  Languages supported:
+  - English (eng)
+  - Spanish (spa)
+  - French (fra)
+  - German (deu)
+  - Chinese (chi_sim, chi_tra)
+  - Japanese (jpn)
+  - 100+ more languages
+
+  ## Use Cases
+
+  ### Document Processing Pipelines
+  - Ingest documents in any format
+  - Extract and index content
+  - Convert between formats
+
+  ### Data Extraction
+  - Extract data from invoices, receipts
+  - Parse forms and applications
+  - Process reports and statements
+
+  ### Content Migration
+  - Migrate legacy documents
+  - Convert document formats
+  - Archive digitization
+
+  ### Search & Indexing
+  - Index document content
+  - Full-text search
+  - Content analysis
+
+  ### AI/ML Workflows
+  - Prepare documents for LLM processing
+  - Extract training data
+  - Document classification
+
+  ## Performance
+
+  ### Text-based Documents
+  - Small (< 10 pages): 500ms - 2s
+  - Medium (10-100 pages): 2s - 10s
+  - Large (100-1000 pages): 10s - 60s
+
+  ### Image-based (OCR)
+  - Per page: 2s - 10s
+  - Depends on image quality and size
+
+  ### Archives
+  - Extracts all files first
+  - Then parses each file
+  - Can be slow for large archives
+
+  ## Best Practices
+
+  1. **Format Detection**: Let the tool auto-detect format
+  2. **OCR**: Only enable for image-based documents (slower)
+  3. **Large Files**: Use appropriate timeout
+  4. **Archives**: Consider extracting files separately
+  5. **Tables**: Enable table extraction for data documents
+  6. **Images**: Only extract if needed (increases processing time)
+  7. **Memory**: Large files may need more memory
+
+  ## Error Handling
+  - Unsupported format: Returns list of supported formats
+  - Corrupted file: Returns error with details
+  - Missing OCR: Suggests installing tesseract
+  - Large file timeout: Suggests increasing timeout
+
+  ## Dependencies
+  The tool uses different libraries based on format:
+  - **textract**: Primary extraction library
+  - **pdfplumber**: PDF parsing
+  - **python-docx**: Word documents
+  - **openpyxl**: Excel files
+  - **python-pptx**: PowerPoint
+  - **pytesseract**: OCR
+  - **BeautifulSoup**: HTML/XML
+  - **pypandoc**: Format conversion
+
+  ## Example Workflow
+  ```python
+  # Universal parsing - handles any format
+  result = parse_document("unknown_file.xyz")
+
+  # The tool automatically:
+  # 1. Detects the format
+  # 2. Chooses appropriate parser
+  # 3. Extracts content
+  # 4. Returns structured data
+  ```

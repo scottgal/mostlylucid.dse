@@ -1,0 +1,339 @@
+name: "Webhook Sender"
+type: "executable"
+version: "1.0.0"
+description: "Send webhooks to Slack, Discord, Microsoft Teams, and custom endpoints. Perfect for workflow notifications, alerts, and integrations. Supports rich formatting, attachments, and custom payloads."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+priority: 120
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/webhook_sender.py"]
+  install_command: "pip install requests"
+
+# Resource constraints
+constraints:
+  timeout_ms: 15000  # 15 seconds
+  max_memory_mb: 128
+  max_cpu_percent: 30
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    service:
+      type: string
+      enum: ["slack", "discord", "teams", "custom"]
+      required: true
+      description: "Webhook service type"
+    webhook_url:
+      type: string
+      description: "Webhook URL"
+      required: true
+    message:
+      type: string
+      description: "Message content"
+      required: true
+    title:
+      type: string
+      description: "Message title/subject"
+      required: false
+    color:
+      type: string
+      description: "Message color (hex code or name)"
+      default: "#0099ff"
+    username:
+      type: string
+      description: "Bot username (Slack/Discord)"
+      required: false
+    icon_emoji:
+      type: string
+      description: "Bot icon emoji (Slack)"
+      required: false
+    fields:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          value:
+            type: string
+          inline:
+            type: boolean
+      description: "Additional fields (embed)"
+      default: []
+    attachments:
+      type: array
+      items:
+        type: string
+      description: "File URLs to attach"
+      default: []
+    mentions:
+      type: array
+      items:
+        type: string
+      description: "Users to mention"
+      default: []
+    thread_ts:
+      type: string
+      description: "Thread timestamp (Slack)"
+      required: false
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    service:
+      type: string
+    message_id:
+      type: string
+    timestamp:
+      type: string
+    status_code:
+      type: integer
+    error:
+      type: string
+
+tags: ["webhook", "slack", "discord", "teams", "notification", "integration", "messaging"]
+
+examples:
+  - input:
+      service: "slack"
+      webhook_url: "https://hooks.slack.com/services/XXX/YYY/ZZZ"
+      message: "Workflow completed successfully!"
+      username: "Workflow Bot"
+      icon_emoji: ":robot_face:"
+    output:
+      success: true
+      service: "slack"
+      status_code: 200
+
+  - input:
+      service: "discord"
+      webhook_url: "https://discord.com/api/webhooks/XXX/YYY"
+      title: "Error Alert"
+      message: "Workflow failed: Database connection timeout"
+      color: "#ff0000"
+      fields:
+        - name: "Error Code"
+          value: "DB_TIMEOUT"
+          inline: true
+        - name: "Timestamp"
+          value: "2025-11-16 10:30:00"
+          inline: true
+    output:
+      success: true
+      service: "discord"
+
+  - input:
+      service: "teams"
+      webhook_url: "https://outlook.office.com/webhook/XXX"
+      title: "Daily Report"
+      message: "Tasks completed: 42\nTasks pending: 8"
+    output:
+      success: true
+      service: "teams"
+
+usage_notes: |
+  ## Overview
+  Send rich notifications to Slack, Discord, Teams, and custom webhooks.
+
+  ## Supported Services
+
+  ### Slack
+  - Rich text formatting with markdown
+  - Custom username and icon
+  - Thread replies
+  - Mentions (@user, @channel)
+  - File attachments
+  - Interactive buttons (advanced)
+
+  ### Discord
+  - Rich embeds with color
+  - Custom username and avatar
+  - Fields (inline or stacked)
+  - Mentions (@user, @role, @everyone)
+  - File attachments
+  - Multiple embeds
+
+  ### Microsoft Teams
+  - Adaptive cards
+  - Markdown formatting
+  - Action buttons
+  - Facts (key-value pairs)
+  - Images and attachments
+
+  ### Custom Webhooks
+  - JSON payloads
+  - Custom headers
+  - Any HTTP endpoint
+
+  ## Setup Instructions
+
+  ### Slack
+  1. Go to https://api.slack.com/apps
+  2. Create new app
+  3. Enable "Incoming Webhooks"
+  4. Add webhook to workspace
+  5. Copy webhook URL
+
+  ### Discord
+  1. Go to Server Settings → Integrations
+  2. Create webhook
+  3. Choose channel
+  4. Copy webhook URL
+
+  ### Teams
+  1. Go to channel
+  2. Click "..." → Connectors
+  3. Configure "Incoming Webhook"
+  4. Provide name and upload image
+  5. Copy webhook URL
+
+  ## Message Formatting
+
+  ### Slack
+  ```markdown
+  *bold* _italic_ ~strikethrough~ `code` ```code block```
+  <https://example.com|Link text>
+  @channel @here @username
+  :emoji:
+  ```
+
+  ### Discord
+  ```markdown
+  **bold** *italic* ~~strikethrough~~ `code` ```code block```
+  [Link text](https://example.com)
+  @everyone @here @user @role
+  :emoji:
+  ```
+
+  ### Teams
+  ```markdown
+  **bold** *italic* ~~strikethrough~~ `code`
+  [Link text](https://example.com)
+  ```
+
+  ## Color Codes
+  - **Success**: #00ff00 or "green"
+  - **Warning**: #ffaa00 or "yellow"
+  - **Error**: #ff0000 or "red"
+  - **Info**: #0099ff or "blue"
+  - **Default**: #808080 or "gray"
+
+  ## Examples
+
+  ### Simple Success Message
+  ```python
+  {
+    "service": "slack",
+    "webhook_url": "https://hooks.slack.com/...",
+    "message": "✅ Workflow completed successfully!",
+    "username": "Workflow Bot",
+    "icon_emoji": ":white_check_mark:"
+  }
+  ```
+
+  ### Error Alert with Details
+  ```python
+  {
+    "service": "discord",
+    "webhook_url": "https://discord.com/api/webhooks/...",
+    "title": "🚨 Critical Error",
+    "message": "Database connection failed",
+    "color": "#ff0000",
+    "fields": [
+      {"name": "Error", "value": "Connection timeout", "inline": true},
+      {"name": "Retry", "value": "3/3 attempts", "inline": true},
+      {"name": "Time", "value": "2025-11-16 10:30:00", "inline": false}
+    ]
+  }
+  ```
+
+  ### Daily Report
+  ```python
+  {
+    "service": "teams",
+    "webhook_url": "https://outlook.office.com/webhook/...",
+    "title": "📊 Daily Report - 2025-11-16",
+    "message": "Summary of today's activities",
+    "fields": [
+      {"name": "Tasks Completed", "value": "42"},
+      {"name": "Tasks Pending", "value": "8"},
+      {"name": "Success Rate", "value": "95%"}
+    ]
+  }
+  ```
+
+  ### Workflow Status Update
+  ```python
+  {
+    "service": "slack",
+    "webhook_url": "https://hooks.slack.com/...",
+    "message": "*Workflow Status Update*\n\n"
+              "✅ Step 1: Data extraction complete\n"
+              "✅ Step 2: Processing complete\n"
+              "⏳ Step 3: Upload in progress...",
+    "username": "Pipeline Bot"
+  }
+  ```
+
+  ### Mention Users
+  ```python
+  # Slack
+  {
+    "service": "slack",
+    "message": "<@U123456> your report is ready!",
+    "mentions": ["@channel"]
+  }
+
+  # Discord
+  {
+    "service": "discord",
+    "message": "<@123456789> urgent: review needed!",
+    "mentions": ["@everyone"]
+  }
+  ```
+
+  ## Use Cases
+  - **Workflow Notifications**: Success/failure alerts
+  - **Error Monitoring**: Real-time error alerts
+  - **Status Updates**: Progress notifications
+  - **Daily Reports**: Automated reporting
+  - **Integration Events**: External system events
+  - **User Notifications**: User-specific alerts
+  - **Team Collaboration**: Team updates
+
+  ## Best Practices
+  1. Use appropriate colors for message types
+  2. Include relevant context in fields
+  3. Use mentions sparingly
+  4. Format messages for readability
+  5. Test webhooks before production use
+  6. Handle rate limits gracefully
+  7. Store webhook URLs securely
+
+  ## Rate Limits
+  - **Slack**: 1 message per second per webhook
+  - **Discord**: 5 messages per 2 seconds
+  - **Teams**: 4 messages per second
+
+  ## Security
+  - Store webhook URLs in environment variables
+  - Never commit webhook URLs to version control
+  - Rotate webhooks periodically
+  - Use dedicated webhooks per service
+  - Monitor for unauthorized usage
+
+  ## Troubleshooting
+  - **401 Unauthorized**: Check webhook URL
+  - **404 Not Found**: Webhook may be deleted
+  - **429 Too Many Requests**: Rate limit exceeded
+  - **Bad Request**: Check payload format

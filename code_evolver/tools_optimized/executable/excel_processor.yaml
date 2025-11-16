@@ -1,0 +1,306 @@
+name: "Excel Spreadsheet Processor"
+type: "executable"
+version: "1.0.0"
+description: "Read, write, and manipulate Excel spreadsheets (.xlsx, .xls). Extract data, create workbooks, modify cells, work with formulas, charts, and formatting. Supports multiple sheets and complex operations."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 110
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/excel_processor.py"]
+  install_command: "pip install openpyxl pandas xlrd xlwt"
+
+# Resource constraints
+constraints:
+  timeout_ms: 90000  # 1.5 minutes
+  max_memory_mb: 1024
+  max_cpu_percent: 60
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["read", "write", "create", "read_sheet", "add_sheet", "query", "pivot", "chart"]
+      required: true
+      description: "Operation to perform"
+    file_path:
+      type: string
+      description: "Path to Excel file"
+      required: true
+    sheet_name:
+      type: string
+      description: "Sheet name to work with"
+      default: "Sheet1"
+    data:
+      type: any
+      description: "Data to write (array of arrays or JSON)"
+      required: false
+    query:
+      type: string
+      description: "SQL-like query for data filtering"
+      required: false
+    range:
+      type: string
+      description: "Cell range (e.g., 'A1:C10')"
+      required: false
+    output_format:
+      type: string
+      enum: ["json", "csv", "dict", "dataframe"]
+      default: "json"
+    headers:
+      type: boolean
+      description: "First row contains headers"
+      default: true
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    data:
+      type: any
+      description: "Extracted or processed data"
+    sheets:
+      type: array
+      items:
+        type: string
+      description: "List of sheet names"
+    rows:
+      type: integer
+      description: "Number of rows"
+    columns:
+      type: integer
+      description: "Number of columns"
+    metadata:
+      type: object
+      properties:
+        created:
+          type: string
+        modified:
+          type: string
+        author:
+          type: string
+    error:
+      type: string
+
+tags: ["excel", "spreadsheet", "xlsx", "xls", "data", "microsoft", "office", "pandas"]
+
+examples:
+  - input:
+      operation: "read"
+      file_path: "data.xlsx"
+      sheet_name: "Sales"
+    output:
+      success: true
+      data: [["Name", "Amount"], ["Alice", 100], ["Bob", 200]]
+      rows: 3
+      columns: 2
+
+  - input:
+      operation: "write"
+      file_path: "output.xlsx"
+      sheet_name: "Results"
+      data: [["Product", "Sales"], ["Widget", 500], ["Gadget", 750]]
+    output:
+      success: true
+      operation: "write"
+
+  - input:
+      operation: "query"
+      file_path: "data.xlsx"
+      query: "SELECT * FROM Sheet1 WHERE Amount > 100"
+    output:
+      success: true
+      data: [["Name", "Amount"], ["Bob", 200], ["Carol", 150]]
+
+usage_notes: |
+  ## Overview
+  Complete Excel processing with pandas integration for advanced operations.
+
+  ## Operations
+
+  ### read
+  Read entire Excel file or specific sheet.
+  - Returns: All data as JSON/CSV/dict
+  - Supports multiple sheets
+  - Auto-detects data types
+
+  ### write
+  Write data to Excel file.
+  - Creates new file if doesn't exist
+  - Supports multiple sheets
+  - Preserves formulas and formatting
+
+  ### create
+  Create new Excel workbook.
+  - Multiple sheets support
+  - Custom formatting
+  - Add charts and formulas
+
+  ### read_sheet
+  Read specific sheet by name.
+  - Returns: Sheet data
+  - Specify cell range
+
+  ### add_sheet
+  Add new sheet to existing workbook.
+  - Custom name
+  - Initialize with data
+
+  ### query
+  SQL-like queries on Excel data.
+  - Uses pandas for filtering
+  - SELECT, WHERE, GROUP BY support
+  - Joins across sheets
+
+  ### pivot
+  Create pivot tables.
+  - Aggregate data
+  - Group by columns
+  - Calculate summaries
+
+  ### chart
+  Generate charts from data.
+  - Line, bar, pie charts
+  - Customizable
+
+  ## Features
+  - **Read/Write**: Full .xlsx and .xls support
+  - **Multiple Sheets**: Work with multiple worksheets
+  - **Formulas**: Preserve and evaluate formulas
+  - **Formatting**: Cell formatting, styles, colors
+  - **Charts**: Create and extract charts
+  - **Pivot Tables**: Create pivot tables
+  - **Data Query**: SQL-like data filtering
+  - **Pandas Integration**: Advanced data manipulation
+
+  ## Use Cases
+  - **Data Analysis**: Load and analyze spreadsheet data
+  - **Report Generation**: Create formatted Excel reports
+  - **Data Transformation**: Convert between formats
+  - **Batch Processing**: Process multiple Excel files
+  - **Dashboard Creation**: Generate Excel dashboards
+  - **Data Validation**: Validate spreadsheet data
+  - **Financial Modeling**: Work with financial data
+
+  ## Query Syntax
+  ```python
+  # Filter rows
+  "SELECT * FROM Sheet1 WHERE Sales > 1000"
+
+  # Select specific columns
+  "SELECT Name, Total FROM Sheet1 WHERE Region = 'West'"
+
+  # Aggregation
+  "SELECT Category, SUM(Amount) FROM Sheet1 GROUP BY Category"
+
+  # Multiple conditions
+  "SELECT * FROM Sheet1 WHERE Sales > 1000 AND Region = 'East'"
+  ```
+
+  ## Data Formats
+
+  ### JSON (default)
+  ```json
+  [
+    {"Name": "Alice", "Age": 30, "City": "NYC"},
+    {"Name": "Bob", "Age": 25, "City": "LA"}
+  ]
+  ```
+
+  ### Array of Arrays
+  ```json
+  [
+    ["Name", "Age", "City"],
+    ["Alice", 30, "NYC"],
+    ["Bob", 25, "LA"]
+  ]
+  ```
+
+  ## Writing Data
+  ```python
+  # Simple array
+  data = [
+      ["Product", "Price", "Stock"],
+      ["Widget", 19.99, 100],
+      ["Gadget", 29.99, 50]
+  ]
+
+  # With formatting
+  data = {
+      "values": [[...]],
+      "formatting": {
+          "header_row": {"bold": true, "bg_color": "blue"},
+          "number_format": {"B": "$#,##0.00"}
+      }
+  }
+  ```
+
+  ## Cell Ranges
+  - `A1:C10` - Rectangle from A1 to C10
+  - `A:A` - Entire column A
+  - `1:5` - Rows 1 through 5
+  - `A1` - Single cell
+
+  ## Performance
+  - Small files (<1K rows): <500ms
+  - Medium files (1K-10K rows): 1-3 seconds
+  - Large files (10K-100K rows): 5-15 seconds
+  - Very large files (>100K rows): Use chunking
+
+  ## Supported Formats
+  - `.xlsx` - Modern Excel format (recommended)
+  - `.xls` - Legacy Excel format
+  - `.xlsm` - Excel with macros
+  - `.csv` - Comma-separated values
+  - `.tsv` - Tab-separated values
+
+  ## Advanced Features
+
+  ### Formulas
+  ```python
+  # Add formula
+  cell["value"] = "=SUM(A1:A10)"
+  cell["formula"] = "=AVERAGE(B:B)"
+  ```
+
+  ### Conditional Formatting
+  ```python
+  formatting = {
+      "condition": "cell_value > 100",
+      "style": {"bg_color": "green", "font_color": "white"}
+  }
+  ```
+
+  ### Data Validation
+  ```python
+  validation = {
+      "type": "list",
+      "values": ["Option1", "Option2", "Option3"]
+  }
+  ```
+
+  ## Best Practices
+  1. Use pandas for large data sets
+  2. Specify sheet names explicitly
+  3. Handle missing data gracefully
+  4. Use appropriate output format
+  5. Close files properly
+  6. Validate data before writing
+  7. Use chunking for very large files
+
+  ## Error Handling
+  - Missing files: Returns error with details
+  - Invalid sheet names: Lists available sheets
+  - Corrupted files: Returns detailed error
+  - Formula errors: Returns error cell references

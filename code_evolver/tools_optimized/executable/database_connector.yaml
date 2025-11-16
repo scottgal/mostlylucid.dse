@@ -1,0 +1,248 @@
+name: "Database Connector"
+type: "executable"
+version: "1.0.0"
+description: "Connect to and query databases. Supports MySQL, PostgreSQL, SQLite, MongoDB, SQL Server, Oracle. Execute queries, fetch data, run transactions. Perfect for data pipelines and automated database operations."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 100
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/database_connector.py"]
+  install_command: "pip install sqlalchemy pymysql psycopg2-binary pymongo cx_Oracle pyodbc"
+
+# Resource constraints
+constraints:
+  timeout_ms: 120000  # 2 minutes
+  max_memory_mb: 1024
+  max_cpu_percent: 60
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["query", "execute", "insert", "update", "delete", "transaction", "schema"]
+      required: true
+    database_type:
+      type: string
+      enum: ["mysql", "postgresql", "sqlite", "mongodb", "sqlserver", "oracle"]
+      required: true
+    connection_string:
+      type: string
+      description: "Database connection string or URL"
+      required: true
+    query:
+      type: string
+      description: "SQL query or MongoDB query"
+      required: false
+    params:
+      type: object
+      description: "Query parameters for prepared statements"
+      default: {}
+    data:
+      type: any
+      description: "Data to insert/update"
+      required: false
+    output_format:
+      type: string
+      enum: ["json", "csv", "dict", "dataframe"]
+      default: "json"
+    fetch_size:
+      type: integer
+      description: "Number of rows to fetch (0 = all)"
+      default: 0
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    rows_affected:
+      type: integer
+    data:
+      type: any
+      description: "Query results"
+    row_count:
+      type: integer
+    columns:
+      type: array
+      items:
+        type: string
+    error:
+      type: string
+
+tags: ["database", "sql", "mysql", "postgresql", "mongodb", "query", "data"]
+
+examples:
+  - input:
+      operation: "query"
+      database_type: "postgresql"
+      connection_string: "postgresql://user:pass@localhost/mydb"
+      query: "SELECT * FROM users WHERE active = true LIMIT 10"
+    output:
+      success: true
+      data: [{"id": 1, "name": "Alice", "active": true}]
+      row_count: 10
+
+  - input:
+      operation: "insert"
+      database_type: "mysql"
+      connection_string: "mysql://user:pass@localhost/mydb"
+      query: "INSERT INTO products (name, price) VALUES (?, ?)"
+      params: {"name": "Widget", "price": 19.99}
+    output:
+      success: true
+      rows_affected: 1
+
+usage_notes: |
+  ## Overview
+  Universal database connector supporting major SQL and NoSQL databases.
+
+  ## Supported Databases
+  - **MySQL**: Popular open-source database
+  - **PostgreSQL**: Advanced open-source database
+  - **SQLite**: File-based database
+  - **MongoDB**: Document database
+  - **SQL Server**: Microsoft database
+  - **Oracle**: Enterprise database
+
+  ## Operations
+
+  ### query
+  Execute SELECT queries and fetch results.
+  ```sql
+  SELECT * FROM users WHERE status = 'active'
+  ```
+
+  ### execute
+  Execute any SQL statement (DDL, DML).
+  ```sql
+  CREATE TABLE products (id INT, name VARCHAR(100))
+  ```
+
+  ### insert
+  Insert data into tables.
+  ```python
+  query = "INSERT INTO users (name, email) VALUES (?, ?)"
+  params = {"name": "John", "email": "john@example.com"}
+  ```
+
+  ### update
+  Update existing records.
+  ```sql
+  UPDATE products SET price = 29.99 WHERE id = 123
+  ```
+
+  ### delete
+  Delete records.
+  ```sql
+  DELETE FROM logs WHERE created_at < '2024-01-01'
+  ```
+
+  ### transaction
+  Execute multiple statements in a transaction.
+  ```python
+  queries = [
+      "INSERT INTO orders (total) VALUES (100)",
+      "UPDATE inventory SET stock = stock - 1 WHERE id = 5"
+  ]
+  ```
+
+  ### schema
+  Get table schema and metadata.
+  ```python
+  # Returns column names, types, constraints
+  ```
+
+  ## Connection Strings
+
+  ### PostgreSQL
+  ```
+  postgresql://username:password@hostname:5432/database
+  postgresql://localhost/mydb
+  ```
+
+  ### MySQL
+  ```
+  mysql://username:password@hostname:3306/database
+  mysql+pymysql://root:pass@localhost/mydb
+  ```
+
+  ### SQLite
+  ```
+  sqlite:///path/to/database.db
+  sqlite:///./data.db
+  ```
+
+  ### MongoDB
+  ```
+  mongodb://username:password@hostname:27017/database
+  mongodb://localhost/mydb
+  ```
+
+  ### SQL Server
+  ```
+  mssql+pyodbc://username:password@hostname/database
+  ```
+
+  ### Oracle
+  ```
+  oracle://username:password@hostname:1521/service
+  ```
+
+  ## Environment Variables
+  Store credentials securely:
+  ```
+  DB_CONNECTION_STRING=postgresql://user:pass@localhost/mydb
+  ```
+
+  Then use:
+  ```python
+  connection_string = "${DB_CONNECTION_STRING}"
+  ```
+
+  ## Features
+  - **Connection Pooling**: Automatic connection management
+  - **Prepared Statements**: SQL injection prevention
+  - **Transactions**: ACID compliance
+  - **Batch Operations**: Bulk inserts/updates
+  - **Schema Introspection**: Discover table structures
+  - **Multiple Formats**: JSON, CSV, dict, dataframe
+
+  ## Use Cases
+  - **ETL Pipelines**: Extract, transform, load data
+  - **Data Analysis**: Query and analyze database data
+  - **Reporting**: Generate reports from database
+  - **Data Migration**: Move data between databases
+  - **Automated Operations**: Scheduled queries and updates
+  - **Integration**: Connect workflows to databases
+
+  ## Security Best Practices
+  1. Use environment variables for credentials
+  2. Use prepared statements (parameterized queries)
+  3. Limit permissions to necessary operations
+  4. Use SSL/TLS connections in production
+  5. Never log sensitive data
+  6. Rotate credentials regularly
+
+  ## Performance Tips
+  - Use `fetch_size` to limit large result sets
+  - Create indexes for frequently queried columns
+  - Use connection pooling for multiple queries
+  - Batch insert/update operations
+  - Close connections when done
+
+  ## Error Handling
+  - Connection errors: Check credentials and hostname
+  - Query errors: Validate SQL syntax
+  - Timeout: Increase timeout or optimize query
+  - Permission denied: Check user privileges

@@ -1,0 +1,364 @@
+name: "Image Converter & Processor"
+type: "executable"
+version: "1.0.0"
+description: "Convert, resize, crop, rotate, and optimize images. Supports 50+ formats including JPG, PNG, GIF, WebP, TIFF, BMP, SVG. Batch processing, watermarking, format conversion, compression, and image manipulation."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+priority: 110
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/image_converter.py"]
+  install_command: "pip install Pillow pillow-heif cairosvg"
+
+# Resource constraints
+constraints:
+  timeout_ms: 60000  # 1 minute
+  max_memory_mb: 1024
+  max_cpu_percent: 70
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["convert", "resize", "crop", "rotate", "compress", "watermark", "thumbnail", "batch"]
+      required: true
+    input_path:
+      type: string
+      description: "Path to input image"
+      required: true
+    output_path:
+      type: string
+      description: "Path to output image"
+      required: true
+    format:
+      type: string
+      description: "Output format (jpg, png, webp, gif, etc.)"
+      required: false
+    width:
+      type: integer
+      description: "Output width in pixels"
+      required: false
+    height:
+      type: integer
+      description: "Output height in pixels"
+      required: false
+    quality:
+      type: integer
+      description: "Output quality 1-100"
+      default: 85
+      minimum: 1
+      maximum: 100
+    maintain_aspect:
+      type: boolean
+      description: "Maintain aspect ratio when resizing"
+      default: true
+    crop_box:
+      type: array
+      items:
+        type: integer
+      description: "[left, top, right, bottom]"
+      required: false
+    rotation:
+      type: integer
+      description: "Rotation angle in degrees"
+      default: 0
+    optimize:
+      type: boolean
+      description: "Optimize file size"
+      default: false
+    watermark_text:
+      type: string
+      description: "Watermark text"
+      required: false
+    watermark_position:
+      type: string
+      enum: ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      default: "bottom-right"
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    output_path:
+      type: string
+    original_size:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+        file_size:
+          type: integer
+    new_size:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+        file_size:
+          type: integer
+    compression_ratio:
+      type: number
+    error:
+      type: string
+
+tags: ["image", "convert", "resize", "compress", "thumbnail", "graphics", "photo"]
+
+# Supported formats
+supported_formats:
+  input:
+    - "JPG/JPEG"
+    - "PNG"
+    - "GIF"
+    - "WebP"
+    - "TIFF"
+    - "BMP"
+    - "SVG"
+    - "HEIC/HEIF"
+    - "ICO"
+    - "PSD"
+    - "PDF (first page)"
+  output:
+    - "JPG"
+    - "PNG"
+    - "WebP"
+    - "GIF"
+    - "TIFF"
+    - "BMP"
+    - "ICO"
+
+examples:
+  - input:
+      operation: "convert"
+      input_path: "photo.png"
+      output_path: "photo.jpg"
+      format: "jpg"
+      quality: 90
+    output:
+      success: true
+      output_path: "photo.jpg"
+      compression_ratio: 0.65
+
+  - input:
+      operation: "resize"
+      input_path: "large.jpg"
+      output_path: "small.jpg"
+      width: 800
+      height: 600
+      maintain_aspect: true
+    output:
+      success: true
+      new_size: {"width": 800, "height": 600}
+
+  - input:
+      operation: "thumbnail"
+      input_path: "photo.jpg"
+      output_path: "thumb.jpg"
+      width: 150
+      height: 150
+    output:
+      success: true
+
+usage_notes: |
+  ## Overview
+  Complete image processing tool for format conversion, resizing, and optimization.
+
+  ## Operations
+
+  ### convert
+  Convert between image formats.
+  ```python
+  # PNG to JPG
+  convert("image.png", "image.jpg", format="jpg", quality=90)
+
+  # JPG to WebP (modern format, smaller size)
+  convert("photo.jpg", "photo.webp", format="webp", quality=85)
+
+  # HEIC to JPG (iPhone photos)
+  convert("IMG_1234.HEIC", "photo.jpg", format="jpg")
+  ```
+
+  ### resize
+  Resize images to specific dimensions.
+  ```python
+  # Fixed size
+  resize("large.jpg", "medium.jpg", width=800, height=600)
+
+  # Proportional resize (maintain aspect ratio)
+  resize("photo.jpg", "small.jpg", width=400, maintain_aspect=true)
+
+  # Fit within dimensions
+  resize("image.png", "fitted.png", width=1920, height=1080)
+  ```
+
+  ### crop
+  Crop images to specific area.
+  ```python
+  # Crop box: [left, top, right, bottom]
+  crop("photo.jpg", "cropped.jpg", crop_box=[100, 100, 500, 500])
+
+  # Center crop
+  crop("image.png", "square.png", width=400, height=400, center=true)
+  ```
+
+  ### rotate
+  Rotate images.
+  ```python
+  # Rotate 90 degrees clockwise
+  rotate("photo.jpg", "rotated.jpg", rotation=90)
+
+  # Rotate 180 degrees
+  rotate("upside_down.jpg", "right_side_up.jpg", rotation=180)
+  ```
+
+  ### compress
+  Optimize file size.
+  ```python
+  # Reduce file size while maintaining quality
+  compress("large.jpg", "optimized.jpg", quality=85, optimize=true)
+
+  # Aggressive compression
+  compress("huge.png", "small.png", quality=60)
+  ```
+
+  ### watermark
+  Add watermark text to images.
+  ```python
+  # Add watermark
+  watermark("photo.jpg", "watermarked.jpg",
+            watermark_text="© 2025 Company",
+            watermark_position="bottom-right")
+  ```
+
+  ### thumbnail
+  Create image thumbnails.
+  ```python
+  # Create 150x150 thumbnail
+  thumbnail("photo.jpg", "thumb.jpg", width=150, height=150)
+
+  # Profile picture size
+  thumbnail("avatar.png", "profile.png", width=256, height=256)
+  ```
+
+  ### batch
+  Process multiple images.
+  ```python
+  # Batch convert folder
+  batch_convert("input_folder/", "output_folder/",
+                format="webp", quality=85)
+  ```
+
+  ## Format Conversion Examples
+
+  ### Web Optimization
+  ```python
+  # Convert to WebP for web (70% smaller than JPG)
+  convert("photo.jpg", "photo.webp", format="webp", quality=85)
+  ```
+
+  ### iPhone Photos
+  ```python
+  # Convert HEIC to JPG
+  convert("IMG_1234.HEIC", "photo.jpg", format="jpg", quality=90)
+  ```
+
+  ### PNG to JPG (with background)
+  ```python
+  # PNG with transparency → JPG with white background
+  convert("logo.png", "logo.jpg", format="jpg", quality=95)
+  ```
+
+  ### Create Icons
+  ```python
+  # Create favicon
+  convert("logo.png", "favicon.ico", format="ico", width=32, height=32)
+  ```
+
+  ## Resize Strategies
+
+  ### Exact Size
+  ```python
+  width=800, height=600, maintain_aspect=false
+  # Result: Exactly 800x600 (may stretch/squash)
+  ```
+
+  ### Fit Within
+  ```python
+  width=800, height=600, maintain_aspect=true
+  # Result: Fits within 800x600 box, preserves ratio
+  ```
+
+  ### Maximum Dimension
+  ```python
+  width=1920, maintain_aspect=true
+  # Result: Width = 1920px, height calculated
+  ```
+
+  ## Quality Guidelines
+  - **100**: Lossless (huge files)
+  - **95**: Excellent (recommended for photos)
+  - **85**: Very good (default, web use)
+  - **75**: Good (smaller files)
+  - **60**: Acceptable (significant compression)
+  - **40**: Poor (very small files)
+
+  ## Format Recommendations
+
+  ### Photos
+  - **Original**: JPG quality 95
+  - **Web**: WebP quality 85 or JPG quality 85
+  - **Thumbnails**: JPG quality 75
+
+  ### Graphics/Logos
+  - **With transparency**: PNG
+  - **Without transparency**: WebP or JPG
+  - **Icons**: PNG or ICO
+
+  ### Animations
+  - **Animated**: GIF or WebP
+  - **Video alternative**: Consider MP4
+
+  ## File Size Comparison
+  Example 1920x1080 photo:
+  - PNG: ~3.2 MB
+  - JPG (quality 95): ~850 KB
+  - JPG (quality 85): ~450 KB
+  - WebP (quality 85): ~280 KB
+  - JPG (quality 75): ~320 KB
+
+  ## Performance
+  - Small images (< 1 MP): 50-200ms
+  - Medium images (1-5 MP): 200-500ms
+  - Large images (5-20 MP): 500ms - 2s
+  - Very large (> 20 MP): 2s - 10s
+
+  ## Use Cases
+  - **Web Optimization**: Convert and compress for web
+  - **Thumbnail Generation**: Create preview images
+  - **Format Standardization**: Convert all to same format
+  - **Image Resizing**: Batch resize for consistency
+  - **Watermarking**: Protect images
+  - **Social Media**: Resize for platforms
+  - **Email Attachments**: Reduce size
+
+  ## Best Practices
+  1. Keep originals, process copies
+  2. Use WebP for web (better compression)
+  3. Optimize quality vs file size
+  4. Batch process similar images
+  5. Maintain aspect ratios
+  6. Test quality before batch processing
+  7. Use appropriate format for content type

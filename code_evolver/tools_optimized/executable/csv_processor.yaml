@@ -1,0 +1,336 @@
+name: "CSV Data Processor"
+type: "executable"
+version: "1.0.0"
+description: "Advanced CSV file processing with pandas. Read, write, filter, transform, merge, and analyze CSV data. Supports large files, encoding detection, data cleaning, and statistical operations."
+
+# Performance metadata
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "very-long"
+priority: 120
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/csv_processor.py"]
+  install_command: "pip install pandas chardet"
+
+# Resource constraints
+constraints:
+  timeout_ms: 60000  # 1 minute
+  max_memory_mb: 2048
+  max_cpu_percent: 60
+
+# Structured input schema
+input_schema:
+  type: object
+  properties:
+    operation:
+      type: string
+      enum: ["read", "write", "filter", "transform", "merge", "aggregate", "validate", "clean"]
+      required: true
+    file_path:
+      type: string
+      description: "Path to CSV file"
+      required: true
+    output_path:
+      type: string
+      description: "Output file path (for write operations)"
+      required: false
+    delimiter:
+      type: string
+      description: "CSV delimiter"
+      default: ","
+    encoding:
+      type: string
+      description: "File encoding (auto-detect if not specified)"
+      default: "auto"
+    headers:
+      type: boolean
+      description: "First row contains headers"
+      default: true
+    filter_expression:
+      type: string
+      description: "Pandas query expression for filtering"
+      required: false
+    columns:
+      type: array
+      items:
+        type: string
+      description: "Columns to select"
+      required: false
+    sort_by:
+      type: array
+      items:
+        type: string
+      description: "Columns to sort by"
+      default: []
+    group_by:
+      type: array
+      items:
+        type: string
+      description: "Columns to group by"
+      default: []
+    aggregation:
+      type: object
+      description: "Aggregation functions (sum, mean, count, etc.)"
+      default: {}
+
+# Structured output schema
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    operation:
+      type: string
+    data:
+      type: any
+      description: "Processed data"
+    rows:
+      type: integer
+    columns:
+      type: integer
+    statistics:
+      type: object
+      description: "Data statistics"
+    error:
+      type: string
+
+tags: ["csv", "data", "pandas", "tabular", "etl", "processing"]
+
+examples:
+  - input:
+      operation: "read"
+      file_path: "data.csv"
+    output:
+      success: true
+      data: [{"col1": "val1", "col2": "val2"}]
+      rows: 100
+      columns: 5
+
+  - input:
+      operation: "filter"
+      file_path: "sales.csv"
+      filter_expression: "amount > 1000 and region == 'West'"
+    output:
+      success: true
+      data: [...]
+      rows: 25
+
+  - input:
+      operation: "aggregate"
+      file_path: "transactions.csv"
+      group_by: ["category"]
+      aggregation: {"amount": "sum", "count": "count"}
+    output:
+      success: true
+      data: [{"category": "Electronics", "amount_sum": 5000, "count": 50}]
+
+usage_notes: |
+  ## Overview
+  Powerful CSV processing with pandas for data analysis and transformation.
+
+  ## Operations
+
+  ### read
+  Read CSV file and return data.
+  - Auto-detect encoding
+  - Handle various delimiters
+  - Parse dates automatically
+  - Handle missing values
+
+  ### write
+  Write data to CSV file.
+  - Custom delimiter
+  - Include/exclude headers
+  - Specify encoding
+  - Append or overwrite
+
+  ### filter
+  Filter rows based on conditions.
+  ```python
+  filter_expression = "age > 25 and city == 'NYC'"
+  filter_expression = "sales > 1000"
+  filter_expression = "date >= '2024-01-01'"
+  ```
+
+  ### transform
+  Transform columns and data.
+  - Add calculated columns
+  - Rename columns
+  - Convert data types
+  - Apply functions
+
+  ### merge
+  Merge multiple CSV files.
+  - Inner/outer/left/right joins
+  - Concatenate files
+  - Merge on columns
+
+  ### aggregate
+  Group and aggregate data.
+  ```python
+  group_by = ["category", "region"]
+  aggregation = {
+      "sales": "sum",
+      "quantity": "count",
+      "price": "mean"
+  }
+  ```
+
+  ### validate
+  Validate CSV data.
+  - Check for missing values
+  - Validate data types
+  - Check constraints
+  - Find duplicates
+
+  ### clean
+  Clean and normalize data.
+  - Remove duplicates
+  - Fill missing values
+  - Trim whitespace
+  - Normalize formats
+
+  ## Features
+  - **Auto-encoding Detection**: Automatically detect file encoding
+  - **Large File Support**: Chunk processing for huge files
+  - **Type Inference**: Automatic data type detection
+  - **Missing Data**: Handle NaN, NULL, empty values
+  - **Date Parsing**: Automatic date/time parsing
+  - **Statistics**: Descriptive statistics
+  - **Validation**: Data quality checks
+
+  ## Filter Examples
+  ```python
+  # Numeric comparison
+  "price > 100"
+  "quantity >= 10 and quantity <= 100"
+
+  # String matching
+  "category == 'Electronics'"
+  "name.str.contains('Widget')"
+  "email.str.endswith('@example.com')"
+
+  # Date filtering
+  "date >= '2024-01-01'"
+  "created_at.dt.year == 2024"
+
+  # Multiple conditions
+  "price > 100 and category == 'Electronics'"
+  "(quantity < 10) | (status == 'low_stock')"
+
+  # Null checks
+  "email.notna()"
+  "phone.isna()"
+  ```
+
+  ## Aggregation Functions
+  - **sum**: Total
+  - **mean**: Average
+  - **median**: Median value
+  - **count**: Count rows
+  - **min**: Minimum
+  - **max**: Maximum
+  - **std**: Standard deviation
+  - **var**: Variance
+  - **first**: First value
+  - **last**: Last value
+
+  ## Transform Operations
+  ```python
+  # Add calculated column
+  transform = {
+      "total": "price * quantity",
+      "tax": "price * 0.08",
+      "full_name": "first_name + ' ' + last_name"
+  }
+
+  # Rename columns
+  rename = {
+      "old_name": "new_name",
+      "qty": "quantity"
+  }
+
+  # Convert types
+  dtypes = {
+      "price": "float",
+      "quantity": "int",
+      "date": "datetime"
+  }
+  ```
+
+  ## Merge Operations
+  ```python
+  # Join two CSV files
+  merge_config = {
+      "left_file": "customers.csv",
+      "right_file": "orders.csv",
+      "on": "customer_id",
+      "how": "inner"  # inner, outer, left, right
+  }
+
+  # Concatenate files
+  concat_files = ["jan.csv", "feb.csv", "mar.csv"]
+  ```
+
+  ## Large File Processing
+  For files > 1GB:
+  ```python
+  # Process in chunks
+  chunk_size = 10000  # rows per chunk
+  # Automatically handled for large files
+  ```
+
+  ## Statistics Output
+  ```json
+  {
+    "statistics": {
+      "column1": {
+        "count": 1000,
+        "mean": 45.6,
+        "std": 12.3,
+        "min": 10,
+        "max": 95,
+        "25%": 35,
+        "50%": 45,
+        "75%": 55
+      }
+    }
+  }
+  ```
+
+  ## Data Cleaning
+  ```python
+  # Remove duplicates
+  clean_config = {
+      "duplicates": "remove",
+      "missing": "fill",  # fill, drop, interpolate
+      "fill_value": 0,
+      "trim": true,
+      "lowercase": ["email", "username"]
+  }
+  ```
+
+  ## Performance
+  - Small files (< 10K rows): < 100ms
+  - Medium files (10K-100K rows): 100ms - 1s
+  - Large files (100K-1M rows): 1s - 10s
+  - Very large files (> 1M rows): Chunk processing
+
+  ## Use Cases
+  - **Data Analysis**: Analyze CSV data
+  - **ETL**: Transform and load data
+  - **Reporting**: Generate reports from CSV
+  - **Data Cleaning**: Clean and normalize data
+  - **Integration**: Connect CSV to workflows
+  - **Validation**: Validate data quality
+
+  ## Best Practices
+  1. Specify encoding if known
+  2. Use chunking for large files
+  3. Validate data before processing
+  4. Handle missing values appropriately
+  5. Use appropriate data types
+  6. Index on frequently filtered columns
