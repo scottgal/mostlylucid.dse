@@ -722,6 +722,45 @@ class ConfigManager:
             "environment": "development"
         })
 
+    # Filesystem properties
+    @property
+    def filesystem_enabled(self) -> bool:
+        """Check if tool-scoped filesystem is enabled."""
+        return self.get("filesystem.enabled", True)
+
+    @property
+    def filesystem_base_path(self) -> str:
+        """Get filesystem base path."""
+        return self.get("filesystem.base_path", "./data/filesystem")
+
+    @property
+    def filesystem_max_file_size_mb(self) -> int:
+        """Get maximum file size in MB."""
+        return self.get("filesystem.max_file_size_mb", 100)
+
+    @property
+    def filesystem_max_total_size_mb(self) -> int:
+        """Get maximum total storage per tool scope in MB."""
+        return self.get("filesystem.max_total_size_mb", 1000)
+
+    @property
+    def filesystem_allowed_extensions(self) -> list:
+        """Get list of allowed file extensions."""
+        return self.get("filesystem.allowed_extensions", [
+            ".txt", ".json", ".yaml", ".yml", ".md",
+            ".csv", ".log", ".xml"
+        ])
+
+    @property
+    def filesystem_allow_absolute_paths(self) -> bool:
+        """Check if absolute paths are allowed."""
+        return self.get("filesystem.allow_absolute_paths", False)
+
+    @property
+    def filesystem_allow_parent_traversal(self) -> bool:
+        """Check if parent directory traversal is allowed."""
+        return self.get("filesystem.allow_parent_traversal", False)
+
     @property
     def registry_path(self) -> str:
         """Get registry path."""

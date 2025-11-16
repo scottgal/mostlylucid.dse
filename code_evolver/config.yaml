@@ -284,6 +284,29 @@ loki:
     application: "code_evolver"
     environment: "development"
 
+# Filesystem - Tool-scoped file operations
+filesystem:
+  enabled: true
+  base_path: "./data/filesystem"
+  # Each tool gets its own isolated directory
+  # Example: ./data/filesystem/my_tool/
+  # Child tools can create subdirectories within their scope
+  max_file_size_mb: 100
+  allowed_extensions:
+    - ".txt"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+    - ".md"
+    - ".csv"
+    - ".log"
+    - ".xml"
+  # Security settings
+  allow_absolute_paths: false
+  allow_parent_traversal: false
+  # Storage limits per tool scope
+  max_total_size_mb: 1000
+
 logging:
   level: "WARNING"
   file: "code_evolver.log"

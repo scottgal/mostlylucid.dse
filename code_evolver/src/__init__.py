@@ -133,6 +133,65 @@ def create_loki_manager(config_manager, scope="global"):
         return None
 
 
+def create_filesystem_manager(config_manager):
+    """
+    Factory function to create FilesystemManager instance.
+
+    This function creates a FilesystemManager instance configured from
+    the config_manager settings.
+
+    Args:
+        config_manager: ConfigManager instance
+
+    Returns:
+        FilesystemManager instance or None if filesystem is disabled
+
+    Example:
+        >>> config = ConfigManager()
+        >>> fs = create_filesystem_manager(config)
+        >>> if fs:
+        ...     fs.write("my_tool", "data.json", '{"key": "value"}')
+        ...     content = fs.read("my_tool", "data.json")
+    """
+    if not config_manager.filesystem_enabled:
+        return None
+
+    try:
+        # Import here to avoid circular dependency
+        import sys
+        from pathlib import Path
+
+        # Add tools/executable to path if not already there
+        tools_path = Path(__file__).parent.parent / 'tools' / 'executable'
+        if str(tools_path) not in sys.path:
+            sys.path.insert(0, str(tools_path))
+
+        from filesystem_manager import FilesystemManager
+
+        # Create instance
+        fs = FilesystemManager(
+            base_path=config_manager.filesystem_base_path,
+            max_file_size_mb=config_manager.filesystem_max_file_size_mb,
+            max_total_size_mb=config_manager.filesystem_max_total_size_mb,
+            allowed_extensions=config_manager.filesystem_allowed_extensions,
+            allow_absolute_paths=config_manager.filesystem_allow_absolute_paths,
+            allow_parent_traversal=config_manager.filesystem_allow_parent_traversal
+        )
+
+        return fs
+
+    except ImportError as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Filesystem requested but filesystem_manager not available: {e}")
+        return None
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Failed to create FilesystemManager: {e}")
+        return None
+
+
 # New hierarchical evolution system
 from .overseer_llm import OverseerLlm, ExecutionPlan
 from .evaluator_llm import EvaluatorLlm, FitnessEvaluation
@@ -166,6 +225,7 @@ __all__ = [
     "OpenAPITool",
     "create_rag_memory",  # Factory function for RAG
     "create_loki_manager",  # Factory function for Loki
+    "create_filesystem_manager",  # Factory function for Filesystem
     # New exports
     "OverseerLlm",
     "ExecutionPlan",
