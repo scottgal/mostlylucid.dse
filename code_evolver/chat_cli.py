@@ -850,8 +850,10 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/run <node_id> [input]", "Run an existing node with optional input"),
             ("/test <node_id>", "Run unit tests for a node"),
             ("/evaluate <node_id>", "Evaluate a node's performance"),
-            ("/list", "List all nodes in registry"),
             ("/tools", "List all available tools (LLM, code, and community tools)"),
+            ("/tool info <tool_name>", "Get intelligent description of a tool (uses tinyllama)"),
+            ("/tool run <tool_name> [input]", "Execute a tool directly with input and see results"),
+            ("/tool list", "List available tools (same as /tools)"),
             ("/backends [--test]", "Check status of all LLM backends (API keys, connectivity)"),
             ("/mutate tool <tool_id> <instructions>", "Improve a tool based on instructions"),
             ("/optimize tool <tool_id> [target]", "Optimize a tool for performance/quality/memory (iterative)"),
@@ -4114,6 +4116,236 @@ Return ONLY the JSON object, nothing else."""
 
         return True
 
+    def handle_tool_command(self, args: str) -> bool:
+        """
+        Handle tool subcommands: info, run, list.
+
+        Args:
+            args: Command arguments after "tool"
+
+        Returns:
+            True if successful
+        """
+        if not args:
+            console.print("[yellow]Usage:[/yellow]")
+            console.print("  [cyan]/tool info <tool_name>[/cyan]  - Get intelligent description of tool")
+            console.print("  [cyan]/tool run <tool_name> [input][/cyan]  - Execute tool with input")
+            console.print("  [cyan]/tool list[/cyan]  - List available tools (same as /tools)")
+            return False
+
+        parts = args.split(None, 1)
+        subcommand = parts[0].lower()
+
+        if subcommand == 'list':
+            return self.handle_tools()
+
+        elif subcommand == 'info':
+            if len(parts) < 2:
+                console.print("[red]Usage: /tool info <tool_name>[/red]")
+                return False
+            tool_name = parts[1].strip()
+            return self.handle_tool_info(tool_name)
+
+        elif subcommand == 'run':
+            if len(parts) < 2:
+                console.print("[red]Usage: /tool run <tool_name> [input][/red]")
+                return False
+            run_args = parts[1].strip()
+            return self.handle_tool_run(run_args)
+
+        else:
+            console.print(f"[red]Unknown tool subcommand: {subcommand}[/red]")
+            console.print("[dim]Available: info, run, list[/dim]")
+            return False
+
+    def handle_tool_info(self, tool_name: str) -> bool:
+        """
+        Get intelligent description of a tool using tinyllama.
+
+        Args:
+            tool_name: Name or ID of the tool
+
+        Returns:
+            True if successful
+        """
+        # Find the tool
+        tool = self.tools_manager.get_tool(tool_name)
+        if not tool:
+            console.print(f"[red]Tool not found: {tool_name}[/red]")
+            console.print("[dim]Use /tools to see available tools[/dim]")
+            return False
+
+        console.print(f"\n[bold cyan]Tool: {tool.name}[/bold cyan]\n")
+
+        # Build tool spec for tinyllama to analyze
+        tool_spec = f"""Tool: {tool.name}
+Type: {tool.tool_type.value}
+Description: {tool.description}
+"""
+
+        # Add tool-specific details
+        if tool.tool_type.value == "llm":
+            impl = getattr(tool, 'implementation', {})
+            if isinstance(impl, dict):
+                llm_config = impl.get('llm', {})
+                if isinstance(llm_config, dict):
+                    tool_spec += f"Model: {llm_config.get('model', 'N/A')}\n"
+
+        if tool.tool_type.value == "executable":
+            impl = getattr(tool, 'implementation', {})
+            if isinstance(impl, dict):
+                func_sig = impl.get('function_signature', '')
+                if func_sig:
+                    tool_spec += f"Function: {func_sig}\n"
+
+        # Use tinyllama to generate friendly explanation
+        prompt = f"""{tool_spec}
+
+Explain what this tool does, what parameters it accepts, and when to use it.
+Be concise (2-3 sentences). Format as:
+
+Purpose: [what it does]
+Input: [what parameters it needs]
+Use case: [when to use it]"""
+
+        try:
+            with console.status("[cyan]Analyzing tool...", spinner="dots"):
+                explanation = self.client.generate(
+                    model="tinyllama",
+                    prompt=prompt,
+                    temperature=0.3,
+                    model_key="triage"
+                )
+
+            console.print(f"[green]{explanation}[/green]\n")
+
+            # Show technical details
+            console.print(f"[dim]ID: {tool.tool_id}[/dim]")
+            console.print(f"[dim]Type: {tool.tool_type.value}[/dim]")
+            if tool.tags:
+                console.print(f"[dim]Tags: {', '.join(tool.tags)}[/dim]")
+
+            console.print()
+            return True
+
+        except Exception as e:
+            console.print(f"[red]Error analyzing tool: {e}[/red]")
+            # Fallback to basic info
+            console.print(f"[yellow]Description: {tool.description}[/yellow]")
+            console.print(f"[dim]Type: {tool.tool_type.value}[/dim]\n")
+            return False
+
+    def handle_tool_run(self, args: str) -> bool:
+        """
+        Execute a tool with provided input.
+
+        Args:
+            args: "<tool_name> [input_json or input_string]"
+
+        Returns:
+            True if successful
+        """
+        # Parse tool name and input
+        parts = args.split(None, 1)
+        tool_name = parts[0]
+
+        # Get input if provided, otherwise prompt for it
+        if len(parts) > 1:
+            input_str = parts[1]
+        else:
+            input_str = console.input("[cyan]Enter input (JSON or text): [/cyan]").strip()
+
+        # Find the tool
+        tool = self.tools_manager.get_tool(tool_name)
+        if not tool:
+            console.print(f"[red]Tool not found: {tool_name}[/red]")
+            console.print("[dim]Use /tools to see available tools[/dim]")
+            return False
+
+        console.print(f"\n[bold cyan]Executing: {tool.name}[/bold cyan]\n")
+
+        try:
+            # Try to parse as JSON, otherwise use as string
+            import json
+            try:
+                if input_str.startswith('{') or input_str.startswith('['):
+                    input_data = json.loads(input_str)
+                else:
+                    # Treat as simple string input
+                    input_data = {"input": input_str, "description": input_str}
+            except json.JSONDecodeError:
+                # Use as plain string
+                input_data = {"input": input_str, "description": input_str}
+
+            # Execute based on tool type
+            if tool.tool_type.value == "llm":
+                # For LLM tools, use the input as a prompt
+                prompt = input_data.get("input", input_data.get("description", ""))
+
+                with console.status("[cyan]Running LLM tool...", spinner="dots"):
+                    result = self.tools_manager.invoke_llm_tool(
+                        tool_id=tool.tool_id,
+                        prompt=prompt,
+                        temperature=0.7
+                    )
+
+                console.print("[bold green]Result:[/bold green]")
+                console.print(result)
+
+            elif tool.tool_type.value == "executable":
+                # For executable tools, run the code
+                impl = getattr(tool, 'implementation', {})
+                if not isinstance(impl, dict) or 'code' not in impl:
+                    console.print(f"[red]Tool {tool_name} has no executable code[/red]")
+                    return False
+
+                # Execute the tool's code with input
+                import tempfile
+                import subprocess
+
+                with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+                    f.write(impl['code'])
+                    code_file = f.name
+
+                try:
+                    # Run with JSON input
+                    process = subprocess.run(
+                        ['python', code_file],
+                        input=json.dumps(input_data),
+                        capture_output=True,
+                        text=True,
+                        timeout=30
+                    )
+
+                    if process.returncode == 0:
+                        console.print("[bold green]Result:[/bold green]")
+                        try:
+                            result_json = json.loads(process.stdout)
+                            console.print(json.dumps(result_json, indent=2))
+                        except json.JSONDecodeError:
+                            console.print(process.stdout)
+                    else:
+                        console.print(f"[red]Error executing tool:[/red]")
+                        console.print(process.stderr)
+                        return False
+
+                finally:
+                    import os
+                    os.unlink(code_file)
+
+            else:
+                console.print(f"[yellow]Tool type '{tool.tool_type.value}' cannot be executed directly[/yellow]")
+                return False
+
+            console.print()
+            return True
+
+        except Exception as e:
+            console.print(f"[red]Error executing tool: {e}[/red]")
+            import traceback
+            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+            return False
+
     def handle_mutate_tool(self, args: str) -> bool:
         """
         Handle mutate tool command - improve a tool based on instructions.
@@ -5026,11 +5258,12 @@ Return ONLY the JSON, no other text."""
                 elif cmd.lower() == 'status':
                     self.handle_status()
 
-                elif cmd.lower() == 'list':
-                    self.handle_list()
-
                 elif cmd.lower() == 'tools':
                     self.handle_tools()
+
+                elif cmd.startswith('tool '):
+                    tool_cmd = cmd[5:].strip()
+                    self.handle_tool_command(tool_cmd)
 
                 elif cmd.lower() == 'backends' or cmd.lower().startswith('backends '):
                     test_connection = '--test' in cmd.lower()
