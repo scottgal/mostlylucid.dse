@@ -1,0 +1,346 @@
+tool_id: "filesystem"
+version: "1.0.0"
+name: "Tool-Scoped Filesystem"
+description: "Isolated filesystem operations for tool-scoped data storage with automatic directory management"
+category: "storage"
+type: "executable"
+
+metadata:
+  tags:
+    - "filesystem"
+    - "storage"
+    - "io"
+    - "data-persistence"
+    - "tool-scoped"
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+
+purpose: |
+  Tool-Scoped Filesystem provides isolated file operations for each tool:
+  - Each tool gets its own directory under /toolname/filesystem
+  - Child tools can create subdirectories within their scope
+  - All standard file operations: read, write, exists, size, list, delete
+  - Security: No path traversal, extension filtering, size limits
+  - Automatic directory creation and cleanup
+
+  This ensures tools have persistent storage without interfering with each other.
+
+capabilities:
+  - "Isolated storage per tool scope"
+  - "Automatic directory management"
+  - "Read/write files with safety checks"
+  - "List files and directories"
+  - "Check file existence and properties"
+  - "Get file size and metadata"
+  - "Delete files and directories"
+  - "Create subdirectories within scope"
+  - "Path traversal protection"
+  - "File size and extension validation"
+
+inputs:
+  - name: "operation"
+    type: "string"
+    description: "File operation to perform"
+    required: true
+    enum:
+      - "read"        # Read file contents
+      - "write"       # Write file contents
+      - "append"      # Append to file
+      - "exists"      # Check if file/dir exists
+      - "list"        # List files in directory
+      - "delete"      # Delete file or directory
+      - "mkdir"       # Create directory
+      - "size"        # Get file size
+      - "metadata"    # Get file metadata
+      - "copy"        # Copy file
+      - "move"        # Move/rename file
+
+  - name: "scope"
+    type: "string"
+    description: "Tool scope name (creates /scope/filesystem directory)"
+    required: true
+    example: "my_tool"
+
+  - name: "path"
+    type: "string"
+    description: "Relative path within tool scope"
+    required: true
+    example: "data/output.json"
+
+  - name: "content"
+    type: "string"
+    description: "Content to write (for write/append operations)"
+    required: false
+
+  - name: "dest_path"
+    type: "string"
+    description: "Destination path (for copy/move operations)"
+    required: false
+
+  - name: "encoding"
+    type: "string"
+    description: "File encoding"
+    required: false
+    default: "utf-8"
+
+  - name: "create_parents"
+    type: "boolean"
+    description: "Create parent directories if they don't exist"
+    required: false
+    default: true
+
+  - name: "recursive"
+    type: "boolean"
+    description: "Recursive operation (for list/delete)"
+    required: false
+    default: false
+
+  - name: "pattern"
+    type: "string"
+    description: "File pattern for list operation (e.g., '*.json')"
+    required: false
+    default: "*"
+
+outputs:
+  - name: "status"
+    type: "string"
+    description: "Operation status (success/error)"
+
+  - name: "message"
+    type: "string"
+    description: "Human-readable status message"
+
+  - name: "content"
+    type: "string"
+    description: "File contents (for read operation)"
+
+  - name: "exists"
+    type: "boolean"
+    description: "Whether file/directory exists (for exists operation)"
+
+  - name: "files"
+    type: "array"
+    description: "List of files (for list operation)"
+
+  - name: "size"
+    type: "integer"
+    description: "File size in bytes (for size/metadata operations)"
+
+  - name: "metadata"
+    type: "object"
+    description: "File metadata (modified time, permissions, etc.)"
+
+  - name: "path"
+    type: "string"
+    description: "Full resolved path within tool scope"
+
+execution:
+  language: "python"
+  entry_point: "tools/executable/filesystem_manager.py"
+  timeout_ms: 10000
+  memory_limit_mb: 256
+
+integration:
+  auto_install: false
+  install_on: "on_demand"
+
+configuration:
+  config_section: "filesystem"
+  required_settings:
+    - "enabled"
+    - "base_path"
+  optional_settings:
+    - "max_file_size_mb"
+    - "allowed_extensions"
+    - "allow_absolute_paths"
+    - "allow_parent_traversal"
+    - "max_total_size_mb"
+
+usage_example: |
+  # Write a file
+  {
+    "operation": "write",
+    "scope": "data_processor",
+    "path": "output/results.json",
+    "content": "{\"status\": \"complete\"}",
+    "create_parents": true
+  }
+  # Writes to: ./data/filesystem/data_processor/output/results.json
+
+  # Read a file
+  {
+    "operation": "read",
+    "scope": "data_processor",
+    "path": "output/results.json"
+  }
+
+  # List files
+  {
+    "operation": "list",
+    "scope": "data_processor",
+    "path": "output",
+    "pattern": "*.json",
+    "recursive": false
+  }
+
+  # Check existence
+  {
+    "operation": "exists",
+    "scope": "data_processor",
+    "path": "output/results.json"
+  }
+
+  # Get file size
+  {
+    "operation": "size",
+    "scope": "data_processor",
+    "path": "output/results.json"
+  }
+
+  # Create subdirectory
+  {
+    "operation": "mkdir",
+    "scope": "data_processor",
+    "path": "temp/cache"
+  }
+
+  # Delete file
+  {
+    "operation": "delete",
+    "scope": "data_processor",
+    "path": "temp/cache/old_data.json"
+  }
+
+  # Copy file
+  {
+    "operation": "copy",
+    "scope": "data_processor",
+    "path": "output/results.json",
+    "dest_path": "backup/results_backup.json"
+  }
+
+  # Get metadata
+  {
+    "operation": "metadata",
+    "scope": "data_processor",
+    "path": "output/results.json"
+  }
+
+directory_structure: |
+  ./data/filesystem/
+  ├── tool_1/                    # First tool's scope
+  │   ├── data/
+  │   │   ├── input.json
+  │   │   └── output.json
+  │   └── temp/
+  │       └── cache.txt
+  ├── tool_2/                    # Second tool's scope
+  │   ├── logs/
+  │   │   └── activity.log
+  │   └── results/
+  │       └── final.csv
+  └── data_processor/            # Data processor tool's scope
+      ├── output/
+      │   └── results.json
+      └── backup/
+          └── results_backup.json
+
+security:
+  path_traversal_protection: |
+    - All paths are resolved relative to tool scope directory
+    - .. (parent directory) traversal is blocked by default
+    - Absolute paths are rejected unless explicitly allowed
+    - Symlinks outside scope are prevented
+
+  extension_filtering: |
+    - Only allowed extensions can be written (configurable)
+    - Default: .txt, .json, .yaml, .yml, .md, .csv, .log, .xml
+    - Prevents execution of scripts or binaries
+
+  size_limits: |
+    - Individual files limited by max_file_size_mb (default: 100MB)
+    - Total storage per tool scope limited by max_total_size_mb (default: 1GB)
+    - Automatic validation before write operations
+
+best_practices:
+  - "Use descriptive scope names (tool name or functionality)"
+  - "Organize files in subdirectories for clarity"
+  - "Check file existence before reading"
+  - "Use appropriate file extensions"
+  - "Clean up temporary files after use"
+  - "Use metadata operation to check file age/size"
+  - "Create backups before overwriting important files"
+  - "Use pattern matching for bulk file operations"
+
+troubleshooting:
+  - issue: "Path traversal error"
+    solution: "Use relative paths only, avoid .. in paths"
+
+  - issue: "Extension not allowed"
+    solution: "Check allowed_extensions in config.yaml"
+
+  - issue: "File too large"
+    solution: "Check max_file_size_mb limit, consider splitting file"
+
+  - issue: "Storage quota exceeded"
+    solution: "Delete old files, check max_total_size_mb limit"
+
+  - issue: "Permission denied"
+    solution: "Verify base_path directory permissions"
+
+related_tools:
+  - "buffer"
+  - "loki"
+  - "qdrant"
+
+examples:
+  - name: "Data Pipeline Storage"
+    description: "Store intermediate results in a data processing pipeline"
+    usage: |
+      # Write intermediate result
+      {"operation": "write", "scope": "etl_pipeline",
+       "path": "stage1/extracted.json", "content": "..."}
+
+      # Read for next stage
+      {"operation": "read", "scope": "etl_pipeline",
+       "path": "stage1/extracted.json"}
+
+      # Write final result
+      {"operation": "write", "scope": "etl_pipeline",
+       "path": "final/transformed.json", "content": "..."}
+
+  - name: "Log Aggregation"
+    description: "Store and manage tool-specific logs"
+    usage: |
+      # Append to log file
+      {"operation": "append", "scope": "my_service",
+       "path": "logs/activity.log",
+       "content": "[2024-01-01] Task completed\n"}
+
+      # List all log files
+      {"operation": "list", "scope": "my_service",
+       "path": "logs", "pattern": "*.log"}
+
+  - name: "Configuration Management"
+    description: "Store and retrieve tool-specific configuration"
+    usage: |
+      # Write config
+      {"operation": "write", "scope": "my_tool",
+       "path": "config/settings.yaml", "content": "..."}
+
+      # Read config
+      {"operation": "read", "scope": "my_tool",
+       "path": "config/settings.yaml"}
+
+notes: |
+  The filesystem tool provides isolated, secure file storage for each tool:
+
+  - **Isolation**: Each tool scope has its own directory tree
+  - **Security**: Path traversal protection and extension filtering
+  - **Flexibility**: Support for all standard file operations
+  - **Persistence**: Data survives across tool invocations
+  - **Organization**: Subdirectories for logical file organization
+
+  All paths are relative to the tool's scope directory, ensuring tools
+  cannot access or modify other tools' data.

@@ -1,0 +1,351 @@
+tool_id: "loki"
+version: "1.0.0"
+name: "Loki Log Aggregation"
+description: "Manages Grafana Loki instance for log aggregation and monitoring (tool/global scope)"
+category: "observability"
+type: "executable"
+
+metadata:
+  tags:
+    - "observability"
+    - "logging"
+    - "monitoring"
+    - "loki"
+    - "infrastructure"
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+
+purpose: |
+  Loki is a log aggregation system that provides:
+  - Automatic stand-up of a lightweight Loki instance
+  - Persistent data storage to configurable directory
+  - Log querying and retrieval capabilities
+  - Integration with Grafana for visualization
+  - Support for tool-scoped or global deployment
+
+  The tool can be used in two modes:
+  1. GLOBAL: Auto-started at workflow initialization for all logging
+  2. TOOL: Explicitly invoked within workflows for specific log management
+
+capabilities:
+  - "Stand up Loki instance via Docker"
+  - "Configure persistent data storage"
+  - "Push logs to Loki with labels"
+  - "Query logs by labels and time range"
+  - "Check Loki instance health status"
+  - "Manage Loki lifecycle (start/stop/restart)"
+  - "Tail logs in real-time"
+  - "Export logs for analysis"
+
+inputs:
+  - name: "operation"
+    type: "string"
+    description: "Operation to perform"
+    required: true
+    enum:
+      - "start"      # Start Loki instance
+      - "stop"       # Stop Loki instance
+      - "restart"    # Restart Loki instance
+      - "status"     # Check health status
+      - "push"       # Push log entries
+      - "query"      # Query logs
+      - "tail"       # Tail recent logs
+      - "labels"     # List available labels
+
+  - name: "data_path"
+    type: "string"
+    description: "Path to persist Loki data (overrides config)"
+    required: false
+    default: "./data/loki"
+
+  - name: "url"
+    type: "string"
+    description: "Loki instance URL"
+    required: false
+    default: "http://localhost:3100"
+
+  - name: "scope"
+    type: "string"
+    description: "Deployment scope: 'tool' or 'global'"
+    required: false
+    default: "tool"
+    enum: ["tool", "global"]
+
+  # Push operation inputs
+  - name: "logs"
+    type: "array"
+    description: "Log entries to push (for 'push' operation)"
+    required: false
+    schema:
+      type: "object"
+      properties:
+        timestamp:
+          type: "integer"
+          description: "Unix timestamp in nanoseconds"
+        message:
+          type: "string"
+          description: "Log message"
+
+  - name: "labels"
+    type: "object"
+    description: "Labels for log entries (for 'push' operation)"
+    required: false
+    default:
+      application: "code_evolver"
+      environment: "development"
+
+  # Query operation inputs
+  - name: "query"
+    type: "string"
+    description: "LogQL query string (for 'query' operation)"
+    required: false
+    example: '{application="code_evolver",level="error"}'
+
+  - name: "start_time"
+    type: "string"
+    description: "Query start time (ISO8601 or relative like '1h')"
+    required: false
+    default: "1h"
+
+  - name: "end_time"
+    type: "string"
+    description: "Query end time (ISO8601 or 'now')"
+    required: false
+    default: "now"
+
+  - name: "limit"
+    type: "integer"
+    description: "Maximum number of log entries to return"
+    required: false
+    default: 100
+
+outputs:
+  - name: "status"
+    type: "string"
+    description: "Operation status (success/error)"
+
+  - name: "message"
+    type: "string"
+    description: "Human-readable status message"
+
+  - name: "instance_info"
+    type: "object"
+    description: "Loki instance information"
+    properties:
+      url:
+        type: "string"
+        description: "Loki URL"
+      data_path:
+        type: "string"
+        description: "Data storage path"
+      healthy:
+        type: "boolean"
+        description: "Health check status"
+      version:
+        type: "string"
+        description: "Loki version"
+
+  - name: "logs"
+    type: "array"
+    description: "Log entries (for query/tail operations)"
+
+  - name: "labels_list"
+    type: "array"
+    description: "Available label names (for 'labels' operation)"
+
+execution:
+  language: "python"
+  entry_point: "tools/executable/loki_manager.py"
+  timeout_ms: 30000
+  memory_limit_mb: 128
+
+integration:
+  # Can be auto-installed globally or used as tool
+  auto_install: false
+  install_on: "on_demand"
+
+  # Optional global hooks
+  hooks:
+    - event: "workflow_start"
+      action: "ensure_running"
+      condition: "scope == 'global'"
+
+    - event: "workflow_end"
+      action: "flush_logs"
+      condition: "scope == 'global'"
+
+dependencies:
+  python:
+    - name: "requests"
+      version: ">=2.25.0"
+      purpose: "HTTP client for Loki API"
+
+    - name: "docker"
+      version: ">=6.0.0"
+      purpose: "Docker SDK for container management"
+      optional: true
+
+  system:
+    - name: "docker"
+      version: ">=20.0.0"
+      purpose: "Docker engine for running Loki container"
+      check_command: "docker --version"
+
+configuration:
+  config_section: "loki"
+  required_settings:
+    - "enabled"
+    - "data_path"
+  optional_settings:
+    - "url"
+    - "push_url"
+    - "docker.image"
+    - "docker.container_name"
+    - "docker.port"
+    - "batch.size"
+    - "batch.timeout_seconds"
+    - "default_labels"
+
+usage_example: |
+  # GLOBAL SCOPE: Auto-started at workflow initialization
+  # Configured in config.yaml with scope: global
+
+  # TOOL SCOPE: Explicit invocation
+
+  # Start Loki instance
+  {
+    "operation": "start",
+    "data_path": "./data/loki",
+    "scope": "tool"
+  }
+
+  # Check status
+  {
+    "operation": "status"
+  }
+
+  # Push logs
+  {
+    "operation": "push",
+    "logs": [
+      {
+        "timestamp": 1234567890000000000,
+        "message": "Application started"
+      }
+    ],
+    "labels": {
+      "application": "code_evolver",
+      "level": "info",
+      "component": "startup"
+    }
+  }
+
+  # Query logs
+  {
+    "operation": "query",
+    "query": "{application=\"code_evolver\",level=\"error\"}",
+    "start_time": "1h",
+    "limit": 100
+  }
+
+  # Tail recent logs
+  {
+    "operation": "tail",
+    "query": "{application=\"code_evolver\"}",
+    "limit": 50
+  }
+
+  # List available labels
+  {
+    "operation": "labels"
+  }
+
+monitoring:
+  metrics:
+    - name: "loki_instance_health"
+      type: "gauge"
+      description: "Loki instance health status (0=down, 1=up)"
+
+    - name: "logs_pushed_total"
+      type: "counter"
+      description: "Total number of log entries pushed"
+
+    - name: "logs_queried_total"
+      type: "counter"
+      description: "Total number of query operations"
+
+    - name: "push_errors_total"
+      type: "counter"
+      description: "Number of failed push operations"
+
+  health_checks:
+    - endpoint: "/ready"
+      description: "Loki readiness check"
+      interval_seconds: 10
+
+    - endpoint: "/metrics"
+      description: "Loki Prometheus metrics"
+
+best_practices:
+  - "Use global scope for application-wide logging"
+  - "Use tool scope for specific workflow logging needs"
+  - "Configure appropriate data_path with sufficient disk space"
+  - "Set retention policies in loki-config.yaml"
+  - "Use meaningful labels for efficient querying"
+  - "Batch log pushes to reduce network overhead"
+  - "Monitor Loki disk usage regularly"
+  - "Use Grafana for log visualization"
+  - "Index frequently-queried labels"
+  - "Set up alerts for critical log patterns"
+
+troubleshooting:
+  - issue: "Loki container fails to start"
+    solution: "Check Docker is running, verify port 3100 is available, check data_path permissions"
+
+  - issue: "Logs not appearing in queries"
+    solution: "Verify labels match query, check time range, ensure logs were pushed successfully"
+
+  - issue: "High disk usage"
+    solution: "Adjust retention_period in loki-config.yaml, compact old data, increase disk space"
+
+  - issue: "Push operations timing out"
+    solution: "Reduce batch size, check network connectivity, verify Loki is responding"
+
+  - issue: "Cannot connect to Loki"
+    solution: "Verify URL is correct, check Loki is running, verify network/firewall rules"
+
+related_tools:
+  - "bugcatcher"
+  - "workflow_tracker"
+  - "profiling"
+  - "status_manager"
+
+docker_compose_integration: |
+  # Loki is already configured in docker-compose.localdev.yml
+  # Start with: docker-compose -f docker-compose.localdev.yml up -d loki
+
+  # For standalone/tool-scoped usage, the tool can start its own container
+  # with custom data path and configuration
+
+notes: |
+  This tool provides flexible Loki deployment:
+
+  1. GLOBAL SCOPE: Single instance for entire application
+     - Auto-started with workflows
+     - Shared across all tools
+     - Configured in config.yaml
+
+  2. TOOL SCOPE: On-demand instances for specific needs
+     - Manually started/stopped
+     - Isolated log streams
+     - Custom configuration per instance
+
+  The tool gracefully handles:
+  - Loki being unavailable (returns errors but doesn't crash)
+  - Docker not installed (provides helpful error messages)
+  - Port conflicts (suggests alternative ports)
+  - Data path permission issues
+
+  Data persistence ensures logs survive container restarts.
+  Use Grafana (http://localhost:3000) for log visualization.

@@ -663,6 +663,104 @@ class ConfigManager:
         """Get max content length for embeddings."""
         return self.get("rag_memory.max_embedding_content_length", 1000)
 
+    # Loki properties
+    @property
+    def loki_enabled(self) -> bool:
+        """Check if Loki should be used for log aggregation."""
+        return self.get("loki.enabled", True)
+
+    @property
+    def loki_data_path(self) -> str:
+        """Get Loki data storage path."""
+        return self.get("loki.data_path", "./data/loki")
+
+    @property
+    def loki_url(self) -> str:
+        """Get Loki server URL."""
+        return self.get("loki.url", "http://localhost:3100")
+
+    @property
+    def loki_push_url(self) -> str:
+        """Get Loki push endpoint URL."""
+        return self.get("loki.push_url", f"{self.loki_url}/loki/api/v1/push")
+
+    @property
+    def loki_docker_image(self) -> str:
+        """Get Loki Docker image."""
+        return self.get("loki.docker.image", "grafana/loki:2.9.3")
+
+    @property
+    def loki_container_name(self) -> str:
+        """Get Loki container name."""
+        return self.get("loki.docker.container_name", "code_evolver_loki_standalone")
+
+    @property
+    def loki_port(self) -> int:
+        """Get Loki HTTP port."""
+        return self.get("loki.docker.port", 3100)
+
+    @property
+    def loki_config_file(self) -> str:
+        """Get Loki config file path."""
+        return self.get("loki.docker.config_file", "./loki-config.yaml")
+
+    @property
+    def loki_batch_size(self) -> int:
+        """Get Loki batch size for log pushing."""
+        return self.get("loki.batch.size", 10)
+
+    @property
+    def loki_batch_timeout(self) -> int:
+        """Get Loki batch timeout in seconds."""
+        return self.get("loki.batch.timeout_seconds", 5)
+
+    @property
+    def loki_default_labels(self) -> dict:
+        """Get default labels for Loki logs."""
+        return self.get("loki.default_labels", {
+            "application": "code_evolver",
+            "environment": "development"
+        })
+
+    # Filesystem properties
+    @property
+    def filesystem_enabled(self) -> bool:
+        """Check if tool-scoped filesystem is enabled."""
+        return self.get("filesystem.enabled", True)
+
+    @property
+    def filesystem_base_path(self) -> str:
+        """Get filesystem base path."""
+        return self.get("filesystem.base_path", "./data/filesystem")
+
+    @property
+    def filesystem_max_file_size_mb(self) -> int:
+        """Get maximum file size in MB."""
+        return self.get("filesystem.max_file_size_mb", 100)
+
+    @property
+    def filesystem_max_total_size_mb(self) -> int:
+        """Get maximum total storage per tool scope in MB."""
+        return self.get("filesystem.max_total_size_mb", 1000)
+
+    @property
+    def filesystem_allowed_extensions(self) -> list:
+        """Get list of allowed file extensions."""
+        return self.get("filesystem.allowed_extensions", [
+            ".txt", ".json", ".yaml", ".yml", ".md",
+            ".csv", ".log", ".xml"
+        ])
+
+    @property
+    def filesystem_allow_absolute_paths(self) -> bool:
+        """Check if absolute paths are allowed."""
+        return self.get("filesystem.allow_absolute_paths", False)
+
+    @property
+    def filesystem_allow_parent_traversal(self) -> bool:
+        """Check if parent directory traversal is allowed."""
+        return self.get("filesystem.allow_parent_traversal", False)
+
     @property
     def registry_path(self) -> str:
         """Get registry path."""

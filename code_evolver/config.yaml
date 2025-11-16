@@ -262,6 +262,51 @@ rag_memory:
   collection_name: "mostlylucid-dse-tools-rag"
   max_embedding_content_length: 1000
 
+# Loki - Log Aggregation and Monitoring
+loki:
+  enabled: true
+  data_path: "./data/loki"
+  url: "http://localhost:3100"
+  push_url: "http://localhost:3100/loki/api/v1/push"
+  # Docker configuration for standalone instance
+  docker:
+    image: "grafana/loki:2.9.3"
+    container_name: "code_evolver_loki_standalone"
+    port: 3100
+    config_file: "./loki-config.yaml"
+  # Batch settings for log pushing
+  batch:
+    size: 10
+    timeout_seconds: 5
+    max_wait_seconds: 10
+  # Labels to add to all logs
+  default_labels:
+    application: "code_evolver"
+    environment: "development"
+
+# Filesystem - Tool-scoped file operations
+filesystem:
+  enabled: true
+  base_path: "./data/filesystem"
+  # Each tool gets its own isolated directory
+  # Example: ./data/filesystem/my_tool/
+  # Child tools can create subdirectories within their scope
+  max_file_size_mb: 100
+  allowed_extensions:
+    - ".txt"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+    - ".md"
+    - ".csv"
+    - ".log"
+    - ".xml"
+  # Security settings
+  allow_absolute_paths: false
+  allow_parent_traversal: false
+  # Storage limits per tool scope
+  max_total_size_mb: 1000
+
 logging:
   level: "WARNING"
   file: "code_evolver.log"
