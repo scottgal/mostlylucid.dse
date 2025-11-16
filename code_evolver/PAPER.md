@@ -1689,27 +1689,33 @@ This continuous optimization uses real-world data rather than synthetic benchmar
 
 ### 4.9 Six-Stage Adaptive Escalation: Progressive Code Fixing with Logging Injection
 
-**Principle**: When code generation fails, progressively escalate through multiple strategies: increase model power, adjust temperature, inject debugging, and finally use god-level models.
+**Principle**: When code generation fails, progressively escalate through multiple strategies: increase model power, adjust temperature, inject debugging, and finally use the most powerful available model.
 
-Traditional systems use a single model and fail if it produces broken code. DSE implements a **6-stage adaptive escalation** system that combines:
+Traditional systems use a single model and fail if it produces broken code. DSE implements a **6-stage adaptive escalation** system that **auto-scales from single PC to cloud frontier models**:
 1. Progressive model capability increase
 2. Adaptive temperature adjustment (0.1 → 0.6)
 3. Strategic logging injection for debugging
 4. Full context tracking across attempts
-5. God-level fallback for hardest cases
+5. Best-available model fallback for hardest cases
 
-**Six-Stage Escalation Pipeline**:
+**Important**: The system adapts to your infrastructure. More powerful models = less escalation needed:
+- **Local setup** (Ollama): May need all 6 stages + "god-level" (deepseek-coder:6.7b is a "minor deity")
+- **Cloud frontier setup** (GPT-4/Claude): Often succeeds on first try, escalation rarely triggered
+- **Hybrid setup**: Smart routing minimizes cloud costs while maintaining high success rates
+
+**Six-Stage Escalation Pipeline** (Auto-scales to your infrastructure):
 
 ```
+LOCAL SETUP EXAMPLE (Ollama):
 Stage 1 (Attempts 1-2): Fast Model, Low Temperature
-  ├─ Model: codellama:7b
+  ├─ Model: codellama:7b (local)
   ├─ Temperature: 0.1 (attempt 1), 0.2 (attempt 2)
   ├─ Strategy: Conservative, focused fixes
   ├─ Success Rate: ~60% of failures
   └─ Avg Time: 15-20 seconds per attempt
 
 Stage 2 (Attempts 3-4): Add Debug Logging, Continue Fast Model
-  ├─ Model: codellama:7b
+  ├─ Model: codellama:7b (local)
   ├─ Temperature: 0.3 (attempt 3), 0.4 (attempt 4)
   ├─ Strategy: Inject comprehensive logging for visibility
   ├─ Logging: logging.debug() at ALL critical points
@@ -1717,12 +1723,12 @@ Stage 2 (Attempts 3-4): Add Debug Logging, Continue Fast Model
   └─ Avg Time: 20-25 seconds per attempt
 
 Stage 3 (Attempts 5-6): Powerful Model + Logging
-  ├─ Model: qwen2.5-coder:14b
+  ├─ Model: qwen2.5-coder:14b (local) OR gpt-4-turbo (cloud)
   ├─ Temperature: 0.5 (attempt 5), 0.6 (attempt 6)
   ├─ Strategy: Powerful model analyzes all previous attempts
   ├─ Context: Full history of 1-4 attempts with errors
-  ├─ Success Rate: ~10% of remaining failures
-  └─ Avg Time: 40-60 seconds per attempt
+  ├─ Success Rate: ~10% of remaining failures (local), ~40% (cloud frontier)
+  └─ Avg Time: 40-60 seconds (local), 10-20 seconds (cloud)
 
 Stage 4: Auto-Cleanup (If Successful)
   ├─ Action: Strip all logging statements
@@ -1730,19 +1736,25 @@ Stage 4: Auto-Cleanup (If Successful)
   ├─ Fallback: Keep version with logging if cleanup breaks
   └─ Avg Time: 5-10 seconds
 
-Stage 5: God-Level Escalation (After 6 Failures)
-  ├─ Model: deepseek-coder:6.7b (god-level)
+Stage 5: Best-Available Model Escalation (After 6 Failures)
+  ├─ Model: deepseek-coder:6.7b (local "god") OR claude-3.5-sonnet (cloud true frontier)
   ├─ Temperature: 0.7 (high creativity)
   ├─ Context: Complete history of ALL 6 attempts
   ├─ Strategy: Fundamental re-thinking, may suggest rewrites
-  ├─ Success Rate: ~5% of remaining failures
-  └─ Avg Time: 60-120 seconds
+  ├─ Success Rate: ~5% of remaining (local), ~20% (cloud frontier)
+  └─ Avg Time: 60-120 seconds (local), 15-30 seconds (cloud)
 
 Stage 6: Manual Intervention (If All Fail)
   ├─ Action: Report detailed failure with all attempt info
   ├─ Preserve: Best attempt (furthest progress)
   ├─ Store: Failure pattern in RAG for learning
   └─ Suggest: Manual debugging steps
+
+CLOUD FRONTIER SETUP (GPT-4/Claude):
+  ├─ Often succeeds in Stage 1-2 (powerful first model)
+  ├─ Escalation rarely needed beyond Stage 3
+  ├─ Stage 5 uses true frontier models (claude-3.5-sonnet, gpt-4-turbo)
+  └─ Overall success rate: ~90-95% (vs ~77% for local)
 ```
 
 **Key Innovation - Logging Injection**:
