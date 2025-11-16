@@ -42,6 +42,7 @@ class QdrantRAGMemory:
         memory_path: str = "./rag_memory",
         ollama_client: Optional[Any] = None,
         embedding_model: str = "nomic-embed-text",
+        embedding_endpoint: str = "http://localhost:11434",
         qdrant_url: str = "http://localhost:6333",
         collection_name: str = "code_evolver_artifacts",
         vector_size: int = 768  # Default for nomic-embed-text (768), llama3 is 4096
@@ -51,8 +52,9 @@ class QdrantRAGMemory:
 
         Args:
             memory_path: Path to memory storage directory (for metadata)
-            ollama_client: OllamaClient for generating embeddings
+            ollama_client: OllamaClient for generating embeddings (optional, uses endpoint if not provided)
             embedding_model: Model to use for embeddings
+            embedding_endpoint: Explicit endpoint for embedding generation (default: local Ollama)
             qdrant_url: URL for Qdrant server
             collection_name: Name of Qdrant collection
             vector_size: Dimension of embedding vectors
@@ -65,6 +67,7 @@ class QdrantRAGMemory:
 
         self.ollama_client = ollama_client
         self.embedding_model = embedding_model
+        self.embedding_endpoint = embedding_endpoint  # Explicit endpoint for embeddings
         self.collection_name = collection_name
         self.vector_size = vector_size
 
@@ -166,7 +169,7 @@ class QdrantRAGMemory:
 
     def _generate_embedding(self, text: str) -> Optional[List[float]]:
         """
-        Generate embedding for text using Ollama.
+        Generate embedding for text using Ollama endpoint.
 
         Args:
             text: Text to embed
@@ -174,16 +177,13 @@ class QdrantRAGMemory:
         Returns:
             Embedding vector or None if generation fails
         """
-        if not self.ollama_client:
-            logger.warning("OllamaClient not configured, cannot generate embeddings")
-            return None
-
         try:
             import requests
 
-            endpoint = self.ollama_client.base_url
+            # Use explicit embedding endpoint (not ollama_client.base_url)
+            # This ensures embeddings always use local Ollama even when LLM uses cloud API
             response = requests.post(
-                f"{endpoint}/api/embeddings",
+                f"{self.embedding_endpoint}/api/embeddings",
                 json={
                     "model": self.embedding_model,
                     "prompt": text
@@ -207,6 +207,8 @@ class QdrantRAGMemory:
 
         except Exception as e:
             logger.error(f"Error generating embedding: {e}")
+            logger.error(f"  Endpoint: {self.embedding_endpoint}")
+            logger.error(f"  Model: {self.embedding_model}")
 
         return None
 
@@ -476,7 +478,8 @@ class QdrantRAGMemory:
         self,
         tags: List[str],
         artifact_type: Optional[ArtifactType] = None,
-        match_all: bool = False
+        match_all: bool = False,
+        limit: Optional[int] = None
     ) -> List[Artifact]:
         """
         Find artifacts by tags.
@@ -485,6 +488,7 @@ class QdrantRAGMemory:
             tags: List of tags to search for
             artifact_type: Optional type filter
             match_all: If True, artifact must have all tags; if False, any tag
+            limit: Optional maximum number of results to return
 
         Returns:
             List of matching artifacts
@@ -516,6 +520,10 @@ class QdrantRAGMemory:
             key=lambda a: (a.quality_score, a.usage_count),
             reverse=True
         )
+
+        # Apply limit if specified
+        if limit is not None and limit > 0:
+            results = results[:limit]
 
         return results
 

@@ -55,7 +55,13 @@
       "Bash(do echo \"=== $model ===\")",
       "Bash(done)",
       "Bash(ollama list:*)",
-      "Bash(=3.0.43 --quiet)"
+      "Bash(=3.0.43 --quiet)",
+      "Bash(for f in config.yaml config.local.yaml config.anthropic.yaml)",
+      "Bash(do echo \"=== $f ===\")",
+      "Bash(for f in config.yaml config.local.yaml config.anthropic.yaml config.anthropic.simple.yaml config.unified.yaml)",
+      "Bash(do echo \"=== Testing $f ===\")",
+      "Bash(echo:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

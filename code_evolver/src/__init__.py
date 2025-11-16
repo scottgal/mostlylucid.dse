@@ -27,6 +27,19 @@ def create_rag_memory(config_manager, ollama_client):
     Returns:
         RAGMemory or QdrantRAGMemory instance based on configuration
     """
+    # Get embedding configuration (separate from LLM backend)
+    # This allows using local Ollama for embeddings even when using cloud LLMs
+
+    # Get embedding model key from config (e.g., "nomic_embed")
+    embedding_model_key = config_manager.get("llm.embedding.default", "nomic_embed")
+
+    # Get model metadata from registry
+    embedding_metadata = config_manager.get_model_metadata(embedding_model_key)
+    embedding_model_name = embedding_metadata.get("name", "nomic-embed-text")
+
+    # Get Ollama backend URL (embeddings ALWAYS use Ollama)
+    embedding_endpoint = config_manager.get("llm.backends.ollama.base_url", "http://localhost:11434")
+
     if config_manager.use_qdrant:
         if not QDRANT_AVAILABLE:
             import logging
@@ -35,21 +48,23 @@ def create_rag_memory(config_manager, ollama_client):
             return RAGMemory(
                 memory_path=config_manager.rag_memory_path,
                 ollama_client=ollama_client,
-                embedding_model=config_manager.embedding_model
+                embedding_model=embedding_model_name
             )
 
         return QdrantRAGMemory(
             memory_path=config_manager.rag_memory_path,
             ollama_client=ollama_client,
-            embedding_model=config_manager.embedding_model,
+            embedding_model=embedding_model_name,
+            embedding_endpoint=embedding_endpoint,  # ALWAYS Ollama for embeddings
             qdrant_url=config_manager.qdrant_url,
+            collection_name=config_manager.get("rag_memory.collection_name", "code_evolver_artifacts"),
             vector_size=config_manager.embedding_vector_size
         )
     else:
         return RAGMemory(
             memory_path=config_manager.rag_memory_path,
             ollama_client=ollama_client,
-            embedding_model=config_manager.embedding_model
+            embedding_model=embedding_model_name
         )
 
 # New hierarchical evolution system

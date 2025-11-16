@@ -1,0 +1,206 @@
+# ============================================================================
+# Code Evolver - Anthropic (Claude) Configuration
+# ============================================================================
+#
+# This configuration uses Anthropic's Claude models for all LLM tasks.
+#
+# SETUP:
+# 1. Get API key from https://console.anthropic.com/
+# 2. Set environment variable:
+#    export ANTHROPIC_API_KEY='sk-ant-api03-...'
+# 3. Run with: python chat_cli.py --config config.anthropic.yaml
+#
+# COST ESTIMATE:
+# - Claude Sonnet: ~$3 per million input tokens, ~$15 per million output
+# - Claude Opus: ~$15 per million input tokens, ~$75 per million output
+# - Average workflow: ~50k tokens = $0.15-$0.75 per generation
+#
+# MODELS:
+# - claude-3-5-sonnet-20241022: Best balance (recommended for most tasks)
+# - claude-3-opus-20240229: Most capable (expensive, use for complex tasks)
+# - claude-3-haiku-20240307: Fast & cheap (good for simple tasks)
+#
+# ============================================================================
+
+# LLM Backend Configuration
+llm:
+  # Primary backend
+  backend: "anthropic"
+
+  # Anthropic API settings
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"   # Set via environment variable
+
+    # Model mappings for different roles
+    models:
+      # Fast model for simple tasks (cheapest, lowest latency)
+      fast: "claude-3-haiku-20240307"
+
+      # Balanced model for most tasks (mid-range, default choice)
+      base: "claude-3-5-sonnet-20241022"
+
+      # Powerful model for complex reasoning (god-level)
+      powerful: "claude-3-opus-20240229"
+
+    # API settings
+    max_tokens: 12000
+    timeout: 120
+    temperature: 0.7   # optional, controls creativity
+
+
+# Embedding Backend Configuration (separate from LLM)
+# Uses local Ollama for embeddings even when using Anthropic for text generation
+# Anthropic doesn't provide an embeddings API, so we always use Ollama for this
+embedding:
+  backend: "ollama"
+  base_url: "http://localhost:11434"
+  model: "nomic-embed-text"
+  vector_size: 768
+
+# Auto-evolution settings
+auto_evolution:
+  enabled: true
+  performance_threshold: 0.15
+  min_runs_before_evolution: 3
+  check_interval_minutes: 60
+  max_versions_per_node: 10
+  keep_best_n_versions: 3
+  mutation_temperature: 0.7
+
+# Quality evaluation
+quality_evaluation:
+  enabled: true
+  evaluate_steps:
+    strategy: true
+    code: true
+    tests: true
+    final: true
+  thresholds:
+    strategy_min: 0.70
+    code_quality_min: 0.75
+    test_coverage_min: 0.80
+    final_min: 0.80
+    auto_adjust: true
+    adjustment_window: 100
+  max_iterations: 3
+  improvement_threshold: 0.05
+  feedback:
+    include_suggestions: true
+    include_examples: true
+    store_in_rag: true
+    learn_from_success: true
+
+# Registry settings
+registry:
+  path: "./registry"
+  backup_enabled: true
+  backup_interval_hours: 24
+  max_backup_count: 7
+
+# Node storage
+nodes:
+  path: "./nodes"
+  artifacts_path: "./artifacts"
+
+# RAG Memory settings
+rag_memory:
+  path: "./rag_memory"
+  use_qdrant: true
+  qdrant_url: "http://192.168.0.76:6333"
+  collection_name: "code_evolver_artifacts"
+  max_embedding_content_length: 1000
+
+# Logging
+logging:
+  level: "INFO"
+  file: "code_evolver.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  console:
+    enabled: true
+    use_colors: true
+
+# Chat interface
+chat:
+  prompt: "CodeEvolver> "
+  history_file: ".code_evolver_history"
+  max_history: 1000
+  show_thinking: false
+  show_metrics: true
+  show_workflow: true
+  auto_save_context: true
+  workflow_mode:
+    enabled: true
+    detect_keywords: ["and", "then", "translate", "convert"]
+    min_steps: 2
+    max_steps: 10
+  default_workflow_context:
+    priority: "medium"
+    quality_level: "production"
+    speed_requirement: "balanced"
+    max_iterations: 3
+    allow_escalation: true
+
+# Testing and code quality
+testing:
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6
+  test_driven_development: true
+  initial_optimization_iterations: 3
+  optimization_score_threshold: 0.1
+
+# ============================================================================
+# TOOLS REGISTRY
+# Tools will automatically use the tiered models (fast/base/powerful) defined
+# in the llm.anthropic.models section above. No need to specify models here.
+# ============================================================================
+# Tools are loaded from the tools/ directory YAML files
+
+# Optimization settings
+optimization:
+  enabled: true
+  cloud_optimization:
+    enabled: true
+    triggers:
+      offline_batch: true
+      quality_threshold: 0.65
+      reuse_threshold: 10
+      explicit_request: true
+    targets:
+      workflows: true
+      tools: true
+      code: true
+      system: true
+    levels:
+      local_only: false
+      cloud_deep_dive: true
+      recursive: true
+    max_cost_per_day: 50.00
+    max_tokens_per_optimization: 100000
+
+optimization_pressure:
+  high:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    min_quality_threshold: 0.60
+    max_latency_ms: 1000
+  medium:
+    optimization_level: "cloud"
+    max_cost: 5.00
+    allow_cloud: true
+    min_quality_threshold: 0.75
+    max_latency_ms: 30000
+  low:
+    optimization_level: "cloud"
+    max_cost: 50.00
+    allow_cloud: true
+    recursive: true
+    min_quality_threshold: 0.85
+    max_latency_ms: null
+
+build:
+  app_name: "CodeEvolver"
+  version: "0.1.0"
+  icon: null

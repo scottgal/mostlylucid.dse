@@ -1,12 +1,15 @@
 # ============================================================================
-# Code Evolver - Local Ollama Configuration (Unified System)
+# Code Evolver - Unified LLM Configuration
 # ============================================================================
 #
-# This is the LOCAL Ollama config - same as base config.yaml but emphasizes
-# that it's for local-only deployment with Ollama.
+# This is the NEW unified config structure with:
+# 1. Model Registry (define models once with all metadata)
+# 2. Cascading Defaults (set once, apply to all roles)
+# 3. Role-specific Overrides (only when needed)
+# 4. Protected Settings (embedding requires force override)
 #
 # USAGE:
-# python chat_cli.py --config config.local.yaml
+# python chat_cli.py --config config.unified.yaml
 #
 # ============================================================================
 
@@ -116,6 +119,7 @@ llm:
       quality: "excellent"
       specialization: "embedding"
 
+
   # ==========================================================================
   # DEFAULTS - Cascade to ALL roles unless overridden
   # ==========================================================================
@@ -164,8 +168,14 @@ llm:
       base_url: "http://localhost:11434"
       enabled: true
 
+    anthropic:
+      api_key: "${ANTHROPIC_API_KEY}"
+      enabled: false
+      max_tokens: 4096
+      timeout: 120
+
 # ==============================================================================
-# SYSTEM CONFIGURATION
+# SYSTEM CONFIGURATION (unchanged)
 # ==============================================================================
 
 execution:
@@ -221,8 +231,8 @@ nodes:
 rag_memory:
   path: "./rag_memory"
   use_qdrant: true
-  qdrant_url: "http://192.168.0.76:6333"
-  collection_name: "code_evolver_artifacts"
+  qdrant_url: "http://localhost:6333"
+  collection_name: "mostlylucid-dse-tools-rag"
   max_embedding_content_length: 1000
 
 logging:
@@ -263,7 +273,25 @@ testing:
   optimization_score_threshold: 0.1
 
 optimization:
-  enabled: false  # Disabled for local
+  enabled: true
+  cloud_optimization:
+    enabled: true
+    triggers:
+      offline_batch: true
+      quality_threshold: 0.65
+      reuse_threshold: 10
+      explicit_request: true
+    targets:
+      workflows: true
+      tools: true
+      code: true
+      system: true
+    levels:
+      local_only: false
+      cloud_deep_dive: true
+      recursive: true
+    max_cost_per_day: 50.00
+    max_tokens_per_optimization: 100000
 
 optimization_pressure:
   high:
@@ -280,7 +308,7 @@ optimization_pressure:
 
   medium:
     optimization_level: "local"
-    max_cost: 0.00
+    max_cost: 1.00
     allow_cloud: false
     use_specialists: true
     cache_first: true
@@ -291,17 +319,43 @@ optimization_pressure:
     fallback_pressure: "low"
 
   low:
-    optimization_level: "local"
-    max_cost: 0.00
-    allow_cloud: false
-    recursive: false
-    meta_optimization: false
+    optimization_level: "cloud"
+    max_cost: 50.00
+    allow_cloud: true
+    recursive: true
+    meta_optimization: true
     store_executions: true
     cluster_similar: true
-    min_quality_threshold: 0.80
+    min_quality_threshold: 0.85
     max_latency_ms: null
     can_reject: false
     fallback_pressure: null
+
+  training:
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    store_all_executions: true
+    cluster_similar: true
+    generate_test_data: true
+    prepare_fine_tuning: true
+    min_quality_threshold: 0.50
+    max_latency_ms: null
+    can_reject: false
+    fallback_pressure: null
+
+  auto:
+    enabled: true
+    rules:
+      - condition: "hour >= 22 or hour <= 6"
+        pressure: "low"
+      - condition: "system_load > 0.8"
+        pressure: "high"
+      - condition: "user_request"
+        pressure: "medium"
+      - condition: "scheduled_task"
+        pressure: "low"
+    default: "medium"
 
 fine_tuning:
   enabled: false

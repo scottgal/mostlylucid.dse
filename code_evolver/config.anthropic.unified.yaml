@@ -68,16 +68,7 @@ llm:
       quality: "basic"
       timeout: 30
 
-  # ==========================================================================
-  # EMBEDDING - Protected setting requiring force override
-  # ==========================================================================
-  embedding:
-    default: nomic_embed
-    allow_override: "force"    # Must explicitly override with override: force
-
-  # ==========================================================================
-  # BACKEND CONFIGURATION
-  # ==========================================================================
+  # Enable Anthropic backend
   backends:
     ollama:
       base_url: "http://localhost:11434"
@@ -94,23 +85,19 @@ llm:
     escalation: claude_sonnet  # Override: use sonnet for escalation
     general: claude_sonnet     # Override: use sonnet for general tasks
     fast: claude_haiku         # Override: use haiku for fast tasks
-    veryfast: tinyllama        # Keep local Ollama for very fast triage (free!)
+    veryfast: tinyllama        # Keep local for very fast triage
 
   # ==========================================================================
   # OPTIONAL: Role-specific overrides (if needed)
   # ==========================================================================
   # Uncomment if you want specific roles to behave differently
   #
-  roles:
-    content:
-      veryfast: claude_haiku   # Use Haiku for content triage (better text understanding)
-
-  # Example: Override for code role if needed
+  # roles:
   #   code:
   #     general: claude_opus     # Use opus instead of sonnet for code
   #     fast: claude_sonnet      # Use sonnet instead of haiku for fast code
   #
-  # Original content example:
+  #   content:
   #     god: claude_opus         # Already set in defaults, but shown for clarity
   #
   # ==========================================================================

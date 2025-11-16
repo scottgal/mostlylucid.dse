@@ -459,7 +459,8 @@ class RAGMemory:
         self,
         tags: List[str],
         artifact_type: Optional[ArtifactType] = None,
-        match_all: bool = False
+        match_all: bool = False,
+        limit: Optional[int] = None
     ) -> List[Artifact]:
         """
         Find artifacts by tags.
@@ -468,6 +469,7 @@ class RAGMemory:
             tags: List of tags to search for
             artifact_type: Optional type filter
             match_all: If True, artifact must have all tags; if False, any tag
+            limit: Optional maximum number of results to return
 
         Returns:
             List of matching artifacts
@@ -499,6 +501,10 @@ class RAGMemory:
             key=lambda a: (a.quality_score, a.usage_count),
             reverse=True
         )
+
+        # Apply limit if specified
+        if limit is not None and limit > 0:
+            results = results[:limit]
 
         return results
 

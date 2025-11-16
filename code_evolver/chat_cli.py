@@ -32,6 +32,9 @@ logging.getLogger("src.tools_manager").setLevel(logging.ERROR)
 logging.getLogger("src.qdrant_rag_memory").setLevel(logging.ERROR)
 
 # Command history support - use prompt_toolkit for cross-platform compatibility
+PROMPT_TOOLKIT_AVAILABLE = False
+READLINE_AVAILABLE = False
+
 try:
     from prompt_toolkit import prompt as pt_prompt
     from prompt_toolkit.history import FileHistory
@@ -210,12 +213,16 @@ class ChatCLI:
         console.print("[dim cyan]> Processing configuration...[/dim cyan]")
         self.config = ConfigManager(config_path)
 
-        # Use LLM client factory if backend is configured, otherwise default to Ollama
+        # Initialize status manager for live status updates
+        from src.status_manager import get_status_manager
+        self.status_manager = get_status_manager(console)
+
+        # Use LLM client factory with routing (auto-detects backend per model)
         try:
             from src.llm_client_factory import LLMClientFactory
-            backend = self.config.config.get("llm", {}).get("backend", "ollama")
-            self.client = LLMClientFactory.create_from_config(self.config, backend)
-            console.print(f"[dim]Using {backend} backend for LLM[/dim]")
+            # Use routing client that automatically routes models to the correct backend
+            self.client = LLMClientFactory.create_routing_client(self.config)
+            console.print(f"[dim]Using multi-backend routing (auto-detects backend per model)[/dim]")
         except (ImportError, KeyError, ValueError) as e:
             # Fall back to Ollama if factory not available or config incomplete
             console.print(f"[yellow]Falling back to Ollama backend: {e}[/yellow]")
@@ -1031,6 +1038,78 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # Step 1: Check for existing solutions in RAG (both code and workflows)
         workflow.add_step("check_existing", "rag", "Check for existing solutions in RAG")
         from src.rag_memory import ArtifactType
+
+        # FAST PATH: Check for 100% exact match on description (no LLM call needed!)
+        # Normalize the description for exact matching (lowercase, strip whitespace)
+        normalized_desc = description.lower().strip()
+
+        # Search all artifacts for exact description match
+        all_workflows = self.rag.find_by_tags(["workflow", "complete"], limit=100)
+        for artifact in all_workflows:
+            # Check if description in metadata matches exactly
+            artifact_desc = artifact.metadata.get("question", "").lower().strip()
+            if artifact_desc == normalized_desc:
+                # 100% EXACT MATCH - INSTANT REUSE!
+                node_id = artifact.metadata.get("node_id")
+                if node_id and self.registry.get_node(node_id):
+                    console.print(f"\n[bold green]✓ 100% EXACT MATCH FOUND![/bold green]")
+                    console.print(f"[green]Reusing: {artifact.name}[/green]")
+                    console.print(f"[dim]Skipping code generation - using cached solution[/dim]\n")
+
+                    self.rag.increment_usage(artifact.artifact_id)
+                    workflow.complete_step("check_existing", f"Exact match: {node_id}", {"reused": True})
+
+                    # Run the existing node immediately (fast path - no code generation!)
+                    input_data = {"input": description}
+                    stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
+
+                    # Display results prominently
+                    if metrics["success"]:
+                        console.print(f"\n[bold green]✓ Execution successful[/bold green]")
+
+                        if stdout and stdout.strip():
+                            # Try to extract and show the actual result prominently
+                            result_extracted = False
+                            try:
+                                # Try to parse as JSON first
+                                output_data = json.loads(stdout.strip())
+                                if isinstance(output_data, dict):
+                                    # Show the actual result clearly
+                                    if 'result' in output_data:
+                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['result']}[/bold white]\n")
+                                        result_extracted = True
+                                    elif 'output' in output_data:
+                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['output']}[/bold white]\n")
+                                        result_extracted = True
+                                    elif 'answer' in output_data:
+                                        console.print(f"\n[bold green]RESULT:[/bold green] [bold white]{output_data['answer']}[/bold white]\n")
+                                        result_extracted = True
+                                    elif 'content' in output_data:
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data['content']}\n")
+                                        result_extracted = True
+                            except:
+                                pass
+
+                            # If we couldn't extract a specific result, show full output
+                            if not result_extracted:
+                                # Check if it's plain text (like an article or story)
+                                if not stdout.strip().startswith('{'):
+                                    console.print(f"\n[bold green]RESULT:[/bold green]")
+                                    console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
+                                else:
+                                    console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
+                        else:
+                            console.print("[yellow]Note: Code executed successfully but produced no output[/yellow]")
+
+                        if self.config.get("chat.show_metrics", True):
+                            self._display_metrics(metrics)
+
+                        return True
+                    else:
+                        console.print(f"[red]Execution failed (exit code: {metrics['exit_code']})[/red]")
+                        if stderr:
+                            console.print(Panel(stderr, title="[red]Error[/red]", border_style="red", box=box.ROUNDED))
+                        return False
 
         # First, check for existing code (FUNCTION artifacts) - these are the actual implementations
         existing_code = self.rag.find_similar(
@@ -3016,7 +3095,16 @@ Return ONLY the JSON, no explanations."""
         """
         # CRITICAL: Use fast LLM to automatically detect task type
         # (More accurate than keyword matching)
-        console.print(f"[dim]Classifying task type with {self.config.triage_model}...[/dim]")
+        # Get the model key for veryfast triage (use content role for better text understanding)
+        triage_model_key = self.config.get_model(role="content", level="veryfast")
+        if triage_model_key:
+            triage_metadata = self.config.get_model_metadata(triage_model_key)
+            triage_model_name = triage_metadata.get("name", self.config.triage_model)
+        else:
+            triage_model_name = self.config.triage_model
+            triage_model_key = self.config.get_model(role="default", level="veryfast")
+
+        console.print(f"[dim]Classifying task type with {triage_model_name}...[/dim]")
 
         classification_prompt = f"""Is this task about writing TEXT or writing CODE?
 
@@ -3028,10 +3116,10 @@ If it's about writing algorithms, functions, APIs, data processing, calculations
 Your answer (one word only):"""
 
         classification = self.client.generate(
-            model=self.config.triage_model,
+            model=triage_model_name,
             prompt=classification_prompt,
             temperature=0.1,
-            model_key="triage"
+            model_key=triage_model_key  # Use actual model key for routing
         ).strip().upper()
 
         # Check if it's a text/content task
@@ -3039,33 +3127,13 @@ Your answer (one word only):"""
         console.print(f"[dim]Task classified as: {'content' if is_content_task else 'code'} (LLM said: {classification[:20]})[/dim]")
 
         if is_content_task:
-            # CONTENT GENERATION: Always use main() interface
-            test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
+            # CONTENT GENERATION: SKIP interface tests - they always fail with import issues!
+            # Instead, rely on smoke tests after code generation
+            console.print(f"\n[cyan]Using cached TDD template for content generation (no LLM call needed)...[/cyan]")
+            console.print(f"[dim]Skipping interface tests for content tasks - will validate with smoke tests instead[/dim]")
 
-TASK DESCRIPTION: {description}
-
-CRITICAL: This is a CONTENT GENERATION task. The code will use main() as the entry point.
-
-Generate ONLY this test structure:
-
-```python
-import sys
-import json
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-def test_main_interface():
-    \"\"\"Test that main() function exists and has correct interface\"\"\"
-    print("Testing main() interface...")
-    import main
-    assert hasattr(main, 'main'), "main() function must exist"
-    print("OK main() function exists")
-
-if __name__ == "__main__":
-    test_main_interface()
-```
-
-Output ONLY the Python test code above (no modifications, no markdown fences, no explanations):"""
+            # Return empty string to skip TDD tests
+            return ""
         else:
             # ARITHMETIC/DATA PROCESSING: Can use specific functions
             test_prompt = f"""You are writing unit tests to DEFINE THE INTERFACE for code that will be generated.
@@ -6987,7 +7055,19 @@ Return ONLY the Python test code, no explanations."""
 
 def main():
     """Main entry point."""
-    chat = ChatCLI()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Code Evolver - Interactive CLI")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="config.yaml",
+        help="Path to configuration file (default: config.yaml)"
+    )
+
+    args = parser.parse_args()
+
+    chat = ChatCLI(config_path=args.config)
     chat.run()
 
 

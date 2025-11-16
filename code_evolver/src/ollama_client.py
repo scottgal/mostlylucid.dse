@@ -15,6 +15,13 @@ if TYPE_CHECKING:
 # Import profiling utilities
 from .profiling import ProfileContext, get_global_registry
 
+# Import status manager for live status updates
+try:
+    from .status_manager import get_status_manager
+    STATUS_MANAGER_AVAILABLE = True
+except ImportError:
+    STATUS_MANAGER_AVAILABLE = False
+
 # Enable DEBUG logging by default (shows full LLM conversations)
 # Set CODE_EVOLVER_DEBUG=0 to disable debug output
 log_level = logging.INFO if os.getenv("CODE_EVOLVER_DEBUG") == "0" else logging.DEBUG
@@ -220,7 +227,9 @@ class OllamaClient:
         stream: bool = False,
         endpoint: Optional[str] = None,
         model_key: Optional[str] = None,
-        speed_tier: Optional[str] = None
+        speed_tier: Optional[str] = None,
+        max_tokens: Optional[int] = None,
+        **kwargs
     ) -> str:
         """
         Generate text using specified Ollama model.
@@ -235,6 +244,8 @@ class OllamaClient:
             endpoint: Optional specific endpoint URL (overrides config and round-robin)
             model_key: Optional model key for config lookup (e.g., "overseer", "generator")
             speed_tier: Optional speed tier for timeout calculation
+            max_tokens: Maximum tokens to generate (for compatibility with other backends)
+            **kwargs: Additional parameters (ignored for compatibility)
 
         Returns:
             Generated text response
@@ -279,6 +290,10 @@ class OllamaClient:
                 }
             }
 
+            # Add max_tokens if provided (Ollama uses 'num_predict')
+            if max_tokens:
+                payload["options"]["num_predict"] = max_tokens
+
             if system:
                 payload["system"] = system
 
@@ -296,6 +311,11 @@ class OllamaClient:
                 if system:
                     logger.debug(f"  System prompt: {system}")
 
+                # Show live status update
+                if STATUS_MANAGER_AVAILABLE:
+                    status_mgr = get_status_manager()
+                    status_mgr.llm_call(model, "ollama", "generate")
+
                 response = requests.post(
                     generate_url,
                     json=payload,
@@ -311,13 +331,23 @@ class OllamaClient:
                 logger.debug(f"  Length: {len(result)} characters")
                 logger.debug(f"  Full response: {result}")
 
+                # Clear status after success
+                if STATUS_MANAGER_AVAILABLE:
+                    get_status_manager().clear()
+
                 logger.info(f"✓ Generated {len(result)} characters from {target_endpoint}")
                 return result
 
             except requests.exceptions.Timeout:
+                # Clear status on error
+                if STATUS_MANAGER_AVAILABLE:
+                    get_status_manager().clear()
                 logger.error(f"Request timed out for {target_endpoint}")
                 return ""
             except requests.exceptions.RequestException as e:
+                # Clear status on error
+                if STATUS_MANAGER_AVAILABLE:
+                    get_status_manager().clear()
                 logger.error(f"Error generating response from {target_endpoint}: {e}")
                 return ""
 

@@ -56,7 +56,7 @@ class NodeRunner:
         self,
         node_id: str,
         input_payload: Dict[str, Any],
-        timeout_ms: int = 5000,
+        timeout_ms: int = 60000,
         filename: str = "main.py"
     ) -> Tuple[str, str, Dict[str, Any]]:
         """

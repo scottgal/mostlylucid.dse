@@ -1,367 +1,407 @@
-# Code Evolver Configuration
+# ============================================================================
+# Code Evolver - Unified LLM Configuration
+# ============================================================================
+#
+# This is the NEW unified config structure with:
+# 1. Model Registry (define models once with all metadata)
+# 2. Cascading Defaults (set once, apply to all roles)
+# 3. Role-specific Overrides (only when needed)
+# 4. Protected Settings (embedding requires force override)
+#
+# USAGE:
+# python chat_cli.py --config config.unified.yaml
+#
+# ============================================================================
 
-# Ollama server settings
-ollama:
-  # Default base URL for all models (can be overridden per-model)
-  base_url: "http://localhost:11434"
-
-  # Model assignments with optional per-model endpoints
-  # Format 1: Simple string - uses base_url
-  # Format 2: Dict with 'model' and optional 'endpoint'
+llm:
+  # ==========================================================================
+  # MODEL REGISTRY - Define each model ONCE with all metadata
+  # ==========================================================================
   models:
-    # Overseer LLM - Plans approach and strategy (REQUIRED)
-    # This model is consulted first to determine how to approach the task
-    # Should be a strong reasoning model (e.g., llama3, mistral, mixtral)
-    overseer:
-      model: "llama3"
-      endpoint: null  # Uses base_url if null
-      # endpoint: "http://machine1:11434"  # Uncomment to use specific endpoint
+    # ---- Tiny Models (very fast, basic quality) ----
+    tinyllama:
+      name: "tinyllama"
+      backend: "ollama"
+      context_window: 2048
+      cost: "very-low"
+      speed: "very-fast"
+      quality: "basic"
+      timeout: 30
 
-    # Code generator - Writes actual Python code
-    # MUST be a code-specialized model (e.g., codellama, qwen2.5-coder, deepseek-coder, starcoder)
-    # NEVER use general chat models (llama3, mistral, etc.) for code generation
-    generator:
-      model: "codellama"
-      endpoint: null  # Uses base_url
+    # ---- Small Models (fast, good quality) ----
+    phi3_mini:
+      name: "phi3:mini"
+      backend: "ollama"
+      context_window: 4096
+      cost: "low"
+      speed: "very-fast"
+      quality: "good"
+      timeout: 60
 
-    # Evaluator - Comprehensive evaluation of results
-    # Different models for different evaluation types
-    evaluator:
-      # For technical writing evaluation (blog posts, articles, documentation)
-      writing:
-        model: "phi3:3.8b"
-        endpoint: null
-      # For code evaluation (different model can be used)
-      code:
-        model: "llama3"  # Or codellama, qwen, etc.
-        endpoint: null
-      # Default fallback
-      default:
-        model: "llama3"
-        endpoint: null
+    gemma3_4b:
+      name: "gemma3:4b"
+      backend: "ollama"
+      context_window: 8192
+      cost: "low"
+      speed: "fast"
+      quality: "good"
+      timeout: 60
 
-    # Triage - Quick pass/fail decisions
-    # Can be a smaller, faster model (e.g., tiny, llama3)
-    triage:
-      model: "tinyllama"
-      endpoint: null  # Uses base_url
+    qwen_3b:
+      name: "qwen2.5-coder:3b"
+      backend: "ollama"
+      context_window: 32768
+      cost: "low"
+      speed: "very-fast"
+      quality: "good"
+      timeout: 60
+      specialization: "code"
 
-    # Escalation - Higher-level code model for fixing complex issues
-    # MUST be a powerful code-specialized model (e.g., qwen2.5-coder:14b, deepseek-coder:33b)
-    # NEVER use general chat models here - code debugging requires code-trained models
-    escalation:
-      model: "qwen2.5-coder:14b"
-      endpoint: "http://localhost:11434"  # Only available on localhost, not remote
-      # Can also use multiple endpoints for load balancing:
-      # endpoints:
-      #   - "http://localhost:11434"
-      #   - "http://powerful-server:11434"
+    # ---- Medium Models (balanced speed/quality) ----
+    llama3:
+      name: "llama3"
+      backend: "ollama"
+      context_window: 8192
+      cost: "medium"
+      speed: "fast"
+      quality: "excellent"
+      timeout: 120
 
-  # Embedding model for RAG/semantic search
-  # Use a small, efficient model like nomic-embed-text
+    codellama_7b:
+      name: "codellama:7b"
+      backend: "ollama"
+      context_window: 16384
+      cost: "medium"
+      speed: "fast"
+      quality: "excellent"
+      timeout: 120
+      specialization: "code"
+
+    # ---- Large Models (powerful, slower) ----
+    qwen_14b:
+      name: "qwen2.5-coder:14b"
+      backend: "ollama"
+      context_window: 32768
+      cost: "high"
+      speed: "medium"
+      quality: "excellent"
+      timeout: 300
+      specialization: "code"
+
+    deepseek_16b:
+      name: "deepseek-coder-v2:16b"
+      backend: "ollama"
+      context_window: 131072
+      cost: "very-high"
+      speed: "slow"
+      quality: "exceptional"
+      timeout: 600
+      specialization: "code"
+
+    mistral_nemo:
+      name: "mistral-nemo"
+      backend: "ollama"
+      context_window: 128000
+      cost: "high"
+      speed: "medium"
+      quality: "excellent"
+      timeout: 240
+      specialization: "content"
+
+    # ---- Embedding Models ----
+    nomic_embed:
+      name: "nomic-embed-text"
+      backend: "ollama"
+      context_window: 8192
+      vector_size: 768
+      cost: "low"
+      speed: "fast"
+      quality: "excellent"
+      specialization: "embedding"
+
+    # ---- Anthropic Models (cloud) ----
+    claude_haiku:
+      name: "claude-3-haiku-20240307"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "low"
+      speed: "very-fast"
+      quality: "excellent"
+      timeout: 120
+
+    claude_sonnet:
+      name: "claude-3-5-sonnet-20241022"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "medium"
+      speed: "fast"
+      quality: "exceptional"
+      timeout: 120
+
+    claude_opus:
+      name: "claude-3-opus-20240229"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "very-high"
+      speed: "medium"
+      quality: "exceptional"
+      timeout: 120
+
+  # ==========================================================================
+  # DEFAULTS - Cascade to ALL roles unless overridden
+  # ==========================================================================
+  defaults:
+    god: deepseek_16b          # Most powerful local model
+    escalation: qwen_14b       # Strong model for complex issues
+    general: llama3            # General purpose model
+    fast: gemma3_4b            # Fast for simple tasks
+    veryfast: tinyllama        # Extremely fast for triage
+
+  # ==========================================================================
+  # ROLE-SPECIFIC OVERRIDES - Only specify what's different from defaults
+  # ==========================================================================
+  roles:
+    # Default role - inherits all from defaults (no overrides needed)
+    default:
+      # All levels inherit from defaults above
+
+    # Code role - override with code-specialized models
+    code:
+      general: codellama_7b    # Override: use code model for general tasks
+      fast: qwen_3b            # Override: use code model for fast tasks
+      # god, escalation, veryfast inherit from defaults
+
+    # Content role - override god with long-context model
+    content:
+      god: mistral_nemo        # Override: use 128K context for novels
+      # escalation, general, fast, veryfast inherit from defaults
+
+    # Analysis role - inherits all from defaults (no overrides needed)
+    analysis:
+      # All levels inherit from defaults
+
+  # ==========================================================================
+  # EMBEDDING - Protected setting requiring force override
+  # ==========================================================================
   embedding:
-    model: "nomic-embed-text"
-    endpoint: null  # Uses base_url if null
-    vector_size: 768  # Dimension of embedding vectors (nomic-embed-text is 768d)
+    default: nomic_embed
+    allow_override: "force"    # Must explicitly override with override: force
 
-  # Context window sizes for each model (in tokens)
-  # Used for truncating prompts when they exceed limits
-  context_windows:
-    llama3: 8192
-    codellama: 16384
-    tinyllama: 2048
-    nomic-embed-text: 8192
-    qwen2.5-coder:14b: 32768
-    gemma2:2b: 8192
-    phi3: 4096
-    mistral-nemo: 128000
-    # Default fallback for unknown models
-    default: 4096
+  # ==========================================================================
+  # BACKEND CONFIGURATION
+  # ==========================================================================
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true
 
-# Execution settings
+    anthropic:
+      api_key: "${ANTHROPIC_API_KEY}"
+      enabled: false
+      max_tokens: 4096
+      timeout: 120
+
+# ==============================================================================
+# SYSTEM CONFIGURATION (unchanged)
+# ==============================================================================
+
 execution:
   default_timeout_ms: 5000
   max_memory_mb: 256
   max_retries: 3
-
-  # Sandbox settings
   sandbox:
     allow_network: false
     allow_file_write: false
     temp_dir: "./temp"
 
-# Auto-evolution settings
 auto_evolution:
   enabled: true
-
-  # Performance thresholds
-  performance_threshold: 0.15  # Trigger evolution if score improves/degrades by 15%
+  performance_threshold: 0.15
   min_runs_before_evolution: 3
   check_interval_minutes: 60
-
-  # Evolution strategy
   max_versions_per_node: 10
   keep_best_n_versions: 3
   mutation_temperature: 0.7
 
-# Quality evaluation settings (phi3:3.8b evaluator)
 quality_evaluation:
   enabled: true
-
-  # Evaluation at each workflow step
   evaluate_steps:
-    strategy: true       # Evaluate overseer's strategy
-    code: true          # Evaluate generated code
-    tests: true         # Evaluate test quality
-    final: true         # Final comprehensive evaluation
-
-  # Automatic quality thresholds
+    strategy: true
+    code: true
+    tests: true
+    final: true
   thresholds:
-    # Minimum acceptable scores (0.0-1.0)
-    strategy_min: 0.70      # Strategy must score 70%+
-    code_quality_min: 0.75  # Code quality must be 75%+
-    test_coverage_min: 0.80 # Test coverage must be 80%+
-    final_min: 0.80         # Final overall score must be 80%+
-
-    # Thresholds are auto-adjusted based on historical performance
+    strategy_min: 0.70
+    code_quality_min: 0.75
+    test_coverage_min: 0.80
+    final_min: 0.80
     auto_adjust: true
-    adjustment_window: 100  # Use last 100 evaluations for adjustment
-
-  # Iterative improvement
-  max_iterations: 3         # Max attempts to improve based on feedback
-  improvement_threshold: 0.05  # Stop if improvement < 5%
-
-  # Feedback loop settings
+    adjustment_window: 100
+  max_iterations: 3
+  improvement_threshold: 0.05
   feedback:
-    include_suggestions: true    # Include specific improvement suggestions
-    include_examples: true       # Include example improvements
-    store_in_rag: true          # Store feedback patterns in RAG
-    learn_from_success: true    # Learn from high-scoring outputs
+    include_suggestions: true
+    include_examples: true
+    store_in_rag: true
+    learn_from_success: true
 
-# Registry settings
 registry:
   path: "./registry"
   backup_enabled: true
   backup_interval_hours: 24
   max_backup_count: 7
 
-# Node storage
 nodes:
   path: "./nodes"
   artifacts_path: "./artifacts"
 
-# RAG Memory settings
 rag_memory:
   path: "./rag_memory"
-  # Use Qdrant for scalable vector storage (requires qdrant-client and Qdrant server)
-  # Set to false to use simple NumPy-based storage
   use_qdrant: true
   qdrant_url: "http://localhost:6333"
   collection_name: "mostlylucid-dse-tools-rag"
-  # Embedding model from ollama.embedding section will be used
-  # Max content length for embeddings (longer content will be truncated)
   max_embedding_content_length: 1000
 
-# Logging
 logging:
   level: "INFO"
   file: "code_evolver.log"
   max_file_size_mb: 10
   backup_count: 5
-
-  # Console output
   console:
     enabled: true
     use_colors: true
 
-# Chat interface settings
 chat:
-  # Prompt style
   prompt: "CodeEvolver> "
-
-  # History
   history_file: ".code_evolver_history"
   max_history: 1000
-
-  # Display settings
-  show_thinking: false  # Show overseer's reasoning
+  show_thinking: false
   show_metrics: true
-  show_workflow: true   # Show multi-step workflow visualization
-
-  # Auto-save
+  show_workflow: true
   auto_save_context: true
-
-  # Workflow mode (experimental)
   workflow_mode:
-    enabled: true  # Enable multi-step workflow decomposition
-    detect_keywords: ["and", "then", "translate", "convert"]  # Keywords that suggest multi-step
-    min_steps: 2   # Minimum steps to create a workflow (vs single code file)
-    max_steps: 10  # Maximum steps in a workflow
-
-  # Default workflow pressure/quality settings
-  # These are passed to all tool invocations and can be overridden per-task
+    enabled: true
+    detect_keywords: ["and", "then", "translate", "convert"]
+    min_steps: 2
+    max_steps: 10
   default_workflow_context:
-    priority: "medium"           # low/medium/high (low=thorough, high=fast)
-    quality_level: "production"  # draft/good/production/perfect
-    speed_requirement: "balanced" # fast/balanced/thorough
-    max_iterations: 3            # Maximum refinement iterations
-    allow_escalation: true       # Allow escalation to higher-quality models
+    priority: "medium"
+    quality_level: "production"
+    speed_requirement: "balanced"
+    max_iterations: 3
+    allow_escalation: true
 
-# Testing and code quality
 testing:
-  enabled: true                        # Generate and run unit tests
-  auto_escalate: true                  # Escalate to higher model if tests fail
-  max_escalation_attempts: 6           # Max fix attempts (1-2: normal, 3-4: +logging, 5-6: powerful model, then god-level)
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6
+  test_driven_development: true
+  initial_optimization_iterations: 3
+  optimization_score_threshold: 0.1
 
-  # Test-Driven Development (TDD) mode
-  # When enabled, generates unit tests BEFORE code to define the interface
-  test_driven_development: true        # Generate tests first, then code to pass them
-
-  # Initial optimization loop
-  # On first code generation, iteratively improve the code through feedback
-  initial_optimization_iterations: 3   # Number of optimize iterations (0 to disable)
-  optimization_score_threshold: 0.1    # Stop if no improvement >= 10%
-
-# Multi-tier optimization settings
 optimization:
   enabled: true
-
-  # Cloud optimization (expensive but high quality)
   cloud_optimization:
     enabled: true
-
-    # Triggers for cloud optimization
     triggers:
-      offline_batch: true           # Batch optimize overnight
-      quality_threshold: 0.65       # Score < 0.65 gets cloud review
-      reuse_threshold: 10           # reuse_count > 10 gets optimized
-      explicit_request: true        # User asks for optimization
-
-    # What to optimize
+      offline_batch: true
+      quality_threshold: 0.65
+      reuse_threshold: 10
+      explicit_request: true
     targets:
-      workflows: true               # Optimize complete workflows
-      tools: true                   # Optimize individual tools
-      code: true                    # Optimize generated code
-      system: true                  # Optimize the system itself!
-
-    # Optimization levels
+      workflows: true
+      tools: true
+      code: true
+      system: true
     levels:
-      local_only: false             # Use only local models
-      cloud_deep_dive: true         # Use cloud for deep analysis
-      recursive: true               # Optimize at ALL levels
-
-    # Cost controls
-    max_cost_per_day: 50.00         # Max $50/day on cloud optimization
+      local_only: false
+      cloud_deep_dive: true
+      recursive: true
+    max_cost_per_day: 50.00
     max_tokens_per_optimization: 100000
 
-# Pressure-based optimization strategy
-# Adjusts optimization behavior based on context (urgency, load, time)
 optimization_pressure:
-
-  # High pressure (urgent, real-time, high load)
   high:
-    optimization_level: "none"        # Skip optimization, use cached
-    max_cost: 0.00                    # Zero spend
-    allow_cloud: false                # Local only
-    use_specialists: true             # Use fine-tuned models if available
-    cache_only: true                  # Only execute cached workflows
-    store_executions: false           # Don't track (too slow)
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    use_specialists: true
+    cache_only: true
+    store_executions: false
+    min_quality_threshold: 0.60
+    max_latency_ms: 1000
+    can_reject: true
+    fallback_pressure: "medium"
 
-    # Quality constraints
-    min_quality_threshold: 0.60       # Accept quality >= 0.60 (60%)
-    max_latency_ms: 1000              # Must complete in 1 second
-    can_reject: true                  # Can refuse if quality too low
-    fallback_pressure: "medium"       # Suggest this if quality too low
-
-  # Medium pressure (normal operation)
   medium:
-    optimization_level: "local"       # Quick local optimization
-    max_cost: 1.00                    # Small budget per optimization
-    allow_cloud: false                # Still local only
-    use_specialists: true             # Prefer specialists
-    cache_first: true                 # Check cache before generating
-    store_executions: true            # Track for later optimization
+    optimization_level: "local"
+    max_cost: 1.00
+    allow_cloud: false
+    use_specialists: true
+    cache_first: true
+    store_executions: true
+    min_quality_threshold: 0.75
+    max_latency_ms: 10000
+    can_reject: true
+    fallback_pressure: "low"
 
-    # Quality constraints
-    min_quality_threshold: 0.75       # Accept quality >= 0.75 (75%)
-    max_latency_ms: 10000             # Must complete in 10 seconds
-    can_reject: true                  # Can refuse if quality too low
-    fallback_pressure: "low"          # Suggest this if quality too low
-
-  # Low pressure (batch jobs, overnight, scheduled)
   low:
-    optimization_level: "cloud"       # Expensive cloud optimization
-    max_cost: 50.00                   # Full daily budget
-    allow_cloud: true                 # Use GPT-4/Claude
-    recursive: true                   # Full recursive optimization
-    meta_optimization: true           # System can optimize itself
-    store_executions: true            # Track everything
-    cluster_similar: true             # Group similar executions
+    optimization_level: "cloud"
+    max_cost: 50.00
+    allow_cloud: true
+    recursive: true
+    meta_optimization: true
+    store_executions: true
+    cluster_similar: true
+    min_quality_threshold: 0.85
+    max_latency_ms: null
+    can_reject: false
+    fallback_pressure: null
 
-    # Quality constraints
-    min_quality_threshold: 0.85       # Accept quality >= 0.85 (85%)
-    max_latency_ms: null              # No time limit
-    can_reject: false                 # Never refuse (will wait/optimize)
-    fallback_pressure: null           # No fallback (this is best effort)
-
-  # Training mode (data collection for fine-tuning)
   training:
-    optimization_level: "none"        # Don't optimize yet
-    max_cost: 0.00                    # No spend during training
-    allow_cloud: false                # Local only
-    store_all_executions: true        # Track EVERYTHING
-    cluster_similar: true             # Group similar patterns
-    generate_test_data: true          # Create synthetic test cases
-    prepare_fine_tuning: true         # Build training datasets
+    optimization_level: "none"
+    max_cost: 0.00
+    allow_cloud: false
+    store_all_executions: true
+    cluster_similar: true
+    generate_test_data: true
+    prepare_fine_tuning: true
+    min_quality_threshold: 0.50
+    max_latency_ms: null
+    can_reject: false
+    fallback_pressure: null
 
-    # Quality constraints
-    min_quality_threshold: 0.50       # Accept any quality (training data)
-    max_latency_ms: null              # No time limit
-    can_reject: false                 # Never refuse (collecting data)
-    fallback_pressure: null           # No fallback
-
-  # Auto pressure (system decides based on context)
   auto:
     enabled: true
     rules:
-      - condition: "hour >= 22 or hour <= 6"  # Night time (10pm-6am)
-        pressure: "low"                       # Use expensive optimization
-      - condition: "system_load > 0.8"        # High system load
-        pressure: "high"                      # Fast execution only
-      - condition: "user_request"             # Direct user request
-        pressure: "medium"                    # Balance speed/quality
-      - condition: "scheduled_task"           # Scheduled background task
-        pressure: "low"                       # Full optimization
+      - condition: "hour >= 22 or hour <= 6"
+        pressure: "low"
+      - condition: "system_load > 0.8"
+        pressure: "high"
+      - condition: "user_request"
+        pressure: "medium"
+      - condition: "scheduled_task"
+        pressure: "low"
     default: "medium"
 
-# Fine-tuning settings
 fine_tuning:
-  enabled: false  # Disabled by default (requires setup)
+  enabled: false
   min_training_examples: 50
   min_quality_score: 0.85
   backends:
-    - ollama      # Local Ollama fine-tuning
-    # - openai    # OpenAI fine-tuning API
-    # - anthropic # Claude fine-tuning (future)
+    - ollama
 
-# Build settings (for executables)
 build:
   app_name: "CodeEvolver"
   version: "0.1.0"
-  icon: null  # Path to icon file (optional)
-
-  # Include files
+  icon: null
   include_data:
     - "prompts/*"
     - "config.yaml"
-
-  # Platform-specific settings
   windows:
-    console: false  # Hide console window
-    admin: false    # Don't require admin
-
+    console: false
+    admin: false
   linux:
     create_desktop_file: true
-
   macos:
     bundle_identifier: "com.codeevolver.app"

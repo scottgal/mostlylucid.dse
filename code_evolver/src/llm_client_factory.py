@@ -189,6 +189,20 @@ class LLMClientFactory:
             fallback_backends=fallback_backends
         )
 
+    @staticmethod
+    def create_routing_client(config_manager: Any) -> 'RoutingClient':
+        """
+        Create a client that automatically routes requests to the correct backend
+        based on model metadata.
+
+        Args:
+            config_manager: ConfigManager instance
+
+        Returns:
+            RoutingClient instance
+        """
+        return RoutingClient(config_manager=config_manager)
+
 
 class MultiBackendClient(LLMClientBase):
     """
@@ -323,3 +337,175 @@ class MultiBackendClient(LLMClientBase):
     def _get_default_triage_model(self) -> str:
         """Get default triage model from primary client."""
         return self.primary_client._get_default_triage_model()
+
+
+class RoutingClient(LLMClientBase):
+    """
+    Client that automatically routes requests to the correct backend based on model metadata.
+
+    This client inspects the model's backend field in the config and routes to the appropriate
+    client (Ollama, Anthropic, OpenAI, etc.). This allows mixing models from different backends
+    in a single configuration.
+    """
+
+    def __init__(self, config_manager: Any):
+        """
+        Initialize routing client with all enabled backends.
+
+        Args:
+            config_manager: ConfigManager instance
+        """
+        super().__init__(config_manager=config_manager)
+        self.config_manager = config_manager
+        self.backend_type = "routing"
+
+        # Initialize clients for all enabled backends
+        self.clients: Dict[str, LLMClientBase] = {}
+
+        backends_config = config_manager.get("llm.backends", {})
+        for backend_name, backend_cfg in backends_config.items():
+            if isinstance(backend_cfg, dict) and backend_cfg.get("enabled", False):
+                try:
+                    self.clients[backend_name] = LLMClientFactory.create_from_config(
+                        config_manager, backend_name
+                    )
+                    logger.info(f"Initialized {backend_name} client for routing")
+                except Exception as e:
+                    logger.warning(f"Failed to initialize {backend_name} client: {e}")
+
+        if not self.clients:
+            logger.warning("No backends enabled! Routing client has no clients to route to.")
+
+    def _get_backend_for_model(self, model: str, model_key: Optional[str] = None) -> Optional[str]:
+        """
+        Determine which backend to use for a given model.
+
+        Args:
+            model: Model name (e.g., 'claude-3-haiku-20240307' or 'llama3')
+            model_key: Optional model key to look up metadata
+
+        Returns:
+            Backend name (e.g., 'anthropic', 'ollama') or None if not found
+        """
+        # If model_key is provided, look up the model's backend from metadata
+        if model_key:
+            metadata = self.config_manager.get_model_metadata(model_key)
+            backend = metadata.get("backend")
+            if backend:
+                logger.debug(f"Model '{model_key}' uses backend: {backend}")
+                return backend
+
+        # Otherwise, try to infer from model name by checking all registered models
+        models = self.config_manager.get("llm.models", {})
+        for key, model_config in models.items():
+            if isinstance(model_config, dict):
+                model_name = model_config.get("name")
+                if model_name == model:
+                    backend = model_config.get("backend", "ollama")
+                    logger.debug(f"Model '{model}' uses backend: {backend}")
+                    return backend
+
+        # Fallback: guess based on model name patterns
+        if model.startswith("claude"):
+            return "anthropic"
+        elif model.startswith("gpt"):
+            return "openai"
+        else:
+            return "ollama"  # Default to ollama
+
+    def check_connection(self, endpoint: Optional[str] = None) -> bool:
+        """Check if at least one backend is accessible."""
+        for backend_name, client in self.clients.items():
+            if client.check_connection(endpoint):
+                logger.info(f"✓ {backend_name} backend is accessible")
+                return True
+        return False
+
+    def list_models(self, endpoint: Optional[str] = None) -> list:
+        """List models from all backends."""
+        all_models = []
+        for backend_name, client in self.clients.items():
+            try:
+                models = client.list_models(endpoint)
+                all_models.extend(models)
+            except Exception as e:
+                logger.warning(f"Failed to list models from {backend_name}: {e}")
+        return all_models
+
+    def generate(
+        self,
+        model: str,
+        prompt: str,
+        system: Optional[str] = None,
+        temperature: float = 0.7,
+        stream: bool = False,
+        endpoint: Optional[str] = None,
+        model_key: Optional[str] = None,
+        speed_tier: Optional[str] = None,
+        max_tokens: Optional[int] = None,
+        **kwargs
+    ) -> str:
+        """
+        Generate text by routing to the appropriate backend based on model.
+
+        Args:
+            model: Model name
+            prompt: User prompt
+            system: Optional system prompt
+            temperature: Sampling temperature
+            stream: Whether to stream response
+            endpoint: Optional specific endpoint
+            model_key: Optional model key for metadata lookup
+            speed_tier: Optional speed tier
+            max_tokens: Maximum tokens to generate
+            **kwargs: Additional parameters
+
+        Returns:
+            Generated text response
+        """
+        # Determine which backend to use
+        backend = self._get_backend_for_model(model, model_key)
+
+        if not backend:
+            logger.error(f"Could not determine backend for model: {model}")
+            return ""
+
+        if backend not in self.clients:
+            logger.error(f"Backend '{backend}' not available (enabled backends: {list(self.clients.keys())})")
+            return ""
+
+        # Route to appropriate client
+        client = self.clients[backend]
+        logger.debug(f"Routing model '{model}' to {backend} backend")
+
+        return client.generate(
+            model=model,
+            prompt=prompt,
+            system=system,
+            temperature=temperature,
+            stream=stream,
+            endpoint=endpoint,
+            model_key=model_key,
+            speed_tier=speed_tier,
+            max_tokens=max_tokens,
+            **kwargs
+        )
+
+    def _get_default_context_window(self, model: str) -> int:
+        """Get context window from model metadata."""
+        backend = self._get_backend_for_model(model)
+        if backend and backend in self.clients:
+            return self.clients[backend]._get_default_context_window(model)
+        return 4096  # Default
+
+    def _get_default_code_model(self) -> str:
+        """Get default code model from config."""
+        return self.config_manager.get("llm.defaults.general", "llama3")
+
+    def _get_default_eval_model(self) -> str:
+        """Get default eval model from config."""
+        return self.config_manager.get("llm.defaults.general", "llama3")
+
+    def _get_default_triage_model(self) -> str:
+        """Get default triage model from config."""
+        return self.config_manager.get("llm.defaults.veryfast", "tinyllama")

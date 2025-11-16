@@ -1,0 +1,128 @@
+# ============================================================================
+# Code Evolver - Anthropic Override (SIMPLIFIED)
+# ============================================================================
+#
+# This shows the power of partial overrides:
+# - Only define what CHANGES from base config.yaml
+# - Everything else inherits automatically
+#
+# SETUP:
+# 1. Set: $env:ANTHROPIC_API_KEY="sk-ant-api03-..."
+# 2. Run: python chat_cli.py --config config.anthropic.simple.yaml
+#
+# ============================================================================
+
+llm:
+  # ==========================================================================
+  # MODEL REGISTRY - Only define Anthropic models
+  # All Ollama models inherit from base config.yaml
+  # ==========================================================================
+  models:
+    claude_haiku:
+      name: "claude-3-haiku-20240307"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "low"
+      speed: "very-fast"
+      quality: "excellent"
+      timeout: 120
+
+    claude_sonnet:
+      name: "claude-3-5-sonnet-20241022"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "medium"
+      speed: "fast"
+      quality: "exceptional"
+      timeout: 120
+
+    claude_opus:
+      name: "claude-3-opus-20240229"
+      backend: "anthropic"
+      context_window: 200000
+      cost: "very-high"
+      speed: "medium"
+      quality: "exceptional"
+      timeout: 120
+
+    # Keep minimal Ollama models for embedding and veryfast
+    nomic_embed:
+      name: "nomic-embed-text"
+      backend: "ollama"
+      context_window: 8192
+      vector_size: 768
+      cost: "low"
+      speed: "fast"
+      quality: "excellent"
+      specialization: "embedding"
+
+    tinyllama:
+      name: "tinyllama"
+      backend: "ollama"
+      context_window: 2048
+      cost: "very-low"
+      speed: "very-fast"
+      quality: "basic"
+      timeout: 30
+
+  # ==========================================================================
+  # PARTIAL OVERRIDE - Only specify what changes!
+  # ==========================================================================
+  defaults:
+    god: claude_opus           # Override: use Opus for god-level tasks
+    escalation: claude_sonnet  # Override: use Sonnet for escalation
+    general: claude_sonnet     # Override: use Sonnet for general tasks
+    fast: claude_haiku         # Override: use Haiku for fast tasks
+    veryfast: tinyllama        # Keep local Ollama for very fast triage (free!)
+
+  # ==========================================================================
+  # EMBEDDING - Keep on Ollama (required)
+  # ==========================================================================
+  embedding:
+    default: nomic_embed
+    allow_override: "force"
+
+  # ==========================================================================
+  # BACKENDS - Enable both (Ollama for embeddings, Anthropic for LLM)
+  # ==========================================================================
+  backends:
+    ollama:
+      base_url: "http://localhost:11434"
+      enabled: true  # Required for embeddings
+    anthropic:
+      enabled: true
+      api_key: "${ANTHROPIC_API_KEY}"
+
+# ==============================================================================
+# Essential settings (these would normally inherit from base config.yaml)
+# ==============================================================================
+
+# RAG Memory
+rag_memory:
+  path: "./rag_memory"
+  use_qdrant: true
+  qdrant_url: "http://192.168.0.76:6333"
+  collection_name: "code_evolver_artifacts"
+  max_embedding_content_length: 1000
+
+# Testing
+testing:
+  enabled: true
+  auto_escalate: true
+  max_escalation_attempts: 6
+
+# ==============================================================================
+# RESULT with this simplified config:
+# ==============================================================================
+# All roles use Anthropic by default:
+#   default.god = claude_opus
+#   default.general = claude_sonnet
+#   default.fast = claude_haiku
+#   default.veryfast = tinyllama (local, free!)
+#
+# Role-specific overrides from base config.yaml would still apply if we were
+# doing multi-file loading. Since this is a standalone config, all roles use
+# the defaults above.
+#
+# Compare to full config.anthropic.yaml which defines everything explicitly.
+# ==============================================================================

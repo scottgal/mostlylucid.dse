@@ -95,7 +95,7 @@ class Registry:
             "inputs": inputs or {},
             "outputs": outputs or {},
             "constraints": constraints or {
-                "timeout_ms": 5000,
+                "timeout_ms": 60000,
                 "max_memory_mb": 256
             },
             "lineage": {

@@ -54,7 +54,7 @@ content:
     description: "Short snippets, simple descriptions, basic text"
     models:
       primary: "tinyllama"
-      fallback: ["gemma2:2b", "phi3:3.8b"]
+      fallback: ["gemma3:4b", "phi3:3.8b"]
     cost: "low"
     speed: "very-fast"
     quality: "basic"
@@ -94,7 +94,7 @@ analysis:
     description: "Pass/fail decisions, basic validation, quick checks"
     models:
       primary: "tinyllama"
-      fallback: ["gemma2:2b"]
+      fallback: ["gemma3:4b"]
     cost: "low"
     speed: "very-fast"
     quality: "basic"

@@ -26,7 +26,7 @@ class ConfigManager:
             }
         },
         "execution": {
-            "default_timeout_ms": 5000,
+            "default_timeout_ms": 60000,
             "max_memory_mb": 256,
             "max_retries": 3,
             "sandbox": {
@@ -317,44 +317,102 @@ class ConfigManager:
 
     @property
     def overseer_model(self) -> str:
-        """Get overseer model name."""
+        """Get overseer model name (uses general level from unified config)."""
+        # Use unified config system: get general model for default role
+        model_key = self.get_model(role="default", level="general")
+        if model_key:
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "llama3")
+
+        # Fallback to legacy config
         model, _ = self._parse_model_config("overseer", "llama3")
         return model
 
     @property
     def generator_model(self) -> str:
-        """Get code generator model name."""
+        """Get code generator model name (uses general level for code role)."""
+        # Use unified config system: get general model for code role
+        model_key = self.get_model(role="code", level="general")
+        if model_key:
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "codellama")
+
+        # Fallback to legacy config
         model, _ = self._parse_model_config("generator", "codellama")
         return model
 
     @property
     def evaluator_model(self) -> str:
-        """Get evaluator model name."""
+        """Get evaluator model name (uses general level from unified config)."""
+        # Use unified config system: get general model for default role
+        model_key = self.get_model(role="default", level="general")
+        if model_key:
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "llama3")
+
+        # Fallback to legacy config
         model, _ = self._parse_model_config("evaluator", "llama3")
         return model
 
     @property
     def triage_model(self) -> str:
-        """Get triage model name."""
-        model, _ = self._parse_model_config("triage", "tiny")
+        """Get triage model name (uses veryfast level from unified config)."""
+        # Use unified config system: get veryfast model for default role
+        model_key = self.get_model(role="default", level="veryfast")
+        if model_key:
+            # Resolve model key to actual model name
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "tinyllama")
+
+        # Fallback to legacy config
+        model, _ = self._parse_model_config("triage", "tinyllama")
         return model
 
     @property
     def escalation_model(self) -> str:
-        """Get escalation model name for fixing issues."""
+        """Get escalation model name for fixing issues (uses escalation level)."""
+        # Use unified config system: get escalation model for default role
+        model_key = self.get_model(role="default", level="escalation")
+        if model_key:
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "qwen2.5-coder:14b")
+
+        # Fallback to legacy config
         model, _ = self._parse_model_config("escalation", "qwen2.5-coder:14b")
         return model
 
     @property
     def embedding_model(self) -> str:
-        """Get embedding model name."""
+        """Get embedding model name (returns the actual model name, not the key)."""
+        # Check new unified structure first (llm.embedding.default gives us the key)
+        model_key = self.get("llm.embedding.default")
+        if model_key:
+            # Resolve key to actual model name via registry
+            metadata = self.get_model_metadata(model_key)
+            return metadata.get("name", "nomic-embed-text")
+
+        # Check legacy embedding.model
+        model = self.get("embedding.model")
+        if model:
+            return model
+
+        # Fallback to old structure
         model, _ = self._parse_model_config("embedding", "nomic-embed-text")
-        return model
+        return model if model else "nomic-embed-text"
 
     @property
     def embedding_vector_size(self) -> int:
         """Get embedding vector size."""
-        return self.get("ollama.embedding.vector_size", 768)
+        # Check new unified structure first (llm.embedding.default -> model metadata)
+        model_key = self.get("llm.embedding.default")
+        if model_key:
+            metadata = self.get_model_metadata(model_key)
+            vector_size = metadata.get("vector_size")
+            if vector_size:
+                return vector_size
+
+        # Check legacy structures
+        return self.get("embedding.vector_size", self.get("ollama.embedding.vector_size", 768))
 
     def _validate_code_models(self):
         """
@@ -421,7 +479,16 @@ class ConfigManager:
         Returns:
             Context window size in tokens
         """
-        # Get the context_windows dictionary directly to handle model names with special chars (e.g., colons)
+        # Try NEW unified structure first (llm.models.{key}.context_window)
+        # This handles model metadata in the registry
+        models = self.get("llm.models", {})
+        for model_key, model_config in models.items():
+            if isinstance(model_config, dict):
+                # Check if this model's name matches
+                if model_config.get("name") == model_name:
+                    return model_config.get("context_window", 4096)
+
+        # Fall back to OLD structure (ollama.context_windows)
         context_windows = self.get("ollama.context_windows", {})
 
         # Try direct lookup in dictionary (handles colons in model names like "qwen2.5-coder:14b")
@@ -430,6 +497,126 @@ class ConfigManager:
 
         # Fall back to default
         return context_windows.get("default", 4096)
+
+    def get_model(self, role: str = "default", level: str = "general") -> str:
+        """
+        Get model for a specific role and level using cascading resolution.
+
+        Resolution order (HIERARCHICAL with partial overrides):
+        1. llm.roles.{role}.{level} (role-specific override in THIS config)
+        2. llm.roles.{role}.{level} (role-specific override in BASE config if loaded)
+        3. llm.defaults.{level} (global default in THIS config)
+        4. llm.defaults.{level} (global default in BASE config if loaded)
+        5. Return None if not found
+
+        This allows partial overrides:
+        - config.anthropic.yaml can override just "god" level
+        - All other levels inherit from base config.yaml
+        - Role-specific overrides also inherit from base
+
+        Args:
+            role: Role name (default, code, content, analysis, etc.)
+            level: Level name (god, escalation, general, fast, veryfast)
+
+        Returns:
+            Model key (e.g., "claude_sonnet", "codellama_7b")
+        """
+        # Check for NEW unified structure first
+        if self.get("llm.models") is not None:
+            # Try role-specific override first
+            role_model = self.get(f"llm.roles.{role}.{level}")
+            if role_model:
+                return role_model
+
+            # Fall back to defaults
+            default_model = self.get(f"llm.defaults.{level}")
+            if default_model:
+                return default_model
+
+            # Not found - this is OK for partial overrides
+            # The base config should have it
+            logger.debug(f"No model configured for role='{role}' level='{level}' (may be in base config)")
+            return None
+
+        # Fall back to OLD structure for backward compatibility
+        return self._get_legacy_model(role, level)
+
+    def _get_legacy_model(self, role: str, level: str) -> Optional[str]:
+        """
+        Get model using legacy config structure for backward compatibility.
+
+        Args:
+            role: Role name
+            level: Level name
+
+        Returns:
+            Model name or None
+        """
+        # Map old role names to new structure
+        legacy_mapping = {
+            ("default", "veryfast"): "triage",
+            ("default", "fast"): "triage",
+            ("default", "general"): "overseer",
+            ("default", "escalation"): "escalation",
+            ("default", "god"): "escalation",
+            ("code", "veryfast"): "generator",
+            ("code", "fast"): "generator",
+            ("code", "general"): "generator",
+            ("code", "escalation"): "escalation",
+            ("code", "god"): "escalation",
+        }
+
+        key = (role, level)
+        if key in legacy_mapping:
+            old_key = legacy_mapping[key]
+            return self.get(f"ollama.models.{old_key}")
+
+        return None
+
+    def get_model_metadata(self, model_key: str) -> Dict[str, Any]:
+        """
+        Get metadata for a model from the registry.
+
+        Args:
+            model_key: Model key (e.g., "claude_sonnet", "codellama_7b")
+
+        Returns:
+            Dictionary with model metadata (name, backend, context_window, cost, speed, quality, etc.)
+        """
+        # Check NEW unified structure
+        model_config = self.get(f"llm.models.{model_key}")
+        if model_config and isinstance(model_config, dict):
+            return model_config
+
+        # Model not found in registry
+        logger.warning(f"Model '{model_key}' not found in llm.models registry")
+        return {
+            "name": model_key,  # Assume key is the model name
+            "backend": "ollama",
+            "context_window": 4096,
+            "cost": "unknown",
+            "speed": "unknown",
+            "quality": "unknown"
+        }
+
+    def resolve_model(self, role: str = "default", level: str = "general") -> Dict[str, Any]:
+        """
+        Resolve a role+level to complete model metadata.
+
+        Args:
+            role: Role name (default, code, content, etc.)
+            level: Level name (god, escalation, general, fast, veryfast)
+
+        Returns:
+            Complete model metadata dictionary
+        """
+        model_key = self.get_model(role, level)
+        if not model_key:
+            raise ValueError(f"No model configured for role='{role}' level='{level}'")
+
+        metadata = self.get_model_metadata(model_key)
+        metadata["model_key"] = model_key  # Include the key for reference
+        return metadata
 
     @property
     def rag_memory_path(self) -> str:
@@ -475,6 +662,39 @@ class ConfigManager:
     def auto_escalate(self) -> bool:
         """Check if auto-escalation on test failure is enabled."""
         return self.get("testing.auto_escalate_on_failure", True)
+
+    def get_primary_llm_backend(self) -> str:
+        """
+        Determine which backend to use for LLM (not embeddings).
+
+        Resolution order:
+        1. Check llm.defaults and see which backend those models use
+        2. Check which backends are enabled
+        3. Default to ollama
+
+        Returns:
+            Backend name (e.g., "anthropic", "ollama", "openai")
+        """
+        # Get defaults to see which models are being used
+        defaults = self.get("llm.defaults", {})
+        if defaults:
+            # Check the "general" level model to determine backend
+            general_model_key = defaults.get("general")
+            if general_model_key:
+                metadata = self.get_model_metadata(general_model_key)
+                backend = metadata.get("backend", "ollama")
+                return backend
+
+        # Fall back to checking which backends are enabled
+        backends = self.get("llm.backends", {})
+        for backend_name, backend_config in backends.items():
+            if isinstance(backend_config, dict) and backend_config.get("enabled"):
+                # Prefer anthropic over others if enabled
+                if backend_name == "anthropic":
+                    return "anthropic"
+
+        # Default to ollama
+        return "ollama"
 
     def create_default_config(self, path: str = "config.yaml"):
         """

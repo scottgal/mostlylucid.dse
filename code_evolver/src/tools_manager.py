@@ -17,6 +17,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 console = Console()
 
+# Import status manager for live status updates
+try:
+    from .status_manager import get_status_manager
+    STATUS_MANAGER_AVAILABLE = True
+except ImportError:
+    STATUS_MANAGER_AVAILABLE = False
+
 
 def calculate_tool_hash(tool_def: Dict[str, Any]) -> str:
     """
@@ -877,11 +884,70 @@ Tags: {', '.join(tool.tags)}
                     logger.warning(f"Missing template variable {e}, using prompt as-is")
             # Otherwise just use the prompt as-is (backward compatibility)
 
+        # HIERARCHICAL CACHING: Check if we've seen this exact (tool_id + prompt) combo before
+        # This implements "at each level, if instruction and tool are the same, reuse that node"
+        if self.rag_memory:
+            try:
+                from .rag_memory import ArtifactType
+
+                # Normalize prompt for exact matching (lowercase, strip whitespace)
+                normalized_prompt = prompt.lower().strip()
+
+                # Search for previous invocations of this tool
+                tool_invocations = self.rag_memory.find_by_tags(["tool_invocation", tool_id], limit=100)
+
+                # Find ALL exact matches, then select the highest fitness version
+                matches = []
+                for artifact in tool_invocations:
+                    # Check if this is an exact match for tool + prompt
+                    cached_prompt = artifact.metadata.get("user_prompt", "").lower().strip()
+                    if cached_prompt == normalized_prompt:
+                        # Exact match found - collect all versions
+                        fitness_score = artifact.metadata.get("fitness_score", 0.0)
+                        version = artifact.metadata.get("version", "1.0.0")
+                        timestamp = artifact.metadata.get("timestamp", 0)
+
+                        matches.append({
+                            "artifact": artifact,
+                            "fitness": fitness_score,
+                            "version": version,
+                            "timestamp": timestamp
+                        })
+
+                if matches:
+                    # Select the LATEST, HIGHEST FITNESS version
+                    # Sort by: fitness (desc), then timestamp (desc) to get latest best version
+                    best_match = sorted(matches, key=lambda m: (m["fitness"], m["timestamp"]), reverse=True)[0]
+
+                    artifact = best_match["artifact"]
+                    cached_result = artifact.content
+
+                    # Extract just the RESPONSE part from the stored content
+                    if "RESPONSE:\n" in cached_result:
+                        cached_result = cached_result.split("RESPONSE:\n", 1)[1]
+
+                    logger.info(
+                        f"✓ CACHE HIT: Reusing result for '{tool.name}' "
+                        f"(version {best_match['version']}, fitness {best_match['fitness']:.2f}) "
+                        f"- saved LLM call"
+                    )
+                    self.increment_usage(tool_id)
+                    self.rag_memory.increment_usage(artifact.artifact_id)
+                    return cached_result
+            except Exception as e:
+                logger.debug(f"Cache lookup failed: {e}")
+                pass  # Continue with normal execution if cache fails
+
         # Increment usage counter
         self.increment_usage(tool_id)
 
         # Log tool invocation
         logger.info(f"Invoking LLM tool '{tool.name}' (model: {model}, endpoint: {endpoint or 'default'})")
+
+        # Show live status update
+        if STATUS_MANAGER_AVAILABLE:
+            status_mgr = get_status_manager()
+            status_mgr.tool_call(tool.name, model)
 
         # Track response time for adaptive timeout learning
         import time
@@ -895,6 +961,10 @@ Tags: {', '.join(tool.tags)}
             temperature=temperature,
             endpoint=endpoint
         )
+
+        # Clear status after LLM call completes
+        if STATUS_MANAGER_AVAILABLE:
+            get_status_manager().clear()
 
         # Calculate actual response time
         response_time = time.time() - start_time
@@ -919,7 +989,11 @@ Tags: {', '.join(tool.tags)}
                 # Create unique artifact ID for this invocation
                 invocation_id = f"invocation_{tool_id}_{int(time.time()*1000)}"
 
-                # Store the prompt/response pair with full context
+                # Get tool version and fitness score for compositional reuse
+                tool_version = tool.metadata.get("version", "1.0.0")
+                fitness_score = tool.metadata.get("quality_score", 0.0)
+
+                # Store the prompt/response pair with full context including version and fitness
                 self.rag_memory.store_artifact(
                     artifact_id=invocation_id,
                     artifact_type=ArtifactType.PATTERN,
@@ -936,7 +1010,10 @@ Tags: {', '.join(tool.tags)}
                         "user_prompt": prompt,
                         "temperature": temperature,
                         "response_length": len(response),
-                        "template_vars": template_vars
+                        "template_vars": template_vars,
+                        "version": tool_version,  # For semver-based selection
+                        "fitness_score": fitness_score,  # For fitness-based selection
+                        "timestamp": int(time.time() * 1000)  # For latest version selection
                     },
                     auto_embed=True
                 )
