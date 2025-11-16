@@ -1,256 +1,136 @@
-# Configuration Guide
+# Code Evolver Configuration Guide
 
-## Overview
+## ⚠️ IMPORTANT: Don't Burn Anthropic Credits Accidentally!
 
-Code Evolver supports multiple configuration files for different backends and use cases. This guide explains which config files to use and when.
+This guide shows **EXACTLY** which configs are free (local Ollama) and which cost money (Anthropic cloud).
 
-## Quick Start
+---
 
-**For most users**: Use the default `config.yaml` which is configured for Ollama (local LLMs).
+## ✅ FREE Configs (100% Local Ollama - No API Costs)
 
-**For specific backends**: Use one of the backend-specific configs:
-- `config.anthropic.yaml` - For Claude models via Anthropic API
-- `config.openai.yaml` - For GPT models via OpenAI API
-- `config.azure.yaml` - For Azure OpenAI
-- `config.local.yaml` - For local/offline models (Ollama, LM Studio)
+**Use these for FREE local-only operation:**
 
-**For tiered model systems**: Use `config.tiered.yaml` for advanced tier-based model selection.
+| Config File | Description | Backend |
+|-------------|-------------|---------|
+| `config.yaml` | **DEFAULT** - Complete unified config, all local | Ollama only |
+| `config.unified.yaml` | Same as config.yaml, all local models | Ollama only |
+| `config.local.yaml` | Explicitly local-only configuration | Ollama only |
+| `config.local.minimal.yaml` | Minimal local config | Ollama only |
 
-## Configuration Files
-
-### Primary Configuration Files
-
-#### `config.yaml` (Default)
-- **When to use**: Default configuration for Ollama-based local LLMs
-- **Backend**: Ollama
-- **Features**: Full-featured config with all settings
-- **Models**: Configurable Ollama models (llama3, codellama, etc.)
-
-#### `config.tiered.yaml` (Recommended for Production)
-- **When to use**: When you want automatic model escalation and tier-based selection
-- **Backend**: Any (Ollama, Anthropic, OpenAI, Azure)
-- **Features**: Hierarchical model tiers with automatic escalation
-- **Benefits**:
-  - Tools reference tiers (e.g., `coding.tier_2`) not specific models
-  - Automatic escalation from simple→general→complex→god-level
-  - Clean separation of concerns
-  - Easy to swap models without changing tool definitions
-- **Documentation**: See `MODEL_TIERS.md` for full details
-
-### Backend-Specific Configurations
-
-#### `config.anthropic.yaml`
-- **Backend**: Anthropic Claude API
-- **Models**: claude-3-5-sonnet-20241022, claude-3-5-haiku-20241022
-- **Use case**: Production deployments using Claude models
-- **Requires**: `ANTHROPIC_API_KEY` environment variable
-
-#### `config.anthropic.minimal.yaml`
-- **Same as above** but with minimal settings (faster to load)
-
-#### `config.openai.yaml`
-- **Backend**: OpenAI API
-- **Models**: gpt-4o, gpt-4o-mini, o1-preview
-- **Use case**: Production deployments using GPT models
-- **Requires**: `OPENAI_API_KEY` environment variable
-
-#### `config.openai.minimal.yaml`
-- **Same as above** but with minimal settings
-
-#### `config.azure.yaml`
-- **Backend**: Azure OpenAI
-- **Use case**: Enterprise deployments using Azure
-- **Requires**: `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` environment variables
-
-#### `config.azure.minimal.yaml`
-- **Same as above** but with minimal settings
-
-#### `config.local.yaml`
-- **Backend**: Ollama or LM Studio
-- **Use case**: Local development without API costs
-- **Models**: Local models only (llama3, codellama, etc.)
-
-#### `config.local.minimal.yaml`
-- **Same as above** but with minimal settings
-
-#### `config.lmstudio.minimal.yaml`
-- **Backend**: LM Studio
-- **Use case**: Using LM Studio for local inference with a GUI
-- **Endpoint**: `http://localhost:1234/v1`
-
-#### `config.hybrid.yaml`
-- **Backend**: Mixed (multiple backends)
-- **Use case**: Using different backends for different purposes
-  - Example: Fast local models for triage, cloud models for complex tasks
-
-### Supporting Files
-
-#### `backends.yaml`
-- Defines available backend configurations
-- Not used directly - referenced by main config files
-
-## Tool Definitions
-
-### Tools Directory Structure
-
-```
-tools/
-├── llm/              # LLM-based tools
-│   ├── code_reviewer.yaml
-│   ├── content_generator.yaml
-│   ├── fast_code_generator.yaml
-│   ├── general.yaml
-│   ├── quick_feedback.yaml
-│   ├── security_auditor.yaml
-│   └── summarizer.yaml
-├── executable/       # Executable/command-line tools
-│   └── save_to_disk.yaml
-└── custom/           # Custom tool definitions
-    └── (your custom tools here)
-```
-
-### Tool Definition Format
-
-All tools in the `tools/` directory use tier-based references:
-
-```yaml
-name: "Code Reviewer"
-type: "llm"
-description: "Reviews code for quality and issues"
-
-# Performance characteristics
-cost_tier: "medium"
-speed_tier: "fast"
-quality_tier: "excellent"
-max_output_length: "long"
-
-# LLM configuration
-llm:
-  tier: "quality.tier_2"  # Tiered system (preferred)
-  role: "base"            # Legacy role system (fallback)
-
-  system_prompt: |
-    You are an expert code reviewer...
-
-  prompt_template: |
-    Review this code: {code}
-```
-
-### Tier vs Role References
-
-**Tier-based (Preferred)**:
-- `tier: "coding.tier_1"` - Fast, simple coding tasks
-- `tier: "coding.tier_2"` - General coding (default)
-- `tier: "coding.tier_3"` - Complex/advanced coding
-- `tier: "content.tier_2"` - Quality content generation
-- `tier: "quality.tier_2"` - Quality review/assessment
-- `tier: "validation.tier_1"` - Fast validation
-
-**Role-based (Fallback)**:
-- `role: "fast"` - Fast model (tinyllama, gpt-4o-mini, claude-haiku)
-- `role: "base"` - Base model (llama3, gpt-4o, claude-sonnet)
-- `role: "powerful"` - Most capable model (qwen2.5-coder:14b, o1-preview, claude-opus)
-
-Tools can specify both for maximum compatibility.
-
-## How to Use a Specific Config
-
-### Command Line
-
+**To use:**
 ```bash
-# Use default config.yaml
+# Default (free)
 python chat_cli.py
 
-# Use a specific config
-python chat_cli.py --config config.tiered.yaml
-python chat_cli.py --config config.anthropic.yaml
-python chat_cli.py --config config.openai.yaml
+# Or explicit local
+python chat_cli.py --config config.local.yaml
 ```
 
-### In Code
+**Cost: $0** (100% free, uses your local Ollama models)
 
-```python
-from src.config_manager import ConfigManager
+---
 
-# Load default config
-config = ConfigManager()
+## ⚠️ PAID Configs (Anthropic Cloud - COSTS MONEY!)
 
-# Load specific config
-config = ConfigManager("config.tiered.yaml")
-config = ConfigManager("config.anthropic.yaml")
-```
+**These configs use Anthropic API and WILL burn credits:**
 
-## Choosing the Right Configuration
+| Config File | Description | Cost Per Workflow |
+|-------------|-------------|-------------------|
+| `config.anthropic.simple.yaml` | Simple Anthropic config | ~$0.15-$0.75 |
+| `config.anthropic.unified.yaml` | Full Anthropic config | ~$0.15-$0.75 |
+| `config.CLOUD_ANTHROPIC_COSTS_MONEY.minimal.yaml` | Minimal Anthropic (renamed for clarity) | ~$0.15-$0.75 |
+| `config.CLOUD_HYBRID_COSTS_MONEY.yaml` | Hybrid cloud/local (renamed for clarity) | ~$0.15-$0.75 |
 
-### For Development
-- Use `config.yaml` or `config.local.yaml`
-- Free, runs locally, no API costs
-- Requires Ollama to be running
-
-### For Production
-- Use `config.tiered.yaml` with your preferred backend
-- Automatic model escalation
-- Clean tier-based tool references
-
-### For Specific Backends
-- **Claude users**: `config.anthropic.yaml` or `.minimal.yaml`
-- **GPT users**: `config.openai.yaml` or `.minimal.yaml`
-- **Azure users**: `config.azure.yaml` or `.minimal.yaml`
-- **Local users**: `config.local.yaml` or `config.lmstudio.minimal.yaml`
-
-### For Cost Optimization
-- Use `config.tiered.yaml` to ensure cheaper models are tried first
-- Automatic escalation only when needed
-- Fine-grained control over which tier each task uses
-
-## Environment Variables
-
-Different configs require different environment variables:
-
+**To use (requires API key):**
 ```bash
-# For Anthropic
-export ANTHROPIC_API_KEY="sk-ant-..."
+# Set API key
+export ANTHROPIC_API_KEY='sk-ant-api03-...'
 
-# For OpenAI
-export OPENAI_API_KEY="sk-..."
-
-# For Azure
-export AZURE_OPENAI_API_KEY="..."
-export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-
-# For Ollama (usually not needed, uses localhost)
-export OLLAMA_BASE_URL="http://localhost:11434"
+# Run with paid config
+python chat_cli.py --config config.anthropic.simple.yaml
 ```
 
-## Configuration Validation
+**Cost: ~$0.15-$0.75 per workflow** (can add up quickly!)
 
-Test your configuration:
+---
 
-```bash
-# Check backend availability
-python demo_backend_checker.py
+## 🎯 Quick Decision Guide
 
-# Test configuration loading
-python -c "from src.config_manager import ConfigManager; c = ConfigManager('config.tiered.yaml'); print('Config loaded successfully')"
+**I want:** → **Use this config:**
+
+- **FREE, unlimited usage** → `config.local.yaml` or `config.yaml` (default)
+- **Best quality, willing to pay** → `config.anthropic.simple.yaml` (with API key)
+- **Testing/prototyping** → `config.local.yaml` (free)
+- **Production with budget** → `config.anthropic.unified.yaml` (with API key)
+
+---
+
+## ⚠️ How to Avoid Burning Credits Accidentally
+
+### Problem: Confusing Config Names (OLD ISSUE - NOW FIXED)
+
+**Before (confusing):**
+```yaml
+# config.hybrid.yaml  ← Unclear if it costs money
+ollama:  # ← Says "ollama" but...
+  models:
+    overseer:
+      backend: "anthropic"  # ← Actually uses Anthropic! Costs money!
 ```
 
-## Troubleshooting
+**After (clear):**
+```yaml
+# config.CLOUD_HYBRID_COSTS_MONEY.yaml  ← VERY CLEAR NOW
+# ⚠️ WARNING: THIS CONFIG USES ANTHROPIC API - COSTS REAL MONEY! ⚠️
+ollama:  # ← MISLEADING NAME (legacy structure)
+  models:
+    overseer:
+      backend: "anthropic"  # ← NOT ollama! This is Anthropic cloud! ⚠️
+```
 
-### "Config file not found"
-- Ensure you're in the `code_evolver/` directory
-- Use full path: `python chat_cli.py --config /path/to/config.yaml`
+---
 
-### "Backend not available"
-- Check environment variables are set
-- For Ollama: ensure `ollama serve` is running
-- For APIs: verify API keys are valid
+## 🛡️ Safety Checklist
 
-### "Tool tier not found"
-- Ensure `config.tiered.yaml` defines the tier your tool references
-- Check `MODEL_TIERS.md` for valid tier names
+**Before running Code Evolver:**
 
-## See Also
+1. ✅ **Check filename**: Does it contain "CLOUD" or "COSTS_MONEY"?
+   - YES → Will burn API credits
+   - NO → Probably free (local Ollama)
 
-- `MODEL_TIERS.md` - Complete guide to the tiered model system
-- `CLAUDE.md` - Complete system documentation
-- `README.md` - Project overview and quick start
+2. ✅ **Read the header**: Open the config file and check the top
+   - Look for: "⚠️ WARNING: COSTS REAL MONEY!" box
+   - If present → Will burn credits
+
+3. ✅ **Check backend setting**: Look for `backend: "anthropic"`
+   - `backend: "ollama"` → Free (local)
+   - `backend: "anthropic"` → Costs money (cloud)
+
+4. ✅ **Default is safe**: If you don't specify `--config`, it uses `config.yaml` (free)
+
+---
+
+## ✅ Safe Defaults
+
+**The system is configured to be SAFE by default:**
+
+1. Default config (`config.yaml`) uses Ollama (free)
+2. Anthropic backend is `enabled: false` in free configs
+3. All Anthropic configs now have BIG WARNING BOXES
+4. Filenames clearly indicate when they cost money
+
+**You have to EXPLICITLY choose a paid config to burn credits.**
+
+---
+
+## 📞 Quick Reference
+
+| Config | Command | Cost | Quality |
+|--------|---------|------|---------|
+| Default | `python chat_cli.py` | FREE | Good |
+| Local | `python chat_cli.py --config config.local.yaml` | FREE | Good |
+| Anthropic | `python chat_cli.py --config config.anthropic.simple.yaml` | PAID | Best |
+
+---
+
+**Summary:** Use `config.local.yaml` or `config.yaml` for FREE local operation. Only use configs with "CLOUD" or "anthropic" in the name when you're ready to pay for Anthropic API!

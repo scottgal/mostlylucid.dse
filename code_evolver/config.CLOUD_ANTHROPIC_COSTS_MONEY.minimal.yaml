@@ -1,19 +1,30 @@
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║                                                                            ║
+# ║  ⚠️  WARNING: THIS CONFIG USES ANTHROPIC API - COSTS REAL MONEY!  ⚠️      ║
+# ║                                                                            ║
+# ║  This is NOT a local-only config. All LLM requests go to Anthropic cloud  ║
+# ║  and burn API credits. Use config.local.yaml for FREE local-only mode.    ║
+# ║                                                                            ║
+# ║  Estimated cost: $0.15-$0.75 per workflow (can add up quickly!)           ║
+# ║                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
+#
 # ============================================================================
 # Code Evolver - Anthropic Configuration (Minimal)
 # ============================================================================
 #
 # SETUP:
 # 1. export ANTHROPIC_API_KEY='sk-ant-api03-...'
-# 2. python chat_cli.py --config config.anthropic.minimal.yaml
+# 2. python chat_cli.py --config config.CLOUD_ANTHROPIC_COSTS_MONEY.minimal.yaml
 #
-# This config just selects backend and maps model roles.
-# All tool definitions come from tools/ directory.
+# This config uses Anthropic cloud API for all LLM tasks (COSTS MONEY).
+# Only embeddings use local Ollama (free).
 #
 # ============================================================================
 
 # LLM Backend Selection & Role Mapping
 llm:
-  # Select backend
+  # ⚠️ Using Anthropic cloud backend (COSTS MONEY)
   backend: "anthropic"
 
   # Map model roles to actual Anthropic models
@@ -28,11 +39,11 @@ llm:
     max_tokens: 4096
     timeout: 120
 
-# Ollama Configuration (for local embeddings)
+# ✅ Ollama Configuration (ONLY for embeddings - everything else uses Anthropic)
 ollama:
   base_url: "http://localhost:11434"
 
-  # Embedding model (local/free)
+  # ✅ Embedding model (actually local/free - this is the ONLY free part)
   embedding:
     model: "nomic-embed-text"
     vector_size: 768

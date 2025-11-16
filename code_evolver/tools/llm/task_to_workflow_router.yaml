@@ -1,0 +1,309 @@
+name: "Task to Workflow Router"
+type: "llm"
+description: "Analyzes streaming task data from SignalR hub and automatically generates appropriate workflow code. Routes tasks to correct workflow patterns based on task type (summarize, generate, translate). Creates executable Python workflows for training the system."
+
+llm:
+  model_tier: "general"
+  temperature: 0.2  # Lower temp for consistent code generation
+  max_tokens: 4000
+  system_prompt: |
+    You are a workflow code generator for the Code Evolver system.
+
+    Your task is to analyze incoming task specifications and generate complete,
+    executable Python workflow code that accomplishes the task.
+
+    IMPORTANT RULES:
+    - Generate COMPLETE, WORKING Python code
+    - Always include proper imports
+    - Use node_runtime.call_tool() to invoke LLM tools
+    - Read input from stdin as JSON
+    - Output results as JSON to stdout
+    - Include error handling
+    - Add a main() function and if __name__ == "__main__"
+    - Use appropriate tools based on task type:
+      * summarize → call_tool("summarizer", ...)
+      * generate → call_tool("content_generator", ...)
+      * translate → call_tool("quick_translator", ...) or call_tool("nmt_translator", ...)
+    - Do NOT add sys.path.insert() for node_runtime (it's handled by the runtime)
+
+  prompt_template: |
+    Generate a complete Python workflow for this task:
+
+    **Task Data:**
+    ```json
+    {task_json}
+    ```
+
+    **Task Analysis:**
+    - Task Type: {task_type}
+    - Task Name: {task_name}
+    - Priority: {priority}
+    - Languages: {languages}
+
+    **Generate workflow code that:**
+
+    1. Reads input from stdin (JSON with task data)
+    2. Calls appropriate tool(s) based on task type:
+       - `summarize` → Use `summarizer` tool
+       - `generate` → Use `content_generator` tool
+       - `translate` → Use `quick_translator` or `nmt_translator` tool
+    3. Handles translation languages if provided
+    4. Outputs result as JSON to stdout
+    5. Includes error handling
+
+    **Code Template:**
+    ```python
+    import json
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    from node_runtime import call_tool
+
+
+    def main():
+        # Read input
+        input_data = json.load(sys.stdin)
+
+        # Extract task parameters
+        # [YOUR CODE HERE]
+
+        # Call appropriate tool
+        # [YOUR CODE HERE]
+
+        # Output result
+        print(json.dumps({{"result": result, "task_id": task_id}}))
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    **Output ONLY valid JSON:**
+    ```json
+    {{
+      "workflow_code": "import json\\nimport sys\\n...",
+      "workflow_name": "descriptive_workflow_name",
+      "suggested_node_id": "task_type_brief_description",
+      "tools_used": ["tool1", "tool2"],
+      "estimated_complexity": "simple|moderate|complex"
+    }}
+    ```
+
+    IMPORTANT: Output ONLY the JSON, no markdown, no explanations.
+
+input_schema:
+  task_json:
+    type: string
+    description: "Full JSON string of the task object from SignalR hub"
+    required: true
+  task_type:
+    type: string
+    description: "Type of task (summarize, generate, translate)"
+    required: false
+    default: "unknown"
+  task_name:
+    type: string
+    description: "Human-readable task name"
+    required: false
+    default: "Unnamed Task"
+  priority:
+    type: string
+    description: "Task priority (low, medium, high)"
+    required: false
+    default: "medium"
+  languages:
+    type: string
+    description: "Translation languages if applicable"
+    required: false
+    default: "none"
+
+output_schema:
+  type: object
+  description: "Generated workflow code and metadata"
+  properties:
+    workflow_code:
+      type: string
+      description: "Complete Python workflow code"
+    workflow_name:
+      type: string
+      description: "Descriptive name for the workflow"
+    suggested_node_id:
+      type: string
+      description: "Suggested node ID for saving"
+    tools_used:
+      type: array
+      description: "List of tools called in the workflow"
+    estimated_complexity:
+      type: string
+      description: "Complexity estimate (simple, moderate, complex)"
+
+tags: ["workflow", "generator", "routing", "task", "automation", "training", "llm"]
+cost_tier: "medium"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 85
+
+examples:
+  - inputs:
+      task_json: |
+        {
+          "id": "task-1",
+          "taskName": "LLM Summarization for Blog Post",
+          "llmTaskType": "summarize",
+          "priority": "medium",
+          "status": "pending"
+        }
+      task_type: "summarize"
+      task_name: "LLM Summarization for Blog Post"
+      priority: "medium"
+      languages: "none"
+    output: |
+      {
+        "workflow_code": "import json\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\nfrom node_runtime import call_tool\n\n\ndef main():\n    input_data = json.load(sys.stdin)\n    \n    # Extract blog post content\n    content = input_data.get('content', input_data.get('text', ''))\n    task_id = input_data.get('id', 'unknown')\n    \n    # Summarize using summarizer tool\n    summary = call_tool('summarizer', content)\n    \n    # Output result\n    print(json.dumps({\n        'result': summary,\n        'task_id': task_id,\n        'task_type': 'summarize'\n    }))\n\n\nif __name__ == '__main__':\n    main()",
+        "workflow_name": "Blog Post Summarization",
+        "suggested_node_id": "summarize_blog_post",
+        "tools_used": ["summarizer"],
+        "estimated_complexity": "simple"
+      }
+
+  - inputs:
+      task_json: |
+        {
+          "id": "task-2",
+          "taskName": "AI Generated Email Content",
+          "llmTaskType": "generate",
+          "priority": "high",
+          "translationLanguages": [
+            {"from": "en", "to": "fr"},
+            {"from": "en", "to": "es"}
+          ]
+        }
+      task_type: "generate"
+      task_name: "AI Generated Email Content"
+      priority: "high"
+      languages: "en->fr, en->es"
+    output: |
+      {
+        "workflow_code": "import json\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\nfrom node_runtime import call_tool\n\n\ndef main():\n    input_data = json.load(sys.stdin)\n    \n    # Extract parameters\n    prompt = input_data.get('prompt', input_data.get('description', ''))\n    task_id = input_data.get('id', 'unknown')\n    translation_langs = input_data.get('translationLanguages', [])\n    \n    # Generate content\n    content = call_tool('content_generator', prompt)\n    \n    # Translate if needed\n    translations = {}\n    for lang_pair in translation_langs:\n        from_lang = lang_pair.get('from', 'en')\n        to_lang = lang_pair.get('to', 'es')\n        \n        translate_prompt = f'Translate from {from_lang} to {to_lang}: {content}'\n        translated = call_tool('quick_translator', translate_prompt)\n        translations[to_lang] = translated\n    \n    # Output result\n    print(json.dumps({\n        'result': content,\n        'translations': translations,\n        'task_id': task_id,\n        'task_type': 'generate'\n    }))\n\n\nif __name__ == '__main__':\n    main()",
+        "workflow_name": "Email Content Generation with Translations",
+        "suggested_node_id": "generate_email_with_translations",
+        "tools_used": ["content_generator", "quick_translator"],
+        "estimated_complexity": "moderate"
+      }
+
+  - inputs:
+      task_json: |
+        {
+          "id": "task-3",
+          "taskName": "Translation of Product Description",
+          "llmTaskType": "translate",
+          "translationLanguages": [
+            {"from": "de", "to": "en"},
+            {"from": "fr", "to": "es"}
+          ]
+        }
+      task_type: "translate"
+      task_name: "Translation of Product Description"
+      priority: "low"
+      languages: "de->en, fr->es"
+    output: |
+      {
+        "workflow_code": "import json\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\nfrom node_runtime import call_tool\n\n\ndef main():\n    input_data = json.load(sys.stdin)\n    \n    # Extract parameters\n    text = input_data.get('text', input_data.get('content', ''))\n    task_id = input_data.get('id', 'unknown')\n    translation_langs = input_data.get('translationLanguages', [])\n    \n    # Perform translations\n    translations = {}\n    for lang_pair in translation_langs:\n        from_lang = lang_pair.get('from', 'en')\n        to_lang = lang_pair.get('to', 'es')\n        \n        # Use NMT translator for better quality\n        translate_data = json.dumps({\n            'text': text,\n            'source_language': from_lang,\n            'target_language': to_lang\n        })\n        \n        translated = call_tool('nmt_translator', translate_data)\n        translations[f'{from_lang}_to_{to_lang}'] = translated\n    \n    # Output result\n    print(json.dumps({\n        'translations': translations,\n        'task_id': task_id,\n        'task_type': 'translate'\n    }))\n\n\nif __name__ == '__main__':\n    main()",
+        "workflow_name": "Multi-Language Product Translation",
+        "suggested_node_id": "translate_product_description",
+        "tools_used": ["nmt_translator"],
+        "estimated_complexity": "simple"
+      }
+
+usage_notes: |
+  ## Overview
+
+  This LLM tool analyzes task specifications and generates complete Python workflow code.
+  It's designed to work with the SignalR Hub Connector for automatic workflow creation.
+
+  ## How It Works
+
+  1. **Parse Task Data**: Analyzes the incoming task JSON
+  2. **Identify Task Type**: Determines if task is summarize, generate, or translate
+  3. **Select Tools**: Chooses appropriate Code Evolver tools
+  4. **Generate Code**: Creates complete Python workflow
+  5. **Return Metadata**: Provides workflow name, complexity, tools used
+
+  ## Task Type Routing
+
+  **Summarize Tasks** → `summarizer` tool
+  - Blog posts, articles, documents
+  - News summaries
+  - Meeting notes
+
+  **Generate Tasks** → `content_generator` tool
+  - Email content
+  - Marketing copy
+  - Creative writing
+  - Code generation
+
+  **Translate Tasks** → `quick_translator` or `nmt_translator` tools
+  - Simple phrases → quick_translator
+  - Complex content → nmt_translator
+  - Multiple language pairs supported
+
+  ## Generated Code Structure
+
+  All generated workflows follow this pattern:
+  ```python
+  import json
+  import sys
+  from pathlib import Path
+
+  sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+  from node_runtime import call_tool
+
+  def main():
+      input_data = json.load(sys.stdin)
+
+      # Extract task parameters
+      # ...
+
+      # Call appropriate tool(s)
+      result = call_tool("tool_name", prompt)
+
+      # Output result as JSON
+      print(json.dumps({"result": result, "task_id": task_id}))
+
+  if __name__ == "__main__":
+      main()
+  ```
+
+  ## Integration with SignalR Connector
+
+  The SignalR Hub Connector automatically calls this tool for each received task:
+  ```python
+  workflow_result = call_tool(
+      "task_to_workflow_router",
+      json.dumps(task_data)
+  )
+  ```
+
+  ## Saving Generated Workflows
+
+  To save the generated workflow as a node:
+  ```python
+  import json
+  from src.node_runner import NodeRunner
+
+  # Generate workflow
+  result = json.loads(workflow_result)
+  code = result["workflow_code"]
+  node_id = result["suggested_node_id"]
+
+  # Save as node
+  runner = NodeRunner()
+  runner.save_code(node_id, code)
+  ```
+
+  ## Complexity Estimation
+
+  - **Simple**: Single tool call, basic processing
+  - **Moderate**: Multiple tool calls, some logic
+  - **Complex**: Advanced flow control, error handling, multiple outputs

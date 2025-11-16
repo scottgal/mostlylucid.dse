@@ -1,0 +1,195 @@
+name: "Stream Processor"
+type: "stream_consumer"
+description: "Generic stream processor that connects a stream producer to a consumer tool. Handles filtering, transformation, and routing of stream events."
+
+executable:
+  command: "python"
+  args: ["tools/executable/stream_processor.py"]
+
+input_schema:
+  producer:
+    type: string
+    description: "Name of the stream producer tool (e.g., 'sse_stream', 'signalr_websocket_stream')"
+    required: true
+  producer_input:
+    type: object
+    description: "Input parameters for the producer tool"
+    required: true
+  consumer:
+    type: string
+    description: "Name of the consumer tool to process each stream item (e.g., 'workflow_generator', 'json_logger')"
+    required: true
+  filter:
+    type: string
+    description: "Optional Python expression to filter events (e.g., \"event_type == 'data' and data.get('priority') == 'high'\")"
+    required: false
+  transform:
+    type: string
+    description: "Optional Python expression to transform data before passing to consumer (e.g., \"data.get('payload')\")"
+    required: false
+  sequential:
+    type: boolean
+    description: "Process items sequentially (wait for each to complete before next). Default: true"
+    default: true
+    required: false
+  max_items:
+    type: integer
+    description: "Maximum number of items to process (0 = unlimited). Default: 0"
+    default: 0
+    required: false
+  timeout_seconds:
+    type: integer
+    description: "Maximum time to run processor (0 = unlimited). Default: 0"
+    default: 0
+    required: false
+
+output_schema:
+  type: object
+  description: "Summary of stream processing"
+  properties:
+    total_events:
+      type: integer
+      description: "Total events received from producer"
+    filtered_events:
+      type: integer
+      description: "Events that passed filter"
+    processed_events:
+      type: integer
+      description: "Events successfully processed by consumer"
+    failed_events:
+      type: integer
+      description: "Events that failed processing"
+    duration_seconds:
+      type: number
+      description: "Total processing duration"
+    shutdown_reason:
+      type: string
+      description: "Why processing stopped"
+
+tags: ["stream", "processor", "consumer", "filter", "transform", "orchestrator"]
+cost_tier: "free"
+speed_tier: "real-time"
+quality_tier: "excellent"
+priority: 90
+
+usage_notes: |
+  ## Overview
+
+  The stream processor connects a stream producer (like SSE or WebSocket) to a
+  consumer tool. It handles:
+
+  - **Filtering**: Only pass events matching criteria
+  - **Transformation**: Transform data before consuming
+  - **Sequential/Parallel**: Control processing mode
+  - **Error handling**: Continue on errors or stop
+  - **Limits**: Max items or time
+
+  ## Basic Usage
+
+  ```python
+  from node_runtime import call_tool
+
+  result = call_tool("stream_processor", json.dumps({
+      "producer": "sse_stream",
+      "producer_input": {
+          "url": "http://127.0.0.1:5116/api/mock/contexts"
+      },
+      "consumer": "workflow_generator"
+  }))
+  ```
+
+  ## With Filtering
+
+  Only process events of type "data":
+  ```python
+  result = call_tool("stream_processor", json.dumps({
+      "producer": "sse_stream",
+      "producer_input": {"url": "http://..."},
+      "consumer": "workflow_generator",
+      "filter": "event_type == 'data'"
+  }))
+  ```
+
+  ## With Transformation
+
+  Extract nested data before processing:
+  ```python
+  result = call_tool("stream_processor", json.dumps({
+      "producer": "sse_stream",
+      "producer_input": {"url": "http://..."},
+      "consumer": "workflow_generator",
+      "transform": "data.get('payload')",  # Only pass payload field
+      "filter": "event_type == 'data' and data.get('payload') is not None"
+  }))
+  ```
+
+  ## Limit Processing
+
+  Process max 10 items or 60 seconds:
+  ```python
+  result = call_tool("stream_processor", json.dumps({
+      "producer": "sse_stream",
+      "producer_input": {"url": "http://..."},
+      "consumer": "workflow_generator",
+      "max_items": 10,
+      "timeout_seconds": 60
+  }))
+  ```
+
+  ## Filter Examples
+
+  - Only errors: `event_type == 'error'`
+  - High priority tasks: `event_type == 'data' and data.get('priority') == 'high'`
+  - Specific event names: `event_name == 'TaskReceived'`
+  - Complex conditions: `event_type == 'data' and ('task' in data) and data['task']['status'] == 'pending'`
+
+  ## Transform Examples
+
+  - Extract payload: `data.get('payload')`
+  - Add metadata: `{**data, 'processed_at': timestamp}`
+  - Flatten structure: `{'id': data['task']['id'], 'type': data['task']['type']}`
+
+  ## Sequential vs Parallel
+
+  - **Sequential (default)**: Wait for each consumer to finish before processing next item
+    - Safer, maintains order
+    - Slower if consumer is slow
+
+  - **Parallel**: Process items concurrently
+    - Faster throughput
+    - May process out of order
+    - Risk of overwhelming consumer
+
+examples:
+  - inputs:
+      producer: "sse_stream"
+      producer_input:
+        url: "http://127.0.0.1:5116/api/mock/contexts"
+      consumer: "workflow_generator"
+      filter: "event_type == 'data'"
+    output: |
+      {
+        "total_events": 25,
+        "filtered_events": 20,
+        "processed_events": 20,
+        "failed_events": 0,
+        "duration_seconds": 45.2,
+        "shutdown_reason": "max_items_reached"
+      }
+
+  - inputs:
+      producer: "sse_stream"
+      producer_input:
+        url: "http://127.0.0.1:5116/api/mock/contexts"
+      consumer: "json_logger"
+      max_items: 10
+      timeout_seconds: 60
+    output: |
+      {
+        "total_events": 10,
+        "filtered_events": 10,
+        "processed_events": 10,
+        "failed_events": 0,
+        "duration_seconds": 30.5,
+        "shutdown_reason": "max_items_reached"
+      }

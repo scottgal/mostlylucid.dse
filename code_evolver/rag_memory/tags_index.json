@@ -119,7 +119,24 @@
     "tool_translate_the_article_into_fre",
     "tool_translate_the_article_into_ger",
     "tool_write_me_some_plausible_sample",
-    "tool_outputs_andy_patterns"
+    "tool_outputs_andy_patterns",
+    "tool_connect_to_signalr_api_at",
+    "tool_process_the_josn_contents_into",
+    "tool_route_this_to_the_most_powerfu",
+    "tool_connect_to_http_127",
+    "tool_buffer",
+    "tool_connect_signalr",
+    "tool_document_workflow",
+    "tool_internal_test_validator",
+    "tool_signalr_hub_connector",
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream",
+    "tool_stream_processor",
+    "tool_signalr_connection_parser",
+    "tool_signalr_llmapi_management",
+    "tool_task_to_workflow_router",
+    "tool_workflow_documenter"
   ],
   "llm": [
     "tool_general",
@@ -145,7 +162,11 @@
     "tool_tell_me_a_joke_about_programmi",
     "tool_quick_translator",
     "tool_code_optimizer",
-    "tool_performance_profiler"
+    "tool_performance_profiler",
+    "tool_signalr_connection_parser",
+    "tool_signalr_llmapi_management",
+    "tool_task_to_workflow_router",
+    "tool_workflow_documenter"
   ],
   "general": [
     "tool_general",
@@ -185,7 +206,11 @@
     "invocation_general_1763288102024",
     "invocation_general_1763289628571",
     "invocation_general_1763290544150",
-    "invocation_general_1763291079420"
+    "invocation_general_1763291079420",
+    "invocation_general_1763292691805",
+    "invocation_general_1763292754169",
+    "invocation_general_1763293354147",
+    "invocation_general_1763295612762"
   ],
   "fallback": [
     "tool_general"
@@ -238,7 +263,9 @@
   "documentation": [
     "tool_doc_generator",
     "tool_technical_writer",
-    "tool_pydocstyle_checker"
+    "tool_pydocstyle_checker",
+    "tool_document_workflow",
+    "tool_workflow_documenter"
   ],
   "docs": [
     "tool_doc_generator"
@@ -269,7 +296,9 @@
     "spec_write_a_longer_article",
     "spec_translate_the_article_into_fre",
     "spec_translate_the_article_into_ger",
-    "spec_write_me_some_plausible_sample"
+    "spec_write_me_some_plausible_sample",
+    "spec_connect_to_signalr_api_at",
+    "spec_process_the_josn_contents_into"
   ],
   "technical": [
     "tool_technical_writer"
@@ -286,7 +315,8 @@
   ],
   "tutorial": [
     "tool_technical_writer",
-    "tool_code_explainer"
+    "tool_code_explainer",
+    "tool_workflow_documenter"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -312,7 +342,8 @@
     "tool_seo_optimizer"
   ],
   "metadata": [
-    "tool_seo_optimizer"
+    "tool_seo_optimizer",
+    "tool_document_workflow"
   ],
   "explanation": [
     "tool_code_explainer"
@@ -461,7 +492,20 @@
     "workflow_design_a_system_which_pulls_in",
     "workflow_perform_pattern_analysis_on_th",
     "tool_outputs_andy_patterns",
-    "workflow_1763291422"
+    "workflow_1763291422",
+    "workflow_connect_to_signalr_api_at",
+    "tool_connect_to_signalr_api_at",
+    "workflow_process_the_josn_contents_into",
+    "tool_process_the_josn_contents_into",
+    "workflow_1763292771",
+    "workflow_route_this_to_the_most_powerfu",
+    "tool_route_this_to_the_most_powerfu",
+    "workflow_connect_to_http_127",
+    "tool_connect_to_http_127",
+    "workflow_1763295627",
+    "tool_document_workflow",
+    "tool_task_to_workflow_router",
+    "tool_workflow_documenter"
   ],
   "generated": [
     "tool_write_a_technical_story_and_tr",
@@ -582,7 +626,23 @@
     "func_perform_pattern_analysis_on_th",
     "workflow_perform_pattern_analysis_on_th",
     "spec_outputs_andy_patterns",
-    "tool_outputs_andy_patterns"
+    "tool_outputs_andy_patterns",
+    "spec_connect_to_signalr_api_at",
+    "func_connect_to_signalr_api_at",
+    "workflow_connect_to_signalr_api_at",
+    "tool_connect_to_signalr_api_at",
+    "spec_process_the_josn_contents_into",
+    "func_process_the_josn_contents_into",
+    "workflow_process_the_josn_contents_into",
+    "tool_process_the_josn_contents_into",
+    "spec_route_this_to_the_most_powerfu",
+    "func_route_this_to_the_most_powerfu",
+    "workflow_route_this_to_the_most_powerfu",
+    "tool_route_this_to_the_most_powerfu",
+    "spec_connect_to_http_127",
+    "func_connect_to_http_127",
+    "workflow_connect_to_http_127",
+    "tool_connect_to_http_127"
   ],
   "chat": [
     "tool_write_a_technical_story_and_tr",
@@ -664,7 +724,19 @@
     "workflow_design_a_system_which_pulls_in",
     "func_perform_pattern_analysis_on_th",
     "workflow_perform_pattern_analysis_on_th",
-    "tool_outputs_andy_patterns"
+    "tool_outputs_andy_patterns",
+    "func_connect_to_signalr_api_at",
+    "workflow_connect_to_signalr_api_at",
+    "tool_connect_to_signalr_api_at",
+    "func_process_the_josn_contents_into",
+    "workflow_process_the_josn_contents_into",
+    "tool_process_the_josn_contents_into",
+    "func_route_this_to_the_most_powerfu",
+    "workflow_route_this_to_the_most_powerfu",
+    "tool_route_this_to_the_most_powerfu",
+    "func_connect_to_http_127",
+    "workflow_connect_to_http_127",
+    "tool_connect_to_http_127"
   ],
   "auto-generated": [
     "tool_write_a_technical_story_and_tr",
@@ -730,7 +802,11 @@
     "tool_translate_the_article_into_fre",
     "tool_translate_the_article_into_ger",
     "tool_write_me_some_plausible_sample",
-    "tool_outputs_andy_patterns"
+    "tool_outputs_andy_patterns",
+    "tool_connect_to_signalr_api_at",
+    "tool_process_the_josn_contents_into",
+    "tool_route_this_to_the_most_powerfu",
+    "tool_connect_to_http_127"
   ],
   "python": [
     "tool_add_5_and_8",
@@ -821,7 +897,16 @@
     "exec_invocation_python_syntax_validator_1763290559880",
     "exec_invocation_node_runtime_import_validator_1763290560535",
     "exec_invocation_python_syntax_validator_1763290881380",
-    "exec_invocation_node_runtime_import_validator_1763290886034"
+    "exec_invocation_node_runtime_import_validator_1763290886034",
+    "exec_invocation_python_syntax_validator_1763292698645",
+    "exec_invocation_node_runtime_import_validator_1763292699281",
+    "exec_invocation_python_syntax_validator_1763292768828",
+    "exec_invocation_node_runtime_import_validator_1763292769491",
+    "exec_invocation_python_syntax_validator_1763293592005",
+    "exec_invocation_node_runtime_import_validator_1763293596056",
+    "exec_invocation_python_syntax_validator_1763295623619",
+    "exec_invocation_node_runtime_import_validator_1763295624782",
+    "exec_invocation_buffer_1763296911972"
   ],
   "addition": [
     "tool_add_5_and_8",
@@ -866,7 +951,13 @@
     "tool_run_static_analysis",
     "tool_workflow_datastore",
     "tool_nmt_translate",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_buffer",
+    "tool_connect_signalr",
+    "tool_document_workflow",
+    "tool_internal_test_validator",
+    "tool_signalr_hub_connector",
+    "tool_signalr_llmapi_skill"
   ],
   "static-analysis": [
     "tool_pylint_checker",
@@ -914,7 +1005,8 @@
     "tool_pynguin_test_generator",
     "tool_code_optimizer",
     "tool_run_static_analysis",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_internal_test_validator"
   ],
   "pytest": [
     "tool_pytest_runner",
@@ -1023,7 +1115,8 @@
     "tool_nmt_translator",
     "tool_http_content_fetcher",
     "tool_http_server",
-    "tool_nmt_translate"
+    "tool_nmt_translate",
+    "tool_workflow_documenter"
   ],
   "validation": [
     "tool_translation_quality_checker",
@@ -1037,7 +1130,8 @@
     "tool_stdin_usage_validator",
     "tool_undefined_name_checker",
     "tool_run_static_analysis",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_internal_test_validator"
   ],
   "quality-check": [
     "tool_translation_quality_checker"
@@ -1225,7 +1319,8 @@
     "tool_write_me_a_poem",
     "tool_write_me_a_poem_1763255171",
     "tool_write_a_poem_and_translate_it",
-    "func_translate_the_poem_into_welsh"
+    "func_translate_the_poem_into_welsh",
+    "tool_signalr_connection_parser"
   ],
   "content_creation": [
     "tool_write_a_joke_1763181926"
@@ -1281,7 +1376,8 @@
   ],
   "http": [
     "tool_http_content_fetcher",
-    "tool_http_server"
+    "tool_http_server",
+    "tool_sse_stream"
   ],
   "fetch": [
     "tool_http_content_fetcher"
@@ -1329,7 +1425,10 @@
   ],
   "custom": [
     "tool_http_server",
-    "tool_model_selector"
+    "tool_model_selector",
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream",
+    "tool_stream_processor"
   ],
   "server": [
     "tool_http_server"
@@ -1489,7 +1588,11 @@
     "spec_write_me_some_plausible_sample",
     "spec_design_a_system_which_pulls_in",
     "spec_perform_pattern_analysis_on_th",
-    "spec_outputs_andy_patterns"
+    "spec_outputs_andy_patterns",
+    "spec_connect_to_signalr_api_at",
+    "spec_process_the_josn_contents_into",
+    "spec_route_this_to_the_most_powerfu",
+    "spec_connect_to_http_127"
   ],
   "plan": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1530,7 +1633,11 @@
     "spec_write_me_some_plausible_sample",
     "spec_design_a_system_which_pulls_in",
     "spec_perform_pattern_analysis_on_th",
-    "spec_outputs_andy_patterns"
+    "spec_outputs_andy_patterns",
+    "spec_connect_to_signalr_api_at",
+    "spec_process_the_josn_contents_into",
+    "spec_route_this_to_the_most_powerfu",
+    "spec_connect_to_http_127"
   ],
   "overseer": [
     "spec_compress_this_string_hello_ho_1763271093",
@@ -1571,7 +1678,11 @@
     "spec_write_me_some_plausible_sample",
     "spec_design_a_system_which_pulls_in",
     "spec_perform_pattern_analysis_on_th",
-    "spec_outputs_andy_patterns"
+    "spec_outputs_andy_patterns",
+    "spec_connect_to_signalr_api_at",
+    "spec_process_the_josn_contents_into",
+    "spec_route_this_to_the_most_powerfu",
+    "spec_connect_to_http_127"
   ],
   "claude-sonnet": [
     "tool_general",
@@ -1646,7 +1757,11 @@
     "invocation_general_1763289628571",
     "invocation_general_1763290544150",
     "invocation_performance_profiler_1763290745954",
-    "invocation_general_1763291079420"
+    "invocation_general_1763291079420",
+    "invocation_general_1763292691805",
+    "invocation_general_1763292754169",
+    "invocation_general_1763293354147",
+    "invocation_general_1763295612762"
   ],
   "prompt": [
     "invocation_general_1763277296689",
@@ -1691,7 +1806,11 @@
     "invocation_general_1763289628571",
     "invocation_general_1763290544150",
     "invocation_performance_profiler_1763290745954",
-    "invocation_general_1763291079420"
+    "invocation_general_1763291079420",
+    "invocation_general_1763292691805",
+    "invocation_general_1763292754169",
+    "invocation_general_1763293354147",
+    "invocation_general_1763295612762"
   ],
   "llama3": [
     "timeout_stats_llama3",
@@ -1731,7 +1850,11 @@
     "invocation_general_1763289628571",
     "invocation_general_1763290544150",
     "invocation_performance_profiler_1763290745954",
-    "invocation_general_1763291079420"
+    "invocation_general_1763291079420",
+    "invocation_general_1763292691805",
+    "invocation_general_1763292754169",
+    "invocation_general_1763293354147",
+    "invocation_general_1763295612762"
   ],
   "content_generator": [
     "invocation_content_generator_1763278040988",
@@ -1822,7 +1945,9 @@
     "workflow_1763287570",
     "workflow_1763287739",
     "workflow_1763288106",
-    "workflow_1763291422"
+    "workflow_1763291422",
+    "workflow_1763292771",
+    "workflow_1763295627"
   ],
   "a": [
     "workflow_1763280509",
@@ -1882,7 +2007,11 @@
     "workflow_translate_the_article_into_ger",
     "workflow_write_me_some_plausible_sample",
     "workflow_design_a_system_which_pulls_in",
-    "workflow_perform_pattern_analysis_on_th"
+    "workflow_perform_pattern_analysis_on_th",
+    "workflow_connect_to_signalr_api_at",
+    "workflow_process_the_josn_contents_into",
+    "workflow_route_this_to_the_most_powerfu",
+    "workflow_connect_to_http_127"
   ],
   "tested": [
     "workflow_write_a_technical_story",
@@ -1909,7 +2038,11 @@
     "workflow_translate_the_article_into_ger",
     "workflow_write_me_some_plausible_sample",
     "workflow_design_a_system_which_pulls_in",
-    "workflow_perform_pattern_analysis_on_th"
+    "workflow_perform_pattern_analysis_on_th",
+    "workflow_connect_to_signalr_api_at",
+    "workflow_process_the_josn_contents_into",
+    "workflow_route_this_to_the_most_powerfu",
+    "workflow_connect_to_http_127"
   ],
   "long_form_writer": [
     "invocation_long_form_writer_1763282532779"
@@ -1985,7 +2118,20 @@
     "exec_invocation_node_runtime_import_validator_1763290560535",
     "exec_invocation_python_syntax_validator_1763290881380",
     "exec_invocation_undefined_name_checker_1763290885713",
-    "exec_invocation_node_runtime_import_validator_1763290886034"
+    "exec_invocation_node_runtime_import_validator_1763290886034",
+    "exec_invocation_python_syntax_validator_1763292698645",
+    "exec_invocation_undefined_name_checker_1763292699036",
+    "exec_invocation_node_runtime_import_validator_1763292699281",
+    "exec_invocation_python_syntax_validator_1763292768828",
+    "exec_invocation_undefined_name_checker_1763292769218",
+    "exec_invocation_node_runtime_import_validator_1763292769491",
+    "exec_invocation_python_syntax_validator_1763293592005",
+    "exec_invocation_undefined_name_checker_1763293595768",
+    "exec_invocation_node_runtime_import_validator_1763293596056",
+    "exec_invocation_python_syntax_validator_1763295623619",
+    "exec_invocation_undefined_name_checker_1763295624339",
+    "exec_invocation_node_runtime_import_validator_1763295624782",
+    "exec_invocation_buffer_1763296911972"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -2055,7 +2201,20 @@
     "exec_invocation_node_runtime_import_validator_1763290560535",
     "exec_invocation_python_syntax_validator_1763290881380",
     "exec_invocation_undefined_name_checker_1763290885713",
-    "exec_invocation_node_runtime_import_validator_1763290886034"
+    "exec_invocation_node_runtime_import_validator_1763290886034",
+    "exec_invocation_python_syntax_validator_1763292698645",
+    "exec_invocation_undefined_name_checker_1763292699036",
+    "exec_invocation_node_runtime_import_validator_1763292699281",
+    "exec_invocation_python_syntax_validator_1763292768828",
+    "exec_invocation_undefined_name_checker_1763292769218",
+    "exec_invocation_node_runtime_import_validator_1763292769491",
+    "exec_invocation_python_syntax_validator_1763293592005",
+    "exec_invocation_undefined_name_checker_1763293595768",
+    "exec_invocation_node_runtime_import_validator_1763293596056",
+    "exec_invocation_python_syntax_validator_1763295623619",
+    "exec_invocation_undefined_name_checker_1763295624339",
+    "exec_invocation_node_runtime_import_validator_1763295624782",
+    "exec_invocation_buffer_1763296911972"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763283458450",
@@ -2079,7 +2238,11 @@
     "exec_invocation_python_syntax_validator_1763288104055",
     "exec_invocation_python_syntax_validator_1763289750388",
     "exec_invocation_python_syntax_validator_1763290559880",
-    "exec_invocation_python_syntax_validator_1763290881380"
+    "exec_invocation_python_syntax_validator_1763290881380",
+    "exec_invocation_python_syntax_validator_1763292698645",
+    "exec_invocation_python_syntax_validator_1763292768828",
+    "exec_invocation_python_syntax_validator_1763293592005",
+    "exec_invocation_python_syntax_validator_1763295623619"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -2103,7 +2266,11 @@
     "exec_invocation_undefined_name_checker_1763288104448",
     "exec_invocation_undefined_name_checker_1763289752173",
     "exec_invocation_undefined_name_checker_1763290560284",
-    "exec_invocation_undefined_name_checker_1763290885713"
+    "exec_invocation_undefined_name_checker_1763290885713",
+    "exec_invocation_undefined_name_checker_1763292699036",
+    "exec_invocation_undefined_name_checker_1763292769218",
+    "exec_invocation_undefined_name_checker_1763293595768",
+    "exec_invocation_undefined_name_checker_1763295624339"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763283458773",
@@ -2127,7 +2294,11 @@
     "exec_invocation_undefined_name_checker_1763288104448",
     "exec_invocation_undefined_name_checker_1763289752173",
     "exec_invocation_undefined_name_checker_1763290560284",
-    "exec_invocation_undefined_name_checker_1763290885713"
+    "exec_invocation_undefined_name_checker_1763290885713",
+    "exec_invocation_undefined_name_checker_1763292699036",
+    "exec_invocation_undefined_name_checker_1763292769218",
+    "exec_invocation_undefined_name_checker_1763293595768",
+    "exec_invocation_undefined_name_checker_1763295624339"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763283458929",
@@ -2151,7 +2322,11 @@
     "exec_invocation_node_runtime_import_validator_1763288104680",
     "exec_invocation_node_runtime_import_validator_1763289752404",
     "exec_invocation_node_runtime_import_validator_1763290560535",
-    "exec_invocation_node_runtime_import_validator_1763290886034"
+    "exec_invocation_node_runtime_import_validator_1763290886034",
+    "exec_invocation_node_runtime_import_validator_1763292699281",
+    "exec_invocation_node_runtime_import_validator_1763292769491",
+    "exec_invocation_node_runtime_import_validator_1763293596056",
+    "exec_invocation_node_runtime_import_validator_1763295624782"
   ],
   "so": [
     "workflow_1763283819",
@@ -2207,7 +2382,9 @@
     "tool_random_data_generator"
   ],
   "generator": [
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_document_workflow",
+    "tool_task_to_workflow_router"
   ],
   "nmt_translate": [
     "exec_invocation_nmt_translate_1763286880284",
@@ -2227,5 +2404,163 @@
   ],
   "design": [
     "workflow_1763291422"
+  ],
+  "i": [
+    "workflow_1763292771"
+  ],
+  "want": [
+    "workflow_1763292771"
+  ],
+  "to": [
+    "workflow_1763292771",
+    "workflow_1763295627"
+  ],
+  "connect": [
+    "workflow_1763295627"
+  ],
+  "http://127.0.0.1:5116/api/mock/products": [
+    "workflow_1763295627"
+  ],
+  "buffer": [
+    "tool_buffer",
+    "exec_invocation_buffer_1763296911972"
+  ],
+  "batching": [
+    "tool_buffer"
+  ],
+  "rate-limiting": [
+    "tool_buffer"
+  ],
+  "smoothing": [
+    "tool_buffer"
+  ],
+  "traffic-control": [
+    "tool_buffer"
+  ],
+  "signalr": [
+    "tool_connect_signalr",
+    "tool_signalr_hub_connector",
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_websocket_stream",
+    "tool_signalr_connection_parser",
+    "tool_signalr_llmapi_management"
+  ],
+  "natural-language": [
+    "tool_connect_signalr",
+    "tool_signalr_connection_parser"
+  ],
+  "streaming": [
+    "tool_connect_signalr",
+    "tool_signalr_hub_connector"
+  ],
+  "realtime": [
+    "tool_connect_signalr",
+    "tool_signalr_hub_connector"
+  ],
+  "workflow-generation": [
+    "tool_connect_signalr"
+  ],
+  "training": [
+    "tool_connect_signalr",
+    "tool_signalr_hub_connector",
+    "tool_task_to_workflow_router"
+  ],
+  "easy": [
+    "tool_connect_signalr"
+  ],
+  "readme": [
+    "tool_document_workflow"
+  ],
+  "automation": [
+    "tool_document_workflow",
+    "tool_task_to_workflow_router"
+  ],
+  "internal": [
+    "tool_internal_test_validator"
+  ],
+  "no-tracking": [
+    "tool_internal_test_validator"
+  ],
+  "integration": [
+    "tool_signalr_hub_connector"
+  ],
+  "hub": [
+    "tool_signalr_hub_connector"
+  ],
+  "websocket": [
+    "tool_signalr_hub_connector",
+    "tool_signalr_websocket_stream"
+  ],
+  "llmapi": [
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_llmapi_management"
+  ],
+  "stream": [
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream",
+    "tool_stream_processor",
+    "tool_signalr_llmapi_management"
+  ],
+  "skill": [
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_llmapi_management"
+  ],
+  "orchestrator": [
+    "tool_signalr_llmapi_skill",
+    "tool_stream_processor"
+  ],
+  "real-time": [
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream"
+  ],
+  "producer": [
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream"
+  ],
+  "sse": [
+    "tool_sse_stream"
+  ],
+  "server-sent-events": [
+    "tool_sse_stream"
+  ],
+  "processor": [
+    "tool_stream_processor"
+  ],
+  "consumer": [
+    "tool_stream_processor"
+  ],
+  "filter": [
+    "tool_stream_processor"
+  ],
+  "transform": [
+    "tool_stream_processor"
+  ],
+  "parser": [
+    "tool_signalr_connection_parser"
+  ],
+  "configuration": [
+    "tool_signalr_connection_parser"
+  ],
+  "admin": [
+    "tool_signalr_llmapi_management"
+  ],
+  "management": [
+    "tool_signalr_llmapi_management"
+  ],
+  "routing": [
+    "tool_task_to_workflow_router"
+  ],
+  "task": [
+    "tool_task_to_workflow_router"
+  ],
+  "guide": [
+    "tool_workflow_documenter"
+  ],
+  "how-to": [
+    "tool_workflow_documenter"
+  ],
+  "frontend": [
+    "tool_workflow_documenter"
   ]
 }

@@ -1,3 +1,14 @@
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║                                                                            ║
+# ║  ⚠️  WARNING: THIS CONFIG USES ANTHROPIC API - COSTS REAL MONEY!  ⚠️      ║
+# ║                                                                            ║
+# ║  This is NOT a local-only config. All LLM requests go to Anthropic cloud  ║
+# ║  and burn API credits. Use config.local.yaml for FREE local-only mode.    ║
+# ║                                                                            ║
+# ║  Estimated cost: $0.15-$0.75 per workflow (can add up quickly!)           ║
+# ║                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
+#
 # ============================================================================
 # Code Evolver - Anthropic Override (SIMPLIFIED)
 # ============================================================================

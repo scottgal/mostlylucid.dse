@@ -1,0 +1,222 @@
+name: "SignalR Connection Parser"
+type: "llm"
+description: "Parses natural language requests to connect to SignalR hubs and converts them into proper connection configuration. Extracts hub URL, context/method name, and workflow generation settings from conversational input."
+
+llm:
+  model_tier: "general"  # Use larger model for better NLP
+  temperature: 0.1  # Low temp for consistent parsing
+  max_tokens: 1000
+  system_prompt: |
+    You are a SignalR configuration parser.
+
+    Your task is to extract SignalR connection details from natural language requests.
+
+    Extract:
+    - Hub URL (full URL to SignalR endpoint)
+    - Hub name/context/method (what to subscribe to)
+    - Duration (if specified)
+    - Auto-generation settings
+
+    IMPORTANT: Output ONLY valid JSON, no markdown, no explanations.
+
+  prompt_template: |
+    Parse this natural language request into SignalR connection configuration:
+
+    **User Request:**
+    "{request}"
+
+    **Extract the following:**
+    - `hub_url`: Full URL to SignalR hub (e.g., "http://localhost:5000/taskhub")
+    - `hub_name`: Hub method/context name (default: "TaskHub")
+    - `duration_seconds`: How long to listen (null = forever)
+    - `auto_generate_workflows`: Whether to auto-generate workflows (default: true if mentioned "create workflow" or "process")
+    - `output_file`: Optional file to save tasks
+
+    **Output ONLY this JSON format:**
+    ```json
+    {{
+      "hub_url": "extracted URL",
+      "hub_name": "extracted hub name or TaskHub",
+      "duration_seconds": null or number,
+      "auto_generate_workflows": true or false,
+      "output_file": "filename.json" or null
+    }}
+    ```
+
+    **Examples:**
+
+    Request: "connect to signalr api at http://localhost:5000/taskhub with hub context TaskHub"
+    Output:
+    ```json
+    {{
+      "hub_url": "http://localhost:5000/taskhub",
+      "hub_name": "TaskHub",
+      "duration_seconds": null,
+      "auto_generate_workflows": false,
+      "output_file": null
+    }}
+    ```
+
+    Request: "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow"
+    Output:
+    ```json
+    {{
+      "hub_url": "http://prod:8080/llmhub",
+      "hub_name": "LLMTasks",
+      "duration_seconds": null,
+      "auto_generate_workflows": true,
+      "output_file": null
+    }}
+    ```
+
+    Request: "listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json"
+    Output:
+    ```json
+    {{
+      "hub_url": "http://localhost:5000/hub",
+      "hub_name": "TaskHub",
+      "duration_seconds": 60,
+      "auto_generate_workflows": false,
+      "output_file": "tasks.json"
+    }}
+    ```
+
+    Now parse: "{request}"
+
+    Output ONLY the JSON, no explanations, no markdown.
+
+input_schema:
+  request:
+    type: string
+    description: "Natural language request to connect to SignalR hub"
+    required: true
+
+output_schema:
+  type: object
+  description: "Parsed SignalR connection configuration"
+  properties:
+    hub_url:
+      type: string
+      description: "Full URL to SignalR hub endpoint"
+    hub_name:
+      type: string
+      description: "Hub method/context name to subscribe to"
+    duration_seconds:
+      type: number
+      description: "How long to listen (null = forever)"
+    auto_generate_workflows:
+      type: boolean
+      description: "Whether to automatically generate workflows from tasks"
+    output_file:
+      type: string
+      description: "Optional file to save received tasks"
+
+tags: ["signalr", "parser", "nlp", "configuration", "natural-language"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 80
+
+examples:
+  - inputs:
+      request: "connect to signalr api at http://localhost:5000/taskhub with hub context TaskHub"
+    output: |
+      {
+        "hub_url": "http://localhost:5000/taskhub",
+        "hub_name": "TaskHub",
+        "duration_seconds": null,
+        "auto_generate_workflows": false,
+        "output_file": null
+      }
+
+  - inputs:
+      request: "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow"
+    output: |
+      {
+        "hub_url": "http://prod:8080/llmhub",
+        "hub_name": "LLMTasks",
+        "duration_seconds": null,
+        "auto_generate_workflows": true,
+        "output_file": null
+      }
+
+  - inputs:
+      request: "listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json"
+    output: |
+      {
+        "hub_url": "http://localhost:5000/hub",
+        "hub_name": "TaskHub",
+        "duration_seconds": 60,
+        "auto_generate_workflows": false,
+        "output_file": "tasks.json"
+      }
+
+  - inputs:
+      request: "connect to https://server/tasks and automatically create workflows"
+    output: |
+      {
+        "hub_url": "https://server/tasks",
+        "hub_name": "TaskHub",
+        "duration_seconds": null,
+        "auto_generate_workflows": true,
+        "output_file": null
+      }
+
+usage_notes: |
+  ## Overview
+
+  This LLM tool parses natural language requests into SignalR connection configuration.
+  It uses a general-tier model (not tinyllama) for better natural language understanding.
+
+  ## How It Works
+
+  1. **Parse Request**: Analyzes natural language input
+  2. **Extract URL**: Finds SignalR hub endpoint
+  3. **Extract Hub Name**: Identifies hub method/context
+  4. **Detect Auto-Generation**: Looks for keywords like "create workflow", "process", "feed into"
+  5. **Parse Duration**: Extracts time limits if mentioned
+  6. **Output JSON**: Returns clean JSON configuration
+
+  ## Keyword Detection
+
+  **Auto-Generation Triggers:**
+  - "create workflow"
+  - "generate workflow"
+  - "feed into creating"
+  - "process"
+  - "automatically"
+  - "each time" + "workflow"
+
+  **Duration Keywords:**
+  - "for X seconds"
+  - "for X minutes"
+  - "for X hours"
+  - "listen for X"
+
+  **Output File Keywords:**
+  - "save to"
+  - "save tasks to"
+  - "output to"
+  - "write to"
+
+  ## Integration
+
+  This tool is used by the natural language SignalR connection workflow:
+  ```python
+  from node_runtime import call_tool
+
+  # Parse natural language
+  user_request = "connect to http://localhost:5000/hub and create workflows"
+  config_json = call_tool("signalr_connection_parser", user_request)
+
+  # Use config with connector
+  result = call_tool("signalr_hub_connector", config_json)
+  ```
+
+  ## Model Choice
+
+  Uses `general` tier (not `veryfast`/tinyllama) because:
+  - Better natural language understanding
+  - More accurate URL extraction
+  - Better keyword detection
+  - Consistent output formatting

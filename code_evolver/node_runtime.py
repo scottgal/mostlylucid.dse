@@ -58,26 +58,103 @@ class NodeRuntime:
             rag_memory=self.rag
         )
 
+    def _track_tool_usage(self, tool_id: str, tool_metadata: dict = None):
+        """
+        Track tool usage in RAG (enabled by default).
+
+        Increments usage counter and updates timestamp for the tool.
+        This allows us to track which tools are used most frequently
+        and aggregate usage across all versions and lineages.
+
+        Can be disabled at:
+        - Tool level: tool YAML has `track_usage: false`
+        - Workflow level: set DISABLE_USAGE_TRACKING env var or pass disable_tracking kwarg
+
+        Args:
+            tool_id: The tool's unique identifier (e.g., "technical_writer_v2")
+            tool_metadata: Tool metadata (to check for opt-out flag)
+        """
+        from datetime import datetime
+
+        try:
+            # Check if tracking disabled at tool level
+            if tool_metadata and not tool_metadata.get('track_usage', True):
+                logging.debug(f"Usage tracking disabled for tool: {tool_id}")
+                return
+
+            # Check if tracking disabled at workflow level
+            if os.environ.get('DISABLE_USAGE_TRACKING', '').lower() in ('true', '1', 'yes'):
+                logging.debug("Usage tracking disabled via DISABLE_USAGE_TRACKING env var")
+                return
+
+            # Increment usage count in RAG
+            # The RAG artifact for a tool should have usage_count metadata
+            self.rag.increment_usage(tool_id)
+
+            # Also update last_used timestamp
+            self.rag.update_artifact_metadata(
+                tool_id,
+                {
+                    "last_used": datetime.utcnow().isoformat() + "Z"
+                }
+            )
+
+        except Exception as e:
+            # If increment_usage doesn't exist yet, we'll add it
+            logging.debug(f"Usage tracking not available: {e}")
+
     def call_tool(self, tool_name: str, prompt: str, **kwargs) -> str:
         """
         Call any tool by name (LLM, OpenAPI, or Executable).
+
+        Usage tracking is ENABLED BY DEFAULT for all tool calls. This helps:
+        - Track which tools are used most frequently
+        - Aggregate usage across tool versions and lineages
+        - Generate learning data for optimization
 
         Args:
             tool_name: Name of the tool (e.g., "technical_writer", "nmt_translator")
             prompt: The prompt to send to the tool (or template variables)
             **kwargs: Additional arguments (temperature, system_prompt, template variables)
+                disable_tracking (bool): Set True to disable usage tracking for this call
 
         Returns:
             Tool output as string
 
+        Usage Tracking:
+            Enabled by default. Can be disabled at:
+
+            1. Tool level - Add to tool YAML:
+               ```yaml
+               track_usage: false
+               ```
+
+            2. Workflow level - Set environment variable:
+               ```bash
+               export DISABLE_USAGE_TRACKING=true
+               python my_workflow.py
+               ```
+
+            3. Call level - Pass kwarg:
+               ```python
+               call_tool("my_tool", "prompt", disable_tracking=True)
+               ```
+
         Examples:
             runtime = NodeRuntime.get_instance()
 
-            # LLM tool usage
+            # LLM tool usage (tracking enabled)
             article = runtime.call_tool(
                 "technical_writer",
                 "Write a blog post about Python decorators",
                 temperature=0.7
+            )
+
+            # Disable tracking for this specific call
+            test_result = runtime.call_tool(
+                "test_validator",
+                "validate",
+                disable_tracking=True  # Don't track this internal test
             )
 
             # OpenAPI tool usage
@@ -102,6 +179,19 @@ class NodeRuntime:
 
         if not tool:
             raise ValueError(f"Tool '{tool_name}' not found")
+
+        # Track tool usage in RAG (enabled by default, can be disabled)
+        # Check for disable_tracking kwarg (workflow-level override)
+        disable_tracking = kwargs.pop('disable_tracking', False)
+
+        if not disable_tracking:
+            try:
+                # Pass tool metadata to check for tool-level opt-out
+                tool_metadata = getattr(tool, 'metadata', {})
+                self._track_tool_usage(tool.tool_id, tool_metadata)
+            except Exception as e:
+                # Don't fail if tracking fails
+                logging.warning(f"Failed to track usage for {tool.tool_id}: {e}")
 
         # Route to appropriate invoke method based on tool type
         if tool.tool_type == ToolType.LLM:

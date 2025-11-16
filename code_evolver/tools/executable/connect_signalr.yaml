@@ -1,0 +1,294 @@
+name: "Connect SignalR (Natural Language)"
+type: "executable"
+description: "Simple natural language interface to connect to SignalR hubs. Just say what you want in plain English and it will parse your request, connect to the hub, and automatically create workflows from streaming tasks. Sequential processing - one task at a time."
+
+executable:
+  command: "python"
+  args: ["tools/executable/connect_signalr.py"]
+  working_dir: "."
+  timeout_ms: 3600000  # 1 hour
+  requires_stdin: true
+
+input_schema:
+  request:
+    type: string
+    description: "Natural language request describing the SignalR connection"
+    required: true
+    examples:
+      - "connect to http://localhost:5000/taskhub and create workflows"
+      - "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow"
+      - "listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json"
+
+output_schema:
+  type: object
+  description: "Result of SignalR connection and workflow generation"
+  properties:
+    success:
+      type: boolean
+      description: "Whether connection was successful"
+    hub_url:
+      type: string
+      description: "URL that was connected to"
+    total_messages:
+      type: integer
+      description: "Number of messages received"
+    tasks_received:
+      type: integer
+      description: "Number of tasks processed"
+    tasks:
+      type: array
+      description: "All received tasks"
+
+tags: ["signalr", "natural-language", "streaming", "realtime", "workflow-generation", "training", "easy"]
+cost_tier: "low"
+speed_tier: "realtime"
+quality_tier: "excellent"
+priority: 90
+
+examples:
+  - inputs:
+      request: "connect to http://localhost:5000/taskhub and create workflows"
+    output: |
+      {
+        "success": true,
+        "hub_url": "http://localhost:5000/taskhub",
+        "hub_name": "TaskHub",
+        "total_messages": 10,
+        "tasks_received": 10,
+        "tasks": [...]
+      }
+
+  - inputs:
+      request: "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow"
+    output: |
+      {
+        "success": true,
+        "hub_url": "http://prod:8080/llmhub",
+        "hub_name": "LLMTasks",
+        "total_messages": 25,
+        "tasks_received": 25,
+        "tasks": [...]
+      }
+
+usage_notes: |
+  ## Overview
+
+  The easiest way to connect to SignalR hubs and automatically train your system.
+
+  **Just say what you want in natural language!**
+
+  ## Quick Start
+
+  ### Example 1: Simple Connection
+  ```bash
+  cd code_evolver
+  echo "connect to http://localhost:5000/taskhub and create workflows" | \
+    python tools/executable/connect_signalr.py
+  ```
+
+  ### Example 2: Full Natural Language
+  ```bash
+  echo "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow" | \
+    python tools/executable/connect_signalr.py
+  ```
+
+  ### Example 3: With Duration and Output
+  ```bash
+  echo "listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json" | \
+    python tools/executable/connect_signalr.py
+  ```
+
+  ## What It Does
+
+  1. **Parses Your Request**: Uses general-tier LLM to understand what you want
+  2. **Extracts Configuration**: Finds hub URL, context, duration, etc.
+  3. **Connects to Hub**: Establishes SignalR connection
+  4. **Processes Tasks Sequentially**: One at a time (waits for each to finish)
+  5. **Generates Workflows**: Creates Python workflows automatically
+  6. **Saves Nodes**: Registers workflows in the system
+  7. **Trains System**: Each workflow becomes a training example
+
+  ## Natural Language Keywords
+
+  **Hub URL:**
+  - "connect to http://..."
+  - "signalr api at http://..."
+  - "listen to http://..."
+
+  **Hub Context:**
+  - "with hub context TaskHub"
+  - "hub name LLMTasks"
+  - "context MyHub"
+
+  **Auto-Generation:**
+  - "create workflows"
+  - "generate workflows"
+  - "feed into creating a new workflow"
+  - "process"
+  - "automatically"
+
+  **Duration:**
+  - "for 60 seconds"
+  - "for 5 minutes"
+  - "for 1 hour"
+
+  **Save Tasks:**
+  - "save tasks to tasks.json"
+  - "save to file.json"
+  - "output to results.json"
+
+  ## Processing Flow
+
+  ```
+  Natural Language Input
+      ↓
+  [LLM Parser] - Uses general-tier model
+      ↓
+  {SignalR Config JSON}
+      ↓
+  [SignalR Connector]
+      ↓
+  Task Arrives → [Queue]
+      ↓
+  [Process Task 1] - Generate workflow, save node
+      ↓ (wait for completion)
+  Task Arrives → [Queue]
+      ↓
+  [Process Task 2] - Generate workflow, save node
+      ↓ (wait for completion)
+  Task Arrives → [Queue]
+      ↓
+  ...continues sequentially...
+  ```
+
+  ## Sequential Processing
+
+  Tasks are processed **one at a time**:
+  - Task 1 arrives → Generate workflow → Save node → Complete
+  - Then Task 2 starts
+  - Then Task 3 starts
+  - etc.
+
+  **Why Sequential?**
+  - Prevents overwhelming LLM backend
+  - Ensures clean training data
+  - Better error isolation
+  - Easier debugging
+
+  ## Examples
+
+  ### Basic Connection
+  Input:
+  ```
+  connect to http://localhost:5000/hub
+  ```
+
+  What happens:
+  - Connects to http://localhost:5000/hub
+  - Hub name: TaskHub (default)
+  - Listens forever (no duration specified)
+  - Does NOT auto-generate workflows (not mentioned)
+
+  ### Full Auto-Generation
+  Input:
+  ```
+  connect to http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow
+  ```
+
+  What happens:
+  - Connects to http://prod:8080/llmhub
+  - Hub name: LLMTasks
+  - Listens forever
+  - Auto-generates workflows (mentioned "feed into creating")
+  - Processes sequentially (one at a time)
+
+  ### Timed Collection
+  Input:
+  ```
+  listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json
+  ```
+
+  What happens:
+  - Connects to http://localhost:5000/hub
+  - Hub name: TaskHub (default)
+  - Listens for 60 seconds
+  - Saves all tasks to tasks.json
+  - Does NOT auto-generate (not mentioned)
+
+  ## Integration with Chat CLI
+
+  You can use this from the chat CLI:
+  ```
+  > connect to http://localhost:5000/taskhub and create workflows
+  ```
+
+  The system will:
+  1. Detect "connect to signalr" pattern
+  2. Route to this tool
+  3. Process your request
+  4. Start listening and generating workflows
+
+  ## Event Logging
+
+  The tool logs events to stderr:
+  ```json
+  {"step": 1, "action": "parsing_request", "request": "..."}
+  {"step": 2, "action": "parsed_config", "config": {...}}
+  {"step": 3, "action": "connecting_to_hub"}
+  {"event": "connected", "hub_url": "...", "status": "listening"}
+  {"event": "task_queued", "task_id": "task-1", "queue_size": 1}
+  {"event": "processing_task", "task_id": "task-1"}
+  {"event": "workflow_generated", "task_id": "task-1", "node_id": "..."}
+  {"event": "workflow_saved", "node_id": "..."}
+  {"event": "task_completed", "task_id": "task-1"}
+  ```
+
+  ## Requirements
+
+  **Python Packages:**
+  ```bash
+  pip install signalr-client aiohttp
+  # Or fallback:
+  pip install signalrcore
+  ```
+
+  **Tools Required:**
+  - `signalr_connection_parser` (LLM tool)
+  - `signalr_hub_connector` (executable tool)
+  - `task_to_workflow_router` (LLM tool)
+
+  ## Error Handling
+
+  **Invalid URL:**
+  ```
+  Input: "connect to invalid-url"
+  Error: "Failed to parse valid hub URL"
+  ```
+
+  **Connection Failed:**
+  ```
+  Input: "connect to http://nonexistent:5000/hub"
+  Error: Auto-retries with exponential backoff (10 attempts)
+  ```
+
+  **Workflow Generation Failed:**
+  ```
+  Event: {"event": "workflow_processing_failed", "error": "..."}
+  Note: Continues processing next task
+  ```
+
+  ## Tips
+
+  **Be Natural:**
+  - ✅ "connect to http://localhost:5000/hub and create workflows"
+  - ✅ "listen to the signalr api at http://prod/tasks for 5 minutes"
+  - ✅ "connect to http://localhost:5000/hub with context MyHub and auto-generate workflows"
+
+  **Be Specific:**
+  - Include full URL: `http://localhost:5000/hub`
+  - Mention hub context if not default: `with hub context TaskHub`
+  - Specify duration if needed: `for 60 seconds`
+
+  **Be Clear About Auto-Generation:**
+  - To enable: "and create workflows" or "feed into creating workflows"
+  - To disable: Don't mention workflows/processing

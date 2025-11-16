@@ -1,0 +1,62 @@
+name: "Claude Sonnet (Balanced)"
+type: "llm_model"
+enabled: true
+provider: "anthropic"
+model_id: "claude-3-5-sonnet-20241022"
+
+description: "Balanced Claude model combining strong performance with reasonable speed. Best for most code generation, general development tasks, and standard workflows. The workhorse model."
+
+capabilities:
+  - "code_generation"
+  - "code_review"
+  - "refactoring"
+  - "debugging"
+  - "documentation"
+  - "unit_testing"
+  - "api_design"
+  - "workflow_creation"
+  - "general_programming"
+
+specialization:
+  primary: "code"
+  secondary: ["workflows", "testing", "documentation"]
+
+quality_tier: "general"
+speed_tier: "fast"
+cost_tier: "medium"
+
+use_cases:
+  - "Standard code generation"
+  - "Workflow development"
+  - "General code review"
+  - "Documentation writing"
+  - "Unit test creation"
+  - "API development"
+
+strengths:
+  - "Excellent speed/quality balance"
+  - "Great for iterative development"
+  - "Strong general coding ability"
+  - "Good at following patterns"
+
+limitations:
+  - "Not as thorough as Opus for deep analysis"
+  - "May miss subtle edge cases"
+
+context_window: 200000
+max_output: 8192
+
+routing_keywords:
+  - "balanced"
+  - "standard"
+  - "general"
+  - "normal"
+  - "default"
+  - "code"
+
+priority: 75
+
+metadata:
+  backend: "anthropic"
+  api_endpoint: "https://api.anthropic.com/v1/messages"
+  requires_api_key: true

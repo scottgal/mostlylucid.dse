@@ -1,0 +1,68 @@
+name: "Claude Opus (Most Powerful)"
+type: "llm_model"
+enabled: true
+provider: "anthropic"
+model_id: "claude-3-opus-20240229"
+
+description: "Most powerful Claude model. Excels at complex reasoning, deep code analysis, architectural design, and nuanced tasks requiring maximum intelligence. Use for critical tasks where quality matters more than speed."
+
+capabilities:
+  - "deep_code_review"
+  - "architectural_design"
+  - "complex_reasoning"
+  - "nuanced_analysis"
+  - "security_auditing"
+  - "bug_detection"
+  - "performance_optimization"
+  - "algorithm_design"
+  - "code_refactoring"
+  - "best_practices_review"
+
+specialization:
+  primary: "code"
+  secondary: ["architecture", "security", "algorithms"]
+
+quality_tier: "god"
+speed_tier: "slow"
+cost_tier: "highest"
+
+use_cases:
+  - "Critical code review requiring deep analysis"
+  - "Security vulnerability assessment"
+  - "Complex algorithm design and optimization"
+  - "Architectural decision review"
+  - "Production code quality assurance"
+  - "Legacy code refactoring planning"
+
+strengths:
+  - "Superior reasoning about complex systems"
+  - "Catches subtle bugs other models miss"
+  - "Excellent at understanding context and implications"
+  - "Strong security and performance awareness"
+  - "Best-in-class code quality assessment"
+
+limitations:
+  - "Slower response time (10-30 seconds)"
+  - "Higher cost per request"
+  - "Overkill for simple tasks"
+
+context_window: 200000
+max_output: 4096
+
+routing_keywords:
+  - "most powerful"
+  - "best"
+  - "critical"
+  - "deep"
+  - "thorough"
+  - "comprehensive"
+  - "production"
+  - "security"
+  - "architectural"
+
+priority: 100  # Highest priority for "most powerful" requests
+
+metadata:
+  backend: "anthropic"
+  api_endpoint: "https://api.anthropic.com/v1/messages"
+  requires_api_key: true

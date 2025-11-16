@@ -1,0 +1,131 @@
+name: "SignalR WebSocket Stream"
+type: "stream_producer"
+description: "Connects to a SignalR hub via WebSocket and streams data continuously. Subscribes to a specific hub context/method and yields each message received."
+
+executable:
+  command: "python"
+  args: ["tools/executable/signalr_websocket_stream.py"]
+  stream_mode: true  # This tool produces a stream
+
+input_schema:
+  url:
+    type: string
+    description: "SignalR hub URL (e.g., http://127.0.0.1:5116/api/mock/contexts)"
+    required: true
+  context_name:
+    type: string
+    description: "Hub method/context name to subscribe to (e.g., 'TaskHub', 'MockContext')"
+    required: true
+  output_format:
+    type: string
+    description: "Output format for each stream item (json, text)"
+    default: "json"
+    required: false
+  reconnect:
+    type: boolean
+    description: "Auto-reconnect on disconnection"
+    default: true
+    required: false
+  max_reconnect_attempts:
+    type: integer
+    description: "Maximum reconnection attempts (0 = infinite)"
+    default: 10
+    required: false
+
+output_schema:
+  type: stream
+  description: "Continuous stream of data from SignalR hub"
+  item_schema:
+    type: object
+    properties:
+      event_type:
+        type: string
+        description: "Type of event (connected, message, error, disconnected)"
+      data:
+        type: object
+        description: "Message data from hub (if event_type=message)"
+      timestamp:
+        type: string
+        description: "ISO timestamp of when event occurred"
+      sequence:
+        type: integer
+        description: "Message sequence number"
+
+tags: ["signalr", "websocket", "stream", "real-time", "producer"]
+cost_tier: "free"
+speed_tier: "real-time"
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## Overview
+
+  This tool creates a persistent WebSocket connection to a SignalR hub and streams
+  data continuously. Each message received is yielded as a separate JSON object.
+
+  ## Stream Output Format
+
+  Each line of output is a JSON object:
+  ```json
+  {
+    "event_type": "message",
+    "data": { ... },
+    "timestamp": "2024-01-15T10:30:45.123Z",
+    "sequence": 42
+  }
+  ```
+
+  ## Event Types
+
+  - `connected`: Initial connection established
+  - `message`: Data received from hub
+  - `error`: Error occurred (but connection may continue)
+  - `disconnected`: Connection lost (will auto-reconnect if enabled)
+  - `reconnecting`: Attempting to reconnect
+  - `shutdown`: Stream ending gracefully
+
+  ## Usage with Stream Consumers
+
+  This tool is a stream producer. Connect it to stream consumers:
+
+  ```python
+  from node_runtime import call_tool, stream_connect
+
+  # Start the stream
+  stream = stream_connect(
+      producer="signalr_websocket_stream",
+      producer_input={
+          "url": "http://127.0.0.1:5116/api/mock/contexts",
+          "context_name": "TaskHub"
+      },
+      consumers=[
+          {"tool": "workflow_generator", "buffer": "line"},
+          {"tool": "json_logger", "buffer": "line"}
+      ]
+  )
+
+  # Stream runs until stopped
+  ```
+
+  ## Manual Usage
+
+  ```bash
+  echo '{"url": "http://127.0.0.1:5116/api/mock/contexts", "context_name": "TaskHub"}' | \
+    python tools/executable/signalr_websocket_stream.py
+  ```
+
+  ## Connection Details
+
+  - Uses `signalrcore` library for WebSocket connection
+  - Supports auto-reconnection with exponential backoff
+  - Handles hub negotiation automatically
+  - Maintains persistent connection
+
+examples:
+  - inputs:
+      url: "http://127.0.0.1:5116/api/mock/contexts"
+      context_name: "TaskHub"
+    output: |
+      {"event_type": "connected", "data": null, "timestamp": "2024-01-15T10:30:00.000Z", "sequence": 0}
+      {"event_type": "message", "data": {"id": "task-1", "type": "summarize"}, "timestamp": "2024-01-15T10:30:05.123Z", "sequence": 1}
+      {"event_type": "message", "data": {"id": "task-2", "type": "translate"}, "timestamp": "2024-01-15T10:30:10.456Z", "sequence": 2}

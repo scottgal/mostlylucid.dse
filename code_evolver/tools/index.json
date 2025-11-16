@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216314Z"
+      "last_reset": "2025-11-16T12:46:13.438671Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216327Z"
+      "last_reset": "2025-11-16T12:46:13.438686Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216333Z"
+      "last_reset": "2025-11-16T12:46:13.438693Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216338Z"
+      "last_reset": "2025-11-16T12:46:13.438699Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216343Z"
+      "last_reset": "2025-11-16T12:46:13.438703Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216347Z"
+      "last_reset": "2025-11-16T12:46:13.438707Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216351Z"
+      "last_reset": "2025-11-16T12:46:13.438711Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216354Z"
+      "last_reset": "2025-11-16T12:46:13.438715Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216358Z"
+      "last_reset": "2025-11-16T12:46:13.438720Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216363Z"
+      "last_reset": "2025-11-16T12:46:13.438724Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216367Z"
+      "last_reset": "2025-11-16T12:46:13.438728Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 21,
+    "usage_count": 25,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216370Z"
+      "last_reset": "2025-11-16T12:46:13.438733Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216374Z"
+      "last_reset": "2025-11-16T12:46:13.438737Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216378Z"
+      "last_reset": "2025-11-16T12:46:13.438740Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216381Z"
+      "last_reset": "2025-11-16T12:46:13.438744Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216386Z"
+      "last_reset": "2025-11-16T12:46:13.438747Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216389Z"
+      "last_reset": "2025-11-16T12:46:13.438751Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216393Z"
+      "last_reset": "2025-11-16T12:46:13.438755Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 21,
+    "usage_count": 25,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216396Z"
+      "last_reset": "2025-11-16T12:46:13.438760Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216400Z"
+      "last_reset": "2025-11-16T12:46:13.438766Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216403Z"
+      "last_reset": "2025-11-16T12:46:13.438771Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216407Z"
+      "last_reset": "2025-11-16T12:46:13.438777Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216410Z"
+      "last_reset": "2025-11-16T12:46:13.438783Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216414Z"
+      "last_reset": "2025-11-16T12:46:13.438789Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 21,
+    "usage_count": 25,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216420Z"
+      "last_reset": "2025-11-16T12:46:13.438796Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216425Z"
+      "last_reset": "2025-11-16T12:46:13.438803Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216429Z"
+      "last_reset": "2025-11-16T12:46:13.438819Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216434Z"
+      "last_reset": "2025-11-16T12:46:13.438824Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1291,7 +1291,7 @@
     "tool_id": "code_optimizer",
     "name": "Code Optimizer",
     "tool_type": "llm",
-    "description": "Comprehensive code optimization tool with profiling, hierarchical optimization (local \u2192 cloud \u2192 deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle.",
+    "description": "Comprehensive code optimization tool with profiling, hierarchical optimization (local → cloud → deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle.",
     "tags": [
       "optimization",
       "performance",
@@ -1305,7 +1305,7 @@
       "yaml_file": "llm\\code_optimizer.yaml",
       "llm_tier": null,
       "llm_role": null,
-      "system_prompt": "You are an expert code optimizer. When asked to optimize code, follow this workflow:\n\nPHASE 1: ANALYSIS\n1. Profile current code to establish baseline\n2. Identify bottlenecks (CPU, I/O, memory)\n3. Analyze algorithm complexity\n4. Check for obvious inefficiencies\n\nPHASE 2: OPTIMIZATION HIERARCHY\n\nLevel 1 - LOCAL (Fast, Free, 10-20% improvement):\n- Use local model (qwen2.5-coder:14b)\n- Quick wins: remove redundancy, fix O(n\u00b2) loops\n- Improve algorithms (use sets instead of lists for lookups)\n- Add caching for repeated computations\n- Optimize string concatenation\n\nLevel 2 - CLOUD (Expensive, 20-40% improvement):\n- Triggered if local < 15% improvement OR code is critical\n- Use cloud LLM (GPT-4/Claude) with RAG context\n- Advanced optimizations: async/await, multiprocessing\n- Data structure redesign\n- Memory layout optimization\n\nLevel 3 - DEEP (Very Expensive, System-level):\n- Triggered for workflows/systems, not individual functions\n- Analyze entire call graph\n- Identify architectural bottlenecks\n- Suggest tool replacements (faster libraries)\n- Recommend breaking changes if necessary\n\nPHASE 3: TEST UPDATING\n1. Identify existing tests for the code\n2. Update tests to match new implementation\n3. Add performance regression tests\n4. Ensure all tests pass\n\nPHASE 4: VALIDATION\n1. Profile optimized code\n2. Compare before/after metrics\n3. Verify correctness (tests pass)\n4. Calculate improvement %\n\nPHASE 5: DECISION\n- If improvement >= 10%: ACCEPT\n- If improvement < 10%: REJECT (keep original)\n- If tests fail: FIX or ROLLBACK\n\nOUTPUT FORMAT:\n```\n## Optimization Report\n\n### Baseline Performance\n- Duration: X.XXs\n- Bottlenecks: [list]\n\n### Optimization Level: [LOCAL|CLOUD|DEEP]\n- Strategy: [description]\n- Changes: [list of modifications]\n\n### Optimized Code\n```python\n[optimized code]\n```\n\n### Updated Tests\n```python\n[updated test code]\n```\n\n### Performance Comparison\n- Before: X.XXs\n- After: Y.XXs\n- Improvement: Z.Z%\n- Recommendation: [ACCEPT|REJECT]\n\n### Breaking Changes\n- [None or list of breaking changes]\n```\n",
+      "system_prompt": "You are an expert code optimizer. When asked to optimize code, follow this workflow:\n\nPHASE 1: ANALYSIS\n1. Profile current code to establish baseline\n2. Identify bottlenecks (CPU, I/O, memory)\n3. Analyze algorithm complexity\n4. Check for obvious inefficiencies\n\nPHASE 2: OPTIMIZATION HIERARCHY\n\nLevel 1 - LOCAL (Fast, Free, 10-20% improvement):\n- Use local model (qwen2.5-coder:14b)\n- Quick wins: remove redundancy, fix O(n²) loops\n- Improve algorithms (use sets instead of lists for lookups)\n- Add caching for repeated computations\n- Optimize string concatenation\n\nLevel 2 - CLOUD (Expensive, 20-40% improvement):\n- Triggered if local < 15% improvement OR code is critical\n- Use cloud LLM (GPT-4/Claude) with RAG context\n- Advanced optimizations: async/await, multiprocessing\n- Data structure redesign\n- Memory layout optimization\n\nLevel 3 - DEEP (Very Expensive, System-level):\n- Triggered for workflows/systems, not individual functions\n- Analyze entire call graph\n- Identify architectural bottlenecks\n- Suggest tool replacements (faster libraries)\n- Recommend breaking changes if necessary\n\nPHASE 3: TEST UPDATING\n1. Identify existing tests for the code\n2. Update tests to match new implementation\n3. Add performance regression tests\n4. Ensure all tests pass\n\nPHASE 4: VALIDATION\n1. Profile optimized code\n2. Compare before/after metrics\n3. Verify correctness (tests pass)\n4. Calculate improvement %\n\nPHASE 5: DECISION\n- If improvement >= 10%: ACCEPT\n- If improvement < 10%: REJECT (keep original)\n- If tests fail: FIX or ROLLBACK\n\nOUTPUT FORMAT:\n```\n## Optimization Report\n\n### Baseline Performance\n- Duration: X.XXs\n- Bottlenecks: [list]\n\n### Optimization Level: [LOCAL|CLOUD|DEEP]\n- Strategy: [description]\n- Changes: [list of modifications]\n\n### Optimized Code\n```python\n[optimized code]\n```\n\n### Updated Tests\n```python\n[updated test code]\n```\n\n### Performance Comparison\n- Before: X.XXs\n- After: Y.XXs\n- Improvement: Z.Z%\n- Recommendation: [ACCEPT|REJECT]\n\n### Breaking Changes\n- [None or list of breaking changes]\n```\n",
       "prompt_template": null,
       "cost_tier": "medium",
       "speed_tier": "medium",
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216438Z"
+      "last_reset": "2025-11-16T12:46:13.438828Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216442Z"
+      "last_reset": "2025-11-16T12:46:13.438837Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1402,7 +1402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216445Z"
+      "last_reset": "2025-11-16T12:46:13.438841Z"
     },
     "created_at": "2025-11-16T08:22:04.604169Z",
     "usage_count": 0,
@@ -1444,7 +1444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216450Z"
+      "last_reset": "2025-11-16T12:46:13.438847Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
     "usage_count": 1,
@@ -1482,7 +1482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216454Z"
+      "last_reset": "2025-11-16T12:46:13.438853Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
     "usage_count": 0,
@@ -1522,7 +1522,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216457Z"
+      "last_reset": "2025-11-16T12:46:13.438859Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
     "usage_count": 0,
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216461Z"
+      "last_reset": "2025-11-16T12:46:13.438865Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 31,
+    "usage_count": 35,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216465Z"
+      "last_reset": "2025-11-16T12:46:13.438876Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216469Z"
+      "last_reset": "2025-11-16T12:46:13.438880Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216472Z"
+      "last_reset": "2025-11-16T12:46:13.438885Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1711,7 +1711,7 @@
       "yaml_file": "llm\\performance_profiler.yaml",
       "llm_tier": null,
       "llm_role": null,
-      "system_prompt": "You are a performance profiling expert. When given code to analyze:\n\n1. EXECUTION: Run the code with PyInstrument profiling enabled\n2. ANALYSIS: Analyze the profiling data to identify:\n   - Total execution time\n   - Hotspots (functions taking most time)\n   - Call stack depth and patterns\n   - I/O vs CPU time breakdown\n   - Memory allocation patterns\n\n3. BOTTLENECK IDENTIFICATION:\n   - List top 5 slowest operations\n   - Identify unnecessary loops or recursion\n   - Spot inefficient algorithms (O(n\u00b2) when O(n) possible)\n   - Find blocking I/O operations\n   - Detect redundant computations\n\n4. RECOMMENDATIONS:\n   - Specific optimization suggestions\n   - Alternative algorithms or approaches\n   - Caching opportunities\n   - Parallelization possibilities\n   - Tool version upgrades if applicable\n\n5. OUTPUT FORMAT:\n   ```\n   ## Performance Profile\n\n   **Total Time**: X.XXs\n   **Samples**: N\n\n   ### Top Bottlenecks\n   1. function_name (XX.X%) - X.XXs\n      Location: file.py:line\n      Issue: [description]\n      Fix: [suggestion]\n\n   2. ...\n\n   ### Breakdown\n   - CPU Time: XX%\n   - I/O Time: XX%\n   - Memory: XX MB peak\n\n   ### Optimization Opportunities\n   1. [High Impact] ...\n   2. [Medium Impact] ...\n\n   ### Recommended Actions\n   - [ ] Action 1\n   - [ ] Action 2\n   ```\n\nUse the profiling.py module to actually profile the code.\nReturn actionable insights, not just data.\n",
+      "system_prompt": "You are a performance profiling expert. When given code to analyze:\n\n1. EXECUTION: Run the code with PyInstrument profiling enabled\n2. ANALYSIS: Analyze the profiling data to identify:\n   - Total execution time\n   - Hotspots (functions taking most time)\n   - Call stack depth and patterns\n   - I/O vs CPU time breakdown\n   - Memory allocation patterns\n\n3. BOTTLENECK IDENTIFICATION:\n   - List top 5 slowest operations\n   - Identify unnecessary loops or recursion\n   - Spot inefficient algorithms (O(n²) when O(n) possible)\n   - Find blocking I/O operations\n   - Detect redundant computations\n\n4. RECOMMENDATIONS:\n   - Specific optimization suggestions\n   - Alternative algorithms or approaches\n   - Caching opportunities\n   - Parallelization possibilities\n   - Tool version upgrades if applicable\n\n5. OUTPUT FORMAT:\n   ```\n   ## Performance Profile\n\n   **Total Time**: X.XXs\n   **Samples**: N\n\n   ### Top Bottlenecks\n   1. function_name (XX.X%) - X.XXs\n      Location: file.py:line\n      Issue: [description]\n      Fix: [suggestion]\n\n   2. ...\n\n   ### Breakdown\n   - CPU Time: XX%\n   - I/O Time: XX%\n   - Memory: XX MB peak\n\n   ### Optimization Opportunities\n   1. [High Impact] ...\n   2. [Medium Impact] ...\n\n   ### Recommended Actions\n   - [ ] Action 1\n   - [ ] Action 2\n   ```\n\nUse the profiling.py module to actually profile the code.\nReturn actionable insights, not just data.\n",
       "prompt_template": null,
       "cost_tier": "medium",
       "speed_tier": "medium",
@@ -1726,7 +1726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216476Z"
+      "last_reset": "2025-11-16T12:46:13.438889Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
     "usage_count": 1,
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216479Z"
+      "last_reset": "2025-11-16T12:46:13.438893Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216483Z"
+      "last_reset": "2025-11-16T12:46:13.438898Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,7 +1849,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216487Z"
+      "last_reset": "2025-11-16T12:46:13.438902Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
     "usage_count": 1,
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216491Z"
+      "last_reset": "2025-11-16T12:46:13.438907Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,7 +1930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216495Z"
+      "last_reset": "2025-11-16T12:46:13.438913Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
     "usage_count": 0,
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216498Z"
+      "last_reset": "2025-11-16T12:46:13.438917Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216503Z"
+      "last_reset": "2025-11-16T12:46:13.438922Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2053,7 +2053,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216506Z"
+      "last_reset": "2025-11-16T12:46:13.438926Z"
     },
     "created_at": "2025-11-16T08:22:06.400998Z",
     "usage_count": 0,
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216510Z"
+      "last_reset": "2025-11-16T12:46:13.438931Z"
     },
     "created_at": "2025-11-16T10:01:30.396360Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216514Z"
+      "last_reset": "2025-11-16T12:46:13.438935Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216518Z"
+      "last_reset": "2025-11-16T12:46:13.438940Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216521Z"
+      "last_reset": "2025-11-16T12:46:13.438943Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216525Z"
+      "last_reset": "2025-11-16T12:46:13.438947Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216529Z"
+      "last_reset": "2025-11-16T12:46:13.438951Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216533Z"
+      "last_reset": "2025-11-16T12:46:13.438954Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216536Z"
+      "last_reset": "2025-11-16T12:46:13.438958Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216539Z"
+      "last_reset": "2025-11-16T12:46:13.438961Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216543Z"
+      "last_reset": "2025-11-16T12:46:13.438965Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216546Z"
+      "last_reset": "2025-11-16T12:46:13.438969Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216550Z"
+      "last_reset": "2025-11-16T12:46:13.438973Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216553Z"
+      "last_reset": "2025-11-16T12:46:13.438977Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2507,14 +2507,15 @@
       "cost_tier": "free",
       "quality_tier": "excellent",
       "latency_ms": 50,
-      "capability": "Model and backend selection with multi-backend support"
+      "capability": "Model and backend selection with multi-backend support",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:44.271384Z"
+      "last_reset": "2025-11-16T12:46:13.438981Z"
     },
     "created_at": "2025-11-16T10:36:44.271377Z",
     "usage_count": 0,
@@ -2543,7 +2544,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216561Z"
+      "last_reset": "2025-11-16T12:46:13.438985Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2575,7 +2576,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216565Z"
+      "last_reset": "2025-11-16T12:46:13.438990Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2605,7 +2606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216569Z"
+      "last_reset": "2025-11-16T12:46:13.438994Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2636,7 +2637,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216573Z"
+      "last_reset": "2025-11-16T12:46:13.438998Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2667,7 +2668,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216577Z"
+      "last_reset": "2025-11-16T12:46:13.439003Z"
     },
     "created_at": "2025-11-16T08:22:06.626451Z",
     "usage_count": 0,
@@ -2697,7 +2698,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216580Z"
+      "last_reset": "2025-11-16T12:46:13.439007Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2728,7 +2729,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216584Z"
+      "last_reset": "2025-11-16T12:46:13.439011Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2757,7 +2758,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216588Z"
+      "last_reset": "2025-11-16T12:46:13.439015Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2787,7 +2788,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216591Z"
+      "last_reset": "2025-11-16T12:46:13.439020Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2816,7 +2817,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216595Z"
+      "last_reset": "2025-11-16T12:46:13.439023Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2847,7 +2848,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216598Z"
+      "last_reset": "2025-11-16T12:46:13.439027Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2877,7 +2878,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216602Z"
+      "last_reset": "2025-11-16T12:46:13.439031Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2908,7 +2909,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216605Z"
+      "last_reset": "2025-11-16T12:46:13.439034Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2937,7 +2938,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216608Z"
+      "last_reset": "2025-11-16T12:46:13.439038Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2967,7 +2968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216612Z"
+      "last_reset": "2025-11-16T12:46:13.439042Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -2996,7 +2997,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216615Z"
+      "last_reset": "2025-11-16T12:46:13.439045Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3025,7 +3026,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216618Z"
+      "last_reset": "2025-11-16T12:46:13.439049Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3055,7 +3056,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216622Z"
+      "last_reset": "2025-11-16T12:46:13.439052Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3086,7 +3087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216625Z"
+      "last_reset": "2025-11-16T12:46:13.439056Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3116,7 +3117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216629Z"
+      "last_reset": "2025-11-16T12:46:13.439060Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3145,7 +3146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216632Z"
+      "last_reset": "2025-11-16T12:46:13.439064Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3175,7 +3176,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216635Z"
+      "last_reset": "2025-11-16T12:46:13.439068Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3205,7 +3206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216639Z"
+      "last_reset": "2025-11-16T12:46:13.439072Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3235,7 +3236,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216643Z"
+      "last_reset": "2025-11-16T12:46:13.439076Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3266,7 +3267,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216647Z"
+      "last_reset": "2025-11-16T12:46:13.439080Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3295,7 +3296,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216651Z"
+      "last_reset": "2025-11-16T12:46:13.439086Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3325,7 +3326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216654Z"
+      "last_reset": "2025-11-16T12:46:13.439089Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3354,7 +3355,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216657Z"
+      "last_reset": "2025-11-16T12:46:13.439093Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3384,7 +3385,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216661Z"
+      "last_reset": "2025-11-16T12:46:13.439097Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3414,7 +3415,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216665Z"
+      "last_reset": "2025-11-16T12:46:13.439100Z"
     },
     "created_at": "2025-11-16T08:22:06.626612Z",
     "usage_count": 0,
@@ -3444,7 +3445,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216668Z"
+      "last_reset": "2025-11-16T12:46:13.439104Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3480,7 +3481,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216672Z"
+      "last_reset": "2025-11-16T12:46:13.439108Z"
     },
     "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
@@ -3510,7 +3511,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216675Z"
+      "last_reset": "2025-11-16T12:46:13.439112Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3539,7 +3540,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216678Z"
+      "last_reset": "2025-11-16T12:46:13.439116Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3568,7 +3569,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216682Z"
+      "last_reset": "2025-11-16T12:46:13.439119Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3598,7 +3599,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216685Z"
+      "last_reset": "2025-11-16T12:46:13.439124Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3629,7 +3630,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216689Z"
+      "last_reset": "2025-11-16T12:46:13.439127Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3659,7 +3660,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216693Z"
+      "last_reset": "2025-11-16T12:46:13.439131Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3689,7 +3690,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216697Z"
+      "last_reset": "2025-11-16T12:46:13.439135Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3725,7 +3726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216701Z"
+      "last_reset": "2025-11-16T12:46:13.439138Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3761,7 +3762,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216704Z"
+      "last_reset": "2025-11-16T12:46:13.439142Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3797,7 +3798,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216708Z"
+      "last_reset": "2025-11-16T12:46:13.439146Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
     "usage_count": 0,
@@ -3833,7 +3834,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216712Z"
+      "last_reset": "2025-11-16T12:46:13.439150Z"
     },
     "created_at": "2025-11-16T09:14:20.219639Z",
     "usage_count": 0,
@@ -3869,7 +3870,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216716Z"
+      "last_reset": "2025-11-16T12:46:13.439155Z"
     },
     "created_at": "2025-11-16T09:17:21.481820Z",
     "usage_count": 0,
@@ -3933,7 +3934,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216720Z"
+      "last_reset": "2025-11-16T12:46:13.439160Z"
     },
     "created_at": "2025-11-16T09:07:23.454598Z",
     "usage_count": 0,
@@ -3969,7 +3970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216723Z"
+      "last_reset": "2025-11-16T12:46:13.439164Z"
     },
     "created_at": "2025-11-16T09:12:45.348005Z",
     "usage_count": 0,
@@ -4005,7 +4006,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216727Z"
+      "last_reset": "2025-11-16T12:46:13.439168Z"
     },
     "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
@@ -4041,7 +4042,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216730Z"
+      "last_reset": "2025-11-16T12:46:13.439172Z"
     },
     "created_at": "2025-11-16T09:25:57.866554Z",
     "usage_count": 0,
@@ -4077,7 +4078,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216734Z"
+      "last_reset": "2025-11-16T12:46:13.439176Z"
     },
     "created_at": "2025-11-16T09:28:27.164898Z",
     "usage_count": 0,
@@ -4113,7 +4114,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216738Z"
+      "last_reset": "2025-11-16T12:46:13.439179Z"
     },
     "created_at": "2025-11-16T09:29:38.153439Z",
     "usage_count": 0,
@@ -4149,7 +4150,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216741Z"
+      "last_reset": "2025-11-16T12:46:13.439183Z"
     },
     "created_at": "2025-11-16T09:35:06.567192Z",
     "usage_count": 0,
@@ -4202,7 +4203,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216745Z"
+      "last_reset": "2025-11-16T12:46:13.439188Z"
     },
     "created_at": "2025-11-16T10:01:29.141239Z",
     "usage_count": 0,
@@ -4255,7 +4256,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216749Z"
+      "last_reset": "2025-11-16T12:46:13.439192Z"
     },
     "created_at": "2025-11-16T10:01:30.181536Z",
     "usage_count": 0,
@@ -4291,7 +4292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216752Z"
+      "last_reset": "2025-11-16T12:46:13.439196Z"
     },
     "created_at": "2025-11-16T10:06:10.391814Z",
     "usage_count": 0,
@@ -4327,7 +4328,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216756Z"
+      "last_reset": "2025-11-16T12:46:13.439200Z"
     },
     "created_at": "2025-11-16T10:12:47.223241Z",
     "usage_count": 0,
@@ -4363,7 +4364,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216759Z"
+      "last_reset": "2025-11-16T12:46:13.439203Z"
     },
     "created_at": "2025-11-16T10:14:13.615361Z",
     "usage_count": 0,
@@ -4399,7 +4400,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:36:09.216763Z"
+      "last_reset": "2025-11-16T12:46:13.439207Z"
     },
     "created_at": "2025-11-16T10:15:06.069892Z",
     "usage_count": 0,
@@ -4427,14 +4428,15 @@
       "created_at": "2025-11-16T10:42:33.746168+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "write me some plausible sample data. It should be in the form of dtails about a person with multiple levels like deails on the persomnm, the address and town, Make it detailed and realisting. (10 items)"
+      "full_title": "write me some plausible sample data. It should be in the form of dtails about a person with multiple levels like deails on the persomnm, the address and town, Make it detailed and realisting. (10 items)",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T10:42:33.746194Z"
+      "last_reset": "2025-11-16T12:46:13.439210Z"
     },
     "created_at": "2025-11-16T10:42:33.746191Z",
     "usage_count": 0,
@@ -4462,19 +4464,1002 @@
       "created_at": "2025-11-16T11:10:19.359098+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "outputs andy patterns."
+      "full_title": "outputs andy patterns.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T11:10:19.359127Z"
+      "last_reset": "2025-11-16T12:46:13.439215Z"
     },
     "created_at": "2025-11-16T11:10:19.359123Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
+    "breaking_changes": []
+  },
+  "connect_to_signalr_api_at": {
+    "tool_id": "connect_to_signalr_api_at",
+    "name": "Connect to SignalR API at < > with HUC context <>",
+    "tool_type": "workflow",
+    "description": "Connect to SignalR API at < > with HUC context <>",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "connect_to_signalr_api_at",
+      "quality_score": 1.1,
+      "latency_ms": 783,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-16T11:31:40.692896+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Connect to SignalR API at < > with HUC context <>",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439342Z"
+    },
+    "created_at": "2025-11-16T11:31:40.692912Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "process_the_josn_contents_into": {
+    "tool_id": "process_the_josn_contents_into",
+    "name": "process the josn contents into creating a new workflow",
+    "tool_type": "workflow",
+    "description": "process the josn contents into creating a new workflow",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "process_the_josn_contents_into",
+      "quality_score": 1.1,
+      "latency_ms": 859,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-16T11:32:50.990772+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "process the josn contents into creating a new workflow",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439353Z"
+    },
+    "created_at": "2025-11-16T11:32:50.990789Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "route_this_to_the_most_powerfu": {
+    "tool_id": "route_this_to_the_most_powerfu",
+    "name": "route this to the most powerful model you have 'what is the meaning of idiocy\"",
+    "tool_type": "workflow",
+    "description": "route this to the most powerful model you have 'what is the meaning of idiocy\"",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "route_this_to_the_most_powerfu",
+      "quality_score": 1.1,
+      "latency_ms": 868,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-16T11:46:37.640755+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "route this to the most powerful model you have 'what is the meaning of idiocy\"",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439357Z"
+    },
+    "created_at": "2025-11-16T11:46:37.640775Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "connect_to_http_127": {
+    "tool_id": "connect_to_http_127",
+    "name": "connect to http://127.0.0.1:5116/api/mock/products process the json data and extract the information. then send it to a small llm and describe the data",
+    "tool_type": "workflow",
+    "description": "connect to http://127.0.0.1:5116/api/mock/products process the json data and extract the information. then send it to a small llm and describe the data",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "connect_to_http_127",
+      "quality_score": 1.1,
+      "latency_ms": 1280,
+      "memory_mb_peak": 1.94,
+      "created_at": "2025-11-16T12:20:27.162417+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "connect to http://127.0.0.1:5116/api/mock/products process the json data and extract the information. then send it to a small llm and describe the data",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439362Z"
+    },
+    "created_at": "2025-11-16T12:20:27.162450Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "buffer": {
+    "tool_id": "buffer",
+    "name": "Buffer",
+    "tool_type": "executable",
+    "description": "Buffers data to smooth fast traffic. Batches items and flushes based on size, time, or manual trigger. Perfect for smoothing rapid usage tracking updates to Qdrant or rate-limiting API calls.",
+    "tags": [
+      "buffer",
+      "batching",
+      "rate-limiting",
+      "smoothing",
+      "traffic-control"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\buffer.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/buffer.py"
+      ],
+      "input_schema": {
+        "operation": {
+          "type": "string",
+          "description": "Operation: 'write', 'flush', 'status', 'clear'",
+          "enum": [
+            "write",
+            "flush",
+            "status",
+            "clear"
+          ],
+          "default": "write",
+          "required": true
+        },
+        "data": {
+          "type": "any",
+          "description": "Data to write to buffer (for 'write' operation)",
+          "required": false
+        },
+        "buffer_id": {
+          "type": "string",
+          "description": "Buffer identifier (default: 'default'). Use different IDs for different buffers.",
+          "default": "default",
+          "required": false
+        },
+        "max_size": {
+          "type": "integer",
+          "description": "Max items before auto-flush (default: 100)",
+          "default": 100,
+          "required": false
+        },
+        "flush_interval_seconds": {
+          "type": "number",
+          "description": "Max seconds before auto-flush (default: 5.0)",
+          "default": 5.0,
+          "required": false
+        },
+        "flush_strategy": {
+          "type": "string",
+          "description": "Strategy: 'batched' (wait for size/time), 'immediate' (pass-through), 'manual' (only flush on command)",
+          "enum": [
+            "batched",
+            "immediate",
+            "manual"
+          ],
+          "default": "batched",
+          "required": false
+        },
+        "pass_through_tool": {
+          "type": "string",
+          "description": "Tool to call when flushing (e.g., 'qdrant_batch_writer')",
+          "required": false
+        },
+        "pass_through_input": {
+          "type": "object",
+          "description": "Additional input to pass to pass_through_tool",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "Buffer operation result",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "description": "Operation performed"
+          },
+          "buffer_id": {
+            "type": "string",
+            "description": "Buffer identifier"
+          },
+          "buffered_count": {
+            "type": "integer",
+            "description": "Current items in buffer"
+          },
+          "flushed": {
+            "type": "boolean",
+            "description": "Whether buffer was flushed"
+          },
+          "flushed_count": {
+            "type": "integer",
+            "description": "Number of items flushed (if flushed)"
+          },
+          "pass_through_result": {
+            "type": "any",
+            "description": "Result from pass_through_tool (if called)"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "4e36eae8fd350d856249d3d00f2254eede5f9f6d6d068a12ec4489d6b32063a7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439366Z"
+    },
+    "created_at": "2025-11-16T12:41:08.799526Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "4e36eae8fd350d856249d3d00f2254eede5f9f6d6d068a12ec4489d6b32063a7",
+    "breaking_changes": []
+  },
+  "connect_signalr": {
+    "tool_id": "connect_signalr",
+    "name": "Connect SignalR (Natural Language)",
+    "tool_type": "executable",
+    "description": "Simple natural language interface to connect to SignalR hubs. Just say what you want in plain English and it will parse your request, connect to the hub, and automatically create workflows from streaming tasks. Sequential processing - one task at a time.",
+    "tags": [
+      "signalr",
+      "natural-language",
+      "streaming",
+      "realtime",
+      "workflow-generation",
+      "training",
+      "easy"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\connect_signalr.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/connect_signalr.py"
+      ],
+      "input_schema": {
+        "request": {
+          "type": "string",
+          "description": "Natural language request describing the SignalR connection",
+          "required": true,
+          "examples": [
+            "connect to http://localhost:5000/taskhub and create workflows",
+            "connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow",
+            "listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json"
+          ]
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "Result of SignalR connection and workflow generation",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether connection was successful"
+          },
+          "hub_url": {
+            "type": "string",
+            "description": "URL that was connected to"
+          },
+          "total_messages": {
+            "type": "integer",
+            "description": "Number of messages received"
+          },
+          "tasks_received": {
+            "type": "integer",
+            "description": "Number of tasks processed"
+          },
+          "tasks": {
+            "type": "array",
+            "description": "All received tasks"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "realtime",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "3bf44ab0f7e5c27abe93da47b050ca7614507d073e3581e14a2ff2cabde268ac",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439371Z"
+    },
+    "created_at": "2025-11-16T12:41:08.807420Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "3bf44ab0f7e5c27abe93da47b050ca7614507d073e3581e14a2ff2cabde268ac",
+    "breaking_changes": []
+  },
+  "document_workflow": {
+    "tool_id": "document_workflow",
+    "name": "Document Workflow",
+    "tool_type": "executable",
+    "description": "Generates comprehensive 'How to Use' documentation for a workflow and saves it to README.txt in the workflow directory. Analyzes the code, detects inputs/outputs, identifies tool calls, and creates detailed documentation with examples, flowcharts, and usage instructions.",
+    "tags": [
+      "documentation",
+      "workflow",
+      "readme",
+      "generator",
+      "automation",
+      "metadata"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\document_workflow.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/document_workflow.py"
+      ],
+      "input_schema": {
+        "workflow_path": {
+          "type": "string",
+          "description": "Absolute or relative path to the workflow's main.py file",
+          "required": true,
+          "example": "nodes/my_workflow/main.py"
+        },
+        "workflow_name": {
+          "type": "string",
+          "description": "Optional: Name of the workflow. If not provided, will be derived from directory name.",
+          "required": false,
+          "example": "Email Validator"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional: High-level description of what the workflow does. If not provided, will be extracted from code docstring.",
+          "required": false,
+          "example": "Validates email addresses and checks domain matching"
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "Result of documentation generation",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether documentation was generated successfully"
+          },
+          "workflow_name": {
+            "type": "string",
+            "description": "Name of the documented workflow"
+          },
+          "documentation_path": {
+            "type": "string",
+            "description": "Path to the generated README.txt file"
+          },
+          "documentation_length": {
+            "type": "integer",
+            "description": "Length of generated documentation in characters"
+          },
+          "preview": {
+            "type": "string",
+            "description": "Preview of the first 500 characters of documentation"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if generation failed (only present on failure)"
+          }
+        }
+      },
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "6da7ffa64247a50ba9fadcddee063b7153b357c0939d6f9454e3f0404029680c",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439375Z"
+    },
+    "created_at": "2025-11-16T12:41:08.810729Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "6da7ffa64247a50ba9fadcddee063b7153b357c0939d6f9454e3f0404029680c",
+    "breaking_changes": []
+  },
+  "internal_test_validator": {
+    "tool_id": "internal_test_validator",
+    "name": "Internal Test Validator",
+    "tool_type": "executable",
+    "description": "Internal tool for validating test outputs. Usage tracking disabled since this is internal tooling.",
+    "tags": [
+      "internal",
+      "testing",
+      "validation",
+      "no-tracking"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\internal_test_validator.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/internal_test_validator.py"
+      ],
+      "input_schema": {
+        "test_output": {
+          "type": "string",
+          "description": "Test output to validate",
+          "required": true
+        },
+        "expected_pattern": {
+          "type": "string",
+          "description": "Regex pattern expected in output",
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "ab0e48815717f1a1a415019ad802f8e83f4910dbea3d3f17c3e9d8e65b60d95d",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439379Z"
+    },
+    "created_at": "2025-11-16T12:41:08.812165Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "ab0e48815717f1a1a415019ad802f8e83f4910dbea3d3f17c3e9d8e65b60d95d",
+    "breaking_changes": []
+  },
+  "signalr_hub_connector": {
+    "tool_id": "signalr_hub_connector",
+    "name": "SignalR Hub Connector",
+    "tool_type": "executable",
+    "description": "Connects to a SignalR hub to receive streaming task data. Automatically routes received tasks to the workflow generator for training. Supports real-time task processing and automatic workflow creation from hub messages.",
+    "tags": [
+      "signalr",
+      "streaming",
+      "realtime",
+      "integration",
+      "hub",
+      "websocket",
+      "training"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\signalr_hub_connector.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/signalr_hub_connector.py"
+      ],
+      "input_schema": {
+        "hub_url": {
+          "type": "string",
+          "description": "Full URL to the SignalR hub endpoint",
+          "required": true,
+          "example": "http://localhost:5000/taskhub"
+        },
+        "hub_name": {
+          "type": "string",
+          "description": "Name of the hub method to subscribe to",
+          "required": false,
+          "default": "TaskHub",
+          "example": "TaskHub"
+        },
+        "duration_seconds": {
+          "type": "number",
+          "description": "How long to listen for messages (in seconds). If not provided, runs until manually stopped.",
+          "required": false,
+          "example": 60
+        },
+        "auto_generate_workflows": {
+          "type": "boolean",
+          "description": "Whether to automatically generate workflows from received tasks",
+          "required": false,
+          "default": true
+        },
+        "output_file": {
+          "type": "string",
+          "description": "Optional file path to save received tasks as JSON",
+          "required": false,
+          "example": "received_tasks.json"
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "Summary of SignalR connection and received tasks",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether connection was successful"
+          },
+          "hub_url": {
+            "type": "string",
+            "description": "URL that was connected to"
+          },
+          "hub_name": {
+            "type": "string",
+            "description": "Hub method name"
+          },
+          "total_messages": {
+            "type": "integer",
+            "description": "Total number of messages received"
+          },
+          "tasks_received": {
+            "type": "integer",
+            "description": "Number of tasks received"
+          },
+          "errors": {
+            "type": "array",
+            "description": "Any errors that occurred during connection"
+          },
+          "tasks": {
+            "type": "array",
+            "description": "Array of all received task objects"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "realtime",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "4e17b0fca378b52e5c860b6ad560d074a5ad3e3aca65dc0f05e59c2705eec331",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439382Z"
+    },
+    "created_at": "2025-11-16T12:41:08.831401Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "4e17b0fca378b52e5c860b6ad560d074a5ad3e3aca65dc0f05e59c2705eec331",
+    "breaking_changes": []
+  },
+  "signalr_llmapi_skill": {
+    "tool_id": "signalr_llmapi_skill",
+    "name": "SignalR LLMApi Skill",
+    "tool_type": "executable",
+    "description": "Complete skill for interacting with LLMApi SignalR simulator. Manages contexts, controls streaming, and executes SSE streams. This orchestrates calls to signalr_llmapi_management (planning) and sse_stream (streaming).",
+    "tags": [
+      "signalr",
+      "llmapi",
+      "stream",
+      "skill",
+      "orchestrator",
+      "executable"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\signalr_llmapi_skill.yaml",
+      "command": "python",
+      "args": [
+        "tools/executable/signalr_llmapi_skill.py"
+      ],
+      "input_schema": {
+        "request": {
+          "type": "string",
+          "description": "Natural language request (e.g., 'create test-ctx and stream data', 'list contexts', 'stop streaming from test-ctx')",
+          "required": true
+        },
+        "base_url": {
+          "type": "string",
+          "description": "Base URL of the LLMApi server (default: http://127.0.0.1:5116)",
+          "default": "http://127.0.0.1:5116",
+          "required": false
+        },
+        "consumer": {
+          "type": "string",
+          "description": "Consumer tool for stream data (if streaming). Default: None (just output stream)",
+          "required": false
+        },
+        "max_stream_items": {
+          "type": "integer",
+          "description": "Maximum stream items to process (0 = unlimited). Default: 0",
+          "default": 0,
+          "required": false
+        },
+        "stream_timeout_seconds": {
+          "type": "integer",
+          "description": "Maximum streaming duration (0 = unlimited). Default: 0",
+          "default": 0,
+          "required": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "Results of SignalR LLMApi operations",
+        "properties": {
+          "operations_executed": {
+            "type": "array",
+            "description": "List of operations that were executed"
+          },
+          "http_results": {
+            "type": "array",
+            "description": "Results from HTTP operations (create, start, stop, etc.)"
+          },
+          "stream_summary": {
+            "type": "object",
+            "description": "Summary of streaming (if streaming was performed)"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "5cd2082d30b1a99ccac67f41d7b2f29be6e38f332c247ceb70494e700a08a7e1",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439386Z"
+    },
+    "created_at": "2025-11-16T12:41:08.834283Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "5cd2082d30b1a99ccac67f41d7b2f29be6e38f332c247ceb70494e700a08a7e1",
+    "breaking_changes": []
+  },
+  "signalr_websocket_stream": {
+    "tool_id": "signalr_websocket_stream",
+    "name": "SignalR WebSocket Stream",
+    "tool_type": "custom",
+    "description": "Connects to a SignalR hub via WebSocket and streams data continuously. Subscribes to a specific hub context/method and yields each message received.",
+    "tags": [
+      "signalr",
+      "websocket",
+      "stream",
+      "real-time",
+      "producer"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\signalr_websocket_stream.yaml",
+      "version": "1.0.0",
+      "definition_hash": "d191961c03ae2cbef19ad344c7ca12a9577d490159b0dd584b16867a8da97dcc",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439390Z"
+    },
+    "created_at": "2025-11-16T12:41:08.836868Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "d191961c03ae2cbef19ad344c7ca12a9577d490159b0dd584b16867a8da97dcc",
+    "breaking_changes": []
+  },
+  "sse_stream": {
+    "tool_id": "sse_stream",
+    "name": "SSE Stream Producer",
+    "tool_type": "custom",
+    "description": "Connects to a Server-Sent Events (SSE) endpoint and streams data continuously. Simpler and more reliable than WebSocket for one-way streaming.",
+    "tags": [
+      "sse",
+      "server-sent-events",
+      "stream",
+      "real-time",
+      "producer",
+      "http"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\sse_stream.yaml",
+      "version": "1.0.0",
+      "definition_hash": "ee40d38e66d6009f5e841e217fe9d4a78b4bd4fbc894478d9523b59be95ee0df",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439393Z"
+    },
+    "created_at": "2025-11-16T12:41:08.839875Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "ee40d38e66d6009f5e841e217fe9d4a78b4bd4fbc894478d9523b59be95ee0df",
+    "breaking_changes": []
+  },
+  "stream_processor": {
+    "tool_id": "stream_processor",
+    "name": "Stream Processor",
+    "tool_type": "custom",
+    "description": "Generic stream processor that connects a stream producer to a consumer tool. Handles filtering, transformation, and routing of stream events.",
+    "tags": [
+      "stream",
+      "processor",
+      "consumer",
+      "filter",
+      "transform",
+      "orchestrator"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\stream_processor.yaml",
+      "version": "1.0.0",
+      "definition_hash": "6bfd08209fd80f81ab3c51ff94b8c4e99adb2d78359a630c4180546d70fe586c",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439397Z"
+    },
+    "created_at": "2025-11-16T12:41:08.844259Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "6bfd08209fd80f81ab3c51ff94b8c4e99adb2d78359a630c4180546d70fe586c",
+    "breaking_changes": []
+  },
+  "signalr_connection_parser": {
+    "tool_id": "signalr_connection_parser",
+    "name": "SignalR Connection Parser",
+    "tool_type": "llm",
+    "description": "Parses natural language requests to connect to SignalR hubs and converts them into proper connection configuration. Extracts hub URL, context/method name, and workflow generation settings from conversational input.",
+    "tags": [
+      "signalr",
+      "parser",
+      "nlp",
+      "configuration",
+      "natural-language"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\signalr_connection_parser.yaml",
+      "llm_tier": null,
+      "llm_role": null,
+      "system_prompt": "You are a SignalR configuration parser.\n\nYour task is to extract SignalR connection details from natural language requests.\n\nExtract:\n- Hub URL (full URL to SignalR endpoint)\n- Hub name/context/method (what to subscribe to)\n- Duration (if specified)\n- Auto-generation settings\n\nIMPORTANT: Output ONLY valid JSON, no markdown, no explanations.\n",
+      "prompt_template": "Parse this natural language request into SignalR connection configuration:\n\n**User Request:**\n\"{request}\"\n\n**Extract the following:**\n- `hub_url`: Full URL to SignalR hub (e.g., \"http://localhost:5000/taskhub\")\n- `hub_name`: Hub method/context name (default: \"TaskHub\")\n- `duration_seconds`: How long to listen (null = forever)\n- `auto_generate_workflows`: Whether to auto-generate workflows (default: true if mentioned \"create workflow\" or \"process\")\n- `output_file`: Optional file to save tasks\n\n**Output ONLY this JSON format:**\n```json\n{{\n  \"hub_url\": \"extracted URL\",\n  \"hub_name\": \"extracted hub name or TaskHub\",\n  \"duration_seconds\": null or number,\n  \"auto_generate_workflows\": true or false,\n  \"output_file\": \"filename.json\" or null\n}}\n```\n\n**Examples:**\n\nRequest: \"connect to signalr api at http://localhost:5000/taskhub with hub context TaskHub\"\nOutput:\n```json\n{{\n  \"hub_url\": \"http://localhost:5000/taskhub\",\n  \"hub_name\": \"TaskHub\",\n  \"duration_seconds\": null,\n  \"auto_generate_workflows\": false,\n  \"output_file\": null\n}}\n```\n\nRequest: \"connect to this signalr api at http://prod:8080/llmhub with hub context LLMTasks and each time a workflow finishes processing feed the json contents into creating a new workflow\"\nOutput:\n```json\n{{\n  \"hub_url\": \"http://prod:8080/llmhub\",\n  \"hub_name\": \"LLMTasks\",\n  \"duration_seconds\": null,\n  \"auto_generate_workflows\": true,\n  \"output_file\": null\n}}\n```\n\nRequest: \"listen to http://localhost:5000/hub for 60 seconds and save tasks to tasks.json\"\nOutput:\n```json\n{{\n  \"hub_url\": \"http://localhost:5000/hub\",\n  \"hub_name\": \"TaskHub\",\n  \"duration_seconds\": 60,\n  \"auto_generate_workflows\": false,\n  \"output_file\": \"tasks.json\"\n}}\n```\n\nNow parse: \"{request}\"\n\nOutput ONLY the JSON, no explanations, no markdown.\n",
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "2179b62ebf4d82f8e611a6586f93cca226beffbee3bfdccd8cb46ce3d7a6a2ad",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439401Z"
+    },
+    "created_at": "2025-11-16T12:41:08.871405Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "2179b62ebf4d82f8e611a6586f93cca226beffbee3bfdccd8cb46ce3d7a6a2ad",
+    "breaking_changes": []
+  },
+  "signalr_llmapi_management": {
+    "tool_id": "signalr_llmapi_management",
+    "name": "SignalR LLMApi Skill",
+    "tool_type": "llm",
+    "description": "Complete skill for interacting with LLMApi SignalR simulator. Supports context management (create, list, delete), stream control (start/stop), and SSE streaming of API data.",
+    "tags": [
+      "signalr",
+      "llmapi",
+      "stream",
+      "admin",
+      "skill",
+      "management"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\signalr_llmapi_management.yaml",
+      "llm_tier": null,
+      "llm_role": null,
+      "system_prompt": "You are a SignalR LLMApi controller. You help users interact with the LLMApi SignalR simulator.\n\n**Available Operations:**\n1. **List Contexts**: GET /api/mock/contexts\n2. **Get Context Details**: GET /api/mock/contexts/{contextName}\n3. **Create Context**: POST /api/mock/contexts (body: {\"name\": \"context-name\"})\n4. **Delete Context**: DELETE /api/mock/contexts/{contextName}\n5. **Start Streaming**: POST /api/mock/contexts/{contextName}/start\n6. **Stop Streaming**: POST /api/mock/contexts/{contextName}/stop\n7. **Stream Data**: Connect to SSE at /api/mock/contexts (once started)\n\n**Your Task:**\n- Parse the user's natural language request\n- Determine which operation(s) to perform\n- Generate the appropriate API calls\n- If streaming is requested, generate SSE stream configuration\n\n**Output Format:**\nReturn JSON with:\n```json\n{\n  \"operations\": [\n    {\n      \"type\": \"http\" | \"sse_stream\",\n      \"method\": \"GET|POST|DELETE\",\n      \"url\": \"full URL\",\n      \"body\": { optional request body },\n      \"description\": \"What this operation does\"\n    }\n  ],\n  \"execution_plan\": \"Human-readable plan\",\n  \"streaming\": true|false\n}\n```\n",
+      "prompt_template": "User request: \"{request}\"\n\n**Context Information:**\n- Base URL: http://127.0.0.1:5116\n- SignalR endpoint: /api/mock/contexts\n- Management endpoints: /api/mock/contexts/{contextName}/start, /stop\n\n**Common Patterns:**\n\n1. **\"List all contexts\"**:\n   ```json\n   {\n     \"operations\": [{\n       \"type\": \"http\",\n       \"method\": \"GET\",\n       \"url\": \"http://127.0.0.1:5116/api/mock/contexts\",\n       \"description\": \"List all active API contexts\"\n     }],\n     \"execution_plan\": \"Fetch list of all contexts\",\n     \"streaming\": false\n   }\n   ```\n\n2. **\"Create context named test-context\"**:\n   ```json\n   {\n     \"operations\": [{\n       \"type\": \"http\",\n       \"method\": \"POST\",\n       \"url\": \"http://127.0.0.1:5116/api/mock/contexts\",\n       \"body\": {\"name\": \"test-context\"},\n       \"description\": \"Create new context test-context\"\n     }],\n     \"execution_plan\": \"Create context test-context\",\n     \"streaming\": false\n   }\n   ```\n\n3. **\"Stream data from test-context\"**:\n   ```json\n   {\n     \"operations\": [\n       {\n         \"type\": \"http\",\n         \"method\": \"POST\",\n         \"url\": \"http://127.0.0.1:5116/api/mock/contexts/test-context/start\",\n         \"description\": \"Start streaming for test-context\"\n       },\n       {\n         \"type\": \"sse_stream\",\n         \"url\": \"http://127.0.0.1:5116/api/mock/contexts\",\n         \"description\": \"Connect to SSE stream\"\n       }\n     ],\n     \"execution_plan\": \"Start test-context streaming, then connect to SSE\",\n     \"streaming\": true\n   }\n   ```\n\n4. **\"Stop streaming test-context\"**:\n   ```json\n   {\n     \"operations\": [{\n       \"type\": \"http\",\n       \"method\": \"POST\",\n       \"url\": \"http://127.0.0.1:5116/api/mock/contexts/test-context/stop\",\n       \"description\": \"Stop streaming for test-context\"\n     }],\n     \"execution_plan\": \"Stop test-context streaming\",\n     \"streaming\": false\n   }\n   ```\n\nNow analyze the user request and generate the appropriate operations.\n\nOutput ONLY the JSON, no markdown, no explanations.\n",
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "19896af27c35fda7037633a7380cb3a4e2e37cbaa242abd2d88482b0aa92344b",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439404Z"
+    },
+    "created_at": "2025-11-16T12:41:08.875026Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "19896af27c35fda7037633a7380cb3a4e2e37cbaa242abd2d88482b0aa92344b",
+    "breaking_changes": []
+  },
+  "task_to_workflow_router": {
+    "tool_id": "task_to_workflow_router",
+    "name": "Task to Workflow Router",
+    "tool_type": "llm",
+    "description": "Analyzes streaming task data from SignalR hub and automatically generates appropriate workflow code. Routes tasks to correct workflow patterns based on task type (summarize, generate, translate). Creates executable Python workflows for training the system.",
+    "tags": [
+      "workflow",
+      "generator",
+      "routing",
+      "task",
+      "automation",
+      "training",
+      "llm"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\task_to_workflow_router.yaml",
+      "llm_tier": null,
+      "llm_role": null,
+      "system_prompt": "You are a workflow code generator for the Code Evolver system.\n\nYour task is to analyze incoming task specifications and generate complete,\nexecutable Python workflow code that accomplishes the task.\n\nIMPORTANT RULES:\n- Generate COMPLETE, WORKING Python code\n- Always include proper imports\n- Use node_runtime.call_tool() to invoke LLM tools\n- Read input from stdin as JSON\n- Output results as JSON to stdout\n- Include error handling\n- Add a main() function and if __name__ == \"__main__\"\n- Use appropriate tools based on task type:\n  * summarize → call_tool(\"summarizer\", ...)\n  * generate → call_tool(\"content_generator\", ...)\n  * translate → call_tool(\"quick_translator\", ...) or call_tool(\"nmt_translator\", ...)\n- Do NOT add sys.path.insert() for node_runtime (it's handled by the runtime)\n",
+      "prompt_template": "Generate a complete Python workflow for this task:\n\n**Task Data:**\n```json\n{task_json}\n```\n\n**Task Analysis:**\n- Task Type: {task_type}\n- Task Name: {task_name}\n- Priority: {priority}\n- Languages: {languages}\n\n**Generate workflow code that:**\n\n1. Reads input from stdin (JSON with task data)\n2. Calls appropriate tool(s) based on task type:\n   - `summarize` → Use `summarizer` tool\n   - `generate` → Use `content_generator` tool\n   - `translate` → Use `quick_translator` or `nmt_translator` tool\n3. Handles translation languages if provided\n4. Outputs result as JSON to stdout\n5. Includes error handling\n\n**Code Template:**\n```python\nimport json\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\nfrom node_runtime import call_tool\n\n\ndef main():\n    # Read input\n    input_data = json.load(sys.stdin)\n\n    # Extract task parameters\n    # [YOUR CODE HERE]\n\n    # Call appropriate tool\n    # [YOUR CODE HERE]\n\n    # Output result\n    print(json.dumps({{\"result\": result, \"task_id\": task_id}}))\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n**Output ONLY valid JSON:**\n```json\n{{\n  \"workflow_code\": \"import json\\\\nimport sys\\\\n...\",\n  \"workflow_name\": \"descriptive_workflow_name\",\n  \"suggested_node_id\": \"task_type_brief_description\",\n  \"tools_used\": [\"tool1\", \"tool2\"],\n  \"estimated_complexity\": \"simple|moderate|complex\"\n}}\n```\n\nIMPORTANT: Output ONLY the JSON, no markdown, no explanations.\n",
+      "cost_tier": "medium",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "af0731fa53b9fa5bb515263873324c31c58f048824afca79610d9b4b8d1def1a",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439408Z"
+    },
+    "created_at": "2025-11-16T12:41:08.881445Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "af0731fa53b9fa5bb515263873324c31c58f048824afca79610d9b4b8d1def1a",
+    "breaking_changes": []
+  },
+  "workflow_documenter": {
+    "tool_id": "workflow_documenter",
+    "name": "Workflow Documenter",
+    "tool_type": "llm",
+    "description": "Generates comprehensive 'How to Use' documentation for workflows by analyzing code, inputs, outputs, and purpose. Creates user-friendly guides for front-end generation and API consumption.",
+    "tags": [
+      "documentation",
+      "workflow",
+      "api",
+      "guide",
+      "tutorial",
+      "how-to",
+      "frontend"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\workflow_documenter.yaml",
+      "llm_tier": null,
+      "llm_role": null,
+      "system_prompt": "You are a technical documentation expert specializing in workflow and API documentation.\n\nYour task is to create clear, comprehensive \"How to Use\" documentation for workflows that will:\n1. Be displayed in auto-generated front-ends\n2. Help users understand what the workflow does\n3. Show exactly what inputs are required\n4. Explain what outputs to expect\n5. Provide usage examples\n\nIMPORTANT RULES:\n- Write for non-technical users when possible\n- Be specific about input requirements (types, formats, required vs optional)\n- Include example inputs and expected outputs\n- Mention any limitations or edge cases\n- Keep it concise but complete (max ~3000 words)\n- Use markdown formatting\n- Include code examples where helpful\n- Focus on practical usage over theoretical details\n",
+      "prompt_template": "Generate concise \"How to Use\" documentation for this workflow (max 3000 words):\n\n**Workflow Name:** {workflow_name}\n**Description:** {description}\n**Source Code:**\n```python\n{code}\n```\n**Context:** {context}\n\nCreate documentation with these sections (be concise):\n\n## Overview\n[1-2 sentences: what it does and who it's for]\n\n## What It Does\n[2-3 paragraphs: purpose, value, and key features]\n\n## Required Inputs\n[Table format with Field, Type, Required, Description, Example]\n\n## Expected Outputs\n[Table format with Field, Type, Description, Example]\n[Include 1 sample JSON output]\n\n## How to Use\n\n### Quick Start (30 seconds)\n[3-5 bullet points for immediate usage]\n\n### Via API\n```bash\ncurl -X POST http://api.example.com/workflow \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{{\"field1\": \"value\", \"field2\": 123}}'\n```\n\n### Via Python\n```python\nimport json, subprocess\nresult = subprocess.run([\"python\", \"workflow.py\"],\n                      input=json.dumps({{\"field1\": \"value\"}}),\n                      capture_output=True, text=True)\noutput = json.loads(result.stdout)\n```\n\n## Examples\n\n### Example 1: Basic Usage\n**Input:** [JSON]\n**Output:** [JSON]\n**Explanation:** [1-2 sentences]\n\n### Example 2: Advanced (if applicable)\n**Input:** [JSON]\n**Output:** [JSON]\n**Explanation:** [1-2 sentences]\n\n## Process Flow (Mermaid)\n```mermaid\nflowchart TD\n    A[Input] --> B[Process]\n    B --> C[Output]\n```\n[Keep diagram simple - max 5-7 nodes]\n\n## Limitations\n- [List 3-5 key limitations/constraints]\n- [Include performance, input size, accuracy notes]\n\n## Error Handling\n[Table: Error | Cause | Solution]\n[List 3-5 common errors]\n\n## Technical Details\n- **Language**: Python 3.x\n- **Dependencies**: [List if any]\n- **Tools Used**: [From context]\n- **Speed**: [From context]\n\n## FAQ\n[2-3 most common questions with brief answers]\n\nIMPORTANT: Keep total output under 3000 words. Focus on practical usage.\n",
+      "cost_tier": "medium",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "8151e5d1f02a71d585bf6b1bae91d0dff797500324436a59ec2cde160fb6afa6",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-16T12:46:13.439412Z"
+    },
+    "created_at": "2025-11-16T12:41:08.887411Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "8151e5d1f02a71d585bf6b1bae91d0dff797500324436a59ec2cde160fb6afa6",
     "breaking_changes": []
   }
 }

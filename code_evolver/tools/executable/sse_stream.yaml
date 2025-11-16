@@ -1,0 +1,156 @@
+name: "SSE Stream Producer"
+type: "stream_producer"
+description: "Connects to a Server-Sent Events (SSE) endpoint and streams data continuously. Simpler and more reliable than WebSocket for one-way streaming."
+
+executable:
+  command: "python"
+  args: ["tools/executable/sse_stream.py"]
+  stream_mode: true
+
+input_schema:
+  url:
+    type: string
+    description: "SSE endpoint URL (e.g., http://127.0.0.1:5116/api/mock/contexts)"
+    required: true
+  headers:
+    type: object
+    description: "Optional HTTP headers (e.g., {'Authorization': 'Bearer token'})"
+    required: false
+  reconnect:
+    type: boolean
+    description: "Auto-reconnect on disconnection"
+    default: true
+    required: false
+  max_reconnect_attempts:
+    type: integer
+    description: "Maximum reconnection attempts (0 = infinite)"
+    default: 10
+    required: false
+  reconnect_delay_seconds:
+    type: integer
+    description: "Initial delay before reconnecting (exponential backoff)"
+    default: 2
+    required: false
+
+output_schema:
+  type: stream
+  description: "Continuous stream of SSE events"
+  item_schema:
+    type: object
+    properties:
+      event_type:
+        type: string
+        description: "Type of event (connected, data, error, disconnected)"
+      event_name:
+        type: string
+        description: "SSE event name (from 'event:' field, or 'message' if not specified)"
+      data:
+        type: any
+        description: "Event data (parsed JSON if possible, otherwise raw string)"
+      id:
+        type: string
+        description: "SSE event ID (if provided)"
+      timestamp:
+        type: string
+        description: "ISO timestamp of when event occurred"
+      sequence:
+        type: integer
+        description: "Event sequence number"
+
+tags: ["sse", "server-sent-events", "stream", "real-time", "producer", "http"]
+cost_tier: "free"
+speed_tier: "real-time"
+quality_tier: "excellent"
+priority: 90
+
+usage_notes: |
+  ## Overview
+
+  Server-Sent Events (SSE) is a standard protocol for server-to-client streaming
+  over HTTP. It's simpler and more reliable than WebSocket for one-way data flow.
+
+  ## SSE Format
+
+  The server sends events in this format:
+  ```
+  event: TaskReceived
+  data: {"id": "task-1", "type": "summarize"}
+  id: 123
+
+  ```
+
+  This tool parses these events and outputs JSON lines:
+  ```json
+  {
+    "event_type": "data",
+    "event_name": "TaskReceived",
+    "data": {"id": "task-1", "type": "summarize"},
+    "id": "123",
+    "timestamp": "2024-01-15T10:30:45.123Z",
+    "sequence": 1
+  }
+  ```
+
+  ## Event Types
+
+  - `connected`: Connection established
+  - `data`: SSE event received
+  - `error`: Error occurred
+  - `disconnected`: Connection lost
+  - `reconnecting`: Attempting to reconnect
+  - `shutdown`: Stream ending
+
+  ## Usage with Stream Processor
+
+  ```python
+  from node_runtime import call_tool
+
+  # Start SSE stream and pipe to processor
+  result = call_tool("stream_processor", json.dumps({
+      "producer": "sse_stream",
+      "producer_input": {
+          "url": "http://127.0.0.1:5116/api/mock/contexts"
+      },
+      "processor": "workflow_from_stream",
+      "filter": "event_type == 'data'"
+  }))
+  ```
+
+  ## Manual Usage
+
+  ```bash
+  echo '{"url": "http://127.0.0.1:5116/api/mock/contexts"}' | \
+    python tools/executable/sse_stream.py
+  ```
+
+  ## Advantages Over WebSocket
+
+  - Simpler protocol (plain HTTP)
+  - Auto-reconnection built into browsers
+  - Works through more proxies/firewalls
+  - Better for one-way server→client streaming
+  - Easier to debug (use curl)
+
+  ## Example: Testing with curl
+
+  ```bash
+  curl -N -H "Accept: text/event-stream" http://127.0.0.1:5116/api/mock/contexts
+  ```
+
+examples:
+  - inputs:
+      url: "http://127.0.0.1:5116/api/mock/contexts"
+    output: |
+      {"event_type": "connected", "event_name": null, "data": null, "id": null, "timestamp": "2024-01-15T10:30:00.000Z", "sequence": 0}
+      {"event_type": "data", "event_name": "TaskReceived", "data": {"id": "task-1", "type": "summarize"}, "id": "1", "timestamp": "2024-01-15T10:30:05.123Z", "sequence": 1}
+      {"event_type": "data", "event_name": "TaskReceived", "data": {"id": "task-2", "type": "translate"}, "id": "2", "timestamp": "2024-01-15T10:30:10.456Z", "sequence": 2}
+
+  - inputs:
+      url: "http://127.0.0.1:5116/api/mock/contexts"
+      headers:
+        Authorization: "Bearer secret-token"
+      reconnect: true
+      max_reconnect_attempts: 5
+    output: |
+      {"event_type": "connected", "event_name": null, "data": null, "id": null, "timestamp": "2024-01-15T10:30:00.000Z", "sequence": 0}
+      {"event_type": "data", "event_name": "message", "data": {"status": "ok"}, "id": null, "timestamp": "2024-01-15T10:30:01.000Z", "sequence": 1}

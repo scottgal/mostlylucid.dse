@@ -1,0 +1,64 @@
+name: "Claude Sonnet (Overseer/Strategy)"
+type: "llm_model"
+enabled: true
+provider: "anthropic"
+model_id: "claude-3-5-sonnet-20241022"
+role: "overseer"
+
+description: "Strategic planning and oversight model. Excels at understanding high-level requirements, breaking down complex tasks, creating execution plans, and making architectural decisions. The 'project manager' LLM."
+
+capabilities:
+  - "task_planning"
+  - "requirement_analysis"
+  - "strategy_formation"
+  - "task_decomposition"
+  - "architectural_decisions"
+  - "workflow_design"
+  - "approach_selection"
+  - "complexity_assessment"
+
+specialization:
+  primary: "planning"
+  secondary: ["architecture", "strategy", "oversight"]
+
+quality_tier: "general"
+speed_tier: "fast"
+cost_tier: "medium"
+
+use_cases:
+  - "Breaking down complex requests"
+  - "Creating execution strategies"
+  - "Choosing appropriate approaches"
+  - "Architectural planning"
+  - "Workflow design"
+  - "Task triage"
+
+strengths:
+  - "Excellent at understanding intent"
+  - "Strong strategic thinking"
+  - "Good at decomposing complexity"
+  - "Balanced decision-making"
+
+limitations:
+  - "Not for actual code generation"
+  - "Strategic only, not tactical"
+
+context_window: 200000
+max_output: 4096
+
+routing_keywords:
+  - "overseer"
+  - "strategy"
+  - "planning"
+  - "architecture"
+  - "design"
+  - "approach"
+  - "break down"
+
+priority: 85
+
+metadata:
+  backend: "anthropic"
+  api_endpoint: "https://api.anthropic.com/v1/messages"
+  requires_api_key: true
+  role_specific: true

@@ -1,0 +1,63 @@
+name: "CodeLlama 7B (Fast Local)"
+type: "llm_model"
+enabled: true
+provider: "ollama"
+model_id: "codellama:7b"
+
+description: "Fast local code model. Good balance of speed and capability for routine coding tasks. Best for quick iterations, simple functions, and standard development work. Runs on modest hardware."
+
+capabilities:
+  - "code_generation"
+  - "simple_refactoring"
+  - "basic_review"
+  - "function_writing"
+  - "boilerplate_code"
+  - "quick_fixes"
+
+specialization:
+  primary: "code"
+  secondary: ["quick_tasks", "iteration"]
+
+quality_tier: "fast"
+speed_tier: "very_fast"
+cost_tier: "free"
+
+use_cases:
+  - "Quick function generation"
+  - "Boilerplate code"
+  - "Simple refactoring"
+  - "Rapid prototyping"
+  - "Learning/experimentation"
+
+strengths:
+  - "Very fast response (2-5 seconds)"
+  - "Low resource requirements (8GB RAM)"
+  - "Free (local)"
+  - "Good for iteration"
+  - "Decent code quality"
+
+limitations:
+  - "Limited complexity handling"
+  - "Not suitable for complex algorithms"
+  - "May make mistakes on edge cases"
+  - "Smaller context window"
+
+context_window: 16384
+max_output: 2048
+
+routing_keywords:
+  - "fast"
+  - "quick"
+  - "simple"
+  - "rapid"
+  - "local fast"
+  - "codellama"
+
+priority: 50
+
+metadata:
+  backend: "ollama"
+  api_endpoint: "http://localhost:11434"
+  requires_api_key: false
+  min_ram_gb: 8
+  recommended_gpu: false

@@ -1,0 +1,298 @@
+name: "Model and Backend Selector"
+type: "llm"
+description: "Analyzes natural language requests to select the optimal LLM backend and model combination. Routes requests like 'using the most powerful code llm review this' to the appropriate provider and model (e.g., Anthropic Claude Opus)."
+
+llm:
+  model_tier: "general"  # Use decent model for intelligent routing
+  temperature: 0.1  # Low temp for consistent routing decisions
+  max_tokens: 1000
+  system_prompt: |
+    You are an intelligent LLM router that selects the best backend and model for each request.
+
+    You have access to multiple LLM providers and models, each with different strengths:
+    - Anthropic: Claude Opus (most powerful), Claude Sonnet (balanced)
+    - Ollama: DeepSeek Coder 16B (powerful local), CodeLlama 7B (fast local)
+    - Each has specific use cases, costs, and capabilities
+
+    Your task is to analyze requests and select the optimal backend + model combination.
+
+    Consider:
+    - Task complexity (simple vs complex)
+    - Quality requirements (best, good enough, quick)
+    - Domain (code, content, general, overseer/planning)
+    - Cost constraints (free/local vs paid/cloud)
+    - Speed requirements (fast vs thorough)
+    - Specific model mentions (opus, codellama, etc.)
+
+    IMPORTANT: Output ONLY valid JSON, no markdown, no explanations.
+
+  prompt_template: |
+    Select the best LLM backend and model for this request:
+
+    **User Request:**
+    "{request}"
+
+    **Available LLMs:**
+    {available_llms}
+
+    **Selection Criteria:**
+    1. Match task type to LLM capabilities
+    2. Consider quality keywords ("most powerful", "best", "quick", etc.)
+    3. Check domain specialization (code, content, planning)
+    4. Consider cost (free/local vs paid/cloud)
+    5. Match routing keywords from request
+    6. Respect enabled/disabled status
+    7. Consider priority scores
+
+    **Quality Keywords Mapping:**
+    - "most powerful", "best", "critical", "thorough" → god tier (Opus)
+    - "balanced", "standard", "normal" → general tier (Sonnet)
+    - "quick", "fast", "simple" → fast tier (CodeLlama)
+    - "local", "free", "offline" → Ollama models
+    - "cloud", "powerful" → Anthropic models
+
+    **Domain Keywords:**
+    - "code review", "analyze code", "review" → code specialization
+    - "overseer", "strategy", "plan" → overseer role
+    - "content", "write", "generate text" → content specialization
+
+    **Output Format:**
+    ```json
+    {{
+      "selected_backend": "anthropic" or "ollama" or "openai",
+      "selected_model": "claude-3-opus-20240229" or "deepseek-coder-v2:16b" etc,
+      "model_name": "Human-readable name",
+      "reason": "Why this model was selected",
+      "confidence": 0.0 to 1.0,
+      "alternative": {{
+        "backend": "fallback option",
+        "model": "fallback model"
+      }}
+    }}
+    ```
+
+    **Examples:**
+
+    Request: "using the most powerful code llm we have review this code very deeply for correctness"
+    Output:
+    ```json
+    {{
+      "selected_backend": "anthropic",
+      "selected_model": "claude-3-opus-20240229",
+      "model_name": "Claude Opus (Most Powerful)",
+      "reason": "Request specifies 'most powerful' and 'very deeply' which maps to god-tier quality. Code review task requires deep analysis. Opus excels at thorough code review.",
+      "confidence": 0.95,
+      "alternative": {{
+        "backend": "ollama",
+        "model": "deepseek-coder-v2:16b"
+      }}
+    }}
+    ```
+
+    Request: "use overseer to break down this complex task"
+    Output:
+    ```json
+    {{
+      "selected_backend": "anthropic",
+      "selected_model": "claude-3-5-sonnet-20241022",
+      "model_name": "Claude Sonnet (Overseer/Strategy)",
+      "reason": "Request explicitly mentions 'overseer' role. Sonnet configured for strategic planning and task decomposition.",
+      "confidence": 0.98,
+      "alternative": {{
+        "backend": "anthropic",
+        "model": "claude-3-opus-20240229"
+      }}
+    }}
+    ```
+
+    Request: "quickly generate a simple helper function"
+    Output:
+    ```json
+    {{
+      "selected_backend": "ollama",
+      "selected_model": "codellama:7b",
+      "model_name": "CodeLlama 7B (Fast Local)",
+      "reason": "Request emphasizes 'quickly' and 'simple' which maps to fast tier. CodeLlama provides good speed for simple tasks. Local execution is sufficient.",
+      "confidence": 0.85,
+      "alternative": {{
+        "backend": "anthropic",
+        "model": "claude-3-5-sonnet-20241022"
+      }}
+    }}
+    ```
+
+    Request: "best local code model to analyze this algorithm"
+    Output:
+    ```json
+    {{
+      "selected_backend": "ollama",
+      "selected_model": "deepseek-coder-v2:16b",
+      "model_name": "DeepSeek Coder 16B (Local Powerhouse)",
+      "reason": "Request specifies 'best local' model and complex task (algorithm analysis). DeepSeek 16B is most powerful local code model.",
+      "confidence": 0.92,
+      "alternative": {{
+        "backend": "anthropic",
+        "model": "claude-3-opus-20240229"
+      }}
+    }}
+    ```
+
+    Now select the model for: "{request}"
+
+    Output ONLY the JSON, no markdown, no explanations.
+
+input_schema:
+  request:
+    type: string
+    description: "Natural language request describing the task and optionally the desired LLM quality/type"
+    required: true
+  available_llms:
+    type: string
+    description: "JSON string of available LLMs with their metadata (auto-populated from registry)"
+    required: false
+
+output_schema:
+  type: object
+  description: "Selected backend and model with reasoning"
+  properties:
+    selected_backend:
+      type: string
+      description: "Backend to use (anthropic, ollama, openai, etc.)"
+    selected_model:
+      type: string
+      description: "Model ID to use"
+    model_name:
+      type: string
+      description: "Human-readable model name"
+    reason:
+      type: string
+      description: "Why this model was selected"
+    confidence:
+      type: number
+      description: "Confidence score 0-1"
+    alternative:
+      type: object
+      description: "Alternative backend/model if primary fails"
+
+tags: ["routing", "model-selection", "backend-selection", "llm", "intelligent-routing"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 95
+
+examples:
+  - inputs:
+      request: "using the most powerful code llm we have review this code very deeply for correctness"
+    output: |
+      {
+        "selected_backend": "anthropic",
+        "selected_model": "claude-3-opus-20240229",
+        "model_name": "Claude Opus (Most Powerful)",
+        "reason": "Request specifies 'most powerful' and 'very deeply' - requires god-tier quality",
+        "confidence": 0.95,
+        "alternative": {
+          "backend": "ollama",
+          "model": "deepseek-coder-v2:16b"
+        }
+      }
+
+  - inputs:
+      request: "quickly generate a simple helper function"
+    output: |
+      {
+        "selected_backend": "ollama",
+        "selected_model": "codellama:7b",
+        "model_name": "CodeLlama 7B (Fast Local)",
+        "reason": "Request emphasizes 'quickly' and 'simple' - fast tier sufficient",
+        "confidence": 0.85,
+        "alternative": {
+          "backend": "anthropic",
+          "model": "claude-3-5-sonnet-20241022"
+        }
+      }
+
+usage_notes: |
+  ## Overview
+
+  This LLM tool intelligently selects the best backend and model combination based on
+  natural language requests. It considers quality requirements, task complexity, domain
+  specialization, cost, and speed to make optimal routing decisions.
+
+  ## How It Works
+
+  1. **Parse Request**: Analyzes natural language for quality keywords, domain, task type
+  2. **Load Available LLMs**: Gets enabled LLMs from registry
+  3. **Match Capabilities**: Compares request requirements to LLM capabilities
+  4. **Score Options**: Ranks LLMs by fit (priority, keywords, specialization)
+  5. **Select Best**: Chooses highest-scoring enabled LLM
+  6. **Provide Alternative**: Suggests fallback option
+
+  ## Quality Keywords
+
+  **God Tier (Most Powerful):**
+  - "most powerful", "best", "critical", "thorough", "deep", "comprehensive"
+  - Routes to: Claude Opus or DeepSeek 16B (local)
+
+  **General Tier (Balanced):**
+  - "balanced", "standard", "normal", "regular"
+  - Routes to: Claude Sonnet or similar
+
+  **Fast Tier (Quick):**
+  - "quick", "fast", "simple", "rapid"
+  - Routes to: CodeLlama 7B or Haiku
+
+  **Local Preference:**
+  - "local", "free", "offline", "private"
+  - Routes to: Ollama models
+
+  ## Domain Specialization
+
+  **Code:**
+  - "code", "review", "analyze", "refactor", "debug"
+  - Prefers code-specialized models
+
+  **Overseer/Planning:**
+  - "overseer", "strategy", "plan", "break down", "architect"
+  - Routes to overseer-role models
+
+  **Content:**
+  - "write", "content", "article", "story", "generate text"
+  - Routes to content-specialized models
+
+  ## Integration
+
+  ```python
+  from node_runtime import call_tool
+
+  # User request
+  request = "using the most powerful code llm review this code deeply"
+
+  # Select model
+  selection = call_tool("model_selector", request)
+  selection_data = json.loads(selection)
+
+  # Use selected model
+  backend = selection_data["selected_backend"]
+  model = selection_data["selected_model"]
+
+  # Execute with selected model
+  result = ollama_client.generate(
+      model=model,
+      prompt="Review this code...",
+      model_key="selected"
+  )
+  ```
+
+  ## Fallback Handling
+
+  If primary selection fails:
+  1. Try alternative backend/model
+  2. Fall back to default general-tier model
+  3. Log failure and continue with fallback
+
+  ## Performance
+
+  - Selection time: < 1 second
+  - Uses general-tier LLM for intelligent routing
+  - Caches LLM registry to avoid repeated loads
+  - Low cost (single LLM call for routing)

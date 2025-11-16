@@ -1,0 +1,173 @@
+name: "SignalR LLMApi Skill"
+type: "executable"
+description: "Complete skill for interacting with LLMApi SignalR simulator. Manages contexts, controls streaming, and executes SSE streams. This orchestrates calls to signalr_llmapi_management (planning) and sse_stream (streaming)."
+
+executable:
+  command: "python"
+  args: ["tools/executable/signalr_llmapi_skill.py"]
+
+input_schema:
+  request:
+    type: string
+    description: "Natural language request (e.g., 'create test-ctx and stream data', 'list contexts', 'stop streaming from test-ctx')"
+    required: true
+  base_url:
+    type: string
+    description: "Base URL of the LLMApi server (default: http://127.0.0.1:5116)"
+    default: "http://127.0.0.1:5116"
+    required: false
+  consumer:
+    type: string
+    description: "Consumer tool for stream data (if streaming). Default: None (just output stream)"
+    required: false
+  max_stream_items:
+    type: integer
+    description: "Maximum stream items to process (0 = unlimited). Default: 0"
+    default: 0
+    required: false
+  stream_timeout_seconds:
+    type: integer
+    description: "Maximum streaming duration (0 = unlimited). Default: 0"
+    default: 0
+    required: false
+
+output_schema:
+  type: object
+  description: "Results of SignalR LLMApi operations"
+  properties:
+    operations_executed:
+      type: array
+      description: "List of operations that were executed"
+    http_results:
+      type: array
+      description: "Results from HTTP operations (create, start, stop, etc.)"
+    stream_summary:
+      type: object
+      description: "Summary of streaming (if streaming was performed)"
+    success:
+      type: boolean
+    message:
+      type: string
+
+tags: ["signalr", "llmapi", "stream", "skill", "orchestrator", "executable"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 95
+
+usage_notes: |
+  ## Overview
+
+  This is the main entry point for all SignalR LLMApi operations. It:
+  1. Uses `signalr_llmapi_management` (LLM) to plan operations
+  2. Executes HTTP operations (create/start/stop/delete contexts)
+  3. Calls `sse_stream` for actual streaming
+  4. Optionally routes stream data to a consumer tool
+
+  ## Usage Examples
+
+  ### List all contexts
+  ```python
+  from node_runtime import call_tool
+
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "list all contexts"
+  }))
+  ```
+
+  ### Create context and stream
+  ```python
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "create context test-123 and start streaming",
+      "consumer": "workflow_generator",  # Optional: process stream data
+      "max_stream_items": 10  # Optional: limit items
+  }))
+  ```
+
+  ### Stop streaming
+  ```python
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "stop streaming from test-123"
+  }))
+  ```
+
+  ## How It Works
+
+  1. **Planning Phase**:
+     - Calls `signalr_llmapi_management` (LLM) to parse request
+     - Gets execution plan with operations list
+
+  2. **Execution Phase**:
+     - Executes HTTP operations (POST/GET/DELETE) via requests
+     - If streaming requested, calls `sse_stream` tool
+     - Optionally pipes stream to consumer tool via `stream_processor`
+
+  3. **Result Phase**:
+     - Returns summary of all operations
+     - Includes HTTP responses and stream summary
+
+  ## Architecture
+
+  ```
+  User Request ("create test-ctx and stream")
+      ↓
+  [signalr_llmapi_skill] (this tool)
+      ↓
+  [signalr_llmapi_management] (LLM - planning)
+      → Returns: {operations: [...], streaming: true}
+      ↓
+  [HTTP Operations] (create, start)
+      → POST /api/mock/contexts (create)
+      → POST /api/mock/contexts/test-ctx/start (start)
+      ↓
+  [sse_stream] (if streaming)
+      → Connect to SSE stream
+      → Yield events
+      ↓
+  [stream_processor] (if consumer specified)
+      → Filter, transform, route to consumer
+      ↓
+  [Consumer Tool] (e.g., workflow_generator)
+      → Process each stream item
+  ```
+
+examples:
+  - inputs:
+      request: "list all contexts"
+    output: |
+      {
+        "operations_executed": ["http:GET /api/mock/contexts"],
+        "http_results": [
+          {
+            "operation": "list_contexts",
+            "status": 200,
+            "data": [...]
+          }
+        ],
+        "stream_summary": null,
+        "success": true,
+        "message": "Listed all contexts successfully"
+      }
+
+  - inputs:
+      request: "create test-123 and start streaming"
+      max_stream_items: 5
+    output: |
+      {
+        "operations_executed": [
+          "http:POST /api/mock/contexts",
+          "http:POST /api/mock/contexts/test-123/start",
+          "sse_stream:http://127.0.0.1:5116/api/mock/contexts"
+        ],
+        "http_results": [
+          {"operation": "create_context", "status": 200},
+          {"operation": "start_streaming", "status": 200}
+        ],
+        "stream_summary": {
+          "total_events": 5,
+          "duration_seconds": 5.2,
+          "shutdown_reason": "max_items_reached"
+        },
+        "success": true,
+        "message": "Created context, started streaming, processed 5 events"
+      }

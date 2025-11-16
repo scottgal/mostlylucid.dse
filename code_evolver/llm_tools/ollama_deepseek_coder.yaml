@@ -1,0 +1,65 @@
+name: "DeepSeek Coder 16B (Local Powerhouse)"
+type: "llm_model"
+enabled: true
+provider: "ollama"
+model_id: "deepseek-coder-v2:16b"
+
+description: "Most powerful local code model. Excellent at complex code tasks, algorithm design, and deep analysis. Best local alternative to cloud models for serious coding work. Requires significant resources (16GB+ RAM)."
+
+capabilities:
+  - "deep_code_review"
+  - "complex_algorithms"
+  - "code_generation"
+  - "refactoring"
+  - "bug_detection"
+  - "optimization"
+  - "architectural_analysis"
+  - "security_review"
+
+specialization:
+  primary: "code"
+  secondary: ["algorithms", "optimization", "architecture"]
+
+quality_tier: "escalation"
+speed_tier: "medium"
+cost_tier: "free"
+
+use_cases:
+  - "Complex local code generation"
+  - "Offline development"
+  - "High-quality code review without API costs"
+  - "Algorithm implementation"
+  - "Performance-critical code"
+
+strengths:
+  - "Free (local execution)"
+  - "Privacy (no data sent to cloud)"
+  - "Strong code understanding"
+  - "Good at complex algorithms"
+  - "No API limits"
+
+limitations:
+  - "Requires 16GB+ RAM"
+  - "Slower than cloud models"
+  - "Lower quality than Claude Opus"
+  - "Limited context window (32k)"
+
+context_window: 32768
+max_output: 4096
+
+routing_keywords:
+  - "local"
+  - "offline"
+  - "free"
+  - "powerful local"
+  - "best local code"
+  - "deepseek"
+
+priority: 80
+
+metadata:
+  backend: "ollama"
+  api_endpoint: "http://localhost:11434"
+  requires_api_key: false
+  min_ram_gb: 16
+  recommended_gpu: true

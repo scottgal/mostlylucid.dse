@@ -1,0 +1,327 @@
+name: "Buffer"
+type: "executable"
+description: "Buffers data to smooth fast traffic. Batches items and flushes based on size, time, or manual trigger. Perfect for smoothing rapid usage tracking updates to Qdrant or rate-limiting API calls."
+
+executable:
+  command: "python"
+  args: ["tools/executable/buffer.py"]
+
+input_schema:
+  operation:
+    type: string
+    description: "Operation: 'write', 'flush', 'status', 'clear'"
+    enum: ["write", "flush", "status", "clear"]
+    default: "write"
+    required: true
+
+  data:
+    type: any
+    description: "Data to write to buffer (for 'write' operation)"
+    required: false
+
+  buffer_id:
+    type: string
+    description: "Buffer identifier (default: 'default'). Use different IDs for different buffers."
+    default: "default"
+    required: false
+
+  # Buffer configuration
+  max_size:
+    type: integer
+    description: "Max items before auto-flush (default: 100)"
+    default: 100
+    required: false
+
+  flush_interval_seconds:
+    type: number
+    description: "Max seconds before auto-flush (default: 5.0)"
+    default: 5.0
+    required: false
+
+  flush_strategy:
+    type: string
+    description: "Strategy: 'batched' (wait for size/time), 'immediate' (pass-through), 'manual' (only flush on command)"
+    enum: ["batched", "immediate", "manual"]
+    default: "batched"
+    required: false
+
+  pass_through_tool:
+    type: string
+    description: "Tool to call when flushing (e.g., 'qdrant_batch_writer')"
+    required: false
+
+  pass_through_input:
+    type: object
+    description: "Additional input to pass to pass_through_tool"
+    required: false
+
+output_schema:
+  type: object
+  description: "Buffer operation result"
+  properties:
+    operation:
+      type: string
+      description: "Operation performed"
+    buffer_id:
+      type: string
+      description: "Buffer identifier"
+    buffered_count:
+      type: integer
+      description: "Current items in buffer"
+    flushed:
+      type: boolean
+      description: "Whether buffer was flushed"
+    flushed_count:
+      type: integer
+      description: "Number of items flushed (if flushed)"
+    pass_through_result:
+      type: any
+      description: "Result from pass_through_tool (if called)"
+    message:
+      type: string
+
+tags: ["buffer", "batching", "rate-limiting", "smoothing", "traffic-control"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 80
+
+usage_notes: |
+  ## Overview
+
+  The buffer tool smooths fast data traffic by batching items and flushing based on:
+  - **Size**: Auto-flush when buffer reaches max_size
+  - **Time**: Auto-flush after flush_interval_seconds
+  - **Manual**: Explicit flush command
+
+  ## Use Cases
+
+  ### 1. Smooth Qdrant Usage Tracking
+  ```python
+  # Instead of writing to Qdrant on every tool call (too fast!)
+  # Buffer the updates and batch them
+
+  # Write to buffer (fast, non-blocking)
+  call_tool("buffer", json.dumps({
+      "operation": "write",
+      "buffer_id": "usage_tracking",
+      "data": {"tool_id": "technical_writer_v2", "increment": 1},
+      "max_size": 50,  # Flush every 50 items
+      "flush_interval_seconds": 5.0,  # Or every 5 seconds
+      "pass_through_tool": "qdrant_batch_update"
+  }))
+
+  # Buffer handles batching and flushing automatically
+  ```
+
+  ### 2. Rate-Limit API Calls
+  ```python
+  # Batch API requests instead of hitting API on every call
+  call_tool("buffer", json.dumps({
+      "operation": "write",
+      "buffer_id": "api_requests",
+      "data": {"method": "POST", "url": "...", "body": {...}},
+      "max_size": 20,  # Batch 20 requests
+      "pass_through_tool": "http_batch_executor"
+  }))
+  ```
+
+  ### 3. Aggregate Log Entries
+  ```python
+  # Buffer log entries and write in batches
+  call_tool("buffer", json.dumps({
+      "operation": "write",
+      "buffer_id": "logs",
+      "data": {"level": "INFO", "message": "..."},
+      "max_size": 100,
+      "flush_interval_seconds": 10.0,
+      "pass_through_tool": "log_writer"
+  }))
+  ```
+
+  ## Operations
+
+  ### Write to Buffer
+  ```python
+  result = call_tool("buffer", json.dumps({
+      "operation": "write",
+      "buffer_id": "my_buffer",
+      "data": {"key": "value"},
+      "max_size": 50
+  }))
+
+  # Result:
+  {
+    "operation": "write",
+    "buffer_id": "my_buffer",
+    "buffered_count": 15,  # Items currently in buffer
+    "flushed": false,       # Not flushed yet
+    "message": "Item buffered (15/50)"
+  }
+  ```
+
+  ### Manual Flush
+  ```python
+  result = call_tool("buffer", json.dumps({
+      "operation": "flush",
+      "buffer_id": "my_buffer"
+  }))
+
+  # Result:
+  {
+    "operation": "flush",
+    "buffer_id": "my_buffer",
+    "flushed": true,
+    "flushed_count": 15,
+    "pass_through_result": {...},  # Result from pass_through_tool
+    "message": "Flushed 15 items"
+  }
+  ```
+
+  ### Check Status
+  ```python
+  result = call_tool("buffer", json.dumps({
+      "operation": "status",
+      "buffer_id": "my_buffer"
+  }))
+
+  # Result:
+  {
+    "operation": "status",
+    "buffer_id": "my_buffer",
+    "buffered_count": 15,
+    "max_size": 50,
+    "time_since_last_flush": 2.5,
+    "message": "Buffer: 15/50 items (2.5s since last flush)"
+  }
+  ```
+
+  ### Clear Buffer
+  ```python
+  result = call_tool("buffer", json.dumps({
+      "operation": "clear",
+      "buffer_id": "my_buffer"
+  }))
+
+  # Result:
+  {
+    "operation": "clear",
+    "buffer_id": "my_buffer",
+    "buffered_count": 0,
+    "message": "Buffer cleared"
+  }
+  ```
+
+  ## Flush Strategies
+
+  ### Batched (Default)
+  - Flushes when buffer reaches max_size OR flush_interval_seconds
+  - Best for smoothing traffic
+
+  ```python
+  {
+    "flush_strategy": "batched",
+    "max_size": 50,
+    "flush_interval_seconds": 5.0
+  }
+  ```
+
+  ### Immediate (Pass-Through)
+  - No buffering, immediately calls pass_through_tool
+  - Useful for debugging
+
+  ```python
+  {
+    "flush_strategy": "immediate"
+  }
+  ```
+
+  ### Manual
+  - Only flushes when explicitly commanded
+  - Full control over flushing
+
+  ```python
+  {
+    "flush_strategy": "manual"
+  }
+  ```
+
+  ## Buffer Persistence
+
+  Buffers are stored in memory per buffer_id. They persist across calls
+  within the same process but are NOT persistent across restarts.
+
+  For persistent buffering, use a pass_through_tool that writes to disk/DB.
+
+  ## Example: Smooth Qdrant Usage Tracking
+
+  ```python
+  # In node_runtime.py _track_tool_usage():
+
+  def _track_tool_usage(self, tool_id: str, tool_metadata: dict = None):
+      # Instead of writing directly to Qdrant (too fast!)
+      # Buffer the updates
+
+      call_tool("buffer", json.dumps({
+          "operation": "write",
+          "buffer_id": "usage_tracking",
+          "data": {
+              "tool_id": tool_id,
+              "timestamp": datetime.utcnow().isoformat() + "Z",
+              "increment": 1
+          },
+          "max_size": 50,  # Batch 50 usage updates
+          "flush_interval_seconds": 5.0,  # Or flush every 5 seconds
+          "flush_strategy": "batched",
+          "pass_through_tool": "qdrant_batch_update",
+          "pass_through_input": {
+              "collection": "tool_usage",
+              "operation": "increment_counters"
+          }
+      }))
+  ```
+
+  Now instead of 1000 Qdrant writes/sec, you get ~20 batch writes/sec!
+
+examples:
+  - inputs:
+      operation: "write"
+      buffer_id: "usage_tracking"
+      data:
+        tool_id: "technical_writer_v2"
+        increment: 1
+      max_size: 50
+      flush_interval_seconds: 5.0
+    output: |
+      {
+        "operation": "write",
+        "buffer_id": "usage_tracking",
+        "buffered_count": 15,
+        "flushed": false,
+        "message": "Item buffered (15/50)"
+      }
+
+  - inputs:
+      operation: "flush"
+      buffer_id: "usage_tracking"
+    output: |
+      {
+        "operation": "flush",
+        "buffer_id": "usage_tracking",
+        "flushed": true,
+        "flushed_count": 15,
+        "message": "Flushed 15 items to pass_through_tool"
+      }
+
+  - inputs:
+      operation: "status"
+      buffer_id: "usage_tracking"
+    output: |
+      {
+        "operation": "status",
+        "buffer_id": "usage_tracking",
+        "buffered_count": 15,
+        "max_size": 50,
+        "time_since_last_flush": 2.5,
+        "message": "Buffer: 15/50 items (2.5s since last flush)"
+      }

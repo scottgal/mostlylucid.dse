@@ -1,0 +1,284 @@
+name: "SignalR LLMApi Skill"
+type: "llm"
+description: "Complete skill for interacting with LLMApi SignalR simulator. Supports context management (create, list, delete), stream control (start/stop), and SSE streaming of API data."
+
+llm:
+  model_tier: "general"
+  temperature: 0.2
+  max_tokens: 3000
+
+  system_prompt: |
+    You are a SignalR LLMApi controller. You help users interact with the LLMApi SignalR simulator.
+
+    **Available Operations:**
+    1. **List Contexts**: GET /api/mock/contexts
+    2. **Get Context Details**: GET /api/mock/contexts/{contextName}
+    3. **Create Context**: POST /api/mock/contexts (body: {"name": "context-name"})
+    4. **Delete Context**: DELETE /api/mock/contexts/{contextName}
+    5. **Start Streaming**: POST /api/mock/contexts/{contextName}/start
+    6. **Stop Streaming**: POST /api/mock/contexts/{contextName}/stop
+    7. **Stream Data**: Connect to SSE at /api/mock/contexts (once started)
+
+    **Your Task:**
+    - Parse the user's natural language request
+    - Determine which operation(s) to perform
+    - Generate the appropriate API calls
+    - If streaming is requested, generate SSE stream configuration
+
+    **Output Format:**
+    Return JSON with:
+    ```json
+    {
+      "operations": [
+        {
+          "type": "http" | "sse_stream",
+          "method": "GET|POST|DELETE",
+          "url": "full URL",
+          "body": { optional request body },
+          "description": "What this operation does"
+        }
+      ],
+      "execution_plan": "Human-readable plan",
+      "streaming": true|false
+    }
+    ```
+
+  prompt_template: |
+    User request: "{request}"
+
+    **Context Information:**
+    - Base URL: http://127.0.0.1:5116
+    - SignalR endpoint: /api/mock/contexts
+    - Management endpoints: /api/mock/contexts/{contextName}/start, /stop
+
+    **Common Patterns:**
+
+    1. **"List all contexts"**:
+       ```json
+       {
+         "operations": [{
+           "type": "http",
+           "method": "GET",
+           "url": "http://127.0.0.1:5116/api/mock/contexts",
+           "description": "List all active API contexts"
+         }],
+         "execution_plan": "Fetch list of all contexts",
+         "streaming": false
+       }
+       ```
+
+    2. **"Create context named test-context"**:
+       ```json
+       {
+         "operations": [{
+           "type": "http",
+           "method": "POST",
+           "url": "http://127.0.0.1:5116/api/mock/contexts",
+           "body": {"name": "test-context"},
+           "description": "Create new context test-context"
+         }],
+         "execution_plan": "Create context test-context",
+         "streaming": false
+       }
+       ```
+
+    3. **"Stream data from test-context"**:
+       ```json
+       {
+         "operations": [
+           {
+             "type": "http",
+             "method": "POST",
+             "url": "http://127.0.0.1:5116/api/mock/contexts/test-context/start",
+             "description": "Start streaming for test-context"
+           },
+           {
+             "type": "sse_stream",
+             "url": "http://127.0.0.1:5116/api/mock/contexts",
+             "description": "Connect to SSE stream"
+           }
+         ],
+         "execution_plan": "Start test-context streaming, then connect to SSE",
+         "streaming": true
+       }
+       ```
+
+    4. **"Stop streaming test-context"**:
+       ```json
+       {
+         "operations": [{
+           "type": "http",
+           "method": "POST",
+           "url": "http://127.0.0.1:5116/api/mock/contexts/test-context/stop",
+           "description": "Stop streaming for test-context"
+         }],
+         "execution_plan": "Stop test-context streaming",
+         "streaming": false
+       }
+       ```
+
+    Now analyze the user request and generate the appropriate operations.
+
+    Output ONLY the JSON, no markdown, no explanations.
+
+input_schema:
+  request:
+    type: string
+    description: "Natural language request describing what to do with the SignalR LLMApi simulator"
+    required: true
+  base_url:
+    type: string
+    description: "Base URL of the LLMApi server (default: http://127.0.0.1:5116)"
+    default: "http://127.0.0.1:5116"
+    required: false
+
+output_schema:
+  type: object
+  description: "Execution plan for interacting with LLMApi SignalR simulator"
+  properties:
+    operations:
+      type: array
+      description: "List of operations to perform"
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: ["http", "sse_stream"]
+          method:
+            type: string
+            enum: ["GET", "POST", "DELETE", "PATCH"]
+          url:
+            type: string
+          body:
+            type: object
+          description:
+            type: string
+    execution_plan:
+      type: string
+    streaming:
+      type: boolean
+
+tags: ["signalr", "llmapi", "stream", "admin", "skill", "management"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 90
+
+usage_notes: |
+  ## Overview
+
+  This skill provides a high-level interface to the LLMApi SignalR simulator.
+  It translates natural language requests into specific API operations.
+
+  ## Usage Examples
+
+  ### List all contexts
+  ```python
+  from node_runtime import call_tool
+
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "list all contexts"
+  }))
+  ```
+
+  ### Create and start streaming
+  ```python
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "create a context named test-ctx and start streaming from it"
+  }))
+  ```
+
+  ### Stop streaming
+  ```python
+  result = call_tool("signalr_llmapi_skill", json.dumps({
+      "request": "stop streaming from test-ctx"
+  }))
+  ```
+
+  ## Combining with Stream Processor
+
+  Once the skill generates the execution plan, use stream_processor to execute:
+
+  ```python
+  # Get plan
+  plan_json = call_tool("signalr_llmapi_skill", '{"request": "stream from test-ctx"}')
+  plan = json.loads(plan_json)
+
+  # If streaming, execute with stream processor
+  if plan["streaming"]:
+      # Find SSE operation
+      sse_op = next(op for op in plan["operations"] if op["type"] == "sse_stream")
+
+      # Execute stream
+      call_tool("stream_processor", json.dumps({
+          "producer": "sse_stream",
+          "producer_input": {"url": sse_op["url"]},
+          "consumer": "workflow_generator"
+      }))
+  ```
+
+examples:
+  - inputs:
+      request: "list all active contexts"
+    output: |
+      {
+        "operations": [{
+          "type": "http",
+          "method": "GET",
+          "url": "http://127.0.0.1:5116/api/mock/contexts",
+          "description": "List all active API contexts"
+        }],
+        "execution_plan": "Fetch list of all contexts from LLMApi",
+        "streaming": false
+      }
+
+  - inputs:
+      request: "create context test-123 and start streaming"
+    output: |
+      {
+        "operations": [
+          {
+            "type": "http",
+            "method": "POST",
+            "url": "http://127.0.0.1:5116/api/mock/contexts",
+            "body": {"name": "test-123"},
+            "description": "Create new context test-123"
+          },
+          {
+            "type": "http",
+            "method": "POST",
+            "url": "http://127.0.0.1:5116/api/mock/contexts/test-123/start",
+            "description": "Start streaming for test-123"
+          },
+          {
+            "type": "sse_stream",
+            "url": "http://127.0.0.1:5116/api/mock/contexts",
+            "description": "Connect to SSE stream"
+          }
+        ],
+        "execution_plan": "Create context test-123, start streaming, connect to SSE",
+        "streaming": true
+      }
+
+  - inputs:
+      request: "stop all streams and delete test-123"
+    output: |
+      {
+        "operations": [
+          {
+            "type": "http",
+            "method": "POST",
+            "url": "http://127.0.0.1:5116/api/mock/contexts/test-123/stop",
+            "description": "Stop streaming for test-123"
+          },
+          {
+            "type": "http",
+            "method": "DELETE",
+            "url": "http://127.0.0.1:5116/api/mock/contexts/test-123",
+            "description": "Delete context test-123"
+          }
+        ],
+        "execution_plan": "Stop test-123 streaming, then delete the context",
+        "streaming": false
+      }
