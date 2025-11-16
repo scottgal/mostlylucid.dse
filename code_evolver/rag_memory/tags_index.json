@@ -57,7 +57,7 @@
     "invocation_general_1763265570362",
     "invocation_general_1763266762349",
     "invocation_general_1763268165085",
-    "invocation_general_1763268600271"
+    "invocation_general_1763268750772"
   ],
   "tool_invocation": [
     "invocation_technical_writer_1763164745044",
@@ -164,7 +164,7 @@
     "invocation_general_1763265570362",
     "invocation_general_1763266762349",
     "invocation_general_1763268165085",
-    "invocation_general_1763268600271"
+    "invocation_general_1763268750772"
   ],
   "prompt": [
     "invocation_technical_writer_1763164745044",
@@ -271,7 +271,7 @@
     "invocation_general_1763265570362",
     "invocation_general_1763266762349",
     "invocation_general_1763268165085",
-    "invocation_general_1763268600271"
+    "invocation_general_1763268750772"
   ],
   "technical_writer": [
     "invocation_technical_writer_1763164745044",
@@ -507,8 +507,7 @@
     "spec_fetch_the_data_at_and_give_me",
     "spec_write_a_file_with_the_name_bu",
     "spec_write_me_a_poem_1763259570",
-    "spec_write_a_poem_and_translate_it",
-    "spec_write_a_short_joke"
+    "spec_write_a_poem_and_translate_it"
   ],
   "workflow": [
     "workflow_add_100_and_200",
@@ -742,8 +741,7 @@
     "spec_write_a_file_with_the_name_bu",
     "spec_write_me_a_poem_1763259570",
     "spec_write_a_poem_and_translate_it",
-    "spec_translate_the_work_boob_to_f",
-    "spec_write_a_short_joke"
+    "spec_translate_the_work_boob_to_f"
   ],
   "chat": [
     "func_write_a_story_about_the_sea",
@@ -1289,8 +1287,7 @@
     "spec_write_a_file_with_the_name_bu",
     "spec_write_me_a_poem_1763259570",
     "spec_write_a_poem_and_translate_it",
-    "spec_translate_the_work_boob_to_f",
-    "spec_write_a_short_joke"
+    "spec_translate_the_work_boob_to_f"
   ],
   "plan": [
     "spec_write_me_a_story",
@@ -1381,8 +1378,7 @@
     "spec_write_a_file_with_the_name_bu",
     "spec_write_me_a_poem_1763259570",
     "spec_write_a_poem_and_translate_it",
-    "spec_translate_the_work_boob_to_f",
-    "spec_write_a_short_joke"
+    "spec_translate_the_work_boob_to_f"
   ],
   "overseer": [
     "spec_write_me_a_story",
@@ -1473,8 +1469,7 @@
     "spec_write_a_file_with_the_name_bu",
     "spec_write_me_a_poem_1763259570",
     "spec_write_a_poem_and_translate_it",
-    "spec_translate_the_work_boob_to_f",
-    "spec_write_a_short_joke"
+    "spec_translate_the_work_boob_to_f"
   ],
   "poetry": [
     "func_write_a_poem_in_the_style_of_r",
@@ -2306,7 +2301,7 @@
     "invocation_general_1763265570362",
     "invocation_general_1763266762349",
     "invocation_general_1763268165085",
-    "invocation_general_1763268600271"
+    "invocation_general_1763268750772"
   ],
   "translate": [
     "workflow_1763251699"
