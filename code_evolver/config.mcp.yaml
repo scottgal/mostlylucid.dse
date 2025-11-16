@@ -1,0 +1,193 @@
+# ============================================================================
+# Code Evolver - MCP (Model Context Protocol) Server Configuration
+# ============================================================================
+#
+# This configuration defines MCP servers that expose tools, resources, and
+# prompts to the Code Evolver system. MCP servers are external processes that
+# provide additional capabilities through a standardized protocol.
+#
+# INSTALLATION:
+# Most MCP servers require Node.js and can be run via npx:
+#
+# Filesystem: npx -y @modelcontextprotocol/server-filesystem <allowed_path>
+# Memory:     npx -y @modelcontextprotocol/server-memory
+# Fetch:      npx -y @modelcontextprotocol/server-fetch
+# Time:       npx -y @modelcontextprotocol/server-time
+#
+# Or install globally:
+# npm install -g @modelcontextprotocol/server-filesystem
+# npm install -g @modelcontextprotocol/server-memory
+# npm install -g @modelcontextprotocol/server-fetch
+#
+# USAGE:
+# 1. Copy this section to your main config file, OR
+# 2. Use this file directly: python chat_cli.py --config config.mcp.yaml
+#
+# ============================================================================
+
+# MCP Server configurations
+mcp_servers:
+  # --------------------------------------------------------------------------
+  # FETCH SERVER - Web content fetching and conversion
+  # --------------------------------------------------------------------------
+  # Enables fetching web content and converting it to markdown for LLM use
+  - name: fetch
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-fetch"
+    description: "Fetch and convert web content to markdown"
+    tags:
+      - web
+      - http
+      - scraping
+      - markdown
+    enabled: true
+
+  # --------------------------------------------------------------------------
+  # MEMORY SERVER - Persistent knowledge graph memory
+  # --------------------------------------------------------------------------
+  # Provides a knowledge graph for storing and retrieving information
+  - name: memory
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-memory"
+    description: "Knowledge graph-based persistent memory system"
+    tags:
+      - memory
+      - knowledge-graph
+      - storage
+      - persistence
+    enabled: true
+
+  # --------------------------------------------------------------------------
+  # TIME SERVER - Time and timezone utilities
+  # --------------------------------------------------------------------------
+  # Provides current time, date, and timezone conversion capabilities
+  - name: time
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-time"
+    description: "Time and timezone conversion utilities"
+    tags:
+      - time
+      - timezone
+      - date
+      - utilities
+    enabled: true
+
+  # --------------------------------------------------------------------------
+  # FILESYSTEM SERVER - Secure file operations
+  # --------------------------------------------------------------------------
+  # Provides read/write access to specified directory with safety controls
+  # NOTE: Adjust the path to match your needs
+  - name: filesystem
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-filesystem"
+      - "/tmp/mcp_workspace"  # Change to your desired allowed directory
+    description: "Secure file operations with configurable access controls"
+    tags:
+      - filesystem
+      - files
+      - storage
+      - io
+    enabled: false  # Disabled by default for security - enable when needed
+
+  # --------------------------------------------------------------------------
+  # GIT SERVER - Git repository operations
+  # --------------------------------------------------------------------------
+  # Provides tools to read, search, and manipulate Git repositories
+  # NOTE: This uses a community-maintained server
+  - name: git
+    command: npx
+    args:
+      - "-y"
+      - "@cyanheads/git-mcp-server"
+    description: "Git repository operations and queries"
+    tags:
+      - git
+      - version-control
+      - repository
+      - scm
+    enabled: false  # Disabled by default - enable when needed
+
+# ============================================================================
+# EXAMPLE: Using with Ollama LLM Configuration
+# ============================================================================
+# You can combine MCP servers with your LLM configuration. Here's an example:
+
+llm:
+  models:
+    qwen_3b:
+      name: "qwen2.5-coder:3b"
+      backend: "ollama"
+      context_window: 32768
+      cost: "low"
+      speed: "fast"
+      quality: "good"
+      timeout: 120
+
+  defaults:
+    backend: "ollama"
+    base_url: "http://localhost:11434"
+    temperature: 0.7
+    max_tokens: 4096
+
+  roles:
+    overseer:
+      model: qwen_3b
+    generator:
+      model: qwen_3b
+    evaluator:
+      model: qwen_3b
+    triage:
+      model: qwen_3b
+    escalation:
+      model: qwen_3b
+
+# ============================================================================
+# NOTES ON MCP SERVERS
+# ============================================================================
+#
+# 1. SECURITY CONSIDERATIONS:
+#    - Filesystem server: Carefully control allowed paths
+#    - Git server: May have access to your repositories
+#    - Fetch server: Can access any URL on the internet
+#
+# 2. REQUIREMENTS:
+#    - Node.js must be installed for npx commands
+#    - Internet connection required for first-time package downloads
+#
+# 3. TROUBLESHOOTING:
+#    - If a server fails to start, check Node.js is installed
+#    - Verify the server package exists on npm
+#    - Check logs for connection errors
+#
+# 4. CUSTOM SERVERS:
+#    - You can add any MCP-compatible server
+#    - Use "command" and "args" to specify how to start it
+#    - Add appropriate tags for discovery
+#
+# 5. ENVIRONMENT VARIABLES:
+#    - Some servers may require environment variables
+#    - Add them via the "env" key (see example below)
+#
+# Example with environment variables:
+# - name: github
+#   command: npx
+#   args:
+#     - "-y"
+#     - "@modelcontextprotocol/server-github"
+#   env:
+#     GITHUB_TOKEN: "${GITHUB_TOKEN}"  # Use env var from your shell
+#   description: "GitHub API access"
+#   tags:
+#     - github
+#     - api
+#   enabled: false
+#
+# ============================================================================

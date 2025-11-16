@@ -350,6 +350,10 @@ class ToolsManager:
         if rag_memory:
             self._index_tools_in_rag()
 
+        # Load MCP tools if configured
+        if config_manager:
+            self._load_mcp_tools()
+
     def _load_tools(self):
         """Load tools from disk into memory."""
         if not self.index_path.exists():
@@ -854,6 +858,50 @@ Tags: {', '.join(tool.tags)}
 
         except Exception as e:
             logger.error(f"Error indexing tools in RAG: {e}")
+
+    def _load_mcp_tools(self):
+        """Load tools from configured MCP servers."""
+        try:
+            # Import MCP modules
+            from .mcp_client_manager import get_mcp_client_manager
+            from .mcp_tool_adapter import get_mcp_tool_adapter
+
+            # Get config data
+            config_data = self.config_manager.config if hasattr(self.config_manager, 'config') else {}
+
+            # Check if MCP servers are configured
+            if 'mcp_servers' not in config_data:
+                logger.debug("No MCP servers configured")
+                return
+
+            # Initialize MCP manager and load server configs
+            mcp_manager = get_mcp_client_manager()
+            mcp_manager.load_from_config(config_data)
+
+            # Connect to all servers
+            logger.info(f"Connecting to {len(config_data['mcp_servers'])} MCP server(s)...")
+            mcp_manager.connect_all_sync()
+
+            # Load tools from all connected servers
+            mcp_adapter = get_mcp_tool_adapter()
+            mcp_tools = mcp_adapter.load_all_tools_sync()
+
+            # Register MCP tools in the tools registry
+            for tool in mcp_tools:
+                if tool.tool_id not in self.tools:
+                    self.tools[tool.tool_id] = tool
+                else:
+                    logger.debug(f"MCP tool {tool.tool_id} already exists, skipping")
+
+            if mcp_tools:
+                logger.info(f"✓ Loaded {len(mcp_tools)} tool(s) from MCP servers")
+            else:
+                logger.debug("No tools loaded from MCP servers")
+
+        except ImportError as e:
+            logger.warning(f"MCP support not available: {e}")
+        except Exception as e:
+            logger.error(f"Error loading MCP tools: {e}")
 
     def invoke_llm_tool(
         self,
