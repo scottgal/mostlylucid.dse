@@ -1,0 +1,292 @@
+name: "Git"
+type: "custom"
+description: "Powerful yet safe Git integration tool. Provides access to git operations with authentication from config.yaml. Supports status, log, diff, clone, fetch, pull, push, branch, checkout, and more. Includes safety checks for destructive operations."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.git_tool"
+  class: "GitTool"
+  config:
+    safe_mode: true
+    require_confirmation_for_destructive: true
+    max_diff_size_kb: 500
+
+input_schema:
+  action:
+    type: string
+    description: "Git action to perform"
+    required: true
+    enum: ["status", "log", "diff", "clone", "fetch", "pull", "push", "branch", "checkout", "remote", "show", "blame", "stash", "tag", "config_get", "config_set"]
+
+  repo_path:
+    type: string
+    description: "Path to git repository (defaults to current directory)"
+    required: false
+
+  # For clone
+  url:
+    type: string
+    description: "Git repository URL (for clone action)"
+    required: false
+
+  destination:
+    type: string
+    description: "Clone destination path"
+    required: false
+
+  # For branch operations
+  branch_name:
+    type: string
+    description: "Branch name (for branch, checkout actions)"
+    required: false
+
+  create_branch:
+    type: boolean
+    description: "Create new branch if it doesn't exist (for checkout)"
+    required: false
+    default: false
+
+  # For log
+  max_count:
+    type: integer
+    description: "Maximum number of commits to show (for log action)"
+    required: false
+    default: 10
+
+  # For diff
+  file_path:
+    type: string
+    description: "Specific file to diff"
+    required: false
+
+  commit_ref:
+    type: string
+    description: "Commit reference for diff/show (e.g., 'HEAD~1', commit hash)"
+    required: false
+
+  # For push/pull
+  remote_name:
+    type: string
+    description: "Remote name (defaults to 'origin')"
+    required: false
+    default: "origin"
+
+  force:
+    type: boolean
+    description: "Force operation (use with caution!)"
+    required: false
+    default: false
+
+  # For config
+  config_key:
+    type: string
+    description: "Git config key (e.g., 'user.name')"
+    required: false
+
+  config_value:
+    type: string
+    description: "Git config value (for config_set)"
+    required: false
+
+  # For authentication
+  use_credentials:
+    type: boolean
+    description: "Use credentials from config.yaml for authentication"
+    required: false
+    default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether operation succeeded"
+    action:
+      type: string
+      description: "Action performed"
+    output:
+      type: string
+      description: "Command output"
+    data:
+      description: "Parsed data (e.g., commits, branches, status info)"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["git", "version-control", "vcs", "repository", "source-control", "scm"]
+
+examples:
+  - description: "Get repository status"
+    input:
+      action: "status"
+    output:
+      success: true
+      action: "status"
+      output: "On branch main\nYour branch is up to date..."
+      data:
+        branch: "main"
+        changes: []
+
+  - description: "View commit log"
+    input:
+      action: "log"
+      max_count: 5
+    output:
+      success: true
+      action: "log"
+      data:
+        commits:
+          - hash: "abc123..."
+            author: "John Doe"
+            date: "2025-01-15"
+            message: "Add new feature"
+
+  - description: "Clone a repository"
+    input:
+      action: "clone"
+      url: "https://github.com/user/repo.git"
+      destination: "./my-repo"
+      use_credentials: true
+    output:
+      success: true
+      action: "clone"
+      output: "Cloning into 'my-repo'..."
+
+  - description: "View file diff"
+    input:
+      action: "diff"
+      file_path: "src/main.py"
+    output:
+      success: true
+      action: "diff"
+      output: "+++ new changes\n--- old content"
+
+usage_notes: |
+  ## Git Tool - Safe and Powerful Version Control
+
+  This tool provides comprehensive Git integration with built-in safety features
+  and authentication from config.yaml.
+
+  ## Features
+
+  - [OK] All major Git operations (status, log, diff, clone, push, pull, etc.)
+  - [OK] Authentication from config.yaml (GitHub tokens, SSH keys)
+  - [OK] Safety checks for destructive operations
+  - [OK] Parsed output for easy consumption
+  - [OK] Support for local and remote operations
+  - [OK] Branch management
+  - [OK] Commit history and diffs
+
+  ## Authentication Setup
+
+  Add to your config.yaml:
+
+  ```yaml
+  git:
+    github:
+      token: "${GITHUB_TOKEN}"
+      username: "your-username"
+    gitlab:
+      token: "${GITLAB_TOKEN}"
+    credentials:
+      - pattern: "github.com"
+        username: "your-username"
+        token: "${GITHUB_TOKEN}"
+      - pattern: "gitlab.com"
+        username: "your-username"
+        token: "${GITLAB_TOKEN}"
+  ```
+
+  ## Usage Examples
+
+  ### Example 1: Check Repository Status
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("git", json.dumps({
+      "action": "status"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"Branch: {data['data']['branch']}")
+      print(f"Changes: {len(data['data']['changes'])}")
+  ```
+
+  ### Example 2: View Commit History
+
+  ```python
+  result = call_tool("git", json.dumps({
+      "action": "log",
+      "max_count": 10
+  }))
+
+  data = json.loads(result)
+  for commit in data['data']['commits']:
+      print(f"{commit['hash'][:7]}: {commit['message']}")
+  ```
+
+  ### Example 3: Clone Repository with Auth
+
+  ```python
+  result = call_tool("git", json.dumps({
+      "action": "clone",
+      "url": "https://github.com/user/private-repo.git",
+      "destination": "./my-repo",
+      "use_credentials": true
+  }))
+  ```
+
+  ### Example 4: Create and Checkout New Branch
+
+  ```python
+  result = call_tool("git", json.dumps({
+      "action": "checkout",
+      "branch_name": "feature/new-feature",
+      "create_branch": true
+  }))
+  ```
+
+  ### Example 5: View File Diff
+
+  ```python
+  result = call_tool("git", json.dumps({
+      "action": "diff",
+      "file_path": "src/main.py"
+  }))
+
+  data = json.loads(result)
+  print(data['output'])  # Shows the diff
+  ```
+
+  ## Safety Features
+
+  - **Safe Mode**: Prevents accidental destructive operations
+  - **Confirmation Required**: Destructive ops require explicit confirmation
+  - **Size Limits**: Large diffs are truncated for safety
+  - **Credential Protection**: Tokens never exposed in output
+
+  ## Supported Actions
+
+  | Action | Description | Safe |
+  |--------|-------------|------|
+  | status | Show working tree status | ✓ |
+  | log | Show commit logs | ✓ |
+  | diff | Show changes | ✓ |
+  | clone | Clone a repository | ✓ |
+  | fetch | Fetch from remote | ✓ |
+  | pull | Pull from remote | ✓ |
+  | push | Push to remote | ⚠️ |
+  | branch | List/create branches | ✓ |
+  | checkout | Switch branches | ⚠️ |
+  | remote | Manage remotes | ✓ |
+  | show | Show commit details | ✓ |
+  | blame | Show file annotations | ✓ |
+  | stash | Stash changes | ⚠️ |
+  | tag | Manage tags | ✓ |
+  | config_get | Get config value | ✓ |
+  | config_set | Set config value | ⚠️ |
