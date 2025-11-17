@@ -114,15 +114,87 @@ class ConfigManager:
             with open(self.config_path, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
 
+            # Validate YAML structure
+            self._lint_config(config)
+
             # Merge with defaults
             merged = self._merge_configs(self.DEFAULT_CONFIG, config)
             logger.info(f"✓ Loaded configuration from {self.config_path}")
             return merged
 
+        except yaml.YAMLError as e:
+            logger.error(f"YAML syntax error in config file: {e}")
+            logger.info("Using default configuration")
+            return self.DEFAULT_CONFIG.copy()
         except Exception as e:
             logger.error(f"Error loading config: {e}")
             logger.info("Using default configuration")
             return self.DEFAULT_CONFIG.copy()
+
+    def _lint_config(self, config: Dict[str, Any]) -> None:
+        """
+        Lint configuration for common issues.
+
+        Args:
+            config: Configuration dictionary to validate
+
+        Raises:
+            ValueError: If critical configuration issues are found
+        """
+        warnings = []
+        errors = []
+
+        # Check LLM configuration
+        if "llm" in config:
+            llm_config = config["llm"]
+
+            # Check model definitions
+            if "models" in llm_config:
+                models = llm_config["models"]
+                for model_id, model_spec in models.items():
+                    if isinstance(model_spec, dict):
+                        model_name = model_spec.get("name", "")
+                        backend = model_spec.get("backend", "")
+
+                        # Check for common Ollama model name issues
+                        if backend == "ollama" and model_name:
+                            # Check if model name looks like it should have a colon but doesn't
+                            # Common patterns: gemma3_1b should be gemma3:1b, phi3_mini should be phi3:mini
+                            if "_" in model_name and ":" not in model_name:
+                                # Check for common model families
+                                model_families = ["gemma", "phi", "llama", "codellama", "qwen", "mistral", "deepseek"]
+                                if any(family in model_name.lower() for family in model_families):
+                                    warnings.append(
+                                        f"Model '{model_id}' has name '{model_name}' which looks incorrect. "
+                                        f"Ollama model names typically use colons (e.g., 'gemma3:1b' not 'gemma3_1b')"
+                                    )
+
+            # Check backend configuration
+            if "backends" in llm_config:
+                backends = llm_config["backends"]
+
+                # Check Ollama backend
+                if "ollama" in backends:
+                    ollama_config = backends["ollama"]
+                    if isinstance(ollama_config, dict):
+                        base_url = ollama_config.get("base_url", "")
+                        if base_url and not base_url.startswith("http"):
+                            warnings.append(
+                                f"Ollama base_url '{base_url}' should start with 'http://' or 'https://'"
+                            )
+
+        # Log warnings
+        if warnings:
+            logger.warning("Configuration validation warnings:")
+            for warning in warnings:
+                logger.warning(f"  ⚠ {warning}")
+
+        # Log errors and raise if critical
+        if errors:
+            logger.error("Configuration validation errors:")
+            for error in errors:
+                logger.error(f"  ✗ {error}")
+            raise ValueError(f"Configuration has {len(errors)} critical error(s)")
 
     def _merge_configs(self, default: Dict, custom: Dict) -> Dict:
         """

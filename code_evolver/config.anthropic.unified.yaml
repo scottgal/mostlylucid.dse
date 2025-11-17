@@ -71,7 +71,7 @@ llm:
 
     # Keep gemma3_1b for veryfast (local triage)
     gemma3_1b:
-      name: "gemma3_1b"
+      name: "gemma3:1b"
       backend: "ollama"
       context_window: 2048
       cost: "very-low"

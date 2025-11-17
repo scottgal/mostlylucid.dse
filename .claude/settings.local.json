@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(for file in code_evolver/tools/llm/*.yaml code_evolver/tools/executable/*.yaml code_evolver/tools/debug/*.yaml code_evolver/tools/fixer/*.yaml code_evolver/tools/perf/*.yaml)",
-      "Bash(for file in .claude/commands/*.md)"
+      "Bash(for file in .claude/commands/*.md)",
+      "Bash(curl:*)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []
