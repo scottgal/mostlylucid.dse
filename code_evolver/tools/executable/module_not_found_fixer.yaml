@@ -1,0 +1,151 @@
+name: "ModuleNotFoundError Fixer"
+type: "executable"
+description: |
+  Fixes ModuleNotFoundError by adding sys.path setup before imports.
+
+  This tool has ENCAPSULATED validation:
+  - fix() method: Applies the fix to the code
+  - validate() method: Validates the fix was actually applied
+
+  Common patterns handled:
+  - Adds path setup (sys.path.insert) before imports
+  - Removes unused imports that cause the error
+  - Validates all changes are actually in the fixed code
+
+command: "python"
+args:
+  - "tools/executable/module_not_found_fixer.py"
+
+input_format: "json"
+output_format: "json"
+
+# Input schema for fix command
+input_schema:
+  type: object
+  properties:
+    command:
+      type: string
+      enum: ["fix", "validate"]
+      default: "fix"
+    code:
+      type: string
+      description: "The failing code"
+    filename:
+      type: string
+      default: "main.py"
+    error_message:
+      type: string
+      description: "The ModuleNotFoundError message"
+    # For validate command
+    original_code:
+      type: string
+    fixed_code:
+      type: string
+    fix_result:
+      type: object
+
+# Output schema for fix command
+output_schema_fix:
+  type: object
+  properties:
+    fixed:
+      type: boolean
+    fixed_code:
+      type: string
+    message:
+      type: string
+    changes_made:
+      type: array
+      items:
+        type: string
+
+# Output schema for validate command
+output_schema_validate:
+  type: object
+  properties:
+    valid:
+      type: boolean
+    confidence:
+      type: number
+    reason:
+      type: string
+
+tags:
+  - "fix"
+  - "error_handler"
+  - "module_error"
+  - "import_error"
+  - "auto_fix"
+  - "tdd"
+  - "validated"  # Indicates this tool has built-in validation
+
+metadata:
+  error_pattern: "ModuleNotFoundError.*No module named"
+  applies_to: "*.py"
+  category: "code_fixer"
+  priority: "high"
+  auto_apply: true
+  has_validation: true  # Key flag: this tool can validate its own fixes
+  validation_confidence_threshold: 0.7
+
+examples:
+  - name: "Fix node_runtime import"
+    input:
+      command: "fix"
+      code: |
+        from node_runtime import call_tool
+
+        def main():
+            result = call_tool("test", "data")
+            return result
+      filename: "main.py"
+      error_message: "ModuleNotFoundError: No module named 'node_runtime'"
+    output:
+      fixed: true
+      message: "Added path setup for node_runtime import"
+      changes_made:
+        - "Added: from pathlib import Path"
+        - "Added: import sys"
+        - "Added: sys.path.insert(0, str(Path(__file__).parent.parent.parent))"
+
+  - name: "Remove unused import"
+    input:
+      command: "fix"
+      code: |
+        from node_runtime import call_tool
+
+        def main():
+            return "no tool calls"
+      filename: "main.py"
+      error_message: "ModuleNotFoundError: No module named 'node_runtime'"
+    output:
+      fixed: true
+      message: "Removed unused import of node_runtime"
+      changes_made:
+        - "Removed unused import: node_runtime"
+
+  - name: "Validate fix was applied"
+    input:
+      command: "validate"
+      original_code: |
+        from node_runtime import call_tool
+        def main():
+            pass
+      fixed_code: |
+        from pathlib import Path
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+        from node_runtime import call_tool
+        def main():
+            pass
+      fix_result:
+        fixed: true
+        changes_made:
+          - "Added: from pathlib import Path"
+          - "Added: import sys"
+          - "Added: sys.path.insert(0, str(Path(__file__).parent.parent.parent))"
+      error_message: "ModuleNotFoundError: No module named 'node_runtime'"
+    output:
+      valid: true
+      confidence: 0.95
+      reason: "All 3 changes validated in code"

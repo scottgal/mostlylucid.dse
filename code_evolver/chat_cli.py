@@ -4589,13 +4589,35 @@ Generate comprehensive tests now:"""
 
             # Build summary of ALL previous attempts for context
             previous_attempts_summary = ""
+            validation_warning = ""
             if all_attempts:
                 previous_attempts_summary = "\nPREVIOUS FIX ATTEMPTS (all failed):\n"
+                validation_failures = []
                 for i, prev in enumerate(all_attempts, 1):
                     previous_attempts_summary += f"\n=== Attempt {i} ({prev['model']}, temp: {prev['temp']}) ===\n"
                     previous_attempts_summary += f"Fixes tried: {', '.join(prev.get('fixes', []))}\n"
                     previous_attempts_summary += f"Analysis: {prev.get('analysis', 'N/A')}\n"
                     previous_attempts_summary += f"Error: {prev['error'][:150]}...\n"
+
+                    # Track validation failures
+                    if prev.get('validation_failure'):
+                        validation_failures.append(i)
+
+                # Add strong warning if there were validation failures
+                if validation_failures:
+                    validation_warning = f"""
+**CRITICAL WARNING - VALIDATION FAILURES DETECTED:**
+Attempts {', '.join(map(str, validation_failures))} claimed to apply fixes but DID NOT actually modify the code!
+This is a HALLUCINATION - you DESCRIBED what to fix but didn't change the code.
+
+YOU MUST:
+1. Actually MODIFY the code field with the fix applied, not just describe the fix
+2. If you say "Added sys.path setup", the code MUST contain sys.path.insert() or sys.path.append()
+3. If you say "Removed import", the import MUST be gone from the code
+4. The "code" field must be DIFFERENT from the input code if you claim to have fixed it
+
+DO NOT just describe fixes in fixes_applied - APPLY THEM TO THE CODE!
+"""
 
             # Add logging requirement for attempts 3+
             logging_instruction = ""
@@ -4689,6 +4711,8 @@ TEST ERROR OUTPUT:
 {test_req_section}
 
 {logging_instruction}
+
+{validation_warning}
 
 You MUST respond with ONLY a JSON object in this exact format:
 
@@ -4792,7 +4816,85 @@ Return ONLY the JSON object, nothing else."""
                 console.print(f"[yellow]Response contains explanatory text instead of code, skipping[/yellow]")
                 continue
 
-            # Save fixed code
+            # ==================== CRITICAL FIX VALIDATION ====================
+            # VALIDATE that the LLM actually applied the fixes it claims!
+            # This prevents the bug where LLM describes the fix but doesn't apply it
+            fix_validation_failed = False
+
+            # UNIVERSAL VALIDATION: If LLM claims fixes, code MUST be different
+            if 'fixes' in locals() and fixes and len(fixes) > 0:
+                # Strip whitespace for comparison
+                original_stripped = code.strip().replace(' ', '').replace('\n', '').replace('\t', '')
+                fixed_stripped = fixed_code.strip().replace(' ', '').replace('\n', '').replace('\t', '')
+
+                if original_stripped == fixed_stripped:
+                    console.print(f"[bold red]✗ UNIVERSAL VALIDATION FAILED: LLM claims {len(fixes)} fix(es) but code is IDENTICAL![/bold red]")
+                    console.print(f"[yellow]Claimed fixes: {', '.join(fixes)}[/yellow]")
+                    console.print(f"[yellow]LLM only DESCRIBED fixes without APPLYING them. Rejecting and retrying...[/yellow]")
+                    fix_validation_failed = True
+
+            if 'fixes' in locals() and fixes and not fix_validation_failed:
+                # Check each claimed fix was actually applied to the code
+                for fix_description in fixes:
+                    fix_lower = fix_description.lower()
+
+                    # Validate ModuleNotFoundError fixes (most common)
+                    if 'modulenotfounderror' in error_output.lower() and 'node_runtime' in error_output.lower():
+                        if 'path setup' in fix_lower or 'sys.path' in fix_lower or 'add' in fix_lower and 'import' in fix_lower:
+                            # LLM claims it added path setup - verify it's in the code!
+                            if 'sys.path.insert' not in fixed_code and 'sys.path.append' not in fixed_code:
+                                console.print(f"[bold red]✗ VALIDATION FAILED: LLM claims '{fix_description}' but code doesn't contain sys.path setup![/bold red]")
+                                console.print(f"[yellow]LLM only DESCRIBED the fix without APPLYING it. Rejecting and retrying...[/yellow]")
+                                fix_validation_failed = True
+                                break
+
+                    # Validate unused import removal fixes
+                    if 'unused import' in fix_lower or 'removed import' in fix_lower or 'delete' in fix_lower and 'import' in fix_lower:
+                        if 'node_runtime' in fix_lower:
+                            # LLM claims it removed node_runtime import
+                            if 'from node_runtime import' in fixed_code or 'import node_runtime' in fixed_code:
+                                console.print(f"[bold red]✗ VALIDATION FAILED: LLM claims '{fix_description}' but import still in code![/bold red]")
+                                console.print(f"[yellow]LLM only DESCRIBED the fix without APPLYING it. Rejecting and retrying...[/yellow]")
+                                fix_validation_failed = True
+                                break
+
+                    # Validate that if fix mentions specific code changes, they're actually there
+                    if 'added' in fix_lower:
+                        # Extract what was supposedly added
+                        added_patterns = []
+                        if 'logging' in fix_lower:
+                            added_patterns.append('import logging')
+                        if 'pathlib' in fix_lower or 'Path' in fix_description:
+                            added_patterns.append('from pathlib import Path')
+
+                        for pattern in added_patterns:
+                            if pattern not in fixed_code:
+                                console.print(f"[bold red]✗ VALIDATION FAILED: LLM claims it added '{pattern}' but it's not in the code![/bold red]")
+                                console.print(f"[yellow]LLM only DESCRIBED the fix without APPLYING it. Rejecting and retrying...[/yellow]")
+                                fix_validation_failed = True
+                                break
+
+            # If validation failed, skip this attempt and try again
+            if fix_validation_failed:
+                # Track this validation failure to warn the LLM in the next attempt
+                all_attempts.append({
+                    'attempt_num': attempt + 1,
+                    'model': current_model,
+                    'temp': temperature,
+                    'stage': stage,
+                    'fixes': fixes if 'fixes' in locals() else [],
+                    'analysis': analysis if 'analysis' in locals() else '',
+                    'error': 'VALIDATION FAILED - LLM described fix without applying it to code',
+                    'code_attempted': fixed_code[:500] if fixed_code else '',
+                    'validation_failure': True
+                })
+
+                # Don't count this as a valid attempt - the LLM is hallucinating fixes
+                console.print(f"[cyan]Retrying with stronger emphasis on ACTUALLY APPLYING the fix...[/cyan]")
+                continue
+            # ==================== END CRITICAL FIX VALIDATION ====================
+
+            # Save fixed code (only if validation passed!)
             self.runner.save_code(node_id, fixed_code)
 
             # Re-run tests

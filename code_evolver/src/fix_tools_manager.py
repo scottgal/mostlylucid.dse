@@ -260,7 +260,8 @@ Respond with ONLY a JSON object:
         self,
         fix_tool_id: str,
         code: str,
-        filename: str = "main.py"
+        filename: str = "main.py",
+        error_message: str = ""
     ) -> Dict[str, Any]:
         """
         Apply a fix tool to code.
@@ -269,6 +270,7 @@ Respond with ONLY a JSON object:
             fix_tool_id: ID of the fix tool to apply
             code: Code to fix
             filename: Name of the file being fixed
+            error_message: The error message being fixed
 
         Returns:
             Dict with fix results:
@@ -276,6 +278,8 @@ Respond with ONLY a JSON object:
             - fixed_code: str (if successful)
             - message: str
             - details: Dict (tool-specific output)
+            - validated: bool (if tool has validation)
+            - validation_result: Dict (if validated)
         """
         logger.info(f"Applying fix tool: {fix_tool_id}")
 
@@ -290,8 +294,10 @@ Respond with ONLY a JSON object:
 
             # Prepare input for fix tool
             fix_input = json.dumps({
+                "command": "fix",
                 "code": code,
-                "filename": filename
+                "filename": filename,
+                "error_message": error_message
             })
 
             # Call the fix tool
@@ -305,11 +311,41 @@ Respond with ONLY a JSON object:
                     pass
 
             if isinstance(result, dict) and result.get("fixed"):
+                fixed_code = result.get("fixed_code", code)
+
+                # Check if this tool has built-in validation
+                tool = self.tools.tools.get(fix_tool_id)
+                has_validation = tool.metadata.get("has_validation", False) if tool else False
+
+                validation_result = None
+                if has_validation:
+                    # Call the tool's validate() method
+                    logger.info(f"Validating fix with built-in validator")
+                    validation_result = self._validate_fix_with_tool(
+                        fix_tool_id=fix_tool_id,
+                        original_code=code,
+                        fixed_code=fixed_code,
+                        fix_result=result,
+                        error_message=error_message
+                    )
+
+                    if not validation_result.get("valid"):
+                        logger.warning(f"Fix validation failed: {validation_result.get('reason')}")
+                        return {
+                            "success": False,
+                            "message": f"Fix validation failed: {validation_result.get('reason')}",
+                            "details": result,
+                            "validated": True,
+                            "validation_result": validation_result
+                        }
+
                 return {
                     "success": True,
-                    "fixed_code": result.get("fixed_code", code),
+                    "fixed_code": fixed_code,
                     "message": result.get("message", "Fix applied"),
-                    "details": result
+                    "details": result,
+                    "validated": has_validation,
+                    "validation_result": validation_result
                 }
             else:
                 return {
@@ -323,6 +359,58 @@ Respond with ONLY a JSON object:
             return {
                 "success": False,
                 "message": f"Fix failed: {e}"
+            }
+
+    def _validate_fix_with_tool(
+        self,
+        fix_tool_id: str,
+        original_code: str,
+        fixed_code: str,
+        fix_result: Dict[str, Any],
+        error_message: str
+    ) -> Dict[str, Any]:
+        """
+        Call a fix tool's validate() method.
+
+        Args:
+            fix_tool_id: ID of the fix tool
+            original_code: Code before fix
+            fixed_code: Code after fix
+            fix_result: Result from the fix() call
+            error_message: The error being fixed
+
+        Returns:
+            {
+                "valid": bool,
+                "confidence": float,
+                "reason": str
+            }
+        """
+        try:
+            from node_runtime import call_tool
+
+            validate_input = json.dumps({
+                "command": "validate",
+                "original_code": original_code,
+                "fixed_code": fixed_code,
+                "fix_result": fix_result,
+                "error_message": error_message
+            })
+
+            result = call_tool(fix_tool_id, validate_input)
+
+            if isinstance(result, str):
+                result = json.loads(result)
+
+            return result
+
+        except Exception as e:
+            logger.error(f"Error validating fix: {e}")
+            # Default to valid if validation fails
+            return {
+                "valid": True,
+                "confidence": 0.0,
+                "reason": f"Validation error: {e}"
             }
 
     def auto_fix_code(
