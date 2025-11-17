@@ -701,7 +701,14 @@
     "interaction_4a7f1927f795",
     "interaction_222bd648558c",
     "interaction_e4f6e5c5e7f0",
-    "tool_write_me_a_poem_conversation"
+    "tool_write_me_a_poem_conversation",
+    "tool_module_not_found_fixer",
+    "interaction_f44fab5f5151",
+    "interaction_6a59ff0361f2",
+    "interaction_d1c20ade5a2e",
+    "interaction_aaeb3413b6d1",
+    "interaction_3c29850d3b2a",
+    "interaction_f79814765e77"
   ],
   "custom": [
     "tool_http_server",
@@ -844,7 +851,8 @@
     "tool_workflow_diagram",
     "tool_workflow_runner",
     "tool_duplicate_style",
-    "tool_write_markdown_doc"
+    "tool_write_markdown_doc",
+    "tool_module_not_found_fixer"
   ],
   "python": [
     "tool_bandit_security",
@@ -1183,7 +1191,11 @@
     "exec_invocation_node_runtime_import_validator_1763393830498",
     "exec_invocation_random_data_generator_1763393831680",
     "exec_invocation_python_syntax_validator_1763396510570",
-    "exec_invocation_node_runtime_import_validator_1763396515196"
+    "exec_invocation_node_runtime_import_validator_1763396515196",
+    "exec_invocation_python_syntax_validator_1763400305410",
+    "exec_invocation_node_runtime_import_validator_1763400306898",
+    "exec_invocation_python_syntax_validator_1763400465315",
+    "exec_invocation_node_runtime_import_validator_1763400466280"
   ],
   "security": [
     "tool_bandit_security",
@@ -1313,7 +1325,10 @@
     "func_write_me_a_poem_conversation",
     "conv_write_me_a_poem_conversation_v1",
     "workflow_write_me_a_poem_conversation",
-    "tool_write_me_a_poem_conversation"
+    "tool_write_me_a_poem_conversation",
+    "func_generate_python_script_to_pars_1763400370",
+    "conv_generate_python_script_to_pars_1763400370_v1",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "style": [
     "tool_black_formatter",
@@ -1792,7 +1807,10 @@
     "interaction_22abdbf9a7b8",
     "interaction_8fdb613d2673",
     "interaction_c9ae62db7deb",
-    "interaction_e2d4631c1410"
+    "interaction_e2d4631c1410",
+    "interaction_8538a34db914",
+    "interaction_af6fb22b91dd",
+    "interaction_418ea9dc675e"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -1899,7 +1917,8 @@
     "spec_write_a_small_book_about_scotl",
     "spec_write_me_a_poem_conversation",
     "spec_make_a_translation_workflow_th",
-    "spec_wo_to_www"
+    "spec_wo_to_www",
+    "spec_write_a_safety_notice_about_ch_1763400166"
   ],
   "articles": [
     "tool_content_generator"
@@ -2133,7 +2152,11 @@
     "invocation_general_1763396771894",
     "interaction_c9ae62db7deb",
     "invocation_general_1763397584708",
-    "interaction_e2d4631c1410"
+    "interaction_e2d4631c1410",
+    "invocation_general_1763400183698",
+    "interaction_8538a34db914",
+    "invocation_general_1763400462222",
+    "interaction_af6fb22b91dd"
   ],
   "fallback": [
     "tool_general",
@@ -2562,7 +2585,8 @@
     "workflow_1763395490",
     "workflow_write_me_a_poem_conversation",
     "tool_write_me_a_poem_conversation",
-    "workflow_1763396560"
+    "workflow_1763396560",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -3228,7 +3252,13 @@
     "workflow_write_me_a_poem_conversation",
     "tool_write_me_a_poem_conversation",
     "spec_make_a_translation_workflow_th",
-    "spec_wo_to_www"
+    "spec_wo_to_www",
+    "spec_write_a_safety_notice_about_ch_1763400166",
+    "spec_generate_python_script_to_pars_1763400370",
+    "func_generate_python_script_to_pars_1763400370",
+    "conv_generate_python_script_to_pars_1763400370_v1",
+    "workflow_generate_python_script_to_pars_1763400370",
+    "spec_transform_sensor_readings_289"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3591,7 +3621,10 @@
     "func_write_me_a_poem_conversation",
     "conv_write_me_a_poem_conversation_v1",
     "workflow_write_me_a_poem_conversation",
-    "tool_write_me_a_poem_conversation"
+    "tool_write_me_a_poem_conversation",
+    "func_generate_python_script_to_pars_1763400370",
+    "conv_generate_python_script_to_pars_1763400370_v1",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -3969,7 +4002,10 @@
     "tool_extract_spec_from_file"
   ],
   "extraction": [
-    "tool_extract_spec_from_file"
+    "tool_extract_spec_from_file",
+    "func_generate_python_script_to_pars_1763400370",
+    "conv_generate_python_script_to_pars_1763400370_v1",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "overseer": [
     "tool_extract_spec_from_file",
@@ -4121,7 +4157,10 @@
     "spec_write_a_small_book_about_scotl",
     "spec_write_me_a_poem_conversation",
     "spec_make_a_translation_workflow_th",
-    "spec_wo_to_www"
+    "spec_wo_to_www",
+    "spec_write_a_safety_notice_about_ch_1763400166",
+    "spec_generate_python_script_to_pars_1763400370",
+    "spec_transform_sensor_readings_289"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4436,7 +4475,10 @@
     "tool_locust_load_tester"
   ],
   "parsing": [
-    "tool_parse_static_analysis"
+    "tool_parse_static_analysis",
+    "func_generate_python_script_to_pars_1763400370",
+    "conv_generate_python_script_to_pars_1763400370_v1",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "quality-metrics": [
     "tool_parse_static_analysis"
@@ -4620,7 +4662,10 @@
     "spec_write_a_small_book_about_scotl",
     "spec_write_me_a_poem_conversation",
     "spec_make_a_translation_workflow_th",
-    "spec_wo_to_www"
+    "spec_wo_to_www",
+    "spec_write_a_safety_notice_about_ch_1763400166",
+    "spec_generate_python_script_to_pars_1763400370",
+    "spec_transform_sensor_readings_289"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -4771,7 +4816,10 @@
     "spec_write_a_small_book_about_scotl",
     "spec_write_me_a_poem_conversation",
     "spec_make_a_translation_workflow_th",
-    "spec_wo_to_www"
+    "spec_wo_to_www",
+    "spec_write_a_safety_notice_about_ch_1763400166",
+    "spec_generate_python_script_to_pars_1763400370",
+    "spec_transform_sensor_readings_289"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
@@ -4940,7 +4988,10 @@
     "invocation_general_1763395072292",
     "invocation_general_1763396145488",
     "invocation_general_1763396771894",
-    "invocation_general_1763397584708"
+    "invocation_general_1763397584708",
+    "invocation_general_1763400183698",
+    "invocation_general_1763400462222",
+    "invocation_fast_code_generator_1763400533694"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -5102,7 +5153,10 @@
     "invocation_general_1763395072292",
     "invocation_general_1763396145488",
     "invocation_general_1763396771894",
-    "invocation_general_1763397584708"
+    "invocation_general_1763397584708",
+    "invocation_general_1763400183698",
+    "invocation_general_1763400462222",
+    "invocation_fast_code_generator_1763400533694"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -5265,7 +5319,10 @@
     "invocation_general_1763395072292",
     "invocation_general_1763396145488",
     "invocation_general_1763396771894",
-    "invocation_general_1763397584708"
+    "invocation_general_1763397584708",
+    "invocation_general_1763400183698",
+    "invocation_general_1763400462222",
+    "invocation_fast_code_generator_1763400533694"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -5853,7 +5910,16 @@
     "interaction_1763396560883",
     "interaction_c9ae62db7deb",
     "interaction_e2d4631c1410",
-    "interaction_1763398149039"
+    "interaction_1763398149039",
+    "interaction_8538a34db914",
+    "interaction_f44fab5f5151",
+    "interaction_6a59ff0361f2",
+    "interaction_d1c20ade5a2e",
+    "interaction_af6fb22b91dd",
+    "interaction_aaeb3413b6d1",
+    "interaction_3c29850d3b2a",
+    "interaction_f79814765e77",
+    "interaction_418ea9dc675e"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -6285,7 +6351,15 @@
     "interaction_222bd648558c",
     "interaction_e4f6e5c5e7f0",
     "interaction_c9ae62db7deb",
-    "interaction_e2d4631c1410"
+    "interaction_e2d4631c1410",
+    "interaction_8538a34db914",
+    "interaction_f44fab5f5151",
+    "interaction_d1c20ade5a2e",
+    "interaction_af6fb22b91dd",
+    "interaction_aaeb3413b6d1",
+    "interaction_3c29850d3b2a",
+    "interaction_f79814765e77",
+    "interaction_418ea9dc675e"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6447,7 +6521,10 @@
     "interaction_22abdbf9a7b8",
     "interaction_8fdb613d2673",
     "interaction_c9ae62db7deb",
-    "interaction_e2d4631c1410"
+    "interaction_e2d4631c1410",
+    "interaction_8538a34db914",
+    "interaction_af6fb22b91dd",
+    "interaction_418ea9dc675e"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -6601,7 +6678,10 @@
     "interaction_22abdbf9a7b8",
     "interaction_8fdb613d2673",
     "interaction_c9ae62db7deb",
-    "interaction_e2d4631c1410"
+    "interaction_e2d4631c1410",
+    "interaction_8538a34db914",
+    "interaction_af6fb22b91dd",
+    "interaction_418ea9dc675e"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7026,7 +7106,13 @@
     "exec_invocation_random_data_generator_1763393831680",
     "exec_invocation_python_syntax_validator_1763396510570",
     "exec_invocation_undefined_name_checker_1763396514839",
-    "exec_invocation_node_runtime_import_validator_1763396515196"
+    "exec_invocation_node_runtime_import_validator_1763396515196",
+    "exec_invocation_python_syntax_validator_1763400305410",
+    "exec_invocation_undefined_name_checker_1763400306270",
+    "exec_invocation_node_runtime_import_validator_1763400306898",
+    "exec_invocation_python_syntax_validator_1763400465315",
+    "exec_invocation_undefined_name_checker_1763400465847",
+    "exec_invocation_node_runtime_import_validator_1763400466280"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7451,7 +7537,13 @@
     "exec_invocation_random_data_generator_1763393831680",
     "exec_invocation_python_syntax_validator_1763396510570",
     "exec_invocation_undefined_name_checker_1763396514839",
-    "exec_invocation_node_runtime_import_validator_1763396515196"
+    "exec_invocation_node_runtime_import_validator_1763396515196",
+    "exec_invocation_python_syntax_validator_1763400305410",
+    "exec_invocation_undefined_name_checker_1763400306270",
+    "exec_invocation_node_runtime_import_validator_1763400306898",
+    "exec_invocation_python_syntax_validator_1763400465315",
+    "exec_invocation_undefined_name_checker_1763400465847",
+    "exec_invocation_node_runtime_import_validator_1763400466280"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7701,7 +7793,11 @@
     "exec_invocation_python_syntax_validator_1763393825531",
     "interaction_d409210b16e8",
     "exec_invocation_python_syntax_validator_1763396510570",
-    "interaction_4a7f1927f795"
+    "interaction_4a7f1927f795",
+    "exec_invocation_python_syntax_validator_1763400305410",
+    "interaction_f44fab5f5151",
+    "exec_invocation_python_syntax_validator_1763400465315",
+    "interaction_aaeb3413b6d1"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -8126,7 +8222,13 @@
     "interaction_30d8ba6cfcf3",
     "interaction_4a7f1927f795",
     "interaction_222bd648558c",
-    "interaction_e4f6e5c5e7f0"
+    "interaction_e4f6e5c5e7f0",
+    "interaction_f44fab5f5151",
+    "interaction_6a59ff0361f2",
+    "interaction_d1c20ade5a2e",
+    "interaction_aaeb3413b6d1",
+    "interaction_3c29850d3b2a",
+    "interaction_f79814765e77"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8559,7 +8661,13 @@
     "interaction_30d8ba6cfcf3",
     "interaction_4a7f1927f795",
     "interaction_222bd648558c",
-    "interaction_e4f6e5c5e7f0"
+    "interaction_e4f6e5c5e7f0",
+    "interaction_f44fab5f5151",
+    "interaction_6a59ff0361f2",
+    "interaction_d1c20ade5a2e",
+    "interaction_aaeb3413b6d1",
+    "interaction_3c29850d3b2a",
+    "interaction_f79814765e77"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8809,7 +8917,11 @@
     "exec_invocation_undefined_name_checker_1763393829889",
     "interaction_53dba79b35fa",
     "exec_invocation_undefined_name_checker_1763396514839",
-    "interaction_222bd648558c"
+    "interaction_222bd648558c",
+    "exec_invocation_undefined_name_checker_1763400306270",
+    "interaction_6a59ff0361f2",
+    "exec_invocation_undefined_name_checker_1763400465847",
+    "interaction_3c29850d3b2a"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8935,7 +9047,9 @@
     "exec_invocation_undefined_name_checker_1763388157658",
     "exec_invocation_undefined_name_checker_1763393309338",
     "exec_invocation_undefined_name_checker_1763393829889",
-    "exec_invocation_undefined_name_checker_1763396514839"
+    "exec_invocation_undefined_name_checker_1763396514839",
+    "exec_invocation_undefined_name_checker_1763400306270",
+    "exec_invocation_undefined_name_checker_1763400465847"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -9185,7 +9299,11 @@
     "exec_invocation_node_runtime_import_validator_1763393830498",
     "interaction_6096dad4db0b",
     "exec_invocation_node_runtime_import_validator_1763396515196",
-    "interaction_e4f6e5c5e7f0"
+    "interaction_e4f6e5c5e7f0",
+    "exec_invocation_node_runtime_import_validator_1763400306898",
+    "interaction_d1c20ade5a2e",
+    "exec_invocation_node_runtime_import_validator_1763400466280",
+    "interaction_f79814765e77"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -9307,7 +9425,8 @@
     "workflow_create_the_tools_required_to_r_1763384526",
     "workflow_write_a_unit_test_for_a_piece",
     "workflow_generate_random_words",
-    "workflow_write_me_a_poem_conversation"
+    "workflow_write_me_a_poem_conversation",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -9429,7 +9548,8 @@
     "workflow_create_the_tools_required_to_r_1763384526",
     "workflow_write_a_unit_test_for_a_piece",
     "workflow_generate_random_words",
-    "workflow_write_me_a_poem_conversation"
+    "workflow_write_me_a_poem_conversation",
+    "workflow_generate_python_script_to_pars_1763400370"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -9538,7 +9658,8 @@
     "interaction_1763395490692",
     "conv_write_me_a_poem_conversation_v1",
     "interaction_1763396560883",
-    "interaction_1763398149039"
+    "interaction_1763398149039",
+    "conv_generate_python_script_to_pars_1763400370_v1"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -9723,7 +9844,8 @@
     "interaction_7d81d73def05",
     "interaction_a0925b326077",
     "interaction_53dba79b35fa",
-    "interaction_6096dad4db0b"
+    "interaction_6096dad4db0b",
+    "interaction_6a59ff0361f2"
   ],
   "multi-step": [
     "workflow_1763345313",
@@ -9856,7 +9978,9 @@
     "invocation_fast_code_generator_1763376037322",
     "interaction_c68c66bd48d6",
     "invocation_fast_code_generator_1763377076703",
-    "interaction_2491c5cc5f3c"
+    "interaction_2491c5cc5f3c",
+    "invocation_fast_code_generator_1763400533694",
+    "interaction_418ea9dc675e"
   ],
   "content_generator": [
     "invocation_content_generator_1763346206566",
@@ -9900,7 +10024,8 @@
     "tool_workflow_runner",
     "tool_explainer",
     "tool_duplicate_style",
-    "tool_write_markdown_doc"
+    "tool_write_markdown_doc",
+    "tool_module_not_found_fixer"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -10004,25 +10129,30 @@
     "workflow_1763376083"
   ],
   "fix": [
-    "tool_circular_import_fixer"
+    "tool_circular_import_fixer",
+    "tool_module_not_found_fixer"
   ],
   "error_handler": [
-    "tool_circular_import_fixer"
+    "tool_circular_import_fixer",
+    "tool_module_not_found_fixer"
   ],
   "circular_import": [
     "tool_circular_import_fixer"
   ],
   "import_error": [
-    "tool_circular_import_fixer"
+    "tool_circular_import_fixer",
+    "tool_module_not_found_fixer"
   ],
   "code_repair": [
     "tool_circular_import_fixer"
   ],
   "auto_fix": [
-    "tool_circular_import_fixer"
+    "tool_circular_import_fixer",
+    "tool_module_not_found_fixer"
   ],
   "tdd": [
-    "tool_circular_import_fixer"
+    "tool_circular_import_fixer",
+    "tool_module_not_found_fixer"
   ],
   "code_generation": [
     "tool_circular_import_fixer"
@@ -10216,12 +10346,22 @@
     "interaction_1763398149039"
   ],
   "tool_history": [
-    "conv_write_me_a_poem_conversation_v1"
+    "conv_write_me_a_poem_conversation_v1",
+    "conv_generate_python_script_to_pars_1763400370_v1"
   ],
   "write_me_a_poem_conversation": [
     "conv_write_me_a_poem_conversation_v1"
   ],
   "me": [
     "workflow_1763396560"
+  ],
+  "module_error": [
+    "tool_module_not_found_fixer"
+  ],
+  "validated": [
+    "tool_module_not_found_fixer"
+  ],
+  "generate_python_script_to_pars_1763400370": [
+    "conv_generate_python_script_to_pars_1763400370_v1"
   ]
 }
