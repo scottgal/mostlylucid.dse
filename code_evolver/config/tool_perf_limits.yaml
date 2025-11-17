@@ -1,0 +1,49 @@
+# Tool Performance Tracking Configuration
+# This file configures performance data retention limits per tool
+
+# Global default for all tools (unless overridden below)
+default_perf_points: 100
+
+# Per-tool overrides
+# Set to -1 for unlimited, 0 to disable tracking for a specific tool
+tool_limits:
+  # High-frequency tools - keep fewer points
+  llm_call: 50
+  vector_search: 50
+  embedding_generate: 50
+
+  # Critical tools - keep more data
+  workflow_execute: 500
+  optimize_code: 1000
+
+  # Low-frequency tools - standard retention
+  file_read: 100
+  file_write: 100
+
+  # Debug tools - extended retention
+  perfanalyzer: 2000
+  bugcatcher: 1000
+
+  # Example: disable tracking for specific tool
+  # noop_tool: 0
+
+  # Example: unlimited tracking for specific tool
+  # critical_tool: -1
+
+# Optimization mode settings
+optimization:
+  enabled: false  # Set to true to enable detailed data collection
+  trigger_threshold: 10000  # Auto-trigger optimization after N total calls
+  cleanup_on_optimize: true  # Delete old perf data during optimization runs
+
+# Storage settings
+storage:
+  async_save: true  # Save performance data in background
+  batch_size: 100  # Number of records to batch before writing
+  flush_interval_seconds: 30  # Force flush every N seconds
+
+# RAG integration
+rag:
+  enabled: true  # Store minimal perf data in RAG for tool characterization
+  cluster_with_tool: true  # Co-locate perf data with tool definition in RAG
+  embedding_include: false  # Don't create separate embeddings for perf data

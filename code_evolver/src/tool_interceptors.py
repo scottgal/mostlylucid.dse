@@ -600,6 +600,102 @@ class PerfCatcherInterceptor(ToolInterceptor):
             }
 
 
+class OptimizedPerfTrackerInterceptor(ToolInterceptor):
+    """
+    Optimized performance tracker interceptor with minimal overhead.
+
+    Features:
+    - Minimal overhead in normal mode (tool, params summary, start/end)
+    - Comprehensive data in optimization mode
+    - Per-tool LRU limits from YAML config
+    - Parent-child context aggregation
+    - Background async saves
+    - RAG integration
+
+    Can be configured via:
+    - code_evolver/config/tool_perf_limits.yaml
+    - OPTIMIZED_PERF_TRACKER_ENABLED env var
+    """
+
+    def __init__(self):
+        """Initialize optimized performance tracker interceptor."""
+        # Run at HIGH priority (after BugCatcher)
+        super().__init__(priority=InterceptorPriority.HIGH)
+
+        # Check environment variable
+        env_enabled = os.getenv('OPTIMIZED_PERF_TRACKER_ENABLED', 'true').lower()
+        self.enabled = env_enabled in ('true', '1', 'yes', 'on')
+
+        # Get tracker instance
+        self.tracker = None
+        if self.enabled:
+            try:
+                from .optimized_perf_tracker import get_tracker
+                self.tracker = get_tracker()
+            except (ImportError, Exception) as e:
+                logger.debug(f"OptimizedPerfTracker not available: {e}")
+                self.enabled = False
+
+    def before_execution(
+        self,
+        tool_name: str,
+        args: tuple,
+        kwargs: dict,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Start tracking tool execution."""
+        if not self.enabled or not self.tracker:
+            return context
+
+        # Start tracking
+        try:
+            record_id = self.tracker.start_tracking(tool_name, kwargs)
+            context['optimized_perf_record_id'] = record_id
+        except Exception as e:
+            logger.debug(f"Failed to start perf tracking for {tool_name}: {e}")
+
+        return context
+
+    def after_execution(
+        self,
+        tool_name: str,
+        result: Any,
+        context: Dict[str, Any]
+    ) -> Any:
+        """End tracking tool execution."""
+        if not self.enabled or not self.tracker:
+            return result
+
+        record_id = context.get('optimized_perf_record_id')
+        if record_id:
+            try:
+                self.tracker.end_tracking(record_id)
+            except Exception as e:
+                logger.debug(f"Failed to end perf tracking for {tool_name}: {e}")
+
+        return result
+
+    def on_exception(
+        self,
+        tool_name: str,
+        exception: Exception,
+        context: Dict[str, Any]
+    ) -> bool:
+        """Track exception in performance data."""
+        if not self.enabled or not self.tracker:
+            return False
+
+        record_id = context.get('optimized_perf_record_id')
+        if record_id:
+            try:
+                error_msg = f"{type(exception).__name__}: {str(exception)}"
+                self.tracker.end_tracking(record_id, error=error_msg)
+            except Exception as e:
+                logger.debug(f"Failed to track exception for {tool_name}: {e}")
+
+        return False  # Don't suppress exception
+
+
 class InterceptorChain:
     """
     Manages chain of tool execution interceptors.
@@ -732,7 +828,10 @@ def get_global_interceptor_chain() -> InterceptorChain:
         # Add PerfCatcher interceptor
         _global_interceptor_chain.add_interceptor(PerfCatcherInterceptor())
 
-        logger.info("Global interceptor chain initialized with BugCatcher and PerfCatcher")
+        # Add OptimizedPerfTracker interceptor (minimal overhead)
+        _global_interceptor_chain.add_interceptor(OptimizedPerfTrackerInterceptor())
+
+        logger.info("Global interceptor chain initialized with BugCatcher, PerfCatcher, and OptimizedPerfTracker")
 
     return _global_interceptor_chain
 
