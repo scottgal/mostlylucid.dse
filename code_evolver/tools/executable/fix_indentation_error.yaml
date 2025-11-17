@@ -1,0 +1,139 @@
+name: fix_indentation_error
+type: executable
+description: |
+  Detects and fixes Python indentation errors.
+
+  Handles:
+  - Inconsistent indentation (tabs vs spaces)
+  - Unexpected indent
+  - Expected indent
+  - Unindent does not match
+  - Mixed indentation styles
+
+  Automatically normalizes indentation to 4 spaces (PEP 8).
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_indentation_error.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+    - source_code
+  properties:
+    error_output:
+      type: string
+      description: IndentationError message from Python
+    source_code:
+      type: string
+      description: Source code with indentation error
+    indent_size:
+      type: integer
+      description: "Target indent size (default: 4)"
+      default: 4
+    use_spaces:
+      type: boolean
+      description: "Use spaces instead of tabs (default: true)"
+      default: true
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    error_type:
+      type: string
+      enum: ["unexpected_indent", "expected_indent", "unindent_mismatch", "mixed_indent"]
+      description: Type of indentation error
+    line_number:
+      type: integer
+      description: Line number where error occurred
+    fixed_code:
+      type: string
+      description: Corrected source code with normalized indentation
+    explanation:
+      type: string
+      description: What was fixed
+    changes_made:
+      type: array
+      items:
+        type: string
+      description: List of indentation changes
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+
+examples:
+  - description: Fix unexpected indent
+    input:
+      error_output: "IndentationError: unexpected indent (line 3)"
+      source_code: |
+        def hello():
+            print("Hello")
+              print("World")
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "unexpected_indent"
+      line_number: 3
+      explanation: "Removed extra indentation on line 3"
+      can_retry: true
+
+  - description: Fix mixed tabs and spaces
+    input:
+      error_output: "TabError: inconsistent use of tabs and spaces in indentation"
+      source_code: |
+        def calculate(x):
+        	result = x * 2
+            return result
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "mixed_indent"
+      explanation: "Converted all indentation to 4 spaces (PEP 8)"
+      changes_made: ["Replaced tabs with spaces on line 2"]
+      can_retry: true
+
+tags:
+  - fix
+  - indentation
+  - whitespace
+  - pep8
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "IndentationError"
+    - "TabError"
+    - "unexpected indent"
+    - "expected an indented block"
+  priority: high
+  retry_after_fix: true
+
+performance:
+  avg_time_seconds: 1
+  timeout_seconds: 30
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"
+  rag_storage: false  # Indentation fixes are generic, not worth storing

@@ -242,6 +242,15 @@ from .workflow_spec import (
 from .workflow_builder import WorkflowBuilder
 from .background_process import BackgroundProcess, ProcessStatus, StatusUpdate
 from .background_process_manager import BackgroundProcessManager
+from .optimized_perf_tracker import OptimizedPerfTracker, get_tracker as get_perf_tracker
+from .tool_interceptors import (
+    get_global_interceptor_chain,
+    intercept_tool_call,
+    BugCatcherInterceptor,
+    PerfCatcherInterceptor,
+    OptimizedPerfTrackerInterceptor
+)
+from .json_response_fixer import extract_json_from_response, safe_json_parse
 
 __all__ = [
     "OllamaClient",
@@ -298,5 +307,16 @@ __all__ = [
     "BackgroundProcess",
     "BackgroundProcessManager",
     "ProcessStatus",
-    "StatusUpdate"
+    "StatusUpdate",
+    # Performance tracking & optimization
+    "OptimizedPerfTracker",
+    "get_perf_tracker",
+    "get_global_interceptor_chain",
+    "intercept_tool_call",
+    "BugCatcherInterceptor",
+    "PerfCatcherInterceptor",
+    "OptimizedPerfTrackerInterceptor",
+    # JSON response handling
+    "extract_json_from_response",
+    "safe_json_parse"
 ]

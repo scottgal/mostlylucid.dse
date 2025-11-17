@@ -1,0 +1,23 @@
+INFO:src.config_manager:\u2713 Loaded configuration from config.yaml
+======================================================================
+TESTING: Background Execution System
+======================================================================
+
+[TEST 1] Basic background execution
+----------------------------------------------------------------------
+Started process: bg_1763397498_1
+  [bg_1763397498_1] Completed successfully (100%)
+[PASS] Process completed successfully
+  Result: {'success': True, 'result': 'Completed 10 steps in 5s'}
+  Duration: 5.00s
+
+[TEST 2] Sentinel interrupt decision
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Source\mostlylucid.dse\code_evolver\test_background_execution.py", line 196, in <module>
+    main()
+    ~~~~^^
+  File "D:\Source\mostlylucid.dse\code_evolver\test_background_execution.py", line 122, in main
+    decision = sentinel.should_interrupt_background_process(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SentinelLLM' object has no attribute 'should_interrupt_background_process'

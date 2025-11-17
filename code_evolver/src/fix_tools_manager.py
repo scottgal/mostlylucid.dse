@@ -70,7 +70,7 @@ class FixToolsManager:
 
         for tool_id, tool in self.tools.tools.items():
             # Check if this is a fix tool
-            if tool.type == "executable" and "fix" in tool.tags:
+            if tool.tool_type.value == "executable" and "fix" in tool.tags:
                 try:
                     from src.rag_memory import ArtifactType
 

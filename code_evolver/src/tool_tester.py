@@ -466,7 +466,7 @@ class ToolTester:
         """
         tool_name = tool.name.replace(" ", "_")
 
-        if tool.type == "executable":
+        if tool.tool_type.value == "executable":
             return f'''#!/usr/bin/env python3
 """
 {test_type.value.upper()} Tests for {tool.name}
@@ -507,7 +507,7 @@ def test_{tool_name}_error_handling():
     pass
 '''
 
-        elif tool.type == "llm":
+        elif tool.tool_type.value == "llm":
             return f'''#!/usr/bin/env python3
 """
 {test_type.value.upper()} Tests for {tool.name}

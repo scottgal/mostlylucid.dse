@@ -1,0 +1,170 @@
+name: fix_attribute_error
+type: executable
+description: |
+  Detects and fixes Python AttributeError.
+
+  Handles:
+  - Missing attributes on objects
+  - Typos in attribute names
+  - Wrong object type
+  - None object attribute access
+  - Method vs property confusion
+
+  Uses RAG to learn from past fixes and suggest corrections.
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_attribute_error.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+    - source_code
+  properties:
+    error_output:
+      type: string
+      description: AttributeError message from Python
+    source_code:
+      type: string
+      description: Source code with attribute error
+    object_type:
+      type: string
+      description: Type of object being accessed (optional)
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+    search_rag:
+      type: boolean
+      description: "Search RAG for similar fixes (default: true)"
+      default: true
+    add_none_checks:
+      type: boolean
+      description: "Add None checks automatically (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    error_type:
+      type: string
+      enum: ["missing_attr", "typo", "none_type", "wrong_type", "method_property"]
+      description: Type of attribute error
+    object_name:
+      type: string
+      description: Name of object being accessed
+    attribute_name:
+      type: string
+      description: Name of missing attribute
+    line_number:
+      type: integer
+      description: Line number where error occurred
+    fixed_code:
+      type: string
+      description: Corrected source code
+    suggestion:
+      type: string
+      description: Suggested fix
+    explanation:
+      type: string
+      description: What was fixed and why
+    alternatives:
+      type: array
+      items:
+        type: string
+      description: Alternative attribute names
+    fix_source:
+      type: string
+      enum: ["rag", "fuzzy_match", "none_check", "type_check"]
+      description: Where fix came from
+    similar_fixes:
+      type: array
+      items:
+        type: object
+      description: Similar fixes found in RAG
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+    rag_artifact_id:
+      type: string
+      description: ID of fix stored in RAG (if stored)
+
+examples:
+  - description: Fix typo in attribute name
+    input:
+      error_output: "AttributeError: 'Person' object has no attribute 'frist_name'"
+      source_code: |
+        class Person:
+            def __init__(self, first_name):
+                self.first_name = first_name
+
+        p = Person("John")
+        print(p.frist_name)
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "typo"
+      attribute_name: "frist_name"
+      suggestion: "first_name"
+      explanation: "Corrected typo: frist_name → first_name"
+      fix_source: "fuzzy_match"
+      can_retry: true
+
+  - description: Fix None attribute access
+    input:
+      error_output: "AttributeError: 'NoneType' object has no attribute 'upper'"
+      source_code: |
+        def format_name(name):
+            return name.upper()
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "none_type"
+      explanation: "Added None check before accessing attribute"
+      fix_source: "none_check"
+      can_retry: true
+
+tags:
+  - fix
+  - attribute-error
+  - typo
+  - none-check
+  - fuzzy-match
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "AttributeError"
+    - "has no attribute"
+    - "'NoneType' object"
+  priority: high
+  retry_after_fix: true
+  search_rag_first: true
+
+performance:
+  avg_time_seconds: 2
+  timeout_seconds: 30
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"
+  rag_storage: true
+  rag_search_enabled: true
+  fuzzy_matching: true

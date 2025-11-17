@@ -298,7 +298,7 @@ class ToolOptimizer:
 
         # For low quality: try better model
         if "low_quality" in bottlenecks:
-            if tool.type == "llm" and hasattr(tool, "llm"):
+            if tool.tool_type.value == "llm" and hasattr(tool, "llm"):
                 current_model = tool.llm.get("model", "")
                 # Suggest escalation
                 hypotheses.append({
@@ -309,7 +309,7 @@ class ToolOptimizer:
 
         # For high latency: try faster model
         if "high_latency" in bottlenecks:
-            if tool.type == "llm" and hasattr(tool, "llm"):
+            if tool.tool_type.value == "llm" and hasattr(tool, "llm"):
                 current_model = tool.llm.get("model", "")
                 hypotheses.append({
                     "type": "model_downgrade",
@@ -319,7 +319,7 @@ class ToolOptimizer:
 
         # For low success rate: adjust temperature
         if "low_success_rate" in bottlenecks or "high_variance" in bottlenecks:
-            if tool.type == "llm" and hasattr(tool, "llm"):
+            if tool.tool_type.value == "llm" and hasattr(tool, "llm"):
                 current_temp = tool.llm.get("temperature", 0.7)
                 hypotheses.append({
                     "type": "temperature_adjust",
@@ -329,7 +329,7 @@ class ToolOptimizer:
 
         # For high latency: reduce max_tokens
         if "high_latency" in bottlenecks:
-            if tool.type == "llm" and hasattr(tool, "llm"):
+            if tool.tool_type.value == "llm" and hasattr(tool, "llm"):
                 current_tokens = tool.llm.get("max_tokens", 2000)
                 if current_tokens > 500:
                     hypotheses.append({

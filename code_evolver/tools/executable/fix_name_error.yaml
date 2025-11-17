@@ -1,0 +1,154 @@
+name: fix_name_error
+type: executable
+description: |
+  Detects and fixes Python NameError (undefined variables/functions).
+
+  Handles:
+  - Undefined variables
+  - Typos in variable names
+  - Missing imports
+  - Scope issues
+  - Function name typos
+
+  Uses fuzzy matching and RAG search to suggest corrections.
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_name_error.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+    - source_code
+  properties:
+    error_output:
+      type: string
+      description: NameError message from Python
+    source_code:
+      type: string
+      description: Source code with name error
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+    fuzzy_threshold:
+      type: number
+      description: "Threshold for fuzzy matching (0-1, default: 0.8)"
+      default: 0.8
+    search_rag:
+      type: boolean
+      description: "Search RAG for similar fixes (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    undefined_name:
+      type: string
+      description: Name that was undefined
+    line_number:
+      type: integer
+      description: Line number where error occurred
+    fixed_code:
+      type: string
+      description: Corrected source code
+    suggestion:
+      type: string
+      description: Suggested correction
+    confidence:
+      type: number
+      description: Confidence in suggestion (0-1)
+    explanation:
+      type: string
+      description: What was fixed and why
+    alternatives:
+      type: array
+      items:
+        type: string
+      description: Alternative suggestions
+    fix_source:
+      type: string
+      enum: ["fuzzy_match", "rag", "import", "scope"]
+      description: Where fix came from
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+    rag_artifact_id:
+      type: string
+      description: ID of fix stored in RAG (if stored)
+
+examples:
+  - description: Fix typo in variable name
+    input:
+      error_output: "NameError: name 'resutl' is not defined"
+      source_code: |
+        def calculate(x, y):
+            result = x + y
+            return resutl
+    expected_output:
+      success: true
+      fixed: true
+      undefined_name: "resutl"
+      suggestion: "result"
+      confidence: 0.95
+      explanation: "Corrected typo: resutl → result"
+      fix_source: "fuzzy_match"
+      can_retry: true
+
+  - description: Fix undefined function by adding import
+    input:
+      error_output: "NameError: name 'sqrt' is not defined"
+      source_code: |
+        def calculate_distance(x, y):
+            return sqrt(x**2 + y**2)
+    expected_output:
+      success: true
+      fixed: true
+      undefined_name: "sqrt"
+      explanation: "Added import: from math import sqrt"
+      fix_source: "import"
+      can_retry: true
+
+tags:
+  - fix
+  - name-error
+  - undefined
+  - typo
+  - fuzzy-match
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "NameError"
+    - "is not defined"
+  priority: high
+  retry_after_fix: true
+  search_rag_first: true
+
+performance:
+  avg_time_seconds: 2
+  timeout_seconds: 30
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "medium"
+  rag_storage: true
+  rag_search_enabled: true
+  fuzzy_matching: true

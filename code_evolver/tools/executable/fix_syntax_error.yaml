@@ -1,0 +1,129 @@
+name: fix_syntax_error
+type: executable
+description: |
+  Detects and fixes Python syntax errors in code.
+
+  Uses AST parsing and pattern matching to identify and correct:
+  - Missing colons after if/for/while/def/class
+  - Mismatched parentheses, brackets, braces
+  - Invalid operators or keywords
+  - Missing commas in lists/dicts/tuples
+  - Incorrect string quotes
+
+  Stores successful fixes in RAG as CODE_FIX artifacts for future reference.
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_syntax_error.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+    - source_code
+  properties:
+    error_output:
+      type: string
+      description: Syntax error message from Python
+    source_code:
+      type: string
+      description: Source code with syntax error
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    error_type:
+      type: string
+      description: Type of syntax error detected
+    line_number:
+      type: integer
+      description: Line number where error occurred
+    fixed_code:
+      type: string
+      description: Corrected source code
+    explanation:
+      type: string
+      description: What was fixed and why
+    fix_pattern:
+      type: string
+      description: Pattern that was applied
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+    rag_artifact_id:
+      type: string
+      description: ID of fix stored in RAG (if stored)
+
+examples:
+  - description: Fix missing colon after if statement
+    input:
+      error_output: "SyntaxError: invalid syntax (line 3)"
+      source_code: |
+        def check_value(x):
+            if x > 10
+                return True
+            return False
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "missing_colon"
+      line_number: 3
+      explanation: "Added missing colon after 'if x > 10'"
+      can_retry: true
+
+  - description: Fix mismatched parentheses
+    input:
+      error_output: "SyntaxError: unexpected EOF while parsing"
+      source_code: |
+        result = calculate(x, y, z
+        print(result)
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "mismatched_parens"
+      explanation: "Closed unclosed parenthesis"
+      can_retry: true
+
+tags:
+  - fix
+  - syntax
+  - parser
+  - ast
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "SyntaxError"
+    - "invalid syntax"
+    - "unexpected EOF"
+  priority: high
+  retry_after_fix: true
+
+performance:
+  avg_time_seconds: 1
+  timeout_seconds: 30
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"
+  rag_storage: true  # Store successful fixes in RAG

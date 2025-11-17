@@ -1,0 +1,186 @@
+name: fix_missing_pip_packages
+type: executable
+description: |
+  Detects and fixes missing pip package errors (ModuleNotFoundError).
+
+  Automatically maps module names to pip packages (e.g., bs4 → beautifulsoup4)
+  and installs missing dependencies.
+
+  Features:
+  - Detects ModuleNotFoundError from test/execution output
+  - Maps common module → package names (bs4, cv2, PIL, etc.)
+  - Automatically installs missing packages
+  - Verifies installation succeeded
+  - Returns list of installed packages
+
+  Use cases:
+  - Auto-fix "No module named 'bs4'" errors
+  - Handle missing dependencies in generated code
+  - Ensure all imports are available before running tests
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_missing_pip_packages.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+  properties:
+    error_output:
+      type: string
+      description: Error output containing ModuleNotFoundError
+    source_code:
+      type: string
+      description: Source code to scan for imports (optional)
+    auto_install:
+      type: boolean
+      description: "Automatically install missing packages (default: true)"
+      default: true
+    verify_install:
+      type: boolean
+      description: "Verify packages after installation (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether all packages were installed successfully
+    fixed:
+      type: boolean
+      description: Whether any packages were installed
+    message:
+      type: string
+      description: Summary message
+    missing_modules:
+      type: array
+      items:
+        type: string
+      description: List of missing module names detected
+    installed_packages:
+      type: array
+      items:
+        type: object
+        properties:
+          module:
+            type: string
+          package:
+            type: string
+          installed:
+            type: boolean
+          verified:
+            type: boolean
+          message:
+            type: string
+      description: List of installation attempts
+    failed_packages:
+      type: array
+      items:
+        type: object
+        properties:
+          module:
+            type: string
+          package:
+            type: string
+          error:
+            type: string
+      description: Packages that failed to install
+    fix_type:
+      type: string
+      description: Type of fix applied
+    can_retry:
+      type: boolean
+      description: Whether code should be retested after fix
+    error:
+      type: string
+      description: Error message if tool failed
+
+examples:
+  - description: Fix missing beautifulsoup4 package
+    input:
+      error_output: |
+        Traceback (most recent call last):
+          File "test.py", line 3, in <module>
+            from bs4 import BeautifulSoup
+        ModuleNotFoundError: No module named 'bs4'
+      source_code: |
+        import json
+        import requests
+        from bs4 import BeautifulSoup
+
+        def main():
+            pass
+      auto_install: true
+      verify_install: true
+    expected_output:
+      success: true
+      fixed: true
+      message: "Installed 1 packages, 0 failed"
+      missing_modules: ["bs4"]
+      installed_packages:
+        - module: "bs4"
+          package: "beautifulsoup4"
+          installed: true
+          verified: true
+          message: "Installed successfully"
+      failed_packages: []
+      fix_type: "pip_install"
+      can_retry: true
+
+  - description: Multiple missing packages
+    input:
+      error_output: |
+        ModuleNotFoundError: No module named 'requests'
+        ModuleNotFoundError: No module named 'PIL'
+      auto_install: true
+    expected_output:
+      success: true
+      fixed: true
+      missing_modules: ["requests", "PIL"]
+      installed_packages:
+        - module: "requests"
+          package: "requests"
+        - module: "PIL"
+          package: "Pillow"
+
+  - description: Just detect without installing
+    input:
+      error_output: "ModuleNotFoundError: No module named 'numpy'"
+      auto_install: false
+    expected_output:
+      success: true
+      fixed: false
+      missing_modules: ["numpy"]
+
+tags:
+  - fix
+  - pip
+  - packages
+  - dependencies
+  - import
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "ModuleNotFoundError"
+    - "No module named"
+    - "cannot import name"
+  priority: high  # Run early in fix pipeline
+  retry_after_fix: true  # Code should be retested
+
+performance:
+  avg_time_seconds: 15  # Depends on package size
+  timeout_seconds: 120  # 2 minutes for large packages
+  caches_result: false  # Don't cache, packages may change
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"

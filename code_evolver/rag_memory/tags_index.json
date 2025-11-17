@@ -718,7 +718,12 @@
     "interaction_9f16b3d51fbc",
     "interaction_11209d8a5a5b",
     "interaction_6ccf0c193429",
-    "tool_note_this_workflow_may_be_mul_1763401552"
+    "tool_note_this_workflow_may_be_mul_1763401552",
+    "interaction_599380eacf23",
+    "interaction_d463a8a351d9",
+    "interaction_5798811b2638",
+    "tool_fix_missing_pip_packages",
+    "tool_open_bbc_website"
   ],
   "custom": [
     "tool_http_server",
@@ -865,7 +870,8 @@
     "tool_workflow_runner",
     "tool_duplicate_style",
     "tool_write_markdown_doc",
-    "tool_module_not_found_fixer"
+    "tool_module_not_found_fixer",
+    "tool_fix_missing_pip_packages"
   ],
   "python": [
     "tool_bandit_security",
@@ -1214,7 +1220,9 @@
     "exec_invocation_python_syntax_validator_1763401456985",
     "exec_invocation_node_runtime_import_validator_1763401467773",
     "exec_invocation_python_syntax_validator_1763401713713",
-    "exec_invocation_node_runtime_import_validator_1763401758061"
+    "exec_invocation_node_runtime_import_validator_1763401758061",
+    "exec_invocation_python_syntax_validator_1763401927467",
+    "exec_invocation_node_runtime_import_validator_1763401928449"
   ],
   "security": [
     "tool_bandit_security",
@@ -1315,7 +1323,10 @@
     "spec_no_this_is_wrong_fix_the_tool",
     "spec_no_this_is_wrong_fix_the_tool_1763388526",
     "spec_note_this_workflow_may_be_mul_1763401552",
-    "spec_process_production_metrics_fro_1763401885"
+    "spec_process_production_metrics_fro_1763401885",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_calculate_machine_utilization_1763402168",
+    "spec_call_www"
   ],
   "calculator": [
     "tool_basic_calculator",
@@ -1443,22 +1454,26 @@
     "tool_mypy_type_checker"
   ],
   "auto-fix": [
-    "tool_node_runtime_import_validator"
+    "tool_node_runtime_import_validator",
+    "tool_fix_missing_pip_packages"
   ],
   "dependencies": [
     "tool_pip_install",
     "tool_dependency_analyzer",
-    "tool_package_recovery_tool"
+    "tool_package_recovery_tool",
+    "tool_fix_missing_pip_packages"
   ],
   "pip": [
     "tool_pip_install",
-    "tool_install_python_package"
+    "tool_install_python_package",
+    "tool_fix_missing_pip_packages"
   ],
   "install": [
     "tool_pip_install"
   ],
   "packages": [
-    "tool_pip_install"
+    "tool_pip_install",
+    "tool_fix_missing_pip_packages"
   ],
   "requirements": [
     "tool_pip_install"
@@ -1835,7 +1850,11 @@
     "interaction_88f29acc8adc",
     "interaction_5861ea000d1a",
     "interaction_6c11ac3c812a",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "interaction_1b30c12cf7b6",
+    "interaction_c745ec4d7937",
+    "interaction_3b0eab664814",
+    "interaction_b52bf8304de0"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -1944,7 +1963,9 @@
     "spec_make_a_translation_workflow_th",
     "spec_wo_to_www",
     "spec_write_a_safety_notice_about_ch_1763400166",
-    "spec_note_this_workflow_may_be_mul_1763401552"
+    "spec_note_this_workflow_may_be_mul_1763401552",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_call_www"
   ],
   "articles": [
     "tool_content_generator"
@@ -2188,7 +2209,13 @@
     "invocation_general_1763401314468",
     "interaction_5861ea000d1a",
     "invocation_general_1763401566749",
-    "interaction_6c11ac3c812a"
+    "interaction_6c11ac3c812a",
+    "invocation_general_1763402007576",
+    "interaction_1b30c12cf7b6",
+    "invocation_general_1763402325971",
+    "interaction_3b0eab664814",
+    "invocation_general_1763403584214",
+    "interaction_b52bf8304de0"
   ],
   "fallback": [
     "tool_general",
@@ -2622,7 +2649,10 @@
     "workflow_go_to_www",
     "workflow_figure_out_how_to_get_html",
     "workflow_note_this_workflow_may_be_mul_1763401552",
-    "tool_note_this_workflow_may_be_mul_1763401552"
+    "tool_note_this_workflow_may_be_mul_1763401552",
+    "workflow_process_production_metrics_fro_1763401885",
+    "tool_open_bbc_website",
+    "workflow_1763403799"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -2777,7 +2807,8 @@
     "tool_no_this_is_wrong_fix_the_tool_1763388526",
     "tool_write_a_small_book_about_scotl",
     "tool_write_me_a_poem_conversation",
-    "tool_note_this_workflow_may_be_mul_1763401552"
+    "tool_note_this_workflow_may_be_mul_1763401552",
+    "tool_open_bbc_website"
   ],
   "generated": [
     "tool_save_input_to_database",
@@ -3309,7 +3340,15 @@
     "conv_note_this_workflow_may_be_mul_1763401552_v1",
     "workflow_note_this_workflow_may_be_mul_1763401552",
     "tool_note_this_workflow_may_be_mul_1763401552",
-    "spec_process_production_metrics_fro_1763401885"
+    "spec_process_production_metrics_fro_1763401885",
+    "func_process_production_metrics_fro_1763401885",
+    "conv_process_production_metrics_fro_1763401885_v1",
+    "workflow_process_production_metrics_fro_1763401885",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_calculate_machine_utilization_1763402168",
+    "spec_call_www",
+    "spec_open_bbc_website",
+    "tool_open_bbc_website"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3685,7 +3724,11 @@
     "func_note_this_workflow_may_be_mul_1763401552",
     "conv_note_this_workflow_may_be_mul_1763401552_v1",
     "workflow_note_this_workflow_may_be_mul_1763401552",
-    "tool_note_this_workflow_may_be_mul_1763401552"
+    "tool_note_this_workflow_may_be_mul_1763401552",
+    "func_process_production_metrics_fro_1763401885",
+    "conv_process_production_metrics_fro_1763401885_v1",
+    "workflow_process_production_metrics_fro_1763401885",
+    "tool_open_bbc_website"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -4225,7 +4268,11 @@
     "spec_go_to_www",
     "spec_figure_out_how_to_get_html",
     "spec_note_this_workflow_may_be_mul_1763401552",
-    "spec_process_production_metrics_fro_1763401885"
+    "spec_process_production_metrics_fro_1763401885",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_calculate_machine_utilization_1763402168",
+    "spec_call_www",
+    "spec_open_bbc_website"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4734,7 +4781,11 @@
     "spec_go_to_www",
     "spec_figure_out_how_to_get_html",
     "spec_note_this_workflow_may_be_mul_1763401552",
-    "spec_process_production_metrics_fro_1763401885"
+    "spec_process_production_metrics_fro_1763401885",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_calculate_machine_utilization_1763402168",
+    "spec_call_www",
+    "spec_open_bbc_website"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -4892,7 +4943,11 @@
     "spec_go_to_www",
     "spec_figure_out_how_to_get_html",
     "spec_note_this_workflow_may_be_mul_1763401552",
-    "spec_process_production_metrics_fro_1763401885"
+    "spec_process_production_metrics_fro_1763401885",
+    "spec_note_this_workflow_may_be_mul_1763401999",
+    "spec_calculate_machine_utilization_1763402168",
+    "spec_call_www",
+    "spec_open_bbc_website"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
@@ -5068,7 +5123,11 @@
     "invocation_general_1763401080799",
     "invocation_general_1763401314468",
     "invocation_general_1763401566749",
-    "invocation_fast_code_generator_1763401923846"
+    "invocation_fast_code_generator_1763401923846",
+    "invocation_general_1763402007576",
+    "invocation_fast_code_generator_1763402174269",
+    "invocation_general_1763402325971",
+    "invocation_general_1763403584214"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -5237,7 +5296,11 @@
     "invocation_general_1763401080799",
     "invocation_general_1763401314468",
     "invocation_general_1763401566749",
-    "invocation_fast_code_generator_1763401923846"
+    "invocation_fast_code_generator_1763401923846",
+    "invocation_general_1763402007576",
+    "invocation_fast_code_generator_1763402174269",
+    "invocation_general_1763402325971",
+    "invocation_general_1763403584214"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -5407,7 +5470,11 @@
     "invocation_general_1763401080799",
     "invocation_general_1763401314468",
     "invocation_general_1763401566749",
-    "invocation_fast_code_generator_1763401923846"
+    "invocation_fast_code_generator_1763401923846",
+    "invocation_general_1763402007576",
+    "invocation_fast_code_generator_1763402174269",
+    "invocation_general_1763402325971",
+    "invocation_general_1763403584214"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -6017,7 +6084,16 @@
     "interaction_9f16b3d51fbc",
     "interaction_11209d8a5a5b",
     "interaction_6ccf0c193429",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "interaction_599380eacf23",
+    "interaction_d463a8a351d9",
+    "interaction_5798811b2638",
+    "interaction_1b30c12cf7b6",
+    "interaction_c745ec4d7937",
+    "interaction_3b0eab664814",
+    "interaction_1763402823316",
+    "interaction_b52bf8304de0",
+    "interaction_1763403799591"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -6470,7 +6546,14 @@
     "interaction_9f16b3d51fbc",
     "interaction_11209d8a5a5b",
     "interaction_6ccf0c193429",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "interaction_599380eacf23",
+    "interaction_d463a8a351d9",
+    "interaction_5798811b2638",
+    "interaction_1b30c12cf7b6",
+    "interaction_c745ec4d7937",
+    "interaction_3b0eab664814",
+    "interaction_b52bf8304de0"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6639,7 +6722,11 @@
     "interaction_88f29acc8adc",
     "interaction_5861ea000d1a",
     "interaction_6c11ac3c812a",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "interaction_1b30c12cf7b6",
+    "interaction_c745ec4d7937",
+    "interaction_3b0eab664814",
+    "interaction_b52bf8304de0"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -6800,7 +6887,11 @@
     "interaction_88f29acc8adc",
     "interaction_5861ea000d1a",
     "interaction_6c11ac3c812a",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "interaction_1b30c12cf7b6",
+    "interaction_c745ec4d7937",
+    "interaction_3b0eab664814",
+    "interaction_b52bf8304de0"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7240,7 +7331,10 @@
     "exec_invocation_node_runtime_import_validator_1763401467773",
     "exec_invocation_python_syntax_validator_1763401713713",
     "exec_invocation_undefined_name_checker_1763401757643",
-    "exec_invocation_node_runtime_import_validator_1763401758061"
+    "exec_invocation_node_runtime_import_validator_1763401758061",
+    "exec_invocation_python_syntax_validator_1763401927467",
+    "exec_invocation_undefined_name_checker_1763401928043",
+    "exec_invocation_node_runtime_import_validator_1763401928449"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7680,7 +7774,10 @@
     "exec_invocation_node_runtime_import_validator_1763401467773",
     "exec_invocation_python_syntax_validator_1763401713713",
     "exec_invocation_undefined_name_checker_1763401757643",
-    "exec_invocation_node_runtime_import_validator_1763401758061"
+    "exec_invocation_node_runtime_import_validator_1763401758061",
+    "exec_invocation_python_syntax_validator_1763401927467",
+    "exec_invocation_undefined_name_checker_1763401928043",
+    "exec_invocation_node_runtime_import_validator_1763401928449"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7940,7 +8037,9 @@
     "exec_invocation_python_syntax_validator_1763401456985",
     "interaction_ce0ff855a876",
     "exec_invocation_python_syntax_validator_1763401713713",
-    "interaction_9f16b3d51fbc"
+    "interaction_9f16b3d51fbc",
+    "exec_invocation_python_syntax_validator_1763401927467",
+    "interaction_599380eacf23"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -8380,7 +8479,10 @@
     "interaction_ae2bf09a77db",
     "interaction_9f16b3d51fbc",
     "interaction_11209d8a5a5b",
-    "interaction_6ccf0c193429"
+    "interaction_6ccf0c193429",
+    "interaction_599380eacf23",
+    "interaction_d463a8a351d9",
+    "interaction_5798811b2638"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8828,7 +8930,10 @@
     "interaction_ae2bf09a77db",
     "interaction_9f16b3d51fbc",
     "interaction_11209d8a5a5b",
-    "interaction_6ccf0c193429"
+    "interaction_6ccf0c193429",
+    "interaction_599380eacf23",
+    "interaction_d463a8a351d9",
+    "interaction_5798811b2638"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9088,7 +9193,9 @@
     "exec_invocation_undefined_name_checker_1763401467353",
     "interaction_7c8506bec133",
     "exec_invocation_undefined_name_checker_1763401757643",
-    "interaction_11209d8a5a5b"
+    "interaction_11209d8a5a5b",
+    "exec_invocation_undefined_name_checker_1763401928043",
+    "interaction_d463a8a351d9"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9219,7 +9326,8 @@
     "exec_invocation_undefined_name_checker_1763400465847",
     "exec_invocation_undefined_name_checker_1763401219850",
     "exec_invocation_undefined_name_checker_1763401467353",
-    "exec_invocation_undefined_name_checker_1763401757643"
+    "exec_invocation_undefined_name_checker_1763401757643",
+    "exec_invocation_undefined_name_checker_1763401928043"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -9479,7 +9587,9 @@
     "exec_invocation_node_runtime_import_validator_1763401467773",
     "interaction_ae2bf09a77db",
     "exec_invocation_node_runtime_import_validator_1763401758061",
-    "interaction_6ccf0c193429"
+    "interaction_6ccf0c193429",
+    "exec_invocation_node_runtime_import_validator_1763401928449",
+    "interaction_5798811b2638"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -9605,7 +9715,8 @@
     "workflow_generate_python_script_to_pars_1763400370",
     "workflow_go_to_www",
     "workflow_figure_out_how_to_get_html",
-    "workflow_note_this_workflow_may_be_mul_1763401552"
+    "workflow_note_this_workflow_may_be_mul_1763401552",
+    "workflow_process_production_metrics_fro_1763401885"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -9731,7 +9842,8 @@
     "workflow_generate_python_script_to_pars_1763400370",
     "workflow_go_to_www",
     "workflow_figure_out_how_to_get_html",
-    "workflow_note_this_workflow_may_be_mul_1763401552"
+    "workflow_note_this_workflow_may_be_mul_1763401552",
+    "workflow_process_production_metrics_fro_1763401885"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -9844,7 +9956,10 @@
     "conv_generate_python_script_to_pars_1763400370_v1",
     "conv_go_to_www_v1",
     "conv_figure_out_how_to_get_html_v1",
-    "conv_note_this_workflow_may_be_mul_1763401552_v1"
+    "conv_note_this_workflow_may_be_mul_1763401552_v1",
+    "conv_process_production_metrics_fro_1763401885_v1",
+    "interaction_1763402823316",
+    "interaction_1763403799591"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -10054,7 +10169,8 @@
     "workflow_1763387640",
     "workflow_1763393832",
     "workflow_1763395490",
-    "workflow_1763396560"
+    "workflow_1763396560",
+    "workflow_1763403799"
   ],
   "aggregate": [
     "workflow_1763345313",
@@ -10167,7 +10283,9 @@
     "invocation_fast_code_generator_1763400533694",
     "interaction_418ea9dc675e",
     "invocation_fast_code_generator_1763401923846",
-    "interaction_dd4b97218b88"
+    "interaction_dd4b97218b88",
+    "invocation_fast_code_generator_1763402174269",
+    "interaction_c745ec4d7937"
   ],
   "content_generator": [
     "invocation_content_generator_1763346206566",
@@ -10212,13 +10330,15 @@
     "tool_explainer",
     "tool_duplicate_style",
     "tool_write_markdown_doc",
-    "tool_module_not_found_fixer"
+    "tool_module_not_found_fixer",
+    "tool_fix_missing_pip_packages"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
   ],
   "import": [
-    "tool_remove_unused_node_runtime_import"
+    "tool_remove_unused_node_runtime_import",
+    "tool_fix_missing_pip_packages"
   ],
   "unused": [
     "tool_remove_unused_node_runtime_import"
@@ -10317,7 +10437,8 @@
   ],
   "fix": [
     "tool_circular_import_fixer",
-    "tool_module_not_found_fixer"
+    "tool_module_not_found_fixer",
+    "tool_fix_missing_pip_packages"
   ],
   "error_handler": [
     "tool_circular_import_fixer",
@@ -10530,14 +10651,17 @@
   "user-query": [
     "interaction_1763395490692",
     "interaction_1763396560883",
-    "interaction_1763398149039"
+    "interaction_1763398149039",
+    "interaction_1763402823316",
+    "interaction_1763403799591"
   ],
   "tool_history": [
     "conv_write_me_a_poem_conversation_v1",
     "conv_generate_python_script_to_pars_1763400370_v1",
     "conv_go_to_www_v1",
     "conv_figure_out_how_to_get_html_v1",
-    "conv_note_this_workflow_may_be_mul_1763401552_v1"
+    "conv_note_this_workflow_may_be_mul_1763401552_v1",
+    "conv_process_production_metrics_fro_1763401885_v1"
   ],
   "write_me_a_poem_conversation": [
     "conv_write_me_a_poem_conversation_v1"
@@ -10567,5 +10691,17 @@
   ],
   "note_this_workflow_may_be_mul_1763401552": [
     "conv_note_this_workflow_may_be_mul_1763401552_v1"
+  ],
+  "process_production_metrics_fro_1763401885": [
+    "conv_process_production_metrics_fro_1763401885_v1"
+  ],
+  "go": [
+    "workflow_1763403799"
+  ],
+  "to": [
+    "workflow_1763403799"
+  ],
+  "www.bbc.co.uk": [
+    "workflow_1763403799"
   ]
 }

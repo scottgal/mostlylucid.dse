@@ -29,6 +29,11 @@ class ArtifactType(Enum):
     FAILURE = "failure"              # Tool/workflow failures and errors
     BUG_REPORT = "bug_report"        # Bug reports and issue tracking
 
+    # Fix and optimization types
+    CODE_FIX = "code_fix"            # Code fixes and patches (RAG-searchable fixes)
+    DEBUG_DATA = "debug_data"        # Debug information and analysis reports
+    PERF_DATA = "perf_data"          # Performance optimization data and reports
+
     # Conversational and history types
     CONVERSATION = "conversation"    # Tool creation conversations and history
 

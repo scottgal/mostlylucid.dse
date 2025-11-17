@@ -1,0 +1,144 @@
+name: fix_type_error
+type: executable
+description: |
+  Detects and fixes Python type errors.
+
+  Handles:
+  - Type mismatches (string vs int, etc.)
+  - Unsupported operations between types
+  - None type errors
+  - Attribute errors on wrong types
+  - Iteration over non-iterables
+
+  Searches RAG for similar fixes before applying new solutions.
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_type_error.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - error_output
+    - source_code
+  properties:
+    error_output:
+      type: string
+      description: TypeError message from Python
+    source_code:
+      type: string
+      description: Source code with type error
+    test_input:
+      type: object
+      description: Test input that triggered error (optional)
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+    search_rag:
+      type: boolean
+      description: "Search RAG for similar fixes (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    error_type:
+      type: string
+      description: Type of type error detected
+    line_number:
+      type: integer
+      description: Line number where error occurred
+    fixed_code:
+      type: string
+      description: Corrected source code
+    explanation:
+      type: string
+      description: What was fixed and why
+    fix_source:
+      type: string
+      enum: ["rag", "pattern", "inference"]
+      description: Where fix came from
+    similar_fixes:
+      type: array
+      items:
+        type: object
+      description: Similar fixes found in RAG
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+    rag_artifact_id:
+      type: string
+      description: ID of fix stored in RAG (if stored)
+
+examples:
+  - description: Fix string concatenation with integer
+    input:
+      error_output: "TypeError: can only concatenate str (not \"int\") to str"
+      source_code: |
+        def format_message(name, count):
+            return "Hello " + name + ", count: " + count
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "type_mismatch"
+      explanation: "Converted integer to string: str(count)"
+      fix_source: "pattern"
+      can_retry: true
+
+  - description: Fix iteration over None
+    input:
+      error_output: "TypeError: 'NoneType' object is not iterable"
+      source_code: |
+        def process_items(items):
+            for item in items:
+                print(item)
+    expected_output:
+      success: true
+      fixed: true
+      error_type: "none_type"
+      explanation: "Added None check: if items is None: return"
+      can_retry: true
+
+tags:
+  - fix
+  - type-error
+  - type-checking
+  - auto-fix
+  - rag-search
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "TypeError"
+    - "can only concatenate"
+    - "not iterable"
+    - "unsupported operand type"
+  priority: high
+  retry_after_fix: true
+  search_rag_first: true  # Check RAG for similar fixes
+
+performance:
+  avg_time_seconds: 2
+  timeout_seconds: 30
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"
+  rag_storage: true
+  rag_search_enabled: true
