@@ -42,6 +42,14 @@ Execute a complete system-wide optimization that includes:
    - Enable better versions to naturally become current through testing
    - Maintain ability to specialize while promoting best versions
 
+7. **Tool Split Detection (Specialization)** ✨ NEW & IMPORTANT
+   - Uses LLM (4B model) to detect when variants have diverged enough to be different tools
+   - Analyzes drift between spec, interface, tests, and implementation (0-100 score)
+   - LLM suggests unique new tool name if split is warranted
+   - Creates deprecation pointers for backward compatibility
+   - **This is the OPPOSITE of clustering** - it specializes rather than generalizes
+   - Prevents false unification of fundamentally different tools
+
 ## Configuration
 
 Use these configurable parameters (can be overridden via config file):

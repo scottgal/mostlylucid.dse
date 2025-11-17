@@ -43,6 +43,8 @@ from .system_optimizer import (
 )
 from .tools_manager import ToolsManager, Tool, ToolType
 from .rag_memory import RAGMemory
+from .versioned_tool_manager import VersionedToolManager
+from .tool_split_detector import ToolSplitDetector, ToolSplit, DeprecationPointer
 
 logger = logging.getLogger(__name__)
 
@@ -209,6 +211,15 @@ class NeighborOptimizer(SystemOptimizer):
 
         # Version-based clustering
         self.version_clusters: Dict[str, List[ArtifactVariant]] = defaultdict(list)
+
+        # Tool split detector
+        self.split_detector = ToolSplitDetector(
+            tool_manager=tools_manager if isinstance(tools_manager, VersionedToolManager) else None
+        )
+
+        # Track detected splits and created tools
+        self.detected_splits: List[ToolSplit] = []
+        self.deprecation_pointers: List[DeprecationPointer] = []
 
     def _default_test_function(self, variant: ArtifactVariant) -> ValidationResult:
         """Default test function (placeholder)."""
@@ -653,6 +664,196 @@ class NeighborOptimizer(SystemOptimizer):
         except:
             return "1.0"
 
+    def detect_splits_in_cluster(self, cluster_info: ClusterInfo) -> List[ToolSplit]:
+        """
+        Detect tool splits within a cluster using distance metrics.
+
+        This is the OPPOSITE of clustering - it SPECIALIZES rather than generalizes.
+        When tools in a cluster are too distant (different tests, different specs),
+        they should become separate specialized tools.
+
+        Args:
+            cluster_info: Cluster to analyze for splits
+
+        Returns:
+            List of detected splits
+        """
+        splits = []
+
+        if not isinstance(self.tools_manager, VersionedToolManager):
+            logger.warning("Split detection requires VersionedToolManager")
+            return splits
+
+        # Get all version pairs in cluster
+        variants_by_version = {}
+        for variant in cluster_info.variants:
+            version = variant.version
+            if version not in variants_by_version:
+                variants_by_version[version] = variant
+
+        versions = sorted(variants_by_version.keys())
+
+        if len(versions) < 2:
+            return splits
+
+        # Compare each version pair
+        tool_name = self._extract_base_name(cluster_info.cluster_id)
+
+        for i in range(len(versions) - 1):
+            v1 = versions[i]
+            v2 = versions[i + 1]
+
+            # Also check distance between variants
+            variant1 = variants_by_version[v1]
+            variant2 = variants_by_version[v2]
+
+            # Calculate semantic distance
+            distance = 1.0 - variant1.similarity_to(variant2)
+
+            # If distance is high, it's a candidate for splitting
+            if distance > self.config.max_distance_from_prime:
+                # Run full split detection
+                split = self.split_detector.detect_split(tool_name, v1, v2)
+
+                if split:
+                    splits.append(split)
+                    logger.info(
+                        f"  🔀 Split detected in cluster {cluster_info.cluster_id}: "
+                        f"v{v1} vs v{v2} (distance: {distance:.3f})"
+                    )
+
+        return splits
+
+    def apply_tool_split(self, split: ToolSplit) -> Tuple[str, str]:
+        """
+        Apply a detected tool split by creating a new specialized tool.
+
+        Process:
+        1. Create new tool with suggested name
+        2. Mark old tool as deprecated
+        3. Create deprecation pointer
+        4. Register both tools
+
+        Args:
+            split: Detected tool split
+
+        Returns:
+            (old_tool_id, new_tool_id) tuple
+        """
+        if not isinstance(self.tools_manager, VersionedToolManager):
+            logger.error("Cannot apply split without VersionedToolManager")
+            return (split.original_tool_id, split.original_tool_id)
+
+        # Get the diverged tool
+        base_name = self._extract_base_name(split.original_tool_id)
+        diverged_tool = self.tools_manager.get_tool_by_version(
+            base_name,
+            split.diverged_version
+        )
+
+        if not diverged_tool:
+            logger.error(f"Could not find diverged tool {base_name} v{split.diverged_version}")
+            return (split.original_tool_id, split.original_tool_id)
+
+        # Create new tool with specialized name
+        new_tool_id = f"{split.suggested_new_name}_v{split.diverged_version.replace('.', '_')}"
+
+        new_tool = Tool(
+            tool_id=new_tool_id,
+            name=split.suggested_new_name,
+            tool_type=diverged_tool.tool_type,
+            description=f"{diverged_tool.description} (specialized from {split.original_tool_id})",
+            tags=diverged_tool.tags + ['specialized', 'split_from_' + split.original_tool_id],
+            implementation=diverged_tool.implementation,
+            parameters=diverged_tool.parameters,
+            metadata={
+                **diverged_tool.metadata,
+                'split_from': split.original_tool_id,
+                'split_reason': f"Diverged by {split.evidence.confidence*100:.0f}%",
+                'original_version': split.diverged_version
+            },
+            constraints=diverged_tool.constraints
+        )
+
+        # Register the new specialized tool
+        self.tools_manager.register_tool(new_tool)
+
+        # Mark original as deprecated
+        diverged_tool.metadata['deprecated'] = True
+        diverged_tool.metadata['deprecated_in_favor_of'] = new_tool_id
+
+        # Create deprecation pointer
+        pointer = self.split_detector.create_deprecation_pointer(split)
+        pointer.replacement_tool_id = new_tool_id
+        self.deprecation_pointers.append(pointer)
+
+        logger.info(
+            f"  ✅ Split applied: {split.original_tool_id} → {new_tool_id}\n"
+            f"     Old tool marked deprecated, new specialized tool created"
+        )
+
+        return (split.original_tool_id, new_tool_id)
+
+    def run_split_detection(self) -> List[ToolSplit]:
+        """
+        Run tool split detection across all clusters.
+
+        This is a SPECIALIZATION stage (opposite of clustering).
+        Identifies when tools have diverged enough to be different tools.
+
+        Returns:
+            List of all detected splits
+        """
+        logger.info("\n🔀 Stage 6: Tool Split Detection (Specialization)...")
+
+        all_splits = []
+
+        for cluster_id, cluster_info in self.clusters.items():
+            if cluster_info.total_variants < 2:
+                continue
+
+            splits = self.detect_splits_in_cluster(cluster_info)
+
+            if splits:
+                all_splits.extend(splits)
+                logger.info(f"  Found {len(splits)} split(s) in cluster {cluster_id}")
+
+        if all_splits:
+            logger.info(f"\n  Total splits detected: {len(all_splits)}")
+            logger.info("  This SPECIALIZES tools (opposite of clustering/generalization)")
+        else:
+            logger.info("  No splits detected - all clusters are cohesive")
+
+        self.detected_splits = all_splits
+        return all_splits
+
+    def apply_all_splits(self) -> Dict[str, str]:
+        """
+        Apply all detected splits to create specialized tools.
+
+        Returns:
+            Dictionary mapping old_tool_id -> new_tool_id
+        """
+        if not self.detected_splits:
+            logger.info("No splits to apply")
+            return {}
+
+        logger.info(f"\n📝 Applying {len(self.detected_splits)} tool split(s)...")
+
+        split_mapping = {}
+
+        for split in self.detected_splits:
+            old_id, new_id = self.apply_tool_split(split)
+            split_mapping[old_id] = new_id
+
+        # Save updated tool registry
+        if isinstance(self.tools_manager, VersionedToolManager):
+            self.tools_manager.save_to_json()
+
+        logger.info(f"  ✅ All splits applied. Created {len(split_mapping)} specialized tools.")
+
+        return split_mapping
+
     def run_full_optimization_with_neighbors(self) -> OptimizationResult:
         """
         Run full optimization workflow with neighbor-based testing.
@@ -722,5 +923,27 @@ class NeighborOptimizer(SystemOptimizer):
                 if opt['improvement'] > 0
             ])
             result.estimated_improvement += avg_neighbor_improvement * 100  # Add to base estimate
+
+        # Run split detection (SPECIALIZATION - opposite of clustering)
+        splits = self.run_split_detection()
+
+        # Apply splits if any detected
+        split_mapping = {}
+        if splits and not self.config.dry_run:
+            split_mapping = self.apply_all_splits()
+
+        # Store split results
+        if not hasattr(result, 'splits_detected'):
+            result.splits_detected = len(splits)
+            result.splits_applied = len(split_mapping)
+            result.split_mapping = split_mapping
+            result.deprecation_pointers = [
+                {
+                    'deprecated': p.deprecated_tool_id,
+                    'replacement': p.replacement_tool_id,
+                    'reason': p.reason
+                }
+                for p in self.deprecation_pointers
+            ]
 
         return result
