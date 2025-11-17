@@ -1,32 +1,46 @@
 # Optimize System Command
 
-You are a system optimization specialist. Your task is to run a full optimization workflow on the RAG tool system.
+You are a system optimization specialist. Your task is to run a full optimization workflow on the RAG tool system with neighbor-based testing and version-aware clustering.
 
 ## Task
 
 Execute a complete system-wide optimization that includes:
 
 1. **Cluster Analysis & Prime Tool Identification**
-   - Identify all tool clusters in the system
+   - Identify all tool clusters in the system (including version-based clusters)
    - For each cluster, find the "prime" tool (highest version/fittest)
+   - Rank clusters by performance scores to prioritize optimization
    - Ensure the prime tool maintains all tool manager references
 
-2. **Similarity-Based Weight Optimization**
+2. **Neighbor-Based Testing & Mutation** ✨ NEW
+   - For each tool, find its 10 closest neighbors with matching interfaces
+   - Test tool against each neighbor (near or higher performance)
+   - If neighbor performs better, mutate current tool with neighbor's improvements
+   - Repeat iteratively until no improvement from top 10 neighbors
+   - If new variant outperforms prime, promote it to prime status
+
+3. **Similarity-Based Weight Optimization**
    - For each tool, find similar tools within its clusters
    - If similarity exceeds the configurable threshold, adjust the optimization weight
    - Handle tools that belong to multiple clusters appropriately
    - Track cluster-specific optimization weights per tool
 
-3. **Low-Score Tool Culling**
+4. **Low-Score Tool Culling**
    - Identify tools with consistently low optimization scores across all their nodes
    - Cull (archive/remove) these low-performing tools
    - Ensure safe removal that doesn't break references
 
-4. **Distance-Based Variant Pruning**
+5. **Distance-Based Variant Pruning**
    - For each prime tool, find all related variants
    - Calculate semantic/performance distance from the prime
    - Drop variants that are too distant or redundant
    - Use a decay function based on distance from prime
+
+6. **Version-Aware Cluster Formation** ✨ NEW
+   - Automatically form clusters around tool versions
+   - Track all tool calls with name + version for cluster identification
+   - Enable better versions to naturally become current through testing
+   - Maintain ability to specialize while promoting best versions
 
 ## Configuration
 
@@ -57,9 +71,9 @@ weight_reduction_factor = 0.7  # Factor to reduce weight for similar tools
 
 ## Implementation
 
-Use the `SystemOptimizer` class from `code_evolver/src/system_optimizer.py`:
+### Basic Optimization (Original)
 
-### Option 1: Use Configuration File (Recommended)
+Use the `SystemOptimizer` class from `code_evolver/src/system_optimizer.py`:
 
 ```python
 from pathlib import Path
@@ -79,44 +93,71 @@ result = optimizer.run_full_optimization()
 print(result.summary())
 ```
 
-### Option 2: Use Programmatic Configuration
+### Advanced Optimization with Neighbor Testing ✨ NEW & RECOMMENDED
+
+Use the `NeighborOptimizer` class from `code_evolver/src/neighbor_optimizer.py`:
 
 ```python
-from code_evolver.src.system_optimizer import SystemOptimizer, OptimizationConfig
+from pathlib import Path
+from code_evolver.src.neighbor_optimizer import NeighborOptimizer
+from code_evolver.src.system_optimizer import load_config_from_file
+from code_evolver.src.versioned_tool_manager import VersionedToolManager
 
-# Create optimizer with inline configuration
-config = OptimizationConfig(
-    similarity_threshold=0.85,
-    min_optimization_score=0.50,
-    max_distance_from_prime=0.30,
-    weight_reduction_factor=0.7,
-    dry_run=False,  # Set to True for testing
-    verbose=True,
-    report_path=Path("optimization_reports/optimization_report.json")
+# Initialize version-aware tool manager
+tool_manager = VersionedToolManager()
+
+# Load configuration
+config_path = Path("code_evolver/config/optimization_config.yaml")
+config = load_config_from_file(config_path)
+
+# Create neighbor optimizer with test function
+optimizer = NeighborOptimizer(
+    config=config,
+    tools_manager=tool_manager
+    # test_function will use default if not specified
 )
 
-optimizer = SystemOptimizer(config=config)
-
-# Run full optimization
-result = optimizer.run_full_optimization()
+# Run full optimization with neighbor testing
+result = optimizer.run_full_optimization_with_neighbors()
 
 # Display results
 print(result.summary())
+
+# Access neighbor optimization details
+for opt in result.neighbor_optimizations:
+    print(f"Cluster: {opt['cluster_id']}")
+    print(f"  Improved: {opt['improvement']*100:.1f}%")
+    for log_entry in opt['log']:
+        print(f"    {log_entry}")
 ```
 
-### Option 3: Use Default Configuration
+### Version-Aware Tool Calling ✨ NEW
+
+Use the `call_tool` function for automatic version tracking:
 
 ```python
-from code_evolver.src.system_optimizer import SystemOptimizer
+from code_evolver.src.versioned_tool_caller import call_tool, analyze_version_clusters
 
-# Use all defaults
-optimizer = SystemOptimizer()
+# Call a tool with version specification
+result = call_tool(
+    "parse_cron",
+    args={"expression": "0 0 * * *"},
+    version="best"  # or "latest", "1.2.3", "1.2", etc.
+)
 
-# Run full optimization
-result = optimizer.run_full_optimization()
+# Analyze version clusters from call history
+analysis = analyze_version_clusters()
 
-# Display results
-print(result.summary())
+print("Cluster Analysis:")
+for tool_name, cluster_info in analysis['clusters'].items():
+    print(f"  {tool_name}:")
+    print(f"    Dominant version: {cluster_info['dominant_version']}")
+    print(f"    Usage: {cluster_info['dominant_usage_percent']:.1f}%")
+    print(f"    Best version: {cluster_info['best_version']}")
+
+# View recommendations
+for recommendation in analysis['recommendations']:
+    print(f"  💡 {recommendation}")
 ```
 
 ## Safety
@@ -156,3 +197,42 @@ Provide a summary report including:
 - Weight adjustments made
 - Tools culled
 - Variants pruned
+- Neighbor optimization results (iterations, mutations, improvements)
+- Version cluster formation statistics
+
+## Version-Aware Code Generation
+
+When generating code that calls tools, ALWAYS specify the tool name and version:
+
+### ❌ OLD WAY (Don't do this):
+```python
+# This doesn't track versions
+result = some_function()
+```
+
+### ✅ NEW WAY (Do this):
+```python
+from code_evolver.src.versioned_tool_caller import call_tool
+
+# Explicitly track tool name and version
+result = call_tool(
+    "some_function",
+    args={"param": "value"},
+    version="best"  # or specific version like "1.2.3"
+)
+```
+
+This enables:
+1. **Cluster identification** - See which versions are used together
+2. **Performance tracking** - Monitor which versions perform best
+3. **Safe optimization** - Don't break during optimization cycles
+4. **Automatic promotion** - Better versions naturally become current
+
+## Benefits of Version-Aware Optimization
+
+1. **Cluster Formation**: New clusters automatically form around popular versions
+2. **Natural Evolution**: Better versions organically become the default through testing
+3. **Specialization**: Maintain ability to use specific versions when needed
+4. **Safe Refactoring**: Old versions remain available during transitions
+5. **Performance History**: Track performance improvements across versions
+6. **Automatic Discovery**: Identify optimization opportunities from usage patterns
