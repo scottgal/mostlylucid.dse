@@ -1,0 +1,102 @@
+name: "Extract Text Content"
+type: "executable"
+description: "Extracts structured text content from documents. Parses into paragraphs, sentences, and sections. Handles various text formats with comprehensive error handling."
+tool_id: "extract_text_content"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/extract_text_content.py"]
+  timeout_ms: 15000
+  memory_limit_mb: 512
+
+# Input schema
+input_schema:
+  document_id:
+    type: "string"
+    description: "ID of the document in the document store"
+    required: true
+
+  structure_level:
+    type: "string"
+    description: "Level of structure extraction: 'paragraphs', 'sentences', 'raw'"
+    required: false
+    default: "paragraphs"
+    enum: ["paragraphs", "sentences", "raw"]
+
+  min_paragraph_length:
+    type: "integer"
+    description: "Minimum character length for a paragraph (default: 50)"
+    required: false
+    default: 50
+
+  preserve_formatting:
+    type: "boolean"
+    description: "Preserve whitespace and formatting (default: false)"
+    required: false
+    default: false
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    document_id:
+      type: "string"
+    structure_level:
+      type: "string"
+    content:
+      type: "object"
+      properties:
+        raw_text:
+          type: "string"
+        paragraphs:
+          type: "array"
+          items:
+            type: "string"
+        sentences:
+          type: "array"
+          items:
+            type: "string"
+        word_count:
+          type: "integer"
+        paragraph_count:
+          type: "integer"
+        sentence_count:
+          type: "integer"
+    metadata:
+      type: "object"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "text-extraction"
+  - "parsing"
+  - "nlp"
+  - "summarization"
+  - "document-processing"
+
+weight: 8.5
+priority: 82
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "re"
+      builtin: true
+  tools:
+    - "document_store"

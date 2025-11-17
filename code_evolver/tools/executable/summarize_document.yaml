@@ -1,0 +1,134 @@
+name: "Summarize Document"
+type: "executable"
+description: "Complete document summarization workflow. Loads document, extracts content, chunks adaptively, and generates incremental summary. Auto-adapts to different model context windows."
+tool_id: "summarize_document"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/summarize_document.py"]
+  timeout_ms: 600000  # 10 minutes for very large documents
+  memory_limit_mb: 1024
+
+# Input schema
+input_schema:
+  filepath:
+    type: "string"
+    description: "Path to the document file to summarize"
+    required: true
+
+  tier:
+    type: "string"
+    description: "Summarization tier: tier_1 (fast), tier_2 (balanced), tier_3 (large context)"
+    required: false
+    default: "tier_2"
+    enum: ["tier_1", "tier_2", "tier_3"]
+
+  auto_tier:
+    type: "boolean"
+    description: "Automatically select tier based on document size (default: true)"
+    required: false
+    default: true
+
+  max_summary_length:
+    type: "integer"
+    description: "Maximum summary length in tokens (default: 1024)"
+    required: false
+    default: 1024
+
+  detailed:
+    type: "boolean"
+    description: "Generate detailed summary with more information (default: false)"
+    required: false
+    default: false
+
+  save_summary:
+    type: "boolean"
+    description: "Save summary to a file (default: false)"
+    required: false
+    default: false
+
+  output_path:
+    type: "string"
+    description: "Path to save summary file (if save_summary is true)"
+    required: false
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    filepath:
+      type: "string"
+    document_id:
+      type: "string"
+    tier:
+      type: "string"
+    summary:
+      type: "string"
+    metadata:
+      type: "object"
+      properties:
+        original_size:
+          type: "integer"
+        summary_size:
+          type: "integer"
+        compression_ratio:
+          type: "number"
+        chunk_count:
+          type: "integer"
+        iterations:
+          type: "integer"
+        processing_time:
+          type: "number"
+        tier_auto_selected:
+          type: "boolean"
+    output_file:
+      type: "string"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "summarization"
+  - "workflow"
+  - "document-processing"
+  - "orchestration"
+  - "end-to-end"
+
+weight: 10.0  # Highest priority for summarization tasks
+priority: 95
+mantra: "pragmatically_effective"
+
+# Use cases
+use_cases:
+  - "Summarize long documents"
+  - "Create executive summaries"
+  - "Condense articles and reports"
+  - "Extract key information from large texts"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "pathlib"
+      builtin: true
+    - name: "time"
+      builtin: true
+  tools:
+    - "load_document"
+    - "extract_text_content"
+    - "adaptive_chunker"
+    - "incremental_summarizer"
+    - "document_store"

@@ -15,10 +15,33 @@ description: |
 mantra: "pragmatically_effective"
 
 llm:
-  model: "llama3"
+  tier: "summarization.tier_2"
+  role: "summarizer"  # Fallback for backward compatibility
   temperature: 0.3
-  max_tokens: 1000
-  context_window: 32768
+  max_tokens: 1024
+  context_window: 8192
+
+  system_prompt: |
+    You are an expert text summarizer. Create comprehensive, well-structured summaries of documents.
+
+    CRITICAL RULES:
+    - Capture ALL main ideas and important details
+    - Maintain logical flow and structure
+    - Preserve the original meaning, tone, and intent
+    - Use clear, professional language
+    - NEVER add information not present in the source
+    - NEVER include personal opinions or interpretations
+    - For multi-section documents, preserve section structure
+    - If given a previous summary, integrate it seamlessly with new information to create a cohesive whole
+
+  prompt_template: |
+    {previous_summary}{content}
+
+    ---
+
+    Create a comprehensive summary of the above text. Include all main ideas and important details while maintaining clarity.
+
+    Summary:
 
 quality_profile:
   speed_score: 0.70
