@@ -1,0 +1,329 @@
+name: "Ask User"
+type: "custom"
+description: "Interactive user input tool for CLI workflows. Prompts the user for input when running in interactive mode, otherwise asks the overseer LLM to make decisions. Enables workflows to get feedback and confirmation without blocking non-interactive execution. Supports yes/no questions, text input, and multiple choice."
+cost_tier: "free"
+speed_tier: "instant"
+quality_tier: "excellent"
+max_output_length: "short"
+custom:
+  module: "src.ask_user_tool"
+  class: "AskUserTool"
+  config:
+    timeout_seconds: 60
+    default_to_llm: true
+
+input_schema:
+  question:
+    type: string
+    description: "Question to ask the user"
+    required: true
+    example: "Do you want to proceed with deployment?"
+
+  question_type:
+    type: string
+    description: "Type of question"
+    required: false
+    default: "text"
+    enum: ["text", "yes_no", "confirm", "choice"]
+
+  choices:
+    type: array
+    description: "Available choices (for choice type)"
+    required: false
+    example: ["production", "staging", "development"]
+
+  default_answer:
+    type: string
+    description: "Default answer if user doesn't respond or in non-interactive mode with LLM disabled"
+    required: false
+
+  context:
+    type: string
+    description: "Additional context to help LLM make decisions (for non-interactive mode)"
+    required: false
+    example: "This is a production deployment with high risk"
+
+  allow_llm_fallback:
+    type: boolean
+    description: "Allow LLM to answer if not interactive (default: true)"
+    required: false
+    default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether operation succeeded"
+    answer:
+      type: string
+      description: "User's answer or LLM decision"
+    answered_by:
+      type: string
+      description: "Who answered: 'user' or 'llm' or 'default'"
+    is_interactive:
+      type: boolean
+      description: "Whether session is interactive"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["user-input", "interactive", "confirmation", "prompt", "cli", "decision", "feedback"]
+
+examples:
+  - description: "Ask yes/no question"
+    input:
+      question: "Do you want to proceed with deployment?"
+      question_type: "yes_no"
+      context: "Deploying to production environment"
+    output:
+      success: true
+      answer: "yes"
+      answered_by: "user"
+      is_interactive: true
+
+  - description: "Ask multiple choice question"
+    input:
+      question: "Which environment should we deploy to?"
+      question_type: "choice"
+      choices: ["production", "staging", "development"]
+      context: "Feature branch ready for deployment"
+    output:
+      success: true
+      answer: "staging"
+      answered_by: "llm"
+      is_interactive: false
+
+  - description: "Get user confirmation"
+    input:
+      question: "This will delete all data. Are you sure?"
+      question_type: "confirm"
+      default_answer: "no"
+    output:
+      success: true
+      answer: "no"
+      answered_by: "default"
+      is_interactive: false
+
+usage_notes: |
+  ## Ask User Tool - Interactive CLI Input with LLM Fallback
+
+  This tool enables workflows to interact with users while remaining compatible
+  with non-interactive execution (scheduled tasks, background jobs, etc.).
+
+  ## Features
+
+  - [OK] Interactive CLI prompts when running interactively
+  - [OK] LLM fallback for non-interactive mode
+  - [OK] Multiple question types (text, yes/no, confirm, choice)
+  - [OK] Timeout handling
+  - [OK] Default answers
+  - [OK] Context-aware LLM decisions
+
+  ## How It Works
+
+  ### Interactive Mode (User present at CLI)
+  1. Tool detects interactive terminal (stdin is TTY)
+  2. Displays question to user
+  3. Waits for user input (with timeout)
+  4. Returns user's answer
+
+  ### Non-Interactive Mode (Scheduled/Background)
+  1. Tool detects non-interactive environment
+  2. If `allow_llm_fallback=true`: Asks overseer LLM to decide
+  3. If `allow_llm_fallback=false`: Uses default answer
+  4. Returns decision with `answered_by` field
+
+  ## Usage Examples
+
+  ### Example 1: Yes/No Question
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("ask_user", json.dumps({
+      "question": "Do you want to proceed with deployment?",
+      "question_type": "yes_no",
+      "context": "Deploying version 2.0 to production",
+      "default_answer": "no"
+  }))
+
+  data = json.loads(result)
+  if data['answer'] == 'yes':
+      # Proceed with deployment
+      deploy_to_production()
+  else:
+      print("Deployment cancelled")
+  ```
+
+  ### Example 2: Multiple Choice
+
+  ```python
+  result = call_tool("ask_user", json.dumps({
+      "question": "Which environment should we deploy to?",
+      "question_type": "choice",
+      "choices": ["production", "staging", "development"],
+      "context": "Feature branch 'feature-xyz' is ready"
+  }))
+
+  data = json.loads(result)
+  environment = data['answer']
+  print(f"Deploying to {environment} (answered by {data['answered_by']})")
+  deploy_to_environment(environment)
+  ```
+
+  ### Example 3: Text Input
+
+  ```python
+  result = call_tool("ask_user", json.dumps({
+      "question": "What email should we send the notification to?",
+      "question_type": "text",
+      "context": "PR #40 has been merged, need to notify stakeholder",
+      "default_answer": "team@example.com"
+  }))
+
+  data = json.loads(result)
+  email = data['answer']
+  send_notification(email, "PR #40 has been merged!")
+  ```
+
+  ### Example 4: Confirmation with High Stakes
+
+  ```python
+  result = call_tool("ask_user", json.dumps({
+      "question": "This will DELETE ALL DATA in production. Type 'DELETE' to confirm:",
+      "question_type": "confirm",
+      "allow_llm_fallback": false,  # Force user confirmation, no LLM
+      "default_answer": "no"
+  }))
+
+  data = json.loads(result)
+  if data['answer'] == 'DELETE' and data['answered_by'] == 'user':
+      # Only proceed if user explicitly confirmed
+      delete_production_data()
+  else:
+      print("Operation cancelled (safety check)")
+  ```
+
+  ## Question Types
+
+  | Type | Description | Example |
+  |------|-------------|---------|
+  | text | Free-form text input | "What is your email?" |
+  | yes_no | Binary yes/no question | "Proceed with deployment?" |
+  | confirm | Requires specific confirmation | "Type 'DELETE' to confirm" |
+  | choice | Select from predefined options | ["prod", "staging", "dev"] |
+
+  ## LLM Decision Making
+
+  When in non-interactive mode with `allow_llm_fallback=true`, the tool:
+
+  1. Sends question + context to overseer LLM
+  2. LLM analyzes the situation
+  3. LLM provides a reasoned answer
+  4. Tool returns answer with `answered_by: "llm"`
+
+  The LLM considers:
+  - The question and available choices
+  - The provided context
+  - Safety implications
+  - Best practices
+
+  ## Interactive Mode Detection
+
+  The tool automatically detects if it's running interactively:
+
+  ```python
+  import sys
+  is_interactive = sys.stdin.isatty() and sys.stdout.isatty()
+  ```
+
+  This works correctly in:
+  - [OK] Terminal sessions
+  - [OK] SSH connections
+  - [OK] Cron jobs (non-interactive)
+  - [OK] Background processes (non-interactive)
+  - [OK] Docker containers with -it flag (interactive)
+
+  ## Workflow Patterns
+
+  ### Pattern 1: Email Notification with RAG
+
+  ```python
+  # Check if user email is in RAG
+  user_email = get_from_rag("user_email")
+
+  if not user_email:
+      # Ask user and store in RAG
+      result = call_tool("ask_user", json.dumps({
+          "question": "What is your email address?",
+          "question_type": "text"
+      }))
+      user_email = json.loads(result)['answer']
+      store_in_rag("user_email", user_email)
+
+  # Use email for notification
+  send_email(user_email, "Your workflow completed!")
+  ```
+
+  ### Pattern 2: PR Merge Notification
+
+  ```python
+  # Monitor PR status
+  pr_url = "https://github.com/scottgal/mostlylucid.dse/pull/40"
+
+  pr_status = call_tool("github", json.dumps({
+      "action": "check_merged",
+      "repo_url": pr_url
+  }))
+
+  if json.loads(pr_status)['data']['is_merged']:
+      # Get user email (from RAG or ask)
+      user_email = get_user_email()
+
+      # Send notification
+      send_email(user_email, f"PR {pr_url} has been merged!")
+  ```
+
+  ### Pattern 3: Conditional Deployment
+
+  ```python
+  # Ask where to deploy
+  result = call_tool("ask_user", json.dumps({
+      "question": "Where should we deploy?",
+      "question_type": "choice",
+      "choices": ["production", "staging"],
+      "context": "Tests passed, code review approved"
+  }))
+
+  data = json.loads(result)
+  environment = data['answer']
+
+  # Deploy to chosen environment
+  deploy(environment)
+
+  # Log the decision
+  log_deployment_decision(
+      environment=environment,
+      decided_by=data['answered_by'],
+      timestamp=datetime.now()
+  )
+  ```
+
+  ## Safety Features
+
+  - **Timeout**: Prevents infinite waiting (default 60s)
+  - **Default Answers**: Always have a fallback
+  - **LLM Toggle**: Can disable LLM for critical operations
+  - **Answer Source Tracking**: Know who/what made the decision
+  - **Interactive Detection**: Automatic, no configuration needed
+
+  ## Best Practices
+
+  1. **Provide Context**: Help LLM make informed decisions
+  2. **Set Defaults**: Always provide sensible default answers
+  3. **Use confirm for Destructive Ops**: Require explicit confirmation
+  4. **Disable LLM for Critical Ops**: Force user interaction when necessary
+  5. **Log Decisions**: Track who answered (user vs LLM vs default)
+  6. **Cache User Preferences**: Use RAG to remember user answers

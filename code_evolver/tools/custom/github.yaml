@@ -1,0 +1,328 @@
+name: "GitHub"
+type: "custom"
+description: "GitHub integration tool for PR management, issue tracking, and repository operations. Works with Git tool for complete GitHub workflow. Supports checking PR status, merge state, comments, reviews, and more. Uses authentication from config.yaml."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.github_tool"
+  class: "GitHubTool"
+  config:
+    api_version: "2022-11-28"
+    max_results: 100
+
+input_schema:
+  action:
+    type: string
+    description: "GitHub action to perform"
+    required: true
+    enum: ["pr_status", "pr_list", "pr_comments", "pr_reviews", "pr_files", "pr_merge_status", "issue_status", "issue_list", "repo_info", "check_merged", "create_comment"]
+
+  # Repository identification
+  repo_url:
+    type: string
+    description: "Repository URL or owner/repo format (e.g., 'https://github.com/user/repo' or 'user/repo')"
+    required: false
+
+  owner:
+    type: string
+    description: "Repository owner (alternative to repo_url)"
+    required: false
+
+  repo:
+    type: string
+    description: "Repository name (alternative to repo_url)"
+    required: false
+
+  # PR/Issue number
+  pr_number:
+    type: integer
+    description: "Pull request number"
+    required: false
+
+  issue_number:
+    type: integer
+    description: "Issue number"
+    required: false
+
+  # Filters
+  state:
+    type: string
+    description: "State filter (open, closed, all)"
+    required: false
+    default: "open"
+    enum: ["open", "closed", "all"]
+
+  # Comments
+  comment_body:
+    type: string
+    description: "Comment text (for create_comment)"
+    required: false
+
+  # Authentication
+  use_credentials:
+    type: boolean
+    description: "Use credentials from config.yaml"
+    required: false
+    default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether operation succeeded"
+    action:
+      type: string
+      description: "Action performed"
+    data:
+      description: "Response data (PR info, issues, etc.)"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["github", "git", "pr", "pull-request", "issue", "repository", "code-review", "vcs"]
+
+examples:
+  - description: "Check if PR is merged"
+    input:
+      action: "check_merged"
+      repo_url: "https://github.com/scottgal/mostlylucid.dse/pull/40"
+    output:
+      success: true
+      action: "check_merged"
+      data:
+        pr_number: 40
+        is_merged: true
+        merged_at: "2025-01-15T10:30:00Z"
+        merged_by: "user123"
+
+  - description: "Get PR status and details"
+    input:
+      action: "pr_status"
+      owner: "scottgal"
+      repo: "mostlylucid.dse"
+      pr_number: 40
+    output:
+      success: true
+      action: "pr_status"
+      data:
+        number: 40
+        title: "Add new feature"
+        state: "closed"
+        merged: true
+        author: "user123"
+        created_at: "2025-01-10T09:00:00Z"
+
+  - description: "List open pull requests"
+    input:
+      action: "pr_list"
+      repo_url: "scottgal/mostlylucid.dse"
+      state: "open"
+    output:
+      success: true
+      action: "pr_list"
+      data:
+        prs:
+          - number: 42
+            title: "Fix bug"
+            author: "user456"
+
+usage_notes: |
+  ## GitHub Tool - Complete GitHub Integration
+
+  This tool provides comprehensive GitHub API integration for PR management,
+  issue tracking, and repository operations. Works seamlessly with the Git tool.
+
+  ## Features
+
+  - [OK] Pull Request management (status, list, comments, reviews)
+  - [OK] Issue tracking
+  - [OK] Check merge status
+  - [OK] Repository information
+  - [OK] Authentication from config.yaml
+  - [OK] URL parsing (supports github.com URLs and owner/repo format)
+  - [OK] Rate limit handling
+
+  ## Authentication Setup
+
+  Add to your config.yaml:
+
+  ```yaml
+  git:
+    github:
+      token: "${GITHUB_TOKEN}"
+      username: "your-username"
+  ```
+
+  Or set environment variable:
+
+  ```bash
+  export GITHUB_TOKEN="ghp_your_token_here"
+  ```
+
+  ## Usage Examples
+
+  ### Example 1: Check if PR is Merged
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("github", json.dumps({
+      "action": "check_merged",
+      "repo_url": "https://github.com/scottgal/mostlylucid.dse/pull/40"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      is_merged = data['data']['is_merged']
+      print(f"PR #40 is {'merged' if is_merged else 'not merged'}")
+  ```
+
+  ### Example 2: Get PR Details
+
+  ```python
+  result = call_tool("github", json.dumps({
+      "action": "pr_status",
+      "owner": "scottgal",
+      "repo": "mostlylucid.dse",
+      "pr_number": 40
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      pr = data['data']
+      print(f"PR #{pr['number']}: {pr['title']}")
+      print(f"State: {pr['state']}")
+      print(f"Merged: {pr['merged']}")
+  ```
+
+  ### Example 3: List Open PRs
+
+  ```python
+  result = call_tool("github", json.dumps({
+      "action": "pr_list",
+      "repo_url": "scottgal/mostlylucid.dse",
+      "state": "open"
+  }))
+
+  data = json.loads(result)
+  for pr in data['data']['prs']:
+      print(f"PR #{pr['number']}: {pr['title']} by {pr['author']}")
+  ```
+
+  ### Example 4: Get PR Comments
+
+  ```python
+  result = call_tool("github", json.dumps({
+      "action": "pr_comments",
+      "owner": "scottgal",
+      "repo": "mostlylucid.dse",
+      "pr_number": 40
+  }))
+
+  data = json.loads(result)
+  for comment in data['data']['comments']:
+      print(f"{comment['author']}: {comment['body']}")
+  ```
+
+  ### Example 5: Workflow - Watch for PR Merge
+
+  ```python
+  # This would be part of a scheduled workflow
+  result = call_tool("github", json.dumps({
+      "action": "check_merged",
+      "repo_url": "https://github.com/scottgal/mostlylucid.dse/pull/40"
+  }))
+
+  data = json.loads(result)
+  if data['data']['is_merged']:
+      # Send notification (use email tool or other notification)
+      print("PR is merged! Triggering notification...")
+  ```
+
+  ## URL Formats
+
+  The tool accepts multiple URL formats:
+
+  1. **Full GitHub URL**: `https://github.com/owner/repo/pull/123`
+  2. **Owner/Repo**: `owner/repo`
+  3. **Separate owner and repo**: `{"owner": "owner", "repo": "repo"}`
+
+  ## Supported Actions
+
+  | Action | Description | Example |
+  |--------|-------------|---------|
+  | check_merged | Check if PR is merged | Is PR #40 merged? |
+  | pr_status | Get PR details | Get info for PR #40 |
+  | pr_list | List pull requests | List all open PRs |
+  | pr_comments | Get PR comments | Get comments on PR #40 |
+  | pr_reviews | Get PR reviews | Get reviews for PR #40 |
+  | pr_files | Get PR changed files | What files changed in PR #40? |
+  | pr_merge_status | Get merge status | Can PR #40 be merged? |
+  | issue_status | Get issue details | Get info for issue #10 |
+  | issue_list | List issues | List all open issues |
+  | repo_info | Get repository info | Get repo metadata |
+  | create_comment | Add comment to PR/issue | Post a comment |
+
+  ## Integration with Workflows
+
+  ### Pattern 1: PR Monitoring
+
+  ```python
+  # Check PR status periodically
+  pr_url = "https://github.com/scottgal/mostlylucid.dse/pull/40"
+
+  result = call_tool("github", json.dumps({
+      "action": "check_merged",
+      "repo_url": pr_url
+  }))
+
+  if json.loads(result)['data']['is_merged']:
+      # Trigger next workflow step
+      send_email_notification()
+  ```
+
+  ### Pattern 2: PR Review Summary
+
+  ```python
+  # Get comprehensive PR information
+  owner, repo, pr = "scottgal", "mostlylucid.dse", 40
+
+  # Get status
+  status = call_tool("github", json.dumps({
+      "action": "pr_status",
+      "owner": owner,
+      "repo": repo,
+      "pr_number": pr
+  }))
+
+  # Get comments
+  comments = call_tool("github", json.dumps({
+      "action": "pr_comments",
+      "owner": owner,
+      "repo": repo,
+      "pr_number": pr
+  }))
+
+  # Get reviews
+  reviews = call_tool("github", json.dumps({
+      "action": "pr_reviews",
+      "owner": owner,
+      "repo": repo,
+      "pr_number": pr
+  }))
+
+  # Generate summary report
+  generate_pr_summary(status, comments, reviews)
+  ```
+
+  ## Rate Limiting
+
+  GitHub API has rate limits:
+  - **Authenticated**: 5,000 requests/hour
+  - **Unauthenticated**: 60 requests/hour
+
+  The tool automatically handles rate limits and provides informative error messages.
