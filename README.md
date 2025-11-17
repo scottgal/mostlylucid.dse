@@ -6,7 +6,7 @@ Welcome to **DiSE**, the **Directed Synthetic Evolution** project.
 
 <p align="left">
   <img src="logo.png" alt="mostlylucid-dse logo" width="120" style="float:left; margin-right:20px;">
-  <strong>An AI-powered system</strong> that genera~~~~tes, executes, evaluates, and optimizes Python code using multiple LLM models. Features intelligent task classification, RAG-powered tool selection, automatic code generation, and self-optimization through iterative improvement.
+  <strong>An AI-powered system</strong> that generates executes, evaluates, and optimizes Python code using multiple LLM models. Features intelligent task classification, RAG-powered tool selection, automatic code generation, and self-optimisation through iterative improvement.
 </p>
 
 Like the exocomps of Star Trek — autonomous repair drones that learn, adapt, and evolve — my system is a code exocomp: a reflexive orchestration mesh that builds, mutates, and specializes itself over time. It doesn’t just run code. It remembers every invocation, tracks performance, and rewrites its own workflows.
