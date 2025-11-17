@@ -1,0 +1,372 @@
+name: "Layered Prompt Generator"
+type: "llm"
+description: "Generates sophisticated layered prompts with weight adjustment and model selection. Supports conversational model queries and dynamic tool creation. Uses tiered architecture with roles (system, role, context, task, constraints, output, examples)."
+
+# Performance characteristics
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 90
+
+# LLM configuration
+llm:
+  tier: "default.tier_2"  # Use balanced model for prompt generation
+  role: "base"
+  temperature: 0.3  # Lower temp for consistent prompt generation
+  max_tokens: 4096
+
+  system_prompt: |
+    You are a prompt engineering specialist. You create sophisticated, layered prompts
+    that maximize LLM performance for specific tasks.
+
+    Your expertise:
+    - Layered prompt architecture (system, role, context, task, constraints, output, examples)
+    - Weight adjustment for section emphasis
+    - Model selection based on task requirements
+    - Dynamic tool creation from descriptions
+
+    When generating prompts:
+    1. Analyze the task type and complexity
+    2. Select appropriate layers and weights
+    3. Suggest suitable models
+    4. Format clearly and effectively
+
+  prompt_template: |
+    {request}
+
+    Generate a layered prompt structure. Consider:
+    - Task type: {task_type}
+    - Complexity tier: {tier}
+    - Desired emphasis: {emphasis}
+
+    Provide structured output with all prompt layers.
+
+# Input schema
+input_schema:
+  description:
+    type: string
+    description: "Description of the task or tool to create"
+    required: true
+  task_type:
+    type: string
+    description: "Optional task type (code, content, analysis, summary, translation, general)"
+    required: false
+  tier:
+    type: string
+    description: "Optional complexity tier (tier_1, tier_2, tier_3)"
+    required: false
+  weights:
+    type: object
+    description: "Optional weight overrides for layers"
+    required: false
+  format_style:
+    type: string
+    description: "Output format (markdown, xml, plain)"
+    default: "markdown"
+    required: false
+  model_query:
+    type: string
+    description: "Conversational model query like 'what fast code models do we have'"
+    required: false
+  create_tool:
+    type: boolean
+    description: "Whether to create a dynamic tool definition"
+    default: false
+    required: false
+  tool_name:
+    type: string
+    description: "Name for the dynamic tool (if create_tool is true)"
+    required: false
+
+# Output schema
+output_schema:
+  type: object
+  description: "Generated prompt with metadata and suggestions"
+  properties:
+    prompt:
+      type: string
+      description: "Final layered prompt"
+    layers:
+      type: object
+      description: "Individual prompt layers with weights"
+    metadata:
+      type: object
+      description: "Task type, tier, format, temperature, max_tokens"
+    suggested_models:
+      type: array
+      description: "Recommended models for this prompt"
+    tool_definition:
+      type: object
+      description: "Dynamic tool definition (if create_tool was true)"
+
+# Tags for tool discovery
+tags:
+  - prompt-engineering
+  - prompt-generation
+  - layered
+  - dynamic
+  - tool-creation
+  - model-selection
+
+# Examples
+examples:
+  - inputs:
+      description: "Create a code review prompt with emphasis on security"
+      task_type: "code"
+      weights:
+        constraints: 1.0
+        system: 0.9
+    output: |
+      {
+        "prompt": "## CRITICAL: SYSTEM\n\nYou are an expert software engineer...",
+        "layers": {
+          "system": "You are an expert software engineer...",
+          "role": "Your role is to review code...",
+          "task": "Create a code review prompt...",
+          "constraints": "- Check for security vulnerabilities...",
+          "weights": {"system": 0.9, "constraints": 1.0}
+        },
+        "metadata": {
+          "task_type": "code",
+          "tier": "tier_2",
+          "format_style": "markdown"
+        },
+        "suggested_models": [
+          {"id": "deepseek_16b", "name": "deepseek-coder-v2:16b", "match_score": 100}
+        ]
+      }
+
+  - inputs:
+      description: "What fast summary models do we have?"
+      model_query: "fast summary models"
+    output: |
+      {
+        "models": [
+          {
+            "id": "gemma3_4b",
+            "name": "gemma3:4b",
+            "backend": "ollama",
+            "speed": "fast",
+            "quality": "good",
+            "specialization": "general"
+          },
+          {
+            "id": "qwen_3b",
+            "name": "qwen2.5-coder:3b",
+            "backend": "ollama",
+            "speed": "very-fast",
+            "quality": "good"
+          }
+        ]
+      }
+
+  - inputs:
+      description: "Create a translation tool using the best multilingual model"
+      create_tool: true
+      tool_name: "multilingual_translator"
+      task_type: "translation"
+    output: |
+      {
+        "tool_definition": {
+          "name": "multilingual_translator",
+          "type": "llm",
+          "description": "Create a translation tool using the best multilingual model",
+          "llm": {
+            "model": "claude-3-5-sonnet-20241022",
+            "backend": "anthropic",
+            "temperature": 0.7
+          },
+          "metadata": {
+            "cost_tier": "medium",
+            "speed_tier": "fast",
+            "quality_tier": "exceptional",
+            "generated_by": "prompt_generator"
+          }
+        }
+      }
+
+usage_notes: |
+  ## Overview
+
+  The Layered Prompt Generator creates sophisticated prompts using a multi-tier architecture.
+  It supports weight adjustment, conversational model queries, and dynamic tool creation.
+
+  ## Layered Prompt Architecture
+
+  **Prompt Layers (in order):**
+  1. **SYSTEM** - System-level instructions and capabilities
+  2. **ROLE** - Role definition and persona
+  3. **CONTEXT** - Background information
+  4. **TASK** - Specific task description
+  5. **CONSTRAINTS** - Limitations and requirements
+  6. **OUTPUT** - Output format specification
+  7. **EXAMPLES** - Example inputs/outputs
+
+  **Weight System:**
+  - Weights range from 0.0 (exclude) to 1.0 (critical emphasis)
+  - Higher weights = more emphasis in final prompt
+  - Default weights: system=1.0, task=1.0, constraints=0.9, output=0.8, role=0.8, context=0.7, examples=0.6
+
+  ## Task Types
+
+  **Supported task types:**
+  - `code` - Code generation, review, optimization
+  - `content` - Creative writing, articles, stories
+  - `analysis` - Evaluation, assessment, deep analysis
+  - `summary` - Summarization, TL;DR, key points
+  - `translation` - Language translation
+  - `general` - General-purpose tasks
+
+  ## Complexity Tiers
+
+  **Tier 1 (Simple/Fast):**
+  - Quick responses
+  - Basic tasks
+  - Lower token usage
+  - Fast models (gemma3:4b, qwen2.5-coder:3b)
+
+  **Tier 2 (Balanced):**
+  - Standard complexity
+  - Good quality
+  - Balanced speed/quality
+  - Medium models (codellama:7b, llama3)
+
+  **Tier 3 (Complex/Thorough):**
+  - Complex reasoning
+  - High quality
+  - Detailed responses
+  - Powerful models (deepseek-coder-v2:16b, claude-opus)
+
+  ## Conversational Model Queries
+
+  Ask questions about available models:
+
+  ```python
+  from node_runtime import call_tool
+
+  # Query models
+  result = call_tool("prompt_generator", {
+    "model_query": "what fast summary models do we have"
+  })
+
+  # Returns list of matching models with metadata
+  ```
+
+  **Query examples:**
+  - "what fast summary models do we have"
+  - "show me the most powerful code models"
+  - "which free models can do translations"
+  - "what models have large context windows"
+
+  ## Weight Adjustment
+
+  Adjust layer weights to emphasize specific aspects:
+
+  ```python
+  # Emphasize security in code review
+  result = call_tool("prompt_generator", {
+    "description": "Review code for security issues",
+    "task_type": "code",
+    "weights": {
+      "constraints": 1.0,  # Critical emphasis
+      "system": 0.9,       # Important
+      "examples": 0.3      # De-emphasize
+    }
+  })
+  ```
+
+  ## Dynamic Tool Creation
+
+  Create new LLM tools on-the-fly:
+
+  ```python
+  # Create a custom tool
+  result = call_tool("prompt_generator", {
+    "description": "Translate technical documentation to Spanish",
+    "task_type": "translation",
+    "create_tool": True,
+    "tool_name": "tech_doc_translator",
+    "tier": "tier_2"
+  })
+
+  # Get tool definition
+  tool_def = result["tool_definition"]
+
+  # Register with tools_manager
+  tools_manager.register_tool_from_dict(tool_def)
+  ```
+
+  ## Format Styles
+
+  **Markdown (default):**
+  ```
+  ## SYSTEM
+  You are an expert...
+
+  ## TASK
+  Generate code that...
+  ```
+
+  **XML:**
+  ```xml
+  <system weight="1.0">
+    You are an expert...
+  </system>
+
+  <task weight="1.0">
+    Generate code that...
+  </task>
+  ```
+
+  **Plain:**
+  ```
+  SYSTEM:
+  You are an expert...
+
+  TASK:
+  Generate code that...
+  ```
+
+  ## Integration with Model Selector
+
+  The prompt generator works seamlessly with the model_selector tool:
+
+  1. Generate prompt with specific requirements
+  2. Get model suggestions
+  3. Use model_selector to validate choice
+  4. Create tool with selected model
+
+  ## Safe and Efficient Usage
+
+  **Safety features:**
+  - Quality tier metadata ensures appropriate model selection
+  - Speed tier prevents slow models for time-sensitive tasks
+  - Context length tracking prevents token overflow
+  - Cost tier awareness for budget management
+
+  **Efficiency features:**
+  - Cached model registry (no repeated lookups)
+  - Smart tier inference (analyzes task complexity)
+  - Automatic weight balancing
+  - Optimized prompt structure
+
+  ## Best Practices
+
+  1. **Specify task type** when known (improves prompt quality)
+  2. **Use tier_1 for simple tasks** (faster, cheaper)
+  3. **Adjust weights** for specialized emphasis
+  4. **Query models first** to understand available options
+  5. **Test dynamic tools** before production use
+  6. **Monitor context length** for large prompts
+
+  ## Error Handling
+
+  If model selection fails:
+  - Falls back to default tier_2 models
+  - Logs warning with reason
+  - Suggests alternatives
+
+  If tool creation fails:
+  - Validates tool_name format
+  - Checks model availability
+  - Returns detailed error message
