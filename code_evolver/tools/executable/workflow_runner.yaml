@@ -1,0 +1,90 @@
+id: workflow_runner
+name: Workflow Runner
+type: executable
+description: |
+  Generates a combined Python script from a workflow with all dependencies inlined.
+  The goal is to reduce the workflow to JUST the required code with all imports properly resolved.
+  Analyzes workflow steps, extracts tool implementations, and generates a standalone script.
+
+tags:
+  - workflow
+  - code-generation
+  - dependency-resolution
+  - inline
+  - standalone
+
+executable:
+  command: python
+  args:
+    - "{tool_dir}/workflow_runner.py"
+    - "{input_json}"
+
+input_schema:
+  workflow_id:
+    type: string
+    required: true
+    description: The workflow ID or name to generate a combined script for
+
+  tools_root:
+    type: string
+    required: false
+    description: Path to tools directory (auto-detected if not specified)
+    default: "code_evolver/tools"
+
+  code_evolver_root:
+    type: string
+    required: false
+    description: Path to code_evolver root directory (auto-detected if not specified)
+    default: "code_evolver"
+
+output_schema:
+  success:
+    type: boolean
+    description: Whether the script generation succeeded
+
+  workflow_id:
+    type: string
+    description: The workflow ID that was processed
+
+  script:
+    type: string
+    description: The generated combined Python script with all dependencies inlined
+
+  workflow_spec:
+    type: object
+    description: The original workflow specification
+
+  dependencies:
+    type: object
+    description: Analyzed dependencies including tools, types, and parallel task info
+
+  stats:
+    type: object
+    description: Statistics about the generated script (lines, imports, tools, etc.)
+
+  error:
+    type: string
+    description: Error message if generation failed
+
+examples:
+  - name: Generate script for API server workflow
+    input:
+      workflow_id: api_server_workflow
+    description: Generates a combined script for the API server workflow
+
+  - name: Generate script with custom paths
+    input:
+      workflow_id: my_custom_workflow
+      tools_root: ./tools
+      code_evolver_root: .
+    description: Generates a script with custom tool and code paths
+
+metadata:
+  version: "1.0.0"
+  author: "Code Evolver"
+  category: "code-generation"
+  use_cases:
+    - "Generate standalone workflow scripts"
+    - "Inline all workflow dependencies"
+    - "Create portable workflow executables"
+    - "Reduce workflow to minimal required code"
