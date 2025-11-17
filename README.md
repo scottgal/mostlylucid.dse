@@ -42,13 +42,16 @@ An AI-powered system that generates, executes, evaluates, and optimizes Python c
 Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 
 1. **Understands** your task using intelligent LLM-based classification
-2. **Plans** the optimal approach using an overseer model with parallel execution support
-3. **Generates** Python code with appropriate tool selection from multiple LLM backends
-4. **Tests** the code automatically with BDD-enhanced specifications
-5. **Optimizes** performance through iterative improvement and pattern clustering
-6. **Learns** from successful solutions via RAG memory
-7. **Serves** workflows as HTTP APIs for integration with other systems
-8. **Adapts** tools through mutation and targeted optimization commands
+2. **Converses** with smart conversation mode - multi-chat context memory with auto-summarization
+3. **Plans** the optimal approach using an overseer model with parallel execution support
+4. **Generates** Python code with appropriate tool selection from multiple LLM backends
+5. **Tests** the code automatically with BDD-enhanced specifications
+6. **Optimizes** performance through multi-level recursive optimization (4 levels!)
+7. **Evolves** overnight with batch optimizer using expensive cloud LLMs for high-value artifacts
+8. **Learns** from successful solutions via RAG memory and pattern clustering
+9. **Serves** workflows as HTTP APIs for integration with other systems
+10. **Adapts** tools through mutation and targeted optimization commands
+11. **Trains** continuously with random prompt variations for system improvement
 
 ### 🔄 Auto-Scaling Architecture
 
@@ -146,6 +149,93 @@ This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE
 ##  What's New
 
 **Recent Feature Additions:**
+
+### 💬 Smart Conversation Mode
+**Multi-chat context memory with semantic search and auto-summarization:**
+- **Context-Aware Conversations** - Maintains conversation state across multiple exchanges
+- **Auto-Summarization** - Automatically summarizes long conversations when context window threshold is reached
+- **Semantic Memory** - Stores conversation metadata in Qdrant for future retrieval
+- **Related Context** - Pulls in relevant snippets from past conversations
+- **Smart Orchestration** - Dynamically calls tools and generates workflows during conversations
+- **Performance Tracking** - Tracks response times and conversation metrics
+
+**Usage with Slash Commands:**
+```bash
+# Start a conversation
+/conversation_start software architecture
+
+# Chat normally - context is managed automatically
+User: "What are the benefits of microservices?"
+Assistant: [Response with full context from conversation history]
+
+# End conversation (saves summary to RAG)
+/conversation_end
+```
+
+**Key Features:**
+- **Automatic context management** - No manual prompting needed
+- **Volatile storage** - Conversations stored in Qdrant, cleaned up after ending
+- **Cross-conversation learning** - Related context from past conversations enhances current responses
+- **Model-aware optimization** - Context sized appropriately for the response model
+- **Smart tool calling** - Can invoke tools and create workflows during conversation
+
+See `/conversation_start` and `/conversation_end` slash commands for details.
+
+### 🔄 Multi-Level Recursive Optimization
+**System optimizes itself at ALL levels recursively:**
+
+**Recursive System Optimizer** - Four levels of recursive optimization:
+1. **Level 0: Code Artifacts** - Individual functions and algorithms
+2. **Level 1: Workflows** - Workflows that use those artifacts
+3. **Level 2: Tools** - Tool definitions and selection logic
+4. **Level 3: Meta-System** - The optimizer itself optimizes its own optimization!
+
+**Offline Batch Optimizer** - Overnight cloud optimization:
+- **Value-Based Selection** - Identifies high-reuse, low-quality artifacts worth expensive optimization
+- **Cloud LLM Investment** - Uses expensive cloud models (GPT-4, Claude) when cost doesn't matter
+- **Scheduled Runs** - Runs overnight to optimize high-value artifacts
+- **ROI Tracking** - Calculates value score (reuse × improvement potential)
+- **Cost-Aware** - Respects maximum cost budgets for batch runs
+
+**Pattern-Based Optimization** - Automatic tool generation:
+- **Pattern Clustering** - Analyzes RAG memory for recurring patterns
+- **Tool Suggestions** - Generates parameterized tools for common operations
+- **Optimization Pressure** - Can target specific functions/code areas for focused optimization
+- **ROI Estimation** - Calculates potential time savings from new tools
+
+**Usage:**
+```bash
+# Optimize everything recursively (all 4 levels)
+optimizer.optimize_everything(max_depth=3)
+
+# Run overnight batch optimization (max $50 cloud spend)
+optimizer.batch_optimize_overnight(max_cost=50.00)
+
+# Analyze patterns and suggest tools
+/optimize_tools
+
+# Focus optimization on specific function
+/optimize_tools translate_text
+```
+
+### 🎓 Continuous Training Mode
+**Train the system with random prompt variations:**
+- **Random Variation Generation** - Creates variations of base prompts
+- **Continuous Execution** - Runs until user interrupts
+- **Performance Tracking** - Tracks success rates and metrics
+- **Factory Task Training** - Default random task generation
+- **Statistics Display** - Shows training results when stopped
+
+**Usage:**
+```bash
+# Train with a base prompt
+/train write a function to process data
+
+# Train with random factory tasks
+/train
+```
+
+The system will continuously generate variations and execute them, learning from each iteration.
 
 ### 🎯 Intelligent Task Processing
 - **Accidental Input Detection** - Detects nonsense/test inputs (e.g., "test", "asdf") and provides helpful suggestions
@@ -439,6 +529,7 @@ See [NEW_CONFIG_ARCHITECTURE.md](code_evolver/NEW_CONFIG_ARCHITECTURE.md) and [M
 
 ### Basic Usage
 
+**Standard Code Generation:**
 ```bash
 # Start interactive CLI
 cd code_evolver
@@ -453,6 +544,54 @@ CodeEvolver> add 10 and 20
 ✓ Optimization complete (best score: 1.10)
 
 RESULT: 30
+```
+
+**Conversation Mode:**
+```bash
+CodeEvolver> /conversation_start software design
+
+Started conversation about software design.
+Context memory: Active
+Auto-summarization: Enabled
+
+CodeEvolver> What are the benefits of microservices?
+> [Response with full conversation context]
+
+CodeEvolver> How does that compare to monoliths?
+> [Response aware of previous discussion about microservices]
+
+CodeEvolver> /conversation_end
+Conversation ended. Summary saved to RAG.
+```
+
+**Training Mode:**
+```bash
+CodeEvolver> /train write a function to process data
+
+Training started. Press any key to stop.
+Variation 1: write a function to process user data
+Variation 2: write a function to process JSON data
+Variation 3: write a function to process CSV data
+...
+[Continues until stopped]
+
+Training complete!
+Success rate: 85%
+Total variations: 42
+```
+
+**Pattern Optimization:**
+```bash
+CodeEvolver> /optimize_tools
+
+Analyzing RAG patterns...
+Found 5 high-value optimization opportunities
+
+1. translation (12 operations, similarity 0.87)
+   Suggested tool: translate_text
+   Time savings: 8 hours/week
+
+✓ Tool definitions saved to tools/suggested/
 ```
 
 ##  System Architecture
@@ -1030,6 +1169,308 @@ Best version selected: Iteration 3
 ```
 
 ##  Advanced Features
+
+### Smart Conversation Mode (Multi-Chat Context Memory)
+
+Code Evolver includes a sophisticated conversation system that maintains context across multiple exchanges with intelligent memory management.
+
+**Architecture:**
+
+```mermaid
+graph TB
+    A[User Message] --> B[ConversationTool]
+    B --> C[Context Manager]
+    B --> D[Summarizer]
+    B --> E[Intent Detector]
+    B --> F[Embedder]
+    B --> G[Smart Orchestrator]
+
+    C --> H[Optimize Context Window]
+    D --> I[Auto-Summarize Long Conversations]
+    E --> J[Detect Conversation Intent]
+    F --> K[Semantic Search in Qdrant]
+    G --> L[Dynamic Tool Calling]
+
+    H --> M[Prepare Response Context]
+    I --> M
+    K --> M
+    L --> M
+
+    M --> N[LLM Response]
+    N --> O[Store in ConversationStorage]
+```
+
+**Components:**
+
+1. **ConversationStorage** - Volatile Qdrant storage for active conversations
+   - Creates separate collection per conversation
+   - Stores messages with embeddings
+   - Tracks metadata (topic, creation time, performance)
+   - Cleans up after conversation ends
+
+2. **ContextMemoryManager** - Model-aware context window optimization
+   - Knows context limits for different models
+   - Decides when to summarize
+   - Optimizes context for response model
+   - Prevents context overflow
+
+3. **ConversationSummarizer** - Intelligent summarization
+   - Summarizes old messages when threshold reached
+   - Preserves key information
+   - Maintains conversation continuity
+   - Uses fast local model (gemma3:1b)
+
+4. **ConversationEmbedder** - Semantic search
+   - Stores conversation metadata in Qdrant
+   - Finds related context from past conversations
+   - Enables cross-conversation learning
+   - Retrieves relevant snippets
+
+5. **SmartConversationOrchestrator** - Dynamic workflow generation
+   - Detects when tools needed during conversation
+   - Calls tools automatically
+   - Generates workflows on-the-fly
+   - Integrates results seamlessly
+
+**Usage Example:**
+
+```python
+from code_evolver.src.conversation import ConversationTool
+
+# Initialize from config
+tool = ConversationTool.create_from_config_file(
+    "code_evolver/config.yaml",
+    conversation_model="gemma3:1b"
+)
+
+# Start conversation
+result = tool.start_conversation(topic="API optimization")
+print(f"Started: {result['conversation_id']}")
+
+# Add user message
+tool.add_user_message("How can I reduce API latency?")
+
+# Prepare context for response
+context = tool.prepare_context_for_response(
+    user_message="How can I reduce API latency?",
+    response_model="llama3"
+)
+
+# Context includes:
+# - Recent messages
+# - Summary of older messages (if any)
+# - Related context from past conversations
+# - Optimized for llama3's context window
+
+# Add assistant response
+tool.add_assistant_message(
+    content="Here are 5 strategies...",
+    performance_data={"response_time": 2.3}
+)
+
+# End conversation (saves summary to RAG)
+summary = tool.end_conversation()
+print(f"Key points: {summary['key_points']}")
+```
+
+**Context Window Optimization:**
+
+The system automatically manages context based on model capabilities:
+
+| Model | Context Window | Summary Threshold | Recent Messages |
+|-------|----------------|-------------------|-----------------|
+| llama3 | 8,192 tokens | 6,000 tokens | Last 10 |
+| gemma3:1b | 2,048 tokens | 1,500 tokens | Last 5 |
+| gpt-4 | 128,000 tokens | 100,000 tokens | Last 50 |
+| claude-3 | 200,000 tokens | 150,000 tokens | Last 100 |
+
+**Benefits:**
+
+- ✅ No manual context management needed
+- ✅ Automatic summarization prevents context overflow
+- ✅ Learns from past conversations
+- ✅ Model-aware optimization
+- ✅ Performance tracking built-in
+- ✅ Clean separation of concerns
+
+### Multi-Level Recursive Optimization
+
+Code Evolver includes powerful optimization systems that work at multiple levels to continuously improve performance.
+
+**1. Recursive System Optimizer**
+
+Optimizes the entire system recursively at 4 levels:
+
+```python
+from code_evolver.src.recursive_optimizer import RecursiveSystemOptimizer
+
+optimizer = RecursiveSystemOptimizer(
+    config_manager=config,
+    rag_memory=rag,
+    optimization_pipeline=pipeline,
+    tools_manager=tools
+)
+
+# Optimize everything from bottom to top
+results = optimizer.optimize_everything(max_depth=3)
+
+# Results include improvements at each level:
+# Level 0: Individual code artifacts optimized
+# Level 1: Workflows using those artifacts re-optimized
+# Level 2: Tool definitions improved
+# Level 3: The optimizer itself optimized!
+```
+
+**Optimization Levels:**
+
+| Level | Target | Example Optimization |
+|-------|--------|---------------------|
+| 0 | Code Artifacts | Optimize `fibonacci()` algorithm |
+| 1 | Workflows | Re-optimize workflows using `fibonacci()` |
+| 2 | Tools | Improve tool selection logic |
+| 3 | Meta-System | Optimize the optimizer itself! |
+
+**How it Works:**
+
+1. **Level 0** - Optimize individual functions
+   - Finds slow/inefficient code artifacts
+   - Applies optimization techniques
+   - Measures improvement
+
+2. **Level 1** - Re-optimize dependent workflows
+   - Finds workflows using optimized artifacts
+   - Regenerates workflow code
+   - Benefits from Level 0 improvements
+
+3. **Level 2** - Improve tool selection
+   - Analyzes tool usage patterns
+   - Optimizes tool selection logic
+   - Improves RAG retrieval
+
+4. **Level 3** - Meta-optimization
+   - The optimizer optimizes itself!
+   - Improves optimization strategies
+   - Recursive self-improvement
+
+**2. Offline Batch Optimizer**
+
+Runs overnight to optimize high-value artifacts using expensive cloud LLMs:
+
+```python
+from code_evolver.src.offline_optimizer import OfflineBatchOptimizer
+
+optimizer = OfflineBatchOptimizer(
+    config_manager=config,
+    rag_memory=rag,
+    optimization_pipeline=pipeline
+)
+
+# Find candidates for optimization
+candidates = optimizer.identify_optimization_candidates(
+    min_reuse_count=10,      # Must be used 10+ times
+    max_quality_score=0.75   # Quality score < 0.75
+)
+
+# Run overnight batch (max $50 cloud spend)
+results = optimizer.batch_optimize_overnight(
+    max_cost=50.00,
+    use_cloud_llm=True,
+    cloud_model="gpt-4"
+)
+
+# Results show ROI
+# Spent: $23.50
+# Artifacts optimized: 15
+# Avg improvement: 35%
+# Estimated time saved: 12 hours/week
+```
+
+**Value-Based Selection:**
+
+The optimizer calculates a value score for each artifact:
+
+```
+value_score = reuse_count × (1 - quality_score) × improvement_potential
+```
+
+High value score = frequently used + low quality + high potential
+
+**Example Candidates:**
+
+| Artifact | Reuse Count | Quality | Improvement | Value Score |
+|----------|-------------|---------|-------------|-------------|
+| translate_text | 50 | 0.60 | 0.40 | 8.0 (HIGH) |
+| fetch_api_data | 30 | 0.75 | 0.25 | 1.9 (MED) |
+| simple_add | 100 | 0.95 | 0.05 | 0.5 (LOW) |
+
+**Scheduling:**
+
+```python
+# Schedule nightly optimization
+optimizer.schedule_nightly_optimization(
+    hour=2,              # Run at 2 AM
+    max_cost=50.00,      # Max $50/night
+    min_candidates=5     # Only run if 5+ candidates
+)
+```
+
+**3. Pattern-Based Optimization**
+
+Analyzes RAG memory to find patterns and suggest new tools:
+
+```python
+from code_evolver.src.pattern_clusterer import PatternClusterer
+
+clusterer = PatternClusterer(
+    rag_memory=rag,
+    min_cluster_size=3,
+    similarity_threshold=0.75
+)
+
+# Analyze patterns
+clusters = clusterer.analyze_patterns()
+
+# Or apply optimization pressure to specific area
+clusters = clusterer.analyze_patterns(
+    target_filter="translate"
+)
+
+# Generate tool definitions for high-value clusters
+for cluster in clusters:
+    if cluster.optimization_potential > 0.5:
+        tool_def = clusterer.generate_tool_definition(cluster)
+        # Save to tools/suggested/
+```
+
+**Optimization Pressure:**
+
+Focus optimization on specific functions or code areas:
+
+```bash
+# Analyze all translation-related patterns
+/optimize_tools translate
+
+# This filters RAG artifacts to only those matching "translate"
+# Applies focused optimization pressure to that area
+```
+
+**Pattern Clustering Output:**
+
+```
+Operation Type: translation
+Similarity: 0.87
+Suggested Tool: translate_text
+Parameters: ['target_language', 'source_language']
+Optimization Potential: 0.72
+
+Examples:
+  - Translate to French
+  - Translate to Spanish
+  - Translate to German
+
+Estimated time savings: 8 hours/week
+Tool definition saved to: tools/suggested/translate_text.yaml
+```
 
 ### Multi-Backend LLM Support
 
@@ -1876,6 +2317,116 @@ Create stories, jokes, articles, and other creative content via LLM tools.
 ### 5. Algorithm Optimization
 Let the system iteratively improve your algorithms for better performance.
 
+##  Slash Commands
+
+Code Evolver provides powerful slash commands for managing conversations, tools, and workflows.
+
+### Conversation Management
+
+**`/conversation_start [topic]`** - Start a new conversation with multi-chat context memory
+```bash
+/conversation_start software architecture
+```
+Features:
+- Multi-chat context memory
+- Auto-summarization based on context window
+- Semantic search for related conversations
+- Performance tracking
+- Smart orchestration with tool calling
+
+**`/conversation_end [topic]`** - End current or specified conversation
+```bash
+/conversation_end
+/conversation_end software architecture
+```
+Features:
+- Saves conversation summary to RAG
+- Extracts key points
+- Cleans up volatile storage
+- Tracks conversation metrics
+
+### Tool Management
+
+**`/create_tool`** - Create a new tool with interactive prompts
+```bash
+/create_tool
+```
+Creates LLM, executable, or OpenAPI tools with full configuration.
+
+**`/list_tools`** - List all available tools with filtering
+```bash
+/list_tools
+/list_tools --type llm
+/list_tools --tag translation
+```
+
+**`/remove_tool <tool_id>`** - Remove a tool from the registry
+```bash
+/remove_tool my_translator
+```
+
+**`/optimize_tools [target]`** - Analyze RAG patterns and suggest optimizations
+```bash
+# Analyze all patterns
+/optimize_tools
+
+# Focus on specific function (optimization pressure)
+/optimize_tools translate_text
+```
+Features:
+- Pattern clustering analysis
+- Similarity detection
+- Parameterized tool suggestions
+- ROI estimation
+- Auto-generates tool definitions
+
+**`/tool-compile`** - Compile tool configurations
+```bash
+/tool-compile
+```
+
+### Training & Optimization
+
+**`/train [prompt]`** - Continuous training with random variations
+```bash
+# Train with specific prompt
+/train write a function to process data
+
+# Train with random factory tasks
+/train
+```
+Features:
+- Random variation generation
+- Continuous execution (stop with any key)
+- Performance tracking
+- Success rate statistics
+
+### System Commands
+
+**`help`** - Show available commands
+**`status`** - Show system status
+**`auto on/off`** - Toggle auto-evolution
+
+### Example Workflow
+
+```bash
+# Start a conversation about optimization
+/conversation_start performance optimization
+
+# Chat about the topic
+> "How can I optimize my API calls?"
+> "What about caching strategies?"
+
+# Analyze patterns and suggest tools
+/optimize_tools
+
+# End conversation (saves to RAG)
+/conversation_end
+
+# Train the system
+/train optimize database queries
+```
+
 ##  API Reference
 
 ### Command-Line Interface
@@ -1949,6 +2500,12 @@ This is an experimental project. Contributions welcome!
 
 ### Recent Improvements
 
+- [x] **Smart Conversation Mode** - Multi-chat context memory with auto-summarization
+- [x] **Multi-Level Recursive Optimization** - System optimizes itself at 4 levels recursively
+- [x] **Offline Batch Optimizer** - Overnight cloud optimization for high-value artifacts
+- [x] **Pattern-Based Optimization** - Automatic tool generation from RAG patterns
+- [x] **Continuous Training Mode** - Train with random prompt variations
+- [x] **Slash Commands** - Complete command system for conversations, tools, and training
 - [x] Multi-backend LLM support (Ollama, OpenAI, Anthropic, Azure, LM Studio)
 - [x] HTTP server tool for workflow-as-API
 - [x] Comprehensive HTTP client with all methods and auth types
