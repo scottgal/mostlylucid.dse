@@ -1,0 +1,273 @@
+﻿tool_id: "store_code_fix_pattern"
+version: "2.0.0"
+name: "Store Code Fix Pattern"
+type: "executable"
+description: |
+  Pattern Recognizer with RAG Data Store - Stores code breaks and their fixes as reusable patterns.
+
+  Stores code fix patterns in a shared RAG-based data store for future retrieval. Each pattern
+  includes the error, broken code, fixed code, and context. Patterns are tagged and embedded
+  for semantic search. The data store scope determines visibility:
+  - Store patterns at tool level (tool-specific learning)
+  - Store patterns at tool+subtools level (hierarchical learning)
+  - Store patterns at hierarchy level (contextual learning)
+  - Store patterns globally (universal learning)
+
+category: "learning"
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/executable/store_code_fix_pattern.py"]
+
+input_schema:
+  error_message:
+    type: string
+    description: "The error message that occurred"
+    required: true
+
+  broken_code:
+    type: string
+    description: "The code that caused the error"
+    required: true
+
+  fixed_code:
+    type: string
+    description: "The corrected code"
+    required: true
+
+  fix_description:
+    type: string
+    description: "Description of what was wrong and how it was fixed"
+    required: true
+
+  error_type:
+    type: string
+    description: "Category of error"
+    enum: ["syntax", "runtime", "logic", "type", "import", "undefined", "indentation", "unicode", "json", "unknown"]
+    default: "unknown"
+    required: false
+
+  language:
+    type: string
+    description: "Programming language"
+    default: "python"
+    required: false
+
+  context:
+    type: object
+    description: "Additional context (tool_id, framework, etc.)"
+    required: false
+
+  debug_info:
+    type: object
+    description: "Full debug information (stack trace, variables, locals, etc.)"
+    required: false
+
+  scope:
+    type: string
+    description: |
+      Data store scope - defines pattern visibility/accessibility:
+      - "tool": Pattern only accessible by the current tool
+      - "tool_subttools": Accessible by current tool and its sub-tools
+      - "hierarchy": Accessible by all tools in current hierarchy
+      - "global": Accessible by all tools (default)
+    enum: ["tool", "tool_subttools", "hierarchy", "global"]
+    default: "global"
+    required: false
+
+  tool_id:
+    type: string
+    description: "Current tool identifier (used with scope tagging)"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    pattern_id:
+      type: string
+      description: "Unique ID for this fix pattern"
+    error_type:
+      type: string
+    tags:
+      type: array
+      items:
+        type: string
+    message:
+      type: string
+    searchable_by:
+      type: array
+      items:
+        type: string
+
+tags: ["learning", "code-fix", "pattern-storage", "error-recovery", "self-improvement", "rag", "data-store", "pattern-recognizer"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 95
+
+metadata:
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+  data_store:
+    type: "rag"
+    backend: "qdrant"
+    collection: "code_fix_patterns"
+    scope_levels: ["tool", "tool_subttools", "hierarchy", "global"]
+
+purpose: |
+  Pattern Recognizer for Code Fixes with RAG Data Store
+
+  This tool stores code fix patterns in a shared RAG (Retrieval-Augmented Generation) data store
+  for future retrieval. Each pattern is tagged, embedded for semantic search, and tracked for
+  usage statistics. The data store scope determines pattern visibility:
+
+  1. **tool**: Pattern only accessible by the current tool
+  2. **tool_subttools**: Accessible by this tool and its sub-tools
+  3. **hierarchy**: Accessible by all tools in current tool hierarchy
+  4. **global**: Accessible by all tools across the system (default)
+
+  This enables intelligent knowledge accumulation and sharing across the system.
+
+capabilities:
+  - "Store code fix patterns with full context and debug info"
+  - "Tag patterns by error type, language, tool, and framework"
+  - "Create semantic embeddings for similarity search"
+  - "Track usage statistics for ranking by effectiveness"
+  - "Support scoped visibility (tool, subtools, hierarchy, global)"
+  - "Automatic quality scoring for proven fixes"
+
+configuration:
+  config_section: "pattern_recognizer"
+  required_settings:
+    - "enabled"
+    - "rag_backend"
+  optional_settings:
+    - "default_scope"
+    - "auto_tag_tool_id"
+    - "initial_quality_score"
+    - "max_patterns_per_tool"
+  per_tool_override: true
+  override_key: "tool_name"
+
+usage_notes: |
+  ## Overview
+
+  Stores code errors and their fixes as reusable patterns in RAG memory.
+  Uses a shared data store with configurable scope for pattern visibility.
+
+  The system can then search for similar errors and apply proven fixes.
+
+  ## Usage
+
+  ### Store a Fix Pattern
+
+  ```bash
+  echo '{
+    "error_message": "SyntaxError: f-string: single } is not allowed",
+    "broken_code": "f\"Hello {{name}}\"",
+    "fixed_code": "f\"Hello {{{{name}}}}\"",
+    "fix_description": "In f-strings, literal braces must be doubled. Single { or } inside f-strings need to be escaped as {{ or }}",
+    "error_type": "syntax",
+    "language": "python",
+    "context": {
+      "tool_id": "standalone_exe_compiler",
+      "location": "generate_standalone_wrapper"
+    }
+  }' | python tools/executable/store_code_fix_pattern.py
+  ```
+
+  ### Result
+
+  ```json
+  {
+    "success": true,
+    "pattern_id": "fix_pattern_a3f2d1b8c9e4",
+    "error_type": "syntax",
+    "tags": ["code-fix-pattern", "syntax", "python", "syntax-error", "tool:standalone_exe_compiler"],
+    "message": "Stored code fix pattern: fix_pattern_a3f2d1b8c9e4",
+    "searchable_by": [
+      "Error message similarity",
+      "Code structure similarity",
+      "Tags and keywords",
+      "Error type"
+    ]
+  }
+  ```
+
+  ## Integration with Fix Cycle
+
+  Use this in your fix workflow:
+
+  ```python
+  # 1. Code breaks with error
+  try:
+      result = execute_code(code)
+  except Exception as e:
+      error_msg = str(e)
+
+      # 2. Search for similar fix patterns
+      similar_fixes = call_tool("find_code_fix_pattern", json.dumps({
+          "error_message": error_msg,
+          "broken_code": code
+      }))
+
+      # 3. If pattern found, apply the fix
+      if similar_fixes['found']:
+          fixed_code = apply_fix_pattern(code, similar_fixes['pattern'])
+      else:
+          # 4. Manual fix or LLM-based fix
+          fixed_code = llm_fix_code(code, error_msg)
+
+      # 5. Store the new fix pattern for future use
+      call_tool("store_code_fix_pattern", json.dumps({
+          "error_message": error_msg,
+          "broken_code": code,
+          "fixed_code": fixed_code,
+          "fix_description": "...",
+          "error_type": "syntax"
+      }))
+  ```
+
+  ## Benefits
+
+  - **Learn from mistakes** - Never make the same error twice
+  - **Faster fixes** - Apply proven solutions instantly
+  - **Knowledge accumulation** - Build a library of fix patterns
+  - **Semantic search** - Find similar errors even with different wording
+  - **Context-aware** - Tag fixes by tool, framework, language
+
+  ## Stored Pattern Structure
+
+  Each pattern includes:
+  - Error message and type
+  - Broken code snippet
+  - Fixed code snippet
+  - Fix description
+  - Tags for categorization
+  - Context (tool, framework, etc.)
+  - Quality score (0.95 for proven fixes)
+  - Embedding for semantic search
+
+examples:
+  - inputs:
+      error_message: "SyntaxError: f-string: single '}' is not allowed"
+      broken_code: "f'Status: {status}'"
+      fixed_code: "f'Status: {{status}}'"
+      fix_description: "Literal braces in f-strings must be doubled"
+      error_type: "syntax"
+      language: "python"
+      context:
+        tool_id: "standalone_exe_compiler"
+    output: |
+      {
+        "success": true,
+        "pattern_id": "fix_pattern_abc123",
+        "error_type": "syntax",
+        "tags": ["code-fix-pattern", "syntax", "python", "syntax-error"],
+        "message": "Stored code fix pattern: fix_pattern_abc123"
+      }

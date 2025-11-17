@@ -1,0 +1,11 @@
+name: "JSON Output Validator"
+type: "executable"
+description: "Validates that node code outputs valid JSON using json.dumps() and print()"
+executable:
+  command: "python"
+  args: ["{tool_dir}/json_output_validator.py", "{source_file}"]
+  install_command: null  # Built-in Python module
+tags: ["python", "json", "validation", "output", "static-analysis"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 150  # Run early, after syntax check

@@ -1,0 +1,109 @@
+name: "Behave BDD Test Generator"
+type: "executable"
+description: "Generate Behave BDD tests with step definitions from Gherkin feature files, tool specs, or workflow definitions with plausible test data"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/behave_test_generator.py"
+  stdin_mode: true
+  install_command: "pip install behave faker pyyaml"
+
+input_schema:
+  feature_file:
+    type: "string"
+    description: "Path to Gherkin .feature file"
+    required: false
+  feature_content:
+    type: "string"
+    description: "Inline Gherkin feature content (if feature_file not provided)"
+    required: false
+  tool_spec:
+    type: "string"
+    description: "Path to tool YAML spec to generate BDD tests for"
+    required: false
+  static_analysis_path:
+    type: "string"
+    description: "Path to static analysis results for plausible data generation"
+    required: false
+  mode:
+    type: "string"
+    description: "Mode: 'generate' (create steps), 'run' (execute tests), or 'both'"
+    required: false
+    default: "both"
+  output_path:
+    type: "string"
+    description: "Directory where generated step definitions will be saved"
+    required: false
+    default: "./features/steps"
+  feature_output_path:
+    type: "string"
+    description: "Directory where feature files will be saved"
+    required: false
+    default: "./features"
+
+output_schema:
+  steps_file_path:
+    type: "string"
+    description: "Path to generated step definitions file"
+  feature_file_path:
+    type: "string"
+    description: "Path to feature file"
+  results:
+    type: "object"
+    description: "BDD test results (if executed)"
+  scenarios_count:
+    type: "integer"
+    description: "Number of scenarios generated/tested"
+  success:
+    type: "boolean"
+    description: "Whether test generation/execution succeeded"
+
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+tags:
+  - "testing"
+  - "bdd"
+  - "behave"
+  - "test-generation"
+  - "gherkin"
+  - "acceptance-testing"
+  - "behavior-driven"
+  - "characterization"
+
+examples:
+  - "Generate BDD tests from tool specification"
+  - "Create step definitions from Gherkin features"
+  - "Characterize tool behavior with BDD scenarios"
+  - "Run acceptance tests with plausible data"
+
+use_cases:
+  - "Tool behavior characterization"
+  - "Acceptance test generation"
+  - "Workflow validation testing"
+  - "Feature verification"
+  - "Regression testing with BDD"
+
+advantages:
+  - "Human-readable test specifications"
+  - "Generates complete step definitions"
+  - "Uses plausible data from static analysis"
+  - "Supports tool and workflow specs"
+  - "Executable documentation"
+  - "Free and open source"
+
+limitations:
+  - "Requires well-formed Gherkin syntax"
+  - "May need manual refinement of steps"
+  - "Best for behavioral/functional testing"
+  - "Not suitable for unit testing"
+
+workflow_integration:
+  position: "characterization"
+  trigger: "after tool creation and validation"
+  next_step: "store results in RAG for verification"
+  fallback: "Use manual BDD testing if generation fails"

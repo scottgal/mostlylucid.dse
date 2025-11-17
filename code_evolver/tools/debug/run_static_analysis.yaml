@@ -1,0 +1,31 @@
+name: "Static Analysis Runner"
+type: "executable"
+description: "Runs all static validators on generated code and reports results. Can run all validators or specific ones. Supports auto-fix and retry-failed modes."
+executable:
+  command: "python"
+  args: ["{tool_dir}/run_static_analysis.py", "{source_file}"]
+  install_command: null  # No external dependencies beyond validators
+tags: ["python", "validation", "static-analysis", "testing", "quality", "comprehensive"]
+speed_tier: "fast"
+cost: "free"
+priority: 250  # Run FIRST - before everything else
+usage_examples:
+  - description: "Run all validators"
+    command: "python run_static_analysis.py main.py"
+  - description: "Run with auto-fix"
+    command: "python run_static_analysis.py main.py --fix"
+  - description: "Run specific validator"
+    command: "python run_static_analysis.py main.py --validator undefined_names"
+  - description: "Retry only failed validators"
+    command: "python run_static_analysis.py main.py --retry-failed"
+  - description: "JSON output"
+    command: "python run_static_analysis.py main.py --json"
+validators_included:
+  - syntax: "Python syntax validation (AST)"
+  - main_function: "main() and __main__ block check"
+  - json_output: "JSON output validation"
+  - stdin_usage: "stdin reading check"
+  - undefined_names: "Undefined variables (flake8)"
+  - import_order: "Import organization (isort)"
+  - node_runtime_import: "node_runtime import order"
+  - call_tool_usage: "call_tool() usage validation"

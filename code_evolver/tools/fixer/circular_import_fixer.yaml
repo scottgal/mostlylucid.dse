@@ -1,0 +1,55 @@
+name: "Circular Import Fixer"
+type: "executable"
+description: |
+  Detects and automatically fixes circular import errors in generated Python code.
+
+  Common pattern fixed:
+  - main.py containing "from main import ..." (circular import)
+  - This happens when the LLM copies test file imports into the main code
+
+  Usage:
+    echo '{"code": "<python_code>", "filename": "main.py"}' | python circular_import_fixer.py
+
+  Returns:
+    - fixed: true/false
+    - removed_imports: list of removed import lines
+    - fixed_code: cleaned code
+    - message: summary of what was fixed
+
+command: "python"
+args:
+  - "tools/executable/circular_import_fixer.py"
+
+input_format: "json"
+output_format: "json"
+
+tags:
+  - "fix"
+  - "error_handler"
+  - "circular_import"
+  - "import_error"
+  - "code_repair"
+  - "auto_fix"
+  - "tdd"
+  - "code_generation"
+
+metadata:
+  error_pattern: "ImportError.*cannot import name.*from partially initialized module"
+  applies_to: "main.py"
+  category: "code_fixer"
+  priority: "high"
+  auto_apply: true
+
+examples:
+  - input: |
+      {
+        "code": "from main import validate_input\\n\\ndef validate_input(data):\\n    return True",
+        "filename": "main.py"
+      }
+    output: |
+      {
+        "fixed": true,
+        "removed_imports": ["from main import validate_input"],
+        "fixed_code": "\\n\\ndef validate_input(data):\\n    return True",
+        "message": "Removed 1 circular import statement(s)"
+      }

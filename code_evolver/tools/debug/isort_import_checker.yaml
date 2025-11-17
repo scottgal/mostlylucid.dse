@@ -1,0 +1,8 @@
+name: "Isort Import Checker"
+type: "executable"
+description: "Checks if Python imports are sorted correctly"
+executable:
+  command: "isort"
+  args: ["--check-only", "--diff", "{source_file}"]
+  install_command: "pip install isort"
+tags: ["python", "imports", "style", "organization"]
