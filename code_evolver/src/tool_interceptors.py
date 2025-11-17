@@ -222,13 +222,15 @@ class PerfCatcherInterceptor(ToolInterceptor):
     PerfCatcher interceptor for performance monitoring.
 
     Tracks tool performance against thresholds and logs when
-    variance is detected. Only captures data when outside threshold.
+    variance is detected. Maintains a rolling buffer of all requests
+    for offline optimization analysis.
 
     Can be configured via environment variables:
     - PERFCATCHER_ENABLED: Enable/disable (default: true)
     - PERFCATCHER_VARIANCE_THRESHOLD: Variance threshold (default: 0.2 = 20%)
     - PERFCATCHER_WINDOW_SIZE: Window size for baseline (default: 100)
     - PERFCATCHER_MIN_SAMPLES: Minimum samples before checking (default: 10)
+    - PERFCATCHER_BUFFER_DURATION: Rolling buffer duration in seconds (default: 30)
     """
 
     def __init__(self):
@@ -244,9 +246,18 @@ class PerfCatcherInterceptor(ToolInterceptor):
         self.variance_threshold = float(os.getenv('PERFCATCHER_VARIANCE_THRESHOLD', '0.2'))
         self.window_size = int(os.getenv('PERFCATCHER_WINDOW_SIZE', '100'))
         self.min_samples = int(os.getenv('PERFCATCHER_MIN_SAMPLES', '10'))
+        self.buffer_duration = float(os.getenv('PERFCATCHER_BUFFER_DURATION', '30'))  # seconds
 
         # Performance tracking per tool
         self.performance_data: Dict[str, deque] = {}
+
+        # Rolling buffer for offline optimization
+        # Stores full request details with timestamps
+        self._rolling_buffer: deque = deque()
+        self._buffer_lock = None  # Will be set to threading.Lock() if needed
+
+        # Track per-tool thresholds for custom monitoring
+        self._tool_thresholds: Dict[str, float] = {}
 
         # Get BugCatcher for logging performance issues
         self.bugcatcher = None
@@ -254,6 +265,9 @@ class PerfCatcherInterceptor(ToolInterceptor):
             try:
                 from .bugcatcher import get_bugcatcher
                 self.bugcatcher = get_bugcatcher()
+                # Initialize lock for thread-safe buffer access
+                import threading
+                self._buffer_lock = threading.Lock()
             except (ImportError, Exception):
                 pass
 
@@ -286,6 +300,16 @@ class PerfCatcherInterceptor(ToolInterceptor):
 
         execution_time_ms = (time.time() - start_time) * 1000
         context['execution_time_ms'] = execution_time_ms
+        current_timestamp = time.time()
+
+        # Add to rolling buffer for offline optimization
+        self._add_to_rolling_buffer(
+            tool_name=tool_name,
+            execution_time_ms=execution_time_ms,
+            timestamp=current_timestamp,
+            context=context,
+            result_summary=str(result)[:200] if result else None
+        )
 
         # Initialize deque for this tool if needed
         if tool_name not in self.performance_data:
@@ -296,7 +320,11 @@ class PerfCatcherInterceptor(ToolInterceptor):
 
         # Check for variance if we have enough samples
         if len(perf_data) >= self.min_samples:
-            self._check_variance(tool_name, execution_time_ms, perf_data, context)
+            variance_detected = self._check_variance(tool_name, execution_time_ms, perf_data, context)
+
+            # If variance detected, dump buffer to Loki for offline analysis
+            if variance_detected:
+                self._dump_buffer_to_loki(tool_name, variance_detected)
 
         return result
 
@@ -306,7 +334,7 @@ class PerfCatcherInterceptor(ToolInterceptor):
         current_time_ms: float,
         perf_data: deque,
         context: Dict[str, Any]
-    ):
+    ) -> Optional[float]:
         """
         Check if current execution time is outside variance threshold.
 
@@ -315,6 +343,9 @@ class PerfCatcherInterceptor(ToolInterceptor):
             current_time_ms: Current execution time
             perf_data: Historical performance data
             context: Execution context
+
+        Returns:
+            Variance value if threshold exceeded, None otherwise
         """
         # Calculate baseline statistics
         mean_time = statistics.mean(perf_data)
@@ -323,8 +354,11 @@ class PerfCatcherInterceptor(ToolInterceptor):
         # Calculate variance from mean
         variance = abs(current_time_ms - mean_time) / mean_time if mean_time > 0 else 0
 
+        # Check tool-specific threshold or use global threshold
+        threshold = self._tool_thresholds.get(tool_name, self.variance_threshold)
+
         # Check if outside threshold
-        if variance > self.variance_threshold:
+        if variance > threshold:
             # Log performance issue
             self._log_performance_variance(
                 tool_name,
@@ -334,6 +368,9 @@ class PerfCatcherInterceptor(ToolInterceptor):
                 variance,
                 context
             )
+            return variance
+
+        return None
 
     def _log_performance_variance(
         self,
@@ -422,6 +459,145 @@ class PerfCatcherInterceptor(ToolInterceptor):
             'p95_ms': statistics.quantiles(perf_data, n=20)[18] if len(perf_data) >= 20 else max(perf_data),
             'p99_ms': statistics.quantiles(perf_data, n=100)[98] if len(perf_data) >= 100 else max(perf_data)
         }
+
+    def set_tool_threshold(self, tool_name: str, threshold: float):
+        """
+        Set a custom performance threshold for a specific tool.
+
+        Args:
+            tool_name: Name of the tool
+            threshold: Variance threshold (e.g., 0.2 for 20%)
+        """
+        self._tool_thresholds[tool_name] = threshold
+        logger.info(f"Set custom threshold for {tool_name}: {threshold:.1%}")
+
+    def _add_to_rolling_buffer(
+        self,
+        tool_name: str,
+        execution_time_ms: float,
+        timestamp: float,
+        context: Dict[str, Any],
+        result_summary: Optional[str] = None
+    ):
+        """
+        Add request to rolling buffer for offline optimization.
+
+        Maintains a rolling window of requests (default 30s).
+        Old entries are automatically pruned.
+
+        Args:
+            tool_name: Name of the tool
+            execution_time_ms: Execution time in milliseconds
+            timestamp: Request timestamp
+            context: Execution context
+            result_summary: Summary of the result (truncated)
+        """
+        if not self._buffer_lock:
+            return
+
+        # Create request entry
+        entry = {
+            'tool_name': tool_name,
+            'execution_time_ms': execution_time_ms,
+            'timestamp': timestamp,
+            'timestamp_iso': datetime.fromtimestamp(timestamp).isoformat(),
+            'workflow_id': context.get('workflow_id'),
+            'step_id': context.get('step_id'),
+            'result_summary': result_summary
+        }
+
+        with self._buffer_lock:
+            # Add new entry
+            self._rolling_buffer.append(entry)
+
+            # Prune old entries (older than buffer_duration)
+            cutoff_time = timestamp - self.buffer_duration
+            while self._rolling_buffer and self._rolling_buffer[0]['timestamp'] < cutoff_time:
+                self._rolling_buffer.popleft()
+
+    def _dump_buffer_to_loki(self, triggered_by_tool: str, variance: float):
+        """
+        Dump entire rolling buffer to Loki for offline optimization analysis.
+
+        Called when a performance threshold is exceeded. Dumps all buffered
+        requests with full timing information for playback during optimization.
+
+        Args:
+            triggered_by_tool: Tool that triggered the dump
+            variance: Variance value that triggered the dump
+        """
+        if not self.bugcatcher or not hasattr(self.bugcatcher, 'loki'):
+            return
+
+        if not self._buffer_lock:
+            return
+
+        with self._buffer_lock:
+            if not self._rolling_buffer:
+                return
+
+            buffer_snapshot = list(self._rolling_buffer)
+
+        # Prepare buffer dump for Loki
+        import json
+
+        dump_data = {
+            'type': 'perfcatcher_buffer_dump',
+            'triggered_by': triggered_by_tool,
+            'trigger_variance': variance,
+            'trigger_timestamp': datetime.now().isoformat(),
+            'buffer_size': len(buffer_snapshot),
+            'buffer_duration_s': self.buffer_duration,
+            'requests': buffer_snapshot
+        }
+
+        labels = {
+            'job': 'code_evolver_offline_optimizer',
+            'type': 'buffer_dump',
+            'triggered_by': triggered_by_tool,
+            'severity': 'high' if variance > self.variance_threshold * 2 else 'medium'
+        }
+
+        message = json.dumps(dump_data, indent=2, default=str)
+
+        try:
+            self.bugcatcher.loki.push(message, labels)
+            logger.info(
+                f"PerfCatcher: Dumped {len(buffer_snapshot)} buffered requests to Loki "
+                f"(triggered by {triggered_by_tool}, variance: {variance:.1%})"
+            )
+        except Exception as e:
+            logger.warning(f"Failed to dump buffer to Loki: {e}")
+
+    def get_buffer_stats(self) -> Dict[str, Any]:
+        """
+        Get statistics about the rolling buffer.
+
+        Returns:
+            Dict with buffer statistics
+        """
+        if not self._buffer_lock:
+            return {'error': 'Buffer not initialized'}
+
+        with self._buffer_lock:
+            if not self._rolling_buffer:
+                return {
+                    'buffer_size': 0,
+                    'oldest_entry': None,
+                    'newest_entry': None,
+                    'duration_s': 0
+                }
+
+            oldest = self._rolling_buffer[0]
+            newest = self._rolling_buffer[-1]
+
+            return {
+                'buffer_size': len(self._rolling_buffer),
+                'oldest_entry': oldest['timestamp_iso'],
+                'newest_entry': newest['timestamp_iso'],
+                'duration_s': newest['timestamp'] - oldest['timestamp'],
+                'configured_duration_s': self.buffer_duration
+            }
 
 
 class InterceptorChain:

@@ -1,0 +1,259 @@
+name: cron_querier
+description: |
+  Converts natural language queries about scheduled tasks into structured search filters.
+
+  This tool enables intuitive querying of scheduled tasks using plain English instead
+  of complex filter syntax. It parses queries to extract:
+  - Task groups (reports, backups, monitoring, etc.)
+  - Frequency (daily, weekly, hourly, etc.)
+  - Time windows ("next 3 hours", "tonight", "tomorrow")
+  - Time of day (morning, afternoon, evening, night)
+  - Day names (Monday, Tuesday, etc.)
+
+  The structured output can be used directly with the task search system.
+
+type: executable
+category: scheduling
+
+parameters:
+  query:
+    type: string
+    description: Natural language query about scheduled tasks
+    required: true
+    examples:
+      - "all tasks which will run in the next three hours"
+      - "backup jobs running tonight"
+      - "weekly reports on monday morning"
+      - "monitoring tasks that run every 5 minutes"
+      - "tasks running tomorrow afternoon"
+      - "maintenance jobs this weekend"
+
+  current_time:
+    type: string
+    description: Reference time as ISO timestamp (defaults to now)
+    required: false
+    format: iso8601
+    example: "2025-01-16T14:30:00"
+
+returns:
+  type: object
+  description: Structured query filters for task search
+  properties:
+    search_query:
+      type: string
+      description: Refined search query terms
+      example: "backup tasks night"
+
+    filters:
+      type: object
+      description: Structured filters based on cron metadata
+      properties:
+        group:
+          type: string
+          description: Task group filter
+          enum: [reports, backups, maintenance, monitoring, synchronization, notifications, general]
+        frequency:
+          type: string
+          description: Frequency filter
+          enum: [every_minute, every_5_minutes, hourly, daily, weekly, monthly, yearly]
+        time_of_day:
+          type: string
+          description: Time of day filter
+          enum: [morning, afternoon, evening, night]
+
+    time_window:
+      type: object
+      description: Time window for task execution (null if not specified)
+      properties:
+        start:
+          type: string
+          description: Window start time (ISO format)
+        end:
+          type: string
+          description: Window end time (ISO format)
+        window_minutes:
+          type: integer
+          description: Window duration in minutes
+
+    day_names:
+      type: array
+      description: Filtered day names
+      items: {type: string}
+      example: ["Monday", "Tuesday"]
+
+    parsed_method:
+      type: string
+      description: Parsing method used (simple, llm, fallback)
+      enum: [simple, llm, fallback]
+
+examples:
+  - name: Tasks running in next 3 hours
+    input:
+      query: "all tasks which will run in the next three hours"
+      current_time: "2025-01-16T14:30:00"
+    output:
+      search_query: "tasks next 3 hours"
+      filters: {}
+      time_window:
+        start: "2025-01-16T14:30:00"
+        end: "2025-01-16T17:30:00"
+        window_minutes: 180
+      day_names: []
+      parsed_method: "simple"
+
+  - name: Backup jobs running tonight
+    input:
+      query: "backup jobs running tonight"
+      current_time: "2025-01-16T14:30:00"
+    output:
+      search_query: "backups evening"
+      filters:
+        group: "backups"
+        time_of_day: "evening"
+      time_window:
+        start: "2025-01-16T18:00:00"
+        end: "2025-01-16T23:59:59"
+        window_minutes: 360
+      day_names: []
+      parsed_method: "simple"
+
+  - name: Weekly reports on Monday morning
+    input:
+      query: "weekly reports on monday morning"
+    output:
+      search_query: "reports weekly morning monday"
+      filters:
+        group: "reports"
+        frequency: "weekly"
+        time_of_day: "morning"
+      time_window: null
+      day_names: ["Monday"]
+      parsed_method: "simple"
+
+  - name: Monitoring tasks every 5 minutes
+    input:
+      query: "monitoring tasks that run every 5 minutes"
+    output:
+      search_query: "monitoring every 5 minutes"
+      filters:
+        group: "monitoring"
+        frequency: "every_5_minutes"
+      time_window: null
+      day_names: []
+      parsed_method: "simple"
+
+  - name: Tasks running tomorrow
+    input:
+      query: "tasks running tomorrow"
+      current_time: "2025-01-16T14:30:00"
+    output:
+      search_query: "tasks tomorrow"
+      filters: {}
+      time_window:
+        start: "2025-01-17T00:00:00"
+        end: "2025-01-17T23:59:59"
+        window_minutes: 1440
+      day_names: []
+      parsed_method: "simple"
+
+  - name: Maintenance jobs this weekend
+    input:
+      query: "maintenance jobs this weekend"
+      current_time: "2025-01-16T14:30:00"  # Thursday
+    output:
+      search_query: "maintenance"
+      filters:
+        group: "maintenance"
+      time_window:
+        start: "2025-01-16T14:30:00"
+        end: "2025-01-19T23:59:59"  # Until Sunday
+        window_minutes: 4890
+      day_names: []
+      parsed_method: "simple"
+
+supported_queries:
+  time_windows:
+    - "next N hours" - Tasks running in next N hours from now
+    - "next N minutes" - Tasks running in next N minutes
+    - "today" - Tasks running until end of today
+    - "tonight" - Tasks running from 6pm to midnight
+    - "tomorrow" - Tasks running tomorrow
+    - "this week" - Tasks running until end of week
+    - "this weekend" - Tasks running until Sunday
+
+  groups:
+    - "backup tasks" / "backups" → group: backups
+    - "reports" / "report jobs" → group: reports
+    - "monitoring" / "monitoring tasks" → group: monitoring
+    - "maintenance" / "cleanup jobs" → group: maintenance
+    - "notifications" / "alerts" → group: notifications
+
+  frequencies:
+    - "every minute" → frequency: every_minute
+    - "every 5 minutes" → frequency: every_5_minutes
+    - "hourly" / "every hour" → frequency: hourly
+    - "daily" / "every day" → frequency: daily
+    - "weekly" / "every week" → frequency: weekly
+    - "monthly" → frequency: monthly
+
+  times_of_day:
+    - "morning" → time_of_day: morning (6am-12pm)
+    - "afternoon" → time_of_day: afternoon (12pm-6pm)
+    - "evening" / "tonight" → time_of_day: evening (6pm-12am)
+    - "night" / "overnight" → time_of_day: night (12am-6am)
+
+  day_names:
+    - "monday", "tuesday", "wednesday", etc. → day_names filter
+
+usage_with_task_manager:
+  example: |
+    from tools.executable.cron_querier import query_scheduled_tasks
+    from src.scheduled_tasks import get_global_task_manager
+
+    # Parse natural language query
+    parsed = query_scheduled_tasks("backup jobs running tonight")
+
+    # Use with task manager
+    task_manager = get_global_task_manager()
+
+    # Method 1: Use search_tasks with filters
+    results = task_manager.search_tasks(
+        parsed['search_query'],
+        parsed['filters']
+    )
+
+    # Method 2: Use get_tasks_due_now with time window
+    if parsed['time_window']:
+        due_tasks = task_manager.get_tasks_due_now(
+            window_minutes=parsed['time_window']['window_minutes']
+        )
+
+parsing_methods:
+  simple:
+    description: Fast pattern matching for common queries
+    performance: <1ms
+    coverage: ~70% of typical queries
+
+  llm:
+    description: LLM-based parsing for complex queries
+    performance: ~500ms
+    coverage: ~95% of queries
+    requires: Ollama client available
+
+  fallback:
+    description: Returns raw query when parsing fails
+    performance: <1ms
+    coverage: 100% (never fails)
+
+best_practices:
+  - Use specific time windows for better results ("next 3 hours" vs "soon")
+  - Include group keywords for filtering ("backup", "report", "monitor")
+  - Combine multiple filters ("weekly reports on monday morning")
+  - Use standard time phrases ("tonight", "tomorrow", "this weekend")
+
+integration_notes:
+  - Output format matches the cron_metadata structure from cron_deconstructor
+  - Filters can be used directly with task_manager.search_tasks()
+  - Time windows can be used with task_manager.get_tasks_due_now()
+  - Supports both simple pattern matching and LLM-enhanced parsing
+  - Degrades gracefully when LLM is unavailable

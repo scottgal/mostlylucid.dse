@@ -317,6 +317,15 @@ class ChatCLI:
 
         self._tools_loader.on_ready(on_tools_ready)
 
+        # Initialize background scheduler for scheduled tasks
+        # This runs in the background with low priority to avoid interfering with workflows
+        try:
+            from src.background_scheduler import start_background_scheduler
+            start_background_scheduler()
+            console.print("[dim]Background task scheduler started[/dim]")
+        except Exception as e:
+            console.print(f"[yellow]Warning: Background scheduler not started: {e}[/yellow]")
+
         # Initialize task evaluator for routing decisions
         self.task_evaluator = TaskEvaluator(self.client)
 
