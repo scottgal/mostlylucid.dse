@@ -1,0 +1,186 @@
+# Trusted Pip Packages Configuration
+# Defines which pip packages can be installed by workflows and codegen tools
+# Each package must be explicitly listed here with version constraints
+
+trusted_packages:
+  # Web & HTTP Tools
+  - name: "requests"
+    versions: [">=2.31.0", "<3.0.0"]
+    purpose: "HTTP client for API calls and web requests"
+    categories: ["http", "api", "web"]
+
+  - name: "beautifulsoup4"
+    versions: [">=4.12.0"]
+    purpose: "HTML/XML parsing for web scraping"
+    categories: ["web", "parsing", "scraping"]
+
+  - name: "httpx"
+    versions: [">=0.25.0"]
+    purpose: "Modern async HTTP client"
+    categories: ["http", "api", "async"]
+
+  # Data Processing & Analysis
+  - name: "pandas"
+    versions: [">=2.0.0", "<3.0.0"]
+    purpose: "Data manipulation and analysis"
+    categories: ["data", "analysis", "csv"]
+
+  - name: "numpy"
+    versions: [">=1.24.0", "<2.0.0"]
+    purpose: "Numerical computing and array operations"
+    categories: ["data", "math", "scientific"]
+
+  - name: "openpyxl"
+    versions: [">=3.0.0"]
+    purpose: "Excel file reading and writing"
+    categories: ["data", "excel", "spreadsheet"]
+
+  # Image & Media Processing
+  - name: "pillow"
+    versions: [">=10.0.0"]
+    purpose: "Image processing and manipulation"
+    categories: ["image", "media", "graphics"]
+
+  - name: "opencv-python"
+    versions: [">=4.8.0"]
+    purpose: "Computer vision and image processing"
+    categories: ["image", "cv", "video"]
+
+  # Text & NLP
+  - name: "nltk"
+    versions: [">=3.8.0"]
+    purpose: "Natural language processing toolkit"
+    categories: ["nlp", "text", "language"]
+
+  - name: "textblob"
+    versions: [">=0.17.0"]
+    purpose: "Simple text processing and sentiment analysis"
+    categories: ["nlp", "text", "sentiment"]
+
+  # File Formats
+  - name: "python-docx"
+    versions: [">=1.0.0"]
+    purpose: "Microsoft Word document processing"
+    categories: ["document", "docx", "office"]
+
+  - name: "PyPDF2"
+    versions: [">=3.0.0"]
+    purpose: "PDF file reading and manipulation"
+    categories: ["document", "pdf"]
+
+  - name: "markdown"
+    versions: [">=3.4.0"]
+    purpose: "Markdown parsing and conversion"
+    categories: ["document", "markdown", "text"]
+
+  # Database & Storage
+  - name: "sqlalchemy"
+    versions: [">=2.0.0"]
+    purpose: "SQL toolkit and ORM"
+    categories: ["database", "sql", "orm"]
+
+  - name: "redis"
+    versions: [">=5.0.0"]
+    purpose: "Redis client for caching and data storage"
+    categories: ["database", "cache", "storage"]
+
+  # Utilities
+  - name: "python-dateutil"
+    versions: [">=2.8.0"]
+    purpose: "Extended date/time handling"
+    categories: ["datetime", "utility"]
+
+  - name: "validators"
+    versions: [">=0.22.0"]
+    purpose: "Data validation (email, URL, etc.)"
+    categories: ["validation", "utility"]
+
+  - name: "click"
+    versions: [">=8.1.0"]
+    purpose: "Command-line interface creation"
+    categories: ["cli", "utility"]
+
+  # Testing & Quality (for generated code)
+  - name: "pytest"
+    versions: [">=7.4.0"]
+    purpose: "Testing framework for generated code"
+    categories: ["testing", "quality"]
+
+  - name: "pytest-cov"
+    versions: [">=4.1.0"]
+    purpose: "Code coverage for tests"
+    categories: ["testing", "coverage"]
+
+  # Scientific Computing
+  - name: "scipy"
+    versions: [">=1.11.0"]
+    purpose: "Scientific computing algorithms"
+    categories: ["scientific", "math", "algorithms"]
+
+  - name: "matplotlib"
+    versions: [">=3.7.0"]
+    purpose: "Data visualization and plotting"
+    categories: ["visualization", "plotting", "charts"]
+
+  # JSON & Data Serialization
+  - name: "jsonschema"
+    versions: [">=4.19.0"]
+    purpose: "JSON schema validation"
+    categories: ["json", "validation", "schema"]
+
+  - name: "pydantic"
+    versions: [">=2.0.0"]
+    purpose: "Data validation using Python type hints"
+    categories: ["validation", "typing", "schema"]
+
+  # Async & Concurrency
+  - name: "aiohttp"
+    versions: [">=3.9.0"]
+    purpose: "Async HTTP client/server"
+    categories: ["async", "http", "server"]
+
+  - name: "asyncio"
+    versions: [">=3.4.3"]
+    purpose: "Asynchronous I/O framework"
+    categories: ["async", "concurrency"]
+
+# Security Configuration
+security:
+  # Prevent installation of packages that could be security risks
+  blocked_packages:
+    - "exec"
+    - "eval"
+    - "pickle"  # Unsafe serialization
+    - "shelve"  # Uses pickle
+
+  # Require explicit approval for system-level packages
+  requires_approval:
+    - "subprocess"
+    - "os"
+    - "sys"
+
+  # Maximum packages per workflow
+  max_packages_per_workflow: 10
+
+  # Enable installation logging
+  log_installations: true
+  log_file: "logs/pip_installations.log"
+
+# Package Source Configuration
+sources:
+  # Default PyPI index
+  default_index: "https://pypi.org/simple"
+
+  # Allow only official PyPI (set to true for production)
+  pypi_only: true
+
+  # Timeout for pip operations (seconds)
+  install_timeout: 300
+
+# Automatic Updates
+auto_update:
+  # Check for security updates
+  enabled: false
+
+  # Notify on available updates
+  notify: true

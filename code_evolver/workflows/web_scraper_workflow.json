@@ -1,0 +1,89 @@
+{
+  "workflow_id": "web_scraper_workflow",
+  "version": "1.0.0",
+  "description": "Scrapes web pages and extracts structured data using pip packages",
+  "created_by": "code_evolver",
+  "created_at": "2025-01-17",
+  "tags": ["web", "scraping", "data-extraction", "pip-packages"],
+  "portable": false,
+  "inputs": {
+    "url": {
+      "type": "string",
+      "required": true,
+      "description": "URL of the web page to scrape"
+    },
+    "css_selector": {
+      "type": "string",
+      "required": false,
+      "default": "article",
+      "description": "CSS selector to extract specific elements"
+    }
+  },
+  "outputs": {
+    "extracted_data": {
+      "type": "object",
+      "description": "Extracted web page data",
+      "source_reference": "steps.extract_data.output"
+    },
+    "summary": {
+      "type": "string",
+      "description": "AI-generated summary of the extracted content",
+      "source_reference": "steps.generate_summary.output"
+    }
+  },
+  "dependencies": {
+    "llm_tools": ["content_generator"],
+    "python_tools": [],
+    "pip_packages": [
+      {
+        "name": "requests",
+        "version": ">=2.31.0"
+      },
+      {
+        "name": "beautifulsoup4",
+        "version": ">=4.12.0"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_id": "fetch_webpage",
+      "type": "python_tool",
+      "description": "Fetch the web page content using requests",
+      "generate_tool": true,
+      "operation_type": "transformer",
+      "input_mapping": {
+        "url": "${inputs.url}"
+      },
+      "output_name": "html_content",
+      "timeout": 60
+    },
+    {
+      "step_id": "extract_data",
+      "type": "python_tool",
+      "description": "Parse HTML and extract data using BeautifulSoup",
+      "generate_tool": true,
+      "operation_type": "transformer",
+      "input_mapping": {
+        "html": "${steps.fetch_webpage.output}",
+        "selector": "${inputs.css_selector}"
+      },
+      "output_name": "extracted_data",
+      "timeout": 30,
+      "depends_on": ["fetch_webpage"]
+    },
+    {
+      "step_id": "generate_summary",
+      "type": "llm_call",
+      "description": "Generate a summary of the extracted content",
+      "tool": "content_generator",
+      "prompt_template": "Please provide a concise summary of the following web content:\n\n${steps.extract_data.output}",
+      "input_mapping": {
+        "content": "${steps.extract_data.output}"
+      },
+      "output_name": "summary",
+      "timeout": 120,
+      "depends_on": ["extract_data"]
+    }
+  ]
+}

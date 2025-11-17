@@ -1,0 +1,114 @@
+{
+  "workflow_id": "data_analysis_workflow",
+  "version": "1.0.0",
+  "description": "Analyzes CSV data and generates visualizations using pandas and matplotlib",
+  "created_by": "code_evolver",
+  "created_at": "2025-01-17",
+  "tags": ["data-analysis", "visualization", "pandas", "pip-packages"],
+  "portable": false,
+  "inputs": {
+    "csv_file": {
+      "type": "string",
+      "required": true,
+      "description": "Path to CSV file to analyze"
+    },
+    "analysis_type": {
+      "type": "string",
+      "required": false,
+      "default": "summary",
+      "description": "Type of analysis: summary, correlation, or distribution"
+    }
+  },
+  "outputs": {
+    "statistics": {
+      "type": "object",
+      "description": "Statistical analysis results",
+      "source_reference": "steps.analyze_data.output"
+    },
+    "visualization": {
+      "type": "string",
+      "description": "Path to generated visualization image",
+      "source_reference": "steps.create_visualization.output"
+    },
+    "insights": {
+      "type": "string",
+      "description": "AI-generated insights from the analysis",
+      "source_reference": "steps.generate_insights.output"
+    }
+  },
+  "dependencies": {
+    "llm_tools": ["content_generator"],
+    "python_tools": [],
+    "pip_packages": [
+      {
+        "name": "pandas",
+        "version": ">=2.0.0"
+      },
+      {
+        "name": "matplotlib",
+        "version": ">=3.7.0"
+      },
+      {
+        "name": "numpy",
+        "version": ">=1.24.0"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_id": "load_data",
+      "type": "python_tool",
+      "description": "Load CSV data using pandas",
+      "generate_tool": true,
+      "operation_type": "transformer",
+      "input_mapping": {
+        "file_path": "${inputs.csv_file}"
+      },
+      "output_name": "dataframe",
+      "timeout": 60
+    },
+    {
+      "step_id": "analyze_data",
+      "type": "python_tool",
+      "description": "Perform statistical analysis on the data",
+      "generate_tool": true,
+      "operation_type": "transformer",
+      "input_mapping": {
+        "data": "${steps.load_data.output}",
+        "analysis_type": "${inputs.analysis_type}"
+      },
+      "output_name": "statistics",
+      "timeout": 120,
+      "depends_on": ["load_data"],
+      "parallel_group": 1
+    },
+    {
+      "step_id": "create_visualization",
+      "type": "python_tool",
+      "description": "Create visualization using matplotlib",
+      "generate_tool": true,
+      "operation_type": "transformer",
+      "input_mapping": {
+        "data": "${steps.load_data.output}",
+        "analysis_type": "${inputs.analysis_type}"
+      },
+      "output_name": "visualization_path",
+      "timeout": 90,
+      "depends_on": ["load_data"],
+      "parallel_group": 1
+    },
+    {
+      "step_id": "generate_insights",
+      "type": "llm_call",
+      "description": "Generate insights from the statistical analysis",
+      "tool": "content_generator",
+      "prompt_template": "Based on this statistical analysis:\n\n${steps.analyze_data.output}\n\nProvide key insights and actionable recommendations.",
+      "input_mapping": {
+        "statistics": "${steps.analyze_data.output}"
+      },
+      "output_name": "insights",
+      "timeout": 120,
+      "depends_on": ["analyze_data", "create_visualization"]
+    }
+  ]
+}
