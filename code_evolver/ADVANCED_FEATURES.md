@@ -1,6 +1,6 @@
 # Advanced Features Guide
 
-This document details the advanced AI-powered features that make Code Evolver intelligent and efficient.
+This document details the advanced AI-powered features that make mostlylucid DiSE intelligent and efficient.
 
 ## Table of Contents
 1. [Specification-Based Code Generation](#specification-based-code-generation)
@@ -17,7 +17,7 @@ This document details the advanced AI-powered features that make Code Evolver in
 
 ### The Two-Stage Architecture
 
-Code Evolver uses a **separation of concerns** approach:
+mostlylucid DiSE uses a **separation of concerns** approach:
 
 #### Stage 1: Specification Creation (Overseer Model)
 The **Overseer (llama3)** - a large, capable reasoning model - creates a comprehensive specification:
@@ -303,7 +303,7 @@ elif is_writing_task:
 
 ### Qdrant Vector Database
 
-Code Evolver uses **Qdrant** for semantic search with fitness indexing:
+mostlylucid DiSE uses **Qdrant** for semantic search with fitness indexing:
 
 ```python
 # Store artifact with fitness dimensions
@@ -603,7 +603,7 @@ Workflow:
 
 ## Summary
 
-Code Evolver's advanced features work together to create an intelligent, efficient, and safe code generation system:
+mostlylucid DiSE's advanced features work together to create an intelligent, efficient, and safe code generation system:
 
 1. **Specification-Based Generation**: Separation of planning (overseer) and implementation (generator)
 2. **Semantic Classification**: SAME/RELATED/DIFFERENT for intelligent reuse

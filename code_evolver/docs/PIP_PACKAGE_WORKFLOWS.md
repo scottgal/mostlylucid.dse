@@ -1,10 +1,10 @@
 # Using Pip Packages in Workflows
 
-This guide explains how to use trusted pip packages in your Code Evolver workflows to extend tool capabilities.
+This guide explains how to use trusted pip packages in your mostlylucid DiSE workflows to extend tool capabilities.
 
 ## Overview
 
-Code Evolver now supports declarative pip package dependencies in workflows. This allows your generated tools to leverage powerful Python libraries like:
+mostlylucid DiSE now supports declarative pip package dependencies in workflows. This allows your generated tools to leverage powerful Python libraries like:
 
 - **Web scraping**: requests, beautifulsoup4, httpx
 - **Data analysis**: pandas, numpy, scipy
@@ -272,7 +272,7 @@ When creating portable workflows, embed package requirements in tool definitions
 
 ## Integration with Code Generation
 
-When the Code Evolver generates tools that need pip packages:
+When the mostlylucid DiSE generates tools that need pip packages:
 
 1. **Declare dependencies** in the workflow spec
 2. **Validation** occurs automatically before installation

@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884415Z"
+      "last_reset": "2025-11-17T22:08:20.140590Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884433Z"
+      "last_reset": "2025-11-17T22:08:20.140608Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884447Z"
+      "last_reset": "2025-11-17T22:08:20.140615Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884455Z"
+      "last_reset": "2025-11-17T22:08:20.140620Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884462Z"
+      "last_reset": "2025-11-17T22:08:20.140625Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884468Z"
+      "last_reset": "2025-11-17T22:08:20.140629Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884475Z"
+      "last_reset": "2025-11-17T22:08:20.140633Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884481Z"
+      "last_reset": "2025-11-17T22:08:20.140637Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884487Z"
+      "last_reset": "2025-11-17T22:08:20.140640Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884493Z"
+      "last_reset": "2025-11-17T22:08:20.140644Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884501Z"
+      "last_reset": "2025-11-17T22:08:20.140648Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 120,
+    "usage_count": 121,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884508Z"
+      "last_reset": "2025-11-17T22:08:20.140652Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884514Z"
+      "last_reset": "2025-11-17T22:08:20.140655Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884519Z"
+      "last_reset": "2025-11-17T22:08:20.140659Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884525Z"
+      "last_reset": "2025-11-17T22:08:20.140663Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884531Z"
+      "last_reset": "2025-11-17T22:08:20.140667Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884536Z"
+      "last_reset": "2025-11-17T22:08:20.140670Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884541Z"
+      "last_reset": "2025-11-17T22:08:20.140674Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 120,
+    "usage_count": 121,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884547Z"
+      "last_reset": "2025-11-17T22:08:20.140678Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884553Z"
+      "last_reset": "2025-11-17T22:08:20.140681Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884559Z"
+      "last_reset": "2025-11-17T22:08:20.140685Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884565Z"
+      "last_reset": "2025-11-17T22:08:20.140689Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884571Z"
+      "last_reset": "2025-11-17T22:08:20.140693Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884577Z"
+      "last_reset": "2025-11-17T22:08:20.140697Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 120,
+    "usage_count": 121,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884583Z"
+      "last_reset": "2025-11-17T22:08:20.140700Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884589Z"
+      "last_reset": "2025-11-17T22:08:20.140704Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884597Z"
+      "last_reset": "2025-11-17T22:08:20.140709Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884602Z"
+      "last_reset": "2025-11-17T22:08:20.140713Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884608Z"
+      "last_reset": "2025-11-17T22:08:20.140717Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884616Z"
+      "last_reset": "2025-11-17T22:08:20.140721Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1402,7 +1402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884622Z"
+      "last_reset": "2025-11-17T22:08:20.140724Z"
     },
     "created_at": "2025-11-17T01:04:53.135606Z",
     "usage_count": 0,
@@ -1444,7 +1444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884627Z"
+      "last_reset": "2025-11-17T22:08:20.140728Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
     "usage_count": 33,
@@ -1482,7 +1482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884632Z"
+      "last_reset": "2025-11-17T22:08:20.140732Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
     "usage_count": 1,
@@ -1522,7 +1522,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884638Z"
+      "last_reset": "2025-11-17T22:08:20.140735Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
     "usage_count": 49,
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884644Z"
+      "last_reset": "2025-11-17T22:08:20.140739Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 187,
+    "usage_count": 191,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884649Z"
+      "last_reset": "2025-11-17T22:08:20.140742Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884654Z"
+      "last_reset": "2025-11-17T22:08:20.140746Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884658Z"
+      "last_reset": "2025-11-17T22:08:20.140750Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1726,7 +1726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884663Z"
+      "last_reset": "2025-11-17T22:08:20.140753Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
     "usage_count": 2,
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884668Z"
+      "last_reset": "2025-11-17T22:08:20.140757Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884674Z"
+      "last_reset": "2025-11-17T22:08:20.140760Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,7 +1849,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884679Z"
+      "last_reset": "2025-11-17T22:08:20.140764Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
     "usage_count": 3,
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884686Z"
+      "last_reset": "2025-11-17T22:08:20.140768Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,7 +1930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884692Z"
+      "last_reset": "2025-11-17T22:08:20.140772Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
     "usage_count": 1,
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884697Z"
+      "last_reset": "2025-11-17T22:08:20.140776Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884703Z"
+      "last_reset": "2025-11-17T22:08:20.140779Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2053,7 +2053,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884708Z"
+      "last_reset": "2025-11-17T22:08:20.140783Z"
     },
     "created_at": "2025-11-17T01:04:53.796074Z",
     "usage_count": 1,
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884713Z"
+      "last_reset": "2025-11-17T22:08:20.140787Z"
     },
     "created_at": "2025-11-16T10:01:30.396360Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884718Z"
+      "last_reset": "2025-11-17T22:08:20.140792Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884724Z"
+      "last_reset": "2025-11-17T22:08:20.140796Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884729Z"
+      "last_reset": "2025-11-17T22:08:20.140799Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884734Z"
+      "last_reset": "2025-11-17T22:08:20.140803Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884738Z"
+      "last_reset": "2025-11-17T22:08:20.140806Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884743Z"
+      "last_reset": "2025-11-17T22:08:20.140810Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884747Z"
+      "last_reset": "2025-11-17T22:08:20.140814Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884752Z"
+      "last_reset": "2025-11-17T22:08:20.140817Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884756Z"
+      "last_reset": "2025-11-17T22:08:20.140821Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884761Z"
+      "last_reset": "2025-11-17T22:08:20.140825Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884765Z"
+      "last_reset": "2025-11-17T22:08:20.140829Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884770Z"
+      "last_reset": "2025-11-17T22:08:20.140833Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2522,9 +2522,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:58.053992Z"
+      "last_reset": "2025-11-17T22:09:43.566722Z"
     },
-    "created_at": "2025-11-17T18:17:58.053983Z",
+    "created_at": "2025-11-17T22:09:43.566716Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2551,7 +2551,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884780Z"
+      "last_reset": "2025-11-17T22:08:20.140840Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2583,7 +2583,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884785Z"
+      "last_reset": "2025-11-17T22:08:20.140844Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2613,7 +2613,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884790Z"
+      "last_reset": "2025-11-17T22:08:20.140848Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2644,7 +2644,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884795Z"
+      "last_reset": "2025-11-17T22:08:20.140852Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2680,7 +2680,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884800Z"
+      "last_reset": "2025-11-17T22:08:20.140855Z"
     },
     "created_at": "2025-11-16T13:40:48.563426Z",
     "usage_count": 0,
@@ -2710,7 +2710,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884805Z"
+      "last_reset": "2025-11-17T22:08:20.140859Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2741,7 +2741,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884810Z"
+      "last_reset": "2025-11-17T22:08:20.140863Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2770,7 +2770,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884814Z"
+      "last_reset": "2025-11-17T22:08:20.140866Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2800,7 +2800,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884819Z"
+      "last_reset": "2025-11-17T22:08:20.140869Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2829,7 +2829,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884824Z"
+      "last_reset": "2025-11-17T22:08:20.140873Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2860,7 +2860,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884828Z"
+      "last_reset": "2025-11-17T22:08:20.140876Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2890,7 +2890,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884833Z"
+      "last_reset": "2025-11-17T22:08:20.140880Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2921,7 +2921,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884839Z"
+      "last_reset": "2025-11-17T22:08:20.140883Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2950,7 +2950,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884843Z"
+      "last_reset": "2025-11-17T22:08:20.140887Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2980,7 +2980,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884847Z"
+      "last_reset": "2025-11-17T22:08:20.140890Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -3009,7 +3009,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884852Z"
+      "last_reset": "2025-11-17T22:08:20.140894Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3038,7 +3038,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884856Z"
+      "last_reset": "2025-11-17T22:08:20.140897Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3068,7 +3068,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884861Z"
+      "last_reset": "2025-11-17T22:08:20.140901Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3099,7 +3099,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884866Z"
+      "last_reset": "2025-11-17T22:08:20.140905Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3129,7 +3129,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884871Z"
+      "last_reset": "2025-11-17T22:08:20.140909Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3158,7 +3158,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884875Z"
+      "last_reset": "2025-11-17T22:08:20.140913Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3188,7 +3188,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884879Z"
+      "last_reset": "2025-11-17T22:08:20.140916Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3218,7 +3218,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884884Z"
+      "last_reset": "2025-11-17T22:08:20.140920Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3248,7 +3248,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884889Z"
+      "last_reset": "2025-11-17T22:08:20.140923Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3279,7 +3279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884893Z"
+      "last_reset": "2025-11-17T22:08:20.140927Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3308,7 +3308,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884899Z"
+      "last_reset": "2025-11-17T22:08:20.140931Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3338,7 +3338,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884905Z"
+      "last_reset": "2025-11-17T22:08:20.140935Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3367,7 +3367,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884910Z"
+      "last_reset": "2025-11-17T22:08:20.140938Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3397,7 +3397,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884914Z"
+      "last_reset": "2025-11-17T22:08:20.140942Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3433,7 +3433,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884919Z"
+      "last_reset": "2025-11-17T22:08:20.140945Z"
     },
     "created_at": "2025-11-16T17:58:30.737649Z",
     "usage_count": 0,
@@ -3463,7 +3463,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884923Z"
+      "last_reset": "2025-11-17T22:08:20.140949Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3499,7 +3499,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884928Z"
+      "last_reset": "2025-11-17T22:08:20.140952Z"
     },
     "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
@@ -3529,7 +3529,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884933Z"
+      "last_reset": "2025-11-17T22:08:20.140956Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3558,7 +3558,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884938Z"
+      "last_reset": "2025-11-17T22:08:20.140959Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3587,7 +3587,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884942Z"
+      "last_reset": "2025-11-17T22:08:20.140963Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3617,7 +3617,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884947Z"
+      "last_reset": "2025-11-17T22:08:20.140966Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3648,7 +3648,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884951Z"
+      "last_reset": "2025-11-17T22:08:20.140970Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3678,7 +3678,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884955Z"
+      "last_reset": "2025-11-17T22:08:20.140973Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3708,7 +3708,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884960Z"
+      "last_reset": "2025-11-17T22:08:20.140977Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3744,7 +3744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884965Z"
+      "last_reset": "2025-11-17T22:08:20.140980Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3780,7 +3780,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884970Z"
+      "last_reset": "2025-11-17T22:08:20.140984Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3816,7 +3816,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884975Z"
+      "last_reset": "2025-11-17T22:08:20.140987Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
     "usage_count": 0,
@@ -3852,7 +3852,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884980Z"
+      "last_reset": "2025-11-17T22:08:20.140991Z"
     },
     "created_at": "2025-11-16T09:14:20.219639Z",
     "usage_count": 0,
@@ -3888,7 +3888,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884984Z"
+      "last_reset": "2025-11-17T22:08:20.140995Z"
     },
     "created_at": "2025-11-16T09:17:21.481820Z",
     "usage_count": 0,
@@ -3952,7 +3952,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884989Z"
+      "last_reset": "2025-11-17T22:08:20.140999Z"
     },
     "created_at": "2025-11-16T09:07:23.454598Z",
     "usage_count": 0,
@@ -3988,7 +3988,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.884995Z"
+      "last_reset": "2025-11-17T22:08:20.141002Z"
     },
     "created_at": "2025-11-16T09:12:45.348005Z",
     "usage_count": 0,
@@ -4024,7 +4024,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885000Z"
+      "last_reset": "2025-11-17T22:08:20.141006Z"
     },
     "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
@@ -4060,7 +4060,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885004Z"
+      "last_reset": "2025-11-17T22:08:20.141009Z"
     },
     "created_at": "2025-11-16T09:25:57.866554Z",
     "usage_count": 0,
@@ -4096,7 +4096,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885008Z"
+      "last_reset": "2025-11-17T22:08:20.141013Z"
     },
     "created_at": "2025-11-16T09:28:27.164898Z",
     "usage_count": 0,
@@ -4132,7 +4132,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885013Z"
+      "last_reset": "2025-11-17T22:08:20.141016Z"
     },
     "created_at": "2025-11-16T09:29:38.153439Z",
     "usage_count": 0,
@@ -4168,7 +4168,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885018Z"
+      "last_reset": "2025-11-17T22:08:20.141020Z"
     },
     "created_at": "2025-11-16T09:35:06.567192Z",
     "usage_count": 0,
@@ -4221,7 +4221,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885023Z"
+      "last_reset": "2025-11-17T22:08:20.141023Z"
     },
     "created_at": "2025-11-16T10:01:29.141239Z",
     "usage_count": 0,
@@ -4274,7 +4274,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885029Z"
+      "last_reset": "2025-11-17T22:08:20.141027Z"
     },
     "created_at": "2025-11-16T10:01:30.181536Z",
     "usage_count": 25,
@@ -4310,7 +4310,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885034Z"
+      "last_reset": "2025-11-17T22:08:20.141030Z"
     },
     "created_at": "2025-11-16T10:06:10.391814Z",
     "usage_count": 0,
@@ -4346,7 +4346,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885038Z"
+      "last_reset": "2025-11-17T22:08:20.141034Z"
     },
     "created_at": "2025-11-16T10:12:47.223241Z",
     "usage_count": 0,
@@ -4382,7 +4382,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885043Z"
+      "last_reset": "2025-11-17T22:08:20.141037Z"
     },
     "created_at": "2025-11-16T10:14:13.615361Z",
     "usage_count": 0,
@@ -4418,7 +4418,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885048Z"
+      "last_reset": "2025-11-17T22:08:20.141041Z"
     },
     "created_at": "2025-11-16T10:15:06.069892Z",
     "usage_count": 0,
@@ -4454,7 +4454,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885053Z"
+      "last_reset": "2025-11-17T22:08:20.141044Z"
     },
     "created_at": "2025-11-16T10:42:33.746191Z",
     "usage_count": 0,
@@ -4490,7 +4490,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885057Z"
+      "last_reset": "2025-11-17T22:08:20.141047Z"
     },
     "created_at": "2025-11-16T11:10:19.359123Z",
     "usage_count": 0,
@@ -4526,7 +4526,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885062Z"
+      "last_reset": "2025-11-17T22:08:20.141051Z"
     },
     "created_at": "2025-11-16T11:31:40.692912Z",
     "usage_count": 0,
@@ -4562,7 +4562,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885066Z"
+      "last_reset": "2025-11-17T22:08:20.141054Z"
     },
     "created_at": "2025-11-16T11:32:50.990789Z",
     "usage_count": 0,
@@ -4598,7 +4598,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885071Z"
+      "last_reset": "2025-11-17T22:08:20.141058Z"
     },
     "created_at": "2025-11-16T11:46:37.640775Z",
     "usage_count": 0,
@@ -4634,7 +4634,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885076Z"
+      "last_reset": "2025-11-17T22:08:20.141061Z"
     },
     "created_at": "2025-11-16T12:20:27.162450Z",
     "usage_count": 0,
@@ -4765,7 +4765,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885081Z"
+      "last_reset": "2025-11-17T22:08:20.141065Z"
     },
     "created_at": "2025-11-16T12:41:08.799526Z",
     "usage_count": 0,
@@ -4845,7 +4845,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885087Z"
+      "last_reset": "2025-11-17T22:08:20.141068Z"
     },
     "created_at": "2025-11-16T12:41:08.807420Z",
     "usage_count": 0,
@@ -4936,7 +4936,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885093Z"
+      "last_reset": "2025-11-17T22:08:20.141072Z"
     },
     "created_at": "2025-11-16T12:41:08.810729Z",
     "usage_count": 0,
@@ -4998,7 +4998,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885100Z"
+      "last_reset": "2025-11-17T22:08:20.141075Z"
     },
     "created_at": "2025-11-16T12:41:08.812165Z",
     "usage_count": 0,
@@ -5098,8 +5098,8 @@
       "cost_tier": "low",
       "speed_tier": "realtime",
       "quality_tier": "good",
-      "version": "1.0.0",
-      "definition_hash": "4e17b0fca378b52e5c860b6ad560d074a5ad3e3aca65dc0f05e59c2705eec331",
+      "version": "1.0.1",
+      "definition_hash": "e0aad309afcf77bdfe06e94595d55cff313bf82edfc31f90cf9866e76799e703",
       "breaking_changes": []
     },
     "constraints": {},
@@ -5107,12 +5107,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885105Z"
+      "last_reset": "2025-11-17T22:08:33.348432Z"
     },
-    "created_at": "2025-11-16T12:41:08.831401Z",
+    "created_at": "2025-11-17T22:08:33.348425Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "4e17b0fca378b52e5c860b6ad560d074a5ad3e3aca65dc0f05e59c2705eec331",
+    "version": "1.0.1",
+    "definition_hash": "e0aad309afcf77bdfe06e94595d55cff313bf82edfc31f90cf9866e76799e703",
     "breaking_changes": []
   },
   "signalr_llmapi_skill": {
@@ -5202,7 +5202,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885110Z"
+      "last_reset": "2025-11-17T22:08:20.141082Z"
     },
     "created_at": "2025-11-16T12:41:08.834283Z",
     "usage_count": 0,
@@ -5235,7 +5235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885116Z"
+      "last_reset": "2025-11-17T22:08:20.141086Z"
     },
     "created_at": "2025-11-16T12:41:08.836868Z",
     "usage_count": 0,
@@ -5269,7 +5269,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885120Z"
+      "last_reset": "2025-11-17T22:08:20.141089Z"
     },
     "created_at": "2025-11-16T12:41:08.839875Z",
     "usage_count": 0,
@@ -5303,7 +5303,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885125Z"
+      "last_reset": "2025-11-17T22:08:20.141093Z"
     },
     "created_at": "2025-11-16T12:41:08.844259Z",
     "usage_count": 0,
@@ -5344,7 +5344,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885131Z"
+      "last_reset": "2025-11-17T22:08:20.141097Z"
     },
     "created_at": "2025-11-17T01:04:53.469789Z",
     "usage_count": 0,
@@ -5386,7 +5386,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885136Z"
+      "last_reset": "2025-11-17T22:08:20.141100Z"
     },
     "created_at": "2025-11-16T12:41:08.875026Z",
     "usage_count": 0,
@@ -5414,14 +5414,14 @@
       "yaml_file": "llm\\task_to_workflow_router.yaml",
       "llm_tier": null,
       "llm_role": null,
-      "system_prompt": "You are a workflow code generator for the Code Evolver system.\n\nYour task is to analyze incoming task specifications and generate complete,\nexecutable Python workflow code that accomplishes the task.\n\nIMPORTANT RULES:\n- Generate COMPLETE, WORKING Python code\n- Always include proper imports\n- Use node_runtime.call_tool() to invoke LLM tools\n- Read input from stdin as JSON\n- Output results as JSON to stdout\n- Include error handling\n- Add a main() function and if __name__ == \"__main__\"\n- Use appropriate tools based on task type:\n  * summarize → call_tool(\"summarizer\", ...)\n  * generate → call_tool(\"content_generator\", ...)\n  * translate → call_tool(\"quick_translator\", ...) or call_tool(\"nmt_translator\", ...)\n- Do NOT add sys.path.insert() for node_runtime (it's handled by the runtime)\n",
+      "system_prompt": "You are a workflow code generator for the mostlylucid DiSE system.\n\nYour task is to analyze incoming task specifications and generate complete,\nexecutable Python workflow code that accomplishes the task.\n\nIMPORTANT RULES:\n- Generate COMPLETE, WORKING Python code\n- Always include proper imports\n- Use node_runtime.call_tool() to invoke LLM tools\n- Read input from stdin as JSON\n- Output results as JSON to stdout\n- Include error handling\n- Add a main() function and if __name__ == \"__main__\"\n- Use appropriate tools based on task type:\n  * summarize → call_tool(\"summarizer\", ...)\n  * generate → call_tool(\"content_generator\", ...)\n  * translate → call_tool(\"quick_translator\", ...) or call_tool(\"nmt_translator\", ...)\n- Do NOT add sys.path.insert() for node_runtime (it's handled by the runtime)\n",
       "prompt_template": "Generate a complete Python workflow for this task:\n\n**Task Data:**\n```json\n{task_json}\n```\n\n**Task Analysis:**\n- Task Type: {task_type}\n- Task Name: {task_name}\n- Priority: {priority}\n- Languages: {languages}\n\n**Generate workflow code that:**\n\n1. Reads input from stdin (JSON with task data)\n2. Calls appropriate tool(s) based on task type:\n   - `summarize` → Use `summarizer` tool\n   - `generate` → Use `content_generator` tool\n   - `translate` → Use `quick_translator` or `nmt_translator` tool\n3. Handles translation languages if provided\n4. Outputs result as JSON to stdout\n5. Includes error handling\n\n**Code Template:**\n```python\nimport json\nimport sys\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\nfrom node_runtime import call_tool\n\n\ndef main():\n    # Read input\n    input_data = json.load(sys.stdin)\n\n    # Extract task parameters\n    # [YOUR CODE HERE]\n\n    # Call appropriate tool\n    # [YOUR CODE HERE]\n\n    # Output result\n    print(json.dumps({{\"result\": result, \"task_id\": task_id}}))\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\n**Output ONLY valid JSON:**\n```json\n{{\n  \"workflow_code\": \"import json\\\\nimport sys\\\\n...\",\n  \"workflow_name\": \"descriptive_workflow_name\",\n  \"suggested_node_id\": \"task_type_brief_description\",\n  \"tools_used\": [\"tool1\", \"tool2\"],\n  \"estimated_complexity\": \"simple|moderate|complex\"\n}}\n```\n\nIMPORTANT: Output ONLY the JSON, no markdown, no explanations.\n",
       "cost_tier": "medium",
       "speed_tier": "fast",
       "quality_tier": "excellent",
       "max_output_length": "medium",
-      "version": "1.0.0",
-      "definition_hash": "af0731fa53b9fa5bb515263873324c31c58f048824afca79610d9b4b8d1def1a",
+      "version": "1.0.1",
+      "definition_hash": "796ff701cf4294dfbb4d4fa5273259154556a1995f573e26e3e97a573af15e46",
       "breaking_changes": []
     },
     "constraints": {},
@@ -5429,12 +5429,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885141Z"
+      "last_reset": "2025-11-17T22:08:39.962162Z"
     },
-    "created_at": "2025-11-16T12:41:08.881445Z",
+    "created_at": "2025-11-17T22:08:39.962155Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "af0731fa53b9fa5bb515263873324c31c58f048824afca79610d9b4b8d1def1a",
+    "version": "1.0.1",
+    "definition_hash": "796ff701cf4294dfbb4d4fa5273259154556a1995f573e26e3e97a573af15e46",
     "breaking_changes": []
   },
   "workflow_documenter": {
@@ -5472,7 +5472,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885147Z"
+      "last_reset": "2025-11-17T22:08:20.141108Z"
     },
     "created_at": "2025-11-16T12:41:08.887411Z",
     "usage_count": 0,
@@ -5508,7 +5508,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885151Z"
+      "last_reset": "2025-11-17T22:08:20.141111Z"
     },
     "created_at": "2025-11-16T13:44:17.864365Z",
     "usage_count": 0,
@@ -5600,7 +5600,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885156Z"
+      "last_reset": "2025-11-17T22:08:20.141115Z"
     },
     "created_at": "2025-11-16T14:05:46.456088Z",
     "usage_count": 0,
@@ -5709,7 +5709,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885161Z"
+      "last_reset": "2025-11-17T22:08:20.141118Z"
     },
     "created_at": "2025-11-16T14:05:47.598951Z",
     "usage_count": 0,
@@ -5808,7 +5808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885167Z"
+      "last_reset": "2025-11-17T22:08:20.141122Z"
     },
     "created_at": "2025-11-16T14:05:47.896875Z",
     "usage_count": 0,
@@ -5844,7 +5844,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885171Z"
+      "last_reset": "2025-11-17T22:08:20.141125Z"
     },
     "created_at": "2025-11-16T14:09:32.745489Z",
     "usage_count": 0,
@@ -5940,7 +5940,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885177Z"
+      "last_reset": "2025-11-17T22:08:20.141129Z"
     },
     "created_at": "2025-11-16T14:36:50.752511Z",
     "usage_count": 0,
@@ -5990,7 +5990,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885182Z"
+      "last_reset": "2025-11-17T22:08:20.141132Z"
     },
     "created_at": "2025-11-16T14:44:34.683195Z",
     "usage_count": 0,
@@ -6041,7 +6041,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885188Z"
+      "last_reset": "2025-11-17T22:08:20.141136Z"
     },
     "created_at": "2025-11-17T01:04:52.642072Z",
     "usage_count": 0,
@@ -6095,7 +6095,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885195Z"
+      "last_reset": "2025-11-17T22:08:20.141140Z"
     },
     "created_at": "2025-11-16T14:44:34.699603Z",
     "usage_count": 0,
@@ -6144,7 +6144,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885200Z"
+      "last_reset": "2025-11-17T22:08:20.141144Z"
     },
     "created_at": "2025-11-16T14:44:34.701148Z",
     "usage_count": 0,
@@ -6193,7 +6193,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885206Z"
+      "last_reset": "2025-11-17T22:08:20.141147Z"
     },
     "created_at": "2025-11-16T14:44:34.702597Z",
     "usage_count": 0,
@@ -6244,7 +6244,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885211Z"
+      "last_reset": "2025-11-17T22:08:20.141150Z"
     },
     "created_at": "2025-11-16T14:44:34.707867Z",
     "usage_count": 0,
@@ -6296,7 +6296,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885218Z"
+      "last_reset": "2025-11-17T22:08:20.141154Z"
     },
     "created_at": "2025-11-16T14:44:34.723916Z",
     "usage_count": 0,
@@ -6349,7 +6349,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885223Z"
+      "last_reset": "2025-11-17T22:08:20.141158Z"
     },
     "created_at": "2025-11-16T14:44:34.739060Z",
     "usage_count": 0,
@@ -6402,7 +6402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885229Z"
+      "last_reset": "2025-11-17T22:08:20.141161Z"
     },
     "created_at": "2025-11-16T14:44:34.753760Z",
     "usage_count": 0,
@@ -6444,7 +6444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885234Z"
+      "last_reset": "2025-11-17T22:08:20.141165Z"
     },
     "created_at": "2025-11-16T14:44:34.775905Z",
     "usage_count": 0,
@@ -6480,7 +6480,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885239Z"
+      "last_reset": "2025-11-17T22:08:20.141168Z"
     },
     "created_at": "2025-11-16T15:16:33.662222Z",
     "usage_count": 0,
@@ -6516,7 +6516,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885243Z"
+      "last_reset": "2025-11-17T22:08:20.141172Z"
     },
     "created_at": "2025-11-16T15:18:49.659263Z",
     "usage_count": 0,
@@ -6653,8 +6653,8 @@
       "cost_tier": "free",
       "speed_tier": "fast",
       "quality_tier": "excellent",
-      "version": "1.0.2",
-      "definition_hash": "4d07c6563a4337d1a1d57bb68db6735c332558fd3efc7987c11e86e95709035b",
+      "version": "1.0.3",
+      "definition_hash": "b180649ee82a80e3065683223b293e5ae4c7654a7468cafad4c1b5c30208cdfa",
       "breaking_changes": []
     },
     "constraints": {},
@@ -6662,12 +6662,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885249Z"
+      "last_reset": "2025-11-17T22:08:34.167393Z"
     },
-    "created_at": "2025-11-17T13:37:52.065236Z",
+    "created_at": "2025-11-17T22:08:34.167386Z",
     "usage_count": 0,
-    "version": "1.0.2",
-    "definition_hash": "4d07c6563a4337d1a1d57bb68db6735c332558fd3efc7987c11e86e95709035b",
+    "version": "1.0.3",
+    "definition_hash": "b180649ee82a80e3065683223b293e5ae4c7654a7468cafad4c1b5c30208cdfa",
     "breaking_changes": []
   },
   "check_tool_duplicate": {
@@ -6782,7 +6782,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885254Z"
+      "last_reset": "2025-11-17T22:08:20.141179Z"
     },
     "created_at": "2025-11-16T15:46:53.635925Z",
     "usage_count": 0,
@@ -6927,8 +6927,8 @@
       "cost_tier": "free",
       "speed_tier": "very-fast",
       "quality_tier": "excellent",
-      "version": "1.0.1",
-      "definition_hash": "0fd8d435634533419b6255afd50b1a171a9ce8fc5dc48784e50727d12a1665ea",
+      "version": "1.0.2",
+      "definition_hash": "4890407cace8ced11797fde8e0957ad42709f73af89946ed92831f96665e899c",
       "breaking_changes": []
     },
     "constraints": {},
@@ -6936,12 +6936,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885259Z"
+      "last_reset": "2025-11-17T22:08:29.230146Z"
     },
-    "created_at": "2025-11-17T13:37:51.765381Z",
+    "created_at": "2025-11-17T22:08:29.230139Z",
     "usage_count": 0,
-    "version": "1.0.1",
-    "definition_hash": "0fd8d435634533419b6255afd50b1a171a9ce8fc5dc48784e50727d12a1665ea",
+    "version": "1.0.2",
+    "definition_hash": "4890407cace8ced11797fde8e0957ad42709f73af89946ed92831f96665e899c",
     "breaking_changes": []
   },
   "prompt_genericiser": {
@@ -6976,7 +6976,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885265Z"
+      "last_reset": "2025-11-17T22:08:20.141187Z"
     },
     "created_at": "2025-11-16T15:46:53.734260Z",
     "usage_count": 1,
@@ -7114,7 +7114,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885270Z"
+      "last_reset": "2025-11-17T22:08:20.141191Z"
     },
     "created_at": "2025-11-16T16:37:21.157255Z",
     "usage_count": 0,
@@ -7223,7 +7223,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885275Z"
+      "last_reset": "2025-11-17T22:08:20.141194Z"
     },
     "created_at": "2025-11-16T16:37:22.333430Z",
     "usage_count": 0,
@@ -7331,7 +7331,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885281Z"
+      "last_reset": "2025-11-17T22:08:20.141198Z"
     },
     "created_at": "2025-11-16T16:37:23.010156Z",
     "usage_count": 0,
@@ -7371,7 +7371,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885287Z"
+      "last_reset": "2025-11-17T22:08:20.141202Z"
     },
     "created_at": "2025-11-16T16:37:23.342186Z",
     "usage_count": 0,
@@ -7407,7 +7407,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885291Z"
+      "last_reset": "2025-11-17T22:08:20.141205Z"
     },
     "created_at": "2025-11-16T18:18:47.459930Z",
     "usage_count": 0,
@@ -7447,7 +7447,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885296Z"
+      "last_reset": "2025-11-17T22:08:20.141209Z"
     },
     "created_at": "2025-11-16T18:39:13.503483Z",
     "usage_count": 0,
@@ -7483,7 +7483,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885302Z"
+      "last_reset": "2025-11-17T22:08:20.141212Z"
     },
     "created_at": "2025-11-16T18:47:31.754804Z",
     "usage_count": 0,
@@ -7556,7 +7556,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885308Z"
+      "last_reset": "2025-11-17T22:08:20.141216Z"
     },
     "created_at": "2025-11-16T19:12:19.491661Z",
     "usage_count": 0,
@@ -7690,7 +7690,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885313Z"
+      "last_reset": "2025-11-17T22:08:20.141220Z"
     },
     "created_at": "2025-11-16T19:12:20.731463Z",
     "usage_count": 0,
@@ -7732,7 +7732,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885319Z"
+      "last_reset": "2025-11-17T22:08:20.141224Z"
     },
     "created_at": "2025-11-16T18:54:43.788820Z",
     "usage_count": 0,
@@ -7768,7 +7768,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885324Z"
+      "last_reset": "2025-11-17T22:08:20.141227Z"
     },
     "created_at": "2025-11-16T19:40:57.911688Z",
     "usage_count": 0,
@@ -7804,7 +7804,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885329Z"
+      "last_reset": "2025-11-17T22:08:20.141231Z"
     },
     "created_at": "2025-11-16T19:42:34.039153Z",
     "usage_count": 0,
@@ -7840,7 +7840,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885336Z"
+      "last_reset": "2025-11-17T22:08:20.141236Z"
     },
     "created_at": "2025-11-16T20:30:38.048887Z",
     "usage_count": 0,
@@ -7857,7 +7857,7 @@
     "parameters": {},
     "metadata": {
       "from_yaml": true,
-      "yaml_file": "executable\\bugcatcher.yaml",
+      "yaml_file": "debug\\bugcatcher.yaml",
       "command": null,
       "args": [],
       "input_schema": null,
@@ -7865,8 +7865,8 @@
       "cost_tier": "free",
       "speed_tier": "medium",
       "quality_tier": "good",
-      "version": "1.0.0",
-      "definition_hash": "40977576bc52077d3a62f85c1fe98b4dd1450e966c7b71b5465db0baedf740fb",
+      "version": "1.0.1",
+      "definition_hash": "dd6298905b057b45df0c68398c85189378e7652fe033ea446c06de81325d9faf",
       "breaking_changes": []
     },
     "constraints": {},
@@ -7874,12 +7874,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885341Z"
+      "last_reset": "2025-11-17T22:08:26.297784Z"
     },
-    "created_at": "2025-11-16T21:05:17.771074Z",
+    "created_at": "2025-11-17T22:08:26.297778Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "40977576bc52077d3a62f85c1fe98b4dd1450e966c7b71b5465db0baedf740fb",
+    "version": "1.0.1",
+    "definition_hash": "dd6298905b057b45df0c68398c85189378e7652fe033ea446c06de81325d9faf",
     "breaking_changes": []
   },
   "http_raw_client": {
@@ -8004,7 +8004,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885346Z"
+      "last_reset": "2025-11-17T22:08:20.141243Z"
     },
     "created_at": "2025-11-16T21:05:19.300501Z",
     "usage_count": 0,
@@ -8120,7 +8120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885352Z"
+      "last_reset": "2025-11-17T22:08:20.141246Z"
     },
     "created_at": "2025-11-16T21:05:19.850955Z",
     "usage_count": 0,
@@ -8217,7 +8217,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885357Z"
+      "last_reset": "2025-11-17T22:08:20.141250Z"
     },
     "created_at": "2025-11-16T21:05:20.413481Z",
     "usage_count": 0,
@@ -8253,7 +8253,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885362Z"
+      "last_reset": "2025-11-17T22:08:20.141254Z"
     },
     "created_at": "2025-11-16T22:00:32.057386Z",
     "usage_count": 0,
@@ -8278,8 +8278,8 @@
       "cost_tier": "free",
       "speed_tier": "medium",
       "quality_tier": "good",
-      "version": "1.0.0",
-      "definition_hash": "d2347b770077b4a508cda89caf9dd6e8e44a40d310c1f26ce79e3f64b1b33e83",
+      "version": "1.0.1",
+      "definition_hash": "b6dbe851d1f67d79947874ec88381ad5d3f9b8a1380bbb01d05117ddd4c7ae78",
       "breaking_changes": []
     },
     "constraints": {},
@@ -8287,12 +8287,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885368Z"
+      "last_reset": "2025-11-17T22:08:29.147254Z"
     },
-    "created_at": "2025-11-16T22:19:28.154854Z",
+    "created_at": "2025-11-17T22:08:29.147247Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "d2347b770077b4a508cda89caf9dd6e8e44a40d310c1f26ce79e3f64b1b33e83",
+    "version": "1.0.1",
+    "definition_hash": "b6dbe851d1f67d79947874ec88381ad5d3f9b8a1380bbb01d05117ddd4c7ae78",
     "breaking_changes": []
   },
   "loki": {
@@ -8312,8 +8312,8 @@
       "cost_tier": "free",
       "speed_tier": "medium",
       "quality_tier": "good",
-      "version": "1.0.0",
-      "definition_hash": "70fef6859e0c8d641c268f0af3ea6ffeec9027a03a6731d3a30cfc7e2842dd0e",
+      "version": "1.0.1",
+      "definition_hash": "c4eb0c756165c1a0ebcddf442d31d922380b8959ccbbd8efd005fe57293afa98",
       "breaking_changes": []
     },
     "constraints": {},
@@ -8321,12 +8321,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885373Z"
+      "last_reset": "2025-11-17T22:08:30.604483Z"
     },
-    "created_at": "2025-11-16T22:19:29.467347Z",
+    "created_at": "2025-11-17T22:08:30.604471Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "70fef6859e0c8d641c268f0af3ea6ffeec9027a03a6731d3a30cfc7e2842dd0e",
+    "version": "1.0.1",
+    "definition_hash": "c4eb0c756165c1a0ebcddf442d31d922380b8959ccbbd8efd005fe57293afa98",
     "breaking_changes": []
   },
   "note_this_workflow_may_be_mul": {
@@ -8357,7 +8357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885377Z"
+      "last_reset": "2025-11-17T22:08:20.141264Z"
     },
     "created_at": "2025-11-16T23:58:51.200477Z",
     "usage_count": 0,
@@ -8393,7 +8393,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885382Z"
+      "last_reset": "2025-11-17T22:08:20.141268Z"
     },
     "created_at": "2025-11-17T00:02:46.175573Z",
     "usage_count": 0,
@@ -8429,7 +8429,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885387Z"
+      "last_reset": "2025-11-17T22:08:20.141271Z"
     },
     "created_at": "2025-11-17T00:06:38.511208Z",
     "usage_count": 0,
@@ -8534,7 +8534,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885394Z"
+      "last_reset": "2025-11-17T22:08:20.141275Z"
     },
     "created_at": "2025-11-17T00:38:55.143090Z",
     "usage_count": 0,
@@ -8611,7 +8611,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885399Z"
+      "last_reset": "2025-11-17T22:08:20.141279Z"
     },
     "created_at": "2025-11-17T00:38:56.295984Z",
     "usage_count": 0,
@@ -8685,7 +8685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885407Z"
+      "last_reset": "2025-11-17T22:08:20.141283Z"
     },
     "created_at": "2025-11-17T00:38:56.519374Z",
     "usage_count": 0,
@@ -8799,7 +8799,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885412Z"
+      "last_reset": "2025-11-17T22:08:20.141286Z"
     },
     "created_at": "2025-11-17T00:38:56.807759Z",
     "usage_count": 0,
@@ -8886,7 +8886,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885418Z"
+      "last_reset": "2025-11-17T22:08:20.141290Z"
     },
     "created_at": "2025-11-17T00:38:57.017183Z",
     "usage_count": 0,
@@ -9001,7 +9001,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885424Z"
+      "last_reset": "2025-11-17T22:08:20.141294Z"
     },
     "created_at": "2025-11-17T00:38:57.227864Z",
     "usage_count": 0,
@@ -9035,7 +9035,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885429Z"
+      "last_reset": "2025-11-17T22:08:20.141298Z"
     },
     "created_at": "2025-11-17T00:38:57.499268Z",
     "usage_count": 0,
@@ -9071,7 +9071,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885434Z"
+      "last_reset": "2025-11-17T22:08:20.141301Z"
     },
     "created_at": "2025-11-17T00:51:06.562840Z",
     "usage_count": 0,
@@ -9107,7 +9107,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885439Z"
+      "last_reset": "2025-11-17T22:08:20.141304Z"
     },
     "created_at": "2025-11-17T00:57:11.169630Z",
     "usage_count": 0,
@@ -9143,7 +9143,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885444Z"
+      "last_reset": "2025-11-17T22:08:20.141308Z"
     },
     "created_at": "2025-11-17T00:59:55.097042Z",
     "usage_count": 0,
@@ -9179,7 +9179,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885448Z"
+      "last_reset": "2025-11-17T22:08:20.141311Z"
     },
     "created_at": "2025-11-17T01:02:19.708052Z",
     "usage_count": 0,
@@ -9215,7 +9215,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885452Z"
+      "last_reset": "2025-11-17T22:08:20.141315Z"
     },
     "created_at": "2025-11-17T01:59:56.117103Z",
     "usage_count": 0,
@@ -9258,7 +9258,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885457Z"
+      "last_reset": "2025-11-17T22:08:20.141318Z"
     },
     "created_at": "2025-11-17T02:01:13.536751Z",
     "usage_count": 0,
@@ -9294,7 +9294,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885462Z"
+      "last_reset": "2025-11-17T22:08:20.141322Z"
     },
     "created_at": "2025-11-17T02:01:13.548173Z",
     "usage_count": 0,
@@ -9330,7 +9330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885467Z"
+      "last_reset": "2025-11-17T22:08:20.141326Z"
     },
     "created_at": "2025-11-17T02:01:13.554693Z",
     "usage_count": 0,
@@ -9364,7 +9364,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885471Z"
+      "last_reset": "2025-11-17T22:08:20.141330Z"
     },
     "created_at": "2025-11-17T02:01:13.610702Z",
     "usage_count": 0,
@@ -9483,7 +9483,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885476Z"
+      "last_reset": "2025-11-17T22:08:20.141334Z"
     },
     "created_at": "2025-11-17T02:01:13.659419Z",
     "usage_count": 0,
@@ -9526,7 +9526,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885481Z"
+      "last_reset": "2025-11-17T22:08:20.141338Z"
     },
     "created_at": "2025-11-17T02:01:13.709755Z",
     "usage_count": 0,
@@ -9562,7 +9562,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885486Z"
+      "last_reset": "2025-11-17T22:08:20.141341Z"
     },
     "created_at": "2025-11-17T02:08:33.381337Z",
     "usage_count": 0,
@@ -9598,7 +9598,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885491Z"
+      "last_reset": "2025-11-17T22:08:20.141345Z"
     },
     "created_at": "2025-11-17T02:12:13.663970Z",
     "usage_count": 0,
@@ -9634,7 +9634,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885497Z"
+      "last_reset": "2025-11-17T22:08:20.141348Z"
     },
     "created_at": "2025-11-17T02:25:32.423226Z",
     "usage_count": 0,
@@ -9710,7 +9710,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885502Z"
+      "last_reset": "2025-11-17T22:08:20.141352Z"
     },
     "created_at": "2025-11-17T02:43:19.957840Z",
     "usage_count": 0,
@@ -9746,7 +9746,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885507Z"
+      "last_reset": "2025-11-17T22:08:20.141355Z"
     },
     "created_at": "2025-11-17T02:59:48.804498Z",
     "usage_count": 0,
@@ -9782,7 +9782,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885512Z"
+      "last_reset": "2025-11-17T22:08:20.141359Z"
     },
     "created_at": "2025-11-17T03:03:34.975666Z",
     "usage_count": 0,
@@ -9818,7 +9818,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885517Z"
+      "last_reset": "2025-11-17T22:08:20.141362Z"
     },
     "created_at": "2025-11-17T03:12:49.892467Z",
     "usage_count": 0,
@@ -9854,7 +9854,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885522Z"
+      "last_reset": "2025-11-17T22:08:20.141366Z"
     },
     "created_at": "2025-11-17T03:16:24.099833Z",
     "usage_count": 0,
@@ -9890,7 +9890,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885526Z"
+      "last_reset": "2025-11-17T22:08:20.141369Z"
     },
     "created_at": "2025-11-17T03:28:03.846725Z",
     "usage_count": 0,
@@ -9926,7 +9926,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885531Z"
+      "last_reset": "2025-11-17T22:08:20.141373Z"
     },
     "created_at": "2025-11-17T03:42:55.443249Z",
     "usage_count": 0,
@@ -9962,7 +9962,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885536Z"
+      "last_reset": "2025-11-17T22:08:20.141376Z"
     },
     "created_at": "2025-11-17T04:09:12.761259Z",
     "usage_count": 0,
@@ -9998,7 +9998,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885540Z"
+      "last_reset": "2025-11-17T22:08:20.141380Z"
     },
     "created_at": "2025-11-17T04:16:08.569034Z",
     "usage_count": 0,
@@ -10034,7 +10034,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885545Z"
+      "last_reset": "2025-11-17T22:08:20.141384Z"
     },
     "created_at": "2025-11-17T04:24:30.592758Z",
     "usage_count": 0,
@@ -10070,7 +10070,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885550Z"
+      "last_reset": "2025-11-17T22:08:20.141388Z"
     },
     "created_at": "2025-11-17T04:30:31.083564Z",
     "usage_count": 0,
@@ -10106,7 +10106,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885554Z"
+      "last_reset": "2025-11-17T22:08:20.141391Z"
     },
     "created_at": "2025-11-17T04:36:53.081537Z",
     "usage_count": 0,
@@ -10142,7 +10142,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885559Z"
+      "last_reset": "2025-11-17T22:08:20.141395Z"
     },
     "created_at": "2025-11-17T04:39:23.751217Z",
     "usage_count": 0,
@@ -10178,7 +10178,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885563Z"
+      "last_reset": "2025-11-17T22:08:20.141398Z"
     },
     "created_at": "2025-11-17T04:48:59.559249Z",
     "usage_count": 0,
@@ -10214,7 +10214,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885569Z"
+      "last_reset": "2025-11-17T22:08:20.141402Z"
     },
     "created_at": "2025-11-17T04:55:16.638562Z",
     "usage_count": 0,
@@ -10250,7 +10250,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885573Z"
+      "last_reset": "2025-11-17T22:08:20.141405Z"
     },
     "created_at": "2025-11-17T05:01:49.442342Z",
     "usage_count": 0,
@@ -10286,7 +10286,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885578Z"
+      "last_reset": "2025-11-17T22:08:20.141409Z"
     },
     "created_at": "2025-11-17T05:09:10.754336Z",
     "usage_count": 0,
@@ -10322,7 +10322,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885582Z"
+      "last_reset": "2025-11-17T22:08:20.141412Z"
     },
     "created_at": "2025-11-17T05:38:47.388798Z",
     "usage_count": 0,
@@ -10358,7 +10358,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885587Z"
+      "last_reset": "2025-11-17T22:08:20.141416Z"
     },
     "created_at": "2025-11-17T05:41:09.183086Z",
     "usage_count": 0,
@@ -10394,7 +10394,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885592Z"
+      "last_reset": "2025-11-17T22:08:20.141419Z"
     },
     "created_at": "2025-11-17T05:49:10.690635Z",
     "usage_count": 0,
@@ -10430,7 +10430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885597Z"
+      "last_reset": "2025-11-17T22:08:20.141423Z"
     },
     "created_at": "2025-11-17T05:58:47.567855Z",
     "usage_count": 0,
@@ -10466,7 +10466,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885601Z"
+      "last_reset": "2025-11-17T22:08:20.141426Z"
     },
     "created_at": "2025-11-17T06:03:46.677831Z",
     "usage_count": 0,
@@ -10502,7 +10502,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885606Z"
+      "last_reset": "2025-11-17T22:08:20.141430Z"
     },
     "created_at": "2025-11-17T06:12:10.021269Z",
     "usage_count": 0,
@@ -10538,7 +10538,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885610Z"
+      "last_reset": "2025-11-17T22:08:20.141434Z"
     },
     "created_at": "2025-11-17T06:15:21.982195Z",
     "usage_count": 0,
@@ -10574,7 +10574,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885615Z"
+      "last_reset": "2025-11-17T22:08:20.141437Z"
     },
     "created_at": "2025-11-17T06:22:57.460855Z",
     "usage_count": 0,
@@ -10610,7 +10610,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885620Z"
+      "last_reset": "2025-11-17T22:08:20.141441Z"
     },
     "created_at": "2025-11-17T06:34:06.435092Z",
     "usage_count": 0,
@@ -10646,7 +10646,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885624Z"
+      "last_reset": "2025-11-17T22:08:20.141444Z"
     },
     "created_at": "2025-11-17T06:36:16.533953Z",
     "usage_count": 0,
@@ -10682,7 +10682,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885629Z"
+      "last_reset": "2025-11-17T22:08:20.141447Z"
     },
     "created_at": "2025-11-17T06:46:35.472419Z",
     "usage_count": 0,
@@ -10718,7 +10718,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885633Z"
+      "last_reset": "2025-11-17T22:08:20.141451Z"
     },
     "created_at": "2025-11-17T06:57:23.474669Z",
     "usage_count": 0,
@@ -10754,7 +10754,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885638Z"
+      "last_reset": "2025-11-17T22:08:20.141454Z"
     },
     "created_at": "2025-11-17T07:19:28.135956Z",
     "usage_count": 0,
@@ -10790,7 +10790,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885644Z"
+      "last_reset": "2025-11-17T22:08:20.141458Z"
     },
     "created_at": "2025-11-17T07:27:54.821020Z",
     "usage_count": 0,
@@ -10826,7 +10826,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885648Z"
+      "last_reset": "2025-11-17T22:08:20.141461Z"
     },
     "created_at": "2025-11-17T07:36:21.626770Z",
     "usage_count": 0,
@@ -10862,7 +10862,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885653Z"
+      "last_reset": "2025-11-17T22:08:20.141464Z"
     },
     "created_at": "2025-11-17T07:41:50.257749Z",
     "usage_count": 0,
@@ -10898,7 +10898,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885657Z"
+      "last_reset": "2025-11-17T22:08:20.141468Z"
     },
     "created_at": "2025-11-17T07:46:26.725606Z",
     "usage_count": 0,
@@ -10934,7 +10934,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885662Z"
+      "last_reset": "2025-11-17T22:08:20.141472Z"
     },
     "created_at": "2025-11-17T07:53:41.948140Z",
     "usage_count": 0,
@@ -10970,7 +10970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885666Z"
+      "last_reset": "2025-11-17T22:08:20.141475Z"
     },
     "created_at": "2025-11-17T08:13:14.546483Z",
     "usage_count": 0,
@@ -11006,7 +11006,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885670Z"
+      "last_reset": "2025-11-17T22:08:20.141479Z"
     },
     "created_at": "2025-11-17T08:24:17.437156Z",
     "usage_count": 0,
@@ -11042,7 +11042,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885675Z"
+      "last_reset": "2025-11-17T22:08:20.141482Z"
     },
     "created_at": "2025-11-17T08:26:56.768446Z",
     "usage_count": 0,
@@ -11078,7 +11078,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885680Z"
+      "last_reset": "2025-11-17T22:08:20.141485Z"
     },
     "created_at": "2025-11-17T08:38:28.375475Z",
     "usage_count": 0,
@@ -11114,7 +11114,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885684Z"
+      "last_reset": "2025-11-17T22:08:20.141489Z"
     },
     "created_at": "2025-11-17T08:43:28.639559Z",
     "usage_count": 0,
@@ -11150,7 +11150,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885689Z"
+      "last_reset": "2025-11-17T22:08:20.141492Z"
     },
     "created_at": "2025-11-17T08:46:02.217903Z",
     "usage_count": 0,
@@ -11186,7 +11186,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885695Z"
+      "last_reset": "2025-11-17T22:08:20.141496Z"
     },
     "created_at": "2025-11-17T08:50:01.442066Z",
     "usage_count": 0,
@@ -11222,7 +11222,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885700Z"
+      "last_reset": "2025-11-17T22:08:20.141499Z"
     },
     "created_at": "2025-11-17T09:04:34.420760Z",
     "usage_count": 0,
@@ -11258,7 +11258,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885705Z"
+      "last_reset": "2025-11-17T22:08:20.141503Z"
     },
     "created_at": "2025-11-17T09:19:06.231216Z",
     "usage_count": 0,
@@ -11294,7 +11294,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885710Z"
+      "last_reset": "2025-11-17T22:08:20.141506Z"
     },
     "created_at": "2025-11-17T09:41:10.255625Z",
     "usage_count": 0,
@@ -11330,7 +11330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885714Z"
+      "last_reset": "2025-11-17T22:08:20.141510Z"
     },
     "created_at": "2025-11-17T09:51:29.792214Z",
     "usage_count": 0,
@@ -11366,7 +11366,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885718Z"
+      "last_reset": "2025-11-17T22:08:20.141513Z"
     },
     "created_at": "2025-11-17T09:57:55.119005Z",
     "usage_count": 0,
@@ -11402,7 +11402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885723Z"
+      "last_reset": "2025-11-17T22:08:20.141516Z"
     },
     "created_at": "2025-11-17T10:00:42.922588Z",
     "usage_count": 0,
@@ -11438,7 +11438,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885727Z"
+      "last_reset": "2025-11-17T22:08:20.141520Z"
     },
     "created_at": "2025-11-17T10:15:02.840305Z",
     "usage_count": 0,
@@ -11474,7 +11474,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885732Z"
+      "last_reset": "2025-11-17T22:08:20.141523Z"
     },
     "created_at": "2025-11-17T10:18:33.923485Z",
     "usage_count": 0,
@@ -11510,7 +11510,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885736Z"
+      "last_reset": "2025-11-17T22:08:20.141527Z"
     },
     "created_at": "2025-11-17T10:30:18.677963Z",
     "usage_count": 0,
@@ -11546,7 +11546,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885740Z"
+      "last_reset": "2025-11-17T22:08:20.141530Z"
     },
     "created_at": "2025-11-17T10:38:16.236098Z",
     "usage_count": 0,
@@ -11582,7 +11582,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885745Z"
+      "last_reset": "2025-11-17T22:08:20.141533Z"
     },
     "created_at": "2025-11-17T11:00:21.662368Z",
     "usage_count": 0,
@@ -11625,7 +11625,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885750Z"
+      "last_reset": "2025-11-17T22:08:20.141537Z"
     },
     "created_at": "2025-11-17T13:00:34.696302Z",
     "usage_count": 0,
@@ -11665,7 +11665,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885755Z"
+      "last_reset": "2025-11-17T22:08:20.141541Z"
     },
     "created_at": "2025-11-17T13:00:36.146962Z",
     "usage_count": 0,
@@ -11697,7 +11697,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885759Z"
+      "last_reset": "2025-11-17T22:08:20.141544Z"
     },
     "created_at": "2025-11-17T13:00:36.522966Z",
     "usage_count": 0,
@@ -11739,10 +11739,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885765Z"
+      "last_reset": "2025-11-17T22:08:20.141548Z"
     },
     "created_at": "2025-11-17T13:00:36.746512Z",
-    "usage_count": 0,
+    "usage_count": 1,
     "version": "1.0.0",
     "definition_hash": "abcd620276ee1827c0b8bb4defa6aa619aadc9a48e357b737040e04eaf2f16ef",
     "breaking_changes": []
@@ -11779,7 +11779,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885771Z"
+      "last_reset": "2025-11-17T22:08:20.141551Z"
     },
     "created_at": "2025-11-17T13:00:36.966897Z",
     "usage_count": 0,
@@ -11819,7 +11819,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885777Z"
+      "last_reset": "2025-11-17T22:08:20.141555Z"
     },
     "created_at": "2025-11-17T13:00:37.166446Z",
     "usage_count": 0,
@@ -11859,7 +11859,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885785Z"
+      "last_reset": "2025-11-17T22:08:20.141559Z"
     },
     "created_at": "2025-11-17T13:00:37.370311Z",
     "usage_count": 0,
@@ -11895,7 +11895,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885794Z"
+      "last_reset": "2025-11-17T22:08:20.141562Z"
     },
     "created_at": "2025-11-17T13:04:46.704336Z",
     "usage_count": 0,
@@ -11930,7 +11930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885804Z"
+      "last_reset": "2025-11-17T22:08:20.141566Z"
     },
     "created_at": "2025-11-17T13:37:50.170997Z",
     "usage_count": 0,
@@ -11964,7 +11964,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885820Z"
+      "last_reset": "2025-11-17T22:08:20.141569Z"
     },
     "created_at": "2025-11-17T13:37:51.251431Z",
     "usage_count": 0,
@@ -12000,7 +12000,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885829Z"
+      "last_reset": "2025-11-17T22:08:20.141573Z"
     },
     "created_at": "2025-11-17T13:37:51.489353Z",
     "usage_count": 0,
@@ -12041,7 +12041,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885838Z"
+      "last_reset": "2025-11-17T22:08:20.141576Z"
     },
     "created_at": "2025-11-17T13:37:52.281086Z",
     "usage_count": 0,
@@ -12122,8 +12122,8 @@
       "cost_tier": "free",
       "speed_tier": "medium",
       "quality_tier": "good",
-      "version": "1.0.0",
-      "definition_hash": "83758b2d6134aedcb3f22fa51514127fcdd5723f000126b9155ec3420d8f0d34",
+      "version": "1.0.1",
+      "definition_hash": "e6a8ccd81fcca1d237d919c85596ae676b0e16d0968637f357637fcda5c0402d",
       "breaking_changes": []
     },
     "constraints": {},
@@ -12131,12 +12131,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885844Z"
+      "last_reset": "2025-11-17T22:08:34.996310Z"
     },
-    "created_at": "2025-11-17T13:37:52.483609Z",
+    "created_at": "2025-11-17T22:08:34.996303Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "83758b2d6134aedcb3f22fa51514127fcdd5723f000126b9155ec3420d8f0d34",
+    "version": "1.0.1",
+    "definition_hash": "e6a8ccd81fcca1d237d919c85596ae676b0e16d0968637f357637fcda5c0402d",
     "breaking_changes": []
   },
   "explainer": {
@@ -12175,7 +12175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885851Z"
+      "last_reset": "2025-11-17T22:08:20.141583Z"
     },
     "created_at": "2025-11-17T13:37:52.704599Z",
     "usage_count": 0,
@@ -12211,7 +12211,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885856Z"
+      "last_reset": "2025-11-17T22:08:20.141587Z"
     },
     "created_at": "2025-11-17T13:40:44.344585Z",
     "usage_count": 0,
@@ -12247,7 +12247,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885861Z"
+      "last_reset": "2025-11-17T22:08:20.141590Z"
     },
     "created_at": "2025-11-17T13:47:46.147854Z",
     "usage_count": 0,
@@ -12283,7 +12283,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885866Z"
+      "last_reset": "2025-11-17T22:08:20.141594Z"
     },
     "created_at": "2025-11-17T13:53:59.916283Z",
     "usage_count": 0,
@@ -12319,7 +12319,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885871Z"
+      "last_reset": "2025-11-17T22:08:20.141597Z"
     },
     "created_at": "2025-11-17T14:04:02.389357Z",
     "usage_count": 0,
@@ -12355,7 +12355,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885876Z"
+      "last_reset": "2025-11-17T22:08:20.141601Z"
     },
     "created_at": "2025-11-17T14:18:25.175722Z",
     "usage_count": 0,
@@ -12456,7 +12456,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885881Z"
+      "last_reset": "2025-11-17T22:08:20.141605Z"
     },
     "created_at": "2025-11-17T15:56:06.087059Z",
     "usage_count": 0,
@@ -12593,7 +12593,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885887Z"
+      "last_reset": "2025-11-17T22:08:20.141609Z"
     },
     "created_at": "2025-11-17T15:56:06.293161Z",
     "usage_count": 0,
@@ -12629,7 +12629,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885892Z"
+      "last_reset": "2025-11-17T22:08:20.141612Z"
     },
     "created_at": "2025-11-17T16:04:50.402693Z",
     "usage_count": 0,
@@ -12666,7 +12666,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885896Z"
+      "last_reset": "2025-11-17T22:08:20.141616Z"
     },
     "created_at": "2025-11-17T16:22:40.447794Z",
     "usage_count": 0,
@@ -12741,7 +12741,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885902Z"
+      "last_reset": "2025-11-17T22:08:20.141619Z"
     },
     "created_at": "2025-11-17T17:21:44.296401Z",
     "usage_count": 0,
@@ -12777,7 +12777,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:22.885906Z"
+      "last_reset": "2025-11-17T22:08:20.141623Z"
     },
     "created_at": "2025-11-17T17:50:05.056550Z",
     "usage_count": 0,
@@ -12922,7 +12922,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:17:23.006318Z"
+      "last_reset": "2025-11-17T22:08:20.141626Z"
     },
     "created_at": "2025-11-17T18:17:23.006311Z",
     "usage_count": 0,
@@ -12950,16 +12950,1126 @@
       "created_at": "2025-11-17T18:23:16.161013+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Open BBC website"
+      "full_title": "Open BBC website",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T18:23:16.161035Z"
+      "last_reset": "2025-11-17T22:08:20.141630Z"
     },
     "created_at": "2025-11-17T18:23:16.161032Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "autoflake_checker": {
+    "tool_id": "autoflake_checker",
+    "name": "Autoflake Checker",
+    "tool_type": "executable",
+    "description": "Removes unused imports and unused variables from Python code. Deterministic and fast cleanup tool.",
+    "tags": [
+      "python",
+      "cleanup",
+      "imports",
+      "static-analysis",
+      "autoflake",
+      "deterministic",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\autoflake_checker.yaml",
+      "command": "python",
+      "args": [
+        "{tools_dir}/executable/autoflake_checker.py",
+        "{source_file}"
+      ],
+      "input_schema": null,
+      "output_schema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether operation succeeded"
+        },
+        "changes_needed": {
+          "type": "boolean",
+          "description": "Whether changes were needed/applied"
+        },
+        "output": {
+          "type": "string",
+          "description": "Detailed output or diff"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "4580006dbb8acc8edb8fea4aa57bcf9e8eb5f159abb5c1bd82038b618e8fd105",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141633Z"
+    },
+    "created_at": "2025-11-17T20:01:51.416521Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "4580006dbb8acc8edb8fea4aa57bcf9e8eb5f159abb5c1bd82038b618e8fd105",
+    "breaking_changes": []
+  },
+  "fix_attribute_error": {
+    "tool_id": "fix_attribute_error",
+    "name": "fix_attribute_error",
+    "tool_type": "executable",
+    "description": "Detects and fixes Python AttributeError.\n\nHandles:\n- Missing attributes on objects\n- Typos in attribute names\n- Wrong object type\n- None object attribute access\n- Method vs property confusion\n\nUses RAG to learn from past fixes and suggest corrections.\n",
+    "tags": [
+      "fix",
+      "attribute-error",
+      "typo",
+      "none-check",
+      "fuzzy-match",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fix_attribute_error.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/fix_attribute_error.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "error_output",
+          "source_code"
+        ],
+        "properties": {
+          "error_output": {
+            "type": "string",
+            "description": "AttributeError message from Python"
+          },
+          "source_code": {
+            "type": "string",
+            "description": "Source code with attribute error"
+          },
+          "object_type": {
+            "type": "string",
+            "description": "Type of object being accessed (optional)"
+          },
+          "apply_fix": {
+            "type": "boolean",
+            "description": "Apply fix to code (default: true)",
+            "default": true
+          },
+          "search_rag": {
+            "type": "boolean",
+            "description": "Search RAG for similar fixes (default: true)",
+            "default": true
+          },
+          "add_none_checks": {
+            "type": "boolean",
+            "description": "Add None checks automatically (default: true)",
+            "default": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether fix was successful"
+          },
+          "fixed": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          },
+          "message": {
+            "type": "string",
+            "description": "Summary message"
+          },
+          "error_type": {
+            "type": "string",
+            "enum": [
+              "missing_attr",
+              "typo",
+              "none_type",
+              "wrong_type",
+              "method_property"
+            ],
+            "description": "Type of attribute error"
+          },
+          "object_name": {
+            "type": "string",
+            "description": "Name of object being accessed"
+          },
+          "attribute_name": {
+            "type": "string",
+            "description": "Name of missing attribute"
+          },
+          "line_number": {
+            "type": "integer",
+            "description": "Line number where error occurred"
+          },
+          "fixed_code": {
+            "type": "string",
+            "description": "Corrected source code"
+          },
+          "suggestion": {
+            "type": "string",
+            "description": "Suggested fix"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "What was fixed and why"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Alternative attribute names"
+          },
+          "fix_source": {
+            "type": "string",
+            "enum": [
+              "rag",
+              "fuzzy_match",
+              "none_check",
+              "type_check"
+            ],
+            "description": "Where fix came from"
+          },
+          "similar_fixes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Similar fixes found in RAG"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "description": "Whether code should be retested"
+          },
+          "rag_artifact_id": {
+            "type": "string",
+            "description": "ID of fix stored in RAG (if stored)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "bc16324e4083568b9449cee258e9ffa430a853ff298649315ba459b6deafcd8b",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141637Z"
+    },
+    "created_at": "2025-11-17T20:01:51.609154Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "bc16324e4083568b9449cee258e9ffa430a853ff298649315ba459b6deafcd8b",
+    "breaking_changes": []
+  },
+  "fix_indentation_error": {
+    "tool_id": "fix_indentation_error",
+    "name": "fix_indentation_error",
+    "tool_type": "executable",
+    "description": "Detects and fixes Python indentation errors.\n\nHandles:\n- Inconsistent indentation (tabs vs spaces)\n- Unexpected indent\n- Expected indent\n- Unindent does not match\n- Mixed indentation styles\n\nAutomatically normalizes indentation to 4 spaces (PEP 8).\n",
+    "tags": [
+      "fix",
+      "indentation",
+      "whitespace",
+      "pep8",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fix_indentation_error.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/fix_indentation_error.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "error_output",
+          "source_code"
+        ],
+        "properties": {
+          "error_output": {
+            "type": "string",
+            "description": "IndentationError message from Python"
+          },
+          "source_code": {
+            "type": "string",
+            "description": "Source code with indentation error"
+          },
+          "indent_size": {
+            "type": "integer",
+            "description": "Target indent size (default: 4)",
+            "default": 4
+          },
+          "use_spaces": {
+            "type": "boolean",
+            "description": "Use spaces instead of tabs (default: true)",
+            "default": true
+          },
+          "apply_fix": {
+            "type": "boolean",
+            "description": "Apply fix to code (default: true)",
+            "default": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether fix was successful"
+          },
+          "fixed": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          },
+          "message": {
+            "type": "string",
+            "description": "Summary message"
+          },
+          "error_type": {
+            "type": "string",
+            "enum": [
+              "unexpected_indent",
+              "expected_indent",
+              "unindent_mismatch",
+              "mixed_indent"
+            ],
+            "description": "Type of indentation error"
+          },
+          "line_number": {
+            "type": "integer",
+            "description": "Line number where error occurred"
+          },
+          "fixed_code": {
+            "type": "string",
+            "description": "Corrected source code with normalized indentation"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "What was fixed"
+          },
+          "changes_made": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of indentation changes"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "description": "Whether code should be retested"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "c507a1f6c36cbbca62c98fc0a7bf534924e9397bf8c958ad073fafdb6c3abb1c",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141641Z"
+    },
+    "created_at": "2025-11-17T20:01:51.733769Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "c507a1f6c36cbbca62c98fc0a7bf534924e9397bf8c958ad073fafdb6c3abb1c",
+    "breaking_changes": []
+  },
+  "fix_name_error": {
+    "tool_id": "fix_name_error",
+    "name": "fix_name_error",
+    "tool_type": "executable",
+    "description": "Detects and fixes Python NameError (undefined variables/functions).\n\nHandles:\n- Undefined variables\n- Typos in variable names\n- Missing imports\n- Scope issues\n- Function name typos\n\nUses fuzzy matching and RAG search to suggest corrections.\n",
+    "tags": [
+      "fix",
+      "name-error",
+      "undefined",
+      "typo",
+      "fuzzy-match",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fix_name_error.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/fix_name_error.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "error_output",
+          "source_code"
+        ],
+        "properties": {
+          "error_output": {
+            "type": "string",
+            "description": "NameError message from Python"
+          },
+          "source_code": {
+            "type": "string",
+            "description": "Source code with name error"
+          },
+          "apply_fix": {
+            "type": "boolean",
+            "description": "Apply fix to code (default: true)",
+            "default": true
+          },
+          "fuzzy_threshold": {
+            "type": "number",
+            "description": "Threshold for fuzzy matching (0-1, default: 0.8)",
+            "default": 0.8
+          },
+          "search_rag": {
+            "type": "boolean",
+            "description": "Search RAG for similar fixes (default: true)",
+            "default": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether fix was successful"
+          },
+          "fixed": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          },
+          "message": {
+            "type": "string",
+            "description": "Summary message"
+          },
+          "undefined_name": {
+            "type": "string",
+            "description": "Name that was undefined"
+          },
+          "line_number": {
+            "type": "integer",
+            "description": "Line number where error occurred"
+          },
+          "fixed_code": {
+            "type": "string",
+            "description": "Corrected source code"
+          },
+          "suggestion": {
+            "type": "string",
+            "description": "Suggested correction"
+          },
+          "confidence": {
+            "type": "number",
+            "description": "Confidence in suggestion (0-1)"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "What was fixed and why"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Alternative suggestions"
+          },
+          "fix_source": {
+            "type": "string",
+            "enum": [
+              "fuzzy_match",
+              "rag",
+              "import",
+              "scope"
+            ],
+            "description": "Where fix came from"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "description": "Whether code should be retested"
+          },
+          "rag_artifact_id": {
+            "type": "string",
+            "description": "ID of fix stored in RAG (if stored)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "c599433803962077e0ffb4787029ee34ae4cb5ff3c844466b81337467c11e5af",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141644Z"
+    },
+    "created_at": "2025-11-17T20:01:51.865227Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "c599433803962077e0ffb4787029ee34ae4cb5ff3c844466b81337467c11e5af",
+    "breaking_changes": []
+  },
+  "fix_syntax_error": {
+    "tool_id": "fix_syntax_error",
+    "name": "fix_syntax_error",
+    "tool_type": "executable",
+    "description": "Detects and fixes Python syntax errors in code.\n\nUses AST parsing and pattern matching to identify and correct:\n- Missing colons after if/for/while/def/class\n- Mismatched parentheses, brackets, braces\n- Invalid operators or keywords\n- Missing commas in lists/dicts/tuples\n- Incorrect string quotes\n\nStores successful fixes in RAG as CODE_FIX artifacts for future reference.\n",
+    "tags": [
+      "fix",
+      "syntax",
+      "parser",
+      "ast",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fix_syntax_error.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/fix_syntax_error.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "error_output",
+          "source_code"
+        ],
+        "properties": {
+          "error_output": {
+            "type": "string",
+            "description": "Syntax error message from Python"
+          },
+          "source_code": {
+            "type": "string",
+            "description": "Source code with syntax error"
+          },
+          "apply_fix": {
+            "type": "boolean",
+            "description": "Apply fix to code (default: true)",
+            "default": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether fix was successful"
+          },
+          "fixed": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          },
+          "message": {
+            "type": "string",
+            "description": "Summary message"
+          },
+          "error_type": {
+            "type": "string",
+            "description": "Type of syntax error detected"
+          },
+          "line_number": {
+            "type": "integer",
+            "description": "Line number where error occurred"
+          },
+          "fixed_code": {
+            "type": "string",
+            "description": "Corrected source code"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "What was fixed and why"
+          },
+          "fix_pattern": {
+            "type": "string",
+            "description": "Pattern that was applied"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "description": "Whether code should be retested"
+          },
+          "rag_artifact_id": {
+            "type": "string",
+            "description": "ID of fix stored in RAG (if stored)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "66f2a4607dcfa33655c0837293bc9f310d92fbb21baa26e0d6bfa728696c629f",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141648Z"
+    },
+    "created_at": "2025-11-17T20:01:51.990057Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "66f2a4607dcfa33655c0837293bc9f310d92fbb21baa26e0d6bfa728696c629f",
+    "breaking_changes": []
+  },
+  "fix_type_error": {
+    "tool_id": "fix_type_error",
+    "name": "fix_type_error",
+    "tool_type": "executable",
+    "description": "Detects and fixes Python type errors.\n\nHandles:\n- Type mismatches (string vs int, etc.)\n- Unsupported operations between types\n- None type errors\n- Attribute errors on wrong types\n- Iteration over non-iterables\n\nSearches RAG for similar fixes before applying new solutions.\n",
+    "tags": [
+      "fix",
+      "type-error",
+      "type-checking",
+      "auto-fix",
+      "rag-search"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\fix_type_error.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/fix_type_error.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "error_output",
+          "source_code"
+        ],
+        "properties": {
+          "error_output": {
+            "type": "string",
+            "description": "TypeError message from Python"
+          },
+          "source_code": {
+            "type": "string",
+            "description": "Source code with type error"
+          },
+          "test_input": {
+            "type": "object",
+            "description": "Test input that triggered error (optional)"
+          },
+          "apply_fix": {
+            "type": "boolean",
+            "description": "Apply fix to code (default: true)",
+            "default": true
+          },
+          "search_rag": {
+            "type": "boolean",
+            "description": "Search RAG for similar fixes (default: true)",
+            "default": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether fix was successful"
+          },
+          "fixed": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          },
+          "message": {
+            "type": "string",
+            "description": "Summary message"
+          },
+          "error_type": {
+            "type": "string",
+            "description": "Type of type error detected"
+          },
+          "line_number": {
+            "type": "integer",
+            "description": "Line number where error occurred"
+          },
+          "fixed_code": {
+            "type": "string",
+            "description": "Corrected source code"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "What was fixed and why"
+          },
+          "fix_source": {
+            "type": "string",
+            "enum": [
+              "rag",
+              "pattern",
+              "inference"
+            ],
+            "description": "Where fix came from"
+          },
+          "similar_fixes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Similar fixes found in RAG"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "description": "Whether code should be retested"
+          },
+          "rag_artifact_id": {
+            "type": "string",
+            "description": "ID of fix stored in RAG (if stored)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "766b19fb646471da26d103c7a1588b887ce82ca6c79fbb4a9f0750995a76443d",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141652Z"
+    },
+    "created_at": "2025-11-17T20:01:52.116947Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "766b19fb646471da26d103c7a1588b887ce82ca6c79fbb4a9f0750995a76443d",
+    "breaking_changes": []
+  },
+  "pynguin_config": {
+    "tool_id": "pynguin_config",
+    "name": "Pynguin Test Generator",
+    "tool_type": "executable",
+    "description": "Automatically generates unit tests using evolutionary algorithms. Windows-compatible configuration.",
+    "tags": [
+      "testing",
+      "test-generation",
+      "pynguin",
+      "automated",
+      "windows",
+      "python"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\pynguin_config.yaml",
+      "command": "python",
+      "args": [
+        "{tools_dir}/executable/pynguin_config.py",
+        "{source_file}"
+      ],
+      "input_schema": null,
+      "output_schema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether test generation succeeded"
+        },
+        "tests_generated": {
+          "type": "integer",
+          "description": "Number of test files generated"
+        },
+        "output_dir": {
+          "type": "string",
+          "description": "Path to output directory"
+        },
+        "test_files": {
+          "type": "array",
+          "description": "List of generated test file paths"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "56f4990c39ab30746bb81f8a9694ae44bff4082f0fcc77b0cf3fa8e7dbfa37c0",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141655Z"
+    },
+    "created_at": "2025-11-17T20:01:52.293427Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "56f4990c39ab30746bb81f8a9694ae44bff4082f0fcc77b0cf3fa8e7dbfa37c0",
+    "breaking_changes": []
+  },
+  "pyupgrade_checker": {
+    "tool_id": "pyupgrade_checker",
+    "name": "Pyupgrade Checker",
+    "tool_type": "executable",
+    "description": "Automatically upgrades Python syntax for newer versions. Modernizes code with f-strings, type hints, and newer Python features.",
+    "tags": [
+      "python",
+      "modernization",
+      "syntax",
+      "static-analysis",
+      "pyupgrade",
+      "deterministic",
+      "auto-fix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\pyupgrade_checker.yaml",
+      "command": "python",
+      "args": [
+        "{tools_dir}/executable/pyupgrade_checker.py",
+        "{source_file}"
+      ],
+      "input_schema": null,
+      "output_schema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether operation succeeded"
+        },
+        "changes_needed": {
+          "type": "boolean",
+          "description": "Whether changes were needed/applied"
+        },
+        "output": {
+          "type": "string",
+          "description": "Detailed output or upgraded code"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "88ebc0aacc975597a260660da9373a4dda3addcdd4adb75a15690a3e12f9f70a",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141659Z"
+    },
+    "created_at": "2025-11-17T20:01:52.421528Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "88ebc0aacc975597a260660da9373a4dda3addcdd4adb75a15690a3e12f9f70a",
+    "breaking_changes": []
+  },
+  "ruff_checker": {
+    "tool_id": "ruff_checker",
+    "name": "Ruff Checker",
+    "tool_type": "executable",
+    "description": "Fast Python linter and formatter. Replaces flake8, isort, pyupgrade, and more. Checks code quality and applies safe auto-fixes.",
+    "tags": [
+      "python",
+      "linting",
+      "formatting",
+      "static-analysis",
+      "ruff",
+      "deterministic",
+      "auto-fix",
+      "fast"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\ruff_checker.yaml",
+      "command": "python",
+      "args": [
+        "{tools_dir}/executable/ruff_checker.py",
+        "{source_file}"
+      ],
+      "input_schema": null,
+      "output_schema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether check passed (no issues or all fixed)"
+        },
+        "issues_found": {
+          "type": "integer",
+          "description": "Number of issues found"
+        },
+        "issues_fixed": {
+          "type": "integer",
+          "description": "Number of issues automatically fixed"
+        },
+        "output": {
+          "type": "string",
+          "description": "Detailed output from ruff"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "31a9389697299073ae7b52027ae2413326ed2e9212a644a08756d21f1dcfd88a",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141662Z"
+    },
+    "created_at": "2025-11-17T20:01:52.551956Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "31a9389697299073ae7b52027ae2413326ed2e9212a644a08756d21f1dcfd88a",
+    "breaking_changes": []
+  },
+  "comprehensive_tool_profiler": {
+    "tool_id": "comprehensive_tool_profiler",
+    "name": "Comprehensive Tool Profiler",
+    "tool_type": "executable",
+    "description": "Complete tool profiling orchestrator that combines performance benchmarking,\nstatic analysis, regression evaluation, and RAG metadata updates into a single\nworkflow. This is the master tool for fully profiling a tool after code generation\nor mutation. Tags tools in RAG with performance metrics, static analysis findings\n(complexity, security, correctness), regression evaluation scores, source code,\nand documentation. Prevents false-positive regressions while ensuring quality.\n",
+    "tags": [
+      "profiling",
+      "orchestration",
+      "performance",
+      "static-analysis",
+      "regression",
+      "rag",
+      "workflow",
+      "comprehensive"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "perf\\comprehensive_tool_profiler.yaml",
+      "command": "python",
+      "args": [
+        "{tool_path}/comprehensive_tool_profiler.py",
+        "{tool_id}"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "48c5a0d07df57c0260059661ec4d751fec8ff978183e72f5a4655a8c39a31028",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141666Z"
+    },
+    "created_at": "2025-11-17T20:01:52.827624Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "48c5a0d07df57c0260059661ec4d751fec8ff978183e72f5a4655a8c39a31028",
+    "breaking_changes": []
+  },
+  "performance_regression_evaluator": {
+    "tool_id": "performance_regression_evaluator",
+    "name": "Performance Regression Evaluator",
+    "tool_type": "executable",
+    "description": "Intelligent performance regression assessment using 4B-class LLM evaluation.\nPrevents being locked into never accepting performance regressions by evaluating\nwhether performance changes are reasonable given requirement changes. Combines\nstatic analysis (complexity, security, correctness) with LLM reasoning to score\nregression acceptability from 0 (reject) to 100 (accept). Essential for avoiding\nfalse positives in performance regression testing during feature evolution.\n",
+    "tags": [
+      "performance",
+      "regression",
+      "evaluation",
+      "llm",
+      "static-analysis",
+      "optimization",
+      "testing",
+      "quality"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "perf\\performance_regression_evaluator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_path}/performance_regression_evaluator.py",
+        "{command}"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "017fd14a983548bece82c3f2430b8322a320b747519183dddaf75b04140ad4c7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141670Z"
+    },
+    "created_at": "2025-11-17T20:01:52.964895Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "017fd14a983548bece82c3f2430b8322a320b747519183dddaf75b04140ad4c7",
+    "breaking_changes": []
+  },
+  "timeit_optimizer": {
+    "tool_id": "timeit_optimizer",
+    "name": "Timeit Performance Optimizer",
+    "tool_type": "executable",
+    "description": "Advanced performance testing and optimization tool. Generates self-contained benchmark scripts,\nruns performance tests with automatic mocking of tool calls and external services,\ncollects execution time and memory metrics across 3 runs, and updates RAG metadata\nwith performance data. Essential for optimization workflows and performance tracking.\n",
+    "tags": [
+      "performance",
+      "optimization",
+      "benchmarking",
+      "timeit",
+      "profiling",
+      "testing",
+      "metrics",
+      "memory",
+      "mocking"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "perf\\timeit_optimizer.yaml",
+      "command": "python",
+      "args": [
+        "{tool_path}/timeit_optimizer.py",
+        "{command}"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "471a0c802e690c8c5c1894eebc92989f02e04c8c54924707a027471c8c32cabb",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141673Z"
+    },
+    "created_at": "2025-11-17T20:01:53.094025Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "471a0c802e690c8c5c1894eebc92989f02e04c8c54924707a027471c8c32cabb",
+    "breaking_changes": []
+  },
+  "take_a_screenshot": {
+    "tool_id": "take_a_screenshot",
+    "name": "Take a Screenshot",
+    "tool_type": "workflow",
+    "description": "Take a Screenshot",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "take_a_screenshot",
+      "quality_score": 1.1,
+      "latency_ms": 85369,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T21:40:32.053646+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Take a Screenshot",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:08:20.141677Z"
+    },
+    "created_at": "2025-11-17T21:40:32.053671Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "build_a_fractal_displayer_appl": {
+    "tool_id": "build_a_fractal_displayer_appl",
+    "name": "build a fractal displayer application which outputs to the console. Make it as efficient as possible to work on a pi\n\n[Conversation Context:\n- Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations that optimize for response\nspeed while maintaining accuracy.\n\nFeatures:\n- Multi-chat context memory (remembers previous conversations)\n- Auto-summarization based on context window size\n- Volatile Qdrant storage for semantic search\n- Related context retrieval from past conversations\n- Performance tracking (response time, tokens, etc.)\n- Intent detection (distinguishes conversation from dialogue generation)\n\nUse this tool for:\n- Starting/ending conversational sessions\n- Managing conversation context\n- Detecting user intent to converse\n- Retrieving related conversation history\n: Tool: conversation_manager\nType: executable\nDescription: Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations]",
+    "tool_type": "workflow",
+    "description": "build a fractal displayer application which outputs to the console. Make it as efficient as possible to work on a pi\n\n[Conversation Context:\n- Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations that optimize for response\nspeed while maintaining accuracy.\n\nFeatures:\n- Multi-chat context memory (remembers previous conversations)\n- Auto-summarization based on context window size\n- Volatile Qdrant storage for semantic search\n- Related context retrieval from past conversations\n- Performance tracking (response time, tokens, etc.)\n- Intent detection (distinguishes conversation from dialogue generation)\n\nUse this tool for:\n- Starting/ending conversational sessions\n- Managing conversation context\n- Detecting user intent to converse\n- Retrieving related conversation history\n: Tool: conversation_manager\nType: executable\nDescription: Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations]",
+    "tags": [
+      "generated",
+      "chat",
+      "searching",
+      "finding",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "build_a_fractal_displayer_appl",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 56,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T22:20:20.022339+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "build a fractal displayer application which outputs to the console. Make it as efficient as possible to work on a pi\n\n[Conversation Context:\n- Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations that optimize for response\nspeed while maintaining accuracy.\n\nFeatures:\n- Multi-chat context memory (remembers previous conversations)\n- Auto-summarization based on context window size\n- Volatile Qdrant storage for semantic search\n- Related context retrieval from past conversations\n- Performance tracking (response time, tokens, etc.)\n- Intent detection (distinguishes conversation from dialogue generation)\n\nUse this tool for:\n- Starting/ending conversational sessions\n- Managing conversation context\n- Detecting user intent to converse\n- Retrieving related conversation history\n: Tool: conversation_manager\nType: executable\nDescription: Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations]"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T22:20:20.022373Z"
+    },
+    "created_at": "2025-11-17T22:20:20.022369Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",

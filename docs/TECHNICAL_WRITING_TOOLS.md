@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system now includes **specialized LLM tools for technical writing** and **blog content analysis**. These tools are automatically selected based on your task description using semantic search in RAG.
+The mostlylucid DiSE system now includes **specialized LLM tools for technical writing** and **blog content analysis**. These tools are automatically selected based on your task description using semantic search in RAG.
 
 ## Available Tools
 

@@ -1,6 +1,6 @@
-# Code Evolver Monitoring System
+# mostlylucid DiSE Monitoring System
 
-Complete overview of the global monitoring system for Code Evolver, including BugCatcher, PerfCatcher, and tool interceptors.
+Complete overview of the global monitoring system for mostlylucid DiSE, including BugCatcher, PerfCatcher, and tool interceptors.
 
 ## System Architecture
 
@@ -207,7 +207,7 @@ Re-raise Exception
 ### File Logs (Fallback)
 
 - **BugCatcher**: `bugcatcher.log`
-- **Code Evolver**: `code_evolver.log`
+- **mostlylucid DiSE**: `code_evolver.log`
 
 ## Quick Start
 
@@ -222,7 +222,7 @@ docker-compose -f docker-compose.localdev.yml up -d
 docker-compose -f docker-compose.localdev.yml ps
 ```
 
-### 2. Run Code Evolver
+### 2. Run mostlylucid DiSE
 
 ```bash
 # BugCatcher and PerfCatcher auto-initialize
@@ -440,7 +440,7 @@ export PERFCATCHER_WINDOW_SIZE=500
 
 ## Summary
 
-The Code Evolver monitoring system provides:
+The mostlylucid DiSE monitoring system provides:
 
 ✅ **Automatic Exception Capture** - BugCatcher wraps every tool call
 ✅ **Performance Monitoring** - PerfCatcher detects variance automatically

@@ -66,7 +66,7 @@ python start_signalr_training.py --no-auto-generate --output tasks.json
 
 ```
 ======================================================================
-  SignalR Training Launcher for Code Evolver
+  SignalR Training Launcher for mostlylucid DiSE
 ======================================================================
 
 Hub URL:          http://localhost:5000/taskhub
@@ -273,7 +273,7 @@ print(f"Generated {len(workflows)} workflows")
 - `aiohttp`
 
 **System Components:**
-- Code Evolver system
+- mostlylucid DiSE system
 - Node runtime
 - Tools manager
 - Registry

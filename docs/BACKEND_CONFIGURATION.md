@@ -1,6 +1,6 @@
 # Backend Configuration Guide
 
-Complete guide to configuring LLM backends in Code Evolver.
+Complete guide to configuring LLM backends in mostlylucid DiSE.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ Complete guide to configuring LLM backends in Code Evolver.
 
 ## Overview
 
-Code Evolver supports **5 LLM backends**:
+mostlylucid DiSE supports **5 LLM backends**:
 
 - **Ollama** - Local/self-hosted models (free)
 - **OpenAI** - GPT-4, GPT-3.5, etc. (paid)

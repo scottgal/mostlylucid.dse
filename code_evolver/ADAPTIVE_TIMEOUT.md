@@ -2,7 +2,7 @@
 
 ## Overview
 
-Code Evolver features a **self-adjusting timeout system** that intelligently manages LLM request timeouts and automatically adapts to infrastructure performance. The system learns from actual response times, predicts optimal timeouts using statistical analysis, and provides automatic fallback to smaller/faster models when requests timeout.
+mostlylucid DiSE features a **self-adjusting timeout system** that intelligently manages LLM request timeouts and automatically adapts to infrastructure performance. The system learns from actual response times, predicts optimal timeouts using statistical analysis, and provides automatic fallback to smaller/faster models when requests timeout.
 
 ## Key Features
 

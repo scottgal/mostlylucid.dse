@@ -666,4 +666,4 @@ Potential future improvements:
 
 ## License
 
-Part of the Code Evolver project.
+Part of the mostlylucid DiSE project.

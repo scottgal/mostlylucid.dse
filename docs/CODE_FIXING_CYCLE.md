@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system features a sophisticated **6-stage adaptive escalation** process that progressively fixes failing code through a combination of:
+The mostlylucid DiSE system features a sophisticated **6-stage adaptive escalation** process that progressively fixes failing code through a combination of:
 - Increasing model capability (fast → powerful → best available)
 - Adaptive temperature adjustment (0.1 → 0.6)
 - Strategic logging injection for debugging

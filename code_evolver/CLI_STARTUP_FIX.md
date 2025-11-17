@@ -137,7 +137,7 @@ self._tools_loader.on_ready(on_tools_ready)
 [dim]Background: Loaded 127 tools in 8.5s[/dim]
 [dim]Registered model selector tool[/dim]
 
-Code Evolver CLI ready!
+mostlylucid DiSE CLI ready!
 >
 ```
 
@@ -153,7 +153,7 @@ User sees: Long pause with no feedback, appears to hang.
 ⠇ Loading tools... 3.1s
 ✓ Loaded 127 tools in 3.2s ← Clear completion
 
-Code Evolver CLI ready!
+mostlylucid DiSE CLI ready!
 >
 ```
 

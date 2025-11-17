@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes a **future enhancement** to Code Evolver that will enable specification-driven model selection. Instead of manually choosing models or tiers, users will provide performance specifications (e.g., "respond within 10 seconds", "use less than $0.01", "achieve 95% accuracy"), and the system will automatically select the optimal model and configuration to meet those requirements.
+This document describes a **future enhancement** to mostlylucid DiSE that will enable specification-driven model selection. Instead of manually choosing models or tiers, users will provide performance specifications (e.g., "respond within 10 seconds", "use less than $0.01", "achieve 95% accuracy"), and the system will automatically select the optimal model and configuration to meet those requirements.
 
 ## Current State vs. Future
 
@@ -319,7 +319,7 @@ This feature is specifically designed to work seamlessly with the Claude Code CL
 
 ### Usage from Claude Code CLI
 
-When using Code Evolver as an MCP tool in Claude Code CLI, you can specify performance requirements directly:
+When using mostlylucid DiSE as an MCP tool in Claude Code CLI, you can specify performance requirements directly:
 
 ```python
 # Example MCP tool call
@@ -337,7 +337,7 @@ When using Code Evolver as an MCP tool in Claude Code CLI, you can specify perfo
 
 ### Automatic Model Selection
 
-Code Evolver will:
+mostlylucid DiSE will:
 1. Parse the specifications
 2. Query RAG for model performance history
 3. Select the optimal model meeting all constraints
@@ -350,7 +350,7 @@ Code Evolver will:
 ```mermaid
 sequenceDiagram
     participant Claude as Claude Code CLI
-    participant CE as Code Evolver
+    participant CE as mostlylucid DiSE
     participant Solver as Constraint Solver
     participant RAG as RAG Memory
     participant LLM as Selected LLM
@@ -403,7 +403,7 @@ sequenceDiagram
 **Example Claude Code CLI Prompts:**
 
 ```
-User: "Generate a JSON parser using Code Evolver, but it needs to respond in under 15 seconds"
+User: "Generate a JSON parser using mostlylucid DiSE, but it needs to respond in under 15 seconds"
 
 Claude: [Uses MCP tool]
 {
@@ -412,7 +412,7 @@ Claude: [Uses MCP tool]
   "specifications": {"max_response_time": 15}
 }
 
-Code Evolver:
+mostlylucid DiSE:
   → Selected model: codellama (predicted: 12s, actual: 11.3s ✓)
   → Specification met ✓
 ```
@@ -577,7 +577,7 @@ System:
 
 ## Summary
 
-Specification-based model selection will transform Code Evolver from a tier-based system to an intelligent constraint solver that:
+Specification-based model selection will transform mostlylucid DiSE from a tier-based system to an intelligent constraint solver that:
 
 - Accepts natural language performance specifications
 - Predicts which models can meet requirements

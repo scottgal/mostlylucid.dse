@@ -1,6 +1,6 @@
 # New Tools Guide - Git, GitHub, Ask User, and Explainer
 
-This guide covers the four major tools added to the Code Evolver system:
+This guide covers the four major tools added to the mostlylucid DiSE system:
 
 1. **Git Tool** - Safe and powerful Git operations with authentication
 2. **GitHub Tool** - Complete GitHub API integration for PR/issue management

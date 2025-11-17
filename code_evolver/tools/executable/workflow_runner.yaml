@@ -81,7 +81,7 @@ examples:
 
 metadata:
   version: "1.0.0"
-  author: "Code Evolver"
+  author: "mostlylucid DiSE"
   category: "code-generation"
   use_cases:
     - "Generate standalone workflow scripts"

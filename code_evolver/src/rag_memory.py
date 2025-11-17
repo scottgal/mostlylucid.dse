@@ -20,6 +20,7 @@ class ArtifactType(Enum):
     FUNCTION = "function"            # Reusable code functions
     SUB_WORKFLOW = "sub_workflow"   # Parts of larger workflows
     WORKFLOW = "workflow"            # Complete workflow sequences
+    TOOL = "tool"                    # Registered tools (LLM, executable, custom, etc.)
     PROMPT = "prompt"                # Reusable prompts
     PATTERN = "pattern"              # Design patterns and solutions
 

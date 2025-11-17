@@ -1,6 +1,6 @@
 # Tool Invocation Guide
 
-Complete guide to using the unified tool invocation system in Code Evolver, including `call_tool()`, parallel execution, and tool chaining.
+Complete guide to using the unified tool invocation system in mostlylucid DiSE, including `call_tool()`, parallel execution, and tool chaining.
 
 ## Table of Contents
 

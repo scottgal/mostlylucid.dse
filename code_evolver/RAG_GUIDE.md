@@ -664,9 +664,9 @@ for artifact in all_artifacts:
 
 ---
 
-## Integration with Code Evolver
+## Integration with mostlylucid DiSE
 
-The RAG system integrates with other Code Evolver components:
+The RAG system integrates with other mostlylucid DiSE components:
 
 ```python
 # In orchestrator

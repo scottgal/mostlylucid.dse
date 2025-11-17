@@ -353,6 +353,10 @@ class ToolsManager:
         # Load tools from YAML files in tools/ directory
         self._load_tools_from_yaml_files()
 
+        # Preload code fixes from RAG at startup
+        if rag_memory:
+            self.preload_code_fixes()
+
         # Load tools from RAG memory
         if rag_memory:
             self._load_tools_from_rag()
@@ -454,8 +458,10 @@ class ToolsManager:
                             for change in breaking_changes:
                                 console.print(f"      - {change}")
                     else:
-                        # No changes, skip reload
-                        logger.debug(f"Tool {tool_id} unchanged, skipping")
+                        # No changes, skip reload but ensure it's in RAG
+                        logger.debug(f"Tool {tool_id} unchanged, ensuring RAG entry exists")
+                        existing_tool = self.tools[tool_id]
+                        self._store_yaml_tool_in_rag(existing_tool, tool_def, str(yaml_file))
                         continue
 
                 # Parse tool type
@@ -833,7 +839,7 @@ class ToolsManager:
                     "output_schema": tool_def.get("output_schema"),
                     "examples": tool_def.get("examples")
                 },
-                auto_embed=False  # Fast initialization - no embeddings needed for tool lookup
+                auto_embed=True  # Enable embeddings for Qdrant storage
             )
 
             logger.debug(f"Stored YAML tool in RAG: {tool.tool_id} (category: {category})")
@@ -872,7 +878,7 @@ Tags: {', '.join(tool.tags)}
                         "tool_type": tool.tool_type.value,
                         "is_tool": True
                     },
-                    auto_embed=False  # Fast initialization
+                    auto_embed=True  # Enable embeddings for Qdrant
                 )
 
             logger.info(f"✓ Indexed {len(self.tools)} tools in RAG memory")
@@ -2041,10 +2047,21 @@ Tags: {', '.join(tool.tags)}
                     - Quality: High quality tools get bonus
                     - Success rate: Tools with good track record get bonus
                     - Effort: Reusing existing code requires less effort
+                    - Feedback: Past positive/negative feedback for similar tasks
                     """
                     fitness = similarity * 100  # Base score from semantic match (0-100)
 
                     metadata = tool.metadata or {}
+
+                    # FEEDBACK SCORE: Learn from past successes and failures
+                    # This is the key self-optimization mechanism
+                    try:
+                        feedback_score = self.get_tool_feedback_score(tool.tool_id, query)
+                        fitness += feedback_score  # Add/subtract based on past feedback
+                        if feedback_score != 0:
+                            logger.debug(f"Feedback adjustment for {tool.name}: {feedback_score:+.1f} points")
+                    except Exception as e:
+                        logger.debug(f"Could not get feedback score for {tool.name}: {e}")
 
                     # Speed bonus (faster = better)
                     speed_tier = metadata.get('speed_tier', 'medium')
@@ -2653,3 +2670,229 @@ Last Updated: {datetime.now().isoformat()}
 
         except Exception as e:
             logger.warning(f"Could not update adaptive timeout stats: {e}")
+
+    def record_tool_feedback(
+        self,
+        tool_id: str,
+        prompt: str,
+        feedback_type: str,
+        reason: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """
+        Record positive or negative feedback for a tool's usage with a specific prompt.
+        This feedback is used to improve future tool selection via RAG semantic search.
+
+        Args:
+            tool_id: ID of the tool that was used
+            prompt: The original task prompt/description
+            feedback_type: Either 'positive' or 'negative'
+            reason: Optional reason for the feedback
+            metadata: Additional metadata (e.g., error message, quality score)
+        """
+        if not self.rag_memory:
+            return
+
+        if feedback_type not in ['positive', 'negative']:
+            logger.warning(f"Invalid feedback type: {feedback_type}. Must be 'positive' or 'negative'")
+            return
+
+        if tool_id not in self.tools:
+            logger.warning(f"Cannot record feedback for unknown tool: {tool_id}")
+            return
+
+        tool = self.tools[tool_id]
+
+        try:
+            from .rag_memory import ArtifactType
+            from datetime import datetime
+            import hashlib
+
+            # Create unique feedback ID
+            feedback_hash = hashlib.sha256(
+                f"{tool_id}:{prompt}:{feedback_type}:{datetime.now().isoformat()}".encode()
+            ).hexdigest()[:16]
+            feedback_id = f"feedback_{feedback_type}_{tool_id}_{feedback_hash}"
+
+            # Build feedback content for embedding
+            feedback_content = f"""Tool Feedback: {feedback_type.upper()}
+
+Tool: {tool.name} ({tool_id})
+Task Prompt: {prompt}
+Feedback Type: {feedback_type}
+Reason: {reason or 'No reason provided'}
+Timestamp: {datetime.now().isoformat()}
+"""
+
+            # Prepare metadata
+            feedback_metadata = {
+                "tool_id": tool_id,
+                "tool_name": tool.name,
+                "prompt": prompt,
+                "feedback_type": feedback_type,
+                "reason": reason,
+                "timestamp": datetime.now().isoformat(),
+                "is_feedback": True,
+                **(metadata or {})
+            }
+
+            # Store in RAG with embedding for semantic matching
+            self.rag_memory.store_artifact(
+                artifact_id=feedback_id,
+                artifact_type=ArtifactType.PATTERN,
+                name=f"{feedback_type.capitalize()} Feedback: {tool.name}",
+                description=f"{feedback_type.capitalize()} feedback for {tool.name} on task: {prompt[:100]}...",
+                content=feedback_content,
+                tags=[
+                    "tool_feedback",
+                    feedback_type,
+                    tool_id,
+                    tool.tool_type.value if hasattr(tool.tool_type, 'value') else str(tool.tool_type)
+                ],
+                metadata=feedback_metadata,
+                auto_embed=True  # Enable embedding for semantic search
+            )
+
+            logger.info(f"Recorded {feedback_type} feedback for tool '{tool.name}' on prompt: {prompt[:50]}...")
+
+        except Exception as e:
+            logger.warning(f"Could not record tool feedback: {e}")
+
+    def get_tool_feedback_score(self, tool_id: str, query: str) -> float:
+        """
+        Calculate a feedback-based score for a tool given a query.
+        Positive feedback adds to score, negative feedback subtracts.
+
+        Uses semantic search to find relevant feedback for similar tasks.
+
+        Args:
+            tool_id: Tool ID to check feedback for
+            query: The current task query to match against past feedback
+
+        Returns:
+            Feedback score adjustment (-50 to +50)
+        """
+        if not self.rag_memory:
+            return 0.0
+
+        try:
+            from .rag_memory import ArtifactType
+
+            # Search for relevant feedback using semantic similarity
+            # This finds feedback for similar prompts/tasks
+            all_feedback = self.rag_memory.find_by_tags(
+                tags=["tool_feedback", tool_id],
+                limit=50  # Get recent feedback
+            )
+
+            if not all_feedback:
+                return 0.0
+
+            positive_count = 0
+            negative_count = 0
+            positive_relevance = 0.0
+            negative_relevance = 0.0
+
+            # For each feedback entry, check if it's semantically similar to current query
+            for artifact in all_feedback:
+                feedback_type = artifact.metadata.get("feedback_type")
+                feedback_prompt = artifact.metadata.get("prompt", "")
+
+                # Calculate semantic similarity between current query and past feedback prompt
+                # This is a simple heuristic - could be improved with actual embedding similarity
+                similarity = self._calculate_simple_similarity(query, feedback_prompt)
+
+                if similarity > 0.3:  # Only count feedback from similar tasks
+                    if feedback_type == "positive":
+                        positive_count += 1
+                        positive_relevance += similarity
+                    elif feedback_type == "negative":
+                        negative_count += 1
+                        negative_relevance += similarity
+
+            # Calculate weighted score
+            # Positive feedback adds points, negative feedback subtracts
+            total_feedback = positive_count + negative_count
+            if total_feedback == 0:
+                return 0.0
+
+            # Weight by relevance and count
+            positive_score = (positive_count * 10) + (positive_relevance * 20)
+            negative_score = (negative_count * 10) + (negative_relevance * 20)
+
+            net_score = positive_score - negative_score
+
+            # Cap at +/- 50 points
+            return max(-50, min(50, net_score))
+
+        except Exception as e:
+            logger.warning(f"Could not calculate feedback score: {e}")
+            return 0.0
+
+    def _calculate_simple_similarity(self, text1: str, text2: str) -> float:
+        """
+        Simple text similarity based on shared words.
+        Returns 0.0 to 1.0 similarity score.
+        """
+        if not text1 or not text2:
+            return 0.0
+
+        # Tokenize and normalize
+        words1 = set(text1.lower().split())
+        words2 = set(text2.lower().split())
+
+        # Jaccard similarity
+        intersection = len(words1 & words2)
+        union = len(words1 | words2)
+
+        return intersection / union if union > 0 else 0.0
+
+    def preload_code_fixes(self) -> int:
+        """
+        Preload all code fixes from RAG at startup.
+        This ensures fixes are ready when needed and improves response time.
+
+        Returns:
+            Number of fixes loaded
+        """
+        if not self.rag_memory:
+            return 0
+
+        try:
+            from .rag_memory import ArtifactType
+
+            # Load all code fixes from RAG
+            code_fixes = self.rag_memory.find_by_tags(
+                tags=["code_fix"],
+                limit=1000  # Load up to 1000 fixes
+            )
+
+            if code_fixes:
+                logger.info(f"Preloaded {len(code_fixes)} code fixes from RAG")
+
+                # Log fix summary
+                static_tool_fixes = [f for f in code_fixes if "static_tool_fix" in f.tags]
+                if static_tool_fixes:
+                    logger.info(f"  - {len(static_tool_fixes)} static tool dependency fixes")
+
+                    # Show top fixes by success rate
+                    top_fixes = sorted(
+                        static_tool_fixes,
+                        key=lambda f: f.metadata.get("success_rate", 0),
+                        reverse=True
+                    )[:5]
+
+                    for fix in top_fixes:
+                        tool_name = fix.metadata.get("tool_name", "unknown")
+                        success_rate = fix.metadata.get("success_rate", 0)
+                        total = fix.metadata.get("success_count", 0) + fix.metadata.get("failure_count", 0)
+                        logger.info(f"    • {tool_name}: {success_rate:.0%} ({total} attempts)")
+
+                return len(code_fixes)
+            else:
+                logger.info("No code fixes found in RAG")
+                return 0
+
+        except Exception as e:
+            logger.warning(f"Could not preload code fixes: {e}")
+            return 0

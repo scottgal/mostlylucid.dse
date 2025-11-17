@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system now includes **automatic workflow reuse** to avoid regenerating code for questions it has already solved. All artifacts (functions, workflows, nodes, tools) are stored in **Qdrant vector database** for efficient semantic search and retrieval.
+The mostlylucid DiSE system now includes **automatic workflow reuse** to avoid regenerating code for questions it has already solved. All artifacts (functions, workflows, nodes, tools) are stored in **Qdrant vector database** for efficient semantic search and retrieval.
 
 ## Key Features Implemented
 

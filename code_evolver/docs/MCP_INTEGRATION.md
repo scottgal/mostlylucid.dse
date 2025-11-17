@@ -2,7 +2,7 @@
 
 ## Overview
 
-Code Evolver now supports the Model Context Protocol (MCP), an open-source standard for connecting AI systems to external tools, data sources, and services. This integration allows you to seamlessly use any MCP-compatible server as tools within the Code Evolver system.
+mostlylucid DiSE now supports the Model Context Protocol (MCP), an open-source standard for connecting AI systems to external tools, data sources, and services. This integration allows you to seamlessly use any MCP-compatible server as tools within the mostlylucid DiSE system.
 
 ## What is MCP?
 
@@ -14,7 +14,7 @@ The Model Context Protocol (MCP) is an open standard introduced by Anthropic tha
 
 ## Architecture
 
-The MCP integration in Code Evolver consists of three main components:
+The MCP integration in mostlylucid DiSE consists of three main components:
 
 ### 1. MCPClientManager (`src/mcp_client_manager.py`)
 

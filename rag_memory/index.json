@@ -1,0 +1,27 @@
+{
+  "tool_model_selector": {
+    "artifact_id": "tool_model_selector",
+    "artifact_type": "pattern",
+    "name": "Model Selector",
+    "description": "Intelligently select the best backend and model for a given task. Supports natural language selection like 'use GPT-4' or 'use Claude'. Considers speed, cost, quality, and context window requirements. Available backends: Ollama, OpenAI, Anthropic, Azure, LM Studio.",
+    "content": "Tool: Model Selector\nType: custom\nDescription: Intelligently select the best backend and model for a given task. Supports natural language selection like 'use GPT-4' or 'use Claude'. Considers speed, cost, quality, and context window requirements. Available backends: Ollama, OpenAI, Anthropic, Azure, LM Studio.\nTags: selection, optimization, model-management, planning, backend\n\nTool: Model Selector (model_selector)\nType: custom\nDescription: Intelligently select the best backend and model for a given task. Supports natural language selection like 'use GPT-4' or 'use Claude'. Considers speed, cost, quality, and context window requirements. Available backends: Ollama, OpenAI, Anthropic, Azure, LM Studio.\nTags: selection, optimization, model-management, planning, backend\nParameters:\n  - task_description: string - Description of the task to perform\n  - constraints: object - Optional constraints like max_cost, min_speed\n  - backend_preference: string - Preferred backend (openai, anthropic, azure, etc.)\n  - model_preference: string - Preferred specific model name\n  - top_k: number - Number of recommendations to return (default: 3)\n  - query: string - Conversational query like 'what fast summary models do we have'\n  - filter_by: object - Optional filters for query_models\n",
+    "tags": [
+      "tool",
+      "custom",
+      "selection",
+      "optimization",
+      "model-management",
+      "planning",
+      "backend"
+    ],
+    "metadata": {
+      "tool_id": "model_selector",
+      "tool_type": "custom",
+      "is_tool": true
+    },
+    "embedding": null,
+    "created_at": "2025-11-17T22:53:35.868231Z",
+    "usage_count": 0,
+    "quality_score": 0.0
+  }
+}

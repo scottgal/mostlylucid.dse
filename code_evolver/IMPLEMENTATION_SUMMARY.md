@@ -1,7 +1,7 @@
-# Code Evolver - Implementation Summary
+# mostlylucid DiSE - Implementation Summary
 
 ## Overview
-Production-ready Code Evolver with embedding support, context management, and progress visualization.
+Production-ready mostlylucid DiSE with embedding support, context management, and progress visualization.
 
 ## Key Features Implemented
 

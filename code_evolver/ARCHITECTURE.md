@@ -1,12 +1,12 @@
-# Code Evolver - Complete System Architecture
+# mostlylucid DiSE - Complete System Architecture
 
 ## Overview
 
-Code Evolver is a self-improving AI workflow system that gets **smarter and faster over time** through continuous learning, optimization, and evolution.
+mostlylucid DiSE is a self-improving AI workflow system that gets **smarter and faster over time** through continuous learning, optimization, and evolution.
 
 ### Key Innovation
 
-Unlike traditional systems that run the same code repeatedly, Code Evolver:
+Unlike traditional systems that run the same code repeatedly, mostlylucid DiSE:
 1. **Learns from every execution** - Builds a semantic library of successful patterns
 2. **Auto-evolves based on performance** - Automatically improves itself when quality drops
 3. **Optimizes for different platforms** - Creates variants for Pi, Edge, Cloud
@@ -832,7 +832,7 @@ The system tracks:
 
 ## Summary
 
-Code Evolver is a **self-improving AI workflow system** that:
+mostlylucid DiSE is a **self-improving AI workflow system** that:
 - Learns from every execution
 - Auto-evolves based on performance
 - Optimizes for different platforms

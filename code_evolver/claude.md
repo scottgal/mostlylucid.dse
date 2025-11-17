@@ -1,4 +1,4 @@
-# Code Evolver - Claude Code CLI Documentation
+# mostlylucid DiSE - Claude Code CLI Documentation
 
 **AI-Powered Code Evolution System with Multi-Backend LLM Support**
 

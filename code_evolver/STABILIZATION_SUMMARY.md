@@ -1,4 +1,4 @@
-# Code Evolver Stabilization Summary
+# mostlylucid DiSE Stabilization Summary
 
 ## Date: 2025-11-17
 

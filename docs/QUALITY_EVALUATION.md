@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system now includes comprehensive quality evaluation at each workflow step, with **automatic threshold adjustment**, **iterative improvement**, and **separate evaluators for different content types**.
+The mostlylucid DiSE system now includes comprehensive quality evaluation at each workflow step, with **automatic threshold adjustment**, **iterative improvement**, and **separate evaluators for different content types**.
 
 **Key Feature**: Uses **phi3:3.8b for writing evaluation** and **llama3 for code evaluation**.
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-A complete SignalR integration system that connects to streaming task hubs and automatically generates training workflows for the Code Evolver system. Tasks are processed sequentially, one at a time, to ensure proper training data collection.
+A complete SignalR integration system that connects to streaming task hubs and automatically generates training workflows for the mostlylucid DiSE system. Tasks are processed sequentially, one at a time, to ensure proper training data collection.
 
 ## Architecture
 
@@ -444,7 +444,7 @@ python tools/executable/signalr_hub_connector.py < config.json 2>&1 | \
   grep -E '"workflow_saved"' | wc -l
 ```
 
-## Integration with Code Evolver
+## Integration with mostlylucid DiSE
 
 **Automatic Integration:**
 1. SignalR connector calls `task_to_workflow_router` LLM tool

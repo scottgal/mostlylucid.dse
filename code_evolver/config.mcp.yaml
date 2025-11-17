@@ -1,9 +1,9 @@
 # ============================================================================
-# Code Evolver - MCP (Model Context Protocol) Server Configuration
+# mostlylucid DiSE - MCP (Model Context Protocol) Server Configuration
 # ============================================================================
 #
 # This configuration defines MCP servers that expose tools, resources, and
-# prompts to the Code Evolver system. MCP servers are external processes that
+# prompts to the mostlylucid DiSE system. MCP servers are external processes that
 # provide additional capabilities through a standardized protocol.
 #
 # INSTALLATION:

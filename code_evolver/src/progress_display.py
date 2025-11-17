@@ -67,7 +67,7 @@ class ProgressDisplay:
         if self.use_rich:
             self.console.print(Panel(
                 f"[bold cyan]{task_description}[/bold cyan]",
-                title="Code Evolver",
+                title="mostlylucid DiSE",
                 border_style="cyan"
             ))
         else:

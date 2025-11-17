@@ -1,4 +1,4 @@
-# Code Evolver Backend Architecture Analysis
+# mostlylucid DiSE Backend Architecture Analysis
 
 ## Executive Summary
 The codebase currently uses **Ollama** as its exclusive LLM backend provider. To add support for OpenAPI, Anthropic, Azure AI, and LM Studio, you'll need to implement a backend abstraction layer that maintains compatibility with existing code while supporting multiple providers.

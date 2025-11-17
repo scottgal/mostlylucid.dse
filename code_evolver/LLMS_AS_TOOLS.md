@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system now treats LLMs themselves as tools, enabling intelligent model and backend selection based on natural language requests and learned performance.
+The mostlylucid DiSE system now treats LLMs themselves as tools, enabling intelligent model and backend selection based on natural language requests and learned performance.
 
 **Key Concept:** The system learns which LLMs are best for each task type through usage, creating a fitness-based selection mechanism that improves over time.
 

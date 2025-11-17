@@ -1,9 +1,9 @@
-# Code Evolver - System Manual
+# mostlylucid DiSE - System Manual
 
 **For AI Self-Reference and User Questions**
 
 This manual is stored in RAG memory and can be semantically searched by the system
-to answer questions about how Code Evolver works.
+to answer questions about how mostlylucid DiSE works.
 
 ---
 

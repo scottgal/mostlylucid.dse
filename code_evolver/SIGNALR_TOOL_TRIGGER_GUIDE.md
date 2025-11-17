@@ -285,7 +285,7 @@ public class ToolHub : Hub
     // Method that clients listen to
     public async Task TriggerTool(string toolId, object parameters, string taskId)
     {
-        // Send to all listening Code Evolver instances
+        // Send to all listening mostlylucid DiSE instances
         await Clients.All.SendAsync("ToolTrigger", new
         {
             action = "trigger_tool",
@@ -353,7 +353,7 @@ hub = Hub()
 
 @hub.on_connect
 def on_connect():
-    print("Code Evolver connected!")
+    print("mostlylucid DiSE connected!")
 
 # Trigger tool from your Python app
 def trigger_translation(text, target_lang):

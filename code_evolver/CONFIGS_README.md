@@ -1,6 +1,6 @@
 # Configuration Files Guide
 
-Code Evolver supports multiple AI backends through swappable configuration files. All configs share the same tools definitions and structure - you just swap the provider.
+mostlylucid DiSE supports multiple AI backends through swappable configuration files. All configs share the same tools definitions and structure - you just swap the provider.
 
 ## Available Configurations
 
@@ -21,7 +21,7 @@ ollama pull codellama
 ollama pull tinyllama
 ollama pull nomic-embed-text
 
-# Run Code Evolver (uses config.yaml by default)
+# Run mostlylucid DiSE (uses config.yaml by default)
 python chat_cli.py
 ```
 
@@ -341,4 +341,4 @@ Then edit:
 
 ## License
 
-All configurations use the same license as Code Evolver (MIT).
+All configurations use the same license as mostlylucid DiSE (MIT).

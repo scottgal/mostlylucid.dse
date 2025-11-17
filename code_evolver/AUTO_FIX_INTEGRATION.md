@@ -31,7 +31,7 @@ OK: Import order is correct (path setup at line 7, import at line 8)
 
 ---
 
-## Integration with Code Evolver
+## Integration with mostlylucid DiSE
 
 ### Current Workflow (Without Auto-Fix)
 

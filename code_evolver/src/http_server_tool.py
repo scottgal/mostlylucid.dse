@@ -1,5 +1,5 @@
 """
-HTTP Server Tool for Code Evolver.
+HTTP Server Tool for mostlylucid DiSE.
 Allows workflows to serve content via HTTP (HTML/API).
 """
 import json

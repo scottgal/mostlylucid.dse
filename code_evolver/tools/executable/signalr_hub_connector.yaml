@@ -112,7 +112,7 @@ usage_notes: |
   ## Overview
 
   This tool connects to SignalR hubs to receive real-time streaming task data.
-  It's designed for training the Code Evolver system by automatically generating
+  It's designed for training the mostlylucid DiSE system by automatically generating
   workflows from incoming task specifications.
 
   ## Requirements

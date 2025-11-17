@@ -88,7 +88,8 @@ class BackendConfigChecker:
 
         # Check if backend is configured
         llm_config = self.config.config.get("llm", {})
-        backend_config = llm_config.get(backend_lower, {})
+        backends_config = llm_config.get("backends", {})
+        backend_config = backends_config.get(backend_lower, {})
 
         if not backend_config:
             return BackendCheckResult(

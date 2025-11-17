@@ -507,7 +507,7 @@ store.close()
 
 ## 🤝 Integration Points
 
-### Existing Code Evolver Components
+### Existing mostlylucid DiSE Components
 
 The debug store integrates with:
 
@@ -622,7 +622,7 @@ See source code documentation in:
 
 ## 📄 License
 
-Part of the Code Evolver project.
+Part of the mostlylucid DiSE project.
 
 ## 🤔 FAQ
 

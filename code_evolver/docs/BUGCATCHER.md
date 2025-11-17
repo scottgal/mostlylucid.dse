@@ -1,6 +1,6 @@
 # BugCatcher - Global Exception Monitoring
 
-BugCatcher is a global exception monitoring tool for Code Evolver that automatically tracks and logs all exceptions across workflows, providing centralized observability via Grafana Loki.
+BugCatcher is a global exception monitoring tool for mostlylucid DiSE that automatically tracks and logs all exceptions across workflows, providing centralized observability via Grafana Loki.
 
 ## Table of Contents
 
@@ -46,7 +46,7 @@ BugCatcher sits at the front of every workflow and automatically:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Code Evolver Workflows                   │
+│                     mostlylucid DiSE Workflows                   │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
 │  │ Step 1   │ -> │ Step 2   │ -> │ Step 3   │              │
 │  └────┬─────┘    └────┬─────┘    └────┬─────┘              │
@@ -116,9 +116,9 @@ bugcatcher:
     file: "bugcatcher.log"
 ```
 
-### 3. Run Code Evolver
+### 3. Run mostlylucid DiSE
 
-BugCatcher automatically initializes when Code Evolver starts (if enabled):
+BugCatcher automatically initializes when mostlylucid DiSE starts (if enabled):
 
 ```bash
 python chat_cli.py
@@ -539,4 +539,4 @@ To contribute to BugCatcher:
 
 ## License
 
-BugCatcher is part of Code Evolver and uses the same license.
+BugCatcher is part of mostlylucid DiSE and uses the same license.

@@ -25,7 +25,7 @@ async def main():
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(
-        description='Start SignalR training for Code Evolver',
+        description='Start SignalR training for mostlylucid DiSE',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 Examples:
@@ -91,7 +91,7 @@ Examples:
 
     # Display welcome banner
     print("=" * 70)
-    print("  SignalR Training Launcher for Code Evolver")
+    print("  SignalR Training Launcher for mostlylucid DiSE")
     print("=" * 70)
     print()
     print(f"Hub URL:          {args.hub_url}")

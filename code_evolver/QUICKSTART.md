@@ -1,6 +1,6 @@
-# Code Evolver - Quick Start Guide
+# mostlylucid DiSE - Quick Start Guide
 
-Get up and running with Code Evolver in 5 minutes!
+Get up and running with mostlylucid DiSE in 5 minutes!
 
 ## Step 1: Install Prerequisites
 
@@ -34,7 +34,7 @@ ollama pull tinyllama
 ollama pull nomic-embed-text
 ```
 
-## Step 2: Install Code Evolver
+## Step 2: Install mostlylucid DiSE
 
 ```bash
 cd code_evolver

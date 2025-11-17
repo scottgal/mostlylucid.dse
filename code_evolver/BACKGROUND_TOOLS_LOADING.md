@@ -10,7 +10,7 @@ chat_cli.py now loads tools in the background to avoid blocking startup.
 ```
 > python chat_cli.py
 (wait 10-15 seconds while tools load...)
-Welcome to Code Evolver!
+Welcome to mostlylucid DiSE!
 ```
 
 ### After
@@ -20,7 +20,7 @@ Welcome to Code Evolver!
 Loading tools in background...
 (Ready in 0.7 seconds!)
 
-Welcome to Code Evolver!
+Welcome to mostlylucid DiSE!
 (tools continue loading in background)
 ```
 

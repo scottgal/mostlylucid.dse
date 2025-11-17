@@ -1,5 +1,5 @@
 """
-GitHub Tool for Code Evolver.
+GitHub Tool for mostlylucid DiSE.
 Provides GitHub API integration for PR management, issue tracking, and repository operations.
 """
 import json

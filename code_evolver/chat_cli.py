@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Interactive CLI chat interface for Code Evolver.
+Interactive CLI chat interface for mostlylucid DiSE.
 Provides a conversational interface for code generation and evolution.
 """
 import sys
@@ -19,6 +19,11 @@ from rich.spinner import Spinner
 from datetime import datetime
 import re
 import unicodedata
+import threading
+import queue
+import time
+from dataclasses import dataclass
+from enum import Enum
 
 # Disable all debug/info logging for clean chat experience
 # Use force=True to override any previous logging configurations from imported modules
@@ -188,20 +193,36 @@ console = SafeConsole()
 class LogPanel:
     """
     Full-width panel for displaying log messages (shows last 4 lines).
+    Buffers messages and only displays when explicitly flushed to avoid interrupting user input.
     """
     def __init__(self, console: Console, max_lines: int = 4):
         self.console = console
         self.max_lines = max_lines
         self.log_lines = []
+        self.pending_messages = []  # Buffer for messages during input
+        self.suppress_output = False  # Flag to suppress panel printing
 
     def log(self, message: str, style: str = "dim"):
-        """Add a log message and display panel."""
+        """Add a log message to buffer."""
         # Add message to buffer
         self.log_lines.append((message, style))
 
         # Keep only last N lines
         if len(self.log_lines) > self.max_lines:
             self.log_lines = self.log_lines[-self.max_lines:]
+
+        # If output is suppressed (during user input), don't print
+        if self.suppress_output:
+            self.pending_messages.append((message, style))
+            return
+
+        # Otherwise print immediately
+        self._print_panel()
+
+    def _print_panel(self):
+        """Print the log panel with current messages."""
+        if not self.log_lines:
+            return
 
         # Build panel content
         from rich.text import Text
@@ -222,9 +243,17 @@ class LogPanel:
         )
         self.console.print(panel)
 
+    def flush(self):
+        """Flush any pending messages and print the panel."""
+        if self.pending_messages:
+            self.pending_messages.clear()
+        if self.log_lines:
+            self._print_panel()
+
     def clear(self):
         """Clear log buffer."""
         self.log_lines = []
+        self.pending_messages = []
 
 
 # Create global log panel
@@ -232,36 +261,42 @@ log_panel = LogPanel(console, max_lines=4)
 
 
 class WorkflowDisplay:
-    """Clean workflow stage display for modern chat experience."""
+    """Clean, minimal workflow stage display."""
 
     def __init__(self, console: Console):
         self.console = console
         self.current_stage = None
         self.stages = []
+        self.last_stage = None  # Track last displayed stage to avoid duplicates
 
     def start_workflow(self, description: str):
         """Start a new workflow."""
-        self.console.print(f"\n[bold cyan]{description}[/bold cyan]\n")
+        self.console.print(f"\n[bold cyan]{description}[/bold cyan]")
         self.stages = []
+        self.last_stage = None
 
     def add_stage(self, stage_name: str):
-        """Add a stage to the workflow."""
-        self.stages.append(stage_name)
+        """Add a stage to the workflow (silently)."""
+        if stage_name not in self.stages:
+            self.stages.append(stage_name)
 
     def show_stages(self):
-        """Show workflow stages as a pipeline."""
-        if not self.stages:
+        """Show workflow stages as a simple pipeline (called once at start)."""
+        if not self.stages or len(self.stages) < 2:
             return
         pipeline = " → ".join(self.stages)
-        self.console.print(f"[dim]{pipeline}[/dim]\n")
+        self.console.print(f"[dim]{pipeline}[/dim]")
 
     def start_stage(self, stage_name: str, status_text: str = None):
-        """Start a stage with a simple status message (no spinner to avoid Unicode issues)."""
-        self.current_stage = stage_name
-        display_text = status_text or stage_name
-        self.console.print(f"[cyan]> {display_text}...[/cyan]")
+        """Only show stage if it's different from the last one (minimal, friendly)."""
+        # Only display if this is a new stage
+        if self.last_stage != stage_name:
+            self.current_stage = stage_name
+            self.last_stage = stage_name
+            display_text = status_text or stage_name
+            self.console.print(f"[cyan]→ {display_text}[/cyan]")
 
-        # Return a dummy context manager that does nothing
+        # Return a dummy context manager
         class DummyContext:
             def __enter__(self):
                 return self
@@ -270,23 +305,14 @@ class WorkflowDisplay:
         return DummyContext()
 
     def complete_stage(self, stage_name: str, result: str = None):
-        """Mark a stage as complete."""
+        """Mark a stage as complete (silent unless there's a result to show)."""
         if result:
-            self.console.print(f"[green]OK[/green] {stage_name}: {result}")
-        else:
-            self.console.print(f"[green]OK[/green] {stage_name}")
+            self.console.print(f"  [dim]{result}[/dim]")
 
     def show_tool_call(self, tool_name: str, model: str = None, endpoint: str = None, tool_type: str = None):
-        """Show a tool being called elegantly."""
-        parts = [f"[bold cyan]{tool_name}[/bold cyan]"]
-        if model:
-            parts.append(f"model: [yellow]{model}[/yellow]")
-        if endpoint:
-            parts.append(f"endpoint: [dim]{endpoint}[/dim]")
-        if tool_type:
-            parts.append(f"type: [dim]{tool_type}[/dim]")
-
-        self.console.print(f"  >> Using {', '.join(parts)}")
+        """Show a tool being called (minimal - only show tool name)."""
+        # Suppress tool calls - only show stage changes
+        pass
 
     def show_result(self, title: str, content: str, syntax: str = None):
         """Show a result in a panel."""
@@ -297,8 +323,192 @@ class WorkflowDisplay:
             self.console.print(Panel(content, title=f"[cyan]{title}[/cyan]", box=box.ROUNDED))
 
 
+class WorkflowStatus(Enum):
+    """Status of a background workflow."""
+    QUEUED = "queued"
+    NAMING = "naming"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+@dataclass
+class BackgroundWorkflow:
+    """Represents a background workflow execution."""
+    workflow_id: str
+    description: str
+    name: Optional[str] = None
+    status: WorkflowStatus = WorkflowStatus.QUEUED
+    progress: str = ""
+    result: Optional[Any] = None
+    error: Optional[str] = None
+    thread: Optional[threading.Thread] = None
+    start_time: float = 0.0
+    end_time: Optional[float] = None
+
+
+class BackgroundWorkflowManager:
+    """Manages multiple background workflow executions."""
+
+    def __init__(self, chat_cli):
+        self.chat_cli = chat_cli
+        self.workflows: Dict[str, BackgroundWorkflow] = {}
+        self.workflow_counter = 0
+        self.lock = threading.Lock()
+
+    def generate_workflow_name(self, description: str) -> str:
+        """
+        Generate a short, descriptive name for a workflow using 1B LLM.
+
+        Args:
+            description: The workflow task description
+
+        Returns:
+            Short name (3-5 words max)
+        """
+        try:
+            # Use veryfast tier (1B model) for quick naming
+            prompt = f"""Given this task description, generate a SHORT descriptive name (3-5 words max, no quotes):
+
+Task: {description[:200]}
+
+Name (short, descriptive, lowercase with dashes):"""
+
+            name = self.chat_cli.client.generate(
+                tier="veryfast",  # Use 1B model
+                prompt=prompt,
+                temperature=0.3,
+                model_key=self.chat_cli.config.triage_model_key
+            )
+
+            # Clean up the name
+            name = name.strip().lower()
+            name = re.sub(r'[^a-z0-9\s-]', '', name)
+            name = re.sub(r'\s+', '-', name)
+            name = name[:50]  # Max 50 chars
+
+            if not name:
+                name = f"workflow-{self.workflow_counter}"
+
+            return name
+
+        except Exception as e:
+            logger.debug(f"Failed to generate workflow name: {e}")
+            return f"workflow-{self.workflow_counter}"
+
+    def start_workflow(self, description: str) -> str:
+        """
+        Start a new background workflow.
+
+        Args:
+            description: Task description
+
+        Returns:
+            Workflow ID
+        """
+        with self.lock:
+            self.workflow_counter += 1
+            workflow_id = f"wf_{self.workflow_counter}_{int(time.time())}"
+
+            # Create workflow
+            workflow = BackgroundWorkflow(
+                workflow_id=workflow_id,
+                description=description,
+                status=WorkflowStatus.NAMING,
+                start_time=time.time()
+            )
+
+            self.workflows[workflow_id] = workflow
+
+        # Start naming in background
+        def name_and_run():
+            try:
+                # Generate name
+                workflow.name = self.generate_workflow_name(description)
+                workflow.status = WorkflowStatus.RUNNING
+                workflow.progress = "Starting..."
+
+                console.print(f"\n[dim cyan]→ [{workflow.name}] Starting workflow...[/dim cyan]")
+
+                # Run the actual workflow
+                try:
+                    result = self.chat_cli._process_generate(description, workflow_id=workflow_id)
+                    workflow.result = result
+                    workflow.status = WorkflowStatus.COMPLETED
+                    workflow.end_time = time.time()
+                    elapsed = workflow.end_time - workflow.start_time
+                    console.print(f"\n[green]✓ [{workflow.name}] Completed in {elapsed:.1f}s[/green]")
+                except Exception as e:
+                    workflow.error = str(e)
+                    workflow.status = WorkflowStatus.FAILED
+                    workflow.end_time = time.time()
+                    console.print(f"\n[red]✗ [{workflow.name}] Failed: {e}[/red]")
+
+            except Exception as e:
+                workflow.error = f"Naming failed: {e}"
+                workflow.status = WorkflowStatus.FAILED
+                workflow.name = f"workflow-{self.workflow_counter}"
+                console.print(f"\n[red]✗ [{workflow.name}] Failed during naming: {e}[/red]")
+
+        # Start thread
+        thread = threading.Thread(target=name_and_run, daemon=True)
+        workflow.thread = thread
+        thread.start()
+
+        return workflow_id
+
+    def get_active_workflows(self) -> List[BackgroundWorkflow]:
+        """Get list of active (running or queued) workflows."""
+        with self.lock:
+            return [
+                wf for wf in self.workflows.values()
+                if wf.status in [WorkflowStatus.QUEUED, WorkflowStatus.NAMING, WorkflowStatus.RUNNING]
+            ]
+
+    def get_workflow(self, workflow_id: str) -> Optional[BackgroundWorkflow]:
+        """Get a specific workflow by ID."""
+        with self.lock:
+            return self.workflows.get(workflow_id)
+
+    def list_workflows(self) -> None:
+        """Display all workflows and their status."""
+        with self.lock:
+            if not self.workflows:
+                console.print("[dim]No workflows yet[/dim]")
+                return
+
+            table = Table(title="Background Workflows", box=box.ROUNDED)
+            table.add_column("ID", style="cyan")
+            table.add_column("Name", style="bold")
+            table.add_column("Status", style="yellow")
+            table.add_column("Progress", style="dim")
+            table.add_column("Time", style="green")
+
+            for wf in self.workflows.values():
+                status_color = {
+                    WorkflowStatus.QUEUED: "yellow",
+                    WorkflowStatus.NAMING: "cyan",
+                    WorkflowStatus.RUNNING: "blue",
+                    WorkflowStatus.COMPLETED: "green",
+                    WorkflowStatus.FAILED: "red"
+                }.get(wf.status, "white")
+
+                elapsed = (wf.end_time or time.time()) - wf.start_time
+                time_str = f"{elapsed:.1f}s"
+
+                table.add_row(
+                    wf.workflow_id,
+                    wf.name or "...",
+                    f"[{status_color}]{wf.status.value}[/{status_color}]",
+                    wf.progress,
+                    time_str
+                )
+
+            console.print(table)
+
+
 class ChatCLI:
-    """Interactive chat interface for Code Evolver."""
+    """Interactive chat interface for mostlylucid DiSE."""
 
     def __init__(self, config_path: str = "config.yaml"):
         """
@@ -361,7 +571,7 @@ class ChatCLI:
         except RuntimeError as e:
             console.print(f"\n[bold red]CRITICAL ERROR: RAG memory initialization failed![/bold red]")
             console.print(f"[red]{e}[/red]")
-            console.print("\n[yellow]RAG is required infrastructure for Code Evolver to function.[/yellow]")
+            console.print("\n[yellow]RAG is required infrastructure for mostlylucid DiSE to function.[/yellow]")
             if self.config.use_qdrant:
                 console.print("[cyan]Make sure Qdrant is running:[/cyan]")
                 console.print("  docker run -p 6333:6333 qdrant/qdrant")
@@ -451,23 +661,83 @@ class ChatCLI:
         self._tool_conversations = {}  # {node_id: [{"role": "user", "content": "..."}, ...]}
         self._current_tool_conversation = []  # Active conversation during tool development
 
-        # Set up command history
-        self.history_file = Path(self.config.get("chat.history_file", ".code_evolver_history"))
+        # Initialize background workflow manager for parallel execution
+        self.workflow_manager = BackgroundWorkflowManager(self)
 
-        # Setup prompt_toolkit history if available
+        # Setup prompt_toolkit for better UX (in-memory history only, RAG has persistent history)
         if PROMPT_TOOLKIT_AVAILABLE:
-            self.pt_history = FileHistory(str(self.history_file))
-            # Create command completer for slash commands
-            slash_commands = [
-                "/generate", "/tools", "/tool", "/status", "/clear", "/clear_rag",
-                "/help", "/manual", "/config", "/auto", "/delete", "/evolve",
-                "/list", "/exit", "/quit"
-            ]
-            self.pt_completer = WordCompleter(slash_commands, ignore_case=True)
+            # In-memory history only - RAG stores persistent conversation history
+            from prompt_toolkit.history import InMemoryHistory
+            self.pt_history = InMemoryHistory()
+            # Create smart completer that uses RAG for suggestions
+            self.pt_completer = self._create_smart_completer()
         else:
             self.pt_history = None
             self.pt_completer = None
-            self._load_history()
+
+    def _create_smart_completer(self):
+        """
+        Create an intelligent autocompleter that uses RAG for suggestions.
+        Suggests:
+        1. Slash commands
+        2. Recent conversation topics from RAG
+        3. Common task patterns
+        """
+        from prompt_toolkit.completion import Completer, Completion
+
+        class RAGSmartCompleter(Completer):
+            def __init__(self, chat_cli):
+                self.chat_cli = chat_cli
+                # Base slash commands
+                self.slash_commands = [
+                    "/generate", "/tools", "/tool", "/status", "/clear", "/clear_rag",
+                    "/help", "/manual", "/config", "/auto", "/delete", "/evolve",
+                    "/list", "/exit", "/quit", "/workflows", "/wf"
+                ]
+
+            def get_completions(self, document, complete_event):
+                text = document.text_before_cursor
+
+                # If starts with /, suggest slash commands
+                if text.startswith('/'):
+                    word = text[1:].lower()
+                    for cmd in self.slash_commands:
+                        if cmd[1:].startswith(word):
+                            yield Completion(cmd, start_position=-len(text))
+
+                # Otherwise, suggest from RAG conversation history
+                elif len(text) > 3:  # Only suggest after 3+ chars
+                    try:
+                        # Quick semantic search in RAG for similar past queries
+                        from src.rag_memory import ArtifactType
+                        similar = self.chat_cli.rag.find_similar(
+                            query=text,
+                            artifact_type=ArtifactType.CONVERSATION,
+                            top_k=5
+                        )
+
+                        # Suggest descriptions from similar past interactions
+                        seen = set()
+                        for artifact, score in similar:
+                            if score > 0.7:  # High similarity only
+                                suggestion = artifact.description
+                                # Clean up suggestion
+                                if ':' in suggestion:
+                                    suggestion = suggestion.split(':', 1)[1].strip()
+                                suggestion = suggestion[:100]  # Max length
+
+                                if suggestion and suggestion not in seen:
+                                    seen.add(suggestion)
+                                    yield Completion(
+                                        suggestion,
+                                        start_position=-len(text),
+                                        display_meta=f"similarity: {score:.0%}"
+                                    )
+                    except Exception:
+                        # Fail silently - autocomplete is optional
+                        pass
+
+        return RAGSmartCompleter(self)
 
     @property
     def tools_manager(self):
@@ -481,38 +751,6 @@ class ChatCLI:
             else:
                 self._tools_manager = self._tools_loader.get_tools(wait=True)
         return self._tools_manager
-
-    def _load_history(self):
-        """Load command history from file (readline fallback)."""
-        if not READLINE_AVAILABLE or PROMPT_TOOLKIT_AVAILABLE:
-            return
-
-        if self.history_file.exists():
-            try:
-                with open(self.history_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        readline.add_history(line.strip())
-            except Exception:
-                pass
-
-    def _save_history(self):
-        """Save command history to file (readline fallback)."""
-        if not READLINE_AVAILABLE or PROMPT_TOOLKIT_AVAILABLE:
-            return
-
-        history_file = self.config.get("chat.history_file", ".code_evolver_history")
-        history_path = Path(history_file)
-
-        try:
-            max_history = self.config.get("chat.max_history", 1000)
-            with open(history_path, 'w') as f:
-                for i in range(max(0, readline.get_current_history_length() - max_history),
-                             readline.get_current_history_length()):
-                    hist_item = readline.get_history_item(i + 1)
-                    if hist_item:
-                        f.write(hist_item + '\n')
-        except Exception:
-            pass
 
     def _validate_python_code(self, code: str) -> tuple[bool, str]:
         """
@@ -1293,7 +1531,7 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
     def print_welcome(self):
         """Print welcome message."""
         welcome = """
-[bold cyan]Code Evolver - Interactive CLI[/bold cyan]
+[bold cyan]mostlylucid DiSE - Interactive CLI[/bold cyan]
 [dim]AI-powered code generation and evolution[/dim]
 
 Just type what you want to create - it will generate and run automatically!
@@ -1325,19 +1563,20 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/run <node_id> [input]", "Run an existing node with optional input"),
             ("/test <node_id>", "Run unit tests for a node"),
             ("/evaluate <node_id>", "Evaluate a node's performance"),
-            ("/tools", "List all available tools (LLM, code, and community tools)"),
-            ("/tools test all", "Run tests for all tools"),
-            ("/tools test --n <name>", "Run tests for a specific tool and dependencies"),
-            ("/tools optimize all", "Optimize all tools (slow, detailed analysis)"),
-            ("/tools optimize --n <name>", "Optimize a specific tool"),
-            ("/tool info <tool_name>", "Get intelligent description of a tool (uses tinyllama)"),
-            ("/tool run <tool_name> [input]", "Execute a tool directly with input and see results"),
-            ("/tools [category]", "List all tools or filter by category (llm, executable, custom, openapi)"),
+            ("", ""),
+            ("Tool Management:", ""),
+            ("/tool", "List all available tools (alias: /tool list)"),
+            ("/tool [category]", "Filter tools by category (llm, executable, custom, openapi)"),
             ("/tool <tool_id>", "Show detailed documentation for a specific tool"),
-            ("/tool list", "List available tools (same as /tools)"),
+            ("/tool info <tool_id>", "Get intelligent description of a tool"),
+            ("/tool run <tool_id> [input]", "Execute a tool directly with input"),
+            ("/tool test <tool_id>", "Run tests for a specific tool"),
+            ("/tool test all", "Run tests for all tools"),
+            ("/tool optimize <tool_id>", "Optimize a tool (iterative improvement)"),
+            ("/tool optimize all", "Optimize all tools (slow)"),
+            ("/tool mutate <tool_id> <instructions>", "Improve a tool based on instructions"),
+            ("", ""),
             ("/backends [--test]", "Check status of all LLM backends (API keys, connectivity)"),
-            ("/mutate tool <tool_id> <instructions>", "Improve a tool based on instructions"),
-            ("/optimize tool <tool_id> [target]", "Optimize a tool for performance/quality/memory (iterative)"),
             ("/workflow <node_id>", "Display the complete workflow for a node"),
             ("/show <node_id>", "Show detailed information about a node"),
             ("/delete <node_id>", "Delete a node"),
@@ -1357,12 +1596,13 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         console.print(table)
 
-    def handle_generate(self, description: str) -> bool:
+    def handle_generate(self, description: str, display_description: str = None) -> bool:
         """
         Handle generate command.
 
         Args:
-            description: Natural language description of what to generate
+            description: Natural language description of what to generate (may include context)
+            display_description: Description to display to user (without context)
 
         Returns:
             True if successful
@@ -1370,6 +1610,10 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         if not description:
             console.print("[red]Error: Please provide a description[/red]")
             return False
+
+        # Use display_description for user-facing output, description for LLM
+        if display_description is None:
+            display_description = description
 
         # Start tracking conversation for this tool development
         # This will be stored in RAG ONLY when tool is registered
@@ -1380,16 +1624,16 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             "timestamp": __import__('time').time()
         })
 
-        # Initialize workflow tracker
+        # Initialize workflow tracker with display description (no context)
         show_workflow = self.config.get("chat.show_workflow", True)
         workflow = WorkflowTracker(
             workflow_id=f"gen_{int(__import__('time').time()*1000)}",
-            description=description,
+            description=display_description,  # Use clean description without context
             context=self.config.get("chat.default_workflow_context", {})
         )
 
-        # Start clean workflow display
-        self.display.start_workflow(description)
+        # Start clean workflow display with user's original input
+        self.display.start_workflow(display_description)
 
         # Step 0: Evaluate task type using tinyllama (fast preprocessing)
         # NOTE: This is ONLY for routing hints - the original description is ALWAYS
@@ -1426,9 +1670,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         if duplicate_check['should_reuse']:
             artifact = duplicate_check['existing_artifact']
-            console.print(f"\n[bold green]✓ DUPLICATE DETECTED ({duplicate_check['confidence']:.1%} match)[/bold green]")
-            console.print(f"[green]Reusing: {artifact.name}[/green]")
-            console.print(f"[dim]{duplicate_check['reasoning']}[/dim]")
+            console.print(f"\n[cyan]→ Using existing tool: {artifact.name}[/cyan]")
+            console.print(f"[dim]  ({duplicate_check['confidence']:.0%} match - {duplicate_check['reasoning']})[/dim]")
 
             # Extract node_id from artifact
             node_id = artifact.metadata.get("node_id") if artifact.metadata else None
@@ -1990,6 +2233,10 @@ Answer:"""
 
         # Get the actual tool objects to show their names
         found_tools = self.tools_manager.search(description, top_k=3)
+
+        # Store found tools in context for feedback recording
+        self.context['_selected_tools'] = found_tools if found_tools else []
+
         if found_tools and len(found_tools) > 0:
             # Use full title from metadata if available, otherwise use name
             tool_names = [
@@ -2300,15 +2547,16 @@ ALGORITHM: fibonacci computation"""
         if is_simple_task and 'fast_code_generator' in self.tools_manager.tools:
             selected_tool = self.tools_manager.tools['fast_code_generator']
             use_specialized_tool = True
-            self.display.show_tool_call(selected_tool.name, model="gemma3:4b", tool_type="Fast")
+            console.print(f"[cyan]→ Using tool: {selected_tool.name}[/cyan]")
         # For ALL content generation (simple or complex), use powerful model
         elif is_simple_content or is_complex_content:
             # Don't search for tools - content needs fresh generation with powerful model
             # Use general tool which has proper prompts for content generation
             selected_tool = None
             use_specialized_tool = False
-            console.print(f"[yellow]Using powerful model for content generation[/yellow]")
-            self.display.show_tool_call("General Code Generator", model=self.config.generator_model, tool_type="Content")
+            # Extract first few words for short description
+            short_desc = ' '.join(description.split()[:6])
+            console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
         else:
             # For other complex tasks or if no specialized tool, use normal tool selection
             selected_tool = self.tools_manager.get_best_llm_for_task(description)
@@ -2317,10 +2565,16 @@ ALGORITHM: fibonacci computation"""
 
             if selected_tool:
                 if "general" not in selected_tool.tool_id.lower() and "fallback" not in selected_tool.tags:
-                    self.display.show_tool_call(selected_tool.name, model=selected_tool.metadata.get('llm_model'), tool_type="Specialized")
-                use_specialized_tool = True
+                    console.print(f"[cyan]→ Using tool: {selected_tool.name}[/cyan]")
+                    use_specialized_tool = True
+                else:
+                    # Using general/fallback means creating new
+                    short_desc = ' '.join(description.split()[:6])
+                    console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
             else:
-                self.display.show_tool_call("Code Generator", model=generator_to_use, tool_type="Standard")
+                # No tool found, creating new
+                short_desc = ' '.join(description.split()[:6])
+                console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
 
         # Step 3: Generate node ID
         import re
@@ -2926,8 +3180,13 @@ Return ONLY the JSON object, nothing else."""
             if code != original_code:
                 console.print("[green]Auto-fixed code formatting and indentation[/green]")
         except ImportError:
-            console.print("[yellow]Warning: autopep8 not installed - skipping auto-formatting[/yellow]")
-            console.print("[dim]Install with: pip install autopep8[/dim]")
+            # Auto-install missing dependency using RAG-based fix system
+            code = self._auto_fix_static_tool_dependency(
+                tool_name="autopep8",
+                install_command="pip install autopep8",
+                code=code,
+                fix_function=lambda c: __import__('autopep8').fix_code(c, options={'aggressive': 2, 'max_line_length': 120})
+            )
         except Exception as e:
             console.print(f"[yellow]Could not auto-format code: {e}[/yellow]")
 
@@ -3415,6 +3674,15 @@ Generated: {datetime.now().isoformat()}
                 except Exception as e:
                     console.print(f"[dim yellow]Could not save specification: {e}[/dim yellow]")
 
+                # Save the overseer's plan/specification
+                self._save_overseer_plan(node_id, specification)
+
+                # Generate Behave .feature file for BDD testing
+                self._generate_behave_feature(node_id, description, specification, code)
+
+                # Generate Locust load test script
+                self._generate_locust_load_test(node_id, description, code)
+
                 # Store complete workflow for future reuse with embedded specification
                 workflow_content = {
                     "description": description,
@@ -3698,12 +3966,37 @@ This workflow successfully completed with passing tests.
         # Finish workflow tracking
         workflow.finish()
 
+        # Step 9.5: Verify BDD spec and get performance scores
+        bdd_passed = False
+        perf_score = 0.0
+        if metrics["success"]:
+            console.print(f"\n[cyan]Verifying BDD specification and performance...[/cyan]")
+
+            # Run BDD verification
+            bdd_passed, perf_score = self._verify_bdd_and_performance(
+                node_id, description, specification, code
+            )
+
+            if bdd_passed:
+                console.print(f"[green]✓ BDD specification verified[/green]")
+            else:
+                console.print(f"[yellow]! BDD verification failed (continuing anyway)[/yellow]")
+
         # Step 10: If execution succeeded, register this node as a reusable tool
         if metrics["success"]:
             console.print(f"\n[cyan]Registering successful node as reusable tool...[/cyan]")
             try:
                 # Calculate quality score based on performance
                 quality_score = 1.0
+
+                # BDD compliance bonus
+                if bdd_passed:
+                    quality_score += 0.2
+
+                # Performance score bonus (from Locust)
+                quality_score += perf_score * 0.3  # Scale perf_score (0-1) by 0.3
+
+                # Basic metrics bonuses
                 if metrics.get("latency_ms", 0) < 100:
                     quality_score += 0.1
                 if metrics.get("memory_mb_peak", 0) < 10:
@@ -3826,15 +4119,564 @@ Linked Pair: {production_tool_id} <-> {debug_tool_id}
             except Exception as e:
                 console.print(f"[dim yellow]Note: Could not register as tool: {e}[/dim yellow]")
 
-        # Display complete workflow summary if enabled
+        # Mark workflow as finished
+        workflow.finish()
+
+        # Record positive feedback for tools that were used successfully
+        self._record_tool_feedback_on_completion(
+            description=description,
+            quality_score=quality_score if 'quality_score' in locals() else 0.0,
+            success=True
+        )
+
+        # Display minimal workflow summary with per-tool timings if enabled
         if show_workflow:
             console.print("\n" + "="*70)
-            console.print("[bold cyan]WORKFLOW SUMMARY:[/bold cyan]")
+            console.print(f"Workflow: {workflow.description}")
             console.print("="*70)
-            console.print(workflow.format_text_display())
+
+            # Show per-tool timings
+            if workflow.steps:
+                console.print("\n[dim]Tool execution times:[/dim]")
+                for step in workflow.steps:
+                    if step.end_time and step.start_time:
+                        duration = step.end_time - step.start_time
+                        console.print(f"  {step.tool_name}: {duration:.2f}s")
+
+                # Total time
+                if workflow.end_time and workflow.start_time:
+                    total_time = workflow.end_time - workflow.start_time
+                    console.print(f"\n[dim]Total: {total_time:.2f}s[/dim]")
+
             console.print("="*70)
 
         return True
+
+    def _auto_fix_static_tool_dependency(
+        self,
+        tool_name: str,
+        install_command: str,
+        code: str,
+        fix_function: callable
+    ) -> str:
+        """
+        Automatically fix missing static tool dependencies using RAG-based learning.
+
+        Flow:
+        1. Search RAG for known fixes for this tool
+        2. Apply fix (pip install)
+        3. Rerun the tool
+        4. Record success/failure for future learning
+
+        Args:
+            tool_name: Name of the missing tool (e.g., "autopep8")
+            install_command: Command to install (e.g., "pip install autopep8")
+            code: Code to process
+            fix_function: Function to call after install (receives code, returns fixed code)
+
+        Returns:
+            Fixed code or original code if fix failed
+        """
+        from rich.console import Console
+        console = Console()
+
+        # Step 1: Search RAG for known fixes for this tool dependency
+        fix_id = f"static_tool_dependency_{tool_name}"
+
+        try:
+            from src.rag_memory import ArtifactType
+
+            # Look for existing fix in RAG
+            existing_fixes = self.rag.find_by_tags(
+                tags=["code_fix", "static_tool_fix", tool_name],
+                limit=1
+            )
+
+            if existing_fixes:
+                fix_artifact = existing_fixes[0]
+                success_count = fix_artifact.metadata.get("success_count", 0)
+                failure_count = fix_artifact.metadata.get("failure_count", 0)
+                success_rate = success_count / (success_count + failure_count) if (success_count + failure_count) > 0 else 0
+
+                console.print(f"[cyan]→ Found fix in RAG: '{install_command}' (success rate: {success_rate:.0%}, {success_count}/{success_count+failure_count} attempts)[/cyan]")
+            else:
+                console.print(f"[yellow]→ No fix found in RAG, attempting install: {install_command}[/yellow]")
+
+        except Exception as e:
+            logger.debug(f"Could not search RAG for fix: {e}")
+
+        # Step 2: Apply the fix (install the package)
+        console.print(f"[cyan]→ Installing {tool_name}...[/cyan]")
+
+        import subprocess
+        try:
+            result = subprocess.run(
+                install_command.split(),
+                capture_output=True,
+                text=True,
+                timeout=120
+            )
+
+            if result.returncode == 0:
+                console.print(f"[green]✓ {tool_name} installed successfully[/green]")
+                install_success = True
+            else:
+                console.print(f"[red]✗ Failed to install {tool_name}: {result.stderr}[/red]")
+                install_success = False
+                return code  # Return original code
+
+        except Exception as e:
+            console.print(f"[red]✗ Install error: {e}[/red]")
+            return code
+
+        # Step 3: Rerun the tool with the fixed dependency
+        if install_success:
+            try:
+                console.print(f"[cyan]→ Running {tool_name} on code...[/cyan]")
+                fixed_code = fix_function(code)
+
+                if fixed_code != code:
+                    console.print(f"[green]✓ {tool_name} successfully processed code[/green]")
+                    tool_success = True
+                else:
+                    console.print(f"[dim]{tool_name} ran but made no changes[/dim]")
+                    tool_success = True  # Still counts as success
+
+            except Exception as e:
+                console.print(f"[red]✗ {tool_name} failed after install: {e}[/red]")
+                tool_success = False
+                fixed_code = code
+        else:
+            tool_success = False
+            fixed_code = code
+
+        # Step 4: Record success/failure in RAG for future learning
+        try:
+            from datetime import datetime
+
+            # Get existing fix stats or create new
+            if existing_fixes:
+                fix_artifact = existing_fixes[0]
+                success_count = fix_artifact.metadata.get("success_count", 0)
+                failure_count = fix_artifact.metadata.get("failure_count", 0)
+            else:
+                success_count = 0
+                failure_count = 0
+
+            # Update counts
+            if tool_success:
+                success_count += 1
+            else:
+                failure_count += 1
+
+            # Calculate success rate
+            total = success_count + failure_count
+            success_rate = success_count / total if total > 0 else 0
+
+            # Store updated fix in RAG
+            self.rag.store_artifact(
+                artifact_id=fix_id,
+                artifact_type=ArtifactType.TOOL,
+                name=f"Static Tool Fix: {tool_name}",
+                description=f"Automatic dependency fix for {tool_name}",
+                content=f"""Fix for missing static tool: {tool_name}
+
+Install Command: {install_command}
+Success Rate: {success_rate:.1%} ({success_count}/{total} attempts)
+Last Updated: {datetime.now().isoformat()}
+
+This fix automatically installs the missing package and reruns the tool.
+""",
+                tags=["code_fix", "static_tool_fix", "dependency", tool_name, "auto_fix"],
+                metadata={
+                    "tool_name": tool_name,
+                    "install_command": install_command,
+                    "success_count": success_count,
+                    "failure_count": failure_count,
+                    "success_rate": success_rate,
+                    "last_attempt": datetime.now().isoformat(),
+                    "last_success": tool_success
+                },
+                auto_embed=True  # Enable semantic search
+            )
+
+            console.print(f"[dim]Recorded fix result in RAG (success rate: {success_rate:.0%})[/dim]")
+
+        except Exception as e:
+            logger.debug(f"Could not record fix in RAG: {e}")
+
+        return fixed_code if tool_success else code
+
+    def _record_tool_feedback_on_completion(
+        self,
+        description: str,
+        quality_score: float,
+        success: bool
+    ) -> None:
+        """
+        Record feedback for tools that were used in this task.
+        This creates a learning loop where the system improves tool selection over time.
+
+        Args:
+            description: The original task description
+            quality_score: Quality score of the result (0.0-1.0)
+            success: Whether the task completed successfully
+        """
+        selected_tools = self.context.get('_selected_tools', [])
+        if not selected_tools:
+            return
+
+        # Determine feedback type based on success and quality
+        if success and quality_score >= 0.7:
+            feedback_type = 'positive'
+            reason = f"Task completed successfully with quality score {quality_score:.2f}"
+        elif success and quality_score >= 0.5:
+            feedback_type = 'positive'
+            reason = f"Task completed with acceptable quality {quality_score:.2f}"
+        elif success:
+            # Low quality but technically successful - neutral/no feedback
+            return
+        else:
+            feedback_type = 'negative'
+            reason = "Task failed to complete successfully"
+
+        # Record feedback for the top tool (most relevant)
+        if selected_tools:
+            top_tool = selected_tools[0]
+            try:
+                self.tools_manager.record_tool_feedback(
+                    tool_id=top_tool.tool_id,
+                    prompt=description,
+                    feedback_type=feedback_type,
+                    reason=reason,
+                    metadata={
+                        "quality_score": quality_score,
+                        "success": success
+                    }
+                )
+            except Exception as e:
+                # Don't fail the task if feedback recording fails
+                logger.debug(f"Could not record tool feedback: {e}")
+
+    def _save_overseer_plan(self, node_id: str, specification: str) -> None:
+        """
+        Save the overseer's plan/specification to a text file.
+        This preserves the original strategy for future reference.
+
+        Args:
+            node_id: Node identifier
+            specification: The overseer's plan/specification
+        """
+        from rich.console import Console
+        console = Console()
+
+        try:
+            # Get node directory
+            node_path = self.runner.get_node_path(node_id).parent
+            plan_file = node_path / f"{node_id}_plan.txt"
+
+            # Save the plan
+            plan_file.write_text(specification, encoding='utf-8')
+            console.print(f"[dim]✓ Saved overseer plan to {plan_file.name}[/dim]")
+
+        except Exception as e:
+            console.print(f"[dim yellow]Could not save overseer plan: {e}[/dim yellow]")
+            logger.debug(f"Failed to save overseer plan for {node_id}: {e}")
+
+    def _generate_behave_feature(
+        self,
+        node_id: str,
+        description: str,
+        specification: str,
+        code: str
+    ) -> None:
+        """
+        Generate a Behave .feature file for BDD testing.
+
+        Args:
+            node_id: Node identifier
+            description: Task description
+            specification: Detailed specification
+            code: Generated code
+        """
+        from rich.console import Console
+        console = Console()
+
+        try:
+            # Get node directory
+            node_path = self.runner.get_node_path(node_id).parent
+            feature_file = node_path / f"{node_id}.feature"
+
+            # Prepare input for behave_test_generator tool
+            feature_input = {
+                "feature_content": f"""Feature: {description}
+
+  As a developer
+  I want to test {description}
+  So that I can ensure it works correctly
+
+  Scenario: Basic functionality
+    Given the system is initialized
+    When I execute the main function
+    Then I should get the expected result
+
+Specification:
+{specification}
+
+Code:
+{code[:500]}...
+""",
+                "mode": "generate",
+                "feature_output_path": str(node_path)
+            }
+
+            # Use the behave_test_generator tool
+            console.print(f"[dim]Generating Behave .feature file...[/dim]")
+
+            # Call the tool to generate BDD tests
+            from node_runtime import call_tool
+            result = call_tool("behave_test_generator", feature_input)
+
+            if result and result.get("success"):
+                console.print(f"[dim green]✓ Generated Behave feature: {feature_file.name}[/dim green]")
+            else:
+                # Fallback: Create a basic feature file manually
+                basic_feature = f"""Feature: {description}
+
+  As a developer
+  I want to verify {description}
+  So that the implementation meets requirements
+
+  Scenario: Basic execution
+    Given the node {node_id} is loaded
+    When I execute the main function
+    Then the result should be valid
+    And no errors should occur
+
+  # Specification:
+  # {specification[:200]}...
+"""
+                feature_file.write_text(basic_feature, encoding='utf-8')
+                console.print(f"[dim]✓ Created basic Behave feature (tool generation failed)[/dim]")
+
+        except Exception as e:
+            console.print(f"[dim yellow]Could not generate Behave feature: {e}[/dim yellow]")
+            logger.debug(f"Behave feature generation failed for {node_id}: {e}")
+
+    def _generate_locust_load_test(
+        self,
+        node_id: str,
+        description: str,
+        code: str
+    ) -> None:
+        """
+        Generate a Locust load testing script.
+
+        Args:
+            node_id: Node identifier
+            description: Task description
+            code: Generated code
+        """
+        from rich.console import Console
+        console = Console()
+
+        try:
+            # Get node directory
+            node_path = self.runner.get_node_path(node_id).parent
+            locust_file = node_path / f"locust_{node_id}.py"
+
+            # Prepare input for locust_load_tester tool
+            locust_input = {
+                "spec_content": f"""# Load Test Specification for {node_id}
+
+Description: {description}
+
+Code to test:
+{code[:500]}...
+
+# This will generate a Locust test for the above code
+""",
+                "mode": "generate",
+                "output_path": str(node_path),
+                "users": 10,
+                "spawn_rate": 2,
+                "run_time": "30s",
+                "host": "http://localhost:8000"
+            }
+
+            # Use the locust_load_tester tool
+            console.print(f"[dim]Generating Locust load test...[/dim]")
+
+            # Call the tool to generate load tests
+            from node_runtime import call_tool
+            result = call_tool("locust_load_tester", locust_input)
+
+            if result and result.get("success"):
+                console.print(f"[dim green]✓ Generated Locust test: {locust_file.name}[/dim green]")
+            else:
+                # Fallback: Create a basic locustfile manually
+                basic_locust = f"""\"\"\"
+Locust load test for {node_id}
+
+Description: {description}
+
+Usage:
+    locust -f locust_{node_id}.py --users 10 --spawn-rate 2 --run-time 30s
+\"\"\"
+
+from locust import HttpUser, task, between
+import json
+
+
+class {node_id.title().replace('_', '')}User(HttpUser):
+    wait_time = between(1, 3)
+
+    @task
+    def test_main_function(self):
+        \"\"\"Test the main functionality\"\"\"
+        # TODO: Customize this test based on the actual API/function
+        response = self.client.get(f"/api/{node_id}")
+        assert response.status_code == 200
+
+    @task(2)
+    def test_with_payload(self):
+        \"\"\"Test with POST payload\"\"\"
+        # TODO: Customize payload based on actual inputs
+        payload = {{"test": "data"}}
+        response = self.client.post(
+            f"/api/{node_id}",
+            json=payload
+        )
+        assert response.status_code in [200, 201]
+
+
+# Run with: locust -f locust_{node_id}.py --users 10 --spawn-rate 2 --run-time 30s
+"""
+                locust_file.write_text(basic_locust, encoding='utf-8')
+                console.print(f"[dim]✓ Created basic Locust test (tool generation failed)[/dim]")
+
+        except Exception as e:
+            console.print(f"[dim yellow]Could not generate Locust load test: {e}[/dim yellow]")
+            logger.debug(f"Locust test generation failed for {node_id}: {e}")
+
+    def _verify_bdd_and_performance(
+        self,
+        node_id: str,
+        description: str,
+        specification: str,
+        code: str
+    ) -> tuple[bool, float]:
+        """
+        Verify BDD specification compliance and measure performance.
+
+        Args:
+            node_id: Node identifier
+            description: Task description
+            specification: Detailed specification
+            code: Generated code
+
+        Returns:
+            Tuple of (bdd_passed: bool, perf_score: float 0-1)
+        """
+        from rich.console import Console
+        console = Console()
+
+        bdd_passed = False
+        perf_score = 0.0
+
+        try:
+            # Step 1: Run Behave BDD tests
+            node_path = self.runner.get_node_path(node_id).parent
+            feature_file = node_path / f"{node_id}.feature"
+
+            if feature_file.exists():
+                console.print(f"[dim]Running Behave tests...[/dim]")
+
+                import subprocess
+                try:
+                    # Run behave on the feature file
+                    result = subprocess.run(
+                        ["behave", str(feature_file)],
+                        capture_output=True,
+                        text=True,
+                        timeout=60,
+                        cwd=str(node_path)
+                    )
+
+                    if result.returncode == 0:
+                        bdd_passed = True
+                        console.print(f"[dim green]✓ BDD tests passed[/dim green]")
+                    else:
+                        console.print(f"[dim yellow]BDD tests failed: {result.stderr[:200]}[/dim yellow]")
+
+                except FileNotFoundError:
+                    console.print(f"[dim yellow]Behave not installed, skipping BDD verification[/dim yellow]")
+                except subprocess.TimeoutExpired:
+                    console.print(f"[dim yellow]BDD tests timed out[/dim yellow]")
+                except Exception as e:
+                    console.print(f"[dim yellow]BDD test error: {e}[/dim yellow]")
+            else:
+                console.print(f"[dim]No .feature file found, skipping BDD verification[/dim]")
+
+            # Step 2: Run Locust performance test
+            locust_file = node_path / f"locust_{node_id}.py"
+
+            if locust_file.exists():
+                console.print(f"[dim]Running performance tests (5s)...[/dim]")
+
+                try:
+                    # Run locust headless for 5 seconds
+                    result = subprocess.run(
+                        [
+                            "locust",
+                            "-f", str(locust_file),
+                            "--headless",
+                            "--users", "5",
+                            "--spawn-rate", "1",
+                            "--run-time", "5s",
+                            "--host", "http://localhost:8000"
+                        ],
+                        capture_output=True,
+                        text=True,
+                        timeout=15,
+                        cwd=str(node_path)
+                    )
+
+                    # Parse performance results from output
+                    if "requests/s" in result.stdout:
+                        # Extract requests per second
+                        import re
+                        rps_match = re.search(r'(\d+\.\d+)\s+requests/s', result.stdout)
+                        if rps_match:
+                            rps = float(rps_match.group(1))
+                            # Normalize: 0-10 rps = 0.0-0.5, 10-100 rps = 0.5-0.9, >100 = 1.0
+                            if rps >= 100:
+                                perf_score = 1.0
+                            elif rps >= 10:
+                                perf_score = 0.5 + (rps - 10) / 90 * 0.4
+                            else:
+                                perf_score = rps / 10 * 0.5
+                            console.print(f"[dim green]Performance: {rps:.1f} req/s (score: {perf_score:.2f})[/dim green]")
+                    else:
+                        # Fallback: if no errors, give baseline score
+                        if result.returncode == 0:
+                            perf_score = 0.5
+                            console.print(f"[dim]Performance test completed (baseline score)[/dim]")
+
+                except FileNotFoundError:
+                    console.print(f"[dim yellow]Locust not installed, skipping performance test[/dim yellow]")
+                except subprocess.TimeoutExpired:
+                    console.print(f"[dim yellow]Performance test timed out[/dim yellow]")
+                except Exception as e:
+                    console.print(f"[dim yellow]Performance test error: {e}[/dim yellow]")
+            else:
+                console.print(f"[dim]No Locust file found, skipping performance test[/dim]")
+
+        except Exception as e:
+            console.print(f"[dim yellow]BDD/performance verification error: {e}[/dim yellow]")
+            logger.debug(f"Verification failed for {node_id}: {e}")
+
+        return bdd_passed, perf_score
 
     def _detect_interface(self, code: str, description: str, specification: str) -> dict:
         """
@@ -4380,13 +5222,22 @@ Generate comprehensive tests now:"""
                 if found_code:
                     stripped = line.strip()
 
-                    # CRITICAL: Remove any attempts to import or use call_tool in tests
-                    if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
-                        console.print(f"[dim]Filtering out node_runtime import: {stripped[:60]}...[/dim]")
-                        continue
-                    if 'call_tool(' in stripped:
-                        console.print(f"[dim]Filtering out call_tool usage: {stripped[:60]}...[/dim]")
-                        continue
+                    # SMART FILTERING: Only filter call_tool if main code doesn't use it
+                    # This prevents conflict with fixers that add call_tool back
+                    main_uses_call_tool = 'call_tool(' in code
+
+                    if not main_uses_call_tool:
+                        # Main code doesn't use call_tool, safe to filter from tests
+                        if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
+                            console.print(f"[dim]Filtering out node_runtime import (main doesn't use it): {stripped[:60]}...[/dim]")
+                            continue
+                        if 'call_tool(' in stripped:
+                            console.print(f"[dim]Filtering out call_tool usage (main doesn't use it): {stripped[:60]}...[/dim]")
+                            continue
+                    else:
+                        # Main code DOES use call_tool - keep it in tests but add proper imports
+                        # The test needs to test the actual call_tool functionality
+                        pass
 
                     # Also filter out problematic test patterns
                     if 'from main import' in stripped and stripped != 'from main import main':
@@ -7014,7 +7865,7 @@ Return ONLY the JSON, no other text."""
 
         # If no search term, show overview
         if not search_term:
-            console.print("\n[bold cyan]Code Evolver Manual[/bold cyan]")
+            console.print("\n[bold cyan]mostlylucid DiSE Manual[/bold cyan]")
             console.print("[dim]Use /manual <search> to find specific commands[/dim]\n")
 
             console.print("[bold]Available Commands:[/bold]")
@@ -8109,15 +8960,21 @@ Return ONLY the Python test code, no explanations."""
         """Run the interactive CLI."""
         self.print_welcome()
 
+        # Flush any initialization logs before starting the input loop
+        log_panel.flush()
+
         # Check status first
         if not self.client.check_connection():
             console.print("[red]Warning: Cannot connect to Ollama. Some features will not work.[/red]")
             console.print("[dim]Start Ollama with: ollama serve[/dim]\n")
 
-        prompt_text = self.config.get("chat.prompt", "CodeEvolver> ")
+        prompt_text = self.config.get("chat.prompt", "DiSE> ")
 
         while True:
             try:
+                # Suppress log panel output during user input to avoid cursor stealing
+                log_panel.suppress_output = True
+
                 # Use prompt_toolkit if available for better history and completion
                 if PROMPT_TOOLKIT_AVAILABLE and sys.stdin.isatty():
                     try:
@@ -8137,6 +8994,10 @@ Return ONLY the Python test code, no explanations."""
                 else:
                     # Use rich console.input for piped input or if prompt_toolkit unavailable
                     user_input = console.input(f"[bold green]{prompt_text}[/bold green]").strip()
+
+                # Re-enable log panel output and flush any pending logs
+                log_panel.suppress_output = False
+                log_panel.flush()
 
                 if not user_input:
                     continue
@@ -8187,8 +9048,7 @@ Return ONLY the Python test code, no explanations."""
 
                                 context_summary = "\n".join(context_parts)
 
-                                # Display minimal status to user
-                                console.print(f"[dim cyan]✓ Context retrieved ({len(self._memory_items)} items)[/dim cyan]")
+                                # Context retrieved silently - no need to show to user
 
                         except Exception as e:
                             console.print(f"[dim yellow]Memory retrieval: {e}[/dim yellow]")
@@ -8197,12 +9057,12 @@ Return ONLY the Python test code, no explanations."""
                     import time
                     start_time = time.time()
 
-                    # Add context summary to description if available
+                    # Add context summary to description if available (for internal use only)
                     final_description = user_input
                     if context_summary:
                         final_description = f"{user_input}\n\n[Conversation Context:\n{context_summary}]"
 
-                    success = self.handle_generate(final_description)
+                    success = self.handle_generate(final_description, display_description=user_input)
                     duration = time.time() - start_time
 
                     # Store this interaction in RAG memory
@@ -8256,38 +9116,38 @@ Return ONLY the Python test code, no explanations."""
                         search_term = cmd[2:].strip()
                     self.handle_manual(search_term)
 
-                elif cmd.lower() == 'tools':
+                elif cmd.lower() == 'tool' or cmd.lower() == 'tools':
+                    # /tool or /tools with no args - list all tools
                     self.handle_tools()
 
-                elif cmd.startswith('tools '):
-                    # Check if this is a tools CLI command (test, optimize)
-                    args = cmd[6:].strip().split()
-
-                    if args and args[0] in ['test', 'optimize']:
-                        # Route to tools CLI
-                        self.handle_tools_cli(f"/{cmd}")
-                    else:
-                        # /tools <page|category> [page] - filter by category or page number
-                        category = None
-                        page = 1
-
-                        if len(args) == 1:
-                            # Could be page number or category
-                            if args[0].isdigit():
-                                page = int(args[0])
-                            else:
-                                category = args[0]
-                        elif len(args) >= 2:
-                            # Category and page number
-                            category = args[0]
-                            if args[1].isdigit():
-                                page = int(args[1])
-
-                        self.handle_tools(category=category, page=page)
-
                 elif cmd.startswith('tool '):
+                    # All tool subcommands go here
                     tool_cmd = cmd[5:].strip()
-                    self.handle_tool_command(tool_cmd)
+                    args = tool_cmd.split(None, 1)
+
+                    if not args:
+                        # /tool with trailing space - list tools
+                        self.handle_tools()
+                    elif args[0] in ['test', 'optimize']:
+                        # /tool test <tool_id|all>
+                        # /tool optimize <tool_id|all>
+                        self.handle_tools_cli(f"/tools {tool_cmd}")
+                    elif args[0] == 'mutate':
+                        # /tool mutate <tool_id> <instructions>
+                        if len(args) > 1:
+                            self.handle_mutate_tool(args[1])
+                        else:
+                            console.print("[red]Usage: /tool mutate <tool_id> <instructions>[/red]")
+                    elif args[0] in ['llm', 'executable', 'custom', 'openapi']:
+                        # /tool <category> - filter by category
+                        category = args[0]
+                        page = 1
+                        if len(args) > 1 and args[1].isdigit():
+                            page = int(args[1])
+                        self.handle_tools(category=category, page=page)
+                    else:
+                        # /tool info|run|list|<tool_id>
+                        self.handle_tool_command(tool_cmd)
 
                 elif cmd.lower() == 'backends' or cmd.lower().startswith('backends '):
                     test_connection = '--test' in cmd.lower()
@@ -8328,11 +9188,14 @@ Return ONLY the Python test code, no explanations."""
                             console.print(f"[dim]Current memory items: {len(self._memory_items)}[/dim]")
                         console.print("\n[dim]Usage: /memory [on|off][/dim]")
 
+                # Legacy commands for backward compatibility
                 elif cmd.startswith('mutate tool '):
+                    console.print("[dim]Note: Use '/tool mutate' instead (deprecated)[/dim]")
                     args = cmd[12:].strip()
                     self.handle_mutate_tool(args)
 
                 elif cmd.startswith('optimize tool '):
+                    console.print("[dim]Note: Use '/tool optimize' instead (deprecated)[/dim]")
                     args = cmd[14:].strip()
                     self.handle_optimize_tool(args)
 
@@ -8507,7 +9370,7 @@ def main():
     """Main entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Code Evolver - Interactive CLI")
+    parser = argparse.ArgumentParser(description="mostlylucid DiSE - Interactive CLI")
     parser.add_argument(
         "--config",
         type=str,

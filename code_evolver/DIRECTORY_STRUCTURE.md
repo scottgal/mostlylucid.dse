@@ -1,11 +1,11 @@
-# Code Evolver Directory Structure
+# mostlylucid DiSE Directory Structure
 
-This document explains the purpose of each directory in the Code Evolver project.
+This document explains the purpose of each directory in the mostlylucid DiSE project.
 
 ## Source Code Directories
 
 ### `src/`
-Core source code for the Code Evolver system.
+Core source code for the mostlylucid DiSE system.
 - Contains all Python modules and classes
 - Includes: LLM clients, registry, node runner, evaluators, workflow systems, RAG memory, etc.
 

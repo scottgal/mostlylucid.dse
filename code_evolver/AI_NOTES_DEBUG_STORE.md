@@ -253,7 +253,7 @@ pytest tests/test_performance_auditor.py -v
 
 ## 🔗 Integration Points
 
-### With Existing Code Evolver
+### With Existing mostlylucid DiSE
 
 1. **WorkflowTracker** (`workflow_tracker.py`)
    - Automatically records workflow execution

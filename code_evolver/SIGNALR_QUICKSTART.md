@@ -2,7 +2,7 @@
 
 ## ✅ Complete! Ready to Use
 
-You now have a full SignalR integration system that lets you train your Code Evolver system from streaming task data.
+You now have a full SignalR integration system that lets you train your mostlylucid DiSE system from streaming task data.
 
 ## Installation
 

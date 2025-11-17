@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive test suite for Code Evolver tools.
+Comprehensive test suite for mostlylucid DiSE tools.
 Tests all new features and tools automatically.
 """
 import subprocess

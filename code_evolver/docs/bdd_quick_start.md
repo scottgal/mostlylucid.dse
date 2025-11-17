@@ -2,7 +2,7 @@
 
 ## What is BDD for Workflows?
 
-BDD (Behavior-Driven Development) specifications serve **multiple purposes** in Code Evolver:
+BDD (Behavior-Driven Development) specifications serve **multiple purposes** in mostlylucid DiSE:
 
 1. **Code Generation Prompt** - Tells the LLM what behavior to implement
 2. **Integration Test** - Validates the workflow does what it should
@@ -130,7 +130,7 @@ Add technical specs at the end:
 - **Success Rate**: ≥ 95%
 ```
 
-## Using BDD Specs in Code Evolver
+## Using BDD Specs in mostlylucid DiSE
 
 ### Option 1: Generate Workflow from BDD Spec
 

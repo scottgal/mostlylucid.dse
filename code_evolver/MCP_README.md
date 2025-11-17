@@ -1,8 +1,8 @@
-# MCP Server Integration for Code Evolver
+# MCP Server Integration for mostlylucid DiSE
 
 ## 🚀 Quick Start
 
-Code Evolver now supports MCP (Model Context Protocol) servers! Use any MCP-compatible tool as a native system tool.
+mostlylucid DiSE now supports MCP (Model Context Protocol) servers! Use any MCP-compatible tool as a native system tool.
 
 ### Installation
 
@@ -152,7 +152,7 @@ mcp_servers:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                  Code Evolver                       │
+│                  mostlylucid DiSE                       │
 │                                                     │
 │  ┌──────────────────────────────────────────────┐  │
 │  │         ToolsManager                         │  │

@@ -1,0 +1,11 @@
+name: "Stdin Usage Validator"
+type: "executable"
+description: "Validates that node code properly reads from stdin using json.load(sys.stdin)"
+executable:
+  command: "python"
+  args: ["{tool_dir}/stdin_usage_validator.py", "{source_file}"]
+  install_command: null
+tags: ["python", "validation", "stdin", "input", "static-analysis"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 140  # Run early

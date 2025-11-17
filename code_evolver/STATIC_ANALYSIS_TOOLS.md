@@ -16,7 +16,7 @@ Complete reference for the integrated static analysis validators that automatica
 
 ## Overview
 
-Code Evolver includes a comprehensive static analysis system that runs multiple validators on generated code. Each validator checks for specific issues and can auto-fix certain problems.
+mostlylucid DiSE includes a comprehensive static analysis system that runs multiple validators on generated code. Each validator checks for specific issues and can auto-fix certain problems.
 
 ### Built-in Validators
 

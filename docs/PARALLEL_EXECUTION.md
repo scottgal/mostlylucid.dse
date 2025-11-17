@@ -1,6 +1,6 @@
 ﻿# Parallel Execution System
 
-Code Evolver now supports parallel execution at multiple levels: workflow steps and tool calls within generated code.
+mostlylucid DiSE now supports parallel execution at multiple levels: workflow steps and tool calls within generated code.
 
 ## Overview
 

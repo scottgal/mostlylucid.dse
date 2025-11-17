@@ -46,7 +46,7 @@ Like the [Exocomp](https://memory-alpha.fandom.com/wiki/Exocomp) of Star Trek â€
 
 ##  What It Does
 
-Code Evolver is a **self-assembling, self-optimizing workflow system** that:
+mostlylucid DiSE is a **self-assembling, self-optimizing workflow system** that:
 
 1. **Understands** your task using intelligent LLM-based classification
 2. **Converses** with smart conversation mode - multi-chat context memory with auto-summarization
@@ -926,7 +926,7 @@ See [NEW_CONFIG_ARCHITECTURE.md](code_evolver/NEW_CONFIG_ARCHITECTURE.md) for th
 
 ### OpenAPI-Based Tools
 
-Code Evolver supports **OpenAPI/REST API integration**, allowing you to seamlessly integrate external APIs into your workflows. This powerful feature enables:
+mostlylucid DiSE supports **OpenAPI/REST API integration**, allowing you to seamlessly integrate external APIs into your workflows. This powerful feature enables:
 
 - **Automatic API discovery** from OpenAPI/Swagger specifications
 - **Type-safe API calls** with parameter validation
@@ -1045,7 +1045,7 @@ if __name__ == "__main__":
 
 ### Python Testing & Code Quality Tools
 
-Code Evolver includes **executable tools** for Python code analysis and testing:
+mostlylucid DiSE includes **executable tools** for Python code analysis and testing:
 
 ```yaml
 tools:
@@ -1140,7 +1140,7 @@ Best version selected: Iteration 3
 
 ### Smart Conversation Mode (Multi-Chat Context Memory)
 
-Code Evolver includes a sophisticated conversation system that maintains context across multiple exchanges with intelligent memory management.
+mostlylucid DiSE includes a sophisticated conversation system that maintains context across multiple exchanges with intelligent memory management.
 
 **Architecture:**
 
@@ -1263,7 +1263,7 @@ The system automatically manages context based on model capabilities:
 
 ### Multi-Level Recursive Optimization
 
-Code Evolver includes powerful optimization systems that work at multiple levels to continuously improve performance.
+mostlylucid DiSE includes powerful optimization systems that work at multiple levels to continuously improve performance.
 
 **1. Recursive System Optimizer**
 
@@ -1442,7 +1442,7 @@ Tool definition saved to: tools/suggested/translate_text.yaml
 
 ### Multi-Backend LLM Support
 
-Code Evolver supports multiple LLM backends with automatic fallback:
+mostlylucid DiSE supports multiple LLM backends with automatic fallback:
 
 ```mermaid
 graph TB
@@ -2287,7 +2287,7 @@ Let the system iteratively improve your algorithms for better performance.
 
 ##  Slash Commands
 
-Code Evolver provides powerful slash commands for managing conversations, tools, and workflows.
+mostlylucid DiSE provides powerful slash commands for managing conversations, tools, and workflows.
 
 ### Conversation Management
 

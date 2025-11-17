@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver now uses a **unified, role-based, level-based LLM configuration system** that makes it incredibly easy to:
+The mostlylucid DiSE now uses a **unified, role-based, level-based LLM configuration system** that makes it incredibly easy to:
 
 1. **Define models once** - Each model is defined once with all its metadata (context size, cost, speed, quality)
 2. **Set defaults** - Configure defaults that cascade to all roles

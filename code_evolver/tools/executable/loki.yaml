@@ -12,7 +12,7 @@ metadata:
     - "monitoring"
     - "loki"
     - "infrastructure"
-  author: "Code Evolver"
+  author: "mostlylucid DiSE"
   license: "MIT"
   status: "stable"
 

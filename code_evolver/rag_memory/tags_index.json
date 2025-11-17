@@ -723,7 +723,33 @@
     "interaction_d463a8a351d9",
     "interaction_5798811b2638",
     "tool_fix_missing_pip_packages",
-    "tool_open_bbc_website"
+    "tool_open_bbc_website",
+    "tool_autoflake_checker",
+    "tool_fix_attribute_error",
+    "tool_fix_indentation_error",
+    "tool_fix_name_error",
+    "tool_fix_syntax_error",
+    "tool_fix_type_error",
+    "tool_pynguin_config",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker",
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer",
+    "interaction_41095086b0af",
+    "interaction_3aa89816356f",
+    "interaction_cdb62dbeb97f",
+    "interaction_424eae1b3cbd",
+    "interaction_c1cb07cc03f9",
+    "interaction_6480f1bf67de",
+    "interaction_a868299b0f19",
+    "interaction_3a711be84ea0",
+    "interaction_a51536e703eb",
+    "tool_take_a_screenshot",
+    "interaction_ba1aa1026d52",
+    "interaction_c0ebe92e5b88",
+    "interaction_f9c7140eb165",
+    "tool_build_a_fractal_displayer_appl"
   ],
   "custom": [
     "tool_http_server",
@@ -871,7 +897,22 @@
     "tool_duplicate_style",
     "tool_write_markdown_doc",
     "tool_module_not_found_fixer",
-    "tool_fix_missing_pip_packages"
+    "tool_fix_missing_pip_packages",
+    "tool_autoflake_checker",
+    "tool_fix_attribute_error",
+    "tool_fix_indentation_error",
+    "tool_fix_name_error",
+    "tool_fix_syntax_error",
+    "tool_fix_type_error",
+    "tool_pynguin_config",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker",
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer",
+    "tool_signalr_websocket_stream",
+    "tool_sse_stream",
+    "tool_stream_processor"
   ],
   "python": [
     "tool_bandit_security",
@@ -1222,7 +1263,19 @@
     "exec_invocation_python_syntax_validator_1763401713713",
     "exec_invocation_node_runtime_import_validator_1763401758061",
     "exec_invocation_python_syntax_validator_1763401927467",
-    "exec_invocation_node_runtime_import_validator_1763401928449"
+    "exec_invocation_node_runtime_import_validator_1763401928449",
+    "tool_autoflake_checker",
+    "tool_pynguin_config",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker",
+    "exec_invocation_python_syntax_validator_1763410198811",
+    "exec_invocation_node_runtime_import_validator_1763410201211",
+    "exec_invocation_python_syntax_validator_1763413169749",
+    "exec_invocation_node_runtime_import_validator_1763413171200",
+    "exec_invocation_python_syntax_validator_1763415540972",
+    "exec_invocation_node_runtime_import_validator_1763415545745",
+    "exec_invocation_python_syntax_validator_1763415795924",
+    "exec_invocation_node_runtime_import_validator_1763415800214"
   ],
   "security": [
     "tool_bandit_security",
@@ -1236,7 +1289,10 @@
     "tool_bandit_security"
   ],
   "math": [
-    "tool_basic_calculator"
+    "tool_basic_calculator",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell"
   ],
   "arithmetic": [
     "tool_basic_calculator",
@@ -1326,7 +1382,10 @@
     "spec_process_production_metrics_fro_1763401885",
     "spec_note_this_workflow_may_be_mul_1763401999",
     "spec_calculate_machine_utilization_1763402168",
-    "spec_call_www"
+    "spec_call_www",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "spec_build_a_fractal_displayer_appl"
   ],
   "calculator": [
     "tool_basic_calculator",
@@ -1344,12 +1403,16 @@
     "tool_translation_quality_checker",
     "tool_fast_content_writer",
     "tool_nmt_translate",
-    "tool_summarizer_fast"
+    "tool_summarizer_fast",
+    "tool_ruff_checker"
   ],
   "deterministic": [
     "tool_basic_calculator",
     "tool_text_formatter",
-    "tool_unit_converter"
+    "tool_unit_converter",
+    "tool_autoflake_checker",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker"
   ],
   "formatting": [
     "tool_black_formatter",
@@ -1360,7 +1423,11 @@
     "tool_write_me_a_poem_conversation",
     "func_generate_python_script_to_pars_1763400370",
     "conv_generate_python_script_to_pars_1763400370_v1",
-    "workflow_generate_python_script_to_pars_1763400370"
+    "workflow_generate_python_script_to_pars_1763400370",
+    "tool_ruff_checker",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell"
   ],
   "style": [
     "tool_black_formatter",
@@ -1406,12 +1473,18 @@
     "tool_undefined_name_checker",
     "tool_pylint_checker",
     "tool_parse_static_analysis",
-    "tool_remove_unused_node_runtime_import"
+    "tool_remove_unused_node_runtime_import",
+    "tool_autoflake_checker",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker",
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator"
   ],
   "imports": [
     "tool_isort_import_checker",
     "tool_node_runtime_import_validator",
-    "tool_undefined_name_checker"
+    "tool_undefined_name_checker",
+    "tool_autoflake_checker"
   ],
   "organization": [
     "tool_isort_import_checker",
@@ -1448,14 +1521,23 @@
     "tool_main_function_checker"
   ],
   "type-checking": [
-    "tool_mypy_type_checker"
+    "tool_mypy_type_checker",
+    "tool_fix_type_error"
   ],
   "types": [
     "tool_mypy_type_checker"
   ],
   "auto-fix": [
     "tool_node_runtime_import_validator",
-    "tool_fix_missing_pip_packages"
+    "tool_fix_missing_pip_packages",
+    "tool_autoflake_checker",
+    "tool_fix_attribute_error",
+    "tool_fix_indentation_error",
+    "tool_fix_name_error",
+    "tool_fix_syntax_error",
+    "tool_fix_type_error",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker"
   ],
   "dependencies": [
     "tool_pip_install",
@@ -1502,7 +1584,9 @@
   "profiling": [
     "tool_pyinstrument_profiler",
     "tool_code_optimizer",
-    "tool_performance_profiler"
+    "tool_performance_profiler",
+    "tool_comprehensive_tool_profiler",
+    "tool_timeit_optimizer"
   ],
   "performance": [
     "tool_pyinstrument_profiler",
@@ -1511,7 +1595,10 @@
     "tool_performance_profiler",
     "tool_create_locust_spec",
     "tool_locust_load_tester",
-    "timeout_stats_llama3"
+    "timeout_stats_llama3",
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer"
   ],
   "optimization": [
     "tool_pyinstrument_profiler",
@@ -1524,7 +1611,10 @@
     "tool_dependency_analyzer",
     "tool_selective_file_copier",
     "tool_parse_static_analysis",
-    "tool_rag_cluster_optimizer"
+    "tool_rag_cluster_optimizer",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer",
+    "tool_optimize_cluster"
   ],
   "pyinstrument": [
     "tool_pyinstrument_profiler",
@@ -1545,11 +1635,15 @@
     "tool_create_behave_spec",
     "tool_create_locust_spec",
     "tool_locust_load_tester",
-    "tool_smart_faker"
+    "tool_smart_faker",
+    "tool_pynguin_config",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer"
   ],
   "test-generation": [
     "tool_pynguin_test_generator",
-    "tool_behave_test_generator"
+    "tool_behave_test_generator",
+    "tool_pynguin_config"
   ],
   "unit-tests": [
     "tool_pynguin_test_generator",
@@ -1565,10 +1659,12 @@
     "tool_pytest_coverage"
   ],
   "automated": [
-    "tool_pynguin_test_generator"
+    "tool_pynguin_test_generator",
+    "tool_pynguin_config"
   ],
   "pynguin": [
-    "tool_pynguin_test_generator"
+    "tool_pynguin_test_generator",
+    "tool_pynguin_config"
   ],
   "evolutionary": [
     "tool_pynguin_test_generator"
@@ -1577,13 +1673,16 @@
     "tool_pynguin_test_generator"
   ],
   "syntax": [
-    "tool_python_syntax_validator"
+    "tool_python_syntax_validator",
+    "tool_fix_syntax_error",
+    "tool_pyupgrade_checker"
   ],
   "complexity": [
     "tool_radon_complexity"
   ],
   "metrics": [
-    "tool_radon_complexity"
+    "tool_radon_complexity",
+    "tool_timeit_optimizer"
   ],
   "maintainability": [
     "tool_radon_complexity"
@@ -1594,10 +1693,12 @@
     "tool_proofreader",
     "tool_flake8_linter",
     "tool_pylint_checker",
-    "workflow_1763372767"
+    "workflow_1763372767",
+    "tool_performance_regression_evaluator"
   ],
   "comprehensive": [
-    "tool_run_static_analysis"
+    "tool_run_static_analysis",
+    "tool_comprehensive_tool_profiler"
   ],
   "save": [
     "tool_save_to_disk"
@@ -1624,7 +1725,8 @@
     "tool_text_formatter"
   ],
   "undefined": [
-    "tool_undefined_name_checker"
+    "tool_undefined_name_checker",
+    "tool_fix_name_error"
   ],
   "conversion": [
     "tool_unit_converter"
@@ -1640,7 +1742,8 @@
   ],
   "cleanup": [
     "tool_vulture_deadcode",
-    "tool_trim_tool_versions"
+    "tool_trim_tool_versions",
+    "tool_autoflake_checker"
   ],
   "llm": [
     "tool_article_analyzer",
@@ -1854,7 +1957,14 @@
     "interaction_1b30c12cf7b6",
     "interaction_c745ec4d7937",
     "interaction_3b0eab664814",
-    "interaction_b52bf8304de0"
+    "interaction_b52bf8304de0",
+    "tool_performance_regression_evaluator",
+    "interaction_85d638103494",
+    "interaction_f111c0746d1c",
+    "interaction_70995af45f50",
+    "interaction_2e7c27d970d4",
+    "tool_model_selector",
+    "interaction_66b4cd12e31a"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -1965,7 +2075,10 @@
     "spec_write_a_safety_notice_about_ch_1763400166",
     "spec_note_this_workflow_may_be_mul_1763401552",
     "spec_note_this_workflow_may_be_mul_1763401999",
-    "spec_call_www"
+    "spec_call_www",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "spec_build_a_fractal_displayer_appl"
   ],
   "articles": [
     "tool_content_generator"
@@ -2215,7 +2328,15 @@
     "invocation_general_1763402325971",
     "interaction_3b0eab664814",
     "invocation_general_1763403584214",
-    "interaction_b52bf8304de0"
+    "interaction_b52bf8304de0",
+    "invocation_general_1763409900559",
+    "interaction_85d638103494",
+    "invocation_general_1763413111326",
+    "interaction_f111c0746d1c",
+    "invocation_general_1763415091417",
+    "interaction_70995af45f50",
+    "invocation_general_1763415673004",
+    "interaction_2e7c27d970d4"
   ],
   "fallback": [
     "tool_general",
@@ -2652,7 +2773,13 @@
     "tool_note_this_workflow_may_be_mul_1763401552",
     "workflow_process_production_metrics_fro_1763401885",
     "tool_open_bbc_website",
-    "workflow_1763403799"
+    "workflow_1763403799",
+    "tool_comprehensive_tool_profiler",
+    "workflow_write_a_workflow_for_paralell",
+    "workflow_take_a_screenshot",
+    "tool_take_a_screenshot",
+    "workflow_save_screenshot_to_file",
+    "tool_build_a_fractal_displayer_appl"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -2808,7 +2935,9 @@
     "tool_write_a_small_book_about_scotl",
     "tool_write_me_a_poem_conversation",
     "tool_note_this_workflow_may_be_mul_1763401552",
-    "tool_open_bbc_website"
+    "tool_open_bbc_website",
+    "tool_take_a_screenshot",
+    "tool_build_a_fractal_displayer_appl"
   ],
   "generated": [
     "tool_save_input_to_database",
@@ -3348,7 +3477,23 @@
     "spec_calculate_machine_utilization_1763402168",
     "spec_call_www",
     "spec_open_bbc_website",
-    "tool_open_bbc_website"
+    "tool_open_bbc_website",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell",
+    "spec_take_a_screenshot",
+    "func_take_a_screenshot",
+    "conv_take_a_screenshot_v1",
+    "workflow_take_a_screenshot",
+    "tool_take_a_screenshot",
+    "spec_save_screenshot_to_file",
+    "func_save_screenshot_to_file",
+    "conv_save_screenshot_to_file_v1",
+    "workflow_save_screenshot_to_file",
+    "spec_build_a_fractal_displayer_appl",
+    "tool_build_a_fractal_displayer_appl"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3728,7 +3873,18 @@
     "func_process_production_metrics_fro_1763401885",
     "conv_process_production_metrics_fro_1763401885_v1",
     "workflow_process_production_metrics_fro_1763401885",
-    "tool_open_bbc_website"
+    "tool_open_bbc_website",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell",
+    "func_take_a_screenshot",
+    "conv_take_a_screenshot_v1",
+    "workflow_take_a_screenshot",
+    "tool_take_a_screenshot",
+    "func_save_screenshot_to_file",
+    "conv_save_screenshot_to_file_v1",
+    "workflow_save_screenshot_to_file",
+    "tool_build_a_fractal_displayer_appl"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -3751,11 +3907,13 @@
   ],
   "linting": [
     "tool_flake8_linter",
-    "tool_pylint_checker"
+    "tool_pylint_checker",
+    "tool_ruff_checker"
   ],
   "pep8": [
     "tool_flake8_linter",
-    "tool_pylint_checker"
+    "tool_pylint_checker",
+    "tool_fix_indentation_error"
   ],
   "multiplication": [
     "tool_multiply_6_and_7_1763228888",
@@ -3866,7 +4024,10 @@
     "tool_exit_1763253889"
   ],
   "calculation": [
-    "tool_calculate_5_plus_10"
+    "tool_calculate_5_plus_10",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell"
   ],
   "sum": [
     "tool_calculate_5_plus_10"
@@ -4070,7 +4231,8 @@
     "tool_stream_processor"
   ],
   "parser": [
-    "tool_signalr_connection_parser"
+    "tool_signalr_connection_parser",
+    "tool_fix_syntax_error"
   ],
   "configuration": [
     "tool_signalr_connection_parser",
@@ -4109,7 +4271,10 @@
     "tool_extract_spec_from_file",
     "func_generate_python_script_to_pars_1763400370",
     "conv_generate_python_script_to_pars_1763400370_v1",
-    "workflow_generate_python_script_to_pars_1763400370"
+    "workflow_generate_python_script_to_pars_1763400370",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell"
   ],
   "overseer": [
     "tool_extract_spec_from_file",
@@ -4272,7 +4437,12 @@
     "spec_note_this_workflow_may_be_mul_1763401999",
     "spec_calculate_machine_utilization_1763402168",
     "spec_call_www",
-    "spec_open_bbc_website"
+    "spec_open_bbc_website",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "spec_take_a_screenshot",
+    "spec_save_screenshot_to_file",
+    "spec_build_a_fractal_displayer_appl"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4357,7 +4527,8 @@
     "tool_docker_compose_generator"
   ],
   "orchestration": [
-    "tool_docker_compose_generator"
+    "tool_docker_compose_generator",
+    "tool_comprehensive_tool_profiler"
   ],
   "containerization": [
     "tool_docker_compose_generator",
@@ -4571,7 +4742,8 @@
     "tool_create_locust_spec",
     "tool_rag_cluster_optimizer",
     "tool_find_code_fix_pattern",
-    "tool_store_code_fix_pattern"
+    "tool_store_code_fix_pattern",
+    "tool_comprehensive_tool_profiler"
   ],
   "locust": [
     "tool_create_locust_spec",
@@ -4584,13 +4756,17 @@
     "tool_locust_load_tester"
   ],
   "benchmarking": [
-    "tool_locust_load_tester"
+    "tool_locust_load_tester",
+    "tool_timeit_optimizer"
   ],
   "parsing": [
     "tool_parse_static_analysis",
     "func_generate_python_script_to_pars_1763400370",
     "conv_generate_python_script_to_pars_1763400370_v1",
-    "workflow_generate_python_script_to_pars_1763400370"
+    "workflow_generate_python_script_to_pars_1763400370",
+    "func_write_a_workflow_for_paralell",
+    "conv_write_a_workflow_for_paralell_v1",
+    "workflow_write_a_workflow_for_paralell"
   ],
   "quality-metrics": [
     "tool_parse_static_analysis"
@@ -4617,7 +4793,8 @@
     "tool_platform_info"
   ],
   "memory": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_timeit_optimizer"
   ],
   "diagnostic": [
     "tool_platform_info"
@@ -4785,7 +4962,12 @@
     "spec_note_this_workflow_may_be_mul_1763401999",
     "spec_calculate_machine_utilization_1763402168",
     "spec_call_www",
-    "spec_open_bbc_website"
+    "spec_open_bbc_website",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "spec_take_a_screenshot",
+    "spec_save_screenshot_to_file",
+    "spec_build_a_fractal_displayer_appl"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -4947,7 +5129,12 @@
     "spec_note_this_workflow_may_be_mul_1763401999",
     "spec_calculate_machine_utilization_1763402168",
     "spec_call_www",
-    "spec_open_bbc_website"
+    "spec_open_bbc_website",
+    "spec_write_code_which_calculates_a",
+    "spec_write_a_workflow_for_paralell",
+    "spec_take_a_screenshot",
+    "spec_save_screenshot_to_file",
+    "spec_build_a_fractal_displayer_appl"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
@@ -5127,7 +5314,12 @@
     "invocation_general_1763402007576",
     "invocation_fast_code_generator_1763402174269",
     "invocation_general_1763402325971",
-    "invocation_general_1763403584214"
+    "invocation_general_1763403584214",
+    "invocation_general_1763409900559",
+    "invocation_general_1763413111326",
+    "invocation_general_1763415091417",
+    "invocation_general_1763415673004",
+    "invocation_prompt_generator_1763417521885"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -5300,7 +5492,12 @@
     "invocation_general_1763402007576",
     "invocation_fast_code_generator_1763402174269",
     "invocation_general_1763402325971",
-    "invocation_general_1763403584214"
+    "invocation_general_1763403584214",
+    "invocation_general_1763409900559",
+    "invocation_general_1763413111326",
+    "invocation_general_1763415091417",
+    "invocation_general_1763415673004",
+    "invocation_prompt_generator_1763417521885"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -5474,7 +5671,12 @@
     "invocation_general_1763402007576",
     "invocation_fast_code_generator_1763402174269",
     "invocation_general_1763402325971",
-    "invocation_general_1763403584214"
+    "invocation_general_1763403584214",
+    "invocation_general_1763409900559",
+    "invocation_general_1763413111326",
+    "invocation_general_1763415091417",
+    "invocation_general_1763415673004",
+    "invocation_prompt_generator_1763417521885"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -6093,7 +6295,27 @@
     "interaction_3b0eab664814",
     "interaction_1763402823316",
     "interaction_b52bf8304de0",
-    "interaction_1763403799591"
+    "interaction_1763403799591",
+    "interaction_85d638103494",
+    "interaction_41095086b0af",
+    "interaction_3aa89816356f",
+    "interaction_cdb62dbeb97f",
+    "interaction_1763410201613",
+    "interaction_f111c0746d1c",
+    "interaction_424eae1b3cbd",
+    "interaction_c1cb07cc03f9",
+    "interaction_6480f1bf67de",
+    "interaction_1763413172104",
+    "interaction_70995af45f50",
+    "interaction_a868299b0f19",
+    "interaction_3a711be84ea0",
+    "interaction_a51536e703eb",
+    "interaction_2e7c27d970d4",
+    "interaction_ba1aa1026d52",
+    "interaction_c0ebe92e5b88",
+    "interaction_f9c7140eb165",
+    "interaction_66b4cd12e31a",
+    "interaction_1763418023922"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -6553,7 +6775,23 @@
     "interaction_1b30c12cf7b6",
     "interaction_c745ec4d7937",
     "interaction_3b0eab664814",
-    "interaction_b52bf8304de0"
+    "interaction_b52bf8304de0",
+    "interaction_85d638103494",
+    "interaction_41095086b0af",
+    "interaction_cdb62dbeb97f",
+    "interaction_f111c0746d1c",
+    "interaction_424eae1b3cbd",
+    "interaction_c1cb07cc03f9",
+    "interaction_6480f1bf67de",
+    "interaction_70995af45f50",
+    "interaction_a868299b0f19",
+    "interaction_3a711be84ea0",
+    "interaction_a51536e703eb",
+    "interaction_2e7c27d970d4",
+    "interaction_ba1aa1026d52",
+    "interaction_c0ebe92e5b88",
+    "interaction_f9c7140eb165",
+    "interaction_66b4cd12e31a"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6726,7 +6964,12 @@
     "interaction_1b30c12cf7b6",
     "interaction_c745ec4d7937",
     "interaction_3b0eab664814",
-    "interaction_b52bf8304de0"
+    "interaction_b52bf8304de0",
+    "interaction_85d638103494",
+    "interaction_f111c0746d1c",
+    "interaction_70995af45f50",
+    "interaction_2e7c27d970d4",
+    "interaction_66b4cd12e31a"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -6891,7 +7134,12 @@
     "interaction_1b30c12cf7b6",
     "interaction_c745ec4d7937",
     "interaction_3b0eab664814",
-    "interaction_b52bf8304de0"
+    "interaction_b52bf8304de0",
+    "interaction_85d638103494",
+    "interaction_f111c0746d1c",
+    "interaction_70995af45f50",
+    "interaction_2e7c27d970d4",
+    "interaction_66b4cd12e31a"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7334,7 +7582,19 @@
     "exec_invocation_node_runtime_import_validator_1763401758061",
     "exec_invocation_python_syntax_validator_1763401927467",
     "exec_invocation_undefined_name_checker_1763401928043",
-    "exec_invocation_node_runtime_import_validator_1763401928449"
+    "exec_invocation_node_runtime_import_validator_1763401928449",
+    "exec_invocation_python_syntax_validator_1763410198811",
+    "exec_invocation_undefined_name_checker_1763410200707",
+    "exec_invocation_node_runtime_import_validator_1763410201211",
+    "exec_invocation_python_syntax_validator_1763413169749",
+    "exec_invocation_undefined_name_checker_1763413170838",
+    "exec_invocation_node_runtime_import_validator_1763413171200",
+    "exec_invocation_python_syntax_validator_1763415540972",
+    "exec_invocation_undefined_name_checker_1763415545281",
+    "exec_invocation_node_runtime_import_validator_1763415545745",
+    "exec_invocation_python_syntax_validator_1763415795924",
+    "exec_invocation_undefined_name_checker_1763415799813",
+    "exec_invocation_node_runtime_import_validator_1763415800214"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7777,7 +8037,19 @@
     "exec_invocation_node_runtime_import_validator_1763401758061",
     "exec_invocation_python_syntax_validator_1763401927467",
     "exec_invocation_undefined_name_checker_1763401928043",
-    "exec_invocation_node_runtime_import_validator_1763401928449"
+    "exec_invocation_node_runtime_import_validator_1763401928449",
+    "exec_invocation_python_syntax_validator_1763410198811",
+    "exec_invocation_undefined_name_checker_1763410200707",
+    "exec_invocation_node_runtime_import_validator_1763410201211",
+    "exec_invocation_python_syntax_validator_1763413169749",
+    "exec_invocation_undefined_name_checker_1763413170838",
+    "exec_invocation_node_runtime_import_validator_1763413171200",
+    "exec_invocation_python_syntax_validator_1763415540972",
+    "exec_invocation_undefined_name_checker_1763415545281",
+    "exec_invocation_node_runtime_import_validator_1763415545745",
+    "exec_invocation_python_syntax_validator_1763415795924",
+    "exec_invocation_undefined_name_checker_1763415799813",
+    "exec_invocation_node_runtime_import_validator_1763415800214"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -8039,7 +8311,15 @@
     "exec_invocation_python_syntax_validator_1763401713713",
     "interaction_9f16b3d51fbc",
     "exec_invocation_python_syntax_validator_1763401927467",
-    "interaction_599380eacf23"
+    "interaction_599380eacf23",
+    "exec_invocation_python_syntax_validator_1763410198811",
+    "interaction_41095086b0af",
+    "exec_invocation_python_syntax_validator_1763413169749",
+    "interaction_424eae1b3cbd",
+    "exec_invocation_python_syntax_validator_1763415540972",
+    "interaction_a868299b0f19",
+    "exec_invocation_python_syntax_validator_1763415795924",
+    "interaction_ba1aa1026d52"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -8482,7 +8762,19 @@
     "interaction_6ccf0c193429",
     "interaction_599380eacf23",
     "interaction_d463a8a351d9",
-    "interaction_5798811b2638"
+    "interaction_5798811b2638",
+    "interaction_41095086b0af",
+    "interaction_3aa89816356f",
+    "interaction_cdb62dbeb97f",
+    "interaction_424eae1b3cbd",
+    "interaction_c1cb07cc03f9",
+    "interaction_6480f1bf67de",
+    "interaction_a868299b0f19",
+    "interaction_3a711be84ea0",
+    "interaction_a51536e703eb",
+    "interaction_ba1aa1026d52",
+    "interaction_c0ebe92e5b88",
+    "interaction_f9c7140eb165"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8933,7 +9225,19 @@
     "interaction_6ccf0c193429",
     "interaction_599380eacf23",
     "interaction_d463a8a351d9",
-    "interaction_5798811b2638"
+    "interaction_5798811b2638",
+    "interaction_41095086b0af",
+    "interaction_3aa89816356f",
+    "interaction_cdb62dbeb97f",
+    "interaction_424eae1b3cbd",
+    "interaction_c1cb07cc03f9",
+    "interaction_6480f1bf67de",
+    "interaction_a868299b0f19",
+    "interaction_3a711be84ea0",
+    "interaction_a51536e703eb",
+    "interaction_ba1aa1026d52",
+    "interaction_c0ebe92e5b88",
+    "interaction_f9c7140eb165"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9195,7 +9499,15 @@
     "exec_invocation_undefined_name_checker_1763401757643",
     "interaction_11209d8a5a5b",
     "exec_invocation_undefined_name_checker_1763401928043",
-    "interaction_d463a8a351d9"
+    "interaction_d463a8a351d9",
+    "exec_invocation_undefined_name_checker_1763410200707",
+    "interaction_3aa89816356f",
+    "exec_invocation_undefined_name_checker_1763413170838",
+    "interaction_c1cb07cc03f9",
+    "exec_invocation_undefined_name_checker_1763415545281",
+    "interaction_3a711be84ea0",
+    "exec_invocation_undefined_name_checker_1763415799813",
+    "interaction_c0ebe92e5b88"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9327,7 +9639,11 @@
     "exec_invocation_undefined_name_checker_1763401219850",
     "exec_invocation_undefined_name_checker_1763401467353",
     "exec_invocation_undefined_name_checker_1763401757643",
-    "exec_invocation_undefined_name_checker_1763401928043"
+    "exec_invocation_undefined_name_checker_1763401928043",
+    "exec_invocation_undefined_name_checker_1763410200707",
+    "exec_invocation_undefined_name_checker_1763413170838",
+    "exec_invocation_undefined_name_checker_1763415545281",
+    "exec_invocation_undefined_name_checker_1763415799813"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -9589,7 +9905,15 @@
     "exec_invocation_node_runtime_import_validator_1763401758061",
     "interaction_6ccf0c193429",
     "exec_invocation_node_runtime_import_validator_1763401928449",
-    "interaction_5798811b2638"
+    "interaction_5798811b2638",
+    "exec_invocation_node_runtime_import_validator_1763410201211",
+    "interaction_cdb62dbeb97f",
+    "exec_invocation_node_runtime_import_validator_1763413171200",
+    "interaction_6480f1bf67de",
+    "exec_invocation_node_runtime_import_validator_1763415545745",
+    "interaction_a51536e703eb",
+    "exec_invocation_node_runtime_import_validator_1763415800214",
+    "interaction_f9c7140eb165"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -9716,7 +10040,10 @@
     "workflow_go_to_www",
     "workflow_figure_out_how_to_get_html",
     "workflow_note_this_workflow_may_be_mul_1763401552",
-    "workflow_process_production_metrics_fro_1763401885"
+    "workflow_process_production_metrics_fro_1763401885",
+    "workflow_write_a_workflow_for_paralell",
+    "workflow_take_a_screenshot",
+    "workflow_save_screenshot_to_file"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -9843,7 +10170,10 @@
     "workflow_go_to_www",
     "workflow_figure_out_how_to_get_html",
     "workflow_note_this_workflow_may_be_mul_1763401552",
-    "workflow_process_production_metrics_fro_1763401885"
+    "workflow_process_production_metrics_fro_1763401885",
+    "workflow_write_a_workflow_for_paralell",
+    "workflow_take_a_screenshot",
+    "workflow_save_screenshot_to_file"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -9959,7 +10289,13 @@
     "conv_note_this_workflow_may_be_mul_1763401552_v1",
     "conv_process_production_metrics_fro_1763401885_v1",
     "interaction_1763402823316",
-    "interaction_1763403799591"
+    "interaction_1763403799591",
+    "interaction_1763410201613",
+    "conv_write_a_workflow_for_paralell_v1",
+    "interaction_1763413172104",
+    "conv_take_a_screenshot_v1",
+    "conv_save_screenshot_to_file_v1",
+    "interaction_1763418023922"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -10145,7 +10481,8 @@
     "interaction_a0925b326077",
     "interaction_53dba79b35fa",
     "interaction_6096dad4db0b",
-    "interaction_6a59ff0361f2"
+    "interaction_6a59ff0361f2",
+    "interaction_3aa89816356f"
   ],
   "multi-step": [
     "workflow_1763345313",
@@ -10331,7 +10668,127 @@
     "tool_duplicate_style",
     "tool_write_markdown_doc",
     "tool_module_not_found_fixer",
-    "tool_fix_missing_pip_packages"
+    "tool_fix_missing_pip_packages",
+    "tool_autoflake_checker",
+    "tool_fix_attribute_error",
+    "tool_fix_indentation_error",
+    "tool_fix_name_error",
+    "tool_fix_syntax_error",
+    "tool_fix_type_error",
+    "tool_pynguin_config",
+    "tool_pyupgrade_checker",
+    "tool_ruff_checker",
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer",
+    "tool_http_server",
+    "tool_bugcatcher",
+    "tool_call_tool_validator",
+    "tool_dependency_analyzer",
+    "tool_internal_test_validator",
+    "tool_isort_import_checker",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_mypy_type_checker",
+    "tool_node_runtime_import_validator",
+    "tool_parse_static_analysis",
+    "tool_python_syntax_validator",
+    "tool_run_static_analysis",
+    "tool_stdin_usage_validator",
+    "tool_api_wrapper_generator",
+    "tool_bandit_security",
+    "tool_basic_calculator",
+    "tool_behave_test_generator",
+    "tool_black_formatter",
+    "tool_buffer",
+    "tool_check_tool_duplicate",
+    "tool_config_file_generator",
+    "tool_connect_signalr",
+    "tool_conversation_manager",
+    "tool_create_behave_spec",
+    "tool_create_locust_spec",
+    "tool_cron_deconstructor",
+    "tool_cron_querier",
+    "tool_docker_compose_generator",
+    "tool_docker_helper_scripts_generator",
+    "tool_document_workflow",
+    "tool_env_file_generator",
+    "tool_evolve_tool",
+    "tool_extract_spec_from_file",
+    "tool_fake_data_generator",
+    "tool_filesystem",
+    "tool_http_raw_client",
+    "tool_http_rest_client",
+    "tool_inline_tool",
+    "tool_load_from_disk",
+    "tool_locust_load_tester",
+    "tool_loki",
+    "tool_mark_tool_failure",
+    "tool_nmt_translate",
+    "tool_optimize_cluster",
+    "tool_package_recovery_tool",
+    "tool_pin_tool_version",
+    "tool_pip_install",
+    "tool_platform_info",
+    "tool_pydocstyle_checker",
+    "tool_pyinstrument_profiler",
+    "tool_pynguin_test_generator",
+    "tool_pytest_coverage",
+    "tool_pytest_runner",
+    "tool_radon_complexity",
+    "tool_random_data_generator",
+    "tool_resilient_tool_call",
+    "tool_save_to_disk",
+    "tool_schedule_task",
+    "tool_selective_file_copier",
+    "tool_signalr_hub_connector",
+    "tool_signalr_llmapi_skill",
+    "tool_signalr_tool_trigger",
+    "tool_signalr_websocket_stream",
+    "tool_smart_api_parser",
+    "tool_smart_faker",
+    "tool_sse_stream",
+    "tool_standalone_exe_compiler",
+    "tool_stream_processor",
+    "tool_text_formatter",
+    "tool_trim_tool_versions",
+    "tool_undefined_name_checker",
+    "tool_unit_converter",
+    "tool_vulture_deadcode",
+    "tool_workflow_datastore",
+    "tool_article_analyzer",
+    "tool_code_explainer",
+    "tool_code_optimizer",
+    "tool_code_reviewer",
+    "tool_code_translation_validator",
+    "tool_content_generator",
+    "tool_detect_tool_specialization",
+    "tool_dockerfile_generator",
+    "tool_doc_generator",
+    "tool_fast_code_generator",
+    "tool_general",
+    "tool_llm_fake_data_generator",
+    "tool_long_form_writer",
+    "tool_model_selector",
+    "tool_outline_generator",
+    "tool_performance_optimizer",
+    "tool_performance_profiler",
+    "tool_prompt_genericiser",
+    "tool_proofreader",
+    "tool_quick_feedback",
+    "tool_quick_translator",
+    "tool_rag_cluster_optimizer",
+    "tool_security_auditor",
+    "tool_semantic_comparator",
+    "tool_seo_optimizer",
+    "tool_signalr_connection_parser",
+    "tool_signalr_llmapi_management",
+    "tool_summarizer",
+    "tool_task_to_workflow_router",
+    "tool_technical_writer",
+    "tool_translation_quality_checker",
+    "tool_workflow_documenter",
+    "tool_nmt_translator"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -10438,7 +10895,12 @@
   "fix": [
     "tool_circular_import_fixer",
     "tool_module_not_found_fixer",
-    "tool_fix_missing_pip_packages"
+    "tool_fix_missing_pip_packages",
+    "tool_fix_attribute_error",
+    "tool_fix_indentation_error",
+    "tool_fix_name_error",
+    "tool_fix_syntax_error",
+    "tool_fix_type_error"
   ],
   "error_handler": [
     "tool_circular_import_fixer",
@@ -10653,7 +11115,10 @@
     "interaction_1763396560883",
     "interaction_1763398149039",
     "interaction_1763402823316",
-    "interaction_1763403799591"
+    "interaction_1763403799591",
+    "interaction_1763410201613",
+    "interaction_1763413172104",
+    "interaction_1763418023922"
   ],
   "tool_history": [
     "conv_write_me_a_poem_conversation_v1",
@@ -10661,7 +11126,10 @@
     "conv_go_to_www_v1",
     "conv_figure_out_how_to_get_html_v1",
     "conv_note_this_workflow_may_be_mul_1763401552_v1",
-    "conv_process_production_metrics_fro_1763401885_v1"
+    "conv_process_production_metrics_fro_1763401885_v1",
+    "conv_write_a_workflow_for_paralell_v1",
+    "conv_take_a_screenshot_v1",
+    "conv_save_screenshot_to_file_v1"
   ],
   "write_me_a_poem_conversation": [
     "conv_write_me_a_poem_conversation_v1"
@@ -10703,5 +11171,120 @@
   ],
   "www.bbc.co.uk": [
     "workflow_1763403799"
+  ],
+  "autoflake": [
+    "tool_autoflake_checker"
+  ],
+  "attribute-error": [
+    "tool_fix_attribute_error"
+  ],
+  "typo": [
+    "tool_fix_attribute_error",
+    "tool_fix_name_error"
+  ],
+  "none-check": [
+    "tool_fix_attribute_error"
+  ],
+  "fuzzy-match": [
+    "tool_fix_attribute_error",
+    "tool_fix_name_error"
+  ],
+  "indentation": [
+    "tool_fix_indentation_error"
+  ],
+  "whitespace": [
+    "tool_fix_indentation_error"
+  ],
+  "name-error": [
+    "tool_fix_name_error"
+  ],
+  "ast": [
+    "tool_fix_syntax_error"
+  ],
+  "type-error": [
+    "tool_fix_type_error"
+  ],
+  "rag-search": [
+    "tool_fix_type_error"
+  ],
+  "windows": [
+    "tool_pynguin_config"
+  ],
+  "modernization": [
+    "tool_pyupgrade_checker"
+  ],
+  "pyupgrade": [
+    "tool_pyupgrade_checker"
+  ],
+  "ruff": [
+    "tool_ruff_checker"
+  ],
+  "perf": [
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator",
+    "tool_timeit_optimizer",
+    "tool_behave_test_generator",
+    "tool_create_behave_spec",
+    "tool_create_locust_spec",
+    "tool_locust_load_tester",
+    "tool_performance_profiler",
+    "tool_pyinstrument_profiler"
+  ],
+  "regression": [
+    "tool_comprehensive_tool_profiler",
+    "tool_performance_regression_evaluator"
+  ],
+  "evaluation": [
+    "tool_performance_regression_evaluator"
+  ],
+  "timeit": [
+    "tool_timeit_optimizer"
+  ],
+  "mocking": [
+    "tool_timeit_optimizer"
+  ],
+  "write_a_workflow_for_paralell": [
+    "conv_write_a_workflow_for_paralell_v1"
+  ],
+  "dynamically-registered": [
+    "tool_model_selector",
+    "tool_take_a_screenshot"
+  ],
+  "take_a_screenshot": [
+    "conv_take_a_screenshot_v1"
+  ],
+  "save_screenshot_to_file": [
+    "conv_save_screenshot_to_file_v1"
+  ],
+  "debug": [
+    "tool_bugcatcher",
+    "tool_call_tool_validator",
+    "tool_dependency_analyzer",
+    "tool_internal_test_validator",
+    "tool_isort_import_checker",
+    "tool_json_output_validator",
+    "tool_main_function_checker",
+    "tool_mypy_type_checker",
+    "tool_node_runtime_import_validator",
+    "tool_parse_static_analysis",
+    "tool_python_syntax_validator",
+    "tool_run_static_analysis",
+    "tool_stdin_usage_validator"
+  ],
+  "fixer": [
+    "tool_circular_import_fixer",
+    "tool_find_code_fix_pattern",
+    "tool_module_not_found_fixer",
+    "tool_store_code_fix_pattern"
+  ],
+  "prompt_generator": [
+    "invocation_prompt_generator_1763417521885",
+    "interaction_66b4cd12e31a"
+  ],
+  "searching": [
+    "tool_build_a_fractal_displayer_appl"
+  ],
+  "finding": [
+    "tool_build_a_fractal_displayer_appl"
   ]
 }

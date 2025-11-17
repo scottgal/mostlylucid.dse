@@ -1,6 +1,6 @@
 # Configuration Guide
 
-Complete guide to configuring the Code Evolver system for different LLM backends, execution environments, and optimization strategies.
+Complete guide to configuring the mostlylucid DiSE system for different LLM backends, execution environments, and optimization strategies.
 
 > **⚠️ IMPORTANT: New Configuration System**
 >

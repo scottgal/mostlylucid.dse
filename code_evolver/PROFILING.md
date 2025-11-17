@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver now includes comprehensive PyInstrument-based profiling for performance analysis and optimization. Profiling helps identify bottlenecks, compare tool versions, evaluate workflow alternatives, and make data-driven optimization decisions.
+The mostlylucid DiSE now includes comprehensive PyInstrument-based profiling for performance analysis and optimization. Profiling helps identify bottlenecks, compare tool versions, evaluate workflow alternatives, and make data-driven optimization decisions.
 
 ## Features
 

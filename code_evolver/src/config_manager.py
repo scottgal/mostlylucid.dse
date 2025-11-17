@@ -1,5 +1,5 @@
 """
-Configuration management for Code Evolver.
+Configuration management for mostlylucid DiSE.
 Loads and validates settings from YAML config file.
 """
 import yaml

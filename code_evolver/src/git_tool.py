@@ -1,5 +1,5 @@
 """
-Git Tool for Code Evolver.
+Git Tool for mostlylucid DiSE.
 Provides safe and powerful Git integration with authentication from config.yaml.
 """
 import json

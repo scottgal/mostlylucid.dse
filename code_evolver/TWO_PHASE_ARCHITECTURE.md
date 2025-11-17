@@ -6,7 +6,7 @@
 
 ## Overview
 
-Code Evolver uses a **two-phase architecture** that balances immediate results with long-term optimization:
+mostlylucid DiSE uses a **two-phase architecture** that balances immediate results with long-term optimization:
 
 **Phase 1 (CORE)**: Get result NOW
 **Phase 2 (OPTIMIZE)**: Make it better LATER

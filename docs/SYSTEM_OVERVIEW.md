@@ -1,4 +1,4 @@
-# Code Evolver - Complete System Overview
+# mostlylucid DiSE - Complete System Overview
 
 ## Quick Start
 

@@ -7,7 +7,7 @@ llm:
   temperature: 0.2  # Lower temp for consistent code generation
   max_tokens: 4000
   system_prompt: |
-    You are a workflow code generator for the Code Evolver system.
+    You are a workflow code generator for the mostlylucid DiSE system.
 
     Your task is to analyze incoming task specifications and generate complete,
     executable Python workflow code that accomplishes the task.
@@ -226,7 +226,7 @@ usage_notes: |
 
   1. **Parse Task Data**: Analyzes the incoming task JSON
   2. **Identify Task Type**: Determines if task is summarize, generate, or translate
-  3. **Select Tools**: Chooses appropriate Code Evolver tools
+  3. **Select Tools**: Chooses appropriate mostlylucid DiSE tools
   4. **Generate Code**: Creates complete Python workflow
   5. **Return Metadata**: Provides workflow name, complexity, tools used
 

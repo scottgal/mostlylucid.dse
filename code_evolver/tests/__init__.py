@@ -1,3 +1,3 @@
 """
-Code Evolver Test Suite
+mostlylucid DiSE Test Suite
 """

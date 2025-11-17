@@ -10,7 +10,7 @@
 # ╚════════════════════════════════════════════════════════════════════════════╝
 #
 # ============================================================================
-# Code Evolver - Hybrid Configuration (Cloud LLM + Local Embeddings)
+# mostlylucid DiSE - Hybrid Configuration (Cloud LLM + Local Embeddings)
 # ============================================================================
 #
 # This configuration uses CLOUD Anthropic for all LLM tasks and local Ollama

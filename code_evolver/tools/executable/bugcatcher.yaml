@@ -12,7 +12,7 @@ metadata:
     - "observability"
     - "logging"
     - "loki"
-  author: "Code Evolver"
+  author: "mostlylucid DiSE"
   license: "MIT"
   status: "stable"
 

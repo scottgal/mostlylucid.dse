@@ -1,5 +1,5 @@
 """
-Ask User Tool for Code Evolver.
+Ask User Tool for mostlylucid DiSE.
 Interactive CLI input with LLM fallback for non-interactive mode.
 """
 import json

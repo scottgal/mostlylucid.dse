@@ -1,4 +1,4 @@
-# Code Evolver Configuration Guide
+# mostlylucid DiSE Configuration Guide
 
 ## ⚠️ IMPORTANT: Don't Burn Anthropic Credits Accidentally!
 
@@ -92,7 +92,7 @@ ollama:  # ← MISLEADING NAME (legacy structure)
 
 ## 🛡️ Safety Checklist
 
-**Before running Code Evolver:**
+**Before running mostlylucid DiSE:**
 
 1. ✅ **Check filename**: Does it contain "CLOUD" or "COSTS_MONEY"?
    - YES → Will burn API credits

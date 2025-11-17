@@ -1,5 +1,5 @@
 """
-BugCatcher - Global exception monitoring tool for Code Evolver.
+BugCatcher - Global exception monitoring tool for mostlylucid DiSE.
 
 This tool sits at the front of every workflow and watches for:
 - Exceptions being raised/returned from code

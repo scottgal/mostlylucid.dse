@@ -1,6 +1,6 @@
 # Docker Setup for Local Development
 
-This guide explains how to set up the local development environment for Code Evolver using Docker Compose.
+This guide explains how to set up the local development environment for mostlylucid DiSE using Docker Compose.
 
 ## Services
 
@@ -283,7 +283,7 @@ docker-compose -f docker-compose.localdev.yml up -d
 docker-compose -f docker-compose.localdev.yml up -d --force-recreate
 ```
 
-## Integration with Code Evolver
+## Integration with mostlylucid DiSE
 
 ### BugCatcher
 

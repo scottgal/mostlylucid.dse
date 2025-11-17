@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Code Evolver system now supports **Qdrant** as a high-performance vector database backend for RAG (Retrieval-Augmented Generation) operations.
+The mostlylucid DiSE system now supports **Qdrant** as a high-performance vector database backend for RAG (Retrieval-Augmented Generation) operations.
 
 ### Why Qdrant?
 

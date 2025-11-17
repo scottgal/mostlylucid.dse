@@ -481,11 +481,16 @@ class OptimizedPerfTracker:
         if not records:
             return {"tool": tool_name, "count": 0}
 
-        # Calculate stats
-        if isinstance(records[0], MinimalPerfData):
-            durations = [(r.end - r.start) for r in records]
-        else:
-            durations = [r.duration_ms / 1000 for r in records]
+        # Calculate stats - handle both MinimalPerfData and DetailedPerfData
+        durations = []
+        for r in records:
+            if isinstance(r, MinimalPerfData):
+                durations.append(r.end - r.start)
+            elif hasattr(r, 'duration_ms'):
+                durations.append(r.duration_ms / 1000)
+            else:
+                # Fallback for unknown types
+                durations.append(0)
 
         return {
             "tool": tool_name,
@@ -500,7 +505,34 @@ class OptimizedPerfTracker:
     def get_all_stats(self) -> Dict[str, Any]:
         """Get global statistics"""
         with self.stores_lock:
-            tool_stats = {name: self.get_tool_stats(name) for name in self.tool_stores.keys()}
+            # Get stats for each tool while holding the lock
+            tool_stats = {}
+            for name, store in self.tool_stores.items():
+                records = store.get_all()
+
+                if not records:
+                    tool_stats[name] = {"tool": name, "count": 0}
+                    continue
+
+                # Calculate stats - handle both MinimalPerfData and DetailedPerfData
+                durations = []
+                for r in records:
+                    if isinstance(r, MinimalPerfData):
+                        durations.append(r.end - r.start)
+                    elif hasattr(r, 'duration_ms'):
+                        durations.append(r.duration_ms / 1000)
+                    else:
+                        durations.append(0)
+
+                tool_stats[name] = {
+                    "tool": name,
+                    "count": len(records),
+                    "avg_duration_s": sum(durations) / len(durations) if durations else 0,
+                    "min_duration_s": min(durations) if durations else 0,
+                    "max_duration_s": max(durations) if durations else 0,
+                    "current_size": store.size(),
+                    "max_size": store.max_size
+                }
 
         return {
             "total_calls": self.total_calls,
@@ -517,13 +549,9 @@ class OptimizedPerfTracker:
         self._flush_save_queue()
 
 
-# Global singleton instance
-_tracker = OptimizedPerfTracker()
-
-
 def get_tracker() -> OptimizedPerfTracker:
     """Get global performance tracker instance"""
-    return _tracker
+    return OptimizedPerfTracker()
 
 
 # Convenience functions

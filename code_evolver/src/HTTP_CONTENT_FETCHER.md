@@ -1,6 +1,6 @@
 # HTTP Content Fetcher
 
-A comprehensive, flexible HTTP client tool for the Code Evolver DSE (Domain Specific Engine) system.
+A comprehensive, flexible HTTP client tool for the mostlylucid DiSE DSE (Domain Specific Engine) system.
 
 ## Overview
 
@@ -54,7 +54,7 @@ The HTTP Content Fetcher is a production-ready tool that provides complete HTTP/
 
 ## Installation
 
-The HTTP Content Fetcher is already integrated into the Code Evolver system. No additional installation required.
+The HTTP Content Fetcher is already integrated into the mostlylucid DiSE system. No additional installation required.
 
 ### Dependencies
 
@@ -371,7 +371,7 @@ python examples/http_content_fetcher_example.py
 
 ## Integration with DSE Workflow System
 
-The HTTP Content Fetcher is fully integrated with the Code Evolver DSE system:
+The HTTP Content Fetcher is fully integrated with the mostlylucid DiSE DSE system:
 
 - **Tool Type**: `api_connector`
 - **Tool ID**: `http_content_fetcher`
@@ -495,14 +495,14 @@ Convenient factory function to create HTTPContentFetcher instances.
 
 ## License
 
-Part of the Code Evolver DSE system.
+Part of the mostlylucid DiSE DSE system.
 
 ## Support
 
 For issues or questions:
 1. Check the examples in `/code_evolver/examples/`
 2. Review the test suite in `/code_evolver/tests/`
-3. Consult the Code Evolver documentation
+3. Consult the mostlylucid DiSE documentation
 
 ## Version
 

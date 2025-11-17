@@ -1,7 +1,7 @@
-# Code Evolver - Execution Architecture Summary
+# mostlylucid DiSE - Execution Architecture Summary
 
 ## Overview
-The Code Evolver system has a **synchronous, sequential execution model** with **limited parallelism** in specific areas. It's designed as an interactive CLI system that generates, executes, and optimizes code through an overseer-driven workflow decomposition approach.
+The mostlylucid DiSE system has a **synchronous, sequential execution model** with **limited parallelism** in specific areas. It's designed as an interactive CLI system that generates, executes, and optimizes code through an overseer-driven workflow decomposition approach.
 
 ---
 
@@ -253,7 +253,7 @@ class WorkflowBuilder:
 
 ```python
 def main():
-    parser = argparse.ArgumentParser(description="Code Evolver - Interactive CLI")
+    parser = argparse.ArgumentParser(description="mostlylucid DiSE - Interactive CLI")
     parser.add_argument("--config", type=str, default="config.yaml")
     args = parser.parse_args()
     

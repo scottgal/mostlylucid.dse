@@ -1,5 +1,5 @@
 """
-OpenAPI tool integration for Code Evolver.
+OpenAPI tool integration for mostlylucid DiSE.
 Allows tools to be defined by OpenAPI specifications and invoked dynamically.
 """
 import json

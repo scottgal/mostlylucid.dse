@@ -152,7 +152,7 @@ def trigger_tool(tool_id, parameters):
     })
 ```
 
-## Client-Side (Code Evolver)
+## Client-Side (mostlylucid DiSE)
 
 ### Via Command Line
 
@@ -283,7 +283,7 @@ echo '{"hub_url": "http://localhost:5000/toolhub", "duration_seconds": 60}' | \
 #   "parameters": {"schema": {"type": "string", "format": "email"}}
 # }
 
-# 4. See result in Code Evolver output
+# 4. See result in mostlylucid DiSE output
 ```
 
 ## Performance

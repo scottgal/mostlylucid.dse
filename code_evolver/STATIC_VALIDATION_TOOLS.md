@@ -233,7 +233,7 @@ Total Static Validation:   ~850ms
 
 ---
 
-## Integration with Code Evolver
+## Integration with mostlylucid DiSE
 
 ### Automatic Tool Selection
 

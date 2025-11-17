@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Integration tests for Code Evolver system.
+Integration tests for mostlylucid DiSE system.
 Tests the full end-to-end workflow with progress display.
 """
 import unittest

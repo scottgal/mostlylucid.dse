@@ -1,0 +1,23 @@
+{
+  "tool": [
+    "tool_model_selector"
+  ],
+  "custom": [
+    "tool_model_selector"
+  ],
+  "selection": [
+    "tool_model_selector"
+  ],
+  "optimization": [
+    "tool_model_selector"
+  ],
+  "model-management": [
+    "tool_model_selector"
+  ],
+  "planning": [
+    "tool_model_selector"
+  ],
+  "backend": [
+    "tool_model_selector"
+  ]
+}

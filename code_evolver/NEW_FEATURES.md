@@ -1,8 +1,8 @@
-# Code Evolver - New Features Guide
+# mostlylucid DiSE - New Features Guide
 
 ## Recent Major Features
 
-This document describes the two major new features added to Code Evolver:
+This document describes the two major new features added to mostlylucid DiSE:
 1. **Smart Conversation Mode** - Multi-chat context memory with semantic search
 2. **RAG Cluster Optimizer** - Iterative self-optimization of code artifacts
 

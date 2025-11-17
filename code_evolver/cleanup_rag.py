@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Cleanup utility for Code Evolver RAG memory.
+Cleanup utility for mostlylucid DiSE RAG memory.
 Removes artifacts for deleted nodes to prevent RAG bloat during testing.
 """
 import sys

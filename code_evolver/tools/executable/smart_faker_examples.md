@@ -687,4 +687,4 @@ Found a bug or want to add features? Please submit issues or pull requests to th
 
 ## License
 
-Part of the Code Evolver project.
+Part of the mostlylucid DiSE project.

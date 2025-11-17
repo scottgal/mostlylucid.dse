@@ -1,5 +1,5 @@
 """
-HTTP Content Fetcher Tool for Code Evolver.
+HTTP Content Fetcher Tool for mostlylucid DiSE.
 
 A comprehensive, flexible HTTP client that supports:
 - All HTTP methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, etc.)

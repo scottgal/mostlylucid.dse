@@ -413,7 +413,7 @@ assert "regex" in tags
 
 ## Summary
 
-The smart deduplication system makes Code Evolver **15x faster** for repeat requests while maintaining quality and learning from past interactions. The 3-tier strategy (100% match → 4b review → new workflow) ensures optimal performance without sacrificing accuracy.
+The smart deduplication system makes mostlylucid DiSE **15x faster** for repeat requests while maintaining quality and learning from past interactions. The 3-tier strategy (100% match → 4b review → new workflow) ensures optimal performance without sacrificing accuracy.
 
 Enhanced RAG tagging makes the system "nice and selective" - translation tasks include language tags, API integrations include service names, and task types are automatically detected and categorized.
 

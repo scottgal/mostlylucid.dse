@@ -287,7 +287,7 @@ result = tool.end_conversation()
 
 ## License
 
-Part of the Code Evolver DSE system.
+Part of the mostlylucid DiSE DSE system.
 
 ## Smart Conversations (Living MCP)
 

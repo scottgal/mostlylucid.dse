@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script to verify workflow reuse in Code Evolver.
+Test script to verify workflow reuse in mostlylucid DiSE.
 Tests that the same question reuses the existing workflow instead of regenerating.
 """
 import sys
@@ -20,7 +20,7 @@ console = Console()
 def test_workflow_reuse():
     """Test that workflows are stored and reused correctly."""
 
-    console.print("[bold cyan]Testing Workflow Reuse in Code Evolver[/bold cyan]\n")
+    console.print("[bold cyan]Testing Workflow Reuse in mostlylucid DiSE[/bold cyan]\n")
 
     # Initialize components
     console.print("[dim]Initializing components...[/dim]")

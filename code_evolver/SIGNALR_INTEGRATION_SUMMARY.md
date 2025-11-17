@@ -149,7 +149,7 @@ connection.invoke("ToolTrigger", {
 ### Use Case 1: Event-Driven API Testing
 
 Your CI/CD pipeline deploys a new API:
-1. SignalR sends OpenAPI spec to Code Evolver
+1. SignalR sends OpenAPI spec to mostlylucid DiSE
 2. Tool creates new API tool automatically
 3. Generates test data and runs tests
 4. Returns results to CI/CD
@@ -158,14 +158,14 @@ Your CI/CD pipeline deploys a new API:
 
 User uploads document in your app:
 1. App sends translation request via SignalR
-2. Code Evolver triggers `nmt_translator`
+2. mostlylucid DiSE triggers `nmt_translator`
 3. Returns translation
 4. App saves result
 
 ### Use Case 3: Training Pipeline
 
 Production app collects user requests:
-1. Each request sent to Code Evolver via SignalR
+1. Each request sent to mostlylucid DiSE via SignalR
 2. System generates workflows from real usage
 3. Learns patterns over time
 4. Improves suggestions
