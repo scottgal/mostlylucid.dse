@@ -24,6 +24,9 @@ from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 
+from .cumulative_changelog import CumulativeChangelog
+from .test_evolution_tracker import TestEvolutionTracker
+
 logger = logging.getLogger(__name__)
 
 
@@ -48,7 +51,9 @@ class OfflineBatchOptimizer:
         config_manager,
         rag_memory,
         optimization_pipeline,
-        executor=None
+        executor=None,
+        changelog: Optional[CumulativeChangelog] = None,
+        test_tracker: Optional[TestEvolutionTracker] = None
     ):
         """
         Initialize offline batch optimizer.
@@ -58,11 +63,17 @@ class OfflineBatchOptimizer:
             rag_memory: RAG memory system
             optimization_pipeline: OptimizationPipeline instance
             executor: Optional executor for testing optimized code
+            changelog: Optional cumulative changelog for tracking mutations
+            test_tracker: Optional test evolution tracker
         """
         self.config = config_manager
         self.rag = rag_memory
         self.pipeline = optimization_pipeline
         self.executor = executor
+        self.changelog = changelog or CumulativeChangelog(
+            storage_dir=config_manager.get("evolution_logs_dir", "evolution_logs")
+        )
+        self.test_tracker = test_tracker or TestEvolutionTracker()
 
         # Get optimization settings
         opt_config = config_manager.get("optimization.cloud_optimization", {})

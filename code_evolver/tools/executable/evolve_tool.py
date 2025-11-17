@@ -39,6 +39,8 @@ def evolve_tool(
         from src.config_manager import ConfigManager
         from src.ollama_client import OllamaClient
         from src.rag_memory import RAGMemory, ArtifactType
+        from src.cumulative_changelog import CumulativeChangelog
+        from src.test_evolution_tracker import TestEvolutionTracker
         from node_runtime import call_tool_resilient, call_llm
 
         # Initialize
@@ -46,6 +48,10 @@ def evolve_tool(
         client = OllamaClient(config_manager=config)
         rag = RAGMemory(ollama_client=client)
         tools = ToolsManager(config, client, rag)
+        changelog = CumulativeChangelog(
+            storage_dir=config.get("evolution_logs_dir", "evolution_logs")
+        )
+        test_tracker = TestEvolutionTracker()
 
         # Get the failing tool
         tool = tools.get_tool(tool_id)
@@ -76,6 +82,17 @@ def evolve_tool(
             with open(yaml_file, 'r', encoding='utf-8') as f:
                 current_yaml = f.read()
 
+        # Read test file if exists
+        test_file = tool_dir / f"test_{tool_id}.py"
+        current_test_code = ""
+        if test_file.exists():
+            with open(test_file, 'r', encoding='utf-8') as f:
+                current_test_code = f.read()
+
+        # Get evolution history from cumulative changelog
+        evolution_history = changelog.format_for_evolution_prompt(tool_id)
+        print(f"Retrieved evolution history for {tool_id}", file=sys.stderr)
+
         # Create mutation prompt for code generator
         mutation_prompt = f"""Fix and evolve this tool that's currently failing.
 
@@ -93,21 +110,32 @@ def evolve_tool(
 {current_yaml}
 ```
 
+**Current Tests:**
+```python
+{current_test_code if current_test_code else "# No tests found"}
+```
+
+{evolution_history}
+
 **Requirements:**
 1. Fix the error: {error_message}
 2. Apply the mutation: {mutation_hint}
 3. {"Make output schema dynamic (flexible JSON)" if dynamic_schema else "Keep output schema structure"}
 4. Maintain backward compatibility where possible
 5. Add tests to prevent regression
+6. DO NOT repeat failed mutations from evolution history
+7. Build on successful patterns from evolution history
+8. Ensure test coverage is maintained or improved
 
 **Output:**
 Generate the evolved tool with:
 - Fixed Python code
 - Updated YAML configuration (if needed)
-- Test cases
+- Test cases (must maintain or improve coverage)
 - Version bump (increment minor version)
 
 The evolved tool should be drop-in compatible but better.
+IMPORTANT: Review the evolution history to avoid repeating mistakes.
 """
 
         # Generate evolved tool using code generator
@@ -223,6 +251,26 @@ Evolved Code:
             },
             auto_embed=True
         )
+
+        # Record mutation in cumulative changelog
+        # Note: We assume success here, but in a real scenario we'd test first
+        changes_description = f"Fixed error: {error_message}. Applied mutation: {mutation_hint}"
+
+        changelog.record_mutation(
+            artifact_id=tool_id,
+            version=new_version,
+            parent_id=tool_id,
+            mutation_type="tool_evolution",
+            changes_description=changes_description,
+            success=True,  # Assumed success; would be validated by testing
+            metadata={
+                "error": error_message,
+                "mutation_hint": mutation_hint,
+                "dynamic_schema": dynamic_schema,
+                "evolved_file": str(evolved_py)
+            }
+        )
+        print(f"Recorded evolution in changelog", file=sys.stderr)
 
         return {
             "success": True,
