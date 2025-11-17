@@ -1,0 +1,80 @@
+name: "Workflow Diagram Generator"
+type: "executable"
+description: |
+  Generates visual workflow diagrams showing tool flow and decisions.
+
+  Creates beautiful Mermaid diagrams or ASCII art showing:
+  - Tool dependencies and flow
+  - Decision points and conditions
+  - Tool types (LLM, executable, workflow)
+  - Complete workflow visualization
+
+  Perfect for understanding complex workflows at a glance.
+
+command: "python"
+args:
+  - "tools/executable/workflow_diagram.py"
+
+input_format: "json"
+output_format: "json"
+
+parameters:
+  tool_name:
+    type: "string"
+    required: true
+    description: "Name of the tool to diagram"
+
+  format:
+    type: "string"
+    default: "mermaid"
+    enum: ["mermaid", "ascii"]
+    description: "Output format (mermaid for rendering, ascii for terminal)"
+
+  show_details:
+    type: "boolean"
+    default: true
+    description: "Include type and parameter details"
+
+  max_depth:
+    type: "integer"
+    default: 3
+    description: "Maximum depth to traverse dependencies"
+
+tags:
+  - "visualization"
+  - "workflow"
+  - "diagram"
+  - "documentation"
+  - "mermaid"
+  - "ascii"
+
+metadata:
+  category: "visualization"
+  supports_streaming: false
+  cacheable: true
+
+examples:
+  - input: |
+      {
+        "tool_name": "content_summarizer",
+        "format": "mermaid",
+        "show_details": true
+      }
+    output: |
+      {
+        "diagram": "graph TD\n  Start([User Request]) --> content_summarizer...",
+        "format": "mermaid",
+        "tool_count": 5
+      }
+
+  - input: |
+      {
+        "tool_name": "content_splitter",
+        "format": "ascii"
+      }
+    output: |
+      {
+        "diagram": "┌─────────────┐\n│   START     │\n└──────┬──────┘...",
+        "format": "ascii",
+        "tool_count": 2
+      }

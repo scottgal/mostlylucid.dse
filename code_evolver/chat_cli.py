@@ -3071,10 +3071,12 @@ logger = _DummyLogger()
                     auto_embed=True
                 )
 
-                # Save specification to filesystem alongside code
-                spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
-                try:
-                    spec_content = f"""# Specification for {node_id}
+                # Only save specification file if explicitly requested via config
+                # Use /document command to generate comprehensive documentation
+                if self.config.get("generation.save_specification", False):
+                    spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
+                    try:
+                        spec_content = f"""# Specification for {node_id}
 
 ## Description
 {description}
@@ -3094,10 +3096,10 @@ logger = _DummyLogger()
 ## Generated
 {datetime.now().isoformat()}
 """
-                    spec_path.write_text(spec_content, encoding='utf-8')
-                    console.print(f"[dim]Saved specification to specification.md[/dim]")
-                except Exception as e:
-                    console.print(f"[dim yellow]Could not save specification file: {e}[/dim yellow]")
+                        spec_path.write_text(spec_content, encoding='utf-8')
+                        console.print(f"[dim]Saved specification to specification.md[/dim]")
+                    except Exception as e:
+                        console.print(f"[dim yellow]Could not save specification file: {e}[/dim yellow]")
 
                 # Store complete workflow for future reuse with embedded specification
                 workflow_content = {

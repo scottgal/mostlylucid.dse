@@ -653,7 +653,18 @@
     "tool_identify_operations_in_the_tas_1763377030",
     "interaction_119350c12b91",
     "interaction_be7dec7186dd",
-    "interaction_c7b912eed425"
+    "interaction_c7b912eed425",
+    "tool_circular_import_fixer",
+    "tool_content_splitter",
+    "tool_content_summarizer",
+    "tool_prompt_generator",
+    "tool_summarizer_fast",
+    "tool_summarizer_large",
+    "tool_summarizer_medium",
+    "interaction_6d3c1477ebca",
+    "interaction_122f036a69a0",
+    "interaction_7a16dd7f5e23",
+    "tool_create_the_tools_required_to_r_1763384526"
   ],
   "custom": [
     "tool_http_server",
@@ -787,7 +798,9 @@
     "tool_cron_querier",
     "tool_optimize_cluster",
     "tool_smart_faker",
-    "tool_remove_unused_node_runtime_import"
+    "tool_remove_unused_node_runtime_import",
+    "tool_circular_import_fixer",
+    "tool_content_splitter"
   ],
   "python": [
     "tool_bandit_security",
@@ -1109,7 +1122,9 @@
     "exec_invocation_random_data_generator_1763376078006",
     "exec_invocation_random_data_generator_1763377217048",
     "exec_invocation_python_syntax_validator_1763378724422",
-    "exec_invocation_node_runtime_import_validator_1763378725588"
+    "exec_invocation_node_runtime_import_validator_1763378725588",
+    "exec_invocation_python_syntax_validator_1763384603511",
+    "exec_invocation_node_runtime_import_validator_1763384604697"
   ],
   "security": [
     "tool_bandit_security",
@@ -1223,7 +1238,8 @@
     "tool_quick_feedback",
     "tool_translation_quality_checker",
     "tool_fast_content_writer",
-    "tool_nmt_translate"
+    "tool_nmt_translate",
+    "tool_summarizer_fast"
   ],
   "deterministic": [
     "tool_basic_calculator",
@@ -1685,7 +1701,13 @@
     "interaction_acb2000784c1",
     "interaction_400fea813723",
     "interaction_f38e15597ef4",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "tool_content_summarizer",
+    "tool_prompt_generator",
+    "tool_summarizer_fast",
+    "tool_summarizer_large",
+    "tool_summarizer_medium",
+    "interaction_26d5e7a6a9d0"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -1990,7 +2012,9 @@
     "invocation_general_1763378720750",
     "interaction_f38e15597ef4",
     "invocation_general_1763379445664",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "invocation_general_1763384600591",
+    "interaction_26d5e7a6a9d0"
   ],
   "fallback": [
     "tool_general",
@@ -2079,7 +2103,12 @@
   ],
   "summarization": [
     "tool_summarizer",
-    "tool_conversation_manager"
+    "tool_conversation_manager",
+    "tool_content_splitter",
+    "tool_content_summarizer",
+    "tool_summarizer_fast",
+    "tool_summarizer_large",
+    "tool_summarizer_medium"
   ],
   "condensing": [
     "tool_summarizer"
@@ -2392,7 +2421,10 @@
     "workflow_convert_499_pounds_to_kilogram",
     "workflow_1763376083",
     "tool_identify_operations_in_the_tas_1763377030",
-    "workflow_mke_multip_stage_workflow_tha"
+    "workflow_mke_multip_stage_workflow_tha",
+    "tool_content_summarizer",
+    "workflow_create_the_tools_required_to_r_1763384526",
+    "tool_create_the_tools_required_to_r_1763384526"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -2538,7 +2570,8 @@
     "tool_what_is_the_correct_procedure",
     "tool_convert_491_rpm_to_rad_s_for_m",
     "tool_write_a_plc_ladder_logic_funct",
-    "tool_identify_operations_in_the_tas_1763377030"
+    "tool_identify_operations_in_the_tas_1763377030",
+    "tool_create_the_tools_required_to_r_1763384526"
   ],
   "generated": [
     "tool_save_input_to_database",
@@ -3017,7 +3050,11 @@
     "spec_mke_multip_stage_workflow_tha",
     "func_mke_multip_stage_workflow_tha",
     "workflow_mke_multip_stage_workflow_tha",
-    "spec_create_the_tools_required_to_r"
+    "spec_create_the_tools_required_to_r",
+    "spec_create_the_tools_required_to_r_1763384526",
+    "func_create_the_tools_required_to_r_1763384526",
+    "workflow_create_the_tools_required_to_r_1763384526",
+    "tool_create_the_tools_required_to_r_1763384526"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3359,7 +3396,10 @@
     "workflow_convert_499_pounds_to_kilogram",
     "tool_identify_operations_in_the_tas_1763377030",
     "func_mke_multip_stage_workflow_tha",
-    "workflow_mke_multip_stage_workflow_tha"
+    "workflow_mke_multip_stage_workflow_tha",
+    "func_create_the_tools_required_to_r_1763384526",
+    "workflow_create_the_tools_required_to_r_1763384526",
+    "tool_create_the_tools_required_to_r_1763384526"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -3876,7 +3916,8 @@
     "spec_create_a_script_to_monitor_pre",
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
-    "spec_create_the_tools_required_to_r"
+    "spec_create_the_tools_required_to_r",
+    "spec_create_the_tools_required_to_r_1763384526"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4137,7 +4178,8 @@
     "tool_http_rest_client"
   ],
   "dynamic": [
-    "tool_signalr_tool_trigger"
+    "tool_signalr_tool_trigger",
+    "tool_prompt_generator"
   ],
   "tool-trigger": [
     "tool_signalr_tool_trigger"
@@ -4358,7 +4400,8 @@
     "spec_create_a_script_to_monitor_pre",
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
-    "spec_create_the_tools_required_to_r"
+    "spec_create_the_tools_required_to_r",
+    "spec_create_the_tools_required_to_r_1763384526"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -4497,7 +4540,8 @@
     "spec_create_a_script_to_monitor_pre",
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
-    "spec_create_the_tools_required_to_r"
+    "spec_create_the_tools_required_to_r",
+    "spec_create_the_tools_required_to_r_1763384526"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
@@ -4654,7 +4698,8 @@
     "invocation_general_1763377362572",
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
-    "invocation_general_1763379445664"
+    "invocation_general_1763379445664",
+    "invocation_general_1763384600591"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -4804,7 +4849,8 @@
     "invocation_general_1763377362572",
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
-    "invocation_general_1763379445664"
+    "invocation_general_1763379445664",
+    "invocation_general_1763384600591"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -4954,7 +5000,8 @@
     "invocation_general_1763377362572",
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
-    "invocation_general_1763379445664"
+    "invocation_general_1763379445664",
+    "invocation_general_1763384600591"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -5502,7 +5549,11 @@
     "interaction_119350c12b91",
     "interaction_be7dec7186dd",
     "interaction_c7b912eed425",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "interaction_26d5e7a6a9d0",
+    "interaction_6d3c1477ebca",
+    "interaction_122f036a69a0",
+    "interaction_7a16dd7f5e23"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -5900,7 +5951,11 @@
     "interaction_119350c12b91",
     "interaction_be7dec7186dd",
     "interaction_c7b912eed425",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "interaction_26d5e7a6a9d0",
+    "interaction_6d3c1477ebca",
+    "interaction_122f036a69a0",
+    "interaction_7a16dd7f5e23"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6050,7 +6105,8 @@
     "interaction_acb2000784c1",
     "interaction_400fea813723",
     "interaction_f38e15597ef4",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "interaction_26d5e7a6a9d0"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -6192,7 +6248,8 @@
     "interaction_acb2000784c1",
     "interaction_400fea813723",
     "interaction_f38e15597ef4",
-    "interaction_8ccb6daf7da8"
+    "interaction_8ccb6daf7da8",
+    "interaction_26d5e7a6a9d0"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -6592,7 +6649,10 @@
     "exec_invocation_random_data_generator_1763377217048",
     "exec_invocation_python_syntax_validator_1763378724422",
     "exec_invocation_undefined_name_checker_1763378725068",
-    "exec_invocation_node_runtime_import_validator_1763378725588"
+    "exec_invocation_node_runtime_import_validator_1763378725588",
+    "exec_invocation_python_syntax_validator_1763384603511",
+    "exec_invocation_undefined_name_checker_1763384604200",
+    "exec_invocation_node_runtime_import_validator_1763384604697"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -6992,7 +7052,10 @@
     "exec_invocation_random_data_generator_1763377217048",
     "exec_invocation_python_syntax_validator_1763378724422",
     "exec_invocation_undefined_name_checker_1763378725068",
-    "exec_invocation_node_runtime_import_validator_1763378725588"
+    "exec_invocation_node_runtime_import_validator_1763378725588",
+    "exec_invocation_python_syntax_validator_1763384603511",
+    "exec_invocation_undefined_name_checker_1763384604200",
+    "exec_invocation_node_runtime_import_validator_1763384604697"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7226,7 +7289,9 @@
     "exec_invocation_python_syntax_validator_1763376071863",
     "interaction_2dc315718407",
     "exec_invocation_python_syntax_validator_1763378724422",
-    "interaction_119350c12b91"
+    "interaction_119350c12b91",
+    "exec_invocation_python_syntax_validator_1763384603511",
+    "interaction_6d3c1477ebca"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -7626,7 +7691,10 @@
     "interaction_d733a6854156",
     "interaction_119350c12b91",
     "interaction_be7dec7186dd",
-    "interaction_c7b912eed425"
+    "interaction_c7b912eed425",
+    "interaction_6d3c1477ebca",
+    "interaction_122f036a69a0",
+    "interaction_7a16dd7f5e23"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8034,7 +8102,10 @@
     "interaction_d733a6854156",
     "interaction_119350c12b91",
     "interaction_be7dec7186dd",
-    "interaction_c7b912eed425"
+    "interaction_c7b912eed425",
+    "interaction_6d3c1477ebca",
+    "interaction_122f036a69a0",
+    "interaction_7a16dd7f5e23"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8268,7 +8339,9 @@
     "exec_invocation_undefined_name_checker_1763376075775",
     "interaction_a40a5216595b",
     "exec_invocation_undefined_name_checker_1763378725068",
-    "interaction_be7dec7186dd"
+    "interaction_be7dec7186dd",
+    "exec_invocation_undefined_name_checker_1763384604200",
+    "interaction_122f036a69a0"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8386,7 +8459,8 @@
     "exec_invocation_undefined_name_checker_1763375065726",
     "exec_invocation_undefined_name_checker_1763375416709",
     "exec_invocation_undefined_name_checker_1763376075775",
-    "exec_invocation_undefined_name_checker_1763378725068"
+    "exec_invocation_undefined_name_checker_1763378725068",
+    "exec_invocation_undefined_name_checker_1763384604200"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -8620,7 +8694,9 @@
     "exec_invocation_node_runtime_import_validator_1763376076488",
     "interaction_7d81d73def05",
     "exec_invocation_node_runtime_import_validator_1763378725588",
-    "interaction_c7b912eed425"
+    "interaction_c7b912eed425",
+    "exec_invocation_node_runtime_import_validator_1763384604697",
+    "interaction_7a16dd7f5e23"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -8738,7 +8814,8 @@
     "workflow_analyze_requirements_and_clari",
     "workflow_convert_491_rpm_to_rad_s_for_m",
     "workflow_convert_499_pounds_to_kilogram",
-    "workflow_mke_multip_stage_workflow_tha"
+    "workflow_mke_multip_stage_workflow_tha",
+    "workflow_create_the_tools_required_to_r_1763384526"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -8856,7 +8933,8 @@
     "workflow_analyze_requirements_and_clari",
     "workflow_convert_491_rpm_to_rad_s_for_m",
     "workflow_convert_499_pounds_to_kilogram",
-    "workflow_mke_multip_stage_workflow_tha"
+    "workflow_mke_multip_stage_workflow_tha",
+    "workflow_create_the_tools_required_to_r_1763384526"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -9296,7 +9374,14 @@
     "interaction_11c1d8bb3bbe"
   ],
   "yaml-defined": [
-    "tool_remove_unused_node_runtime_import"
+    "tool_remove_unused_node_runtime_import",
+    "tool_circular_import_fixer",
+    "tool_content_splitter",
+    "tool_content_summarizer",
+    "tool_prompt_generator",
+    "tool_summarizer_fast",
+    "tool_summarizer_large",
+    "tool_summarizer_medium"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -9398,5 +9483,86 @@
   ],
   "499": [
     "workflow_1763376083"
+  ],
+  "fix": [
+    "tool_circular_import_fixer"
+  ],
+  "error_handler": [
+    "tool_circular_import_fixer"
+  ],
+  "circular_import": [
+    "tool_circular_import_fixer"
+  ],
+  "import_error": [
+    "tool_circular_import_fixer"
+  ],
+  "code_repair": [
+    "tool_circular_import_fixer"
+  ],
+  "auto_fix": [
+    "tool_circular_import_fixer"
+  ],
+  "tdd": [
+    "tool_circular_import_fixer"
+  ],
+  "code_generation": [
+    "tool_circular_import_fixer"
+  ],
+  "content_processing": [
+    "tool_content_splitter"
+  ],
+  "splitting": [
+    "tool_content_splitter"
+  ],
+  "chunking": [
+    "tool_content_splitter"
+  ],
+  "utility": [
+    "tool_content_splitter"
+  ],
+  "smart_routing": [
+    "tool_content_summarizer"
+  ],
+  "high_priority": [
+    "tool_content_summarizer"
+  ],
+  "prompt-engineering": [
+    "tool_prompt_generator"
+  ],
+  "prompt-generation": [
+    "tool_prompt_generator"
+  ],
+  "layered": [
+    "tool_prompt_generator"
+  ],
+  "tool-creation": [
+    "tool_prompt_generator"
+  ],
+  "model-selection": [
+    "tool_prompt_generator"
+  ],
+  "small_context": [
+    "tool_summarizer_fast"
+  ],
+  "gemma": [
+    "tool_summarizer_fast"
+  ],
+  "high_quality": [
+    "tool_summarizer_large"
+  ],
+  "large_context": [
+    "tool_summarizer_large"
+  ],
+  "mistral": [
+    "tool_summarizer_large"
+  ],
+  "balanced": [
+    "tool_summarizer_medium"
+  ],
+  "medium_context": [
+    "tool_summarizer_medium"
+  ],
+  "llama": [
+    "tool_summarizer_medium"
   ]
 }
