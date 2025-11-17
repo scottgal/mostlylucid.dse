@@ -12,32 +12,39 @@ from src.sentinel_llm import SentinelLLM
 
 def slow_task(duration: int, background_process=None):
     """
-    A slow task that updates status.
+    A slow task that updates status with realistic workflow steps.
 
     Args:
         duration: How long to run (seconds)
         background_process: Process instance for status updates
     """
-    steps = 10
-    step_duration = duration / steps
+    # Simulate realistic tool building workflow
+    steps = [
+        (0.05, "Initializing..."),
+        (0.10, "Consulting overseer..."),
+        (0.20, "Generating spec..."),
+        (0.40, "Generating code for tool: test_tool"),
+        (0.60, "Running tests..."),
+        (0.70, "Running static analysis..."),
+        (0.85, "Validating output..."),
+        (0.95, "Saving tool..."),
+        (1.00, "Complete!")
+    ]
 
-    for i in range(steps):
+    step_duration = duration / len(steps)
+
+    for progress, message in steps:
         if background_process and background_process.is_cancelled():
-            print(f"Task was cancelled at step {i+1}/{steps}")
-            return {"cancelled": True, "completed_steps": i}
+            return {"cancelled": True, "progress": progress}
+
+        # Update status BEFORE the work
+        if background_process:
+            background_process.update_status(message, progress)
 
         # Simulate work
         time.sleep(step_duration)
 
-        # Update status
-        if background_process:
-            progress = (i + 1) / steps
-            background_process.update_status(
-                f"Processing step {i+1}/{steps}",
-                progress
-            )
-
-    return {"success": True, "result": f"Completed {steps} steps in {duration}s"}
+    return {"success": True, "result": f"Tool built successfully"}
 
 
 def main():
@@ -65,24 +72,33 @@ def main():
 
     print(f"Started process: {process_id}")
 
-    # Monitor progress
+    # Monitor progress with real-time updates
     last_progress = -1
+    update_count = 0
+
+    print("Monitoring process (showing real-time updates)...")
+
     while True:
         process = manager.get_process(process_id)
         if not process:
             print("ERROR: Process not found!")
             break
 
-        # Print new status updates
+        # Print new status updates immediately
         updates = process.get_new_status_updates()
         for update in updates:
-            print(f"  [{process_id}] {update.message} ({update.progress:.0%})")
+            update_count += 1
+            # Show timestamp and progress bar
+            progress_bar = "=" * int(update.progress * 20)
+            progress_pct = f"{update.progress:.0%}"
+            print(f"  [{process_id}] {update.message} [{progress_bar:20s}] {progress_pct}")
 
         # Check if done
         if not process.is_running():
+            print(f"Process finished! (received {update_count} status updates)")
             break
 
-        time.sleep(0.5)
+        time.sleep(0.2)  # Check more frequently for responsive updates
 
     # Get final status
     status = manager.get_status(process_id)
@@ -155,18 +171,23 @@ def main():
         print(f"Started: {pid}")
 
     # Wait for all
-    print("Waiting for all processes...")
+    print("Waiting for all processes (showing real-time updates)...")
     start_time = time.time()
+    total_updates = 0
 
     while manager.has_running_processes():
-        # Print new updates
+        # Print new updates with progress bars
         all_updates = manager.get_new_status_updates()
 
         for pid, updates in all_updates.items():
             for update in updates:
-                print(f"  [{pid}] {update.message}")
+                total_updates += 1
+                progress_bar = "=" * int(update.progress * 15)
+                print(f"  [{pid[-8:]}] {update.message:30s} [{progress_bar:15s}] {update.progress:.0%}")
 
-        time.sleep(0.5)
+        time.sleep(0.2)
+
+    print(f"All processes complete! (total {total_updates} status updates)")
 
     elapsed = time.time() - start_time
 

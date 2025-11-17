@@ -708,7 +708,8 @@
     "interaction_d1c20ade5a2e",
     "interaction_aaeb3413b6d1",
     "interaction_3c29850d3b2a",
-    "interaction_f79814765e77"
+    "interaction_f79814765e77",
+    "interaction_0baaa8939ab9"
   ],
   "custom": [
     "tool_http_server",
@@ -1195,7 +1196,8 @@
     "exec_invocation_python_syntax_validator_1763400305410",
     "exec_invocation_node_runtime_import_validator_1763400306898",
     "exec_invocation_python_syntax_validator_1763400465315",
-    "exec_invocation_node_runtime_import_validator_1763400466280"
+    "exec_invocation_node_runtime_import_validator_1763400466280",
+    "exec_invocation_store_code_fix_pattern_1763401085882"
   ],
   "security": [
     "tool_bandit_security",
@@ -5919,7 +5921,8 @@
     "interaction_aaeb3413b6d1",
     "interaction_3c29850d3b2a",
     "interaction_f79814765e77",
-    "interaction_418ea9dc675e"
+    "interaction_418ea9dc675e",
+    "interaction_0baaa8939ab9"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -7112,7 +7115,8 @@
     "exec_invocation_node_runtime_import_validator_1763400306898",
     "exec_invocation_python_syntax_validator_1763400465315",
     "exec_invocation_undefined_name_checker_1763400465847",
-    "exec_invocation_node_runtime_import_validator_1763400466280"
+    "exec_invocation_node_runtime_import_validator_1763400466280",
+    "exec_invocation_store_code_fix_pattern_1763401085882"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7543,7 +7547,8 @@
     "exec_invocation_node_runtime_import_validator_1763400306898",
     "exec_invocation_python_syntax_validator_1763400465315",
     "exec_invocation_undefined_name_checker_1763400465847",
-    "exec_invocation_node_runtime_import_validator_1763400466280"
+    "exec_invocation_node_runtime_import_validator_1763400466280",
+    "exec_invocation_store_code_fix_pattern_1763401085882"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -8228,7 +8233,8 @@
     "interaction_d1c20ade5a2e",
     "interaction_aaeb3413b6d1",
     "interaction_3c29850d3b2a",
-    "interaction_f79814765e77"
+    "interaction_f79814765e77",
+    "interaction_0baaa8939ab9"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8667,7 +8673,8 @@
     "interaction_d1c20ade5a2e",
     "interaction_aaeb3413b6d1",
     "interaction_3c29850d3b2a",
-    "interaction_f79814765e77"
+    "interaction_f79814765e77",
+    "interaction_0baaa8939ab9"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9845,7 +9852,8 @@
     "interaction_a0925b326077",
     "interaction_53dba79b35fa",
     "interaction_6096dad4db0b",
-    "interaction_6a59ff0361f2"
+    "interaction_6a59ff0361f2",
+    "interaction_0baaa8939ab9"
   ],
   "multi-step": [
     "workflow_1763345313",
@@ -10363,5 +10371,9 @@
   ],
   "generate_python_script_to_pars_1763400370": [
     "conv_generate_python_script_to_pars_1763400370_v1"
+  ],
+  "store_code_fix_pattern": [
+    "exec_invocation_store_code_fix_pattern_1763401085882",
+    "interaction_0baaa8939ab9"
   ]
 }
