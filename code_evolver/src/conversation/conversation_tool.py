@@ -15,6 +15,7 @@ from .context_manager import ContextMemoryManager
 from .summarizer import ConversationSummarizer
 from .intent_detector import ConversationIntentDetector
 from .embedder import ConversationEmbedder
+from .smart_orchestrator import SmartConversationOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ class ConversationTool:
     - Volatile Qdrant storage
     - Semantic search for related conversations
     - Performance tracking
+    - Smart orchestration with dynamic tool calling and workflow generation
     """
 
     def __init__(
@@ -77,6 +79,14 @@ class ConversationTool:
             embedding_model=embedding_model,
             embedding_endpoint=embedding_endpoint,
             vector_size=vector_size
+        )
+
+        # Initialize smart orchestrator for tool calling and workflow generation
+        self.orchestrator = SmartConversationOrchestrator(
+            model_name=conversation_model,
+            ollama_endpoint=ollama_endpoint,
+            tools_manager=config.get("tools_manager"),
+            workflow_engine=config.get("workflow_engine")
         )
 
         # Track active conversation

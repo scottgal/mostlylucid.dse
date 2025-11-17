@@ -288,3 +288,125 @@ result = tool.end_conversation()
 ## License
 
 Part of the Code Evolver DSE system.
+
+## Smart Conversations (Living MCP)
+
+The conversation tool now features **smart orchestration** - a "living MCP" that dynamically calls tools and generates workflows during conversations.
+
+### Smart Features
+
+#### 1. **Automatic Task Detection**
+- Analyzes user messages to detect task requests
+- Distinguishes between conversation and actionable tasks
+- Classifies task type and complexity
+
+#### 2. **Dynamic Tool Selection**
+- Uses gemma3:1b to select appropriate tools
+- Considers available tools and task requirements
+- Recommends execution order for multiple tools
+
+#### 3. **Workflow Generation**
+- Creates optimal workflows for complex tasks
+- Identifies dependencies between steps
+- Finds opportunities for parallel execution
+
+#### 4. **Parallel Task Execution**
+- **Runs tools in background** (non-blocking)
+- Conversation continues while tasks execute
+- Returns task IDs for status tracking
+
+#### 5. **CPU/GPU Load Monitoring**
+- Checks system resources before starting tasks
+- Queues tasks when system is busy
+- Automatically starts when resources available
+- Configurable thresholds (default: 80% CPU, 85% memory)
+
+### Usage
+
+```python
+from code_evolver.src.conversation import ConversationTool
+
+# Initialize with smart orchestration
+tool = ConversationTool.create_from_config_file(
+    "code_evolver/config.yaml",
+    conversation_model="gemma3:1b"
+)
+
+# Start conversation
+tool.start_conversation("Python development")
+
+# User says: "Can you analyze this codebase for bugs?"
+# Smart orchestrator:
+# 1. Detects task (code analysis)
+# 2. Selects tools (code analyzer, linter)
+# 3. Generates workflow
+# 4. Checks system load
+# 5. Starts execution in background
+# 6. Returns immediately
+
+result = tool.orchestrator.orchestrate_with_parallel_execution(
+    user_message="Can you analyze this codebase for bugs?",
+    conversation_context="Previous conversation context..."
+)
+
+# Immediate response
+print(result["immediate_response"])
+# → "I understand you want to analyze codebase for bugs. I'm working on that in the background. Feel free to continue our conversation while I work on it!"
+
+# Check task status later
+task_id = result.get("task_id")
+if task_id:
+    status = tool.orchestrator.get_task_status(task_id)
+    print(f"Status: {status['status']}")  # queued, running, completed, or failed
+    
+    if status['status'] == 'completed':
+        print(f"Result: {status['result']}")
+```
+
+### System Load Awareness
+
+```python
+# Check current system load
+load = tool.orchestrator.check_system_load()
+print(f"CPU: {load['cpu_percent']}%")
+print(f"Memory: {load['memory_percent']}%")
+print(f"Too busy: {load['is_busy']}")
+
+# Task will wait if system busy
+task_id = tool.orchestrator.execute_task_in_background(
+    task_id=None,
+    task_description="Generate documentation",
+    workflow=workflow_spec,
+    wait_if_busy=True  # Waits up to 5 minutes for resources
+)
+```
+
+### Task Management
+
+```python
+# List active tasks
+active_tasks = tool.orchestrator.list_active_tasks()
+for task in active_tasks:
+    print(f"{task['task_id']}: {task['description']} - {task['status']}")
+
+# Get specific task status
+status = tool.orchestrator.get_task_status(task_id)
+if status:
+    print(f"Started: {status['started_at']}")
+    print(f"Duration: {status.get('completed_at', time.time()) - status['started_at']}s")
+```
+
+### Example: Smart Conversation Flow
+
+```
+User: "Let's discuss Python best practices"
+Assistant: [Starts conversation]
+
+User: "Can you refactor my code to follow PEP 8?"
+Smart Orchestrator:
+  → Detects task: code_generation
+  → Selects tools: [code_analyzer, pep8_formatter]
+  → Generates 3-step workflow
+  → Checks system: CPU 45%, Memory 60% ✓
+  → Starts background task: task_abc123
+  → Returns immediately
