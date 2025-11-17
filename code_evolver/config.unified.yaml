@@ -19,8 +19,8 @@ llm:
   # ==========================================================================
   models:
     # ---- Tiny Models (very fast, basic quality) ----
-    tinyllama:
-      name: "tinyllama"
+    gemma3_1b:
+      name: "gemma3_1b"
       backend: "ollama"
       context_window: 2048
       cost: "very-low"
@@ -128,7 +128,7 @@ llm:
     escalation: qwen_14b       # Strong model for complex issues
     general: llama3            # General purpose model
     fast: gemma3_4b            # Fast for simple tasks
-    veryfast: tinyllama        # Extremely fast for triage
+    veryfast: gemma3_1b        # Extremely fast for triage
 
   # ==========================================================================
   # ROLE-SPECIFIC OVERRIDES - Only specify what's different from defaults

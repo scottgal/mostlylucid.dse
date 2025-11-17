@@ -1,12 +1,12 @@
 name: "Translation Quality Validator"
 type: "llm"
-description: "Fast quality check for translation output using tinyllama. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality."
+description: "Fast quality check for translation output using gemma3_1b. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality."
 cost_tier: "low"
 speed_tier: "very-fast"
 quality_tier: "basic"
 max_output_length: "short"
 llm:
-  model: "tinyllama"
+  model: "gemma3_1b"
   endpoint: null
   system_prompt: "You are a translation quality validator. Check translated text for common errors. Be fast and concise - your context window is only 2048 tokens.\n\nPriority: {priority}\nQuality expectation: {quality_level}\nSpeed requirement: {speed_requirement}"
   prompt_template: "Validate this translated text for quality issues:\n\nOriginal: {original_text}\nTranslated: {translated_text}\n\nCheck for:\n1. Repeated characters (e.g., 'aaaa', '||||')\n2. Garbled text (random symbols, encoding errors)\n3. Untranslated portions\n4. Missing or corrupted text\n5. Obvious translation failures\n\nRespond with ONLY:\n- 'OK' if translation looks good\n- 'ERROR: <brief description>' if issues found\n\nKeep response under 100 tokens."

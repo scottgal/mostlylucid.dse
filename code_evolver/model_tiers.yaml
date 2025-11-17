@@ -14,7 +14,7 @@ coding:
     description: "Simple functions, basic algorithms, straightforward code"
     models:
       primary: "qwen2.5-coder:3b"
-      fallback: ["gemma3:4b", "tinyllama"]
+      fallback: ["gemma3:4b", "gemma3_1b"]
     cost: "low"
     speed: "very-fast"
     quality: "good"
@@ -53,7 +53,7 @@ content:
     name: "Quick Content (Tier 1)"
     description: "Short snippets, simple descriptions, basic text"
     models:
-      primary: "tinyllama"
+      primary: "gemma3_1b"
       fallback: ["gemma3:4b", "phi3:3.8b"]
     cost: "low"
     speed: "very-fast"
@@ -93,7 +93,7 @@ analysis:
     name: "Quick Analysis (Tier 1)"
     description: "Pass/fail decisions, basic validation, quick checks"
     models:
-      primary: "tinyllama"
+      primary: "gemma3_1b"
       fallback: ["gemma3:4b"]
     cost: "low"
     speed: "very-fast"

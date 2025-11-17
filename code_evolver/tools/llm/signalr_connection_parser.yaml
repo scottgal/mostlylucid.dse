@@ -166,7 +166,7 @@ usage_notes: |
   ## Overview
 
   This LLM tool parses natural language requests into SignalR connection configuration.
-  It uses a general-tier model (not tinyllama) for better natural language understanding.
+  It uses a general-tier model (not gemma3_1b) for better natural language understanding.
 
   ## How It Works
 
@@ -215,7 +215,7 @@ usage_notes: |
 
   ## Model Choice
 
-  Uses `general` tier (not `veryfast`/tinyllama) because:
+  Uses `general` tier (not `veryfast`/gemma3_1b) because:
   - Better natural language understanding
   - More accurate URL extraction
   - Better keyword detection

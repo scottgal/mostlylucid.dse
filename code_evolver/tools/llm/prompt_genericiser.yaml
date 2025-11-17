@@ -3,7 +3,7 @@ type: "llm"
 description: "Converts specific prompts into generic, reusable tool descriptions. Prevents unnecessary specialization by identifying the underlying generic pattern."
 
 llm:
-  tier: "triage"  # Use fast model (tinyllama or haiku)
+  tier: "triage"  # Use fast model (gemma3_1b or haiku)
   temperature: 0.3
   max_tokens: 500
 

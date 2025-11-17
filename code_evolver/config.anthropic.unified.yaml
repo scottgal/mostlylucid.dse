@@ -69,9 +69,9 @@ llm:
       quality: "excellent"
       specialization: "embedding"
 
-    # Keep tinyllama for veryfast (local triage)
-    tinyllama:
-      name: "tinyllama"
+    # Keep gemma3_1b for veryfast (local triage)
+    gemma3_1b:
+      name: "gemma3_1b"
       backend: "ollama"
       context_window: 2048
       cost: "very-low"
@@ -96,7 +96,7 @@ llm:
     escalation: claude_sonnet  # Override: use sonnet for escalation
     general: claude_sonnet     # Override: use sonnet for general tasks
     fast: claude_haiku         # Override: use haiku for fast tasks
-    veryfast: tinyllama        # Keep local for very fast triage
+    veryfast: gemma3_1b        # Keep local for very fast triage
 
   # ==========================================================================
   # OPTIONAL: Role-specific overrides (if needed)
@@ -131,7 +131,7 @@ llm:
 # - Claude Opus (god): ~$15 per million input tokens
 # - Typical workflow: 10-50k tokens = $0.03-$0.75 per generation
 #
-# veryfast (tinyllama) remains free on local Ollama for triage/validation
+# veryfast (gemma3_1b) remains free on local Ollama for triage/validation
 # ==============================================================================
 
 # ==============================================================================

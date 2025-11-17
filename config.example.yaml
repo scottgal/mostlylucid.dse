@@ -38,7 +38,7 @@ llm:
       overseer: "llama3"           # Strategic planning
       generator: "qwen2.5-coder:14b"  # Code generation
       evaluator: "llama3"          # Code evaluation
-      triage: "tinyllama"          # Quick triage
+      triage: "gemma3_1b"          # Quick triage
       technical_writer: "mistral-nemo"  # Documentation
 
     # Multi-endpoint support for distributed inference
@@ -55,7 +55,7 @@ llm:
       llama3: 8192
       "qwen2.5-coder:14b": 131072
       "mistral-nemo": 128000
-      tinyllama: 2048
+      gemma3_1b: 2048
 
   # -------------------------------------------------------------------------
   # OpenAI Configuration
