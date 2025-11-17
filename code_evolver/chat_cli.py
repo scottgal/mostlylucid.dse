@@ -365,6 +365,19 @@ class ChatCLI:
             self._tools_manager = tools_manager
             # Completion message already shown by BackgroundToolsLoader spinner
 
+            # Initialize Fix Tools Manager for auto-fix system
+            try:
+                from src.fix_tools_manager import FixToolsManager
+                self._fix_tools_manager = FixToolsManager(
+                    rag_memory=self.rag,
+                    tools_manager=tools_manager,
+                    ollama_client=self.client
+                )
+                log_panel.log("OK Auto-fix library indexed")
+            except (ImportError, Exception) as e:
+                console.print(f"[dim yellow]Auto-fix system not available: {e}[/dim yellow]")
+                self._fix_tools_manager = None
+
             # Register model selector tool AFTER tools are ready (non-blocking)
             try:
                 from src.model_selector_tool import create_model_selector_tool
@@ -374,6 +387,7 @@ class ChatCLI:
                 pass  # Silent failure, not critical
 
         self._tools_loader.on_ready(on_tools_ready)
+        self._fix_tools_manager = None  # Will be set when tools ready
 
         # Initialize background scheduler for scheduled tasks
         # This runs in the background with low priority to avoid interfering with workflows
@@ -2231,6 +2245,11 @@ Look at the import statement in the tests:
 - If tests do: `from main import binary_search` → you MUST create `def binary_search(...)`
 - If tests do: `from main import add` → you MUST create `def add(...)`
 - If tests call specific functions, you MUST implement those exact functions with matching signatures
+
+ABSOLUTELY FORBIDDEN IN YOUR CODE (main.py):
+- DO NOT EVER include `from main import` statements - this creates circular imports!
+- The test file imports from main.py, NOT the other way around!
+- Only the TEST file should have `from main import` - NEVER in your actual code!
 
 DO NOT create a generic main() function - implement the SPECIFIC functions the tests expect!
 
@@ -4139,8 +4158,9 @@ Return valid Python test code only - nothing else."""
         available_tools: str = ""
     ) -> bool:
         """
-        Multi-stage adaptive escalation with logging injection:
+        Multi-stage adaptive escalation with AUTO-FIX system:
 
+        Stage 0 (FIRST): Try auto-fix from Fix Tools Library (RAG-based)
         Stage 1 (Attempts 1-2): Normal fixing with fast model
         Stage 2 (Attempts 3-4): Add debug logging, continue with fast model
         Stage 3 (Attempts 5-6): Continue with logging, escalate to powerful model
@@ -4164,6 +4184,47 @@ Return valid Python test code only - nothing else."""
         stdout_output = self.context.get('last_stdout', '')
         test_output = self.context.get('last_test_output', '')
         original_test = self.context.get('original_interface_test', '')
+
+        # STAGE 0: Try AUTO-FIX from Fix Tools Library (RAG-based)
+        if self._fix_tools_manager:
+            console.print("[cyan]Checking fix library for known solutions...[/cyan]")
+
+            try:
+                # Extract error type from error message
+                import re
+                error_type_match = re.match(r'(\w+Error|Exception)', error_output)
+                error_type = error_type_match.group(1) if error_type_match else "Unknown"
+
+                # Try auto-fix
+                fix_result = self._fix_tools_manager.auto_fix_code(
+                    error_message=error_output,
+                    error_type=error_type,
+                    code=code,
+                    filename="main.py"
+                )
+
+                if fix_result.get("fixed"):
+                    console.print(f"[green]✓ Auto-fix applied: {fix_result['fix_applied']}[/green]")
+                    console.print(f"[dim]{fix_result['message']}[/dim]")
+
+                    # Save fixed code
+                    fixed_code = fix_result["fixed_code"]
+                    self.runner.save_code(node_id, fixed_code)
+
+                    # Re-run tests
+                    console.print("[cyan]Re-running tests with fixed code...[/cyan]")
+                    if self._run_tests(node_id):
+                        console.print("[green]✓ Auto-fix successful! Tests pass.[/green]")
+                        return True
+                    else:
+                        console.print("[yellow]Auto-fix applied but tests still fail - continuing with manual repair[/yellow]")
+                else:
+                    console.print(f"[dim]{fix_result.get('message', 'No applicable fixes found')}[/dim]")
+
+            except Exception as e:
+                console.print(f"[dim yellow]Auto-fix check failed: {e}[/dim yellow]")
+        else:
+            console.print("[dim]Auto-fix system not yet available (tools still loading)[/dim]")
 
         # Track ALL attempts for god-level tool
         all_attempts = []
@@ -4226,8 +4287,42 @@ Since previous attempts failed, ADD comprehensive debug logging to help identify
             if stdout_output:
                 stdout_section = f"STDOUT: {stdout_output[:500]}"
 
+            # CRITICAL: Read the ACTUAL test file to see what functions are expected
+            test_file_content = ""
+            test_expectations = ""
+            try:
+                node_dir = self.runner.get_node_path(node_id).parent
+                test_file_path = node_dir / "test_main.py"
+
+                if test_file_path.exists():
+                    with open(test_file_path, 'r') as f:
+                        test_file_content = f.read()
+
+                    # Extract imports to see what's expected
+                    import re
+                    imports = re.findall(r'from main import (.+)', test_file_content)
+                    if imports:
+                        imported_items = [item.strip() for imp in imports for item in imp.split(',')]
+                        test_expectations = f"""
+CRITICAL - TEST FILE EXPECTS THESE FUNCTIONS/CLASSES TO EXIST IN main.py:
+{chr(10).join('  - ' + item for item in imported_items)}
+
+Your code MUST implement ALL of these, or the tests will fail with ImportError!
+"""
+            except Exception as e:
+                console.print(f"[dim yellow]Could not read test file: {e}[/dim yellow]")
+
             test_req_section = ""
-            if original_test:
+            if test_file_content:
+                test_req_section = f"""
+ACTUAL TEST FILE CONTENT (test_main.py):
+```python
+{test_file_content[:1500]}
+```
+
+{test_expectations}
+"""
+            elif original_test:
                 test_req_section = f"ORIGINAL TEST REQUIREMENTS:\n{original_test[:500]}"
 
             # Build comprehensive fix prompt with all context

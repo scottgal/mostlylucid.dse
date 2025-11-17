@@ -69,7 +69,10 @@
       "Bash(for i in {2..5})",
       "Bash(do echo \"{\"\"operation\"\": \"\"write\"\", \"\"buffer_id\"\": \"\"test_buffer\"\", \"\"data\"\": {\"\"item\"\": $i}, \"\"max_size\"\": 5}\")",
       "Bash(setx:*)",
-      "Bash(set PYNGUIN_DANGER_AWARE=1)"
+      "Bash(set PYNGUIN_DANGER_AWARE=1)",
+      "Bash(test:*)",
+      "Bash(=2.0.0 --quiet)",
+      "Bash(SESSION_SUMMARY.md)"
     ],
     "deny": [],
     "ask": []
