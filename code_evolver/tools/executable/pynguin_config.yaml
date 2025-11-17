@@ -1,0 +1,85 @@
+name: "Pynguin Test Generator"
+type: "executable"
+description: "Automatically generates unit tests using evolutionary algorithms. Windows-compatible configuration."
+
+executable:
+  command: "python"
+  args:
+    - "{tools_dir}/executable/pynguin_config.py"
+    - "{source_file}"
+  install_command: "pip install pynguin"
+
+parameters:
+  source_file:
+    type: "string"
+    description: "Path to Python module to generate tests for"
+    required: true
+
+  output_dir:
+    type: "string"
+    description: "Output directory for generated tests"
+    required: false
+
+  timeout_seconds:
+    type: "integer"
+    description: "Timeout in seconds"
+    default: 60
+
+  algorithm:
+    type: "string"
+    description: "Test generation algorithm"
+    default: "DYNAMOSA"
+    enum: ["DYNAMOSA", "MOSA", "MIO", "RANDOM", "WHOLE_SUITE"]
+
+  save_with_module:
+    type: "boolean"
+    description: "Save generated tests in same directory as module"
+    default: true
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether test generation succeeded"
+
+  tests_generated:
+    type: "integer"
+    description: "Number of test files generated"
+
+  output_dir:
+    type: "string"
+    description: "Path to output directory"
+
+  test_files:
+    type: "array"
+    description: "List of generated test file paths"
+
+features:
+  - "Automatic unit test generation"
+  - "Evolutionary algorithm-based"
+  - "Windows-compatible configuration"
+  - "Configurable timeout and algorithms"
+  - "Tests saved with module code"
+  - "Reproducible with seed parameter"
+
+requirements:
+  - "Python 3.9+"
+  - "May have compatibility issues on some Windows systems"
+  - "Requires pynguin package"
+
+notes:
+  - "Pynguin is experimental and may not work reliably on all systems"
+  - "On Windows, consider using alternative test generation methods if pynguin fails"
+  - "Generated tests should be reviewed and may require manual adjustments"
+
+tags:
+  - "testing"
+  - "test-generation"
+  - "pynguin"
+  - "automated"
+  - "windows"
+  - "python"
+
+version: "1.0.0"
+priority: 50
+supports_autofix: false
+category: "test-generation"

@@ -1,0 +1,61 @@
+name: "Autoflake Checker"
+type: "executable"
+description: "Removes unused imports and unused variables from Python code. Deterministic and fast cleanup tool."
+
+executable:
+  command: "python"
+  args:
+    - "{tools_dir}/executable/autoflake_checker.py"
+    - "{source_file}"
+  install_command: "pip install autoflake"
+
+parameters:
+  source_file:
+    type: "string"
+    description: "Path to Python source file to check"
+    required: true
+
+  auto_fix:
+    type: "boolean"
+    description: "Apply fixes in-place"
+    default: false
+
+  aggressive:
+    type: "boolean"
+    description: "Remove all unused imports (not just stdlib)"
+    default: false
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  changes_needed:
+    type: "boolean"
+    description: "Whether changes were needed/applied"
+
+  output:
+    type: "string"
+    description: "Detailed output or diff"
+
+features:
+  - "Remove unused imports (stdlib and third-party with --aggressive)"
+  - "Remove unused variables"
+  - "Remove duplicate dictionary keys"
+  - "Deterministic output"
+  - "Fast execution"
+  - "Safe transformations only"
+
+tags:
+  - "python"
+  - "cleanup"
+  - "imports"
+  - "static-analysis"
+  - "autoflake"
+  - "deterministic"
+  - "auto-fix"
+
+version: "1.0.0"
+priority: 130
+supports_autofix: true
+category: "code-cleanup"

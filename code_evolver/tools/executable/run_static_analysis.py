@@ -45,6 +45,7 @@ class ValidatorConfig:
 
 
 # All available validators (in priority order)
+# NOTE: Replaced flake8+isort with ruff, added autoflake, pyupgrade, mypy, and bandit
 VALIDATORS = [
     ValidatorConfig(
         name="syntax",
@@ -78,22 +79,48 @@ VALIDATORS = [
         supports_autofix=False,
         description="Checks stdin reading with json.load(sys.stdin)"
     ),
+    # Deterministic Python tools - Fast and reliable
     ValidatorConfig(
-        name="undefined_names",
-        script="flake8",  # External tool
-        category="imports",
-        priority=120,
-        supports_autofix=False,
-        description="Detects undefined variables and missing imports"
-    ),
-    ValidatorConfig(
-        name="import_order",
-        script="isort",  # External tool
-        category="imports",
-        priority=110,
+        name="ruff",
+        script="ruff_checker.py",
+        category="code-quality",
+        priority=135,
         supports_autofix=True,
-        description="Validates and fixes import organization"
+        description="Fast linter and formatter (replaces flake8+isort+more)"
     ),
+    ValidatorConfig(
+        name="autoflake",
+        script="autoflake_checker.py",
+        category="code-cleanup",
+        priority=130,
+        supports_autofix=True,
+        description="Removes unused imports and variables"
+    ),
+    ValidatorConfig(
+        name="pyupgrade",
+        script="pyupgrade_checker.py",
+        category="code-modernization",
+        priority=125,
+        supports_autofix=True,
+        description="Modernizes Python syntax for newer versions"
+    ),
+    ValidatorConfig(
+        name="mypy",
+        script="mypy_checker.py",
+        category="type-checking",
+        priority=115,
+        supports_autofix=False,
+        description="Static type checker that finds type errors"
+    ),
+    ValidatorConfig(
+        name="bandit",
+        script="bandit_checker.py",
+        category="security",
+        priority=105,
+        supports_autofix=False,
+        description="Security scanner for common vulnerabilities"
+    ),
+    # Legacy validators - kept for backwards compatibility
     ValidatorConfig(
         name="node_runtime_import",
         script="node_runtime_import_validator.py",
@@ -152,13 +179,17 @@ class StaticAnalysisRunner:
             cmd = ['python', str(self.tools_dir / validator.script), code_file]
             if auto_fix and validator.supports_autofix:
                 cmd.append('--fix')
-        elif validator.script == 'flake8':
-            cmd = ['flake8', '--select=F821,F401,F811,E999', '--format=pylint', code_file]
-        elif validator.script == 'isort':
-            if auto_fix:
-                cmd = ['isort', code_file]
-            else:
-                cmd = ['isort', '--check-only', '--diff', code_file]
+            # Special handling for specific tools
+            if validator.script == 'ruff_checker.py' and auto_fix:
+                cmd.append('--format')  # Also run formatting
+            elif validator.script == 'autoflake_checker.py' and auto_fix:
+                cmd.append('--aggressive')  # Remove all unused imports
+            elif validator.script == 'pyupgrade_checker.py':
+                cmd.append('--py38-plus')  # Target Python 3.8+
+            elif validator.script == 'mypy_checker.py':
+                cmd.append('--ignore-missing-imports')  # Ignore missing stubs
+            elif validator.script == 'bandit_checker.py':
+                cmd.append('--level=medium')  # Only medium+ severity
         else:
             return False, f"Unknown validator script: {validator.script}", 0
 
