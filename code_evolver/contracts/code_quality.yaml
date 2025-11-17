@@ -1,0 +1,74 @@
+# Code Quality Contract
+# General code quality requirements for maintainability
+
+contract_id: "code_quality"
+name: "Code Quality Standards"
+description: |
+  Contract enforcing general code quality standards:
+  - Function length limits
+  - Complexity limits
+  - Documentation requirements
+  - Type hints
+version: "1.0.0"
+tags:
+  - quality
+  - maintainability
+  - standards
+author: "Code Evolver System"
+created_at: "2025-01-17"
+
+rules:
+  # Rule 1: Maximum function length
+  - rule_id: "QUAL-001"
+    name: "Maximum Function Length"
+    description: "Functions should not exceed 50 lines before refactoring to a tool"
+    rule_type: "metric"
+    severity: "warning"
+    validator: "max_function_length"
+    max_value: 50
+    validator_config:
+      max_lines: 50
+    applies_to:
+      - "function"
+
+  # Rule 2: Cyclomatic complexity limit
+  - rule_id: "QUAL-002"
+    name: "Complexity Limit"
+    description: "Functions should not exceed cyclomatic complexity of 10"
+    rule_type: "metric"
+    severity: "warning"
+    validator: "cyclomatic_complexity"
+    max_value: 10
+    validator_config:
+      max_complexity: 10
+    applies_to:
+      - "function"
+
+  # Rule 3: Docstrings required
+  - rule_id: "QUAL-003"
+    name: "Docstrings Required"
+    description: "All public functions and classes must have docstrings"
+    rule_type: "documentation"
+    severity: "warning"
+    validator: "has_docstring"
+    validator_config:
+      require_module_docstring: true
+      skip_private: true
+    applies_to:
+      - "function"
+      - "class"
+      - "module"
+
+  # Rule 4: Type hints required
+  - rule_id: "QUAL-004"
+    name: "Type Hints Required"
+    description: "Public functions should have type hints for parameters and return values"
+    rule_type: "documentation"
+    severity: "info"
+    validator: "has_type_hints"
+    validator_config:
+      require_return_type: true
+      require_param_types: true
+      skip_private: true
+    applies_to:
+      - "function"

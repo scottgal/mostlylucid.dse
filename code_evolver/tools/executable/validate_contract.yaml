@@ -1,0 +1,76 @@
+name: "Contract Validator"
+type: "executable"
+description: |
+  Validates generated code against a specified contract.
+  Returns compliance report with violations and suggestions.
+
+  Use this tool after code generation to ensure the code meets
+  organizational standards for logging, structure, libraries, etc.
+
+executable:
+  command: "python"
+  args:
+    - "-c"
+    - |
+      import sys
+      import json
+      from pathlib import Path
+
+      # Add src to path
+      sys.path.insert(0, str(Path.cwd() / 'code_evolver'))
+
+      from src.code_contract import ContractLoader
+      from src.contract_validator import ContractValidator
+
+      def main():
+          import argparse
+          parser = argparse.ArgumentParser()
+          parser.add_argument('--contract', required=True, help='Contract ID or path to contract YAML')
+          parser.add_argument('--code-file', required=True, help='Path to Python file to validate')
+          parser.add_argument('--format', choices=['json', 'markdown', 'text'], default='text')
+          args = parser.parse_args()
+
+          # Load contract
+          if args.contract.endswith('.yaml'):
+              from src.code_contract import CodeContract
+              contract = CodeContract.from_yaml(args.contract)
+          else:
+              loader = ContractLoader(Path.cwd() / 'code_evolver' / 'contracts')
+              loader.load_all_contracts()
+              contract = loader.get_contract(args.contract)
+              if not contract:
+                  print(f"Contract not found: {args.contract}", file=sys.stderr)
+                  sys.exit(1)
+
+          # Load code
+          with open(args.code_file) as f:
+              code = f.read()
+
+          # Validate
+          validator = ContractValidator()
+          report = validator.validate(code, contract, args.code_file)
+
+          # Output
+          if args.format == 'json':
+              print(json.dumps(report.to_dict(), indent=2))
+          elif args.format == 'markdown':
+              print(report.to_markdown())
+          else:
+              print(report)
+              if report.violations:
+                  print("\nViolations:")
+                  for v in report.violations:
+                      print(f"\n{v}")
+
+          # Exit with error if not compliant
+          sys.exit(0 if report.is_compliant else 1)
+
+      if __name__ == '__main__':
+          main()
+  install_command: "pip install pyyaml"
+
+tags:
+  - validation
+  - contracts
+  - quality
+  - compliance
