@@ -1,0 +1,43 @@
+name: "Text to Markdown"
+type: "executable"
+description: "Converts plain text to well-formatted markdown with intelligent structure detection. Auto-detects headers, lists, code blocks, and paragraphs. Applies appropriate markdown formatting. Optional file output to secured 'output/' directory."
+
+priority: 85
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "long"
+
+executable:
+  command: "python"
+  args: ["/home/user/mostlylucid.dse/code_evolver/tools/executable/text_to_markdown.py"]
+
+input_schema:
+  text: "str - Plain text content to convert (required)"
+  auto_format: "bool - Apply automatic formatting (optional, default: true)"
+  preserve_linebreaks: "bool - Keep original line breaks (optional, default: false)"
+  detect_code: "bool - Detect and format code blocks (optional, default: true)"
+  detect_lists: "bool - Detect and format lists (optional, default: true)"
+  detect_headers: "bool - Detect and format headers (optional, default: true)"
+  output_file: "str - Optional output file path in output/ directory (must end in .md)"
+
+output_schema:
+  markdown: "str - Formatted markdown text"
+  file_path: "str - Path to output file (only if output_file provided)"
+  formatting_applied: "list[str] - List of formatting types applied (headers, lists, code_blocks)"
+  success: "bool - Whether conversion was successful"
+  message: "str - Success or error message"
+
+tags:
+  - markdown
+  - converter
+  - formatter
+  - text-processing
+  - auto-format
+  - intelligent
+
+examples:
+  - input: {"text": "INTRODUCTION\\n\\nThis is a paragraph with some important points:\\n\\n- First point\\n- Second point", "auto_format": true}
+    output: {"markdown": "# Introduction\\n\\nThis is a paragraph...\\n\\n- First point\\n- Second point\\n", "formatting_applied": ["headers", "lists"], "success": true}
+  - input: {"text": "def hello():\\n    print('world')", "detect_code": true, "output_file": "code_example.md"}
+    output: {"markdown": "```\\ndef hello():\\n    print('world')\\n```\\n", "file_path": "output/code_example.md", "success": true}

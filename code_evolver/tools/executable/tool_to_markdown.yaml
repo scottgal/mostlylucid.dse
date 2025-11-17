@@ -1,0 +1,40 @@
+name: "Tool to Markdown"
+type: "executable"
+description: "Generates comprehensive markdown documentation from tool definitions. Recursively follows and documents all referenced subtools. Reads from tools/index.json and outputs to secured 'output/' directory."
+
+priority: 80
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+executable:
+  command: "python"
+  args: ["/home/user/mostlylucid.dse/code_evolver/tools/executable/tool_to_markdown.py"]
+
+input_schema:
+  tool_id: "str - Tool identifier to document (required)"
+  output_file: "str - Relative path in output/ directory (required, must end in .md)"
+  include_subtools: "bool - Whether to recursively document subtools (optional, default: true)"
+  max_depth: "int - Maximum recursion depth for subtools (optional, default: 3)"
+
+output_schema:
+  file_path: "str - Absolute path to generated markdown file"
+  content_length: "int - Length of generated documentation in characters"
+  tools_documented: "list[str] - List of all tools included in documentation"
+  success: "bool - Whether documentation was generated successfully"
+  message: "str - Success or error message"
+
+tags:
+  - markdown
+  - documentation
+  - tools
+  - generator
+  - recursive
+  - export
+
+examples:
+  - input: {"tool_id": "basic_calculator", "output_file": "calculator_docs.md"}
+    output: {"file_path": "output/calculator_docs.md", "tools_documented": ["basic_calculator"], "success": true}
+  - input: {"tool_id": "workflow_runner", "output_file": "workflows/runner.md", "include_subtools": true, "max_depth": 2}
+    output: {"file_path": "output/workflows/runner.md", "tools_documented": ["workflow_runner", "subtool1", "subtool2"], "success": true}

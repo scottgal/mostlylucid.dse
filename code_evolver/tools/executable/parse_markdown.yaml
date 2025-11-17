@@ -1,0 +1,39 @@
+name: "Parse Markdown"
+type: "executable"
+description: "Parses markdown documents and returns structured JSON representation. Extracts headers, lists, code blocks, links, images, tables, blockquotes, and formatting elements. Supports both file paths and raw markdown text input."
+
+priority: 85
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+executable:
+  command: "python"
+  args: ["/home/user/mostlylucid.dse/code_evolver/tools/executable/parse_markdown.py"]
+
+input_schema:
+  source: "str - File path or markdown text content (required)"
+  source_type: "str - Either 'file' or 'text' (optional, default: 'text')"
+  include_raw_content: "bool - Include original markdown in output (optional, default: false)"
+
+output_schema:
+  structure: "dict - Structured representation with headers, code_blocks, lists, links, images, tables, blockquotes, formatting"
+  metadata: "dict - Document metadata (word count, line count, element counts)"
+  raw_content: "str - Original markdown (only if include_raw_content=true)"
+  success: "bool - Whether parsing was successful"
+  message: "str - Success or error message"
+
+tags:
+  - markdown
+  - parser
+  - json
+  - structure
+  - analysis
+  - extraction
+
+examples:
+  - input: {"source": "# Hello\n\nThis is **bold** text", "source_type": "text"}
+    output: {"structure": {"headers": [{"level": 1, "content": "Hello"}], "formatting": {"bold": ["bold"]}}, "success": true}
+  - input: {"source": "/path/to/document.md", "source_type": "file", "include_raw_content": false}
+    output: {"structure": {...}, "metadata": {"word_count": 500}, "success": true}
