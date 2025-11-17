@@ -1,0 +1,155 @@
+name: write_markdown_doc
+type: executable
+description: |
+  Generates well-formatted markdown documentation with optional style matching.
+  Uses tiered LLM selection for optimal quality/speed balance.
+
+  Features:
+  - Smart LLM tier selection (gemma2:2b for quick, llama3 for balanced, mistral-nemo for high-quality)
+  - Optional style guide matching (works with output from duplicate_style)
+  - Review and refinement capability for higher quality
+  - Proper markdown formatting with validation
+  - Configurable length (short ~500 words, medium ~1500 words, long ~3000 words)
+  - Security guardrails (enforces output only to 'output/' directory)
+
+  Security:
+  - All output paths are validated to be under output/ directory
+  - Cannot escape with ../ or absolute paths
+  - Only .md files allowed
+
+  Use cases:
+  - Generate documentation matching existing style
+  - Create technical articles and guides
+  - Write README files and tutorials
+  - Generate API documentation
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/write_markdown_doc.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - topic
+    - output_file
+  properties:
+    topic:
+      type: string
+      description: What to write about
+    output_file:
+      type: string
+      description: "Relative path for output file under output/ directory (e.g., 'docs/readme.md')"
+    style_guide:
+      type: string
+      description: Optional style guide to match (from duplicate_style skill)
+    outline:
+      type: string
+      description: Optional outline to follow
+    length:
+      type: string
+      enum: ["short", "medium", "long"]
+      description: "Target length: short (~500 words), medium (~1500 words), long (~3000 words)"
+      default: medium
+    quality_requirement:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: Quality requirement for LLM tier selection (0-1, default: 0.8)
+    review_and_refine:
+      type: boolean
+      description: Whether to review and refine the generated content (default: true)
+
+output_schema:
+  type: object
+  properties:
+    file_path:
+      type: string
+      description: Absolute path where file was written
+    content_length:
+      type: integer
+      description: Content length in characters
+    word_count:
+      type: integer
+      description: Approximate word count
+    validation:
+      type: object
+      description: Markdown validation results
+      properties:
+        valid:
+          type: boolean
+        issues:
+          type: array
+          items:
+            type: string
+        has_headers:
+          type: boolean
+        has_lists:
+          type: boolean
+        word_count:
+          type: integer
+    success:
+      type: boolean
+      description: Whether the operation succeeded
+    message:
+      type: string
+      description: Status message
+    error:
+      type: string
+      description: Error message if failed
+
+examples:
+  - description: Generate a technical guide
+    input:
+      topic: "Introduction to Python async/await"
+      output_file: "guides/python_async.md"
+      length: "medium"
+      quality_requirement: 0.8
+      review_and_refine: true
+    expected_output:
+      file_path: "output/guides/python_async.md"
+      word_count: 1500
+      success: true
+
+  - description: Generate styled documentation
+    input:
+      topic: "API Reference for User Management"
+      output_file: "api/user_management.md"
+      style_guide: "OVERVIEW: Technical documentation with clear examples..."
+      length: "long"
+      quality_requirement: 0.9
+    expected_output:
+      file_path: "output/api/user_management.md"
+      word_count: 3000
+      success: true
+
+  - description: Quick README generation
+    input:
+      topic: "Project README for CLI tool"
+      output_file: "README.md"
+      length: "short"
+      quality_requirement: 0.7
+      review_and_refine: false
+    expected_output:
+      file_path: "output/README.md"
+      word_count: 500
+      success: true
+
+tags:
+  - documentation
+  - markdown
+  - content-generation
+  - style-matching
+
+performance:
+  avg_time_seconds: 15
+  context_aware: true
+  scales_with: length
+
+security:
+  output_restrictions:
+    - "Output only to output/ directory"
+    - "No path traversal allowed"
+    - "Only .md files allowed"
