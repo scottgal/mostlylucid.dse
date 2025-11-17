@@ -124,7 +124,7 @@ def create_loki_manager(config_manager, scope="global"):
     except ImportError as e:
         import logging
         logger = logging.getLogger(__name__)
-        logger.warning(f"Loki requested but loki_manager not available: {e}")
+        logger.debug(f"Loki requested but loki_manager not available (optional): {e}")
         return None
     except Exception as e:
         import logging
@@ -183,7 +183,7 @@ def create_filesystem_manager(config_manager):
     except ImportError as e:
         import logging
         logger = logging.getLogger(__name__)
-        logger.warning(f"Filesystem requested but filesystem_manager not available: {e}")
+        logger.debug(f"Filesystem requested but filesystem_manager not available (optional): {e}")
         return None
     except Exception as e:
         import logging

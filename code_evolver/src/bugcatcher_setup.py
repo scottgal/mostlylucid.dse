@@ -50,7 +50,7 @@ def initialize_bugcatcher_from_config(config: Dict[str, Any]) -> Optional[object
         return bugcatcher
 
     except ImportError:
-        logger.warning("BugCatcher module not available")
+        logger.debug("BugCatcher module not available (optional)")
         return None
     except Exception as e:
         logger.error(f"Failed to initialize BugCatcher: {e}")

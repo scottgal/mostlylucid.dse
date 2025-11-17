@@ -917,7 +917,7 @@ Tags: {', '.join(tool.tags)}
                 logger.debug("No tools loaded from MCP servers")
 
         except ImportError as e:
-            logger.warning(f"MCP support not available: {e}")
+            logger.debug(f"MCP support not available (optional): {e}")
         except Exception as e:
             logger.error(f"Error loading MCP tools: {e}")
 

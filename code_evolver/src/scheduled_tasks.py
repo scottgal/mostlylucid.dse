@@ -486,7 +486,7 @@ class ScheduledTaskManager:
             - search_tasks("monitoring tasks", {"frequency": "every_5_minutes"})
         """
         if not self.rag:
-            logger.warning("RAG not available, falling back to simple search")
+            logger.debug("RAG not available (optional), falling back to simple search")
             return self._simple_search(query, filters)
 
         try:

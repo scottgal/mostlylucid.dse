@@ -507,7 +507,7 @@ Your workflow:"""
             - gpu_info: GPU information (if available)
         """
         if not PSUTIL_AVAILABLE:
-            logger.warning("psutil not available, assuming system is not busy")
+            logger.debug("psutil not available (optional), assuming system is not busy")
             return {
                 "cpu_percent": 0.0,
                 "memory_percent": 0.0,
