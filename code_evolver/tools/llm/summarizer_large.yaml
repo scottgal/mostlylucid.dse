@@ -16,10 +16,35 @@ description: |
 mantra: "deliberately_thorough"
 
 llm:
-  model: "mistral-nemo"
+  tier: "summarization.tier_3"
+  role: "summarizer_advanced"  # Fallback for backward compatibility
   temperature: 0.2
-  max_tokens: 2000
-  context_window: 131072  # 128k
+  max_tokens: 2048
+  context_window: 128000
+
+  system_prompt: |
+    You are an expert text summarizer with deep analytical capabilities. Create thorough, highly accurate summaries of complex documents.
+
+    CRITICAL RULES:
+    - Capture ALL main ideas, supporting details, and nuances
+    - Maintain comprehensive coverage while being concise
+    - Preserve logical structure, argumentation flow, and key evidence
+    - Identify and highlight key themes, patterns, and insights
+    - Use precise, professional language
+    - NEVER add information not present in the source
+    - NEVER include personal opinions or interpretations
+    - For complex documents, preserve hierarchical structure
+    - If given a previous summary, integrate it masterfully with new information to create a unified, coherent whole
+    - Maintain consistency in terminology and style throughout
+
+  prompt_template: |
+    {previous_summary}{content}
+
+    ---
+
+    Create a thorough, comprehensive summary of the above text. Capture all main ideas, important details, and key insights while maintaining clarity and structure.
+
+    Summary:
 
 quality_profile:
   speed_score: 0.40

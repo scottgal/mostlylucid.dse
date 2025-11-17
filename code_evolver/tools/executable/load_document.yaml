@@ -1,0 +1,91 @@
+name: "Load Document"
+type: "executable"
+description: "Loads a text document from disk and stores it in the document store for summarization workflows. Extracts metadata and validates content."
+tool_id: "load_document"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/load_document.py"]
+  timeout_ms: 10000
+  memory_limit_mb: 256
+
+# Input schema
+input_schema:
+  filepath:
+    type: "string"
+    description: "Path to the document file to load"
+    required: true
+
+  document_id:
+    type: "string"
+    description: "Optional unique ID for the document. If not provided, filename will be used."
+    required: false
+
+  encoding:
+    type: "string"
+    description: "File encoding (default: utf-8)"
+    required: false
+    default: "utf-8"
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    document_id:
+      type: "string"
+    filepath:
+      type: "string"
+    content:
+      type: "string"
+    metadata:
+      type: "object"
+      properties:
+        filename:
+          type: "string"
+        file_path:
+          type: "string"
+        size:
+          type: "integer"
+        format:
+          type: "string"
+        encoding:
+          type: "string"
+        loaded_at:
+          type: "string"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "file-io"
+  - "load"
+  - "document-loading"
+  - "summarization"
+  - "workflow"
+
+weight: 9.0
+priority: 85
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "pathlib"
+      builtin: true
+  tools:
+    - "load_from_disk"
+    - "document_store"
