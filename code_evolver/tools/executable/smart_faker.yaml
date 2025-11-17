@@ -1,0 +1,242 @@
+name: "Smart Faker"
+type: "executable"
+description: "Intelligent fake data generator that accepts plain English, code, JSON schemas, or any LLM-interpretable input. Supports multiple output formats including streaming, arrays, and CSV."
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/smart_faker.py"]
+  stdin_mode: true
+  timeout: 60
+
+input_schema:
+  prompt:
+    type: string
+    description: "Plain English description of data to generate, OR JSON schema, OR code snippet, OR JSON file content - anything describable"
+    required: true
+
+  count:
+    type: integer
+    description: "Number of items to generate (default: 1)"
+    required: false
+    default: 1
+
+  output_format:
+    type: string
+    description: "Output format: 'json' (default), 'csv', 'jsonl' (JSON Lines for streaming), or 'array'"
+    required: false
+    default: "json"
+    enum: ["json", "csv", "jsonl", "array"]
+
+  stream:
+    type: boolean
+    description: "If true, output items one at a time (for large datasets). Only works with jsonl format."
+    required: false
+    default: false
+
+  seed:
+    type: integer
+    description: "Random seed for reproducible data generation"
+    required: false
+
+  llm_model:
+    type: string
+    description: "LLM model to use for interpretation (default: gemma2:2b)"
+    required: false
+    default: "gemma2:2b"
+
+  additional_context:
+    type: string
+    description: "Additional context or constraints for data generation"
+    required: false
+    default: ""
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether generation succeeded"
+    data:
+      description: "Generated data in requested format"
+    format:
+      type: string
+      description: "Output format used"
+    count:
+      type: integer
+      description: "Number of items generated"
+    schema:
+      type: object
+      description: "Inferred schema used for generation"
+    error:
+      type: string
+      description: "Error message if failed"
+
+examples:
+  - description: "Generate user data from plain English"
+    input:
+      prompt: "I need user data with name, email, age, and subscription status"
+      count: 3
+      output_format: "json"
+    output:
+      success: true
+      format: "json"
+      count: 3
+      data:
+        - name: "Sarah Johnson"
+          email: "sarah.johnson@example.com"
+          age: 28
+          subscription_status: "active"
+        - name: "Michael Chen"
+          email: "michael.chen@example.com"
+          age: 35
+          subscription_status: "active"
+        - name: "Emma Davis"
+          email: "emma.davis@example.com"
+          age: 42
+          subscription_status: "inactive"
+
+  - description: "Generate from JSON schema"
+    input:
+      prompt: |
+        {
+          "type": "object",
+          "properties": {
+            "order_id": {"type": "string"},
+            "customer": {"type": "string"},
+            "total": {"type": "number"},
+            "items": {"type": "array"}
+          }
+        }
+      count: 2
+      output_format: "json"
+    output:
+      success: true
+      data:
+        - order_id: "ORD-2024-001"
+          customer: "John Doe"
+          total: 125.50
+          items: ["Widget A", "Gadget B"]
+
+  - description: "Generate from code snippet"
+    input:
+      prompt: |
+        class Product:
+            def __init__(self, sku, name, price, stock):
+                self.sku = sku
+                self.name = name
+                self.price = price
+                self.stock = stock
+      count: 5
+      output_format: "csv"
+    output:
+      success: true
+      format: "csv"
+      data: |
+        sku,name,price,stock
+        SKU-001,Laptop,999.99,15
+        SKU-002,Mouse,24.99,50
+        SKU-003,Keyboard,79.99,30
+        SKU-004,Monitor,299.99,12
+        SKU-005,Webcam,89.99,25
+
+  - description: "Generate streaming data"
+    input:
+      prompt: "IoT sensor readings with timestamp, sensor_id, temperature, humidity"
+      count: 100
+      output_format: "jsonl"
+      stream: true
+    output:
+      success: true
+      format: "jsonl"
+      data: |
+        {"timestamp": "2024-01-15T10:00:00Z", "sensor_id": "SENS-001", "temperature": 22.5, "humidity": 45}
+        {"timestamp": "2024-01-15T10:00:01Z", "sensor_id": "SENS-002", "temperature": 23.1, "humidity": 48}
+        ...
+
+  - description: "Generate from pasted JSON"
+    input:
+      prompt: |
+        Here's an example of the data I need:
+        {
+          "transaction_id": "TXN-123",
+          "amount": 50.00,
+          "currency": "USD",
+          "status": "completed",
+          "timestamp": "2024-01-15T10:30:00Z"
+        }
+      count: 3
+      additional_context: "For a payment processing system"
+
+tags: ["testing", "data-generation", "faker", "llm", "flexible", "smart", "csv", "streaming"]
+cost_tier: "low"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 80
+
+usage_notes: |
+  ## Smart Faker - Intelligent Data Generation
+
+  This tool uses LLM interpretation to understand what data you need, then efficiently generates it.
+
+  ### Input Types Supported:
+  - **Plain English**: "I need customer data with name, email, and phone"
+  - **JSON Schema**: Full JSON Schema specification
+  - **Code Snippets**: Python classes, TypeScript interfaces, etc.
+  - **Example JSON**: Paste example data and it will generate similar items
+  - **Mixed**: Any combination of the above
+
+  ### Output Formats:
+  - **json**: Standard JSON array (default)
+  - **csv**: Comma-separated values with headers
+  - **jsonl**: JSON Lines (one object per line) - great for streaming
+  - **array**: Python list notation
+
+  ### Use Cases:
+  1. **API Testing**: Generate mock responses
+  2. **Database Seeding**: Create test data for development
+  3. **Load Testing**: Generate large datasets
+  4. **Prototyping**: Quick sample data for demos
+  5. **Data Science**: Create training/test datasets
+
+  ### Example Usage:
+
+  ```python
+  from node_runtime import NodeRuntime
+  import json
+
+  runtime = NodeRuntime()
+
+  # Plain English
+  result = runtime.call_tool("smart_faker",
+      prompt="Generate employee records with name, department, salary, hire_date",
+      count=10,
+      output_format="csv"
+  )
+
+  # From code
+  result = runtime.call_tool("smart_faker",
+      prompt='''
+      interface User {
+          id: number;
+          username: string;
+          email: string;
+          isActive: boolean;
+      }
+      ''',
+      count=5
+  )
+
+  # Streaming large datasets
+  result = runtime.call_tool("smart_faker",
+      prompt="IoT temperature sensor readings",
+      count=10000,
+      output_format="jsonl",
+      stream=True
+  )
+  ```
+
+  ### Performance:
+  - LLM interprets the prompt ONCE to create a schema
+  - Faker library generates data efficiently
+  - Can generate thousands of records per second
+  - Streaming mode for memory efficiency with large datasets
