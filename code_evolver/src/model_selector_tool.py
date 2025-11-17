@@ -384,6 +384,115 @@ class ModelSelectorTool:
             f"Best for: {', '.join(info['best_for'])}"
         )
 
+    def query_models(
+        self,
+        query: str,
+        filter_by: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Query available models conversationally.
+
+        Args:
+            query: Natural language query like "what fast summary models do we have"
+            filter_by: Optional filters like {"speed": "fast", "cost": "free"}
+
+        Returns:
+            List of matching models with metadata
+
+        Examples:
+            >>> selector.query_models("what fast code models do we have")
+            >>> selector.query_models("show me free models with large context")
+            >>> selector.query_models("which models are best for summarization")
+        """
+        query_lower = query.lower()
+
+        # Parse query for filters
+        auto_filters = {}
+
+        # Speed keywords
+        if any(kw in query_lower for kw in ["fast", "quick", "rapid"]):
+            auto_filters["speed"] = ["fast", "very-fast"]
+        elif any(kw in query_lower for kw in ["slow", "thorough", "powerful"]):
+            auto_filters["speed"] = ["slow", "medium"]
+
+        # Quality keywords
+        if any(kw in query_lower for kw in ["best", "high quality", "excellent"]):
+            auto_filters["quality"] = ["excellent"]
+
+        # Cost keywords
+        if any(kw in query_lower for kw in ["free", "cheap", "low cost", "local"]):
+            auto_filters["cost"] = ["free"]
+        elif any(kw in query_lower for kw in ["expensive", "premium", "cloud"]):
+            auto_filters["cost"] = ["high", "very-high", "medium"]
+
+        # Task keywords
+        if any(kw in query_lower for kw in ["code", "coding", "programming"]):
+            auto_filters["best_for_contains"] = "code"
+        elif any(kw in query_lower for kw in ["summary", "summarize", "summarization"]):
+            auto_filters["task_type"] = "summary"
+        elif any(kw in query_lower for kw in ["content", "writing", "creative"]):
+            auto_filters["best_for_contains"] = "content"
+
+        # Context window keywords
+        if any(kw in query_lower for kw in ["large context", "long context", "big context"]):
+            auto_filters["min_context_window"] = 50000
+
+        # Merge with explicit filters
+        if filter_by:
+            auto_filters.update(filter_by)
+
+        # Filter models
+        matching = []
+        for backend_model_id, info in self.backends.items():
+            match = True
+
+            # Check each filter
+            for key, values in auto_filters.items():
+                if key == "best_for_contains":
+                    # Special case: check if any best_for item contains the value
+                    if not any(values in bf for bf in info.get("best_for", [])):
+                        match = False
+                        break
+                elif key == "min_context_window":
+                    # Special case: minimum context window
+                    if info.get("context_window", 0) < values:
+                        match = False
+                        break
+                elif key == "task_type":
+                    # Special case: check best_for list
+                    if not any(values in bf for bf in info.get("best_for", [])):
+                        match = False
+                        break
+                else:
+                    # Standard filter
+                    model_value = info.get(key)
+                    if model_value:
+                        if isinstance(values, list):
+                            if model_value not in values:
+                                match = False
+                                break
+                        else:
+                            if model_value != values:
+                                match = False
+                                break
+
+            if match:
+                matching.append({
+                    "backend_model_id": backend_model_id,
+                    **info
+                })
+
+        # Sort by quality and speed
+        matching.sort(
+            key=lambda m: (
+                {"excellent": 3, "good": 2, "fair": 1}.get(m.get("quality", "good"), 2),
+                {"very-fast": 4, "fast": 3, "medium": 2, "slow": 1}.get(m.get("speed", "medium"), 2)
+            ),
+            reverse=True
+        )
+
+        return matching
+
     def get_client_for_selection(self, selection: Dict[str, Any]):
         """
         Create an LLM client for a model selection.
@@ -443,6 +552,14 @@ def create_model_selector_tool(config_manager, tools_manager):
             "top_k": {
                 "type": "number",
                 "description": "Number of recommendations to return (default: 3)"
+            },
+            "query": {
+                "type": "string",
+                "description": "Conversational query like 'what fast summary models do we have'"
+            },
+            "filter_by": {
+                "type": "object",
+                "description": "Optional filters for query_models"
             }
         },
         metadata={
