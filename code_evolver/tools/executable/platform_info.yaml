@@ -1,0 +1,224 @@
+name: "Platform Information"
+type: "executable"
+description: "Gathers comprehensive information about the underlying platform including OS, CPU, GPU, memory, disk, processes, and network. Enables decision-making based on platform characteristics like 'when running with low memory' or 'when running on Windows'. Supports multiple detail levels from basic to full."
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/platform_info.py"]
+  stdin_mode: true
+  timeout: 10
+  install_command: "pip install psutil pynvml GPUtil"
+
+input_schema:
+  detail_level:
+    type: "string"
+    description: "Level of detail to gather. Options: 'basic' (platform and minimal info), 'standard' (+ CPU, memory, disk, GPU), 'detailed' (+ usage stats), 'full' (everything including processes and network)"
+    required: false
+    default: "standard"
+    enum: ["basic", "standard", "detailed", "full"]
+
+  include_processes:
+    type: "boolean"
+    description: "Include information about running processes (top 10 by CPU and memory)"
+    required: false
+    default: false
+
+  include_network:
+    type: "boolean"
+    description: "Include network interface information"
+    required: false
+    default: false
+
+output_schema:
+  type: "object"
+  properties:
+    timestamp:
+      type: "string"
+      description: "ISO timestamp when information was gathered"
+    detail_level:
+      type: "string"
+      description: "The detail level that was used"
+    platform:
+      type: "object"
+      description: "Basic platform information (OS, architecture, hostname, etc.)"
+    cpu:
+      type: "object"
+      description: "CPU information (cores, frequency, usage)"
+    memory:
+      type: "object"
+      description: "Memory information (total, available, used, swap)"
+    gpu:
+      type: "object"
+      description: "GPU information (devices, memory, utilization)"
+    disk:
+      type: "object"
+      description: "Disk information (partitions, usage, I/O stats)"
+    processes:
+      type: "object"
+      description: "Running processes information (if requested)"
+    network:
+      type: "object"
+      description: "Network interface information (if requested)"
+    summary:
+      type: "object"
+      description: "Summary for decision making (platform_type, memory_status, has_gpu, etc.)"
+
+tags: ["platform", "system", "info", "monitoring", "cpu", "gpu", "memory", "diagnostic", "conditional"]
+cost: "free"
+speed_tier: "very-fast"
+priority: 75
+
+examples:
+  - description: "Get basic platform information"
+    input:
+      detail_level: "basic"
+    output:
+      timestamp: "2024-01-15T10:30:00Z"
+      detail_level: "basic"
+      platform:
+        platform: "Linux"
+        platform_release: "5.15.0"
+        architecture: "x86_64"
+        hostname: "dev-server"
+        processor: "x86_64"
+        python_version: "3.10.12"
+      cpu:
+        cores: 8
+      memory:
+        total_gb: 16.0
+        available_gb: 8.5
+        usage_percent: 46.88
+      summary:
+        platform_type: "Linux"
+        is_windows: false
+        is_linux: true
+        is_macos: false
+        memory_status: "low"
+        low_memory: false
+        cpu_cores: 8
+        low_cpu_cores: false
+
+  - description: "Get standard platform information (default)"
+    input:
+      detail_level: "standard"
+    conversational_use: |
+      User: "What platform are we running on?"
+
+      Assistant uses this tool with detail_level="basic"
+
+      Assistant: "We're running on Linux (Ubuntu) on an x86_64 architecture with 8 CPU cores and 16GB of memory. Currently, memory usage is at 47% (8.5GB available)."
+
+  - description: "Check if running on Windows with low memory"
+    input:
+      detail_level: "standard"
+    conversational_use: |
+      User: "Can you optimize this code for the current platform?"
+
+      Assistant uses this tool with detail_level="standard"
+
+      Result shows: is_windows=true, memory_status="high", low_memory=true
+
+      Assistant: "I notice we're running on Windows with high memory usage (78% used, only 3.5GB available). I'll optimize the code to use memory-efficient data structures and implement streaming where possible."
+
+  - description: "Get detailed system info including GPU"
+    input:
+      detail_level: "detailed"
+    output_excerpt:
+      gpu:
+        available: true
+        vendor: "NVIDIA"
+        devices:
+          - index: 0
+            name: "NVIDIA GeForce RTX 3080"
+            memory_total_gb: 10.0
+            memory_used_gb: 2.3
+            memory_free_gb: 7.7
+            memory_usage_percent: 23.0
+            gpu_utilization_percent: 15
+            temperature_c: 45
+      summary:
+        has_gpu: true
+        gpu_count: 1
+    conversational_use: |
+      User: "Should I use GPU acceleration for this task?"
+
+      Assistant uses this tool with detail_level="detailed"
+
+      Assistant: "Yes, you have an NVIDIA GeForce RTX 3080 with 10GB of VRAM available (7.7GB free). The GPU is currently at low utilization (15%), so it's a great time to use GPU acceleration for your task."
+
+  - description: "Full system diagnostic with processes"
+    input:
+      detail_level: "full"
+    conversational_use: |
+      User: "The system seems slow, can you check what's going on?"
+
+      Assistant uses this tool with detail_level="full" (includes processes)
+
+      Result shows high CPU usage with top process using 85% CPU
+
+      Assistant: "I found the issue. Your system is running with 92% CPU usage, primarily due to a process called 'video_encoder' using 85% CPU. Memory usage is also high at 76%. Would you like me to help optimize the video encoding settings or suggest running it at a lower priority?"
+
+  - description: "Platform-aware decision making"
+    conversational_use: |
+      User: "Install the dependencies for this project"
+
+      Assistant uses this tool with detail_level="basic"
+
+      Result: is_windows=true
+
+      Assistant: "I see you're on Windows. I'll use pip install with the --user flag to avoid permission issues, and I'll make sure to install the Windows-specific dependencies from requirements-windows.txt."
+
+  - description: "Memory-aware optimization"
+    conversational_use: |
+      User: "Process this large dataset"
+
+      Assistant uses this tool with detail_level="standard"
+
+      Result: memory_status="high", available_gb=2.1, total_gb=8.0
+
+      Assistant: "I notice you only have 2.1GB of available memory out of 8GB total (high usage). Instead of loading the entire dataset into memory, I'll process it in chunks of 100MB each to avoid memory issues."
+
+  - description: "GPU-aware task allocation"
+    conversational_use: |
+      User: "Train this machine learning model"
+
+      Assistant uses this tool with detail_level="detailed"
+
+      Result: has_gpu=false
+
+      Assistant: "I don't detect any GPU on this system. I'll configure the training to use CPU-only mode and reduce the batch size to 32 for better CPU performance. Note that training will be slower than with a GPU."
+
+usage_notes: |
+  This tool is particularly useful for:
+
+  1. **Conditional Logic**: Make decisions based on platform
+     - "if running on Windows, use backslashes in paths"
+     - "if low memory, use streaming instead of loading all data"
+     - "if GPU available, use GPU acceleration"
+
+  2. **Optimization**: Adapt behavior to system resources
+     - Adjust batch sizes based on available memory
+     - Choose algorithms based on CPU core count
+     - Enable/disable features based on available resources
+
+  3. **Diagnostics**: Troubleshoot performance issues
+     - Identify memory bottlenecks
+     - Find CPU-intensive processes
+     - Check GPU utilization
+
+  4. **Platform-Specific Instructions**:
+     - Generate OS-specific commands
+     - Use platform-appropriate file paths
+     - Install platform-specific dependencies
+
+  Detail Levels:
+  - **basic**: Fast, minimal info (platform, cores, memory %). Use for quick checks.
+  - **standard**: Default, includes CPU, memory, disk, GPU. Good for most decisions.
+  - **detailed**: Adds usage stats, per-core CPU, swap, I/O. Use for optimization.
+  - **full**: Everything including top processes and network. Use for diagnostics.
+
+  Performance: Very fast (< 1 second for basic/standard, < 2 seconds for full)
+
+  Dependencies: Works without dependencies but install psutil for full features:
+  - psutil: Required for CPU, memory, disk, process, network info
+  - pynvml or GPUtil: Optional, for NVIDIA GPU information
