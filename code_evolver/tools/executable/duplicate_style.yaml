@@ -1,0 +1,105 @@
+name: duplicate_style
+type: executable
+description: |
+  Analyzes writing style from a directory of content and creates a comprehensive
+  style guide. Uses tiered summarization to efficiently process large amounts of content.
+
+  Features:
+  - Recursive directory scanning with smart file filtering
+  - Tiered LLM selection based on content size (gemma2:2b, llama3, mistral-nemo)
+  - Context-aware chunking and progressive summarization
+  - Incremental style analysis that builds understanding across files
+  - Optional review and refinement for higher quality output
+
+  Use cases:
+  - Extract writing style from documentation to replicate in new docs
+  - Analyze code comment style for consistency
+  - Create style guides from existing content
+  - Understand voice and tone patterns
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/duplicate_style.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - directory
+  properties:
+    directory:
+      type: string
+      description: Path to directory containing content to analyze
+    file_patterns:
+      type: array
+      items:
+        type: string
+      description: "File patterns to match (e.g., ['*.md', '*.txt']). Default: text and code files"
+    max_files:
+      type: integer
+      description: Maximum number of files to analyze (optional)
+    quality_requirement:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: Quality requirement for LLM tier selection (0-1, default: 0.8)
+    review_and_refine:
+      type: boolean
+      description: Whether to review and refine the style guide (default: false)
+
+output_schema:
+  type: object
+  properties:
+    style_guide:
+      type: string
+      description: Comprehensive style guide extracted from content
+    files_analyzed:
+      type: integer
+      description: Number of files successfully analyzed
+    total_content_length:
+      type: integer
+      description: Total content length in characters
+    success:
+      type: boolean
+      description: Whether the operation succeeded
+    message:
+      type: string
+      description: Status message
+    error:
+      type: string
+      description: Error message if failed
+
+examples:
+  - description: Analyze markdown documentation
+    input:
+      directory: "/path/to/docs"
+      file_patterns: ["*.md"]
+      quality_requirement: 0.8
+    expected_output:
+      style_guide: "OVERVIEW: Technical documentation with clear, concise explanations..."
+      files_analyzed: 25
+      success: true
+
+  - description: Analyze Python code comments
+    input:
+      directory: "/path/to/project/src"
+      file_patterns: ["*.py"]
+      max_files: 50
+      review_and_refine: true
+    expected_output:
+      style_guide: "OVERVIEW: Docstring style follows Google format..."
+      files_analyzed: 50
+      success: true
+
+tags:
+  - style-analysis
+  - documentation
+  - content-analysis
+  - summarization
+
+performance:
+  avg_time_seconds: 30
+  context_aware: true
+  scales_with: content_size
