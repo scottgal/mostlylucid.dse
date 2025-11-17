@@ -22,7 +22,9 @@ def store_code_fix_pattern(
     error_type: str = "unknown",
     language: str = "python",
     context: Dict[str, Any] = None,
-    debug_info: Dict[str, Any] = None
+    debug_info: Dict[str, Any] = None,
+    scope: str = "global",
+    tool_id: str = ""
 ) -> Dict[str, Any]:
     """
     Store a code fix pattern for future reuse
@@ -39,6 +41,8 @@ def store_code_fix_pattern(
         language: Programming language
         context: Additional context (framework, tool_id, etc.)
         debug_info: Full debug information (stack trace, variables, etc.)
+        scope: Data store scope - "tool", "tool_subttools", "hierarchy", or "global"
+        tool_id: Current tool identifier (required for scoped storage)
 
     Returns:
         Result with pattern ID and storage confirmation
@@ -140,6 +144,19 @@ def store_code_fix_pattern(
             *error_keywords
         ]
 
+        # Add scope tags for filtering
+        if scope != "global" and tool_id:
+            if scope == "tool":
+                # Pattern only accessible by this specific tool
+                tags.append(f"scope:tool:{tool_id}")
+            elif scope == "tool_subttools":
+                # Pattern accessible by this tool and its sub-tools
+                tags.append(f"scope:hierarchy:{tool_id}")
+            elif scope == "hierarchy":
+                # Pattern accessible by all tools in hierarchy
+                tags.append(f"scope:hierarchy:{tool_id}")
+        # else: global scope - no scope tag (accessible by all)
+
         if context:
             if 'tool_id' in context:
                 tags.append(f"tool:{context['tool_id']}")
@@ -223,6 +240,8 @@ def main():
         language = input_data.get('language', 'python')
         context = input_data.get('context', {})
         debug_info = input_data.get('debug_info', {})
+        scope = input_data.get('scope', 'global')
+        tool_id = input_data.get('tool_id', '')
 
         if not error_message or not broken_code or not fixed_code:
             print(json.dumps({
@@ -240,7 +259,9 @@ def main():
             error_type=error_type,
             language=language,
             context=context,
-            debug_info=debug_info
+            debug_info=debug_info,
+            scope=scope,
+            tool_id=tool_id
         )
 
         # Output result
