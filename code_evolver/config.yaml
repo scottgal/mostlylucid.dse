@@ -483,3 +483,39 @@ build:
     create_desktop_file: true
   macos:
     bundle_identifier: "com.codeevolver.app"
+
+# ==============================================================================
+# GIT & GITHUB CONFIGURATION
+# ==============================================================================
+# Credentials for Git and GitHub operations
+# Use environment variables for sensitive data
+git:
+  # GitHub configuration
+  github:
+    username: "${GITHUB_USERNAME}"  # Or set directly: "your-username"
+    token: "${GITHUB_TOKEN}"        # Personal access token with repo permissions
+
+  # GitLab configuration (if needed)
+  gitlab:
+    username: "${GITLAB_USERNAME}"
+    token: "${GITLAB_TOKEN}"
+
+  # Custom credential patterns
+  # Pattern-based matching for different Git hosts
+  credentials:
+    - pattern: "github.com"
+      username: "${GITHUB_USERNAME}"
+      token: "${GITHUB_TOKEN}"
+    - pattern: "gitlab.com"
+      username: "${GITLAB_USERNAME}"
+      token: "${GITLAB_TOKEN}"
+    # Add more patterns as needed:
+    # - pattern: "bitbucket.org"
+    #   username: "${BITBUCKET_USERNAME}"
+    #   token: "${BITBUCKET_TOKEN}"
+
+  # Git tool settings
+  tool_settings:
+    safe_mode: true                        # Enable safety checks
+    require_confirmation_for_destructive: true  # Confirm destructive operations
+    max_diff_size_kb: 500                  # Maximum diff size to display

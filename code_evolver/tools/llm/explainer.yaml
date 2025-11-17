@@ -1,0 +1,274 @@
+name: "Explainer"
+type: "llm"
+description: "Fast AI explainer tool that generates quick, concise descriptions of what's happening in workflows, tools, and system stages. Uses a 1B-class LLM for instant responses. Stage-aware and context-sensitive. Perfect for real-time explanations during tool generation and workflow execution."
+
+llm:
+  tier: "veryfast"  # Uses 1B model for speed
+  role: "code"      # Code-specialized model
+  system_prompt: |
+    You are a concise technical explainer for a code evolution system.
+
+    Your role:
+    - Explain what's happening in workflows, tools, and system stages
+    - Be EXTREMELY concise (1-3 sentences max)
+    - Focus on the "what" and "why", not implementation details
+    - Use clear, simple language
+    - Be stage-aware (understand context: planning, executing, testing, etc.)
+
+    Guidelines:
+    - **Brevity is critical** - No fluff, just facts
+    - **Action-oriented** - "Generating code...", "Testing implementation...", etc.
+    - **Context-aware** - Reference the stage or phase when relevant
+    - **Technical but accessible** - Use terms developers understand
+
+    Examples:
+    - "Generating test cases using pytest framework to validate the calculator function."
+    - "Analyzing code complexity with radon to identify optimization opportunities."
+    - "Executing workflow step 3/5: Deploying to staging environment."
+
+  prompt_template: |
+    Explain what's happening:
+
+    {query}
+
+    {% if context %}
+    Context: {{context}}
+    {% endif %}
+
+    {% if stage %}
+    Current Stage: {{stage}}
+    {% endif %}
+
+    Provide a concise 1-2 sentence explanation focusing on what's happening and why.
+
+input_schema:
+  query:
+    type: string
+    description: "What to explain (e.g., 'what is this tool doing?', 'explain this workflow step')"
+    required: true
+
+  context:
+    type: string
+    description: "Additional context (code, tool name, workflow state, etc.)"
+    required: false
+
+  stage:
+    type: string
+    description: "Current stage/phase (e.g., 'planning', 'execution', 'testing', 'optimization')"
+    required: false
+    enum: ["planning", "execution", "testing", "validation", "optimization", "deployment", "monitoring"]
+
+output_schema:
+  type: object
+  properties:
+    explanation:
+      type: string
+      description: "Concise explanation (1-3 sentences)"
+    stage:
+      type: string
+      description: "Stage this explanation relates to"
+    confidence:
+      type: string
+      description: "Confidence level (high/medium/low)"
+
+cost_tier: "very-low"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+
+tags: ["explanation", "documentation", "help", "describe", "clarify", "stage-aware", "workflow", "real-time"]
+
+examples:
+  - description: "Explain tool generation step"
+    input:
+      query: "What is the system doing when generating a new tool?"
+      stage: "execution"
+    output:
+      explanation: "The system is analyzing requirements and generating Python code that implements the requested tool functionality. This includes input validation, core logic, and error handling."
+      stage: "execution"
+      confidence: "high"
+
+  - description: "Explain workflow stage"
+    input:
+      query: "Why is the system running tests?"
+      context: "Tool: pytest_runner"
+      stage: "testing"
+    output:
+      explanation: "Running pytest to validate that the generated code works correctly and meets the specified requirements. This ensures quality before deployment."
+      stage: "testing"
+      confidence: "high"
+
+  - description: "Explain optimization process"
+    input:
+      query: "What happens during code optimization?"
+      stage: "optimization"
+    output:
+      explanation: "The system analyzes execution metrics and code complexity to identify performance bottlenecks, then generates improved versions of slow or inefficient code."
+      stage: "optimization"
+      confidence: "high"
+
+usage_notes: |
+  ## Explainer Tool - Fast AI Explanations
+
+  This tool provides real-time, concise explanations of what's happening in the
+  system. Perfect for:
+
+  - Understanding workflow stages
+  - Documenting tool generation
+  - Clarifying system behavior
+  - Providing context during execution
+
+  ## Features
+
+  - [OK] **Ultra-fast** (1B LLM, <100ms response)
+  - [OK] **Concise** (1-3 sentences max)
+  - [OK] **Stage-aware** (understands workflow phases)
+  - [OK] **Context-sensitive** (uses provided context)
+  - [OK] **Technical but clear** (developer-friendly language)
+
+  ## Usage Examples
+
+  ### Example 1: Explain Workflow Step
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("explainer", json.dumps({
+      "query": "What is happening in this step?",
+      "context": "Running black_formatter on generated code",
+      "stage": "execution"
+  }))
+
+  data = json.loads(result)
+  print(data['explanation'])
+  # Output: "Formatting Python code with Black to ensure consistent style and readability across the codebase."
+  ```
+
+  ### Example 2: Explain Tool Purpose
+
+  ```python
+  result = call_tool("explainer", json.dumps({
+      "query": "What does the git tool do?",
+      "context": "Tool: git, Action: status"
+  }))
+
+  data = json.loads(result)
+  print(data['explanation'])
+  # Output: "Checking the current state of the git repository to identify modified, staged, and untracked files."
+  ```
+
+  ### Example 3: Explain Stage Transition
+
+  ```python
+  result = call_tool("explainer", json.dumps({
+      "query": "Why did we move from testing to optimization?",
+      "context": "Tests passed but execution time > 5s",
+      "stage": "optimization"
+  }))
+
+  data = json.loads(result)
+  print(data['explanation'])
+  # Output: "Tests validated correctness but revealed performance issues. Now optimizing to reduce execution time below acceptable thresholds."
+  ```
+
+  ## Use Cases
+
+  ### During Tool Generation
+
+  ```python
+  # Explain what's being generated
+  explanation = call_tool("explainer", json.dumps({
+      "query": "What is being generated?",
+      "context": f"Tool: {tool_name}, Type: executable",
+      "stage": "execution"
+  }))
+
+  print(f"[INFO] {json.loads(explanation)['explanation']}")
+  ```
+
+  ### During Workflow Execution
+
+  ```python
+  # Explain current workflow step
+  for step in workflow_steps:
+      explanation = call_tool("explainer", json.dumps({
+          "query": f"What is step '{step['name']}' doing?",
+          "context": step['description'],
+          "stage": step['stage']
+      }))
+
+      print(f"[{step['name']}] {json.loads(explanation)['explanation']}")
+  ```
+
+  ### During Testing
+
+  ```python
+  # Explain test results
+  if tests_failed:
+      explanation = call_tool("explainer", json.dumps({
+          "query": "Why did tests fail?",
+          "context": f"Failed: {failed_test_names}",
+          "stage": "testing"
+      }))
+
+      print(f"[TESTING] {json.loads(explanation)['explanation']}")
+  ```
+
+  ## Stage Awareness
+
+  The explainer understands different workflow stages:
+
+  | Stage | Focus | Example |
+  |-------|-------|---------|
+  | planning | What's being designed | "Analyzing requirements to design tool architecture" |
+  | execution | What's running now | "Generating Python code for the calculator tool" |
+  | testing | What's being validated | "Running unit tests to verify correctness" |
+  | validation | What's being checked | "Validating output schema matches specification" |
+  | optimization | What's being improved | "Reducing memory usage by optimizing data structures" |
+  | deployment | What's being released | "Deploying optimized tool to production registry" |
+  | monitoring | What's being observed | "Tracking execution metrics for performance analysis" |
+
+  ## Performance
+
+  - **Latency**: <100ms (uses 1B model)
+  - **Quality**: Good for explanations, excellent for speed
+  - **Cost**: Very low (local execution)
+  - **Model**: gemma3:1b or similar fast model
+
+  ## Integration Patterns
+
+  ### Pattern 1: Real-time Logging
+
+  ```python
+  def log_with_explanation(action, context, stage):
+      explanation = call_tool("explainer", json.dumps({
+          "query": f"Explain: {action}",
+          "context": context,
+          "stage": stage
+      }))
+
+      data = json.loads(explanation)
+      logger.info(f"[{stage.upper()}] {data['explanation']}")
+  ```
+
+  ### Pattern 2: User-Friendly Status
+
+  ```python
+  def show_status(workflow_state):
+      explanation = call_tool("explainer", json.dumps({
+          "query": "What is the system doing now?",
+          "context": workflow_state['current_step'],
+          "stage": workflow_state['stage']
+      }))
+
+      data = json.loads(explanation)
+      print(f"Status: {data['explanation']}")
+  ```
+
+  ## Best Practices
+
+  1. **Provide Context**: More context = better explanations
+  2. **Use Stages**: Stage info helps focus the explanation
+  3. **Keep Queries Simple**: Clear questions get clear answers
+  4. **Cache Results**: Same query + context = same explanation
