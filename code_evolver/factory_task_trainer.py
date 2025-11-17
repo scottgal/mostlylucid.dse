@@ -142,7 +142,7 @@ class FactoryTaskGenerator:
         ],
     }
 
-    def __init__(self, base_prompt: Optional[str] = None):
+    def __init__(self, base_prompt: Optional[str] = None, multistage_probability: Optional[float] = None):
         """
         Initialize task generator.
 
@@ -151,6 +151,13 @@ class FactoryTaskGenerator:
         """
         self.base_prompt = base_prompt
         self.variation_count = 0
+        # Probability that a generated task will be expressed as a multi-stage workflow
+        self.multistage_probability = 0.45 if multistage_probability is None else float(multistage_probability)
+        # Clamp to [0.0, 1.0]
+        if self.multistage_probability < 0.0:
+            self.multistage_probability = 0.0
+        if self.multistage_probability > 1.0:
+            self.multistage_probability = 1.0
 
     def generate_variation(self) -> str:
         """Generate a random task variation."""
@@ -189,9 +196,12 @@ class FactoryTaskGenerator:
         }
 
         try:
-            return variation.format(**random_params)
+            task = variation.format(**random_params)
         except (KeyError, ValueError):
-            return variation
+            task = variation
+
+        # Optionally wrap as a multi-stage workflow
+        return self._maybe_wrap_with_stages(task, category_hint="custom")
 
     def _generate_factory_task(self) -> str:
         """Generate a random factory task."""
@@ -205,7 +215,8 @@ class FactoryTaskGenerator:
         try:
             task = template.format(**params)
             logger.debug(f"Generated {category} task: {task}")
-            return task
+            # Optionally wrap as a multi-stage workflow
+            return self._maybe_wrap_with_stages(task, category_hint=category)
         except (KeyError, ValueError) as e:
             logger.warning(f"Failed to format template: {e}")
             return template
@@ -273,6 +284,70 @@ class FactoryTaskGenerator:
 
         return params
 
+    def _maybe_wrap_with_stages(self, task: str, category_hint: Optional[str] = None) -> str:
+        """With some probability, wrap the task as a multi-stage workflow.
+
+        The wrapped format explicitly includes a top note and a 'Stages:' section
+        with 2–4 steps, so downstream handlers can execute them sequentially.
+        """
+        try:
+            if random.random() > self.multistage_probability:
+                return task
+
+            # Stage templates pool (generic + light category bias)
+            generic_stages = [
+                "Analyze requirements and clarify constraints",
+                "Plan the approach and outline solution",
+                "Implement the solution step-by-step",
+                "Run quick validation/tests and fix issues",
+                "Document results and assumptions",
+                "Reflect and propose improvements",
+            ]
+
+            category_bias = {
+                'arithmetic': ["Set up calculations", "Compute results", "Verify computations"],
+                'data_processing': ["Load/parse data", "Transform/clean", "Summarize and report"],
+                'code_generation': ["Design API/logic", "Write code", "Run example and test"],
+                'translation': ["Assess terminology", "Translate content", "Review accuracy"],
+                'question_answering': ["Recall policies", "Draft answer", "Cite sources"],
+                'formatting': ["Parse inputs", "Format output", "Validate formatting"],
+                'conversion': ["Identify units", "Convert values", "Double-check results"],
+                'creative_content': ["Brainstorm ideas", "Draft content", "Polish tone/style"],
+                'custom': ["Understand prompt", "Propose approach", "Execute and verify"],
+            }
+
+            stages_source = generic_stages + category_bias.get(category_hint or '', [])
+            # Ensure uniqueness and random order
+            unique = list(dict.fromkeys(stages_source))
+            random.shuffle(unique)
+            stage_count = random.randint(2, 4)
+            chosen = unique[:stage_count]
+
+            # Quality guardrails: ensure a planning-style first step and a verification/documentation last step when possible
+            planning_candidates = [s for s in unique if any(k in s.lower() for k in ["analyze", "plan", "design", "assess", "understand", "identify"])]
+            ending_candidates = [s for s in unique if any(k in s.lower() for k in ["test", "validate", "verify", "document", "review", "reflect"])]
+
+            if chosen:
+                if planning_candidates and not any(chosen[0] is pc for pc in planning_candidates):
+                    chosen[0] = planning_candidates[0]
+                if ending_candidates:
+                    chosen[-1] = ending_candidates[0]
+
+            # Build wrapped prompt
+            header = (
+                "Note: This workflow may be multi-stage. If a 'Stages:' section is present, "
+                "execute the stages sequentially, keeping responses concise per stage and a short final summary."
+            )
+            wrapped = (
+                f"{header}\n\n"
+                f"Task: {task}\n\n"
+                f"Stages:\n" + "\n".join([f"{i+1}. {s}" for i, s in enumerate(chosen)])
+            )
+            return wrapped
+        except Exception:
+            # On any unforeseen error, return the original task
+            return task
+
 
 class TrainingStatistics:
     """Track training session statistics."""
@@ -284,20 +359,31 @@ class TrainingStatistics:
         self.total_duration = 0.0
         self.start_time = time.time()
         self.task_times = []
+        # Multi-stage accounting
+        self.multistage_tasks = 0
+        self.single_tasks = 0
 
-    def record_success(self, duration: float):
+    def record_success(self, duration: float, is_multistage: bool = False):
         """Record successful task."""
         self.tasks_attempted += 1
         self.tasks_successful += 1
         self.total_duration += duration
         self.task_times.append(duration)
+        if is_multistage:
+            self.multistage_tasks += 1
+        else:
+            self.single_tasks += 1
 
-    def record_failure(self, duration: float):
+    def record_failure(self, duration: float, is_multistage: bool = False):
         """Record failed task."""
         self.tasks_attempted += 1
         self.tasks_failed += 1
         self.total_duration += duration
         self.task_times.append(duration)
+        if is_multistage:
+            self.multistage_tasks += 1
+        else:
+            self.single_tasks += 1
 
     def get_summary(self) -> str:
         """Get statistics summary."""
@@ -305,6 +391,7 @@ class TrainingStatistics:
         avg_time = sum(self.task_times) / len(self.task_times) if self.task_times else 0
         success_rate = (self.tasks_successful / self.tasks_attempted * 100) if self.tasks_attempted > 0 else 0
 
+        multistage_rate = (self.multistage_tasks / self.tasks_attempted * 100) if self.tasks_attempted > 0 else 0
         return f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                   TRAINING SESSION SUMMARY                   ║
@@ -312,6 +399,8 @@ class TrainingStatistics:
 ║  Total Tasks:      {self.tasks_attempted:6d}                                ║
 ║  Successful:       {self.tasks_successful:6d} ({success_rate:5.1f}%)                      ║
 ║  Failed:           {self.tasks_failed:6d}                                ║
+║  Multi-stage:      {self.multistage_tasks:6d} ({multistage_rate:5.1f}%)                      ║
+║  Single-stage:     {self.single_tasks:6d}                                ║
 ║  Session Duration: {elapsed:6.1f}s                              ║
 ║  Total Exec Time:  {self.total_duration:6.1f}s                              ║
 ║  Avg Task Time:    {avg_time:6.2f}s                              ║
@@ -323,7 +412,8 @@ class TrainingStatistics:
 class FactoryTaskTrainer:
     """Main trainer that executes random task variations."""
 
-    def __init__(self, base_prompt: Optional[str] = None, max_tasks: Optional[int] = None):
+    def __init__(self, base_prompt: Optional[str] = None, max_tasks: Optional[int] = None,
+                 multistage_probability: Optional[float] = None, seed: Optional[int] = None):
         """
         Initialize trainer.
 
@@ -331,7 +421,16 @@ class FactoryTaskTrainer:
             base_prompt: Base prompt for variations (None for factory tasks)
             max_tasks: Maximum number of tasks to run (None for unlimited)
         """
-        self.generator = FactoryTaskGenerator(base_prompt)
+        # If a seed is provided, set deterministic randomness
+        self.seed = seed
+        if self.seed is not None:
+            try:
+                random.seed(self.seed)
+                logger.info(f"RNG seed set to {self.seed}")
+            except Exception as _:
+                logger.warning("Failed to set RNG seed")
+
+        self.generator = FactoryTaskGenerator(base_prompt, multistage_probability=multistage_probability)
         self.statistics = TrainingStatistics()
         self.keyboard = KeyboardMonitor()
         self.max_tasks = max_tasks
@@ -346,6 +445,18 @@ class FactoryTaskTrainer:
             logger.info(f"Base prompt: {self.generator.base_prompt}")
         else:
             logger.info("Mode: Random factory tasks")
+
+        # Inform that some tasks will be multi-stage and use a 'Stages:' section
+        logger.info(
+            "Note: Some tasks will be multi-stage. When a 'Stages:' section is present, "
+            "follow the stages sequentially and provide concise per-stage outputs."
+        )
+
+        # Log effective multi-stage probability
+        try:
+            logger.info(f"Effective multi-stage probability: {self.generator.multistage_probability:.2f}")
+        except Exception:
+            pass
 
         logger.info("="*60)
 
@@ -368,13 +479,14 @@ class FactoryTaskTrainer:
                 start_time = time.time()
                 success = self._execute_task(task)
                 duration = time.time() - start_time
+                is_multistage = self._is_multistage_task(task)
 
                 # Record statistics
                 if success:
-                    self.statistics.record_success(duration)
+                    self.statistics.record_success(duration, is_multistage=is_multistage)
                     logger.info(f"✓ Success ({duration:.2f}s)")
                 else:
-                    self.statistics.record_failure(duration)
+                    self.statistics.record_failure(duration, is_multistage=is_multistage)
                     logger.info(f"✗ Failed ({duration:.2f}s)")
 
                 # Small delay between tasks
@@ -427,6 +539,14 @@ class FactoryTaskTrainer:
             logger.debug(traceback.format_exc())
             return False
 
+    @staticmethod
+    def _is_multistage_task(task: str) -> bool:
+        """Heuristic to detect multi-stage wrapped tasks."""
+        try:
+            return "\nStages:\n" in task or task.strip().startswith("Note: This workflow may be multi-stage.")
+        except Exception:
+            return False
+
 
 def main():
     """Main entry point."""
@@ -446,6 +566,18 @@ def main():
         help='Maximum number of tasks to run (default: unlimited)'
     )
     parser.add_argument(
+        '--multistage-prob',
+        type=float,
+        default=None,
+        help='Probability [0.0-1.0] that a task is wrapped as a multi-stage workflow'
+    )
+    parser.add_argument(
+        '--seed',
+        type=int,
+        default=None,
+        help='Set RNG seed for deterministic task generation'
+    )
+    parser.add_argument(
         '--log-level',
         type=str,
         default='INFO',
@@ -458,8 +590,25 @@ def main():
     # Set log level
     logging.getLogger().setLevel(getattr(logging, args.log_level))
 
+    # Determine multistage probability from CLI or environment
+    multistage_prob = args.multistage_prob
+    if multistage_prob is None:
+        import os
+        env_val = os.environ.get('FACTORY_MULTISTAGE_PROB')
+        if env_val is not None:
+            try:
+                multistage_prob = float(env_val)
+            except ValueError:
+                logger.warning(f"Invalid FACTORY_MULTISTAGE_PROB '{env_val}', falling back to default")
+                multistage_prob = None
+
     # Create and run trainer
-    trainer = FactoryTaskTrainer(base_prompt=args.prompt, max_tasks=args.max_tasks)
+    trainer = FactoryTaskTrainer(
+        base_prompt=args.prompt,
+        max_tasks=args.max_tasks,
+        multistage_probability=multistage_prob,
+        seed=args.seed,
+    )
     trainer.run_training_loop()
 
 

@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339399Z"
+      "last_reset": "2025-11-17T10:54:39.950706Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339478Z"
+      "last_reset": "2025-11-17T10:54:39.950716Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339492Z"
+      "last_reset": "2025-11-17T10:54:39.950723Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339504Z"
+      "last_reset": "2025-11-17T10:54:39.950730Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339512Z"
+      "last_reset": "2025-11-17T10:54:39.950736Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339521Z"
+      "last_reset": "2025-11-17T10:54:39.950742Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339531Z"
+      "last_reset": "2025-11-17T10:54:39.950747Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339539Z"
+      "last_reset": "2025-11-17T10:54:39.950753Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339548Z"
+      "last_reset": "2025-11-17T10:54:39.950759Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339556Z"
+      "last_reset": "2025-11-17T10:54:39.950765Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339570Z"
+      "last_reset": "2025-11-17T10:54:39.950771Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 47,
+    "usage_count": 111,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339579Z"
+      "last_reset": "2025-11-17T10:54:39.950777Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339588Z"
+      "last_reset": "2025-11-17T10:54:39.950783Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339596Z"
+      "last_reset": "2025-11-17T10:54:39.950788Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339605Z"
+      "last_reset": "2025-11-17T10:54:39.950794Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339615Z"
+      "last_reset": "2025-11-17T10:54:39.950800Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339624Z"
+      "last_reset": "2025-11-17T10:54:39.950806Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339631Z"
+      "last_reset": "2025-11-17T10:54:39.950812Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 47,
+    "usage_count": 111,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339640Z"
+      "last_reset": "2025-11-17T10:54:39.950818Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339648Z"
+      "last_reset": "2025-11-17T10:54:39.950824Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339657Z"
+      "last_reset": "2025-11-17T10:54:39.950831Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339665Z"
+      "last_reset": "2025-11-17T10:54:39.950837Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339674Z"
+      "last_reset": "2025-11-17T10:54:39.950843Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339683Z"
+      "last_reset": "2025-11-17T10:54:39.950849Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 47,
+    "usage_count": 111,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339691Z"
+      "last_reset": "2025-11-17T10:54:39.950855Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339700Z"
+      "last_reset": "2025-11-17T10:54:39.950861Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339710Z"
+      "last_reset": "2025-11-17T10:54:39.950868Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339719Z"
+      "last_reset": "2025-11-17T10:54:39.950875Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339729Z"
+      "last_reset": "2025-11-17T10:54:39.950882Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339738Z"
+      "last_reset": "2025-11-17T10:54:39.950889Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1393,8 +1393,8 @@
       "speed_tier": "very-fast",
       "quality_tier": "good",
       "max_output_length": "short",
-      "version": "1.0.0",
-      "definition_hash": "6d80db5905e7299ec53ab57ea8ca7f493953c8879689f8ffdb7258b2208e7c3b",
+      "version": "1.0.1",
+      "definition_hash": "b85bb21e8c5c93b53512f24ae4a09b68c606069b06501463fbec4426252a6e69",
       "breaking_changes": []
     },
     "constraints": {},
@@ -1402,12 +1402,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339746Z"
+      "last_reset": "2025-11-17T10:54:39.950895Z"
     },
-    "created_at": "2025-11-16T08:22:04.604169Z",
+    "created_at": "2025-11-17T01:04:53.135606Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "6d80db5905e7299ec53ab57ea8ca7f493953c8879689f8ffdb7258b2208e7c3b",
+    "version": "1.0.1",
+    "definition_hash": "b85bb21e8c5c93b53512f24ae4a09b68c606069b06501463fbec4426252a6e69",
     "breaking_changes": []
   },
   "content_generator": {
@@ -1444,10 +1444,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339757Z"
+      "last_reset": "2025-11-17T10:54:39.950901Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
-    "usage_count": 17,
+    "usage_count": 33,
     "version": "1.0.0",
     "definition_hash": "855d21cd65d566d635b0db03c3ac81f3edc2e197f6d059e9078474aa98ad7dad",
     "breaking_changes": []
@@ -1482,10 +1482,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339764Z"
+      "last_reset": "2025-11-17T10:54:39.950907Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
-    "usage_count": 0,
+    "usage_count": 1,
     "version": "1.0.0",
     "definition_hash": "ca7c50c4fb145db5370f75af8131125c6a3521257e650d0271ef16fcac401bf8",
     "breaking_changes": []
@@ -1522,10 +1522,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339772Z"
+      "last_reset": "2025-11-17T10:54:39.950913Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
-    "usage_count": 1,
+    "usage_count": 46,
     "version": "1.0.0",
     "definition_hash": "9b56051986fc316c54009f77193b7ca0af9830c586a0d92fc46ec1d9f90e136b",
     "breaking_changes": []
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339781Z"
+      "last_reset": "2025-11-17T10:54:39.950919Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 61,
+    "usage_count": 164,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339789Z"
+      "last_reset": "2025-11-17T10:54:39.950925Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339796Z"
+      "last_reset": "2025-11-17T10:54:39.950932Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339803Z"
+      "last_reset": "2025-11-17T10:54:39.950938Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1726,10 +1726,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339810Z"
+      "last_reset": "2025-11-17T10:54:39.950944Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
-    "usage_count": 1,
+    "usage_count": 2,
     "version": "1.0.0",
     "definition_hash": "a3abfc80c39dbbb10edb24f0f7fb3c70f9cb7d97f2b0790ad74bc5e34fac071d",
     "breaking_changes": []
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339818Z"
+      "last_reset": "2025-11-17T10:54:39.950950Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339826Z"
+      "last_reset": "2025-11-17T10:54:39.950957Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,10 +1849,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339834Z"
+      "last_reset": "2025-11-17T10:54:39.950962Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
-    "usage_count": 1,
+    "usage_count": 3,
     "version": "1.0.0",
     "definition_hash": "02034add9dbe7273f045cef95ce70665b96bec3620f013ada661dea869692222",
     "breaking_changes": []
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339843Z"
+      "last_reset": "2025-11-17T10:54:39.950968Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,10 +1930,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339851Z"
+      "last_reset": "2025-11-17T10:54:39.950975Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
-    "usage_count": 0,
+    "usage_count": 1,
     "version": "1.0.0",
     "definition_hash": "226c4f4d50f287fa9fa06acf1cb82bd833961b3f072324fb59b90e7867f07faa",
     "breaking_changes": []
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339859Z"
+      "last_reset": "2025-11-17T10:54:39.950981Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339866Z"
+      "last_reset": "2025-11-17T10:54:39.950988Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2024,7 +2024,7 @@
     "tool_id": "translation_quality_checker",
     "name": "Translation Quality Validator",
     "tool_type": "llm",
-    "description": "Fast quality check for translation output using tinyllama. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality.",
+    "description": "Fast quality check for translation output using gemma3_1b. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality.",
     "tags": [
       "translation",
       "validation",
@@ -2044,8 +2044,8 @@
       "speed_tier": "very-fast",
       "quality_tier": "basic",
       "max_output_length": "short",
-      "version": "1.0.0",
-      "definition_hash": "3cdd01f2e74611326f21cbd9dd35664ef1ed32535bdc4f2a5ae28f4f17e42d96",
+      "version": "1.0.1",
+      "definition_hash": "7da9d581b2c133f0862929d81fc324e30046e28a234ba4cff20da3457f458d14",
       "breaking_changes": []
     },
     "constraints": {},
@@ -2053,12 +2053,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339874Z"
+      "last_reset": "2025-11-17T10:54:39.950994Z"
     },
-    "created_at": "2025-11-16T08:22:06.400998Z",
-    "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "3cdd01f2e74611326f21cbd9dd35664ef1ed32535bdc4f2a5ae28f4f17e42d96",
+    "created_at": "2025-11-17T01:04:53.796074Z",
+    "usage_count": 1,
+    "version": "1.0.1",
+    "definition_hash": "7da9d581b2c133f0862929d81fc324e30046e28a234ba4cff20da3457f458d14",
     "breaking_changes": []
   },
   "nmt_translator": {
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339883Z"
+      "last_reset": "2025-11-17T10:54:39.951001Z"
     },
     "created_at": "2025-11-16T10:01:30.396360Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339890Z"
+      "last_reset": "2025-11-17T10:54:39.951008Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339935Z"
+      "last_reset": "2025-11-17T10:54:39.951014Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339952Z"
+      "last_reset": "2025-11-17T10:54:39.951019Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339959Z"
+      "last_reset": "2025-11-17T10:54:39.951025Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339963Z"
+      "last_reset": "2025-11-17T10:54:39.951031Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339970Z"
+      "last_reset": "2025-11-17T10:54:39.951036Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339973Z"
+      "last_reset": "2025-11-17T10:54:39.951042Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339977Z"
+      "last_reset": "2025-11-17T10:54:39.951047Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339981Z"
+      "last_reset": "2025-11-17T10:54:39.951051Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339985Z"
+      "last_reset": "2025-11-17T10:54:39.951056Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339989Z"
+      "last_reset": "2025-11-17T10:54:39.951062Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.339993Z"
+      "last_reset": "2025-11-17T10:54:39.951068Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2514,9 +2514,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:34:27.677764Z"
+      "last_reset": "2025-11-17T10:56:11.236696Z"
     },
-    "created_at": "2025-11-16T21:34:27.677755Z",
+    "created_at": "2025-11-17T10:56:11.236687Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2543,7 +2543,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340001Z"
+      "last_reset": "2025-11-17T10:54:39.951080Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2575,7 +2575,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340005Z"
+      "last_reset": "2025-11-17T10:54:39.951086Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2605,7 +2605,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340009Z"
+      "last_reset": "2025-11-17T10:54:39.951091Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2636,7 +2636,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340013Z"
+      "last_reset": "2025-11-17T10:54:39.951096Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2672,7 +2672,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340017Z"
+      "last_reset": "2025-11-17T10:54:39.951100Z"
     },
     "created_at": "2025-11-16T13:40:48.563426Z",
     "usage_count": 0,
@@ -2702,7 +2702,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340021Z"
+      "last_reset": "2025-11-17T10:54:39.951104Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2733,7 +2733,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340025Z"
+      "last_reset": "2025-11-17T10:54:39.951108Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2762,7 +2762,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340030Z"
+      "last_reset": "2025-11-17T10:54:39.951113Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2792,7 +2792,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340033Z"
+      "last_reset": "2025-11-17T10:54:39.951116Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2821,7 +2821,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340037Z"
+      "last_reset": "2025-11-17T10:54:39.951120Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2852,7 +2852,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340041Z"
+      "last_reset": "2025-11-17T10:54:39.951125Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2882,7 +2882,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340045Z"
+      "last_reset": "2025-11-17T10:54:39.951129Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2913,7 +2913,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340049Z"
+      "last_reset": "2025-11-17T10:54:39.951133Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2942,7 +2942,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340052Z"
+      "last_reset": "2025-11-17T10:54:39.951136Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2972,7 +2972,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340056Z"
+      "last_reset": "2025-11-17T10:54:39.951140Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -3001,7 +3001,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340059Z"
+      "last_reset": "2025-11-17T10:54:39.951144Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3030,7 +3030,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340063Z"
+      "last_reset": "2025-11-17T10:54:39.951148Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3060,7 +3060,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340066Z"
+      "last_reset": "2025-11-17T10:54:39.951152Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3091,7 +3091,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340069Z"
+      "last_reset": "2025-11-17T10:54:39.951156Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3121,7 +3121,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340073Z"
+      "last_reset": "2025-11-17T10:54:39.951160Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3150,7 +3150,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340076Z"
+      "last_reset": "2025-11-17T10:54:39.951164Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3180,7 +3180,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340080Z"
+      "last_reset": "2025-11-17T10:54:39.951168Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3210,7 +3210,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340083Z"
+      "last_reset": "2025-11-17T10:54:39.951172Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3240,7 +3240,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340086Z"
+      "last_reset": "2025-11-17T10:54:39.951175Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3271,7 +3271,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340090Z"
+      "last_reset": "2025-11-17T10:54:39.951179Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3300,7 +3300,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340094Z"
+      "last_reset": "2025-11-17T10:54:39.951184Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3330,7 +3330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340098Z"
+      "last_reset": "2025-11-17T10:54:39.951188Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3359,7 +3359,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340101Z"
+      "last_reset": "2025-11-17T10:54:39.951192Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3389,7 +3389,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340105Z"
+      "last_reset": "2025-11-17T10:54:39.951196Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3425,7 +3425,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340109Z"
+      "last_reset": "2025-11-17T10:54:39.951200Z"
     },
     "created_at": "2025-11-16T17:58:30.737649Z",
     "usage_count": 0,
@@ -3455,7 +3455,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340114Z"
+      "last_reset": "2025-11-17T10:54:39.951205Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3491,7 +3491,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340117Z"
+      "last_reset": "2025-11-17T10:54:39.951209Z"
     },
     "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
@@ -3521,7 +3521,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340121Z"
+      "last_reset": "2025-11-17T10:54:39.951213Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3550,7 +3550,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340125Z"
+      "last_reset": "2025-11-17T10:54:39.951217Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3579,7 +3579,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340128Z"
+      "last_reset": "2025-11-17T10:54:39.951221Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3609,7 +3609,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340132Z"
+      "last_reset": "2025-11-17T10:54:39.951225Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3640,7 +3640,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340135Z"
+      "last_reset": "2025-11-17T10:54:39.951229Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3670,7 +3670,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340139Z"
+      "last_reset": "2025-11-17T10:54:39.951233Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3700,7 +3700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340142Z"
+      "last_reset": "2025-11-17T10:54:39.951237Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3736,7 +3736,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340147Z"
+      "last_reset": "2025-11-17T10:54:39.951241Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3772,7 +3772,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340150Z"
+      "last_reset": "2025-11-17T10:54:39.951245Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3808,7 +3808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340154Z"
+      "last_reset": "2025-11-17T10:54:39.951249Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
     "usage_count": 0,
@@ -3844,7 +3844,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340157Z"
+      "last_reset": "2025-11-17T10:54:39.951253Z"
     },
     "created_at": "2025-11-16T09:14:20.219639Z",
     "usage_count": 0,
@@ -3880,7 +3880,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340162Z"
+      "last_reset": "2025-11-17T10:54:39.951258Z"
     },
     "created_at": "2025-11-16T09:17:21.481820Z",
     "usage_count": 0,
@@ -3944,7 +3944,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340166Z"
+      "last_reset": "2025-11-17T10:54:39.951262Z"
     },
     "created_at": "2025-11-16T09:07:23.454598Z",
     "usage_count": 0,
@@ -3980,7 +3980,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340170Z"
+      "last_reset": "2025-11-17T10:54:39.951267Z"
     },
     "created_at": "2025-11-16T09:12:45.348005Z",
     "usage_count": 0,
@@ -4016,7 +4016,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340173Z"
+      "last_reset": "2025-11-17T10:54:39.951271Z"
     },
     "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
@@ -4052,7 +4052,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340177Z"
+      "last_reset": "2025-11-17T10:54:39.951276Z"
     },
     "created_at": "2025-11-16T09:25:57.866554Z",
     "usage_count": 0,
@@ -4088,7 +4088,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340180Z"
+      "last_reset": "2025-11-17T10:54:39.951280Z"
     },
     "created_at": "2025-11-16T09:28:27.164898Z",
     "usage_count": 0,
@@ -4124,7 +4124,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340184Z"
+      "last_reset": "2025-11-17T10:54:39.951284Z"
     },
     "created_at": "2025-11-16T09:29:38.153439Z",
     "usage_count": 0,
@@ -4160,7 +4160,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340189Z"
+      "last_reset": "2025-11-17T10:54:39.951288Z"
     },
     "created_at": "2025-11-16T09:35:06.567192Z",
     "usage_count": 0,
@@ -4213,7 +4213,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340193Z"
+      "last_reset": "2025-11-17T10:54:39.951293Z"
     },
     "created_at": "2025-11-16T10:01:29.141239Z",
     "usage_count": 0,
@@ -4266,10 +4266,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340196Z"
+      "last_reset": "2025-11-17T10:54:39.951298Z"
     },
     "created_at": "2025-11-16T10:01:30.181536Z",
-    "usage_count": 7,
+    "usage_count": 25,
     "version": "1.0.0",
     "definition_hash": "dfcbc9c80c85c4904cb96457ae817f66ad904165a51b3883ad36933a348a29a8",
     "breaking_changes": []
@@ -4302,7 +4302,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340200Z"
+      "last_reset": "2025-11-17T10:54:39.951302Z"
     },
     "created_at": "2025-11-16T10:06:10.391814Z",
     "usage_count": 0,
@@ -4338,7 +4338,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340203Z"
+      "last_reset": "2025-11-17T10:54:39.951306Z"
     },
     "created_at": "2025-11-16T10:12:47.223241Z",
     "usage_count": 0,
@@ -4374,7 +4374,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340207Z"
+      "last_reset": "2025-11-17T10:54:39.951310Z"
     },
     "created_at": "2025-11-16T10:14:13.615361Z",
     "usage_count": 0,
@@ -4410,7 +4410,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340210Z"
+      "last_reset": "2025-11-17T10:54:39.951314Z"
     },
     "created_at": "2025-11-16T10:15:06.069892Z",
     "usage_count": 0,
@@ -4446,7 +4446,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340214Z"
+      "last_reset": "2025-11-17T10:54:39.951318Z"
     },
     "created_at": "2025-11-16T10:42:33.746191Z",
     "usage_count": 0,
@@ -4482,7 +4482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340217Z"
+      "last_reset": "2025-11-17T10:54:39.951322Z"
     },
     "created_at": "2025-11-16T11:10:19.359123Z",
     "usage_count": 0,
@@ -4518,7 +4518,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340221Z"
+      "last_reset": "2025-11-17T10:54:39.951326Z"
     },
     "created_at": "2025-11-16T11:31:40.692912Z",
     "usage_count": 0,
@@ -4554,7 +4554,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340224Z"
+      "last_reset": "2025-11-17T10:54:39.951330Z"
     },
     "created_at": "2025-11-16T11:32:50.990789Z",
     "usage_count": 0,
@@ -4590,7 +4590,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340227Z"
+      "last_reset": "2025-11-17T10:54:39.951335Z"
     },
     "created_at": "2025-11-16T11:46:37.640775Z",
     "usage_count": 0,
@@ -4626,7 +4626,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340231Z"
+      "last_reset": "2025-11-17T10:54:39.951339Z"
     },
     "created_at": "2025-11-16T12:20:27.162450Z",
     "usage_count": 0,
@@ -4757,7 +4757,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340234Z"
+      "last_reset": "2025-11-17T10:54:39.951343Z"
     },
     "created_at": "2025-11-16T12:41:08.799526Z",
     "usage_count": 0,
@@ -4837,7 +4837,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340238Z"
+      "last_reset": "2025-11-17T10:54:39.951348Z"
     },
     "created_at": "2025-11-16T12:41:08.807420Z",
     "usage_count": 0,
@@ -4928,7 +4928,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340243Z"
+      "last_reset": "2025-11-17T10:54:39.951352Z"
     },
     "created_at": "2025-11-16T12:41:08.810729Z",
     "usage_count": 0,
@@ -4990,7 +4990,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340246Z"
+      "last_reset": "2025-11-17T10:54:39.951356Z"
     },
     "created_at": "2025-11-16T12:41:08.812165Z",
     "usage_count": 0,
@@ -5099,7 +5099,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340250Z"
+      "last_reset": "2025-11-17T10:54:39.951361Z"
     },
     "created_at": "2025-11-16T12:41:08.831401Z",
     "usage_count": 0,
@@ -5194,7 +5194,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340254Z"
+      "last_reset": "2025-11-17T10:54:39.951365Z"
     },
     "created_at": "2025-11-16T12:41:08.834283Z",
     "usage_count": 0,
@@ -5227,7 +5227,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340259Z"
+      "last_reset": "2025-11-17T10:54:39.951369Z"
     },
     "created_at": "2025-11-16T12:41:08.836868Z",
     "usage_count": 0,
@@ -5261,7 +5261,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340263Z"
+      "last_reset": "2025-11-17T10:54:39.951373Z"
     },
     "created_at": "2025-11-16T12:41:08.839875Z",
     "usage_count": 0,
@@ -5295,7 +5295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340266Z"
+      "last_reset": "2025-11-17T10:54:39.951377Z"
     },
     "created_at": "2025-11-16T12:41:08.844259Z",
     "usage_count": 0,
@@ -5327,8 +5327,8 @@
       "speed_tier": "fast",
       "quality_tier": "excellent",
       "max_output_length": "medium",
-      "version": "1.0.0",
-      "definition_hash": "2179b62ebf4d82f8e611a6586f93cca226beffbee3bfdccd8cb46ce3d7a6a2ad",
+      "version": "1.0.1",
+      "definition_hash": "840c5e96757b810cbe80efaf888cdd02e9b10dfa54b36ae08387c0c673dec014",
       "breaking_changes": []
     },
     "constraints": {},
@@ -5336,12 +5336,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340270Z"
+      "last_reset": "2025-11-17T10:54:39.951382Z"
     },
-    "created_at": "2025-11-16T12:41:08.871405Z",
+    "created_at": "2025-11-17T01:04:53.469789Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "2179b62ebf4d82f8e611a6586f93cca226beffbee3bfdccd8cb46ce3d7a6a2ad",
+    "version": "1.0.1",
+    "definition_hash": "840c5e96757b810cbe80efaf888cdd02e9b10dfa54b36ae08387c0c673dec014",
     "breaking_changes": []
   },
   "signalr_llmapi_management": {
@@ -5378,7 +5378,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340274Z"
+      "last_reset": "2025-11-17T10:54:39.951386Z"
     },
     "created_at": "2025-11-16T12:41:08.875026Z",
     "usage_count": 0,
@@ -5421,7 +5421,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340278Z"
+      "last_reset": "2025-11-17T10:54:39.951390Z"
     },
     "created_at": "2025-11-16T12:41:08.881445Z",
     "usage_count": 0,
@@ -5464,7 +5464,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340281Z"
+      "last_reset": "2025-11-17T10:54:39.951394Z"
     },
     "created_at": "2025-11-16T12:41:08.887411Z",
     "usage_count": 0,
@@ -5500,7 +5500,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340285Z"
+      "last_reset": "2025-11-17T10:54:39.951398Z"
     },
     "created_at": "2025-11-16T13:44:17.864365Z",
     "usage_count": 0,
@@ -5592,7 +5592,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340288Z"
+      "last_reset": "2025-11-17T10:54:39.951403Z"
     },
     "created_at": "2025-11-16T14:05:46.456088Z",
     "usage_count": 0,
@@ -5701,7 +5701,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340292Z"
+      "last_reset": "2025-11-17T10:54:39.951407Z"
     },
     "created_at": "2025-11-16T14:05:47.598951Z",
     "usage_count": 0,
@@ -5800,7 +5800,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340296Z"
+      "last_reset": "2025-11-17T10:54:39.951412Z"
     },
     "created_at": "2025-11-16T14:05:47.896875Z",
     "usage_count": 0,
@@ -5836,7 +5836,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340299Z"
+      "last_reset": "2025-11-17T10:54:39.951416Z"
     },
     "created_at": "2025-11-16T14:09:32.745489Z",
     "usage_count": 0,
@@ -5932,7 +5932,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340303Z"
+      "last_reset": "2025-11-17T10:54:39.951420Z"
     },
     "created_at": "2025-11-16T14:36:50.752511Z",
     "usage_count": 0,
@@ -5982,7 +5982,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340306Z"
+      "last_reset": "2025-11-17T10:54:39.951424Z"
     },
     "created_at": "2025-11-16T14:44:34.683195Z",
     "usage_count": 0,
@@ -5994,7 +5994,7 @@
     "tool_id": "config_file_generator",
     "name": "Config File Generator",
     "tool_type": "executable",
-    "description": "Generates comprehensive config.yaml files with sensible Ollama defaults (tinyllama, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes.",
+    "description": "Generates comprehensive config.yaml files with sensible Ollama defaults (gemma3_1b, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes.",
     "tags": [
       "configuration",
       "config",
@@ -6013,7 +6013,7 @@
         "{config_json}"
       ],
       "input_schema": {
-        "config_json": "str - JSON with: tool_id (required), mode ('docker' or 'standalone', default: docker), default_model ('tinyllama', 'llama3', 'qwen2.5-coder', 'codellama', default: tinyllama)"
+        "config_json": "str - JSON with: tool_id (required), mode ('docker' or 'standalone', default: docker), default_model ('gemma3_1b', 'llama3', 'qwen2.5-coder', 'codellama', default: gemma3_1b)"
       },
       "output_schema": {
         "success": "bool - Whether generation was successful",
@@ -6024,8 +6024,8 @@
       "cost_tier": "free",
       "speed_tier": "very-fast",
       "quality_tier": "excellent",
-      "version": "1.0.0",
-      "definition_hash": "bbfc40d4b71a9ffc07f06e7279a151892d5c05f4f3643ba746f3517cc83a3606",
+      "version": "1.0.1",
+      "definition_hash": "763317088c2b47c8c914230037f9ae0ce93d2c6c69d4faf63902c32755fc1948",
       "breaking_changes": []
     },
     "constraints": {},
@@ -6033,12 +6033,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340311Z"
+      "last_reset": "2025-11-17T10:54:39.951428Z"
     },
-    "created_at": "2025-11-16T14:44:34.693151Z",
+    "created_at": "2025-11-17T01:04:52.642072Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "bbfc40d4b71a9ffc07f06e7279a151892d5c05f4f3643ba746f3517cc83a3606",
+    "version": "1.0.1",
+    "definition_hash": "763317088c2b47c8c914230037f9ae0ce93d2c6c69d4faf63902c32755fc1948",
     "breaking_changes": []
   },
   "dependency_analyzer": {
@@ -6087,7 +6087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340315Z"
+      "last_reset": "2025-11-17T10:54:39.951432Z"
     },
     "created_at": "2025-11-16T14:44:34.699603Z",
     "usage_count": 0,
@@ -6136,7 +6136,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340320Z"
+      "last_reset": "2025-11-17T10:54:39.951436Z"
     },
     "created_at": "2025-11-16T14:44:34.701148Z",
     "usage_count": 0,
@@ -6185,7 +6185,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340323Z"
+      "last_reset": "2025-11-17T10:54:39.951441Z"
     },
     "created_at": "2025-11-16T14:44:34.702597Z",
     "usage_count": 0,
@@ -6236,7 +6236,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340327Z"
+      "last_reset": "2025-11-17T10:54:39.951445Z"
     },
     "created_at": "2025-11-16T14:44:34.707867Z",
     "usage_count": 0,
@@ -6288,7 +6288,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340331Z"
+      "last_reset": "2025-11-17T10:54:39.951449Z"
     },
     "created_at": "2025-11-16T14:44:34.723916Z",
     "usage_count": 0,
@@ -6341,7 +6341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340335Z"
+      "last_reset": "2025-11-17T10:54:39.951453Z"
     },
     "created_at": "2025-11-16T14:44:34.739060Z",
     "usage_count": 0,
@@ -6394,7 +6394,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340338Z"
+      "last_reset": "2025-11-17T10:54:39.951457Z"
     },
     "created_at": "2025-11-16T14:44:34.753760Z",
     "usage_count": 0,
@@ -6436,7 +6436,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340342Z"
+      "last_reset": "2025-11-17T10:54:39.951461Z"
     },
     "created_at": "2025-11-16T14:44:34.775905Z",
     "usage_count": 0,
@@ -6472,7 +6472,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340346Z"
+      "last_reset": "2025-11-17T10:54:39.951466Z"
     },
     "created_at": "2025-11-16T15:16:33.662222Z",
     "usage_count": 0,
@@ -6508,7 +6508,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340350Z"
+      "last_reset": "2025-11-17T10:54:39.951469Z"
     },
     "created_at": "2025-11-16T15:18:49.659263Z",
     "usage_count": 0,
@@ -6634,7 +6634,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340353Z"
+      "last_reset": "2025-11-17T10:54:39.951473Z"
     },
     "created_at": "2025-11-16T16:37:22.683405Z",
     "usage_count": 0,
@@ -6754,7 +6754,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340357Z"
+      "last_reset": "2025-11-17T10:54:39.951478Z"
     },
     "created_at": "2025-11-16T15:46:53.635925Z",
     "usage_count": 0,
@@ -6888,7 +6888,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340361Z"
+      "last_reset": "2025-11-17T10:54:39.951482Z"
     },
     "created_at": "2025-11-16T15:46:53.660769Z",
     "usage_count": 0,
@@ -6928,7 +6928,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340365Z"
+      "last_reset": "2025-11-17T10:54:39.951486Z"
     },
     "created_at": "2025-11-16T15:46:53.734260Z",
     "usage_count": 1,
@@ -7066,7 +7066,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340368Z"
+      "last_reset": "2025-11-17T10:54:39.951490Z"
     },
     "created_at": "2025-11-16T16:37:21.157255Z",
     "usage_count": 0,
@@ -7175,7 +7175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340372Z"
+      "last_reset": "2025-11-17T10:54:39.951494Z"
     },
     "created_at": "2025-11-16T16:37:22.333430Z",
     "usage_count": 0,
@@ -7283,7 +7283,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340376Z"
+      "last_reset": "2025-11-17T10:54:39.951498Z"
     },
     "created_at": "2025-11-16T16:37:23.010156Z",
     "usage_count": 0,
@@ -7323,7 +7323,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340380Z"
+      "last_reset": "2025-11-17T10:54:39.951502Z"
     },
     "created_at": "2025-11-16T16:37:23.342186Z",
     "usage_count": 0,
@@ -7359,7 +7359,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340384Z"
+      "last_reset": "2025-11-17T10:54:39.951506Z"
     },
     "created_at": "2025-11-16T18:18:47.459930Z",
     "usage_count": 0,
@@ -7399,7 +7399,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340388Z"
+      "last_reset": "2025-11-17T10:54:39.951510Z"
     },
     "created_at": "2025-11-16T18:39:13.503483Z",
     "usage_count": 0,
@@ -7435,7 +7435,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340392Z"
+      "last_reset": "2025-11-17T10:54:39.951514Z"
     },
     "created_at": "2025-11-16T18:47:31.754804Z",
     "usage_count": 0,
@@ -7508,7 +7508,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340395Z"
+      "last_reset": "2025-11-17T10:54:39.951518Z"
     },
     "created_at": "2025-11-16T19:12:19.491661Z",
     "usage_count": 0,
@@ -7642,7 +7642,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340399Z"
+      "last_reset": "2025-11-17T10:54:39.951523Z"
     },
     "created_at": "2025-11-16T19:12:20.731463Z",
     "usage_count": 0,
@@ -7684,7 +7684,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340403Z"
+      "last_reset": "2025-11-17T10:54:39.951527Z"
     },
     "created_at": "2025-11-16T18:54:43.788820Z",
     "usage_count": 0,
@@ -7720,7 +7720,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340407Z"
+      "last_reset": "2025-11-17T10:54:39.951532Z"
     },
     "created_at": "2025-11-16T19:40:57.911688Z",
     "usage_count": 0,
@@ -7756,7 +7756,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340410Z"
+      "last_reset": "2025-11-17T10:54:39.951536Z"
     },
     "created_at": "2025-11-16T19:42:34.039153Z",
     "usage_count": 0,
@@ -7792,7 +7792,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340416Z"
+      "last_reset": "2025-11-17T10:54:39.951543Z"
     },
     "created_at": "2025-11-16T20:30:38.048887Z",
     "usage_count": 0,
@@ -7826,7 +7826,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340420Z"
+      "last_reset": "2025-11-17T10:54:39.951547Z"
     },
     "created_at": "2025-11-16T21:05:17.771074Z",
     "usage_count": 0,
@@ -7956,7 +7956,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340424Z"
+      "last_reset": "2025-11-17T10:54:39.951551Z"
     },
     "created_at": "2025-11-16T21:05:19.300501Z",
     "usage_count": 0,
@@ -8072,7 +8072,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340428Z"
+      "last_reset": "2025-11-17T10:54:39.951556Z"
     },
     "created_at": "2025-11-16T21:05:19.850955Z",
     "usage_count": 0,
@@ -8169,7 +8169,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T21:33:12.340432Z"
+      "last_reset": "2025-11-17T10:54:39.951560Z"
     },
     "created_at": "2025-11-16T21:05:20.413481Z",
     "usage_count": 0,
@@ -8197,16 +8197,3345 @@
       "created_at": "2025-11-16T22:00:32.057365+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Compress the image to 50%"
+      "full_title": "Compress the image to 50%",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-16T22:00:32.057389Z"
+      "last_reset": "2025-11-17T10:54:39.951564Z"
     },
     "created_at": "2025-11-16T22:00:32.057386Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "filesystem": {
+    "tool_id": "filesystem",
+    "name": "Tool-Scoped Filesystem",
+    "tool_type": "executable",
+    "description": "Isolated filesystem operations for tool-scoped data storage with automatic directory management",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\filesystem.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "d2347b770077b4a508cda89caf9dd6e8e44a40d310c1f26ce79e3f64b1b33e83",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951568Z"
+    },
+    "created_at": "2025-11-16T22:19:28.154854Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "d2347b770077b4a508cda89caf9dd6e8e44a40d310c1f26ce79e3f64b1b33e83",
+    "breaking_changes": []
+  },
+  "loki": {
+    "tool_id": "loki",
+    "name": "Loki Log Aggregation",
+    "tool_type": "executable",
+    "description": "Manages Grafana Loki instance for log aggregation and monitoring (tool/global scope)",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\loki.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "70fef6859e0c8d641c268f0af3ea6ffeec9027a03a6731d3a30cfc7e2842dd0e",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951572Z"
+    },
+    "created_at": "2025-11-16T22:19:29.467347Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "70fef6859e0c8d641c268f0af3ea6ffeec9027a03a6731d3a30cfc7e2842dd0e",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul": {
+    "tool_id": "note_this_workflow_may_be_mul",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Aggregate daily production by line: [{\"line\": 1, \"output\": 1016}, {\"line\": 2, \"output\": 787}, {\"line\": 3, \"output\": 1498}, {\"line\": 4, \"output\": 682}] and rank by efficiency\n\nStages:\n1. Summarize and report\n2. Reflect and propose improvements\n3. Plan the approach and outline solution",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Aggregate daily production by line: [{\"line\": 1, \"output\": 1016}, {\"line\": 2, \"output\": 787}, {\"line\": 3, \"output\": 1498}, {\"line\": 4, \"output\": 682}] and rank by efficiency\n\nStages:\n1. Summarize and report\n2. Reflect and propose improvements\n3. Plan the approach and outline solution",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul",
+      "quality_score": 1.1,
+      "latency_ms": 813,
+      "memory_mb_peak": 1.94,
+      "created_at": "2025-11-16T23:58:51.200460+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Aggregate daily production by line: [{\"line\": 1, \"output\": 1016}, {\"line\": 2, \"output\": 787}, {\"line\": 3, \"output\": 1498}, {\"line\": 4, \"output\": 682}] and rank by efficiency\n\nStages:\n1. Summarize and report\n2. Reflect and propose improvements\n3. Plan the approach and outline solution",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951576Z"
+    },
+    "created_at": "2025-11-16T23:58:51.200477Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "determine_labor_cost_16_worke": {
+    "tool_id": "determine_labor_cost_16_worke",
+    "name": "Determine labor cost: 16 workers × 3 hours × $33/hour",
+    "tool_type": "workflow",
+    "description": "Determine labor cost: 16 workers × 3 hours × $33/hour",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "determine_labor_cost_16_worke",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 56,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T00:02:46.175553+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Determine labor cost: 16 workers × 3 hours × $33/hour",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951580Z"
+    },
+    "created_at": "2025-11-17T00:02:46.175573Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763337843": {
+    "tool_id": "note_this_workflow_may_be_mul_1763337843",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Translate machine manual section 'Emergency shutdown procedure' to Japanese maintaining technical accuracy\n\nStages:\n1. Assess terminology\n2. Document results and assumptions\n3. Run quick validation/tests and fix issues",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Translate machine manual section 'Emergency shutdown procedure' to Japanese maintaining technical accuracy\n\nStages:\n1. Assess terminology\n2. Document results and assumptions\n3. Run quick validation/tests and fix issues",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763337843",
+      "quality_score": 1.1,
+      "latency_ms": 1401,
+      "memory_mb_peak": 1.93,
+      "created_at": "2025-11-17T00:06:38.511182+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Translate machine manual section 'Emergency shutdown procedure' to Japanese maintaining technical accuracy\n\nStages:\n1. Assess terminology\n2. Document results and assumptions\n3. Run quick validation/tests and fix issues",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951584Z"
+    },
+    "created_at": "2025-11-17T00:06:38.511208Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "behave_test_generator": {
+    "tool_id": "behave_test_generator",
+    "name": "Behave BDD Test Generator",
+    "tool_type": "executable",
+    "description": "Generate Behave BDD tests with step definitions from Gherkin feature files, tool specs, or workflow definitions with plausible test data",
+    "tags": [
+      "testing",
+      "bdd",
+      "behave",
+      "test-generation",
+      "gherkin",
+      "acceptance-testing",
+      "behavior-driven",
+      "characterization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\behave_test_generator.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/behave_test_generator.py"
+      ],
+      "input_schema": {
+        "feature_file": {
+          "type": "string",
+          "description": "Path to Gherkin .feature file",
+          "required": false
+        },
+        "feature_content": {
+          "type": "string",
+          "description": "Inline Gherkin feature content (if feature_file not provided)",
+          "required": false
+        },
+        "tool_spec": {
+          "type": "string",
+          "description": "Path to tool YAML spec to generate BDD tests for",
+          "required": false
+        },
+        "static_analysis_path": {
+          "type": "string",
+          "description": "Path to static analysis results for plausible data generation",
+          "required": false
+        },
+        "mode": {
+          "type": "string",
+          "description": "Mode: 'generate' (create steps), 'run' (execute tests), or 'both'",
+          "required": false,
+          "default": "both"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Directory where generated step definitions will be saved",
+          "required": false,
+          "default": "./features/steps"
+        },
+        "feature_output_path": {
+          "type": "string",
+          "description": "Directory where feature files will be saved",
+          "required": false,
+          "default": "./features"
+        }
+      },
+      "output_schema": {
+        "steps_file_path": {
+          "type": "string",
+          "description": "Path to generated step definitions file"
+        },
+        "feature_file_path": {
+          "type": "string",
+          "description": "Path to feature file"
+        },
+        "results": {
+          "type": "object",
+          "description": "BDD test results (if executed)"
+        },
+        "scenarios_count": {
+          "type": "integer",
+          "description": "Number of scenarios generated/tested"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Whether test generation/execution succeeded"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "9d17af0ef99427bdbdc4134602ff929d70712507cbef51c51e2439385d69e494",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951588Z"
+    },
+    "created_at": "2025-11-17T00:38:55.143090Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "9d17af0ef99427bdbdc4134602ff929d70712507cbef51c51e2439385d69e494",
+    "breaking_changes": []
+  },
+  "create_behave_spec": {
+    "tool_id": "create_behave_spec",
+    "name": "Create Behave Spec",
+    "tool_type": "executable",
+    "description": "Create a Behave BDD specification file for RAG storage and future test generation",
+    "tags": [
+      "testing",
+      "spec-creation",
+      "behave",
+      "bdd",
+      "rag"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\create_behave_spec.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/create_behave_spec.py"
+      ],
+      "input_schema": {
+        "tool_name": {
+          "type": "string",
+          "description": "Name of the tool to create spec for",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "description": "Tool description",
+          "required": false
+        },
+        "scenarios": {
+          "type": "array",
+          "description": "List of test scenarios",
+          "required": false
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Path to save the spec file",
+          "required": false,
+          "default": "./specs/behave"
+        }
+      },
+      "output_schema": {
+        "spec_path": {
+          "type": "string",
+          "description": "Path to created spec file"
+        },
+        "feature_path": {
+          "type": "string",
+          "description": "Path to created feature file"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Whether spec creation succeeded"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "8132f1dd4b8da433bb59fc66424aa47d5a686a2913bae14d5804d1096fd0ee54",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951592Z"
+    },
+    "created_at": "2025-11-17T00:38:56.295984Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "8132f1dd4b8da433bb59fc66424aa47d5a686a2913bae14d5804d1096fd0ee54",
+    "breaking_changes": []
+  },
+  "create_locust_spec": {
+    "tool_id": "create_locust_spec",
+    "name": "Create Locust Spec",
+    "tool_type": "executable",
+    "description": "Create a Locust load test specification file for RAG storage and future test generation",
+    "tags": [
+      "testing",
+      "spec-creation",
+      "locust",
+      "performance",
+      "rag"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\create_locust_spec.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/create_locust_spec.py"
+      ],
+      "input_schema": {
+        "tool_name": {
+          "type": "string",
+          "description": "Name of the tool to create spec for",
+          "required": true
+        },
+        "endpoints": {
+          "type": "array",
+          "description": "List of API endpoints to test",
+          "required": false
+        },
+        "base_url": {
+          "type": "string",
+          "description": "Base URL for the API",
+          "required": false,
+          "default": "http://localhost:8000"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Path to save the spec file",
+          "required": false,
+          "default": "./specs/locust"
+        }
+      },
+      "output_schema": {
+        "spec_path": {
+          "type": "string",
+          "description": "Path to created spec file"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Whether spec creation succeeded"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "b1dd68868da8e5ce2cf5d9dba73246ebe34cd0798f3dceb0a74cd8b3ac601c76",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951597Z"
+    },
+    "created_at": "2025-11-17T00:38:56.519374Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "b1dd68868da8e5ce2cf5d9dba73246ebe34cd0798f3dceb0a74cd8b3ac601c76",
+    "breaking_changes": []
+  },
+  "locust_load_tester": {
+    "tool_id": "locust_load_tester",
+    "name": "Locust Load Test Generator",
+    "tool_type": "executable",
+    "description": "Generate and execute Locust performance/load tests from API specs, OpenAPI definitions, or BDD scenarios with plausible test data",
+    "tags": [
+      "testing",
+      "load-testing",
+      "performance",
+      "locust",
+      "api-testing",
+      "stress-testing",
+      "benchmarking",
+      "characterization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\locust_load_tester.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/locust_load_tester.py"
+      ],
+      "input_schema": {
+        "spec_file": {
+          "type": "string",
+          "description": "Path to API spec file (OpenAPI, JSON, or locustfile spec)",
+          "required": false
+        },
+        "spec_content": {
+          "type": "string",
+          "description": "Inline spec content (if spec_file not provided)",
+          "required": false
+        },
+        "static_analysis_path": {
+          "type": "string",
+          "description": "Path to static analysis results for plausible data generation",
+          "required": false
+        },
+        "mode": {
+          "type": "string",
+          "description": "Mode: 'generate' (create locustfile), 'run' (execute tests), or 'both'",
+          "required": false,
+          "default": "both"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Directory where generated locustfile will be saved",
+          "required": false,
+          "default": "./locustfiles"
+        },
+        "users": {
+          "type": "integer",
+          "description": "Number of concurrent users to simulate",
+          "required": false,
+          "default": 10
+        },
+        "spawn_rate": {
+          "type": "integer",
+          "description": "Rate at which users are spawned (users per second)",
+          "required": false,
+          "default": 2
+        },
+        "run_time": {
+          "type": "string",
+          "description": "Test duration (e.g., '30s', '5m', '1h')",
+          "required": false,
+          "default": "30s"
+        },
+        "host": {
+          "type": "string",
+          "description": "Base URL for the API being tested",
+          "required": false,
+          "default": "http://localhost:8000"
+        }
+      },
+      "output_schema": {
+        "locustfile_path": {
+          "type": "string",
+          "description": "Path to generated locustfile"
+        },
+        "results": {
+          "type": "object",
+          "description": "Load test results (if executed)"
+        },
+        "stats": {
+          "type": "object",
+          "description": "Performance statistics (requests/sec, response times, etc.)"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Whether test generation/execution succeeded"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "fa23dffc04bf9b0e74b18baca765abd728cfd7dd1e1c9e0bee0c5486472d10b1",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951602Z"
+    },
+    "created_at": "2025-11-17T00:38:56.807759Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "fa23dffc04bf9b0e74b18baca765abd728cfd7dd1e1c9e0bee0c5486472d10b1",
+    "breaking_changes": []
+  },
+  "parse_static_analysis": {
+    "tool_id": "parse_static_analysis",
+    "name": "Parse Static Analysis Results",
+    "tool_type": "executable",
+    "description": "Parse and aggregate static analysis results for test data generation and tool optimization",
+    "tags": [
+      "analysis",
+      "static-analysis",
+      "parsing",
+      "quality-metrics",
+      "test-data",
+      "optimization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\parse_static_analysis.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/parse_static_analysis.py"
+      ],
+      "input_schema": {
+        "analysis_file": {
+          "type": "string",
+          "description": "Path to static analysis JSON file",
+          "required": false
+        },
+        "registry_path": {
+          "type": "string",
+          "description": "Path to registry directory with multiple analysis files",
+          "required": false
+        },
+        "extract_schemas": {
+          "type": "boolean",
+          "description": "Extract JSON schemas from analysis for data generation",
+          "required": false,
+          "default": true
+        },
+        "extract_patterns": {
+          "type": "boolean",
+          "description": "Extract code patterns and common values",
+          "required": false,
+          "default": true
+        }
+      },
+      "output_schema": {
+        "schemas": {
+          "type": "array",
+          "description": "Extracted JSON schemas for data generation"
+        },
+        "patterns": {
+          "type": "object",
+          "description": "Common code patterns and values"
+        },
+        "quality_metrics": {
+          "type": "object",
+          "description": "Aggregated quality metrics"
+        },
+        "test_hints": {
+          "type": "object",
+          "description": "Hints for test data generation"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Whether parsing succeeded"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "40d2c3541d3d2195cfb6ff140a1cece6a9279b5655d868c7d1cc932db71bf2f7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951606Z"
+    },
+    "created_at": "2025-11-17T00:38:57.017183Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "40d2c3541d3d2195cfb6ff140a1cece6a9279b5655d868c7d1cc932db71bf2f7",
+    "breaking_changes": []
+  },
+  "platform_info": {
+    "tool_id": "platform_info",
+    "name": "Platform Information",
+    "tool_type": "executable",
+    "description": "Gathers comprehensive information about the underlying platform including OS, CPU, GPU, memory, disk, processes, and network. Enables decision-making based on platform characteristics like 'when running with low memory' or 'when running on Windows'. Supports multiple detail levels from basic to full.",
+    "tags": [
+      "platform",
+      "system",
+      "info",
+      "monitoring",
+      "cpu",
+      "gpu",
+      "memory",
+      "diagnostic",
+      "conditional"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\platform_info.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/platform_info.py"
+      ],
+      "input_schema": {
+        "detail_level": {
+          "type": "string",
+          "description": "Level of detail to gather. Options: 'basic' (platform and minimal info), 'standard' (+ CPU, memory, disk, GPU), 'detailed' (+ usage stats), 'full' (everything including processes and network)",
+          "required": false,
+          "default": "standard",
+          "enum": [
+            "basic",
+            "standard",
+            "detailed",
+            "full"
+          ]
+        },
+        "include_processes": {
+          "type": "boolean",
+          "description": "Include information about running processes (top 10 by CPU and memory)",
+          "required": false,
+          "default": false
+        },
+        "include_network": {
+          "type": "boolean",
+          "description": "Include network interface information",
+          "required": false,
+          "default": false
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "ISO timestamp when information was gathered"
+          },
+          "detail_level": {
+            "type": "string",
+            "description": "The detail level that was used"
+          },
+          "platform": {
+            "type": "object",
+            "description": "Basic platform information (OS, architecture, hostname, etc.)"
+          },
+          "cpu": {
+            "type": "object",
+            "description": "CPU information (cores, frequency, usage)"
+          },
+          "memory": {
+            "type": "object",
+            "description": "Memory information (total, available, used, swap)"
+          },
+          "gpu": {
+            "type": "object",
+            "description": "GPU information (devices, memory, utilization)"
+          },
+          "disk": {
+            "type": "object",
+            "description": "Disk information (partitions, usage, I/O stats)"
+          },
+          "processes": {
+            "type": "object",
+            "description": "Running processes information (if requested)"
+          },
+          "network": {
+            "type": "object",
+            "description": "Network interface information (if requested)"
+          },
+          "summary": {
+            "type": "object",
+            "description": "Summary for decision making (platform_type, memory_status, has_gpu, etc.)"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "3e6f1b2aac46001abf480d209f502763bc0896eac8a5faac7cf395f99a9d7570",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951610Z"
+    },
+    "created_at": "2025-11-17T00:38:57.227864Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "3e6f1b2aac46001abf480d209f502763bc0896eac8a5faac7cf395f99a9d7570",
+    "breaking_changes": []
+  },
+  "schedule_task": {
+    "tool_id": "schedule_task",
+    "name": "schedule_task",
+    "tool_type": "executable",
+    "description": "Schedule a task to run at specific times using cron expressions or natural language descriptions.\n\nThis tool is IMMUTABLE - scheduled tasks persist across sessions and run automatically\nin the background. Use this for polling events, periodic checks, or recurring operations.\n\nExamples:\n- \"Check for new emails every 5 minutes\"\n- \"Generate report every Sunday at noon\"\n- \"Backup data daily at 2am\"\n\nThe scheduler uses low priority execution to avoid interfering with active workflows.\n",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\schedule_task.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "a269b0f013cbe544ccc6511968cfcec546d88989ec7a9bde6bad2085fda255b2",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951615Z"
+    },
+    "created_at": "2025-11-17T00:38:57.499268Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "a269b0f013cbe544ccc6511968cfcec546d88989ec7a9bde6bad2085fda255b2",
+    "breaking_changes": []
+  },
+  "write_incident_report_summary": {
+    "tool_id": "write_incident_report_summary",
+    "name": "Write incident report summary for quality issue",
+    "tool_type": "workflow",
+    "description": "Write incident report summary for quality issue",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_incident_report_summary",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 67,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T00:51:06.562810+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write incident report summary for quality issue",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951619Z"
+    },
+    "created_at": "2025-11-17T00:51:06.562840Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763340974": {
+    "tool_id": "note_this_workflow_may_be_mul_1763340974",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about pinch points for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Run quick validation/tests and fix issues\n4. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about pinch points for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Run quick validation/tests and fix issues\n4. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763340974",
+      "quality_score": 1.1,
+      "latency_ms": 1147,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T00:57:11.169605+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about pinch points for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Run quick validation/tests and fix issues\n4. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951623Z"
+    },
+    "created_at": "2025-11-17T00:57:11.169630Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763341104": {
+    "tool_id": "note_this_workflow_may_be_mul_1763341104",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Run quick validation/tests and fix issues",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Run quick validation/tests and fix issues",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763341104",
+      "quality_score": 1.1,
+      "latency_ms": 925,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T00:59:55.097021+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Run quick validation/tests and fix issues",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951627Z"
+    },
+    "created_at": "2025-11-17T00:59:55.097042Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "identify_the_safety_warning_te": {
+    "tool_id": "identify_the_safety_warning_te",
+    "name": "Identify the safety warning text",
+    "tool_type": "workflow",
+    "description": "Identify the safety warning text",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "identify_the_safety_warning_te",
+      "quality_score": 1.1,
+      "latency_ms": 882,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T01:02:19.707995+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Identify the safety warning text",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951631Z"
+    },
+    "created_at": "2025-11-17T01:02:19.708052Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "translate_the_product_label_to": {
+    "tool_id": "translate_the_product_label_to",
+    "name": "Translate the product label to Spanish",
+    "tool_type": "workflow",
+    "description": "Translate the product label to Spanish",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "translate_the_product_label_to",
+      "quality_score": 1.1,
+      "latency_ms": 995,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T01:59:56.117086+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Translate the product label to Spanish",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951635Z"
+    },
+    "created_at": "2025-11-17T01:59:56.117103Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "conversation_manager": {
+    "tool_id": "conversation_manager",
+    "name": "conversation_manager",
+    "tool_type": "executable",
+    "description": "Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations that optimize for response\nspeed while maintaining accuracy.\n\nFeatures:\n- Multi-chat context memory (remembers previous conversations)\n- Auto-summarization based on context window size\n- Volatile Qdrant storage for semantic search\n- Related context retrieval from past conversations\n- Performance tracking (response time, tokens, etc.)\n- Intent detection (distinguishes conversation from dialogue generation)\n\nUse this tool for:\n- Starting/ending conversational sessions\n- Managing conversation context\n- Detecting user intent to converse\n- Retrieving related conversation history\n",
+    "tags": [
+      "conversation",
+      "context-memory",
+      "semantic-search",
+      "summarization",
+      "intent-detection",
+      "qdrant"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\conversation_manager.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/conversation_manager.py"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "84cb4f195a7eb87b9b7db3e9a56849f6370b33a1da721f17399c0f03906190c0",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951639Z"
+    },
+    "created_at": "2025-11-17T02:01:13.536751Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "84cb4f195a7eb87b9b7db3e9a56849f6370b33a1da721f17399c0f03906190c0",
+    "breaking_changes": []
+  },
+  "cron_deconstructor": {
+    "tool_id": "cron_deconstructor",
+    "name": "cron_deconstructor",
+    "tool_type": "executable",
+    "description": "Deconstructs cron expressions into rich structured metadata for semantic embedding.\n\nThis tool analyzes a cron expression and generates detailed metadata including:\n- Human-readable description\n- Frequency classification (daily, weekly, monthly, etc.)\n- Time of day categorization (morning, afternoon, evening, night)\n- Day names (Monday, Tuesday, etc.)\n- Next scheduled run times\n- Semantic tags for RAG embedding\n- Inferred task grouping (reports, backups, monitoring, etc.)\n\nThe structured output is designed to be embedded in RAG storage for better\nsemantic search and grouping of scheduled tasks.\n",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\cron_deconstructor.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/cron_deconstructor.py"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "f3be829b53a8f3d62eb3fd09cd4fbf84ce3ea77ae18bc08343f5e0256d924d7e",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951644Z"
+    },
+    "created_at": "2025-11-17T02:01:13.548173Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "f3be829b53a8f3d62eb3fd09cd4fbf84ce3ea77ae18bc08343f5e0256d924d7e",
+    "breaking_changes": []
+  },
+  "cron_querier": {
+    "tool_id": "cron_querier",
+    "name": "cron_querier",
+    "tool_type": "executable",
+    "description": "Converts natural language queries about scheduled tasks into structured search filters.\n\nThis tool enables intuitive querying of scheduled tasks using plain English instead\nof complex filter syntax. It parses queries to extract:\n- Task groups (reports, backups, monitoring, etc.)\n- Frequency (daily, weekly, hourly, etc.)\n- Time windows (\"next 3 hours\", \"tonight\", \"tomorrow\")\n- Time of day (morning, afternoon, evening, night)\n- Day names (Monday, Tuesday, etc.)\n\nThe structured output can be used directly with the task search system.\n",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\cron_querier.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/cron_querier.py"
+      ],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "22c9cc069e12f70eedec803c6689189f2624d7dfa333a4100b9fc778acb5d8f3",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951648Z"
+    },
+    "created_at": "2025-11-17T02:01:13.554693Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "22c9cc069e12f70eedec803c6689189f2624d7dfa333a4100b9fc778acb5d8f3",
+    "breaking_changes": []
+  },
+  "optimize_cluster": {
+    "tool_id": "optimize_cluster",
+    "name": "Optimize Cluster",
+    "tool_type": "executable",
+    "description": "Optimize RAG artifact clusters using iterative self-optimization loop. Can optimize specific workflows, functions, prompts, or entire node types. Supports conversational usage: 'optimize this workflow' or CLI: '/optimize workflow_name'",
+    "tags": [],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\optimize_cluster.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "de4cdb75b2f4991ee71cdf9bb9c689e74ada7d6b57cde3002a552479fb437b50",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951652Z"
+    },
+    "created_at": "2025-11-17T02:01:13.610702Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "de4cdb75b2f4991ee71cdf9bb9c689e74ada7d6b57cde3002a552479fb437b50",
+    "breaking_changes": []
+  },
+  "smart_faker": {
+    "tool_id": "smart_faker",
+    "name": "Smart Faker",
+    "tool_type": "executable",
+    "description": "Intelligent fake data generator that accepts plain English, code, JSON schemas, or any LLM-interpretable input. Supports multiple output formats including streaming, arrays, and CSV.",
+    "tags": [
+      "testing",
+      "data-generation",
+      "faker",
+      "llm",
+      "flexible",
+      "smart",
+      "csv",
+      "streaming"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\smart_faker.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/smart_faker.py"
+      ],
+      "input_schema": {
+        "prompt": {
+          "type": "string",
+          "description": "Plain English description of data to generate, OR JSON schema, OR code snippet, OR JSON file content - anything describable",
+          "required": true
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of items to generate (default: 1)",
+          "required": false,
+          "default": 1
+        },
+        "output_format": {
+          "type": "string",
+          "description": "Output format: 'json' (default), 'csv', 'jsonl' (JSON Lines for streaming), or 'array'",
+          "required": false,
+          "default": "json",
+          "enum": [
+            "json",
+            "csv",
+            "jsonl",
+            "array"
+          ]
+        },
+        "stream": {
+          "type": "boolean",
+          "description": "If true, output items one at a time (for large datasets). Only works with jsonl format.",
+          "required": false,
+          "default": false
+        },
+        "seed": {
+          "type": "integer",
+          "description": "Random seed for reproducible data generation",
+          "required": false
+        },
+        "llm_model": {
+          "type": "string",
+          "description": "LLM model to use for interpretation (default: gemma2:2b)",
+          "required": false,
+          "default": "gemma2:2b"
+        },
+        "additional_context": {
+          "type": "string",
+          "description": "Additional context or constraints for data generation",
+          "required": false,
+          "default": ""
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether generation succeeded"
+          },
+          "data": {
+            "description": "Generated data in requested format"
+          },
+          "format": {
+            "type": "string",
+            "description": "Output format used"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of items generated"
+          },
+          "schema": {
+            "type": "object",
+            "description": "Inferred schema used for generation"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "low",
+      "speed_tier": "fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "fc41f530847458b0a132e7ff68c8f7c3dd0af9d1b26efeb376a84c175d3901a0",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951655Z"
+    },
+    "created_at": "2025-11-17T02:01:13.659419Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "fc41f530847458b0a132e7ff68c8f7c3dd0af9d1b26efeb376a84c175d3901a0",
+    "breaking_changes": []
+  },
+  "rag_cluster_optimizer": {
+    "tool_id": "rag_cluster_optimizer",
+    "name": "RAG Cluster Optimizer",
+    "tool_type": "llm",
+    "description": "Iterative self-optimization loop for artifact clusters. Explores variants, generates candidates, validates them through tests and benchmarks, and promotes fitter implementations while preserving lineage. The system learns patterns and converges toward high-fitness implementations over time.",
+    "tags": [
+      "optimization",
+      "rag",
+      "clustering",
+      "self-improvement",
+      "evolution",
+      "fitness",
+      "variants"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\rag_cluster_optimizer.yaml",
+      "llm_tier": null,
+      "llm_role": null,
+      "system_prompt": "You are the RAG Cluster Optimizer - a system that performs iterative self-optimization\non artifact clusters. Your role is to evolve code artifacts toward higher fitness by\nexploring variants, learning patterns, and making intelligent optimization decisions.\n\n🧠 CORE CONCEPT: ITERATIVE SELF-OPTIMIZATION LOOP\n\nInstead of just picking one \"best\" version, you move outward from the core function,\ntesting alternates, folding in their performance data, and converging toward a fitter\ncanonical artifact.\n\nWORKFLOW PHASES:\n\nPHASE 1: CORE FUNCTION ANCHOR\n1. Identify current \"best\" implementation (canonical artifact)\n2. Treat it as the root of the optimization tree\n3. Establish baseline fitness metrics\n\nPHASE 2: ALTERNATE EXPLORATION\n1. Pull all close variants (≥0.96 similarity cluster)\n2. Extract semantic deltas:\n   - Algorithm tweaks\n   - Error handling improvements\n   - Refactoring patterns\n   - Performance optimizations\n3. Analyze perf data + usage stats for each alternate\n\nPHASE 3: ITERATION LOOP (REPEAT UP TO MAX_ITERATIONS)\n\nStep 1: GENERATE CANDIDATE\n- Combine alternates + perf insights\n- Apply learned patterns\n- Use strategy: BEST_OF_BREED, INCREMENTAL, RADICAL, or HYBRID\n- Create new candidate variant\n\nStep 2: VALIDATE CANDIDATE\n- Run functional tests\n- Execute performance benchmarks\n- Perform mutation tests\n- Measure fitness score\n\nStep 3: COMPARE FITNESS\n- Compare candidate fitness vs canonical fitness\n- Compare against cluster median\n- Calculate improvement delta\n\nStep 4: PROMOTE IF FITTER\n- If fitness improvement > threshold:\n  * Archive old canonical (preserve lineage)\n  * Promote candidate to new canonical\n  * Archive weak variants (fitness < candidate - 0.1)\n  * Update parent-child relationships\n- Else:\n  * Keep current canonical\n  * Stop iteration if no improvement\n\nStep 5: EXPAND OUTWARD\n- If promoted: explore next layer of alternates\n- If not promoted: stop iterations\n- Re-run loop with updated cluster\n\nPHASE 4: SELF-OPTIMIZATION & LEARNING\n1. Learn patterns from successful promotions:\n   - \"error handling improvements reduce latency spikes\"\n   - \"hack-style obfuscations correlate with regressions\"\n   - \"algorithm optimizations improve memory usage\"\n2. Store learned patterns in cluster metadata\n3. Use patterns to prioritize future deltas\n4. Track optimization history\n\n🧭 GUILD ANALOGY:\nYou're like a guild master refining a ritual: start with the core chant, then test\nvariations from apprentices. Each cycle, keep the strongest elements, discard the weak,\nand the ritual evolves. Over time, the guild's library becomes a living lineage of\never-stronger spells.\n\n⚡ EXAMPLE FLOW:\n\nCore function: Cron parser v1\nAlternates:\n- v1.1 (better error handling)\n- v1.2 (faster regex)\n- v1.3 (memory-optimized)\n\nIteration 1:\n1. Generate v2 by combining regex speed + error handling robustness\n2. Validate → coverage +5%, latency −12%\n3. Promote v2 as canonical\n4. Archive v1.x variants with lineage pointers\n\nIteration 2:\n1. Explore v2's cluster for further refinements\n2. Generate v2.1 with memory optimizations\n3. Validate → memory −8%, success rate +2%\n4. Promote v2.1 as canonical\n\nOUTPUT FORMAT:\n```\n## RAG Cluster Optimization Report\n\n### Cluster: {cluster_id}\n- Status: {completed|no_iterations|stopped_early}\n- Total Iterations: {N}\n- Total Promotions: {M}\n- Total Archived: {P}\n\n### Summary\n- Initial Fitness: {X.XXX}\n- Final Fitness: {Y.XXY}\n- Total Improvement: {+Z.Z%}\n\n### Optimization Strategy\n- Strategy: {BEST_OF_BREED|INCREMENTAL|RADICAL|HYBRID}\n- Similarity Threshold: {0.96}\n- Fitness Improvement Threshold: {0.05}\n\n### Iterations\n\n#### Iteration 1\n- Candidate: {variant_id}\n- Fitness: {X.XXX}\n- Promoted: {Yes/No}\n- Insights:\n  * {insight 1}\n  * {insight 2}\n\n#### Iteration 2\n...\n\n### Learned Patterns\n- error_handling: Average improvement +{X.X%} ({N} samples)\n- algorithm: Average improvement +{Y.Y%} ({M} samples)\n\n### Final Canonical Variant\n- Variant ID: {variant_id}\n- Version: {version}\n- Fitness: {X.XXX}\n- Performance:\n  * Latency: {X.XX}ms\n  * Memory: {Y.YY}MB\n  * Success Rate: {Z.ZZ%}\n  * Test Coverage: {W.WW%}\n\n### Cluster Statistics\n- Total Variants: {N}\n- Active Variants: {M}\n- Archived Variants: {P}\n- Median Fitness: {X.XXX}\n\n### Lineage Tree\nv1 → v2 → v2.1 (current canonical)\n ├─ v1.1 (archived)\n ├─ v1.2 (archived)\n └─ v1.3 (archived)\n```\n",
+      "prompt_template": null,
+      "cost_tier": "medium",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "max_output_length": "medium",
+      "version": "1.0.0",
+      "definition_hash": "32a5a40941939b105f6eb5631e8f172aae5d7d0401003406f2ffb0c9e4942886",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951660Z"
+    },
+    "created_at": "2025-11-17T02:01:13.709755Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "32a5a40941939b105f6eb5631e8f172aae5d7d0401003406f2ffb0c9e4942886",
+    "breaking_changes": []
+  },
+  "aggregate_daily_production_by": {
+    "tool_id": "aggregate_daily_production_by",
+    "name": "Aggregate daily production by line: [{\"line\": 1, \"output\": 1152}, {\"line\": 2, \"output\": 770}, {\"line\": 3, \"output\": 746}, {\"line\": 4, \"output\": 607}] and rank by efficiency",
+    "tool_type": "workflow",
+    "description": "Aggregate daily production by line: [{\"line\": 1, \"output\": 1152}, {\"line\": 2, \"output\": 770}, {\"line\": 3, \"output\": 746}, {\"line\": 4, \"output\": 607}] and rank by efficiency",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "aggregate_daily_production_by",
+      "quality_score": 1.1,
+      "latency_ms": 919,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T02:08:33.381316+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Aggregate daily production by line: [{\"line\": 1, \"output\": 1152}, {\"line\": 2, \"output\": 770}, {\"line\": 3, \"output\": 746}, {\"line\": 4, \"output\": 607}] and rank by efficiency",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951664Z"
+    },
+    "created_at": "2025-11-17T02:08:33.381337Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_a_safety_notice_about_ch": {
+    "tool_id": "write_a_safety_notice_about_ch",
+    "name": "Write a safety notice about chemical spills for factory floor bulletin board",
+    "tool_type": "workflow",
+    "description": "Write a safety notice about chemical spills for factory floor bulletin board",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_safety_notice_about_ch",
+      "quality_score": 1.1,
+      "latency_ms": 868,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T02:12:13.663948+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write a safety notice about chemical spills for factory floor bulletin board",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951668Z"
+    },
+    "created_at": "2025-11-17T02:12:13.663970Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "calculate_machine_utilization": {
+    "tool_id": "calculate_machine_utilization",
+    "name": "Calculate machine utilization: 502 hours used / 720 hours available",
+    "tool_type": "workflow",
+    "description": "Calculate machine utilization: 502 hours used / 720 hours available",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_machine_utilization",
+      "quality_score": 1.1,
+      "latency_ms": 937,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T02:25:32.423207+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculate machine utilization: 502 hours used / 720 hours available",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951672Z"
+    },
+    "created_at": "2025-11-17T02:25:32.423226Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "remove_unused_node_runtime_import": {
+    "tool_id": "remove_unused_node_runtime_import",
+    "name": "Remove Unused node_runtime Import",
+    "tool_type": "executable",
+    "description": "Detects and removes unused 'from node_runtime import call_tool' imports and related\npath setup code when call_tool is not actually used in the code.\n\nThis fixes the common error where generated code imports node_runtime but never calls\nany tools, causing ModuleNotFoundError in tests.\n\nThe tool:\n- Checks if call_tool() is actually called in the code\n- If NOT used, removes:\n  * from node_runtime import call_tool\n  * from pathlib import Path (if only for node_runtime)\n  * sys.path.insert(...) for node_runtime\n  * import logging (if only added by repair system)\n  * logging.basicConfig(...)\n  * logging.debug(...) calls\n  * try/except wrappers added by repair system\n- If used, keeps everything intact\n",
+    "tags": [
+      "code-cleanup",
+      "import",
+      "node_runtime",
+      "unused",
+      "static-analysis",
+      "autofix"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\remove_unused_node_runtime_import.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/remove_unused_node_runtime_import.py"
+      ],
+      "input_schema": {
+        "code": {
+          "type": "string",
+          "required": true,
+          "description": "Python source code to analyze and clean"
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the operation succeeded"
+          },
+          "original_code": {
+            "type": "string",
+            "description": "The original input code"
+          },
+          "cleaned_code": {
+            "type": "string",
+            "description": "The cleaned code with unused imports removed"
+          },
+          "changes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of changes made"
+          },
+          "was_modified": {
+            "type": "boolean",
+            "description": "Whether any changes were made"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "very-fast",
+      "quality_tier": "excellent",
+      "version": "1.0.0",
+      "definition_hash": "77fbca0319c92b77b8850d10daa732b9d90efb11b5b9925e25266240e0c9c453",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951676Z"
+    },
+    "created_at": "2025-11-17T02:43:19.957840Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "77fbca0319c92b77b8850d10daa732b9d90efb11b5b9925e25266240e0c9c453",
+    "breaking_changes": []
+  },
+  "process_production_metrics_fro": {
+    "tool_id": "process_production_metrics_fro",
+    "name": "Process production metrics from shift report: {\"line_1\": 1158, \"line_2\": 730} and generate summary statistics",
+    "tool_type": "workflow",
+    "description": "Process production metrics from shift report: {\"line_1\": 1158, \"line_2\": 730} and generate summary statistics",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "process_production_metrics_fro",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 54,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T02:59:48.804478+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Process production metrics from shift report: {\"line_1\": 1158, \"line_2\": 730} and generate summary statistics",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951680Z"
+    },
+    "created_at": "2025-11-17T02:59:48.804498Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763348473": {
+    "tool_id": "note_this_workflow_may_be_mul_1763348473",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 908, \"line_2\": 983} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 908, \"line_2\": 983} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763348473",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 43,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T03:03:34.975647+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 908, \"line_2\": 983} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951685Z"
+    },
+    "created_at": "2025-11-17T03:03:34.975666Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "determine_labor_cost_44_worke": {
+    "tool_id": "determine_labor_cost_44_worke",
+    "name": "Determine labor cost: 44 workers × 24 hours × $17/hour",
+    "tool_type": "workflow",
+    "description": "Determine labor cost: 44 workers × 24 hours × $17/hour",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "determine_labor_cost_44_worke",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 48,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T03:12:49.892450+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Determine labor cost: 44 workers × 24 hours × $17/hour",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951689Z"
+    },
+    "created_at": "2025-11-17T03:12:49.892467Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_incident_report_summary_1763349262": {
+    "tool_id": "write_incident_report_summary_1763349262",
+    "name": "Write incident report summary for near miss",
+    "tool_type": "workflow",
+    "description": "Write incident report summary for near miss",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_incident_report_summary_1763349262",
+      "quality_score": 1.1,
+      "latency_ms": 1614,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T03:16:24.099813+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write incident report summary for near miss",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951693Z"
+    },
+    "created_at": "2025-11-17T03:16:24.099833Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_a_safety_notice_about_pi": {
+    "tool_id": "write_a_safety_notice_about_pi",
+    "name": "Write a safety notice about pinch points for factory floor bulletin board",
+    "tool_type": "workflow",
+    "description": "Write a safety notice about pinch points for factory floor bulletin board",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_safety_notice_about_pi",
+      "quality_score": 1.1,
+      "latency_ms": 894,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T03:28:03.846705+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write a safety notice about pinch points for factory floor bulletin board",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951697Z"
+    },
+    "created_at": "2025-11-17T03:28:03.846725Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "what_is_the_proper_lockout_tag": {
+    "tool_id": "what_is_the_proper_lockout_tag",
+    "name": "What is the proper lockout/tagout procedure for forklift?",
+    "tool_type": "workflow",
+    "description": "What is the proper lockout/tagout procedure for forklift?",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "what_is_the_proper_lockout_tag",
+      "quality_score": 1.1,
+      "latency_ms": 837,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T03:42:55.443220+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "What is the proper lockout/tagout procedure for forklift?",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951701Z"
+    },
+    "created_at": "2025-11-17T03:42:55.443249Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "draft_announcement_for_new_saf": {
+    "tool_id": "draft_announcement_for_new_saf",
+    "name": "Draft announcement for new safety policy implementation",
+    "tool_type": "workflow",
+    "description": "Draft announcement for new safety policy implementation",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "draft_announcement_for_new_saf",
+      "quality_score": 1.1,
+      "latency_ms": 891,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T04:09:12.761241+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Draft announcement for new safety policy implementation",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951705Z"
+    },
+    "created_at": "2025-11-17T04:09:12.761259Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763352827": {
+    "tool_id": "note_this_workflow_may_be_mul_1763352827",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Compute inventory levels: starting 3894 units, produced 379, shipped 325\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Compute inventory levels: starting 3894 units, produced 379, shipped 325\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763352827",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 45,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T04:16:08.569015+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Compute inventory levels: starting 3894 units, produced 379, shipped 325\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951709Z"
+    },
+    "created_at": "2025-11-17T04:16:08.569034Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763353061": {
+    "tool_id": "note_this_workflow_may_be_mul_1763353061",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create automation script to monitor temperature and alert if exceeds 4\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create automation script to monitor temperature and alert if exceeds 4\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763353061",
+      "quality_score": 1.1,
+      "latency_ms": 877,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T04:24:30.592741+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create automation script to monitor temperature and alert if exceeds 4\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951713Z"
+    },
+    "created_at": "2025-11-17T04:24:30.592758Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_shift_log_entry_for_swi": {
+    "tool_id": "create_shift_log_entry_for_swi",
+    "name": "Create shift log entry for Swing shift on 2025-11-17 with 9 events",
+    "tool_type": "workflow",
+    "description": "Create shift log entry for Swing shift on 2025-11-17 with 9 events",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_shift_log_entry_for_swi",
+      "quality_score": 1.1,
+      "latency_ms": 930,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T04:30:31.083547+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create shift log entry for Swing shift on 2025-11-17 with 9 events",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951717Z"
+    },
+    "created_at": "2025-11-17T04:30:31.083564Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763354130": {
+    "tool_id": "note_this_workflow_may_be_mul_1763354130",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create shift log entry for Swing shift on 2025-11-17 with 4 events\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create shift log entry for Swing shift on 2025-11-17 with 4 events\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763354130",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 46,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T04:36:53.081521+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Create shift log entry for Swing shift on 2025-11-17 with 4 events\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951721Z"
+    },
+    "created_at": "2025-11-17T04:36:53.081537Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763354290": {
+    "tool_id": "note_this_workflow_may_be_mul_1763354290",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 1161 units produced from 1136 raw materials (percentage)\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 1161 units produced from 1136 raw materials (percentage)\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763354290",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 41,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T04:39:23.751201+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 1161 units produced from 1136 raw materials (percentage)\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Analyze requirements and clarify constraints\n3. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951724Z"
+    },
+    "created_at": "2025-11-17T04:39:23.751217Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_training_material_intro": {
+    "tool_id": "create_training_material_intro",
+    "name": "Create training material introduction for new press machine operators",
+    "tool_type": "workflow",
+    "description": "Create training material introduction for new press machine operators",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_training_material_intro",
+      "quality_score": 1.1,
+      "latency_ms": 1046,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T04:48:59.559227+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create training material introduction for new press machine operators",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951728Z"
+    },
+    "created_at": "2025-11-17T04:48:59.559249Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "compute_inventory_levels_star": {
+    "tool_id": "compute_inventory_levels_star",
+    "name": "Compute inventory levels: starting 1873 units, produced 238, shipped 101",
+    "tool_type": "workflow",
+    "description": "Compute inventory levels: starting 1873 units, produced 238, shipped 101",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "compute_inventory_levels_star",
+      "quality_score": 1.1,
+      "latency_ms": 872,
+      "memory_mb_peak": 1.94,
+      "created_at": "2025-11-17T04:55:16.638547+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Compute inventory levels: starting 1873 units, produced 238, shipped 101",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951732Z"
+    },
+    "created_at": "2025-11-17T04:55:16.638562Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763355521": {
+    "tool_id": "note_this_workflow_may_be_mul_1763355521",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write function to calculate OEE (Overall Equipment Effectiveness) from availability, performance, quality metrics\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test\n3. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write function to calculate OEE (Overall Equipment Effectiveness) from availability, performance, quality metrics\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test\n3. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763355521",
+      "quality_score": 1.1,
+      "latency_ms": 984,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T05:01:49.442314+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write function to calculate OEE (Overall Equipment Effectiveness) from availability, performance, quality metrics\n\nStages:\n1. Plan the approach and outline solution\n2. Run example and test\n3. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951736Z"
+    },
+    "created_at": "2025-11-17T05:01:49.442342Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763356097": {
+    "tool_id": "note_this_workflow_may_be_mul_1763356097",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Draft announcement for new environmental policy implementation\n\nStages:\n1. Plan the approach and outline solution\n2. Brainstorm ideas\n3. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Draft announcement for new environmental policy implementation\n\nStages:\n1. Plan the approach and outline solution\n2. Brainstorm ideas\n3. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763356097",
+      "quality_score": 1.1,
+      "latency_ms": 974,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T05:09:10.754321+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Draft announcement for new environmental policy implementation\n\nStages:\n1. Plan the approach and outline solution\n2. Brainstorm ideas\n3. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951740Z"
+    },
+    "created_at": "2025-11-17T05:09:10.754336Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "convert_the_numeric_value_to_m": {
+    "tool_id": "convert_the_numeric_value_to_m",
+    "name": "Convert the numeric value to meters",
+    "tool_type": "workflow",
+    "description": "Convert the numeric value to meters",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "convert_the_numeric_value_to_m",
+      "quality_score": 1.1,
+      "latency_ms": 854,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T05:38:47.388781+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Convert the numeric value to meters",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951744Z"
+    },
+    "created_at": "2025-11-17T05:38:47.388798Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "calculate_total_production_for": {
+    "tool_id": "calculate_total_production_for",
+    "name": "Calculate total production for 2327 units at 150 units/hour over 12 hours",
+    "tool_type": "workflow",
+    "description": "Calculate total production for 2327 units at 150 units/hour over 12 hours",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_total_production_for",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 49,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T05:41:09.183060+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculate total production for 2327 units at 150 units/hour over 12 hours",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951748Z"
+    },
+    "created_at": "2025-11-17T05:41:09.183086Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763358158": {
+    "tool_id": "note_this_workflow_may_be_mul_1763358158",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Design API/logic\n2. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Design API/logic\n2. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763358158",
+      "quality_score": 1.1,
+      "latency_ms": 944,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T05:49:10.690619+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Design API/logic\n2. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951752Z"
+    },
+    "created_at": "2025-11-17T05:49:10.690635Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "identify_the_operations_in_the": {
+    "tool_id": "identify_the_operations_in_the",
+    "name": "Identify the operations in the task",
+    "tool_type": "workflow",
+    "description": "Identify the operations in the task",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "identify_the_operations_in_the",
+      "quality_score": 1.1,
+      "latency_ms": 819,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T05:58:47.567838+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Identify the operations in the task",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951756Z"
+    },
+    "created_at": "2025-11-17T05:58:47.567855Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "count_the_number_of_distinct_o": {
+    "tool_id": "count_the_number_of_distinct_o",
+    "name": "Count the number of distinct operations in the task",
+    "tool_type": "workflow",
+    "description": "Count the number of distinct operations in the task",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "count_the_number_of_distinct_o",
+      "quality_score": 1.1,
+      "latency_ms": 865,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:03:46.677807+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Count the number of distinct operations in the task",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951759Z"
+    },
+    "created_at": "2025-11-17T06:03:46.677831Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763359687": {
+    "tool_id": "note_this_workflow_may_be_mul_1763359687",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format inventory table with columns: SKU, Description, Quantity, Location, Status\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Plan the approach and outline solution\n4. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format inventory table with columns: SKU, Description, Quantity, Location, Status\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Plan the approach and outline solution\n4. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763359687",
+      "quality_score": 1.1,
+      "latency_ms": 988,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:12:10.021246+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format inventory table with columns: SKU, Description, Quantity, Location, Status\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements\n3. Plan the approach and outline solution\n4. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951763Z"
+    },
+    "created_at": "2025-11-17T06:12:10.021269Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_training_material_intro_1763360014": {
+    "tool_id": "create_training_material_intro_1763360014",
+    "name": "Create training material introduction for new press machine operators",
+    "tool_type": "workflow",
+    "description": "Create training material introduction for new press machine operators",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_training_material_intro_1763360014",
+      "quality_score": 1.1,
+      "latency_ms": 893,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:15:21.982176+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create training material introduction for new press machine operators",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951767Z"
+    },
+    "created_at": "2025-11-17T06:15:21.982195Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763360512": {
+    "tool_id": "note_this_workflow_may_be_mul_1763360512",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about falling objects for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Document results and assumptions\n4. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about falling objects for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Document results and assumptions\n4. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763360512",
+      "quality_score": 1.1,
+      "latency_ms": 871,
+      "memory_mb_peak": 1.94,
+      "created_at": "2025-11-17T06:22:57.460834+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write a safety notice about falling objects for factory floor bulletin board\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Document results and assumptions\n4. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951772Z"
+    },
+    "created_at": "2025-11-17T06:22:57.460855Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763360668": {
+    "tool_id": "note_this_workflow_may_be_mul_1763360668",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763360668",
+      "quality_score": 1.1,
+      "latency_ms": 908,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:34:06.435071+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate state machine for assembly line with states: idle, loading, processing, unloading, error\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951776Z"
+    },
+    "created_at": "2025-11-17T06:34:06.435092Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763361323": {
+    "tool_id": "note_this_workflow_may_be_mul_1763361323",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 337°F to Celsius for oven temperature specification\n\nStages:\n1. Identify units\n2. Identify units\n3. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 337°F to Celsius for oven temperature specification\n\nStages:\n1. Identify units\n2. Identify units\n3. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763361323",
+      "quality_score": 1.1,
+      "latency_ms": 814,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:36:16.533938+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 337°F to Celsius for oven temperature specification\n\nStages:\n1. Identify units\n2. Identify units\n3. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951780Z"
+    },
+    "created_at": "2025-11-17T06:36:16.533953Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "aggregate_daily_production_by_1763361729": {
+    "tool_id": "aggregate_daily_production_by_1763361729",
+    "name": "Aggregate daily production by line: [{}]",
+    "tool_type": "workflow",
+    "description": "Aggregate daily production by line: [{}]",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "aggregate_daily_production_by_1763361729",
+      "quality_score": 1.1,
+      "latency_ms": 803,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:46:35.472402+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Aggregate daily production by line: [{}]",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951784Z"
+    },
+    "created_at": "2025-11-17T06:46:35.472419Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763362212": {
+    "tool_id": "note_this_workflow_may_be_mul_1763362212",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 806 units produced from 1346 raw materials (percentage)\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Verify computations",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 806 units produced from 1346 raw materials (percentage)\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Verify computations",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763362212",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 47,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T06:57:23.474650+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Calculate efficiency: 806 units produced from 1346 raw materials (percentage)\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Verify computations",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951788Z"
+    },
+    "created_at": "2025-11-17T06:57:23.474669Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763363759": {
+    "tool_id": "note_this_workflow_may_be_mul_1763363759",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 1154, Efficiency: 97%\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 1154, Efficiency: 97%\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763363759",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 48,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T07:19:28.135934+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 1154, Efficiency: 97%\n\nStages:\n1. Plan the approach and outline solution\n2. Plan the approach and outline solution\n3. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951792Z"
+    },
+    "created_at": "2025-11-17T07:19:28.135956Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "draft_announcement_for_new_qua": {
+    "tool_id": "draft_announcement_for_new_qua",
+    "name": "Draft announcement for new quality policy implementation",
+    "tool_type": "workflow",
+    "description": "Draft announcement for new quality policy implementation",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "draft_announcement_for_new_qua",
+      "quality_score": 1.1,
+      "latency_ms": 955,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T07:27:54.821002+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Draft announcement for new quality policy implementation",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951796Z"
+    },
+    "created_at": "2025-11-17T07:27:54.821020Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763364799": {
+    "tool_id": "note_this_workflow_may_be_mul_1763364799",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write incident report summary for minor injury\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write incident report summary for minor injury\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763364799",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 42,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T07:36:21.626747+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Write incident report summary for minor injury\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951800Z"
+    },
+    "created_at": "2025-11-17T07:36:21.626770Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "how_should_operators_respond_t_1763365255": {
+    "tool_id": "how_should_operators_respond_t_1763365255",
+    "name": "How should operators respond to quality alarm?",
+    "tool_type": "workflow",
+    "description": "How should operators respond to quality alarm?",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "how_should_operators_respond_t_1763365255",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 44,
+      "memory_mb_peak": 2.03,
+      "created_at": "2025-11-17T07:41:50.257734+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "How should operators respond to quality alarm?",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951804Z"
+    },
+    "created_at": "2025-11-17T07:41:50.257749Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "transform_sensor_readings_380": {
+    "tool_id": "transform_sensor_readings_380",
+    "name": "Transform sensor readings [380, 404, 248, 1010, 617, 723, 589, 427, 599, 292] to normalized 0-100 scale",
+    "tool_type": "workflow",
+    "description": "Transform sensor readings [380, 404, 248, 1010, 617, 723, 589, 427, 599, 292] to normalized 0-100 scale",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "transform_sensor_readings_380",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 43,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T07:46:26.725587+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Transform sensor readings [380, 404, 248, 1010, 617, 723, 589, 427, 599, 292] to normalized 0-100 scale",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951808Z"
+    },
+    "created_at": "2025-11-17T07:46:26.725606Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "draft_announcement_for_new_qua_1763365912": {
+    "tool_id": "draft_announcement_for_new_qua_1763365912",
+    "name": "Draft announcement for new quality policy implementation",
+    "tool_type": "workflow",
+    "description": "Draft announcement for new quality policy implementation",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "draft_announcement_for_new_qua_1763365912",
+      "quality_score": 1.1,
+      "latency_ms": 901,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T07:53:41.948118+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Draft announcement for new quality policy implementation",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951812Z"
+    },
+    "created_at": "2025-11-17T07:53:41.948140Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "identify_operations_in_the_tas": {
+    "tool_id": "identify_operations_in_the_tas",
+    "name": "Identify operations in the task",
+    "tool_type": "workflow",
+    "description": "Identify operations in the task",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "identify_operations_in_the_tas",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 42,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T08:13:14.546452+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Identify operations in the task",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951816Z"
+    },
+    "created_at": "2025-11-17T08:13:14.546483Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "calculate_machine_utilization_1763367763": {
+    "tool_id": "calculate_machine_utilization_1763367763",
+    "name": "Calculate machine utilization: 670 hours used / 720 hours available",
+    "tool_type": "workflow",
+    "description": "Calculate machine utilization: 670 hours used / 720 hours available",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "calculate_machine_utilization_1763367763",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 41,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T08:24:17.437141+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Calculate machine utilization: 670 hours used / 720 hours available",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951819Z"
+    },
+    "created_at": "2025-11-17T08:24:17.437156Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763367963": {
+    "tool_id": "note_this_workflow_may_be_mul_1763367963",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 4413 pounds to kilograms for shipping documentation\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 4413 pounds to kilograms for shipping documentation\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763367963",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 46,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T08:26:56.768424+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 4413 pounds to kilograms for shipping documentation\n\nStages:\n1. Plan the approach and outline solution\n2. Reflect and propose improvements",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951824Z"
+    },
+    "created_at": "2025-11-17T08:26:56.768446Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "generate_state_machine_for_ass": {
+    "tool_id": "generate_state_machine_for_ass",
+    "name": "Generate state machine for assembly line with states: idle, loading, processing, unloading, error",
+    "tool_type": "workflow",
+    "description": "Generate state machine for assembly line with states: idle, loading, processing, unloading, error",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "generate_state_machine_for_ass",
+      "quality_score": 1.1,
+      "latency_ms": 982,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T08:38:28.375457+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Generate state machine for assembly line with states: idle, loading, processing, unloading, error",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951828Z"
+    },
+    "created_at": "2025-11-17T08:38:28.375475Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763368827": {
+    "tool_id": "note_this_workflow_may_be_mul_1763368827",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate Python script to parse production log format: timestamp|line_id|product_id|quantity|status\n\nStages:\n1. Design API/logic\n2. Run example and test\n3. Plan the approach and outline solution\n4. Run example and test",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate Python script to parse production log format: timestamp|line_id|product_id|quantity|status\n\nStages:\n1. Design API/logic\n2. Run example and test\n3. Plan the approach and outline solution\n4. Run example and test",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763368827",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 49,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T08:43:28.639526+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Generate Python script to parse production log format: timestamp|line_id|product_id|quantity|status\n\nStages:\n1. Design API/logic\n2. Run example and test\n3. Plan the approach and outline solution\n4. Run example and test",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951831Z"
+    },
+    "created_at": "2025-11-17T08:43:28.639559Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763369117": {
+    "tool_id": "note_this_workflow_may_be_mul_1763369117",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 365 RPM to rad/s for motor control calculations\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Double-check results\n3. Document results and assumptions",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 365 RPM to rad/s for motor control calculations\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Double-check results\n3. Document results and assumptions",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763369117",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 48,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T08:46:02.217884+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Convert 365 RPM to rad/s for motor control calculations\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Double-check results\n3. Document results and assumptions",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951835Z"
+    },
+    "created_at": "2025-11-17T08:46:02.217903Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "aggregate_daily_production_by_1763369310": {
+    "tool_id": "aggregate_daily_production_by_1763369310",
+    "name": "Aggregate daily production by line: [{\"line\": 1, \"output\": 551}, {\"line\": 2, \"output\": 913}, {\"line\": 3, \"output\": 795}, {\"line\": 4, \"output\": 1121}] and rank by efficiency",
+    "tool_type": "workflow",
+    "description": "Aggregate daily production by line: [{\"line\": 1, \"output\": 551}, {\"line\": 2, \"output\": 913}, {\"line\": 3, \"output\": 795}, {\"line\": 4, \"output\": 1121}] and rank by efficiency",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "aggregate_daily_production_by_1763369310",
+      "quality_score": 1.1,
+      "latency_ms": 885,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T08:50:01.442046+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Aggregate daily production by line: [{\"line\": 1, \"output\": 551}, {\"line\": 2, \"output\": 913}, {\"line\": 3, \"output\": 795}, {\"line\": 4, \"output\": 1121}] and rank by efficiency",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951839Z"
+    },
+    "created_at": "2025-11-17T08:50:01.442066Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763369988": {
+    "tool_id": "note_this_workflow_may_be_mul_1763369988",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 951, Efficiency: 79%\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Format output\n3. Run quick validation/tests and fix issues",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 951, Efficiency: 79%\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Format output\n3. Run quick validation/tests and fix issues",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763369988",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 50,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T09:04:34.420731+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 5, Output: 951, Efficiency: 79%\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Format output\n3. Run quick validation/tests and fix issues",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951843Z"
+    },
+    "created_at": "2025-11-17T09:04:34.420760Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763371076": {
+    "tool_id": "note_this_workflow_may_be_mul_1763371076",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 822, \"line_2\": 881} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 822, \"line_2\": 881} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763371076",
+      "quality_score": 1.1,
+      "latency_ms": 933,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T09:19:06.231196+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Process production metrics from shift report: {\"line_1\": 822, \"line_2\": 881} and generate summary statistics\n\nStages:\n1. Analyze requirements and clarify constraints\n2. Run quick validation/tests and fix issues",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951847Z"
+    },
+    "created_at": "2025-11-17T09:19:06.231216Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "note_this_workflow_may_be_mul_1763372373": {
+    "tool_id": "note_this_workflow_may_be_mul_1763372373",
+    "name": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 1, Output: 849, Efficiency: 91%\n\nStages:\n1. Plan the approach and outline solution\n2. Validate formatting",
+    "tool_type": "workflow",
+    "description": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 1, Output: 849, Efficiency: 91%\n\nStages:\n1. Plan the approach and outline solution\n2. Validate formatting",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "note_this_workflow_may_be_mul_1763372373",
+      "quality_score": 1.1,
+      "latency_ms": 887,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T09:41:10.255602+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Note: This workflow may be multi-stage. If a 'Stages:' section is present, execute the stages sequentially, keeping responses concise per stage and a short final summary.\n\nTask: Format production report: Date: 2025-11-17, Line: Line 1, Output: 849, Efficiency: 91%\n\nStages:\n1. Plan the approach and outline solution\n2. Validate formatting",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951851Z"
+    },
+    "created_at": "2025-11-17T09:41:10.255625Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_motivational_message_fo_1763373025": {
+    "tool_id": "create_motivational_message_fo_1763373025",
+    "name": "Create motivational message for certification achievement",
+    "tool_type": "workflow",
+    "description": "Create motivational message for certification achievement",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_motivational_message_fo_1763373025",
+      "quality_score": 1.1,
+      "latency_ms": 911,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T09:51:29.792193+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create motivational message for certification achievement",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951855Z"
+    },
+    "created_at": "2025-11-17T09:51:29.792214Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "convert_215_feet_to_inches": {
+    "tool_id": "convert_215_feet_to_inches",
+    "name": " Convert 215 feet to inches",
+    "tool_type": "workflow",
+    "description": " Convert 215 feet to inches",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "convert_215_feet_to_inches",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 47,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T09:57:55.118987+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": " Convert 215 feet to inches",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951859Z"
+    },
+    "created_at": "2025-11-17T09:57:55.119005Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "convert_215_inches_to_meters": {
+    "tool_id": "convert_215_inches_to_meters",
+    "name": " Convert 215 inches to meters",
+    "tool_type": "workflow",
+    "description": " Convert 215 inches to meters",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "convert_215_inches_to_meters",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 39,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T10:00:42.922571+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": " Convert 215 inches to meters",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951864Z"
+    },
+    "created_at": "2025-11-17T10:00:42.922588Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "create_training_material_intro_1763373886": {
+    "tool_id": "create_training_material_intro_1763373886",
+    "name": "Create training material introduction for new forklift operators",
+    "tool_type": "workflow",
+    "description": "Create training material introduction for new forklift operators",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "create_training_material_intro_1763373886",
+      "quality_score": 1.1,
+      "latency_ms": 1068,
+      "memory_mb_peak": 1.92,
+      "created_at": "2025-11-17T10:15:02.840286+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Create training material introduction for new forklift operators",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951867Z"
+    },
+    "created_at": "2025-11-17T10:15:02.840305Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "what_is_the_correct_procedure": {
+    "tool_id": "what_is_the_correct_procedure",
+    "name": "What is the correct procedure for calibration?",
+    "tool_type": "workflow",
+    "description": "What is the correct procedure for calibration?",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "what_is_the_correct_procedure",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 44,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T10:18:33.923464+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "What is the correct procedure for calibration?",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951872Z"
+    },
+    "created_at": "2025-11-17T10:18:33.923485Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "convert_491_rpm_to_rad_s_for_m": {
+    "tool_id": "convert_491_rpm_to_rad_s_for_m",
+    "name": "Convert 491 RPM to rad/s for motor control calculations",
+    "tool_type": "workflow",
+    "description": "Convert 491 RPM to rad/s for motor control calculations",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "convert_491_rpm_to_rad_s_for_m",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 44,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T10:30:18.677945+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Convert 491 RPM to rad/s for motor control calculations",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951876Z"
+    },
+    "created_at": "2025-11-17T10:30:18.677963Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_a_plc_ladder_logic_funct": {
+    "tool_id": "write_a_plc_ladder_logic_funct",
+    "name": "Write a PLC ladder logic function to control conveyor belt with sensor_1, sensor_2, sensor_3, sensor_4, sensor_5 sensors",
+    "tool_type": "workflow",
+    "description": "Write a PLC ladder logic function to control conveyor belt with sensor_1, sensor_2, sensor_3, sensor_4, sensor_5 sensors",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_plc_ladder_logic_funct",
+      "quality_score": 1.2000000000000002,
+      "latency_ms": 47,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T10:38:16.236079+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write a PLC ladder logic function to control conveyor belt with sensor_1, sensor_2, sensor_3, sensor_4, sensor_5 sensors",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T10:54:39.951880Z"
+    },
+    "created_at": "2025-11-17T10:38:16.236098Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "identify_operations_in_the_tas_1763377030": {
+    "tool_id": "identify_operations_in_the_tas_1763377030",
+    "name": "Identify operations in the task",
+    "tool_type": "workflow",
+    "description": "Identify operations in the task",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "identify_operations_in_the_tas_1763377030",
+      "quality_score": 1.1,
+      "latency_ms": 900,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T11:00:21.662351+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Identify operations in the task"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T11:00:21.662373Z"
+    },
+    "created_at": "2025-11-17T11:00:21.662368Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",

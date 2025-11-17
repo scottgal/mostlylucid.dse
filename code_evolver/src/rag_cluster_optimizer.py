@@ -46,6 +46,8 @@ discards the weak, and the ritual evolves. Over time, the guild's library become
 a living lineage of ever‑stronger spells.
 """
 
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

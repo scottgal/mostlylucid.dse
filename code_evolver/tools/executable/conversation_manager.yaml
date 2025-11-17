@@ -20,7 +20,12 @@ description: |
 
 type: executable
 category: conversation
-executable: conversation_manager.py
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/conversation_manager.py"]
+  stdin_mode: true
+  timeout: 30
 
 parameters:
   action:

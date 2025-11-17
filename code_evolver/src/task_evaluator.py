@@ -104,15 +104,17 @@ Classify as ONE:
 - creative_content: stories, jokes, articles, poems, OR GENERATING SAMPLE/TEST/RANDOM DATA
 - arithmetic: math calculations, number operations
 - data_processing: filtering, sorting, transforming EXISTING data (NOT generating new data)
-- code_generation: writing functions, programs
+- code_generation: writing functions, programs, OR fetching/downloading/saving data
 - translation: language translation
 - question_answering: answering questions, explaining concepts
 - formatting: changing text format/case
 - conversion: converting between formats
 - unknown: unclear tasks
 
-IMPORTANT: "generate data", "create sample data", "random data" → creative_content (needs LLM)
-           "filter data", "sort data" → data_processing (can use code)
+IMPORTANT:
+- "generate data", "create sample data", "random data" → creative_content (needs LLM)
+- "filter data", "sort data" → data_processing (can use code)
+- "fetch", "download", "get from URL", "save to disk" → code_generation (needs code to fetch/save)
 
 Also rate COMPLEXITY:
 simple, moderate, complex
@@ -161,12 +163,12 @@ COMPLEXITY: [pick one]"""
                         category = 'creative_content'
                     elif any(word in response_lower for word in ['math', 'calculate', 'arithmetic', 'number']):
                         category = 'arithmetic'
-                    elif any(word in response_lower for word in ['code', 'function', 'program']):
+                    elif any(word in response_lower for word in ['code', 'function', 'program', 'fetch', 'download', 'save', 'file']):
                         category = 'code_generation'
                     elif any(word in response_lower for word in ['question', 'answer', 'explain']):
                         category = 'question_answering'
-                    elif any(word in response_lower for word in ['accidental', 'unclear', 'nonsense', 'invalid']):
-                        category = 'accidental'
+                    # Removed aggressive 'accidental' keyword check - let unknown tasks route to LLM
+                    # Don't reject tasks just because tinyllama is confused
                     else:
                         category = 'unknown'
 
@@ -235,8 +237,8 @@ COMPLEXITY: [pick one]"""
             len(words) == 1 and desc_lower in ['test', 'testing', 'asdf', 'qwerty', 'hello', 'hi', 'abc'],
             # Just numbers with no context (but allow "add 10 and 20")
             len(words) == 1 and desc_clean.isdigit(),
-            # Random keypresses (3+ consecutive same char)
-            any(description.count(c * 3) > 0 for c in set(description) if c.isalpha()),
+            # Random keypresses (4+ consecutive same char, not 3 to avoid false positives like "www")
+            any(description.count(c * 4) > 0 for c in set(description) if c.isalpha()),
             # Just punctuation
             desc_clean == '',
             # Mostly consonants with no real words (unlikely to be real)

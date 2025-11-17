@@ -17,10 +17,16 @@ description: |
 type: executable
 category: scheduling
 
+executable:
+  command: "python"
+  args: ["{tool_dir}/cron_deconstructor.py"]
+  stdin_mode: true
+  timeout: 10
+
 parameters:
   cron:
     type: string
-    description: Cron expression to deconstruct (5 fields: minute hour day month weekday)
+    description: "Cron expression to deconstruct (5 fields: minute hour day month weekday)"
     required: true
     examples:
       - "0 9 * * MON"

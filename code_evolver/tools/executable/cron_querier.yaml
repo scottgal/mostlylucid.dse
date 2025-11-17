@@ -15,6 +15,12 @@ description: |
 type: executable
 category: scheduling
 
+executable:
+  command: "python"
+  args: ["{tool_dir}/cron_querier.py"]
+  stdin_mode: true
+  timeout: 10
+
 parameters:
   query:
     type: string
@@ -173,37 +179,37 @@ examples:
 
 supported_queries:
   time_windows:
-    - "next N hours" - Tasks running in next N hours from now
-    - "next N minutes" - Tasks running in next N minutes
-    - "today" - Tasks running until end of today
-    - "tonight" - Tasks running from 6pm to midnight
-    - "tomorrow" - Tasks running tomorrow
-    - "this week" - Tasks running until end of week
-    - "this weekend" - Tasks running until Sunday
+    - "next N hours: Tasks running in next N hours from now"
+    - "next N minutes: Tasks running in next N minutes"
+    - "today: Tasks running until end of today"
+    - "tonight: Tasks running from 6pm to midnight"
+    - "tomorrow: Tasks running tomorrow"
+    - "this week: Tasks running until end of week"
+    - "this weekend: Tasks running until Sunday"
 
   groups:
-    - "backup tasks" / "backups" → group: backups
-    - "reports" / "report jobs" → group: reports
-    - "monitoring" / "monitoring tasks" → group: monitoring
-    - "maintenance" / "cleanup jobs" → group: maintenance
-    - "notifications" / "alerts" → group: notifications
+    - "backup tasks / backups: group backups"
+    - "reports / report jobs: group reports"
+    - "monitoring / monitoring tasks: group monitoring"
+    - "maintenance / cleanup jobs: group maintenance"
+    - "notifications / alerts: group notifications"
 
   frequencies:
-    - "every minute" → frequency: every_minute
-    - "every 5 minutes" → frequency: every_5_minutes
-    - "hourly" / "every hour" → frequency: hourly
-    - "daily" / "every day" → frequency: daily
-    - "weekly" / "every week" → frequency: weekly
-    - "monthly" → frequency: monthly
+    - "every minute: frequency every_minute"
+    - "every 5 minutes: frequency every_5_minutes"
+    - "hourly / every hour: frequency hourly"
+    - "daily / every day: frequency daily"
+    - "weekly / every week: frequency weekly"
+    - "monthly: frequency monthly"
 
   times_of_day:
-    - "morning" → time_of_day: morning (6am-12pm)
-    - "afternoon" → time_of_day: afternoon (12pm-6pm)
-    - "evening" / "tonight" → time_of_day: evening (6pm-12am)
-    - "night" / "overnight" → time_of_day: night (12am-6am)
+    - "morning: time_of_day morning (6am-12pm)"
+    - "afternoon: time_of_day afternoon (12pm-6pm)"
+    - "evening / tonight: time_of_day evening (6pm-12am)"
+    - "night / overnight: time_of_day night (12am-6am)"
 
   day_names:
-    - "monday", "tuesday", "wednesday", etc. → day_names filter
+    - "monday, tuesday, wednesday, etc.: day_names filter"
 
 usage_with_task_manager:
   example: |

@@ -185,6 +185,52 @@ class SafeConsole(Console):
 console = SafeConsole()
 
 
+class LogPanel:
+    """
+    Full-width panel for displaying log messages (shows last 4 lines).
+    """
+    def __init__(self, console: Console, max_lines: int = 4):
+        self.console = console
+        self.max_lines = max_lines
+        self.log_lines = []
+
+    def log(self, message: str, style: str = "dim"):
+        """Add a log message and display panel."""
+        # Add message to buffer
+        self.log_lines.append((message, style))
+
+        # Keep only last N lines
+        if len(self.log_lines) > self.max_lines:
+            self.log_lines = self.log_lines[-self.max_lines:]
+
+        # Build panel content
+        from rich.text import Text
+        content = Text()
+
+        for i, (msg, msg_style) in enumerate(self.log_lines):
+            if i > 0:
+                content.append("\n")
+            content.append(msg, style=msg_style)
+
+        # Display full-width panel
+        panel = Panel(
+            content,
+            title="[dim]Logs[/dim]",
+            border_style="dim",
+            box=box.SIMPLE,
+            expand=True  # Full width
+        )
+        self.console.print(panel)
+
+    def clear(self):
+        """Clear log buffer."""
+        self.log_lines = []
+
+
+# Create global log panel
+log_panel = LogPanel(console, max_lines=4)
+
+
 class WorkflowDisplay:
     """Clean workflow stage display for modern chat experience."""
 
@@ -261,7 +307,7 @@ class ChatCLI:
         Args:
             config_path: Path to configuration file
         """
-        console.print("[dim cyan]> Processing configuration...[/dim cyan]")
+        log_panel.log("> Processing configuration...", style="dim cyan")
         self.config = ConfigManager(config_path)
 
         # Initialize status manager for live status updates
@@ -273,7 +319,7 @@ class ChatCLI:
             from src.llm_client_factory import LLMClientFactory
             # Use routing client that automatically routes models to the correct backend
             self.client = LLMClientFactory.create_routing_client(self.config)
-            console.print(f"[dim]Using multi-backend routing (auto-detects backend per model)[/dim]")
+            log_panel.log("Using multi-backend routing (auto-detects backend per model)")
         except (ImportError, KeyError, ValueError) as e:
             # Fall back to Ollama if factory not available or config incomplete
             console.print(f"[yellow]Falling back to Ollama backend: {e}[/yellow]")
@@ -288,7 +334,7 @@ class ChatCLI:
         if self.config.use_qdrant:
             from src.qdrant_rag_memory import QDRANT_AVAILABLE
             if QDRANT_AVAILABLE:
-                console.print("[dim]OK Using Qdrant for RAG memory[/dim]")
+                log_panel.log("OK Using Qdrant for RAG memory")
             else:
                 console.print("[yellow]WARNING Qdrant requested but not available, using NumPy-based RAG[/yellow]")
 
@@ -354,11 +400,15 @@ class ChatCLI:
 
     @property
     def tools_manager(self):
-        """Get tools manager, waiting if necessary."""  
+        """Get tools manager, waiting if necessary."""
         if self._tools_manager is None:
             if not self._tools_loader.is_ready_sync():
-                console.print("[dim yellow]Waiting for tools...[/dim yellow]")
-            self._tools_manager = self._tools_loader.get_tools(wait=True)
+                # Show simple status while waiting (not a big panel)
+                from rich.status import Status
+                with Status("[dim]Loading tools...[/dim]", console=console):
+                    self._tools_manager = self._tools_loader.get_tools(wait=True)
+            else:
+                self._tools_manager = self._tools_loader.get_tools(wait=True)
         return self._tools_manager
 
     def _load_history(self):
@@ -866,7 +916,7 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
                     node_task = step.description
 
                 console.print(f"\n[bold]Step: {step.description}[/bold]")
-                console.print(f"[dim]Generating node for: {node_task}[/dim]")
+                log_panel.log(f"Generating node for: {node_task}")
 
                 # Save current context and set workflow mode flag
                 old_context = self.context.copy()
@@ -1158,7 +1208,7 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # NOTE: This is ONLY for routing hints - the original description is ALWAYS
         # passed to overseer and code generators. task_evaluation just helps us
         # choose the right tier/model, not replace the original instruction.
-        console.print("[dim cyan]> Evaluating task type...[/dim cyan]")
+        log_panel.log("> Evaluating task type...", style="dim cyan")
         task_evaluation = self.task_evaluator.evaluate_task_type(description)
 
         # Check if input appears accidental
@@ -1173,8 +1223,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # Show task categorization with complexity
         console.print(f"[cyan]> Task type: {task_evaluation['task_type'].value}[/cyan]")
         if 'complexity' in task_evaluation:
-            console.print(f"[dim]> Complexity: {task_evaluation['complexity']}[/dim]")
-        console.print(f"[dim]> Routing: {task_evaluation['recommended_tier']}[/dim]")
+            log_panel.log(f"> Complexity: {task_evaluation['complexity']}")
+        log_panel.log(f"> Routing: {task_evaluation['recommended_tier']}")
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:
@@ -1199,7 +1249,7 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
                 if node_id and self.registry.get_node(node_id):
                     console.print(f"\n[bold green]✓ 100% EXACT MATCH FOUND![/bold green]")
                     console.print(f"[green]Reusing: {artifact.name}[/green]")
-                    console.print(f"[dim]Skipping code generation - using cached solution[/dim]\n")
+                    log_panel.log("Skipping code generation - using cached solution")
 
                     self.rag.increment_usage(artifact.artifact_id)
                     workflow.complete_step("check_existing", f"Exact match: {node_id}", {"reused": True})
@@ -1434,8 +1484,10 @@ Answer:"""
                             return True
 
                         else:
-                            # Medium similarity (70-90%) - use as template and modify
-                            self.display.complete_stage("Search RAG", f"Using as template ({similarity:.0%} match)")
+                            # Similarity >=90% but semantic check says RELATED/DIFFERENT - generate from scratch
+                            console.print(f"[yellow]Note: High textual similarity ({similarity:.0%}) but semantically different[/yellow]")
+                            console.print(f"[yellow]Generating new solution from scratch (STRICT reuse policy)...[/yellow]")
+                            self.display.complete_stage("Search RAG", f"Not reusing ({similarity:.0%} match but different task)")
                             self.display.show_result(f"Template: {node_id}", code_content, "python")
 
                             # Store template for modification
@@ -1455,8 +1507,8 @@ Answer:"""
         # Check workflows if no code reuse
         if existing_workflows and len(existing_workflows) > 0:
             workflow_artifact, similarity = existing_workflows[0]
-            # Lower threshold to 75% for workflows (was 85%)
-            if similarity > 0.75:
+            # STRICT: 90% minimum similarity for workflows (prefer NOT matching)
+            if similarity >= 0.90:
                 self.display.complete_stage("Search RAG", f"Found workflow ({similarity:.0%} match)")
 
                 # CRITICAL: Check relationship between tasks (SAME/RELATED/DIFFERENT)
@@ -1482,11 +1534,12 @@ Examples:
 Answer with ONLY ONE WORD: SAME, RELATED, or DIFFERENT
 Answer:"""
 
+                # Use fast LLM (not very fast) for semantic assessment
                 semantic_response = self.client.generate(
-                    model=self.config.triage_model,
+                    role="fast",  # Use fast tier (e.g., gemma3_4b) not veryfast (tinyllama)
                     prompt=semantic_check_prompt,
                     temperature=0.1,
-                    model_key=self.config.triage_model_key  # Use actual model key for routing
+                    model_key=self.config.generator_model_key
                 ).strip().upper()
 
                 if "SAME" in semantic_response:
@@ -1794,7 +1847,7 @@ Answer:"""
             )
             if similar_specs:
                 spec_artifact, similarity = similar_specs[0]
-                if similarity >= 0.80:  # High similarity threshold for specs
+                if similarity >= 0.90:  # STRICT: 90% minimum for spec reuse
                     console.print(f"[dim cyan]Found similar specification (similarity: {similarity:.1%})[/dim cyan]")
                     existing_spec_info = f"""
 EXISTING SPECIFICATION FOR SIMILAR TASK (similarity: {similarity:.1%}):
@@ -1915,7 +1968,7 @@ The code generator will follow this specification EXACTLY, so include ALL critic
         self.display.complete_stage("Thinking", "Specification complete")
 
         # Show brief specification summary (full spec saved to specification.md in node directory)
-        console.print(f"[dim cyan]Specification: {len(specification)} chars (saved to specification.md)[/dim cyan]")
+        log_panel.log(f"Specification: {len(specification)} chars (saved to specification.md)", style="dim cyan")
 
         workflow.complete_step("overseer_specification", f"{len(specification)} chars specification", {"model": self.config.overseer_model})
 
@@ -2266,7 +2319,7 @@ USAGE GUIDELINES:
 5. ALWAYS include these standard imports at the top:
    - import json
    - import sys
-   - from node_runtime import call_tool (REQUIRED for content generation and project management tasks)
+   - from node_runtime import call_tool (ONLY if you actually call this function - do NOT import if unused)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -2827,7 +2880,13 @@ logger = _DummyLogger()
             }
         )
 
-        # Step 5: Save code with interface metadata
+        # Step 5: Clean unused imports, then save code with interface metadata
+        from tools.executable.remove_unused_node_runtime_import import remove_node_runtime_import
+        cleaned_code, changes = remove_node_runtime_import(code)
+        if any("Removed:" in c for c in changes):
+            console.print(f"[dim]Auto-cleaned: {', '.join([c for c in changes if 'Removed:' in c][:2])}[/dim]")
+            code = cleaned_code
+
         self.runner.save_code(node_id, code)
 
         # Save interface schema alongside the code
@@ -4203,17 +4262,21 @@ Requirements for "code" field:
 - Must fix ALL errors shown above
 - Must be immediately runnable
 - Learn from previous failed attempts listed above
-- CRITICAL: If the original code uses call_tool(), the fixed code MUST also use call_tool()
-  * NEVER replace call_tool() with hardcoded data, dictionaries, or lists
-  * NEVER remove call_tool() calls
-  * NEVER create a mock or fake call_tool() function (def call_tool)
-  * ALWAYS import call_tool from node_runtime: "from node_runtime import call_tool"
-  * If call_tool() import is failing with ModuleNotFoundError, FIX THE PATH:
-    Add these lines BEFORE the import:
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-    Then import: from node_runtime import call_tool
+- CRITICAL: Handle call_tool() imports correctly based on ACTUAL USAGE:
+  * If the code actually CALLS call_tool() somewhere:
+    - Keep the call_tool() calls (NEVER replace with hardcoded data)
+    - NEVER remove call_tool() calls
+    - NEVER create a mock or fake call_tool() function (def call_tool)
+    - ALWAYS import: "from node_runtime import call_tool"
+    - If ModuleNotFoundError on node_runtime, ADD path setup BEFORE import:
+      from pathlib import Path
+      import sys
+      sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+      from node_runtime import call_tool
+  * If the code DOES NOT call call_tool() anywhere (UNUSED IMPORT):
+    - REMOVE the import statement: "from node_runtime import call_tool"
+    - REMOVE any path setup related to node_runtime
+    - ModuleNotFoundError for unused import means DELETE the import, not fix the path!
 - For content generation (jokes, stories, articles), always use call_tool("content_generator", prompt)
 
 Return ONLY the JSON object, nothing else."""
@@ -4977,13 +5040,20 @@ Return ONLY the JSON object, nothing else."""
             console.print("[dim]Multi-backend support may not be installed[/dim]")
             return False
 
-    def handle_tools(self, category: str = None) -> bool:
+    def handle_tools(self, category: str = None, page: int = 1) -> bool:
         """
-        Handle tools command - list all available tools or filter by category.
+        Handle tools command - list all available tools or filter by category with pagination.
 
         Args:
             category: Optional category to filter by (llm, executable, custom, openapi)
+            page: Page number (default 1), shows 10 tools per page
         """
+        # Check if tools are ready
+        if not self._tools_loader.is_ready_sync():
+            console.print("[yellow]Tools are still loading in the background...[/yellow]")
+            console.print("[dim]Please wait a moment and try again[/dim]\n")
+            return False
+
         all_tools = self.tools_manager.get_all_tools()
 
         if not all_tools:
@@ -5013,64 +5083,88 @@ Return ONLY the JSON object, nothing else."""
             console.print("\n[bold cyan]Available Tools by Category[/bold cyan]\n")
             tools_to_show = tools_by_type
 
-        # Display each type separately
+        # Pagination settings
+        TOOLS_PER_PAGE = 10
+
+        # Flatten all tools for pagination
+        all_tools_flat = []
         for tool_type in sorted(tools_to_show.keys()):
-            tools = tools_to_show[tool_type]
+            for tool in tools_to_show[tool_type]:
+                all_tools_flat.append((tool_type, tool))
 
-            table = Table(
-                title=f"{tool_type.upper()} Tools ({len(tools)})",
-                box=box.ROUNDED,
-                show_header=True,
-                header_style="bold magenta"
-            )
-            table.add_column("Tool ID", style="cyan", no_wrap=True, width=20)
-            table.add_column("Name", style="green", width=25)
-            table.add_column("Description", width=50)
-            table.add_column("Category", style="yellow", no_wrap=True, width=12)
+        total_tools_to_show = len(all_tools_flat)
+        total_pages = (total_tools_to_show + TOOLS_PER_PAGE - 1) // TOOLS_PER_PAGE
 
-            for tool in tools:
-                tool_id = tool.tool_id
-                name = getattr(tool, 'name', tool_id)
-                description = tool.description[:47] + "..." if len(tool.description) > 50 else tool.description
+        # Validate page number
+        if page < 1:
+            page = 1
+        if page > total_pages and total_pages > 0:
+            page = total_pages
 
-                # Determine category from metadata
-                metadata = tool.metadata or {}
+        # Calculate slice
+        start_idx = (page - 1) * TOOLS_PER_PAGE
+        end_idx = start_idx + TOOLS_PER_PAGE
+        page_tools = all_tools_flat[start_idx:end_idx]
 
-                # Check if this is a DEBUG version
-                is_debug = metadata.get("is_debug", False) or "DEBUG" in tool.tags
-                if is_debug:
-                    # Prepend [DEBUG] tag to name
-                    name = f"[DEBUG] {name}"
-                    # Highlight in description
-                    description = f"DEBUG VERSION - {description[:30]}..."
+        # Display paginated tools
+        table = Table(
+            title=f"Tools (Page {page}/{total_pages}) - Showing {len(page_tools)} of {total_tools_to_show}",
+            box=box.ROUNDED,
+            show_header=True,
+            header_style="bold magenta"
+        )
+        table.add_column("Tool ID", style="cyan", no_wrap=True, width=20)
+        table.add_column("Name", style="green", width=25)
+        table.add_column("Description", width=45)
+        table.add_column("Type", style="yellow", no_wrap=True, width=10)
 
-                yaml_path = metadata.get("yaml_path", "")
-                if yaml_path:
-                    # Extract category from path (e.g., "tools/executable/foo.yaml" -> "executable")
-                    from pathlib import Path
-                    path_parts = Path(yaml_path).parts
-                    if len(path_parts) >= 2:
-                        category_name = path_parts[-2]  # Second to last part
-                    else:
-                        category_name = "other"
-                elif metadata.get("from_rag"):
-                    category_name = "dynamic"
-                elif metadata.get("from_config"):
-                    category_name = "config"
+        for tool_type, tool in page_tools:
+            tool_id = tool.tool_id
+            name = getattr(tool, 'name', tool_id)
+            description = tool.description[:47] + "..." if len(tool.description) > 50 else tool.description
+
+            # Determine category from metadata
+            metadata = tool.metadata or {}
+
+            # Check if this is a DEBUG version
+            is_debug = metadata.get("is_debug", False) or "DEBUG" in tool.tags
+            if is_debug:
+                # Prepend [DEBUG] tag to name
+                name = f"[DEBUG] {name}"
+                # Highlight in description
+                description = f"DEBUG VERSION - {description[:30]}..."
+
+            yaml_path = metadata.get("yaml_path", "")
+            if yaml_path:
+                # Extract category from path (e.g., "tools/executable/foo.yaml" -> "executable")
+                from pathlib import Path
+                path_parts = Path(yaml_path).parts
+                if len(path_parts) >= 2:
+                    category_name = path_parts[-2]  # Second to last part
                 else:
                     category_name = "other"
+            elif metadata.get("from_rag"):
+                category_name = "dynamic"
+            elif metadata.get("from_config"):
+                category_name = "config"
+            else:
+                category_name = "other"
 
-                table.add_row(tool_id, name, description, category_name)
+            table.add_row(tool_id, name, description, tool_type)
 
-            console.print(table)
-            console.print()  # Blank line between tables
+        console.print(table)
+        console.print()
 
-        # Summary
-        total_tools = len(all_tools)
-        if category:
-            console.print(f"[dim]{len(tools_to_show[category_lower])} tools in category '{category_lower}'[/dim]")
-        else:
-            console.print(f"[dim]Total: {total_tools} tools available across {len(tools_by_type)} types[/dim]")
+        # Navigation hint
+        if total_pages > 1:
+            nav_text = []
+            if page > 1:
+                nav_text.append(f"[cyan]/tools {page - 1}[/cyan] for previous page")
+            if page < total_pages:
+                nav_text.append(f"[cyan]/tools {page + 1}[/cyan] for next page")
+
+            if nav_text:
+                console.print("[dim]" + " | ".join(nav_text) + "[/dim]")
 
         console.print(f"[dim]Use /tool <tool_id> for detailed documentation[/dim]\n")
 
@@ -6429,6 +6523,12 @@ Return ONLY the JSON, no other text."""
             'needed_llm_fix': False
         }
 
+        # Skip Pynguin on Windows (incompatible)
+        import platform
+        if platform.system() == 'Windows':
+            console.print(f"[dim]Skipping Pynguin on Windows (incompatible), using LLM-based tests[/dim]")
+            return result
+
         try:
             # Get node path
             node_path = self.runner.get_node_path(node_id)
@@ -7420,9 +7520,24 @@ Return ONLY the Python test code, no explanations."""
                     self.handle_tools()
 
                 elif cmd.startswith('tools '):
-                    # /tools <category> - filter by category
-                    category = cmd[6:].strip()
-                    self.handle_tools(category=category)
+                    # /tools <page|category> [page] - filter by category or page number
+                    args = cmd[6:].strip().split()
+                    category = None
+                    page = 1
+
+                    if len(args) == 1:
+                        # Could be page number or category
+                        if args[0].isdigit():
+                            page = int(args[0])
+                        else:
+                            category = args[0]
+                    elif len(args) >= 2:
+                        # Category and page number
+                        category = args[0]
+                        if args[1].isdigit():
+                            page = int(args[1])
+
+                    self.handle_tools(category=category, page=page)
 
                 elif cmd.startswith('tool '):
                     tool_cmd = cmd[5:].strip()

@@ -1,0 +1,143 @@
+name: "Remove Unused node_runtime Import"
+type: "executable"
+description: |
+  Detects and removes unused 'from node_runtime import call_tool' imports and related
+  path setup code when call_tool is not actually used in the code.
+
+  This fixes the common error where generated code imports node_runtime but never calls
+  any tools, causing ModuleNotFoundError in tests.
+
+  The tool:
+  - Checks if call_tool() is actually called in the code
+  - If NOT used, removes:
+    * from node_runtime import call_tool
+    * from pathlib import Path (if only for node_runtime)
+    * sys.path.insert(...) for node_runtime
+    * import logging (if only added by repair system)
+    * logging.basicConfig(...)
+    * logging.debug(...) calls
+    * try/except wrappers added by repair system
+  - If used, keeps everything intact
+
+executable:
+  command: "python"
+  args: ["{tool_dir}/remove_unused_node_runtime_import.py"]
+  stdin_mode: true
+  timeout: 10
+
+input_schema:
+  code:
+    type: string
+    required: true
+    description: "Python source code to analyze and clean"
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    original_code:
+      type: string
+      description: "The original input code"
+    cleaned_code:
+      type: string
+      description: "The cleaned code with unused imports removed"
+    changes:
+      type: array
+      items: {type: string}
+      description: "List of changes made"
+    was_modified:
+      type: boolean
+      description: "Whether any changes were made"
+
+tags: ["code-cleanup", "import", "node_runtime", "unused", "static-analysis", "autofix"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+
+examples:
+  - description: "Remove unused node_runtime import"
+    input:
+      code: |
+        import json
+        import sys
+        from node_runtime import call_tool
+
+        def calculate(x, y):
+            return x + y
+
+        def main():
+            input_data = json.load(sys.stdin)
+            result = calculate(input_data["x"], input_data["y"])
+            print(json.dumps({"result": result}))
+
+        if __name__ == "__main__":
+            main()
+    expected_output:
+      success: true
+      was_modified: true
+      changes:
+        - "Removed: from node_runtime import call_tool"
+      cleaned_code: |
+        import json
+        import sys
+
+        def calculate(x, y):
+            return x + y
+
+        def main():
+            input_data = json.load(sys.stdin)
+            result = calculate(input_data["x"], input_data["y"])
+            print(json.dumps({"result": result}))
+
+        if __name__ == "__main__":
+            main()
+
+  - description: "Keep import when call_tool is used"
+    input:
+      code: |
+        import json
+        import sys
+        from node_runtime import call_tool
+
+        def generate_content(prompt):
+            return call_tool("content_generator", prompt)
+
+        def main():
+            input_data = json.load(sys.stdin)
+            result = generate_content(input_data["prompt"])
+            print(json.dumps({"result": result}))
+
+        if __name__ == "__main__":
+            main()
+    expected_output:
+      success: true
+      was_modified: false
+      changes:
+        - "call_tool is used - keeping import"
+
+usage_notes: |
+  This tool is particularly useful for:
+
+  1. **Cleaning generated code** that unnecessarily imports node_runtime
+  2. **Fixing ModuleNotFoundError** in tests for code that doesn't need node_runtime
+  3. **Removing repair artifacts** like debug logging added by the adaptive escalation system
+  4. **Static analysis** as part of code validation pipeline
+
+  The tool uses AST parsing to reliably detect call_tool usage, falling back to
+  regex if parsing fails (e.g., due to syntax errors).
+
+  Integration with repair system:
+  - Can be called before test execution to prevent ModuleNotFoundError
+  - Can be called after repair to clean up unnecessary additions
+  - Preserves all other imports and functionality
+
+integration:
+  static_analysis:
+    priority: 5
+    run_before: ["syntax_validator", "import_validator"]
+
+  repair_pipeline:
+    stage: "post-fix-cleanup"
+    condition: "ModuleNotFoundError: No module named 'node_runtime'"

@@ -63,59 +63,23 @@ class BackgroundToolsLoader:
         self.loading_thread.start()
 
     def _load_tools(self):
-        """Background thread function to load tools with live progress."""
+        """Background thread function to load tools silently."""
         try:
             import time
-            import sys
             start = time.time()
             logger.debug("Background: Loading tools...")
 
-            # Show initial loading message with spinner
-            sys.stderr.write("\r\033[2K")  # Clear line
-            sys.stderr.write("\033[?25l")  # Hide cursor
-            sys.stderr.flush()
-
-            spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
-            spinner_idx = 0
-
-            # Start progress thread
-            progress_running = True
-            def show_progress():
-                nonlocal spinner_idx
-                while progress_running:
-                    elapsed = time.time() - start
-                    sys.stderr.write("\r\033[2K")  # Clear line
-                    sys.stderr.write(f"\033[36m{spinner_chars[spinner_idx % len(spinner_chars)]}\033[0m ")
-                    sys.stderr.write(f"\033[2mLoading tools... {elapsed:.1f}s\033[0m")
-                    sys.stderr.flush()
-                    spinner_idx += 1
-                    time.sleep(0.1)
-
-            import threading
-            progress_thread = threading.Thread(target=show_progress, daemon=True)
-            progress_thread.start()
-
-            # This is the slow part - loads all YAML files
+            # Just load silently in background - don't show anything
             self.tools_manager = ToolsManager(
                 config_manager=self.config_manager,
                 ollama_client=self.ollama_client,
                 rag_memory=self.rag_memory
             )
 
-            # Stop progress and show completion
-            progress_running = False
-            progress_thread.join(timeout=0.5)
-
             elapsed = time.time() - start
             with self._lock:
                 self.is_ready = True
                 self.is_loading = False
-
-            # Clear progress line and show result
-            sys.stderr.write("\r\033[2K")  # Clear line
-            sys.stderr.write(f"\033[32m✓\033[0m \033[2mLoaded {len(self.tools_manager.tools)} tools in {elapsed:.1f}s\033[0m\n")
-            sys.stderr.write("\033[?25h")  # Show cursor
-            sys.stderr.flush()
 
             logger.debug(f"Background: Loaded {len(self.tools_manager.tools)} tools in {elapsed:.2f}s")
 
@@ -127,17 +91,6 @@ class BackgroundToolsLoader:
                     logger.error(f"Ready callback error: {e}")
 
         except Exception as e:
-            # Stop progress and show error
-            import sys
-            progress_running = False
-            if 'progress_thread' in locals():
-                progress_thread.join(timeout=0.5)
-
-            sys.stderr.write("\r\033[2K")  # Clear line
-            sys.stderr.write(f"\033[31m✗\033[0m \033[2mFailed to load tools: {str(e)[:60]}\033[0m\n")
-            sys.stderr.write("\033[?25h")  # Show cursor
-            sys.stderr.flush()
-
             logger.error(f"Failed to load tools in background: {e}")
             with self._lock:
                 self.error = e

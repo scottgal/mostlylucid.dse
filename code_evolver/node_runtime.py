@@ -229,6 +229,43 @@ class NodeRuntime:
             )
             # Extract stdout from result
             return result.get("stdout", "").strip() or result.get("stderr", "")
+        elif tool.tool_type == ToolType.WORKFLOW:
+            # Workflow tools are executed as nodes
+            import subprocess
+            import json
+            import os
+
+            # Convert tool_id to node directory (e.g., "translate_the_data" -> "nodes/translate_the_data")
+            node_dir = os.path.join("nodes", tool.tool_id)
+            main_py = os.path.join(node_dir, "main.py")
+
+            if not os.path.exists(main_py):
+                raise FileNotFoundError(f"Workflow '{tool.tool_id}' main.py not found at {main_py}")
+
+            # Execute the workflow node with prompt as input
+            try:
+                # Prepare input JSON
+                input_data = {"prompt": prompt}
+                input_json = json.dumps(input_data)
+
+                # Run the workflow
+                result = subprocess.run(
+                    ["python", main_py],
+                    input=input_json,
+                    capture_output=True,
+                    text=True,
+                    timeout=kwargs.get('timeout', 300)  # 5 minute default timeout
+                )
+
+                if result.returncode != 0:
+                    raise RuntimeError(f"Workflow '{tool.tool_id}' failed: {result.stderr}")
+
+                return result.stdout.strip()
+
+            except subprocess.TimeoutExpired:
+                raise TimeoutError(f"Workflow '{tool.tool_id}' timed out")
+            except Exception as e:
+                raise RuntimeError(f"Failed to execute workflow '{tool.tool_id}': {e}")
         else:
             raise ValueError(f"Unknown tool type: {tool.tool_type}")
 
