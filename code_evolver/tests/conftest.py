@@ -289,18 +289,22 @@ def reset_singletons():
     import src.fix_template_store
 
     # Store original values
-    original_bugcatcher = src.bugcatcher._global_bugcatcher
-    original_store = src.fix_template_store._global_fix_store
+    original_bugcatcher = getattr(src.bugcatcher, '_global_bugcatcher', None) if hasattr(src, 'bugcatcher') else None
+    original_store = getattr(src.fix_template_store, '_global_fix_store', None) if hasattr(src, 'fix_template_store') else None
 
     # Reset
-    src.bugcatcher._global_bugcatcher = None
-    src.fix_template_store._global_fix_store = None
+    if hasattr(src, 'bugcatcher') and hasattr(src.bugcatcher, '_global_bugcatcher'):
+        src.bugcatcher._global_bugcatcher = None
+    if hasattr(src, 'fix_template_store') and hasattr(src.fix_template_store, '_global_fix_store'):
+        src.fix_template_store._global_fix_store = None
 
     yield
 
     # Restore (optional - helps with test isolation)
-    src.bugcatcher._global_bugcatcher = original_bugcatcher
-    src.fix_template_store._global_fix_store = original_store
+    if hasattr(src, 'bugcatcher') and hasattr(src.bugcatcher, '_global_bugcatcher'):
+        src.bugcatcher._global_bugcatcher = original_bugcatcher
+    if hasattr(src, 'fix_template_store') and hasattr(src.fix_template_store, '_global_fix_store'):
+        src.fix_template_store._global_fix_store = original_store
 
 
 @pytest.fixture

@@ -378,6 +378,20 @@ class ChatCLI:
                 console.print(f"[dim yellow]Auto-fix system not available: {e}[/dim yellow]")
                 self._fix_tools_manager = None
 
+            # Initialize Tools CLI for /tools test and /tools optimize commands
+            try:
+                from src.tools_cli import ToolsCLI
+                self._tools_cli = ToolsCLI(
+                    tools_manager=tools_manager,
+                    rag=self.rag,
+                    client=self.client,
+                    verbose=True
+                )
+                log_panel.log("OK Tools CLI initialized")
+            except (ImportError, Exception) as e:
+                console.print(f"[dim yellow]Tools CLI not available: {e}[/dim yellow]")
+                self._tools_cli = None
+
             # Register model selector tool AFTER tools are ready (non-blocking)
             try:
                 from src.model_selector_tool import create_model_selector_tool
@@ -388,6 +402,7 @@ class ChatCLI:
 
         self._tools_loader.on_ready(on_tools_ready)
         self._fix_tools_manager = None  # Will be set when tools ready
+        self._tools_cli = None  # Will be set when tools ready
 
         # Initialize background scheduler for scheduled tasks
         # This runs in the background with low priority to avoid interfering with workflows
@@ -1178,6 +1193,10 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             ("/test <node_id>", "Run unit tests for a node"),
             ("/evaluate <node_id>", "Evaluate a node's performance"),
             ("/tools", "List all available tools (LLM, code, and community tools)"),
+            ("/tools test all", "Run tests for all tools"),
+            ("/tools test --n <name>", "Run tests for a specific tool and dependencies"),
+            ("/tools optimize all", "Optimize all tools (slow, detailed analysis)"),
+            ("/tools optimize --n <name>", "Optimize a specific tool"),
             ("/tool info <tool_name>", "Get intelligent description of a tool (uses tinyllama)"),
             ("/tool run <tool_name> [input]", "Execute a tool directly with input and see results"),
             ("/tools [category]", "List all tools or filter by category (llm, executable, custom, openapi)"),
@@ -5319,6 +5338,63 @@ Return ONLY the JSON object, nothing else."""
             console.print("[dim]Available: info, run, list[/dim]")
             return False
 
+    def handle_tools_cli(self, command: str) -> bool:
+        """
+        Handle tools CLI commands for testing and optimization.
+
+        Args:
+            command: Full command string (e.g., "/tools test all")
+
+        Returns:
+            True if successful
+        """
+        # Check if tools CLI is ready
+        if not self._tools_cli:
+            console.print("[yellow]Tools CLI is not yet initialized...[/yellow]")
+            console.print("[dim]Please wait a moment and try again[/dim]\n")
+            return False
+
+        try:
+            result = self._tools_cli.handle_command(command)
+
+            # Display result
+            if result.success:
+                console.print(f"[green]{result.message}[/green]")
+            else:
+                console.print(f"[red]{result.message}[/red]")
+
+            # Show details if available
+            details = result.details
+            if details:
+                # For test results
+                if "total_tests" in details:
+                    console.print(f"\n[cyan]Test Results:[/cyan]")
+                    console.print(f"  Total: {details['total_tests']}")
+                    console.print(f"  Passed: {details['passed']}")
+                    console.print(f"  Failed: {details['failed']}")
+
+                # For optimization results
+                elif "total_tools" in details:
+                    console.print(f"\n[cyan]Optimization Results:[/cyan]")
+                    console.print(f"  Total tools: {details['total_tools']}")
+                    console.print(f"  Improved: {details['improved_count']}")
+
+                # For single tool results
+                elif "improvement_score" in details:
+                    console.print(f"\n[cyan]Improvement: {details['improvement_score']:.2%}[/cyan]")
+                    if "changes" in details:
+                        console.print(f"[dim]Changes: {', '.join(details['changes'])}[/dim]")
+
+            console.print(f"\n[dim]Duration: {result.duration:.2f}s[/dim]")
+
+            return result.success
+
+        except Exception as e:
+            console.print(f"[red]Error executing command: {e}[/red]")
+            import traceback
+            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+            return False
+
     def handle_tool_info(self, tool_name: str) -> bool:
         """
         Show detailed documentation for a tool from its YAML definition.
@@ -7627,24 +7703,30 @@ Return ONLY the Python test code, no explanations."""
                     self.handle_tools()
 
                 elif cmd.startswith('tools '):
-                    # /tools <page|category> [page] - filter by category or page number
+                    # Check if this is a tools CLI command (test, optimize)
                     args = cmd[6:].strip().split()
-                    category = None
-                    page = 1
 
-                    if len(args) == 1:
-                        # Could be page number or category
-                        if args[0].isdigit():
-                            page = int(args[0])
-                        else:
+                    if args and args[0] in ['test', 'optimize']:
+                        # Route to tools CLI
+                        self.handle_tools_cli(f"/{cmd}")
+                    else:
+                        # /tools <page|category> [page] - filter by category or page number
+                        category = None
+                        page = 1
+
+                        if len(args) == 1:
+                            # Could be page number or category
+                            if args[0].isdigit():
+                                page = int(args[0])
+                            else:
+                                category = args[0]
+                        elif len(args) >= 2:
+                            # Category and page number
                             category = args[0]
-                    elif len(args) >= 2:
-                        # Category and page number
-                        category = args[0]
-                        if args[1].isdigit():
-                            page = int(args[1])
+                            if args[1].isdigit():
+                                page = int(args[1])
 
-                    self.handle_tools(category=category, page=page)
+                        self.handle_tools(category=category, page=page)
 
                 elif cmd.startswith('tool '):
                     tool_cmd = cmd[5:].strip()
