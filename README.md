@@ -73,70 +73,31 @@ Code Evolver is a **self-assembling, self-optimizing workflow system** that:
 
 **Key Insight**: More powerful models = less escalation. A local "god-level" model (deepseek-coder:6.7b) is actually a minor deity compared to cloud frontier models (GPT-4, Claude 3.5 Sonnet). The system automatically adapts its escalation strategy based on what models you have available.
 
-##  Comprehensive Documentation
+##  Documentation
 
-**Complete DSE Framework & Tool Documentation**
+### Core Framework Documentation
 
-This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE)** framework with advanced features and detailed guides:
+This project has evolved into a comprehensive **Digital Synthetic Evolution (DSE)** framework. For detailed documentation, see the [docs/](docs/) folder.
 
-### Core Architecture & Theory
+#### Essential Reading
 
 - **[ARCHITECTURE.md](code_evolver/ARCHITECTURE.md)** - Complete system architecture (9 layers, 851 lines)
-  - Executable ground truth design principle
-  - Multi-tier optimization (local/cloud/deep)
-  - Pressure-aware quality negotiation
-  - Platform-targeted optimization (Pi/Edge/Cloud)
-  - Recursive self-optimization
-  - Fine-tuning evolution
+- **[PAPER.md](code_evolver/PAPER.md)** - Academic paper: "Digital Synthetic Evolution"
+- **[CONFIGURATION_GUIDE.md](code_evolver/CONFIGURATION_GUIDE.md)** - Complete setup guide for all LLM backends
+- **[QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)** - Quick reference guide
 
-- **[PAPER.md](code_evolver/PAPER.md)** - Academic paper (1,534 lines)
-  - "Digital Synthetic Evolution: A Self-Optimizing Framework for Multi-Agent Workflows"
-  - Complete algorithms, experimental results, benchmarks
-  - 92% cost reduction, 31% quality improvement demonstrated
-  - Future research directions
+#### Additional Documentation
 
-### Configuration & Tool Usage
+See the **[docs/](docs/)** folder for comprehensive documentation including:
 
-- **[CONFIGURATION_GUIDE.md](code_evolver/CONFIGURATION_GUIDE.md)** - Complete configuration system guide
-  - LLM backend setup (Ollama, OpenAI, Anthropic, Azure, LM Studio)
-  - Execution, testing, and optimization settings
-  - Auto-evolution and RAG configuration
-  - Multi-backend fallback strategies
-  - Environment variable setup
-
-- **[TOOL_INVOCATION_GUIDE.md](code_evolver/TOOL_INVOCATION_GUIDE.md)** - Using `call_tool()` and tool chains
-  - Unified tool invocation API
-  - Parallel tool execution with `call_tools_parallel()`
-  - Tool chaining for sequential workflows
-  - Tool discovery and selection
-  - Best practices and patterns
-  - Error handling and debugging
-
-- **[STATIC_ANALYSIS_TOOLS.md](code_evolver/STATIC_ANALYSIS_TOOLS.md)** - Static analysis validators
-  - Built-in validators (syntax, type checking, security, complexity)
-  - Validation pipeline and priority ordering
-  - Individual validator details and configuration
-  - Escalation workflow for failing validation
-  - Integration examples and custom validators
-
-### Advanced Features
-
-- **[ADAPTIVE_TIMEOUT.md](code_evolver/ADAPTIVE_TIMEOUT.md)** - Self-adjusting response time management
-  - Learns optimal timeouts from actual performance (95th percentile + 20% buffer)
-  - Automatic fallback to smaller models on timeout
-  - Tracks per-model metrics in RAG memory
-  - Works across all backends (Ollama, OpenAI, Anthropic, Azure, LM Studio)
-
-- **[SPECIFICATION_BASED_SELECTION.md](code_evolver/SPECIFICATION_BASED_SELECTION.md)** - Future: Constraint-driven model selection
-  - Specify requirements: "within 10 seconds", "cost under $0.01", "quality > 90"
-  - System automatically selects optimal model to meet specifications
-  - Validates constraints and adapts over time
-  - Designed for Claude Code CLI integration
-
-- **[Complete Demo](code_evolver/examples/complete_workflow_evolution_demo.py)** - End-to-end demonstration
-  - Runs all 6 evolution phases
-  - Shows auto-evolution, pressure management, platform variants
-  - Demonstrates fine-tuning and cost optimization
+- **Architecture & Design**: [BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md), [EXECUTION_ARCHITECTURE.md](docs/EXECUTION_ARCHITECTURE.md), [SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md)
+- **Configuration**: [BACKEND_CONFIGURATION.md](docs/BACKEND_CONFIGURATION.md), [DOCKER_QUICK_START.md](docs/DOCKER_QUICK_START.md), [DOCKER_PACKAGING_GUIDE.md](docs/DOCKER_PACKAGING_GUIDE.md)
+- **Tools & Workflows**: [TECHNICAL_WRITING_TOOLS.md](docs/TECHNICAL_WRITING_TOOLS.md), [WORKFLOW_REUSE.md](docs/WORKFLOW_REUSE.md), [PARALLEL_EXECUTION.md](docs/PARALLEL_EXECUTION.md)
+- **Implementation**: [IMPLEMENTATION_NOTES.md](docs/IMPLEMENTATION_NOTES.md), [CODE_FIXING_CYCLE.md](docs/CODE_FIXING_CYCLE.md)
+- **Features**: [HIERARCHICAL_RAG_IMPLEMENTATION.md](docs/HIERARCHICAL_RAG_IMPLEMENTATION.md), [JSON_STRUCTURED_OUTPUT.md](docs/JSON_STRUCTURED_OUTPUT.md)
+- **Quality**: [QUALITY_EVALUATION.md](docs/QUALITY_EVALUATION.md)
+- **Skills**: [SKILLS_README.md](docs/SKILLS_README.md)
+- **Blog Articles**: [blog-article-dse-part7.md](docs/blog-article-dse-part7.md), [ARTICLE_PART8_TOOLS_SYSTEM.md](docs/ARTICLE_PART8_TOOLS_SYSTEM.md)
 
 **Key DSE Innovations:**
 -  **Executable ground truth** (not metadata) with empirical proof
