@@ -124,7 +124,7 @@ class FactoryTaskGenerator:
             "Create shift log entry for {shift} shift on {date} with {events} events",
             "Format inventory table with columns: SKU, Description, Quantity, Location, Status",
             "Generate downtime report showing {equipment}, {duration}, {reason}, {cost}",
-            "Create quality control report for batch {batch} with pass/fail counts",
+            "Create quality control report for batchhow {batch} with pass/fail counts",
         ],
         'conversion': [
             "Convert {temp}°F to Celsius for oven temperature specification",

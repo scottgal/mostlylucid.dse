@@ -8187,9 +8187,8 @@ Return ONLY the Python test code, no explanations."""
 
                                 context_summary = "\n".join(context_parts)
 
-                                # Display concise summary to user
-                                topics_str = ", ".join(set(context_topics[:3]))  # Unique topics, max 3
-                                console.print(f"[dim cyan]✓ Using context from: {topics_str}[/dim cyan]")
+                                # Display minimal status to user
+                                console.print(f"[dim cyan]✓ Context retrieved ({len(self._memory_items)} items)[/dim cyan]")
 
                         except Exception as e:
                             console.print(f"[dim yellow]Memory retrieval: {e}[/dim yellow]")
