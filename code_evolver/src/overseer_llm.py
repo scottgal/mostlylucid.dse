@@ -326,6 +326,12 @@ Create an execution plan with:
 3. Expected quality score (0.0-1.0)
 4. Expected execution time (milliseconds)
 
+CRITICAL REQUIREMENT:
+- ALL tasks MUST produce visible output - no exceptions!
+- Content generation tasks MUST always output the generated content
+- Every tool/task must print its result to stdout as JSON
+- If a task doesn't produce output, it's considered broken
+
 Respond in JSON format:
 {{
   "strategy": "Brief description of the approach",

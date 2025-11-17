@@ -2806,8 +2806,9 @@ Code requirements:
 - For SIMPLE tasks (translations, math, lookups): Write direct code - NO call_tool()!
 - For CREATIVE tasks (stories, jokes, articles): Use call_tool() to invoke content generation LLM tools
 - Include proper error handling
-- MUST print output as JSON using print(json.dumps(...))
-- Be production-ready and well-documented
+- **ABSOLUTELY MANDATORY**: MUST print output as JSON using print(json.dumps(...))
+  * EVERY tool MUST produce output - no exceptions!
+  * Even if there's an error, print the error as JSON: print(json.dumps({{"error": "..."}}))
 
 **INPUT DATA FORMAT**:
 The code will receive input as a JSON object with these standard fields (interface):
@@ -2881,11 +2882,18 @@ def main():
     # CRITICAL: Always use call_tool() for content generation - NEVER hardcode content
     content = call_tool("content_generator", prompt)
 
+    # ABSOLUTELY MANDATORY: ALWAYS print output - this is NON-NEGOTIABLE!
+    # The output MUST be printed or the tool is considered broken!
     print(json.dumps({{"result": content}}))
 
 if __name__ == "__main__":
     main()
 ```
+
+CRITICAL OUTPUT REQUIREMENT:
+- The print(json.dumps(...)) statement is ABSOLUTELY MANDATORY - NO EXCEPTIONS!
+- If you forget to print output, the tool will appear broken to users
+- ALWAYS include at least ONE print statement that outputs JSON with a "result" field
 
 Example for joke generation specifically:
 ```python
@@ -2913,6 +2921,7 @@ def main():
     # Call LLM tool to generate the joke (NEVER use hardcoded jokes!)
     joke = call_tool("content_generator", joke_prompt)
 
+    # ABSOLUTELY MANDATORY: Print the output!
     print(json.dumps({{"result": joke}}))
 
 if __name__ == "__main__":
@@ -3384,6 +3393,51 @@ logger = _DummyLogger()
                 console.print("[green]Code fixed successfully[/green]")
             else:
                 console.print(f"[red]Warning: Code still has issues: {error_msg}[/red]")
+
+        # CRITICAL: Validate that code produces output
+        # ALL tools must output something - this is non-negotiable!
+        has_print_statement = 'print(' in code
+        has_stdout_write = 'sys.stdout.write(' in code
+        has_output = has_print_statement or has_stdout_write
+
+        if not has_output:
+            console.print(f"[red]CRITICAL: Generated code has NO output statements![/red]")
+            console.print(f"[yellow]ALL tools MUST produce output. Adding fallback output...[/yellow]")
+
+            # Add a print statement at the end of main() or at the end of the file
+            if 'def main(' in code:
+                # Find the main function and add output before its return
+                lines = code.split('\n')
+                main_func_indent = None
+                insert_line = None
+
+                for i, line in enumerate(lines):
+                    if 'def main(' in line:
+                        main_func_indent = len(line) - len(line.lstrip())
+                    elif main_func_indent is not None and line.strip() == '':
+                        # Found empty line in main - could be end of function
+                        continue
+                    elif main_func_indent is not None and line.strip() and not line.strip().startswith('#'):
+                        # Check if this is a return statement or end of function
+                        current_indent = len(line) - len(line.lstrip())
+                        if current_indent <= main_func_indent:
+                            # End of main function
+                            insert_line = i
+                            break
+
+                if insert_line is not None:
+                    # Insert output statement before end of main
+                    indent = ' ' * (main_func_indent + 4)
+                    output_statement = f'{indent}# FALLBACK: Ensure output is produced\n{indent}print(json.dumps({{"result": "Task completed", "note": "No explicit output was generated"}}))'
+                    lines.insert(insert_line, output_statement)
+                    code = '\n'.join(lines)
+                    console.print("[green]✓ Added fallback output statement to main()[/green]")
+            else:
+                # No main function - add output at the end
+                code += '\n\n# FALLBACK: Ensure output is produced\nprint(json.dumps({"result": "Task completed", "note": "No explicit output was generated"}))\n'
+                console.print("[green]✓ Added fallback output statement at end of file[/green]")
+        else:
+            console.print(f"[dim green]✓ Code contains output statements[/dim green]")
 
         # Step 5: Detect interface (inputs, outputs, operation type)
         try:
@@ -3878,10 +3932,12 @@ This workflow successfully completed with passing tests.
 
         # CRITICAL: Display output IMMEDIATELY and PROMINENTLY
         # This is what the user wants to see!
+        # ALWAYS show output section - even if empty (to highlight the problem)
+        console.print("\n" + "="*80)
+        console.print("[bold magenta on white]  YOUR RESULT  [/bold magenta on white]")
+        console.print("="*80 + "\n")
+
         if stdout and stdout.strip():
-            console.print("\n" + "="*80)
-            console.print("[bold magenta on white]  YOUR RESULT  [/bold magenta on white]")
-            console.print("="*80 + "\n")
 
             # Try to extract and show the actual result prominently
             result_displayed = False
@@ -3936,6 +3992,19 @@ This workflow successfully completed with passing tests.
                 console.print("[yellow]━" * 40 + "[/yellow]")
 
             console.print("\n" + "="*80 + "\n")
+        else:
+            # NO OUTPUT - This is a critical error!
+            console.print("[bold red]⚠ NO OUTPUT WAS PRODUCED![/bold red]\n")
+            console.print("[yellow]This tool failed to generate any output.[/yellow]")
+            console.print("[yellow]ALL tools MUST produce output - this indicates a bug in code generation.[/yellow]")
+
+            if stderr and stderr.strip():
+                console.print(f"\n[yellow]Error output (stderr):[/yellow]")
+                console.print(Panel(stderr, border_style="red", box=box.ROUNDED))
+            else:
+                console.print("\n[dim]No error messages were captured either.[/dim]")
+
+            console.print("\n" + "="*80 + "\n")
 
         # Display results - ALWAYS show output, even if there were errors
         console.print("\n" + "="*70)
@@ -3949,8 +4018,20 @@ This workflow successfully completed with passing tests.
                 "latency_ms": metrics["latency_ms"]
             })
             if not stdout or not stdout.strip():
-                console.print("[yellow]Note: Code executed successfully but produced no output[/yellow]")
-                console.print("[dim]This usually means the code didn't print anything to stdout[/dim]")
+                # CRITICAL: This should NEVER happen - all tools MUST produce output!
+                console.print("\n" + "="*80)
+                console.print("[bold red on white]  ⚠ CRITICAL ERROR: NO OUTPUT PRODUCED  [/bold red on white]")
+                console.print("="*80)
+                console.print("[red]The code executed successfully but produced NO output![/red]")
+                console.print("[yellow]This is a BUG in code generation - ALL tools MUST output something![/yellow]")
+                console.print("[yellow]Possible causes:[/yellow]")
+                console.print("  1. Missing print() statement in the generated code")
+                console.print("  2. Code didn't call the main() function")
+                console.print("  3. Output was written to stderr instead of stdout")
+                if stderr and stderr.strip():
+                    console.print(f"\n[yellow]stderr output:[/yellow]")
+                    console.print(Panel(stderr, border_style="yellow"))
+                console.print("="*80 + "\n")
         else:
             console.print(f"[red]FAIL Execution failed (exit code: {metrics['exit_code']})[/red]")
             workflow.fail_step("execution", f"Exit code {metrics['exit_code']}")
