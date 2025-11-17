@@ -1378,14 +1378,27 @@ Tags: {', '.join(tool.tags)}
         # Build arguments with placeholder substitution
         # Add tool_dir to substitutions (directory containing executable tools)
         tool_dir = str(self.tools_path / "executable")
+
+        # Check if this is an evolved tool with a custom evolved file
+        evolved_file = executable_config.get("evolved_file")
+        if evolved_file:
+            # For evolved tools, update args to use the evolved file
+            logger.info(f"📈 Using evolved tool file: {evolved_file}")
+            # Replace the tool script path in args with evolved file
+            args_template = [
+                evolved_file if "{tool_dir}" in arg and arg.endswith(".py") else arg
+                for arg in args_template
+            ]
+
         substitutions = {
             "source_file": source_file,
             "tool_dir": tool_dir,
+            "evolved_file": evolved_file or "",  # Add evolved_file as a substitution
             **kwargs
         }
         args = []
         for arg in args_template:
-            # Replace placeholders like {source_file}, {test_file}, {source_module}, {tool_dir}, {prompt}
+            # Replace placeholders like {source_file}, {test_file}, {source_module}, {tool_dir}, {prompt}, {evolved_file}
             for key, value in substitutions.items():
                 arg = arg.replace(f"{{{key}}}", str(value))
             args.append(arg)
@@ -1702,16 +1715,221 @@ Tags: {', '.join(tool.tags)}
         logger.info(f"✓ Registered community tool: {tool_id}")
         return tool
 
-    def get_tool(self, tool_id: str) -> Optional[Tool]:
+    def _get_evolved_tool(self, tool_id: str) -> Optional[Tool]:
         """
-        Get a tool by ID.
+        Check for and load an evolved version of a tool.
+
+        Reads .tool_promotions.json to find evolved versions and loads them
+        dynamically from the versioned files.
 
         Args:
-            tool_id: Tool identifier
+            tool_id: Original tool identifier
 
         Returns:
-            Tool object or None
+            Evolved Tool object or None if no evolution exists
         """
+        try:
+            promotion_file = Path(".tool_promotions.json")
+            if not promotion_file.exists():
+                return None
+
+            with open(promotion_file, 'r', encoding='utf-8') as f:
+                promotions = json.load(f)
+
+            if tool_id not in promotions:
+                return None
+
+            promotion = promotions[tool_id]
+            evolved_file = Path(promotion.get("evolved_file"))
+            evolved_version = promotion.get("evolved_version")
+
+            if not evolved_file.exists():
+                logger.warning(f"Evolved tool file not found: {evolved_file}")
+                return None
+
+            # Get original tool for metadata
+            original_tool = self.tools.get(tool_id)
+            if not original_tool:
+                return None
+
+            # Create evolved tool object
+            # The evolved tool maintains the same ID (namespace) but with updated version
+            evolved_tool = Tool(
+                tool_id=tool_id,  # Keep same namespace ID
+                tool_type=original_tool.tool_type,
+                name=f"{original_tool.name} (evolved)",
+                description=f"{original_tool.description} [Evolved: {promotion.get('reason', 'optimized')}]",
+                version=evolved_version,
+                tags=original_tool.tags + ["evolved"],
+                implementation={
+                    **original_tool.implementation,
+                    "evolved_file": str(evolved_file),
+                    "original_version": promotion.get("original_version"),
+                    "evolution_reason": promotion.get("reason"),
+                    "mutation": promotion.get("mutation")
+                },
+                metadata={
+                    **original_tool.metadata,
+                    "is_evolved": True,
+                    "original_version": promotion.get("original_version"),
+                    "evolved_at": promotion.get("promoted_at")
+                },
+                quality_score=original_tool.quality_score  # Inherit quality score
+            )
+
+            logger.info(f"📈 Using evolved tool: {tool_id} v{evolved_version}")
+            return evolved_tool
+
+        except Exception as e:
+            logger.warning(f"Error loading evolved tool for {tool_id}: {e}")
+            return None
+
+    def get_best_tool_in_namespace(
+        self,
+        tool_id: str,
+        scenario: Optional[str] = None,
+        use_rag: bool = True
+    ) -> Optional[Tool]:
+        """
+        Get the BEST/FITTEST tool in a semantic namespace.
+
+        This is the core of the optimization flow:
+        1. Check for evolved versions via promotions
+        2. Use RAG to find similar tools in the semantic cluster
+        3. Rank by quality score and failure history
+        4. Return the fittest tool
+
+        Args:
+            tool_id: Tool namespace identifier
+            scenario: Optional scenario description for RAG matching
+            use_rag: Whether to use RAG for semantic search (default: True)
+
+        Returns:
+            Best tool in namespace or None
+        """
+        candidates = []
+
+        # Candidate 1: Evolved version (if exists)
+        evolved = self._get_evolved_tool(tool_id)
+        if evolved:
+            candidates.append((evolved, 1.0, "evolved_version"))
+
+        # Candidate 2: Original tool
+        original = self.tools.get(tool_id)
+        if original:
+            candidates.append((original, 0.9, "original_version"))
+
+        # Candidate 3: RAG-based semantic matches (if scenario provided)
+        if use_rag and scenario and self.rag_memory:
+            try:
+                from .rag_memory import ArtifactType
+
+                # Search for similar tools
+                similar_tools = self.rag_memory.find_similar(
+                    query=scenario,
+                    artifact_type=ArtifactType.TOOL,
+                    tags=[tool_id],  # Limit to this namespace
+                    top_k=5
+                )
+
+                for artifact, similarity in similar_tools:
+                    tool = self.tools.get(artifact.artifact_id)
+                    if tool and tool.tool_id != tool_id:
+                        # RAG match - consider quality and similarity
+                        quality = tool.quality_score or 1.0
+                        score = similarity * quality * 0.8  # Slight penalty for non-exact match
+                        candidates.append((tool, score, "rag_semantic_match"))
+
+            except Exception as e:
+                logger.debug(f"RAG search failed for {tool_id}: {e}")
+
+        # Rank candidates by fitness score
+        if not candidates:
+            return None
+
+        # Apply quality score adjustments
+        scored_candidates = []
+        for tool, base_score, source in candidates:
+            quality = tool.quality_score or 1.0
+            final_score = base_score * quality
+
+            # Check failure history
+            if self.rag_memory and scenario:
+                try:
+                    from .rag_memory import ArtifactType
+
+                    failures = self.rag_memory.find_similar(
+                        query=scenario,
+                        artifact_type=ArtifactType.PATTERN,
+                        tags=["tool_failure", tool.tool_id],
+                        top_k=5
+                    )
+
+                    # Demote based on failure similarity
+                    for _, failure_sim in failures:
+                        if failure_sim > 0.7:
+                            final_score *= 0.7  # Significant demotion
+
+                except Exception as e:
+                    logger.debug(f"Failure check failed: {e}")
+
+            scored_candidates.append((tool, final_score, source))
+
+        # Sort by score and return best
+        scored_candidates.sort(key=lambda x: x[1], reverse=True)
+        best_tool, best_score, source = scored_candidates[0]
+
+        logger.info(
+            f"🎯 Selected best tool in namespace '{tool_id}': "
+            f"{best_tool.tool_id} v{best_tool.version} "
+            f"(score: {best_score:.2f}, source: {source})"
+        )
+
+        return best_tool
+
+    def get_tool(
+        self,
+        tool_id: str,
+        use_evolved: bool = True,
+        use_best_in_namespace: bool = False,
+        scenario: Optional[str] = None
+    ) -> Optional[Tool]:
+        """
+        Get a tool by ID, automatically using evolved versions if available.
+
+        This implements the namespace/semantic cluster concept where calling
+        a tool by name gets the BEST/FITTEST version (original or evolved).
+
+        Process:
+        1. If use_best_in_namespace=True: Use RAG-based best selection
+        2. Otherwise: Check .tool_promotions.json for evolved versions
+        3. Fall back to original tool from registry
+
+        Args:
+            tool_id: Tool identifier (namespace name)
+            use_evolved: Whether to check for evolved versions (default: True)
+            use_best_in_namespace: Use RAG to find best tool in semantic cluster
+            scenario: Optional scenario for RAG-based selection
+
+        Returns:
+            Tool object (original, evolved, or best in namespace) or None
+        """
+        # Option 1: Use full RAG-based best selection
+        if use_best_in_namespace and scenario:
+            return self.get_best_tool_in_namespace(
+                tool_id=tool_id,
+                scenario=scenario,
+                use_rag=True
+            )
+
+        # Option 2: Check for evolved version
+        if use_evolved:
+            evolved_tool = self._get_evolved_tool(tool_id)
+            if evolved_tool:
+                logger.debug(f"Using evolved version of {tool_id}")
+                return evolved_tool
+
+        # Option 3: Fall back to original tool from registry
         return self.tools.get(tool_id)
 
     def find_by_tags(self, tags: List[str]) -> List[Tool]:
