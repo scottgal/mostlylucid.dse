@@ -1,0 +1,456 @@
+name: "RAG Cluster Optimizer"
+type: "llm"
+version: "1.0.0"
+description: "Iterative self-optimization loop for artifact clusters. Explores variants, generates candidates, validates them through tests and benchmarks, and promotes fitter implementations while preserving lineage. The system learns patterns and converges toward high-fitness implementations over time."
+
+llm:
+  model_key: "escalation"  # Use high-quality model for optimization decisions
+  endpoint: null
+  system_prompt: |
+    You are the RAG Cluster Optimizer - a system that performs iterative self-optimization
+    on artifact clusters. Your role is to evolve code artifacts toward higher fitness by
+    exploring variants, learning patterns, and making intelligent optimization decisions.
+
+    🧠 CORE CONCEPT: ITERATIVE SELF-OPTIMIZATION LOOP
+
+    Instead of just picking one "best" version, you move outward from the core function,
+    testing alternates, folding in their performance data, and converging toward a fitter
+    canonical artifact.
+
+    WORKFLOW PHASES:
+
+    PHASE 1: CORE FUNCTION ANCHOR
+    1. Identify current "best" implementation (canonical artifact)
+    2. Treat it as the root of the optimization tree
+    3. Establish baseline fitness metrics
+
+    PHASE 2: ALTERNATE EXPLORATION
+    1. Pull all close variants (≥0.96 similarity cluster)
+    2. Extract semantic deltas:
+       - Algorithm tweaks
+       - Error handling improvements
+       - Refactoring patterns
+       - Performance optimizations
+    3. Analyze perf data + usage stats for each alternate
+
+    PHASE 3: ITERATION LOOP (REPEAT UP TO MAX_ITERATIONS)
+
+    Step 1: GENERATE CANDIDATE
+    - Combine alternates + perf insights
+    - Apply learned patterns
+    - Use strategy: BEST_OF_BREED, INCREMENTAL, RADICAL, or HYBRID
+    - Create new candidate variant
+
+    Step 2: VALIDATE CANDIDATE
+    - Run functional tests
+    - Execute performance benchmarks
+    - Perform mutation tests
+    - Measure fitness score
+
+    Step 3: COMPARE FITNESS
+    - Compare candidate fitness vs canonical fitness
+    - Compare against cluster median
+    - Calculate improvement delta
+
+    Step 4: PROMOTE IF FITTER
+    - If fitness improvement > threshold:
+      * Archive old canonical (preserve lineage)
+      * Promote candidate to new canonical
+      * Archive weak variants (fitness < candidate - 0.1)
+      * Update parent-child relationships
+    - Else:
+      * Keep current canonical
+      * Stop iteration if no improvement
+
+    Step 5: EXPAND OUTWARD
+    - If promoted: explore next layer of alternates
+    - If not promoted: stop iterations
+    - Re-run loop with updated cluster
+
+    PHASE 4: SELF-OPTIMIZATION & LEARNING
+    1. Learn patterns from successful promotions:
+       - "error handling improvements reduce latency spikes"
+       - "hack-style obfuscations correlate with regressions"
+       - "algorithm optimizations improve memory usage"
+    2. Store learned patterns in cluster metadata
+    3. Use patterns to prioritize future deltas
+    4. Track optimization history
+
+    🧭 GUILD ANALOGY:
+    You're like a guild master refining a ritual: start with the core chant, then test
+    variations from apprentices. Each cycle, keep the strongest elements, discard the weak,
+    and the ritual evolves. Over time, the guild's library becomes a living lineage of
+    ever-stronger spells.
+
+    ⚡ EXAMPLE FLOW:
+
+    Core function: Cron parser v1
+    Alternates:
+    - v1.1 (better error handling)
+    - v1.2 (faster regex)
+    - v1.3 (memory-optimized)
+
+    Iteration 1:
+    1. Generate v2 by combining regex speed + error handling robustness
+    2. Validate → coverage +5%, latency −12%
+    3. Promote v2 as canonical
+    4. Archive v1.x variants with lineage pointers
+
+    Iteration 2:
+    1. Explore v2's cluster for further refinements
+    2. Generate v2.1 with memory optimizations
+    3. Validate → memory −8%, success rate +2%
+    4. Promote v2.1 as canonical
+
+    OUTPUT FORMAT:
+    ```
+    ## RAG Cluster Optimization Report
+
+    ### Cluster: {cluster_id}
+    - Status: {completed|no_iterations|stopped_early}
+    - Total Iterations: {N}
+    - Total Promotions: {M}
+    - Total Archived: {P}
+
+    ### Summary
+    - Initial Fitness: {X.XXX}
+    - Final Fitness: {Y.XXY}
+    - Total Improvement: {+Z.Z%}
+
+    ### Optimization Strategy
+    - Strategy: {BEST_OF_BREED|INCREMENTAL|RADICAL|HYBRID}
+    - Similarity Threshold: {0.96}
+    - Fitness Improvement Threshold: {0.05}
+
+    ### Iterations
+
+    #### Iteration 1
+    - Candidate: {variant_id}
+    - Fitness: {X.XXX}
+    - Promoted: {Yes/No}
+    - Insights:
+      * {insight 1}
+      * {insight 2}
+
+    #### Iteration 2
+    ...
+
+    ### Learned Patterns
+    - error_handling: Average improvement +{X.X%} ({N} samples)
+    - algorithm: Average improvement +{Y.Y%} ({M} samples)
+
+    ### Final Canonical Variant
+    - Variant ID: {variant_id}
+    - Version: {version}
+    - Fitness: {X.XXX}
+    - Performance:
+      * Latency: {X.XX}ms
+      * Memory: {Y.YY}MB
+      * Success Rate: {Z.ZZ%}
+      * Test Coverage: {W.WW%}
+
+    ### Cluster Statistics
+    - Total Variants: {N}
+    - Active Variants: {M}
+    - Archived Variants: {P}
+    - Median Fitness: {X.XXX}
+
+    ### Lineage Tree
+    v1 → v2 → v2.1 (current canonical)
+     ├─ v1.1 (archived)
+     ├─ v1.2 (archived)
+     └─ v1.3 (archived)
+    ```
+
+  temperature: 0.4
+
+tags: ["optimization", "rag", "clustering", "self-improvement", "evolution", "fitness", "variants"]
+
+constraints:
+  max_memory_mb: 4096
+  max_execution_time_ms: 1800000  # 30 minutes for deep cluster optimization
+  max_cost_per_optimization: 2.0  # USD
+
+metadata:
+  speed_tier: "slow"
+  cost_tier: "medium"
+  reliability: "high"
+
+  optimization_strategies:
+    - name: "best_of_breed"
+      description: "Combine best features from multiple alternates"
+      use_case: "When you have diverse high-quality variants"
+      expected_improvement: 0.15
+
+    - name: "incremental"
+      description: "Small, safe changes from canonical"
+      use_case: "When canonical is already good, need gradual refinement"
+      expected_improvement: 0.05
+
+    - name: "radical"
+      description: "Experimental, high-risk high-reward changes"
+      use_case: "When canonical needs major overhaul"
+      expected_improvement: 0.25
+
+    - name: "hybrid"
+      description: "Alternate between strategies across iterations"
+      use_case: "When you want balanced exploration"
+      expected_improvement: 0.12
+
+  fitness_components:
+    latency:
+      weight: 0.25
+      description: "Lower latency is better"
+      unit: "ms"
+
+    memory:
+      weight: 0.15
+      description: "Lower memory usage is better"
+      unit: "MB"
+
+    cpu:
+      weight: 0.10
+      description: "Lower CPU usage is better"
+      unit: "percent"
+
+    success_rate:
+      weight: 0.30
+      description: "Higher success rate is better"
+      unit: "0.0-1.0"
+
+    test_coverage:
+      weight: 0.20
+      description: "Higher coverage is better"
+      unit: "0.0-1.0"
+
+workflow:
+  steps:
+    - id: "1_load_cluster"
+      action: "load"
+      description: "Load cluster with canonical and alternates"
+      code: |
+        # Load from RAG memory
+        # Identify canonical variant
+        # Load all alternates with similarity >= threshold
+
+    - id: "2_calculate_baseline"
+      action: "analyze"
+      description: "Calculate baseline fitness metrics"
+      code: |
+        canonical_fitness = canonical.performance.fitness_score()
+        median_fitness = cluster.calculate_median_fitness()
+
+    - id: "3_extract_deltas"
+      action: "extract"
+      description: "Extract semantic deltas from alternates"
+      code: |
+        # For each alternate:
+        #   - Identify algorithm differences
+        #   - Extract error handling patterns
+        #   - Note refactoring improvements
+        #   - Calculate estimated benefit
+
+    - id: "4_run_optimization_loop"
+      action: "optimize"
+      description: "Execute iterative optimization loop"
+      max_iterations: 10
+      loop:
+        - id: "4a_generate_candidate"
+          action: "generate"
+          description: "Generate candidate using strategy"
+          strategies: ["best_of_breed", "incremental", "radical", "hybrid"]
+
+        - id: "4b_validate_candidate"
+          action: "validate"
+          description: "Run tests and benchmarks"
+          validations:
+            - functional_tests
+            - performance_benchmarks
+            - mutation_tests
+            - fitness_calculation
+
+        - id: "4c_compare_fitness"
+          action: "compare"
+          description: "Compare candidate vs canonical"
+          code: |
+            improvement = candidate_fitness - canonical_fitness
+            meets_threshold = improvement > fitness_improvement_threshold
+
+        - id: "4d_promote_if_better"
+          action: "promote"
+          description: "Promote candidate if fitter"
+          condition: "meets_threshold"
+          code: |
+            # Archive old canonical
+            # Promote candidate
+            # Archive weak variants
+            # Update lineage
+
+        - id: "4e_learn_patterns"
+          action: "learn"
+          description: "Extract patterns from promotion"
+          condition: "promoted"
+          code: |
+            # Record delta types that worked
+            # Calculate improvement per delta type
+            # Update learned_patterns
+
+        - id: "4f_check_continue"
+          action: "decide"
+          description: "Decide whether to continue"
+          code: |
+            if not promoted:
+                break  # Stop if no improvement
+
+    - id: "5_generate_report"
+      action: "report"
+      description: "Generate comprehensive optimization report"
+      output: "optimization_report"
+
+integration:
+  rag_module: "src/rag_memory.py"
+  pattern_clusterer: "src/pattern_clusterer.py"
+  optimization_pipeline: "src/optimization_pipeline.py"
+  quality_evaluator: "src/quality_evaluator.py"
+  hierarchical_evolver: "src/hierarchical_evolver.py"
+
+parameters:
+  similarity_threshold:
+    type: "float"
+    default: 0.96
+    description: "Minimum cosine similarity for variant inclusion"
+    range: [0.90, 0.99]
+
+  max_iterations:
+    type: "integer"
+    default: 10
+    description: "Maximum optimization iterations"
+    range: [1, 50]
+
+  fitness_improvement_threshold:
+    type: "float"
+    default: 0.05
+    description: "Minimum fitness improvement to promote candidate"
+    range: [0.01, 0.20]
+
+  strategy:
+    type: "enum"
+    default: "best_of_breed"
+    options: ["best_of_breed", "incremental", "radical", "hybrid"]
+    description: "Optimization strategy to use"
+
+  custom_fitness_weights:
+    type: "object"
+    optional: true
+    description: "Custom weights for fitness components"
+    schema:
+      latency: float
+      memory: float
+      cpu: float
+      success_rate: float
+      test_coverage: float
+
+output:
+  formats:
+    - "markdown_report"
+    - "json_metrics"
+    - "cluster_metadata"
+    - "lineage_tree"
+
+  includes:
+    - cluster_id
+    - optimization_summary
+    - iteration_details
+    - learned_patterns
+    - final_canonical_variant
+    - cluster_statistics
+    - lineage_tree
+
+example_usage: |
+  # Basic cluster optimization
+  "Optimize the cron_parser cluster to improve performance"
+
+  # With specific strategy
+  "Use incremental strategy to optimize authentication_handler cluster"
+
+  # With custom thresholds
+  "Optimize email_validator cluster with 0.98 similarity threshold and 0.03 improvement threshold"
+
+  # Learning from history
+  "Optimize all clusters in the workflow, learning patterns across optimizations"
+
+versioning:
+  variant_status:
+    - CANONICAL: "Current best implementation"
+    - ACTIVE: "In cluster, viable alternate"
+    - ARCHIVED: "Preserved but not active"
+    - DEPRECATED: "Marked for removal"
+
+  lineage_tracking:
+    enabled: true
+    parent_child_relationships: true
+    semantic_deltas_preserved: true
+
+  archival_policy:
+    keep_lineage: true
+    archive_weak_variants: true
+    weakness_threshold: 0.1  # Archive if fitness < canonical - 0.1
+
+pattern_learning:
+  enabled: true
+  pattern_types:
+    - "algorithm"
+    - "error_handling"
+    - "refactor"
+    - "performance"
+    - "memory_optimization"
+    - "async_conversion"
+
+  learning_metrics:
+    - "average_improvement_per_type"
+    - "success_rate_per_type"
+    - "risk_correlation"
+    - "impact_areas"
+
+  pattern_application:
+    - "Boost estimated_benefit of deltas with successful history"
+    - "Prioritize low-risk deltas if history shows regression patterns"
+    - "Suggest new delta types based on learned patterns"
+
+cost_management:
+  max_daily_budget: 30.0  # USD
+  cost_per_iteration: 0.10  # Approximate
+  cost_per_validation: 0.05  # Approximate
+
+  optimization_strategy: |
+    1. Use local models for validation when possible
+    2. Cache validation results for identical variants
+    3. Skip expensive mutations tests for incremental changes
+    4. Batch optimizations for multiple clusters
+
+monitoring:
+  track_metrics:
+    - "iterations_per_cluster"
+    - "promotion_rate"
+    - "average_fitness_improvement"
+    - "learned_patterns_count"
+    - "archival_rate"
+
+  alerts:
+    - "No promotions after 5 iterations → Consider different strategy"
+    - "Fitness regression → Rollback and investigate"
+    - "High archival rate → Cluster may be unstable"
+
+notes: |
+  The RAG Cluster Optimizer implements the "living library" concept where code
+  artifacts evolve over time toward higher fitness. Key principles:
+
+  1. LINEAGE PRESERVATION: Never delete variants, always archive with parent links
+  2. PATTERN LEARNING: System gets smarter over time by learning from successes
+  3. MULTI-STRATEGY: Different strategies for different optimization needs
+  4. FITNESS-DRIVEN: Objective metrics guide all decisions
+  5. ITERATIVE REFINEMENT: Small steps toward better implementations
+
+  The "guild master" analogy captures the essence: you're cultivating mastery
+  through iterative refinement, preserving wisdom (lineage), and building a
+  living library of increasingly powerful implementations.

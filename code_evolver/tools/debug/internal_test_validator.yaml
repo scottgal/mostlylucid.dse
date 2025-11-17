@@ -1,0 +1,65 @@
+name: "Internal Test Validator"
+type: "executable"
+description: "Internal tool for validating test outputs. Usage tracking disabled since this is internal tooling."
+
+# Disable usage tracking for this tool (internal/testing only)
+track_usage: false
+
+executable:
+  command: "python"
+  args: ["tools/executable/internal_test_validator.py"]
+
+input_schema:
+  test_output:
+    type: string
+    description: "Test output to validate"
+    required: true
+  expected_pattern:
+    type: string
+    description: "Regex pattern expected in output"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    valid:
+      type: boolean
+    message:
+      type: string
+
+tags: ["internal", "testing", "validation", "no-tracking"]
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+priority: 10
+
+usage_notes: |
+  ## Usage Tracking Disabled
+
+  This tool has `track_usage: false` because it's an internal testing tool.
+  It won't increment usage counters in RAG.
+
+  **Use this pattern for:**
+  - Internal testing tools
+  - Debugging/diagnostic tools
+  - Temporary/experimental tools
+  - Tools you don't want in usage analytics
+
+  ## Example
+
+  ```python
+  # This call won't be tracked
+  result = call_tool("internal_test_validator", json.dumps({
+      "test_output": "some output",
+      "expected_pattern": "success"
+  }))
+  # No usage counter incremented, no timestamp updated
+  ```
+
+  ## Production Tools
+
+  Production tools should have `track_usage: true` (or omit it, true is default).
+  This helps track:
+  - Which tools are popular
+  - Version adoption rates
+  - Lineage effectiveness

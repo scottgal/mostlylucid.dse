@@ -1,0 +1,71 @@
+name: "Create Behave Spec"
+type: "executable"
+description: "Create a Behave BDD specification file for RAG storage and future test generation"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/create_behave_spec.py"
+  stdin_mode: true
+
+input_schema:
+  tool_name:
+    type: "string"
+    description: "Name of the tool to create spec for"
+    required: true
+  description:
+    type: "string"
+    description: "Tool description"
+    required: false
+  scenarios:
+    type: "array"
+    description: "List of test scenarios"
+    required: false
+  output_path:
+    type: "string"
+    description: "Path to save the spec file"
+    required: false
+    default: "./specs/behave"
+
+output_schema:
+  spec_path:
+    type: "string"
+    description: "Path to created spec file"
+  feature_path:
+    type: "string"
+    description: "Path to created feature file"
+  success:
+    type: "boolean"
+    description: "Whether spec creation succeeded"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "medium"
+
+tags:
+  - "testing"
+  - "spec-creation"
+  - "behave"
+  - "bdd"
+  - "rag"
+
+examples:
+  - "Create Behave spec for tool validation"
+  - "Generate BDD test specification"
+
+use_cases:
+  - "Initialize tool BDD specifications"
+  - "Store test specs in RAG for reuse"
+  - "Template for future BDD tests"
+
+advantages:
+  - "Very fast spec creation"
+  - "Gherkin format for readability"
+  - "RAG-compatible output"
+
+workflow_integration:
+  position: "initialization"
+  trigger: "after tool creation"
+  next_step: "store in RAG memory"

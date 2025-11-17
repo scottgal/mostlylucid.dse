@@ -1,0 +1,7 @@
+name: "Performance Optimizer"
+type: "llm"
+description: "Suggests performance optimizations"
+llm:
+  model: "codellama"
+  endpoint: null
+tags: ["performance", "optimization"]

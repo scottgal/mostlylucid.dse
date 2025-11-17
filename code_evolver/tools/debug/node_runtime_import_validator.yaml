@@ -1,0 +1,15 @@
+name: "Node Runtime Import Validator"
+type: "executable"
+description: "Validates that node_runtime imports come AFTER sys.path.insert() setup to prevent ModuleNotFoundError"
+executable:
+  command: "python"
+  args: ["{tool_dir}/node_runtime_import_validator.py", "{source_file}"]
+  install_command: null  # No external dependencies needed
+auto_fix:
+  enabled: true
+  command: "python"
+  args: ["{tool_dir}/node_runtime_import_validator.py", "{source_file}", "--fix"]
+tags: ["python", "imports", "validation", "node_runtime", "static-analysis", "auto-fix"]
+speed_tier: "fast"
+cost: "free"
+priority: 100  # Run early - before expensive LLM tools

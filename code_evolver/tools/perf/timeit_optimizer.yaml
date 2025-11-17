@@ -1,0 +1,291 @@
+name: "Timeit Performance Optimizer"
+type: "executable"
+version: "1.0.0"
+description: |
+  Advanced performance testing and optimization tool. Generates self-contained benchmark scripts,
+  runs performance tests with automatic mocking of tool calls and external services,
+  collects execution time and memory metrics across 3 runs, and updates RAG metadata
+  with performance data. Essential for optimization workflows and performance tracking.
+
+executable:
+  command: "python"
+  args:
+    - "{tool_path}/timeit_optimizer.py"
+    - "{command}"
+  stdin: true
+  environment:
+    PYTHONPATH: "{project_root}/code_evolver/src"
+
+parameters:
+  command:
+    type: "string"
+    description: "Command to execute: generate, benchmark, or update_rag"
+    required: true
+    enum: ["generate", "benchmark", "update_rag"]
+    default: "benchmark"
+
+  tool_code:
+    type: "string"
+    description: "Source code of the tool to benchmark"
+    required: true
+
+  tool_id:
+    type: "string"
+    description: "Unique identifier for the tool being tested"
+    required: true
+
+  test_input:
+    type: "object"
+    description: "Sample input data for testing the tool (will auto-generate if omitted)"
+    required: false
+    default: null
+
+  mock_tools:
+    type: "boolean"
+    description: "Whether to mock calls to other tools"
+    required: false
+    default: true
+
+  mock_external:
+    type: "boolean"
+    description: "Whether to mock external service/API calls"
+    required: false
+    default: true
+
+tags:
+  - "performance"
+  - "optimization"
+  - "benchmarking"
+  - "timeit"
+  - "profiling"
+  - "testing"
+  - "metrics"
+  - "memory"
+  - "mocking"
+
+constraints:
+  max_memory_mb: 512
+  max_execution_time_ms: 120000  # 2 minutes for 3 benchmark runs
+  max_storage_mb: 10
+
+metadata:
+  artifact_type: "optimization_tool"
+  speed_tier: "medium"
+  cost_tier: "free"
+  reliability: "high"
+
+  capabilities:
+    - "Generate standalone performance test scripts"
+    - "Run 3 benchmark iterations and select best result"
+    - "Track execution time in milliseconds"
+    - "Monitor memory usage in KB"
+    - "Mock tool calls to eliminate external dependencies"
+    - "Mock external service calls (HTTP, LLM APIs, etc.)"
+    - "Update RAG metadata with performance metrics"
+    - "Auto-detect tool calls and external dependencies"
+    - "Generate 4B-class test scripts with all required data"
+
+  output_formats:
+    - "json_metrics"
+    - "test_script"
+    - "performance_report"
+
+  integration_points:
+    - tool_registry: "./code_evolver/tools/index.json"
+    - rag_memory: "./rag_memory"
+    - workflow_system: "Can be used as a workflow step"
+
+workflow:
+  steps:
+    - id: "1_generate_test_script"
+      action: "generate"
+      description: "Generate self-contained performance test script"
+      inputs:
+        - tool_code
+        - tool_id
+        - test_input
+      outputs:
+        - test_script
+
+    - id: "2_run_benchmark"
+      action: "benchmark"
+      description: "Execute benchmark (3 runs, best result)"
+      depends_on: ["1_generate_test_script"]
+      outputs:
+        - best_run
+        - all_runs
+        - performance_metrics
+
+    - id: "3_update_rag"
+      action: "update_rag"
+      description: "Update tool's RAG metadata with performance data"
+      depends_on: ["2_run_benchmark"]
+      condition: "benchmark succeeded and tool is fully tested"
+      outputs:
+        - rag_updated
+
+example_usage:
+  generate_test_script: |
+    {
+      "command": "generate",
+      "tool_code": "def add(a, b):\n    return a + b",
+      "tool_id": "simple_adder",
+      "test_input": {"a": 5, "b": 3}
+    }
+
+  run_benchmark: |
+    {
+      "command": "benchmark",
+      "tool_code": "def process_data(data):\n    return [x*2 for x in data]",
+      "tool_id": "data_processor",
+      "test_input": {"data": [1, 2, 3, 4, 5]}
+    }
+
+  update_rag: |
+    {
+      "command": "update_rag",
+      "tool_id": "data_processor",
+      "best_run": {
+        "execution_time_ms": 0.023,
+        "memory_usage_kb": 128.5,
+        "calls_to_mocked_tools": [],
+        "test_run_number": 2,
+        "timestamp": "2025-11-17 18:30:00"
+      },
+      "all_runs": [...]
+    }
+
+output:
+  success_example: |
+    {
+      "tool_id": "data_processor",
+      "success": true,
+      "best_run": {
+        "execution_time_ms": 0.023,
+        "memory_usage_kb": 128.5,
+        "calls_to_mocked_tools": [],
+        "test_run_number": 2,
+        "timestamp": "2025-11-17 18:30:00"
+      },
+      "all_runs": [
+        {
+          "execution_time_ms": 0.025,
+          "memory_usage_kb": 130.0,
+          "test_run_number": 1,
+          "timestamp": "2025-11-17 18:30:00"
+        },
+        {
+          "execution_time_ms": 0.023,
+          "memory_usage_kb": 128.5,
+          "test_run_number": 2,
+          "timestamp": "2025-11-17 18:30:00"
+        },
+        {
+          "execution_time_ms": 0.024,
+          "memory_usage_kb": 129.0,
+          "test_run_number": 3,
+          "timestamp": "2025-11-17 18:30:00"
+        }
+      ],
+      "test_script": "#!/usr/bin/env python3\n..."
+    }
+
+  error_example: |
+    {
+      "tool_id": "buggy_tool",
+      "success": false,
+      "error": "NameError: name 'undefined_var' is not defined",
+      "test_script": "#!/usr/bin/env python3\n..."
+    }
+
+best_practices:
+  - "Always run benchmarks after code is fully fixed and tested"
+  - "Use representative test inputs that exercise main code paths"
+  - "Mock all external dependencies to isolate tool performance"
+  - "Run 3 iterations to account for system variance"
+  - "Update RAG metadata only after successful testing"
+  - "Keep generated test scripts for debugging and validation"
+  - "Include test script with tool artifacts for reproducibility"
+
+mocking_strategy: |
+  The tool automatically detects and mocks:
+
+  1. Tool Calls:
+     - Pattern matching: call_tool, execute_tool, run_tool, tool_*
+     - AST analysis to find function calls
+     - Mocked with success responses
+
+  2. External Services:
+     - HTTP clients: requests, httpx, urllib
+     - LLM APIs: ollama, openai, anthropic
+     - Database calls: common ORM patterns
+     - All return successful mock responses
+
+  3. File I/O (optional):
+     - Can mock file operations if needed
+     - Prevents actual disk writes during benchmarking
+
+performance_tracking: |
+  Metrics collected per run:
+  - Execution time (milliseconds, high precision)
+  - Memory usage (KB, peak allocation)
+  - Test run number (1-3)
+  - Timestamp
+  - Mocked dependencies list
+
+  Best run selection:
+  - Lowest execution time among successful runs
+  - Ignores failed runs
+  - All runs preserved for analysis
+
+rag_integration: |
+  Updates tool registry at ./code_evolver/tools/index.json
+
+  Adds to tool metadata:
+  {
+    "metadata": {
+      "performance": {
+        "execution_time_ms": 0.023,
+        "memory_usage_kb": 128.5,
+        "last_benchmarked": "2025-11-17 18:30:00",
+        "test_runs": 3
+      }
+    }
+  }
+
+  Used for:
+  - Performance regression detection
+  - Tool selection in workflows (prefer faster tools)
+  - Optimization target identification
+  - Performance trend tracking
+
+test_script_generation: |
+  Generated scripts are:
+  - Fully self-contained (4B-class)
+  - Include all necessary imports
+  - Include tool code under test
+  - Include mock setup
+  - Include test input data
+  - Runnable standalone with: python test_script.py
+  - Output JSON results to stdout
+  - Return exit code 0 on success
+
+  Output snippet after codegen:
+  ```python
+  #!/usr/bin/env python3
+  """Auto-generated performance test for tool: {tool_id}"""
+  import json
+  import time
+  import timeit
+  import tracemalloc
+  from unittest.mock import Mock, patch
+
+  # Tool code under test
+  {tool_code}
+
+  # Mock setup
+  {mock_setup}
+
+  # Test execution with 3 runs
+  # Returns best run + all runs as JSON
+  ```

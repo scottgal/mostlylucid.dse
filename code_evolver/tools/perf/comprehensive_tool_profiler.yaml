@@ -1,0 +1,344 @@
+name: "Comprehensive Tool Profiler"
+type: "executable"
+version: "1.0.0"
+description: |
+  Complete tool profiling orchestrator that combines performance benchmarking,
+  static analysis, regression evaluation, and RAG metadata updates into a single
+  workflow. This is the master tool for fully profiling a tool after code generation
+  or mutation. Tags tools in RAG with performance metrics, static analysis findings
+  (complexity, security, correctness), regression evaluation scores, source code,
+  and documentation. Prevents false-positive regressions while ensuring quality.
+
+executable:
+  command: "python"
+  args:
+    - "{tool_path}/comprehensive_tool_profiler.py"
+    - "{tool_id}"
+  stdin: true
+
+parameters:
+  tool_id:
+    type: "string"
+    description: "Unique identifier for the tool"
+    required: true
+
+  tool_code:
+    type: "string"
+    description: "Source code of the tool to profile"
+    required: true
+
+  test_input:
+    type: "object"
+    description: "Sample input for performance testing"
+    required: false
+    default: null
+
+  requirement:
+    type: "string"
+    description: "Current requirement specification"
+    required: false
+    default: ""
+
+  old_version_data:
+    type: "object"
+    description: "Previous version data for regression comparison"
+    required: false
+    default: null
+    properties:
+      code:
+        type: "string"
+      version:
+        type: "string"
+      requirement:
+        type: "string"
+      metadata:
+        type: "object"
+
+tags:
+  - "profiling"
+  - "orchestration"
+  - "performance"
+  - "static-analysis"
+  - "regression"
+  - "rag"
+  - "workflow"
+  - "comprehensive"
+
+constraints:
+  max_memory_mb: 1024
+  max_execution_time_ms: 180000  # 3 minutes total
+  max_storage_mb: 20
+
+metadata:
+  artifact_type: "optimization_tool"
+  speed_tier: "slow"
+  cost_tier: "low"
+  reliability: "high"
+
+  workflow_steps:
+    - step: 1
+      name: "Performance Benchmark"
+      tool: "timeit_optimizer"
+      description: "Run 3 benchmark iterations with mocking"
+      outputs:
+        - execution_time_ms
+        - memory_usage_kb
+        - best_run
+        - test_script
+
+    - step: 2
+      name: "Static Analysis"
+      tool: "performance_regression_evaluator"
+      description: "Analyze complexity, security, correctness"
+      outputs:
+        - complexity_metrics
+        - security_issues
+        - syntax_validation
+        - code_quality
+
+    - step: 3
+      name: "Regression Evaluation"
+      tool: "performance_regression_evaluator"
+      description: "LLM-based assessment of performance changes"
+      condition: "old_version_data exists"
+      outputs:
+        - score (0-100)
+        - recommendation (ACCEPT/REJECT/REVIEW)
+        - reasoning
+        - confidence
+
+    - step: 4
+      name: "Metadata Building"
+      description: "Combine all metrics into comprehensive metadata"
+      outputs:
+        - complete_metadata
+
+    - step: 5
+      name: "RAG Update"
+      description: "Store metadata in tool registry"
+      outputs:
+        - rag_updated
+
+  decision_flow:
+    - condition: "Benchmark fails"
+      action: "STOP - Return failure"
+
+    - condition: "Regression evaluation returns REJECT"
+      action: "STOP - Return rejected status"
+
+    - condition: "Regression evaluation returns REVIEW"
+      action: "CONTINUE - Mark for human review"
+
+    - condition: "All steps complete"
+      action: "Update RAG and return success"
+
+example_usage:
+  initial_profiling: |
+    # First time profiling a tool (no old version)
+    echo '{
+      "tool_code": "def add(a, b):\n    return a + b",
+      "test_input": {"a": 5, "b": 3},
+      "requirement": "Add two numbers together"
+    }' | python comprehensive_tool_profiler.py simple_adder
+
+  regression_check: |
+    # Profiling after mutation (with old version)
+    echo '{
+      "tool_code": "def add(a, b):\n    if not isinstance(a, (int, float)):\n        raise ValueError\n    return a + b",
+      "test_input": {"a": 5, "b": 3},
+      "requirement": "Add two numbers with type validation",
+      "old_version_data": {
+        "code": "def add(a, b):\n    return a + b",
+        "version": "1.0.0",
+        "requirement": "Add two numbers together",
+        "metadata": {
+          "performance": {
+            "execution_time_ms": 0.005,
+            "memory_usage_kb": 0.1
+          }
+        }
+      }
+    }' | python comprehensive_tool_profiler.py simple_adder
+
+output:
+  success_example: |
+    {
+      "tool_id": "simple_adder",
+      "timestamp": "2025-11-17T18:00:00",
+      "status": "completed",
+      "workflow_steps": [
+        {
+          "step": "benchmark",
+          "status": "completed",
+          "data": {
+            "success": true,
+            "best_run": {
+              "execution_time_ms": 0.006,
+              "memory_usage_kb": 0.15
+            }
+          }
+        },
+        {
+          "step": "static_analysis",
+          "status": "completed",
+          "data": {
+            "analysis": {
+              "complexity": {"average_complexity": 1.0},
+              "security": {"total_issues": 0},
+              "code_quality": {"documentation_ratio": 0.0}
+            }
+          }
+        },
+        {
+          "step": "regression_evaluation",
+          "status": "completed",
+          "data": {
+            "evaluation": {
+              "score": 88,
+              "recommendation": "ACCEPT",
+              "reasoning": "Type validation is an important safety feature...",
+              "confidence": "high"
+            }
+          }
+        },
+        {
+          "step": "rag_update",
+          "status": "completed",
+          "data": {"success": true}
+        }
+      ],
+      "metadata": {
+        "performance": {
+          "execution_time_ms": 0.006,
+          "memory_usage_kb": 0.15,
+          "regression_evaluation": {
+            "score": 88,
+            "recommendation": "ACCEPT"
+          }
+        },
+        "static_analysis": {
+          "complexity": {"average_complexity": 1.0},
+          "security": {"total_issues": 0},
+          "code_quality": {"documentation_ratio": 0.0}
+        },
+        "source": "def add(a, b): ...",
+        "requirement": "Add two numbers with type validation"
+      }
+    }
+
+  rejected_example: |
+    {
+      "tool_id": "slow_tool",
+      "timestamp": "2025-11-17T18:00:00",
+      "status": "rejected",
+      "reason": "Regression rejected: 200% slowdown with no feature additions",
+      "workflow_steps": [...]
+    }
+
+  review_required_example: |
+    {
+      "tool_id": "complex_tool",
+      "timestamp": "2025-11-17T18:00:00",
+      "status": "review_required",
+      "reason": "Human review needed: 40% regression with moderate changes",
+      "workflow_steps": [...]
+    }
+
+integration_with_codegen_workflow: |
+  # Use in code generation and mutation workflows
+
+  ## Initial Code Generation
+  1. LLM generates tool code
+  2. Run pytest to verify correctness
+  3. Run comprehensive_tool_profiler (no old version)
+  4. Store in RAG with all metadata
+
+  ## After Code Mutation
+  1. Load old version from RAG
+  2. LLM mutates code (adds features, fixes bugs, etc.)
+  3. Run pytest to verify correctness
+  4. Run comprehensive_tool_profiler (with old version)
+  5. Check regression evaluation:
+     - ACCEPT: Update RAG with new version
+     - REJECT: Revert or try different mutation
+     - REVIEW: Flag for human decision
+  6. If accepted, save new version to RAG
+
+rag_metadata_schema: |
+  # Complete metadata stored in RAG
+
+  {
+    "tool_id": "example_tool",
+    "version": "1.1.0",
+    "metadata": {
+      "performance": {
+        "execution_time_ms": 7.8,
+        "memory_usage_kb": 1280,
+        "last_benchmarked": "2025-11-17T12:00:00",
+        "test_runs": 3,
+        "test_script": "#!/usr/bin/env python3...",
+        "regression_evaluation": {
+          "score": 85,
+          "recommendation": "ACCEPT",
+          "reasoning": "Security improvements justify performance cost",
+          "confidence": "high",
+          "llm_model": "qwen2.5-coder:3b",
+          "timestamp": "2025-11-17T12:30:00"
+        }
+      },
+      "static_analysis": {
+        "complexity": {
+          "average_complexity": 3.2,
+          "grade": "B",
+          "tool": "radon"
+        },
+        "security": {
+          "total_issues": 0,
+          "severity_counts": {"LOW": 0, "MEDIUM": 0, "HIGH": 0},
+          "tool": "bandit"
+        },
+        "correctness": {
+          "syntax_valid": true,
+          "syntax_error": null,
+          "tool": "python_compile"
+        },
+        "code_quality": {
+          "docstring_count": 3,
+          "function_count": 4,
+          "class_count": 1,
+          "documentation_ratio": 0.75
+        }
+      },
+      "source": "<complete source code>",
+      "requirement": "<requirement specification>",
+      "documentation": "<auto-generated docs>",
+      "last_updated": "2025-11-17T12:30:00"
+    }
+  }
+
+exit_codes:
+  0: "Success - Tool profiled and accepted"
+  1: "Failure - Benchmark or analysis failed"
+  2: "Review required - Human decision needed"
+
+best_practices:
+  - "Always profile after code generation or mutation"
+  - "Store old version data for regression comparison"
+  - "Use meaningful requirement specifications"
+  - "Provide representative test inputs"
+  - "Review tools flagged with REVIEW status"
+  - "Track profiling results over time in RAG"
+  - "Use metadata to select optimal tools in workflows"
+  - "Don't skip profiling to save time - it catches issues"
+
+workflow_automation: |
+  # Automated profiling in CI/CD
+
+  1. Developer commits new tool code
+  2. CI runs pytest
+  3. If tests pass, run comprehensive_tool_profiler
+  4. If status = "completed": merge to main
+  5. If status = "review_required": flag for review
+  6. If status = "rejected": block merge, request optimization
+  7. Update tool registry with metadata
+  8. Generate changelog with performance deltas

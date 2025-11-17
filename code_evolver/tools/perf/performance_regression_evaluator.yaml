@@ -1,0 +1,433 @@
+name: "Performance Regression Evaluator"
+type: "executable"
+version: "1.0.0"
+description: |
+  Intelligent performance regression assessment using 4B-class LLM evaluation.
+  Prevents being locked into never accepting performance regressions by evaluating
+  whether performance changes are reasonable given requirement changes. Combines
+  static analysis (complexity, security, correctness) with LLM reasoning to score
+  regression acceptability from 0 (reject) to 100 (accept). Essential for avoiding
+  false positives in performance regression testing during feature evolution.
+
+executable:
+  command: "python"
+  args:
+    - "{tool_path}/performance_regression_evaluator.py"
+    - "{command}"
+  stdin: true
+  environment:
+    PYTHONPATH: "{project_root}/code_evolver/src"
+
+parameters:
+  command:
+    type: "string"
+    description: "Command to execute: evaluate or analyze"
+    required: true
+    enum: ["evaluate", "analyze"]
+    default: "evaluate"
+
+  old_metrics:
+    type: "object"
+    description: "Performance metrics from previous version"
+    required: true
+    properties:
+      execution_time_ms:
+        type: "number"
+        description: "Execution time in milliseconds"
+      memory_usage_kb:
+        type: "number"
+        description: "Memory usage in kilobytes"
+      timestamp:
+        type: "string"
+        description: "When metrics were collected"
+      version:
+        type: "string"
+        description: "Version identifier"
+      complexity_score:
+        type: "number"
+        description: "Optional complexity score"
+      security_issues:
+        type: "integer"
+        description: "Number of security issues found"
+      correctness_score:
+        type: "number"
+        description: "Optional correctness score"
+
+  new_metrics:
+    type: "object"
+    description: "Performance metrics from new version"
+    required: true
+    properties:
+      execution_time_ms:
+        type: "number"
+      memory_usage_kb:
+        type: "number"
+      timestamp:
+        type: "string"
+      version:
+        type: "string"
+      complexity_score:
+        type: "number"
+      security_issues:
+        type: "integer"
+      correctness_score:
+        type: "number"
+
+  requirement_change:
+    type: "object"
+    description: "Description of requirement changes between versions"
+    required: true
+    properties:
+      previous_requirement:
+        type: "string"
+        description: "Original requirement specification"
+      new_requirement:
+        type: "string"
+        description: "Updated requirement specification"
+      change_summary:
+        type: "string"
+        description: "Summary of what changed"
+      feature_additions:
+        type: "array"
+        description: "List of features added"
+      feature_removals:
+        type: "array"
+        description: "List of features removed"
+      breaking_changes:
+        type: "array"
+        description: "List of breaking changes"
+
+  old_code:
+    type: "string"
+    description: "Source code from previous version"
+    required: true
+
+  new_code:
+    type: "string"
+    description: "Source code from new version"
+    required: true
+
+  llm_model:
+    type: "string"
+    description: "LLM model to use for evaluation (4B-class recommended)"
+    required: false
+    default: "qwen2.5-coder:3b"
+
+tags:
+  - "performance"
+  - "regression"
+  - "evaluation"
+  - "llm"
+  - "static-analysis"
+  - "optimization"
+  - "testing"
+  - "quality"
+
+constraints:
+  max_memory_mb: 512
+  max_execution_time_ms: 60000  # 1 minute for LLM call
+  max_storage_mb: 5
+
+metadata:
+  artifact_type: "perf_tool"
+  speed_tier: "medium"
+  cost_tier: "low"  # Uses local 4B LLM
+  reliability: "high"
+
+  capabilities:
+    - "LLM-based regression assessment"
+    - "Static analysis integration (complexity, security, correctness)"
+    - "Requirement change analysis"
+    - "0-100 scoring scale"
+    - "Confidence levels (high/medium/low)"
+    - "Accept/Reject/Review recommendations"
+    - "Prevents false positive regressions"
+    - "Context-aware evaluation"
+
+  static_analysis_tools:
+    - tool: "radon"
+      purpose: "Complexity analysis"
+      fallback: "Line counting"
+    - tool: "bandit"
+      purpose: "Security scanning"
+      fallback: "Pattern matching"
+    - tool: "python_compile"
+      purpose: "Syntax validation"
+      fallback: "None"
+
+  llm_models:
+    recommended:
+      - "qwen2.5-coder:3b"  # Fast, good for code
+      - "codellama:7b"       # More capable
+      - "deepseek-coder:6.7b"  # Excellent for code analysis
+    minimum_size: "3B parameters"
+    maximum_time: "30 seconds per evaluation"
+
+  evaluation_criteria:
+    acceptable_regression_thresholds:
+      minor_features: "< 10% performance degradation"
+      major_features: "< 25% performance degradation"
+      security_improvements: "< 30% performance degradation"
+      breaking_changes: "< 40% performance degradation"
+      no_changes: "< 5% performance degradation"
+
+    automatic_accept:
+      - "Performance improved"
+      - "Regression < 5% with feature additions"
+      - "Security issues reduced and regression < 20%"
+
+    automatic_reject:
+      - "Regression > 100% with no justification"
+      - "Regression > 50% with only minor changes"
+      - "Security issues increased"
+      - "Complexity increased significantly with performance degradation"
+
+    requires_review:
+      - "Regression 20-50% with moderate changes"
+      - "Confidence score is 'low'"
+      - "Conflicting signals (better complexity but worse performance)"
+
+workflow:
+  steps:
+    - id: "1_collect_metrics"
+      description: "Gather old and new performance metrics"
+      inputs:
+        - old_metrics (from previous benchmark)
+        - new_metrics (from current benchmark)
+
+    - id: "2_static_analysis"
+      description: "Run static analysis on both versions"
+      tools:
+        - radon (complexity)
+        - bandit (security)
+        - python compile (correctness)
+
+    - id: "3_llm_evaluation"
+      description: "Call 4B LLM to assess reasonableness"
+      model: "qwen2.5-coder:3b"
+      prompt_type: "structured_assessment"
+      output_format: "json"
+
+    - id: "4_parse_result"
+      description: "Parse LLM response and extract score"
+      outputs:
+        - score (0-100)
+        - reasoning
+        - recommendation
+        - confidence
+
+    - id: "5_make_decision"
+      description: "Decide accept/reject/review"
+      logic: |
+        if score >= 80:
+          decision = "ACCEPT"
+        elif score <= 30:
+          decision = "REJECT"
+        else:
+          decision = "REVIEW"
+
+example_usage:
+  evaluate_regression: |
+    {
+      "command": "evaluate",
+      "old_metrics": {
+        "execution_time_ms": 5.2,
+        "memory_usage_kb": 1024,
+        "timestamp": "2025-11-17T10:00:00",
+        "version": "1.0.0",
+        "security_issues": 2
+      },
+      "new_metrics": {
+        "execution_time_ms": 7.8,
+        "memory_usage_kb": 1280,
+        "timestamp": "2025-11-17T12:00:00",
+        "version": "1.1.0",
+        "security_issues": 0
+      },
+      "requirement_change": {
+        "previous_requirement": "Parse JSON data from input",
+        "new_requirement": "Parse JSON data with schema validation and security checks",
+        "change_summary": "Added schema validation and security scanning",
+        "feature_additions": [
+          "JSON schema validation",
+          "Security vulnerability scanning",
+          "Input sanitization"
+        ],
+        "feature_removals": [],
+        "breaking_changes": []
+      },
+      "old_code": "def parse_json(data): return json.loads(data)",
+      "new_code": "def parse_json(data): validate_schema(data); scan_security(data); return json.loads(sanitize(data))",
+      "llm_model": "qwen2.5-coder:3b"
+    }
+
+  analyze_code: |
+    {
+      "command": "analyze",
+      "code": "def process_data(data):\n    return [x*2 for x in data]"
+    }
+
+output:
+  success_example: |
+    {
+      "success": true,
+      "evaluation": {
+        "score": 85,
+        "reasoning": "The 50% performance regression is reasonable given that schema validation and security scanning were added. These are important features that justify the performance cost. Security issues were reduced from 2 to 0.",
+        "recommendation": "ACCEPT",
+        "confidence": "high",
+        "llm_model": "qwen2.5-coder:3b",
+        "timestamp": "2025-11-17T12:30:00"
+      },
+      "performance_delta": {
+        "execution_time_pct": 50.0,
+        "memory_pct": 25.0
+      }
+    }
+
+  reject_example: |
+    {
+      "success": true,
+      "evaluation": {
+        "score": 15,
+        "reasoning": "The 80% performance regression is not justified. Only minor formatting changes were made, which should not impact performance this significantly. This suggests a performance bug was introduced.",
+        "recommendation": "REJECT",
+        "confidence": "high",
+        "llm_model": "qwen2.5-coder:3b",
+        "timestamp": "2025-11-17T12:30:00"
+      },
+      "performance_delta": {
+        "execution_time_pct": 80.0,
+        "memory_pct": 5.0
+      }
+    }
+
+  review_example: |
+    {
+      "success": true,
+      "evaluation": {
+        "score": 55,
+        "reasoning": "The 30% regression is concerning but the addition of async processing may justify it. However, the complexity increase seems disproportionate. This needs human review to determine if the implementation is optimal.",
+        "recommendation": "REVIEW",
+        "confidence": "medium",
+        "llm_model": "qwen2.5-coder:3b",
+        "timestamp": "2025-11-17T12:30:00"
+      },
+      "performance_delta": {
+        "execution_time_pct": 30.0,
+        "memory_pct": 45.0
+      }
+    }
+
+integration_with_timeit_optimizer: |
+  # Complete workflow combining both tools
+
+  1. Run timeit_optimizer on old version
+     → Get old_metrics
+
+  2. Make code changes (new features, fixes, etc.)
+
+  3. Run timeit_optimizer on new version
+     → Get new_metrics
+
+  4. Run performance_regression_evaluator
+     → Compare old_metrics vs new_metrics
+     → Analyze requirement changes
+     → Get LLM assessment (0-100 score)
+
+  5. Decision:
+     - Score >= 80: ACCEPT → Update RAG with new metrics
+     - Score <= 30: REJECT → Revert or optimize
+     - Score 31-79: REVIEW → Human decision needed
+
+  6. If accepted, tag tool in RAG with:
+     - Performance metrics
+     - Static analysis findings
+     - Regression evaluation score
+     - Source code + docs
+
+rag_tagging_schema: |
+  {
+    "tool_id": "my_tool",
+    "version": "1.1.0",
+    "metadata": {
+      "performance": {
+        "execution_time_ms": 7.8,
+        "memory_usage_kb": 1280,
+        "last_benchmarked": "2025-11-17T12:00:00",
+        "test_runs": 3,
+        "regression_evaluation": {
+          "score": 85,
+          "recommendation": "ACCEPT",
+          "reasoning": "Security improvements justify performance cost",
+          "confidence": "high"
+        }
+      },
+      "static_analysis": {
+        "complexity": {
+          "average_complexity": 3.2,
+          "grade": "B"
+        },
+        "security": {
+          "total_issues": 0,
+          "severity_counts": {"LOW": 0, "MEDIUM": 0, "HIGH": 0}
+        },
+        "correctness": {
+          "syntax_valid": true
+        },
+        "code_quality": {
+          "documentation_ratio": 0.85,
+          "function_count": 4
+        }
+      },
+      "source": "<source code>",
+      "documentation": "<generated docs>"
+    }
+  }
+
+best_practices:
+  - "Always evaluate regressions when requirements change"
+  - "Use 4B-class models for fast, accurate assessment"
+  - "Combine LLM reasoning with static analysis data"
+  - "Set clear thresholds for auto-accept/reject"
+  - "Require human review for borderline cases (scores 31-79)"
+  - "Document why regressions were accepted in RAG"
+  - "Track regression trends over time"
+  - "Don't optimize prematurely - some regressions are justified"
+
+common_scenarios:
+  security_improvement:
+    description: "Added security checks causing slowdown"
+    typical_score: "75-90"
+    recommendation: "Usually ACCEPT"
+    reasoning: "Security > Speed in most cases"
+
+  feature_addition:
+    description: "New features with moderate performance cost"
+    typical_score: "60-80"
+    recommendation: "ACCEPT if < 30% regression"
+    reasoning: "Features justify reasonable performance cost"
+
+  refactoring:
+    description: "Code cleanup with slight performance impact"
+    typical_score: "70-85"
+    recommendation: "ACCEPT if complexity improved"
+    reasoning: "Maintainability matters"
+
+  bug_fix:
+    description: "Bug fix causing performance regression"
+    typical_score: "50-70"
+    recommendation: "REVIEW - depends on bug severity"
+    reasoning: "Correctness first, but optimize if possible"
+
+  optimization_regression:
+    description: "Optimization attempt that worsened performance"
+    typical_score: "10-25"
+    recommendation: "REJECT"
+    reasoning: "Optimization should improve, not degrade"
+
+  no_changes:
+    description: "Performance degraded with no code changes"
+    typical_score: "5-15"
+    recommendation: "REJECT - investigate environment"
+    reasoning: "Likely environmental issue or test flakiness"
