@@ -17,7 +17,9 @@ def find_code_fix_pattern(
     broken_code: str = "",
     error_type: str = "",
     language: str = "python",
-    top_k: int = 3
+    top_k: int = 3,
+    scope: str = "global",
+    tool_id: str = ""
 ) -> Dict[str, Any]:
     """
     Find similar code fix patterns from RAG memory
@@ -28,6 +30,8 @@ def find_code_fix_pattern(
         error_type: Category of error (optional)
         language: Programming language
         top_k: Number of similar patterns to return
+        scope: Data store scope - "tool", "tool_subttools", "hierarchy", or "global"
+        tool_id: Current tool identifier (required for scoped searches)
 
     Returns:
         Result with found patterns and suggested fixes
@@ -49,10 +53,23 @@ def find_code_fix_pattern(
         if broken_code:
             search_query += f"\n\nBroken code:\n{broken_code}"
 
-        # Search by tags first for exact matches
+        # Build tags based on scope
         tags = ['code-fix-pattern', language]
         if error_type:
             tags.append(error_type)
+
+        # Apply scope filtering
+        if scope != "global" and tool_id:
+            if scope == "tool":
+                # Only patterns from this specific tool
+                tags.append(f"scope:tool:{tool_id}")
+            elif scope == "tool_subttools":
+                # Patterns from this tool and its sub-tools
+                tags.append(f"scope:hierarchy:{tool_id}")
+            elif scope == "hierarchy":
+                # All patterns in the tool hierarchy
+                tags.append(f"scope:hierarchy:{tool_id}")
+        # else: global scope - no scope tag filtering
 
         tag_matches = rag.find_by_tags(tags, limit=top_k * 2)
 
@@ -212,6 +229,8 @@ def main():
         error_type = input_data.get('error_type', '')
         language = input_data.get('language', 'python')
         top_k = input_data.get('top_k', 3)
+        scope = input_data.get('scope', 'global')
+        tool_id = input_data.get('tool_id', '')
 
         if not error_message:
             print(json.dumps({
@@ -226,7 +245,9 @@ def main():
             broken_code=broken_code,
             error_type=error_type,
             language=language,
-            top_k=top_k
+            top_k=top_k,
+            scope=scope,
+            tool_id=tool_id
         )
 
         # Output result

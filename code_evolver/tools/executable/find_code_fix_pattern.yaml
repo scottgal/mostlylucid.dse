@@ -1,6 +1,18 @@
-﻿name: "Find Code Fix Pattern"
+﻿tool_id: "find_code_fix_pattern"
+version: "2.0.0"
+name: "Find Code Fix Pattern"
 type: "executable"
-description: "Searches for similar code errors and suggests proven fixes. Returns multiple solutions ranked by usage count and similarity."
+description: |
+  Pattern Recognizer with RAG Data Store - Searches for similar code errors and suggests proven fixes.
+
+  Uses a shared RAG-based pattern data store to find code fix patterns that have been successfully
+  applied in the past. Returns multiple solutions ranked by usage count (proven effectiveness) and
+  semantic similarity. The data store scope can be configured to search:
+  - Only patterns from the current tool
+  - Patterns from the current tool and its sub-tools
+  - All patterns across the entire tool hierarchy
+
+category: "learning"
 
 track_usage: true
 
@@ -34,6 +46,23 @@ input_schema:
     type: integer
     description: "Number of similar patterns to return"
     default: 3
+    required: false
+
+  scope:
+    type: string
+    description: |
+      Data store scope - defines which patterns are accessible:
+      - "tool": Only patterns stored by the current tool
+      - "tool_subttools": Patterns from current tool and its sub-tools
+      - "hierarchy": All patterns in the current tool hierarchy
+      - "global": All patterns across all tools (default)
+    enum: ["tool", "tool_subttools", "hierarchy", "global"]
+    default: "global"
+    required: false
+
+  tool_id:
+    type: string
+    description: "Current tool identifier (used with scope filtering)"
     required: false
 
 output_schema:
@@ -81,20 +110,76 @@ output_schema:
       items:
         type: string
 
-tags: ["learning", "code-fix", "pattern-search", "error-recovery", "self-improvement"]
+tags: ["learning", "code-fix", "pattern-search", "error-recovery", "self-improvement", "rag", "data-store", "pattern-recognizer"]
 cost_tier: "free"
 speed_tier: "very-fast"
 quality_tier: "excellent"
 priority: 95
 
+metadata:
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+  data_store:
+    type: "rag"
+    backend: "qdrant"
+    collection: "code_fix_patterns"
+    scope_levels: ["tool", "tool_subttools", "hierarchy", "global"]
+
+purpose: |
+  Pattern Recognizer for Code Fixes with RAG Data Store
+
+  This tool searches a shared RAG (Retrieval-Augmented Generation) data store for similar
+  code errors and returns proven fixes. It uses semantic similarity and usage statistics
+  to rank fixes by effectiveness. The data store can be scoped to:
+
+  1. **tool**: Only search patterns stored by the current tool
+  2. **tool_subttools**: Search patterns from this tool and its sub-tools
+  3. **hierarchy**: Search all patterns in the current tool hierarchy
+  4. **global**: Search all patterns across all tools (default)
+
+  This enables intelligent code error recovery by learning from past fixes.
+
+capabilities:
+  - "Semantic search for similar code errors using RAG embeddings"
+  - "Rank fixes by proven effectiveness (usage count)"
+  - "Filter patterns by scope (tool, subtools, hierarchy, global)"
+  - "Return multiple fix options with confidence scores"
+  - "Tag-based filtering by error type and language"
+  - "Combined ranking using usage count and semantic similarity"
+
+configuration:
+  config_section: "pattern_recognizer"
+  required_settings:
+    - "enabled"
+    - "rag_backend"
+  optional_settings:
+    - "default_scope"
+    - "default_top_k"
+    - "min_similarity_threshold"
+    - "usage_weight"
+  per_tool_override: true
+  override_key: "tool_name"
+
 usage_notes: |
   ## Overview
 
   Searches RAG memory for similar code errors and returns proven fixes.
+  Uses a shared data store with configurable scope to find relevant patterns.
+
   Patterns are ranked by:
-  1. **Usage count** (most proven/successful)
-  2. **Similarity** (how closely it matches your error)
-  3. **Quality score** (confidence in the fix)
+  1. **Usage count** (most proven/successful) - weight: 10x
+  2. **Similarity** (how closely it matches your error) - weight: 1x
+  3. **Quality score** (confidence in the fix) - tiebreaker
+
+  ## Data Store Scope
+
+  The `scope` parameter determines which patterns are searched:
+
+  - **tool**: Only patterns from the current tool (isolated learning)
+  - **tool_subttools**: Patterns from this tool + sub-tools (hierarchical learning)
+  - **hierarchy**: All patterns in current tool hierarchy (contextual learning)
+  - **global**: All patterns across all tools (universal learning, default)
 
   ## Usage
 

@@ -1,6 +1,19 @@
-﻿name: "Store Code Fix Pattern"
+﻿tool_id: "store_code_fix_pattern"
+version: "2.0.0"
+name: "Store Code Fix Pattern"
 type: "executable"
-description: "Stores code breaks and their fixes as reusable patterns. Learns from errors so similar issues can be fixed earlier next time."
+description: |
+  Pattern Recognizer with RAG Data Store - Stores code breaks and their fixes as reusable patterns.
+
+  Stores code fix patterns in a shared RAG-based data store for future retrieval. Each pattern
+  includes the error, broken code, fixed code, and context. Patterns are tagged and embedded
+  for semantic search. The data store scope determines visibility:
+  - Store patterns at tool level (tool-specific learning)
+  - Store patterns at tool+subtools level (hierarchical learning)
+  - Store patterns at hierarchy level (contextual learning)
+  - Store patterns globally (universal learning)
+
+category: "learning"
 
 track_usage: true
 
@@ -52,6 +65,23 @@ input_schema:
     description: "Full debug information (stack trace, variables, locals, etc.)"
     required: false
 
+  scope:
+    type: string
+    description: |
+      Data store scope - defines pattern visibility/accessibility:
+      - "tool": Pattern only accessible by the current tool
+      - "tool_subttools": Accessible by current tool and its sub-tools
+      - "hierarchy": Accessible by all tools in current hierarchy
+      - "global": Accessible by all tools (default)
+    enum: ["tool", "tool_subttools", "hierarchy", "global"]
+    default: "global"
+    required: false
+
+  tool_id:
+    type: string
+    description: "Current tool identifier (used with scope tagging)"
+    required: false
+
 output_schema:
   type: object
   properties:
@@ -73,16 +103,63 @@ output_schema:
       items:
         type: string
 
-tags: ["learning", "code-fix", "pattern-storage", "error-recovery", "self-improvement"]
+tags: ["learning", "code-fix", "pattern-storage", "error-recovery", "self-improvement", "rag", "data-store", "pattern-recognizer"]
 cost_tier: "free"
 speed_tier: "fast"
 quality_tier: "excellent"
 priority: 95
 
+metadata:
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+  data_store:
+    type: "rag"
+    backend: "qdrant"
+    collection: "code_fix_patterns"
+    scope_levels: ["tool", "tool_subttools", "hierarchy", "global"]
+
+purpose: |
+  Pattern Recognizer for Code Fixes with RAG Data Store
+
+  This tool stores code fix patterns in a shared RAG (Retrieval-Augmented Generation) data store
+  for future retrieval. Each pattern is tagged, embedded for semantic search, and tracked for
+  usage statistics. The data store scope determines pattern visibility:
+
+  1. **tool**: Pattern only accessible by the current tool
+  2. **tool_subttools**: Accessible by this tool and its sub-tools
+  3. **hierarchy**: Accessible by all tools in current tool hierarchy
+  4. **global**: Accessible by all tools across the system (default)
+
+  This enables intelligent knowledge accumulation and sharing across the system.
+
+capabilities:
+  - "Store code fix patterns with full context and debug info"
+  - "Tag patterns by error type, language, tool, and framework"
+  - "Create semantic embeddings for similarity search"
+  - "Track usage statistics for ranking by effectiveness"
+  - "Support scoped visibility (tool, subtools, hierarchy, global)"
+  - "Automatic quality scoring for proven fixes"
+
+configuration:
+  config_section: "pattern_recognizer"
+  required_settings:
+    - "enabled"
+    - "rag_backend"
+  optional_settings:
+    - "default_scope"
+    - "auto_tag_tool_id"
+    - "initial_quality_score"
+    - "max_patterns_per_tool"
+  per_tool_override: true
+  override_key: "tool_name"
+
 usage_notes: |
   ## Overview
 
   Stores code errors and their fixes as reusable patterns in RAG memory.
+  Uses a shared data store with configurable scope for pattern visibility.
+
   The system can then search for similar errors and apply proven fixes.
 
   ## Usage

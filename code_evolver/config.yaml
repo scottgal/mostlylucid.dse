@@ -262,6 +262,59 @@ rag_memory:
   collection_name: "mostlylucid-dse-tools-rag"
   max_embedding_content_length: 1000
 
+# Pattern Recognizer - Code Fix Pattern Learning with RAG Data Store
+pattern_recognizer:
+  enabled: true
+  rag_backend: "qdrant"  # Backend for pattern storage (qdrant, memory, etc.)
+
+  # Default scope for pattern storage and retrieval
+  # - "tool": Only patterns from current tool
+  # - "tool_subttools": Patterns from current tool and sub-tools
+  # - "hierarchy": All patterns in current tool hierarchy
+  # - "global": All patterns across all tools
+  default_scope: "global"
+
+  # Search parameters
+  default_top_k: 3  # Number of similar patterns to return
+  min_similarity_threshold: 0.5  # Minimum similarity score (0.0-1.0)
+
+  # Ranking weights
+  usage_weight: 10  # How much to weight usage count in ranking (default: 10x)
+  similarity_weight: 1  # How much to weight similarity in ranking (default: 1x)
+  quality_weight: 0.1  # How much to weight quality score (tiebreaker)
+
+  # Storage parameters
+  initial_quality_score: 0.95  # Quality score for new proven fixes
+  auto_tag_tool_id: true  # Automatically tag patterns with tool_id from context
+  max_patterns_per_tool: 1000  # Maximum patterns per tool scope
+
+  # Data store configuration
+  data_store:
+    type: "rag"
+    backend: "qdrant"
+    collection: "code_fix_patterns"
+    auto_embed: true  # Automatically create embeddings
+    embedding_model: "nomic_embed"  # Model to use for embeddings
+
+  # Per-tool overrides
+  # Example: Override settings for specific tools
+  tool_overrides:
+    # Example tool with custom settings
+    # my_code_generator:
+    #   default_scope: "tool"  # Only learn from own patterns
+    #   max_patterns_per_tool: 500
+    #   usage_weight: 20  # Prioritize proven fixes even more
+
+    # Example: Shared learning for a tool family
+    # web_scraper:
+    #   default_scope: "tool_subttools"  # Share with sub-tools
+    #   min_similarity_threshold: 0.7  # Higher threshold for quality
+
+    # Example: Global learner
+    # universal_fixer:
+    #   default_scope: "global"
+    #   max_patterns_per_tool: 5000
+
 # Loki - Log Aggregation and Monitoring
 loki:
   enabled: true
