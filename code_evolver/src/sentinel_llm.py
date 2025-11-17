@@ -75,19 +75,47 @@ class SentinelLLM:
             - urgency: "high" or "normal"
             - signals: List of detected intent signals
             - reasoning: Why this mode was selected
+            - mantra: Detected mantra (optional)
         """
 
         # Fast pattern matching first (no LLM needed for obvious cases)
         quick_result = self._quick_pattern_match(user_input)
         if quick_result:
             logger.info(f"Quick mode detection: {quick_result['execution_mode']}")
+            # Also detect mantra
+            quick_result["mantra"] = self._detect_mantra(user_input)
             return quick_result
 
         # Use sentinel LLM for ambiguous cases
         llm_result = self._llm_intent_detection(user_input)
 
         logger.info(f"LLM mode detection: {llm_result['execution_mode']}")
+        # Also detect mantra
+        llm_result["mantra"] = self._detect_mantra(user_input)
         return llm_result
+
+    def _detect_mantra(self, user_input: str) -> Optional[str]:
+        """
+        Detect mantra from user input.
+
+        Args:
+            user_input: User's request
+
+        Returns:
+            Mantra name, or None if no clear mantra
+        """
+        try:
+            from src.mantras import MantraLibrary
+
+            mantra = MantraLibrary.from_user_input(user_input)
+            if mantra:
+                logger.info(f"Detected mantra: {mantra.name}")
+                return mantra.name
+
+        except Exception as e:
+            logger.debug(f"Could not detect mantra: {e}")
+
+        return None
 
     def _quick_pattern_match(self, user_input: str) -> Optional[Dict[str, Any]]:
         """
