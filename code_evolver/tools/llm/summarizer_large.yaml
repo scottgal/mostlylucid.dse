@@ -1,0 +1,45 @@
+name: "Large Context Summarizer"
+type: "llm"
+description: |
+  High-quality summarization with large context window.
+
+  Use when:
+  - User says "carefully summarize" or "thoroughly"
+  - Quality is critical
+  - Content 32k-128k tokens
+  - Complex documents
+  - Books, research papers
+
+  Model: mistral-nemo (large, 128k context)
+
+# MANTRA: Thorough, high quality
+mantra: "deliberately_thorough"
+
+llm:
+  model: "mistral-nemo"
+  temperature: 0.2
+  max_tokens: 2000
+  context_window: 131072  # 128k
+
+quality_profile:
+  speed_score: 0.40
+  quality_score: 0.90
+  cost_score: 0.40
+
+use_cases:
+  - "Book summaries"
+  - "Research paper summaries"
+  - "Very long documents"
+  - "Comprehensive reports"
+  - "Legal documents"
+
+tags:
+  - "summarization"
+  - "high_quality"
+  - "large_context"
+  - "mistral"
+
+metadata:
+  tier: "large"
+  context_tokens: 131072
+  avg_time_per_1k_tokens: 12.0  # seconds

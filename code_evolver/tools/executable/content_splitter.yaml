@@ -1,0 +1,61 @@
+name: "Content Splitter"
+type: "executable"
+description: |
+  Splits large content into chunks for progressive summarization.
+
+  Strategies:
+  - paragraph: Split on paragraph boundaries (default)
+  - sentence: Split on sentence boundaries (more granular)
+  - fixed: Fixed-size chunks (simple, may break sentences)
+
+  Respects max chunk size while maintaining readability.
+
+command: "python"
+args:
+  - "tools/executable/content_splitter.py"
+
+input_format: "json"
+output_format: "json"
+
+parameters:
+  content:
+    type: "string"
+    required: true
+    description: "Content to split"
+
+  max_chunk_size:
+    type: "integer"
+    default: 8000
+    description: "Max tokens per chunk"
+
+  strategy:
+    type: "string"
+    default: "paragraph"
+    enum: ["paragraph", "sentence", "fixed"]
+    description: "Splitting strategy"
+
+tags:
+  - "content_processing"
+  - "splitting"
+  - "chunking"
+  - "summarization"
+  - "utility"
+
+metadata:
+  category: "content_processing"
+  supports_streaming: false
+  cacheable: true
+
+examples:
+  - input: |
+      {
+        "content": "Long document text...",
+        "max_chunk_size": 8000,
+        "strategy": "paragraph"
+      }
+    output: |
+      {
+        "chunks": ["chunk1", "chunk2", "chunk3"],
+        "num_chunks": 3,
+        "strategy_used": "paragraph"
+      }

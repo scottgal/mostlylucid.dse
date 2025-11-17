@@ -1,0 +1,43 @@
+name: "Fast Summarizer"
+type: "llm"
+description: |
+  Quick content summarization with small, fast model.
+
+  Use when:
+  - User says "quickly summarize"
+  - Speed is priority
+  - Basic quality is acceptable
+  - Content < 8k tokens
+
+  Model: gemma2:2b (very fast, 8k context)
+
+# MANTRA: Fast summarization
+mantra: "lightning_fast"
+
+llm:
+  model: "gemma2:2b"
+  temperature: 0.3
+  max_tokens: 500
+  context_window: 8192
+
+quality_profile:
+  speed_score: 0.95
+  quality_score: 0.65
+  cost_score: 0.95
+
+use_cases:
+  - "Quick summaries"
+  - "Email summaries"
+  - "Chat message summaries"
+  - "Short document summaries"
+
+tags:
+  - "summarization"
+  - "fast"
+  - "small_context"
+  - "gemma"
+
+metadata:
+  tier: "fast"
+  context_tokens: 8192
+  avg_time_per_1k_tokens: 2.0  # seconds

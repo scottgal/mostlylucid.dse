@@ -1,0 +1,43 @@
+name: "Medium Summarizer"
+type: "llm"
+description: |
+  Balanced summarization with medium-sized model.
+
+  Use when:
+  - Quality matters
+  - Reasonable speed needed
+  - Content 8k-32k tokens
+  - Need comprehensive summary
+
+  Model: llama3 (balanced, 32k context)
+
+# MANTRA: Balanced quality and speed
+mantra: "pragmatically_effective"
+
+llm:
+  model: "llama3"
+  temperature: 0.3
+  max_tokens: 1000
+  context_window: 32768
+
+quality_profile:
+  speed_score: 0.70
+  quality_score: 0.80
+  cost_score: 0.70
+
+use_cases:
+  - "Long article summaries"
+  - "Report summaries"
+  - "Documentation summaries"
+  - "Multi-page content"
+
+tags:
+  - "summarization"
+  - "balanced"
+  - "medium_context"
+  - "llama"
+
+metadata:
+  tier: "medium"
+  context_tokens: 32768
+  avg_time_per_1k_tokens: 5.0  # seconds

@@ -1,0 +1,66 @@
+name: "Content Summarizer"
+type: "workflow"
+description: |
+  Smart content summarizer that automatically selects best tier and strategy.
+
+  Features:
+  - Automatic tier selection (fast/medium/large)
+  - Progressive summarization for large content
+  - Split-summarize-merge for very large docs
+  - Mantra-aware (respects speed/quality hints)
+  - Caching of results
+
+  This is the HIGH WEIGHT tool that should be used for all summarization.
+
+# HIGH WEIGHT - prefer this tool for summarization
+weight: 10.0  # Very high weight
+
+# DEFAULT MANTRA - but adapts based on user's request
+mantra: "pragmatically_effective"
+
+workflow:
+  steps:
+    - name: "analyze_content"
+      tool: "summarization_chooser"
+      description: "Determine best strategy"
+
+    - name: "split_if_needed"
+      tool: "content_splitter"
+      condition: "requires_splitting"
+      description: "Split large content"
+
+    - name: "summarize"
+      tool: "auto_select_tier"
+      description: "Summarize with chosen tier"
+
+    - name: "cache_result"
+      tool: "cache_summary"
+      description: "Cache for future use"
+
+routing_rules:
+  # User says "quickly" → fast tier
+  - pattern: "quickly"
+    tier: "fast"
+    mantra: "lightning_fast"
+
+  # User says "carefully" → large tier
+  - pattern: "carefully|thoroughly"
+    tier: "large"
+    mantra: "deliberately_thorough"
+
+  # Default → medium tier
+  - pattern: ".*"
+    tier: "medium"
+    mantra: "pragmatically_effective"
+
+tags:
+  - "summarization"
+  - "smart_routing"
+  - "high_priority"
+  - "workflow"
+
+metadata:
+  priority: "high"
+  auto_select_tier: true
+  supports_streaming: true
+  cacheable: true
