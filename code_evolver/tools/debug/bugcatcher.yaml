@@ -1,0 +1,209 @@
+tool_id: "bugcatcher"
+version: "1.0.0"
+name: "BugCatcher Exception Monitor"
+description: "Global exception monitoring tool that watches for exceptions and logs them to Loki"
+category: "monitoring"
+type: "executable"
+
+metadata:
+  tags:
+    - "monitoring"
+    - "exceptions"
+    - "observability"
+    - "logging"
+    - "loki"
+  author: "Code Evolver"
+  license: "MIT"
+  status: "stable"
+
+purpose: |
+  BugCatcher is a global exception monitoring tool that sits at the front of
+  every workflow and watches for:
+  - Exceptions being raised or returned from code
+  - Exceptions being logged
+  - Workflow failures
+  - Tool execution failures
+  - LLM errors
+
+  It maintains an LRU cache of recent requests to associate exceptions with
+  the operations that caused them, and logs all exceptions to Grafana Loki
+  for centralized log aggregation and analysis.
+
+capabilities:
+  - "Track exceptions across all workflow steps"
+  - "Maintain request context via LRU cache"
+  - "Log to Grafana Loki for centralized monitoring"
+  - "Capture uncaught exceptions via global exception hook"
+  - "Track logged exceptions via custom logging handler"
+  - "Associate exceptions with workflow/step context"
+  - "Configurable severity levels"
+  - "File and Loki logging backends"
+
+inputs:
+  - name: "enabled"
+    type: "boolean"
+    description: "Whether BugCatcher is enabled"
+    required: false
+    default: true
+
+  - name: "loki_url"
+    type: "string"
+    description: "Loki push endpoint URL"
+    required: false
+    default: "http://localhost:3100"
+
+  - name: "cache_size"
+    type: "integer"
+    description: "Size of request context LRU cache"
+    required: false
+    default: 100
+
+  - name: "log_to_file"
+    type: "boolean"
+    description: "Whether to also log exceptions to file"
+    required: false
+    default: true
+
+  - name: "log_file"
+    type: "string"
+    description: "Path to exception log file"
+    required: false
+    default: "bugcatcher.log"
+
+outputs:
+  - name: "stats"
+    type: "object"
+    description: "BugCatcher statistics (exception count, cache size, etc.)"
+
+  - name: "exception_logged"
+    type: "boolean"
+    description: "Whether an exception was successfully logged"
+
+execution:
+  language: "python"
+  entry_point: "src/bugcatcher.py"
+  timeout_ms: 1000
+  memory_limit_mb: 64
+
+integration:
+  auto_install: true
+  install_on: "workflow_start"
+  hooks:
+    - event: "workflow_start"
+      action: "track_request"
+    - event: "step_start"
+      action: "track_request"
+    - event: "step_fail"
+      action: "capture_exception"
+    - event: "exception_logged"
+      action: "capture_logged_exception"
+
+dependencies:
+  python:
+    - name: "requests"
+      version: ">=2.25.0"
+      purpose: "HTTP client for Loki push API"
+
+configuration:
+  config_section: "bugcatcher"
+  required_settings:
+    - "enabled"
+  optional_settings:
+    - "loki.url"
+    - "loki.enabled"
+    - "cache.max_size"
+    - "file_logging.enabled"
+    - "file_logging.file"
+
+usage_example: |
+  # Automatic usage (via workflow integration)
+  BugCatcher automatically tracks all workflow steps and captures exceptions.
+
+  # Manual usage in code
+  from src.bugcatcher import get_bugcatcher, track_request
+
+  # Track a request
+  bugcatcher = get_bugcatcher()
+  bugcatcher.track_request('req_123', {
+      'workflow_id': 'wf_1',
+      'step_id': 'step_1',
+      'tool_name': 'my_tool'
+  })
+
+  # Capture an exception
+  try:
+      # Your code here
+      pass
+  except Exception as e:
+      bugcatcher.capture_exception(e, request_id='req_123')
+
+  # Using context manager
+  with track_request('req_123', workflow_id='wf_1', step_id='step_1'):
+      # Your code here - exceptions automatically captured
+      pass
+
+  # Get statistics
+  stats = bugcatcher.get_stats()
+  print(f"Total exceptions: {stats['total_exceptions']}")
+
+  # Flush pending logs
+  bugcatcher.flush()
+
+monitoring:
+  metrics:
+    - name: "total_exceptions"
+      type: "counter"
+      description: "Total number of exceptions captured"
+
+    - name: "cache_size"
+      type: "gauge"
+      description: "Current size of request context cache"
+
+    - name: "exceptions_by_type"
+      type: "counter"
+      description: "Exception count grouped by exception type"
+
+    - name: "exceptions_by_severity"
+      type: "counter"
+      description: "Exception count grouped by severity level"
+
+  loki_labels:
+    - "job: code_evolver_bugcatcher"
+    - "severity: {debug,info,warning,error,critical}"
+    - "exception_type: {exception_class_name}"
+    - "workflow_id: {workflow_id}"
+    - "tool_name: {tool_name}"
+
+best_practices:
+  - "Run Loki and Grafana via docker-compose.localdev.yml for local development"
+  - "Use appropriate severity levels (WARNING and above for production)"
+  - "Flush BugCatcher logs before application shutdown"
+  - "Monitor cache size to ensure sufficient context retention"
+  - "Set up Grafana dashboards to visualize exception patterns"
+  - "Use workflow_id and tool_name labels for filtering in Grafana"
+
+troubleshooting:
+  - issue: "Logs not appearing in Loki"
+    solution: "Check Loki connection, verify loki_enabled is true, ensure batch is flushed"
+
+  - issue: "High memory usage"
+    solution: "Reduce cache_size in configuration"
+
+  - issue: "Exceptions not being captured"
+    solution: "Verify auto_install_hooks is true, check that BugCatcher is initialized"
+
+  - issue: "Loki connection refused"
+    solution: "Start Loki via docker-compose.localdev.yml, verify URL is correct"
+
+related_tools:
+  - "workflow_tracker"
+  - "status_manager"
+  - "profiling"
+
+notes: |
+  BugCatcher is designed to be transparent and low-overhead. It:
+  - Gracefully handles Loki being unavailable
+  - Falls back to file logging if Loki fails
+  - Uses batching to minimize network overhead
+  - Maintains bounded memory usage via LRU cache
+  - Can be disabled via configuration without code changes

@@ -1,0 +1,117 @@
+name: "Locust Load Test Generator"
+type: "executable"
+description: "Generate and execute Locust performance/load tests from API specs, OpenAPI definitions, or BDD scenarios with plausible test data"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/locust_load_tester.py"
+  stdin_mode: true
+  install_command: "pip install locust faker pyyaml requests"
+
+input_schema:
+  spec_file:
+    type: "string"
+    description: "Path to API spec file (OpenAPI, JSON, or locustfile spec)"
+    required: false
+  spec_content:
+    type: "string"
+    description: "Inline spec content (if spec_file not provided)"
+    required: false
+  static_analysis_path:
+    type: "string"
+    description: "Path to static analysis results for plausible data generation"
+    required: false
+  mode:
+    type: "string"
+    description: "Mode: 'generate' (create locustfile), 'run' (execute tests), or 'both'"
+    required: false
+    default: "both"
+  output_path:
+    type: "string"
+    description: "Directory where generated locustfile will be saved"
+    required: false
+    default: "./locustfiles"
+  users:
+    type: "integer"
+    description: "Number of concurrent users to simulate"
+    required: false
+    default: 10
+  spawn_rate:
+    type: "integer"
+    description: "Rate at which users are spawned (users per second)"
+    required: false
+    default: 2
+  run_time:
+    type: "string"
+    description: "Test duration (e.g., '30s', '5m', '1h')"
+    required: false
+    default: "30s"
+  host:
+    type: "string"
+    description: "Base URL for the API being tested"
+    required: false
+    default: "http://localhost:8000"
+
+output_schema:
+  locustfile_path:
+    type: "string"
+    description: "Path to generated locustfile"
+  results:
+    type: "object"
+    description: "Load test results (if executed)"
+  stats:
+    type: "object"
+    description: "Performance statistics (requests/sec, response times, etc.)"
+  success:
+    type: "boolean"
+    description: "Whether test generation/execution succeeded"
+
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+
+tags:
+  - "testing"
+  - "load-testing"
+  - "performance"
+  - "locust"
+  - "api-testing"
+  - "stress-testing"
+  - "benchmarking"
+  - "characterization"
+
+examples:
+  - "Generate load tests from OpenAPI spec with 100 users"
+  - "Run performance tests on REST API with realistic data"
+  - "Characterize tool performance under load"
+  - "Stress test API endpoints with concurrent requests"
+
+use_cases:
+  - "Tool characterization for performance baselines"
+  - "API load testing with plausible data"
+  - "Performance regression testing"
+  - "Capacity planning and benchmarking"
+  - "Endpoint stress testing"
+
+advantages:
+  - "Generates realistic load patterns"
+  - "Uses plausible data from static analysis"
+  - "Flexible user/spawn rate configuration"
+  - "Detailed performance metrics"
+  - "Can test any HTTP API"
+  - "Free and open source"
+
+limitations:
+  - "Requires running server/API"
+  - "May need custom scenarios for complex workflows"
+  - "Performance limited by network/hardware"
+  - "Best for HTTP-based APIs"
+
+workflow_integration:
+  position: "characterization"
+  trigger: "after tool creation and validation"
+  next_step: "store results in RAG for optimization"
+  fallback: "Use simple HTTP benchmarking if Locust unavailable"

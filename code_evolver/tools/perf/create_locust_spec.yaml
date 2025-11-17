@@ -1,0 +1,69 @@
+name: "Create Locust Spec"
+type: "executable"
+description: "Create a Locust load test specification file for RAG storage and future test generation"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/create_locust_spec.py"
+  stdin_mode: true
+
+input_schema:
+  tool_name:
+    type: "string"
+    description: "Name of the tool to create spec for"
+    required: true
+  endpoints:
+    type: "array"
+    description: "List of API endpoints to test"
+    required: false
+  base_url:
+    type: "string"
+    description: "Base URL for the API"
+    required: false
+    default: "http://localhost:8000"
+  output_path:
+    type: "string"
+    description: "Path to save the spec file"
+    required: false
+    default: "./specs/locust"
+
+output_schema:
+  spec_path:
+    type: "string"
+    description: "Path to created spec file"
+  success:
+    type: "boolean"
+    description: "Whether spec creation succeeded"
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "medium"
+
+tags:
+  - "testing"
+  - "spec-creation"
+  - "locust"
+  - "performance"
+  - "rag"
+
+examples:
+  - "Create Locust spec for API tool"
+  - "Generate performance test specification"
+
+use_cases:
+  - "Initialize tool testing specifications"
+  - "Store test specs in RAG for reuse"
+  - "Template for future load tests"
+
+advantages:
+  - "Very fast spec creation"
+  - "Consistent spec format"
+  - "RAG-compatible output"
+
+workflow_integration:
+  position: "initialization"
+  trigger: "after tool creation"
+  next_step: "store in RAG memory"

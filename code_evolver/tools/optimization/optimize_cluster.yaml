@@ -1,0 +1,166 @@
+name: "Optimize Cluster"
+type: "executable"
+version: "1.0.0"
+description: "Optimize RAG artifact clusters using iterative self-optimization loop. Can optimize specific workflows, functions, prompts, or entire node types. Supports conversational usage: 'optimize this workflow' or CLI: '/optimize workflow_name'"
+
+executable:
+  script_path: "src/cli/optimize_cluster.py"
+  interpreter: "python"
+  entry_point: "main"
+
+parameters:
+  target:
+    type: "string"
+    required: true
+    description: "Target to optimize: cluster name, node type, or 'all'"
+    examples:
+      - "cron_parser_cluster"
+      - "function"
+      - "workflow"
+      - "all"
+
+  node_type:
+    type: "string"
+    required: false
+    description: "Node type filter (function, workflow, prompt, sub_workflow, plan, pattern)"
+    options:
+      - "function"
+      - "workflow"
+      - "prompt"
+      - "sub_workflow"
+      - "plan"
+      - "pattern"
+
+  strategy:
+    type: "string"
+    required: false
+    description: "Optimization strategy to use"
+    default: "best_of_breed"
+    options:
+      - "best_of_breed"
+      - "incremental"
+      - "radical"
+      - "hybrid"
+
+  max_iterations:
+    type: "integer"
+    required: false
+    description: "Maximum number of optimization iterations"
+    default: 10
+    range: [1, 50]
+
+  apply_trimming:
+    type: "boolean"
+    required: false
+    description: "Apply trimming policy after optimization"
+    default: true
+
+  config_path:
+    type: "string"
+    required: false
+    description: "Path to custom configuration file"
+    default: "config/rag_cluster_optimizer.yaml"
+
+  output_format:
+    type: "string"
+    required: false
+    description: "Output format for report"
+    default: "markdown"
+    options:
+      - "markdown"
+      - "json"
+      - "text"
+
+  verbose:
+    type: "boolean"
+    required: false
+    description: "Verbose output"
+    default: false
+
+output:
+  type: "object"
+  schema:
+    cluster_id: "string"
+    status: "string"
+    summary:
+      total_iterations: "integer"
+      total_promotions: "integer"
+      total_archived: "integer"
+      initial_fitness: "float"
+      final_fitness: "float"
+      total_improvement: "float"
+    iterations: "array"
+    learned_patterns: "object"
+
+usage_examples:
+  - description: "Optimize a specific cluster"
+    command: "optimize_cluster --target=cron_parser_cluster"
+    conversational: "Optimize the cron_parser_cluster"
+
+  - description: "Optimize all function clusters"
+    command: "optimize_cluster --target=all --node_type=function"
+    conversational: "Optimize all function clusters"
+
+  - description: "Optimize with specific strategy"
+    command: "optimize_cluster --target=auth_handler --strategy=incremental"
+    conversational: "Use incremental strategy to optimize auth_handler"
+
+  - description: "Optimize without trimming"
+    command: "optimize_cluster --target=email_validator --apply_trimming=false"
+    conversational: "Optimize email_validator but don't trim variants"
+
+  - description: "Optimize all workflows"
+    command: "optimize_cluster --target=all --node_type=workflow --max_iterations=15"
+    conversational: "Optimize all workflows with up to 15 iterations"
+
+conversational_patterns:
+  triggers:
+    - "optimize {target}"
+    - "optimize this {node_type}"
+    - "run optimization on {target}"
+    - "improve {target}"
+    - "evolve {target}"
+
+  examples:
+    - input: "optimize the authentication workflow"
+      parsed:
+        target: "authentication"
+        node_type: "workflow"
+
+    - input: "optimize all prompts"
+      parsed:
+        target: "all"
+        node_type: "prompt"
+
+    - input: "improve the cron parser function"
+      parsed:
+        target: "cron_parser"
+        node_type: "function"
+
+    - input: "evolve this pattern using radical strategy"
+      parsed:
+        target: "this"
+        strategy: "radical"
+        node_type: "pattern"
+
+cli_aliases:
+  - "/optimize"
+  - "/evolve"
+  - "/improve"
+
+metadata:
+  category: "optimization"
+  tags: ["rag", "optimization", "evolution", "fitness", "clustering"]
+  speed_tier: "slow"
+  cost_tier: "medium"
+  reliability: "high"
+
+integration:
+  rag_memory: "src/rag_memory.py"
+  optimizer: "src/rag_cluster_optimizer.py"
+  config_manager: "src/rag_cluster_optimizer.OptimizerConfigManager"
+
+constraints:
+  max_execution_time_ms: 1800000  # 30 minutes
+  max_memory_mb: 4096
+  max_cost_per_run: 5.0  # USD
