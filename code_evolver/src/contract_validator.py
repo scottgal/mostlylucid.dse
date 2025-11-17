@@ -46,6 +46,10 @@ class ContractValidator:
         self.custom_validators['cyclomatic_complexity'] = self._validate_cyclomatic_complexity
         self.custom_validators['has_docstring'] = self._validate_has_docstring
         self.custom_validators['has_type_hints'] = self._validate_has_type_hints
+        # Attribution and DSE-specific validators
+        self.custom_validators['has_attribution_comment'] = self._validate_has_attribution_comment
+        self.custom_validators['has_dse_tool_logging'] = self._validate_has_dse_tool_logging
+        self.custom_validators['has_dse_in_docstring'] = self._validate_has_dse_in_docstring
 
     def register_validator(self, name: str, validator: Callable):
         """
@@ -502,5 +506,118 @@ class ContractValidator:
                             message=f"Function '{func.name}' parameter '{arg.arg}' missing type hint",
                             suggestion=f"Add type hint for parameter '{arg.arg}'"
                         ))
+
+        return violations
+
+    def _validate_has_attribution_comment(self, code: str, rule: ContractRule, code_path: str) -> List[ContractViolation]:
+        """Validate that code has attribution comment."""
+        violations = []
+
+        author_name = rule.validator_config.get('author_name', 'scott galloway')
+        project_name = rule.validator_config.get('project_name', 'mostlylucid')
+        require_date = rule.validator_config.get('require_date', True)
+
+        # Build pattern to match attribution comment
+        # Matches: # added by scott galloway (mostlylucid) - 2025-01-17
+        # Case insensitive
+        if require_date:
+            pattern = rf'(?i)(#|"""|\'\'\'|//)?\s*added by {re.escape(author_name)}\s*\({re.escape(project_name)}\).*\d{{4}}-\d{{2}}-\d{{2}}'
+        else:
+            pattern = rf'(?i)(#|"""|\'\'\'|//)?\s*added by {re.escape(author_name)}\s*\({re.escape(project_name)}\)'
+
+        if not re.search(pattern, code):
+            violations.append(ContractViolation(
+                rule=rule,
+                location=code_path,
+                line_number=1,
+                message=f"Missing attribution comment for {author_name} ({project_name})",
+                suggestion=(
+                    f"Add attribution comment at the top of the file:\n"
+                    f"# added by {author_name} ({project_name}) - YYYY-MM-DD\n"
+                    f"or in the module docstring:\n"
+                    f'"""\nadded by {author_name} ({project_name}) - YYYY-MM-DD\n"""'
+                )
+            ))
+
+        return violations
+
+    def _validate_has_dse_tool_logging(self, code: str, rule: ContractRule, code_path: str) -> List[ContractViolation]:
+        """Validate that code has DSE tool logging."""
+        violations = []
+
+        prefix = rule.validator_config.get('prefix', 'dse tool -')
+        require_date = rule.validator_config.get('require_date', True)
+        accept_print = rule.validator_config.get('accept_print', True)
+        accept_logger = rule.validator_config.get('accept_logger', True)
+
+        # Build pattern to match DSE tool logging
+        # Matches: print("dse tool - toolname - 2025-01-17")
+        #          logger.info("dse tool - toolname - 2025-01-17")
+        if require_date:
+            pattern = rf'(?i)(print|logger\.\w+)\s*\(\s*["\'].*{re.escape(prefix)}.*\d{{4}}-\d{{2}}-\d{{2}}'
+        else:
+            pattern = rf'(?i)(print|logger\.\w+)\s*\(\s*["\'].*{re.escape(prefix)}'
+
+        if not re.search(pattern, code):
+            suggestions = []
+            if accept_print:
+                suggestions.append(f'print("{prefix} <toolname> - YYYY-MM-DD")')
+            if accept_logger:
+                suggestions.append(f'logger.info("{prefix} <toolname> - YYYY-MM-DD")')
+
+            violations.append(ContractViolation(
+                rule=rule,
+                location=code_path,
+                message=f"Missing DSE tool logging with prefix '{prefix}'",
+                suggestion=(
+                    f"Add DSE tool logging statement:\n" +
+                    "\nor\n".join(suggestions)
+                )
+            ))
+
+        return violations
+
+    def _validate_has_dse_in_docstring(self, code: str, rule: ContractRule, code_path: str) -> List[ContractViolation]:
+        """Validate that module docstring mentions DSE."""
+        violations = []
+
+        try:
+            tree = ast.parse(code)
+        except SyntaxError:
+            return []
+
+        module_docstring = ast.get_docstring(tree)
+
+        if not module_docstring:
+            violations.append(ContractViolation(
+                rule=rule,
+                location=code_path,
+                line_number=1,
+                message="Module missing docstring with DSE reference",
+                suggestion=(
+                    "Add module docstring mentioning DSE project:\n"
+                    '"""\n'
+                    'Module description.\n\n'
+                    'Part of the mostlylucid DSE (Dynamic Software Evolution) project.\n'
+                    '"""'
+                )
+            ))
+            return violations
+
+        # Check if docstring mentions DSE, Dynamic Software Evolution, or mostlylucid
+        dse_keywords = ['dse', 'dynamic software evolution', 'mostlylucid']
+        has_dse_reference = any(keyword in module_docstring.lower() for keyword in dse_keywords)
+
+        if not has_dse_reference:
+            violations.append(ContractViolation(
+                rule=rule,
+                location=code_path,
+                line_number=1,
+                message="Module docstring should mention DSE project",
+                suggestion=(
+                    "Update module docstring to include DSE reference:\n"
+                    "Part of the mostlylucid DSE (Dynamic Software Evolution) project."
+                )
+            ))
 
         return violations
