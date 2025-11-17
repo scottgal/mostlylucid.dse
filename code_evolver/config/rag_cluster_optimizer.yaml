@@ -1,0 +1,222 @@
+# RAG Cluster Optimizer Configuration
+#
+# Configure per-node-type optimizers with custom policies.
+# Each RAG node type (PLAN, FUNCTION, SUB_WORKFLOW, WORKFLOW, PROMPT, PATTERN)
+# can have its own optimization strategy, fitness weights, and trimming policy.
+
+node_type_optimizers:
+  # FUNCTION nodes - Code functions and methods
+  function:
+    enabled: true
+    similarity_threshold: 0.96  # High similarity required for clustering
+    max_iterations: 10
+    fitness_improvement_threshold: 0.05  # 5% improvement required to promote
+    strategy: best_of_breed  # Options: best_of_breed, incremental, radical, hybrid
+    optimization_frequency: daily
+    priority: 8  # 1-10, higher = more important
+
+    fitness_weights:
+      latency: 0.30  # Functions prioritize performance
+      memory: 0.20
+      cpu: 0.15
+      success_rate: 0.25
+      coverage: 0.10
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.70  # Prune if similarity < 70%
+      preserve_high_perf_threshold: 0.85  # Keep high-perf variants even if unused
+      min_usage_count: 1
+      never_used_grace_period_days: 30
+      min_fitness_absolute: 0.50  # Prune below 50% fitness
+      max_distance_from_fittest: 0.30  # Max 30% fitness gap
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: true
+
+  # WORKFLOW nodes - Complete workflows
+  workflow:
+    enabled: true
+    similarity_threshold: 0.94  # Slightly lower for more variants
+    max_iterations: 15  # More iterations for complex workflows
+    fitness_improvement_threshold: 0.08  # Require larger improvement
+    strategy: incremental  # Safer for critical workflows
+    optimization_frequency: weekly  # Less frequent for stability
+    priority: 9  # Highest priority
+
+    fitness_weights:
+      latency: 0.20
+      memory: 0.10
+      cpu: 0.10
+      success_rate: 0.40  # Workflows prioritize reliability
+      coverage: 0.20
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.75
+      preserve_high_perf_threshold: 0.88
+      min_usage_count: 2
+      never_used_grace_period_days: 45  # Longer grace period
+      min_fitness_absolute: 0.60  # Higher minimum for workflows
+      max_distance_from_fittest: 0.25
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: true
+
+  # PROMPT nodes - LLM prompts and templates
+  prompt:
+    enabled: true
+    similarity_threshold: 0.92  # Lower for more prompt variation
+    max_iterations: 8
+    fitness_improvement_threshold: 0.06
+    strategy: hybrid  # Mix of strategies for prompt optimization
+    optimization_frequency: daily
+    priority: 7
+
+    fitness_weights:
+      latency: 0.15
+      memory: 0.05
+      cpu: 0.05
+      success_rate: 0.50  # Prompts prioritize quality/success
+      coverage: 0.25
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.65
+      preserve_high_perf_threshold: 0.82
+      min_usage_count: 1
+      never_used_grace_period_days: 20  # Shorter for prompts
+      min_fitness_absolute: 0.45
+      max_distance_from_fittest: 0.35
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: false  # Don't need all endpoints for prompts
+
+  # SUB_WORKFLOW nodes - Workflow components
+  sub_workflow:
+    enabled: true
+    similarity_threshold: 0.95
+    max_iterations: 10
+    fitness_improvement_threshold: 0.05
+    strategy: best_of_breed
+    optimization_frequency: daily
+    priority: 6
+
+    fitness_weights:
+      latency: 0.25
+      memory: 0.15
+      cpu: 0.10
+      success_rate: 0.30
+      coverage: 0.20
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.70
+      preserve_high_perf_threshold: 0.85
+      min_usage_count: 1
+      never_used_grace_period_days: 30
+      min_fitness_absolute: 0.50
+      max_distance_from_fittest: 0.30
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: true
+
+  # PLAN nodes - Execution plans
+  plan:
+    enabled: true
+    similarity_threshold: 0.95
+    max_iterations: 10
+    fitness_improvement_threshold: 0.05
+    strategy: best_of_breed
+    optimization_frequency: daily
+    priority: 5
+
+    fitness_weights:
+      latency: 0.25
+      memory: 0.15
+      cpu: 0.10
+      success_rate: 0.30
+      coverage: 0.20
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.70
+      preserve_high_perf_threshold: 0.85
+      min_usage_count: 1
+      never_used_grace_period_days: 30
+      min_fitness_absolute: 0.50
+      max_distance_from_fittest: 0.30
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: true
+
+  # PATTERN nodes - Code patterns and templates
+  pattern:
+    enabled: true
+    similarity_threshold: 0.93  # Lower for pattern variation
+    max_iterations: 12
+    fitness_improvement_threshold: 0.04  # Lower threshold for patterns
+    strategy: radical  # Explore radical changes for patterns
+    optimization_frequency: daily
+    priority: 6
+
+    fitness_weights:
+      latency: 0.20
+      memory: 0.10
+      cpu: 0.10
+      success_rate: 0.35
+      coverage: 0.25
+
+    trimming_policy:
+      min_similarity_to_fittest: 0.68
+      preserve_high_perf_threshold: 0.83
+      min_usage_count: 1
+      never_used_grace_period_days: 25
+      min_fitness_absolute: 0.48
+      max_distance_from_fittest: 0.32
+      always_keep_canonical: true
+      keep_high_coverage_variants: true
+      preserve_lineage_endpoints: true
+
+# Global settings
+global:
+  # Logging
+  log_level: INFO
+  log_optimizations: true
+  log_trimming: true
+
+  # Performance
+  max_concurrent_optimizations: 3
+  optimization_timeout_seconds: 600  # 10 minutes
+
+  # Reporting
+  generate_reports: true
+  report_format: markdown  # markdown, json, html
+  report_directory: ./optimization_reports
+
+# Trimming Policy Examples and Decision Tree
+#
+# Example 1: Never-used but high performance
+#   Variant: usage_count=0, fitness=0.90, days_old=40
+#   Decision: KEEP - "Never used but high fitness (0.90) - worth evaluating"
+#   Rationale: High performance variants should be preserved for future evaluation
+#
+# Example 2: Poor performance and far from fittest
+#   Variant: fitness=0.40, fittest_fitness=0.85, distance=0.45
+#   Decision: PRUNE - "Poor fitness (0.40) and far from fittest (0.45)"
+#   Rationale: Low fitness + large distance = no value
+#
+# Example 3: Low similarity but high fitness
+#   Variant: similarity=0.65, fitness=0.87
+#   Decision: KEEP - "Low similarity but high fitness (0.87)"
+#   Rationale: Different approach but performs well
+#
+# Example 4: High coverage variant
+#   Variant: test_coverage=0.92, fitness=0.70
+#   Decision: KEEP - "High test coverage (0.92)"
+#   Rationale: Well-tested code should be preserved
+#
+# Example 5: Lineage endpoint
+#   Variant: children_ids=[], fitness=0.75
+#   Decision: KEEP - "Lineage endpoint (leaf node)"
+#   Rationale: Preserve historical record
+#
+# Example 6: Acceptable fitness with usage
+#   Variant: fitness=0.65, usage_count=5
+#   Decision: KEEP - "Acceptable fitness (0.65) with usage (5)"
+#   Rationale: Active variants with decent performance are valuable
