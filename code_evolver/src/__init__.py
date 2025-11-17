@@ -20,13 +20,24 @@ def create_rag_memory(config_manager, ollama_client):
     """
     Factory function to create appropriate RAG memory implementation.
 
+    CRITICAL: RAG is required infrastructure. This function will retry with
+    exponential backoff if initialization fails.
+
     Args:
         config_manager: ConfigManager instance
         ollama_client: OllamaClient instance
 
     Returns:
         RAGMemory or QdrantRAGMemory instance based on configuration
+
+    Raises:
+        RuntimeError: If RAG cannot be initialized after all retries
     """
+    import logging
+    import time
+
+    logger = logging.getLogger(__name__)
+
     # Get embedding configuration (separate from LLM backend)
     # This allows using local Ollama for embeddings even when using cloud LLMs
 
@@ -40,32 +51,55 @@ def create_rag_memory(config_manager, ollama_client):
     # Get Ollama backend URL (embeddings ALWAYS use Ollama)
     embedding_endpoint = config_manager.get("llm.backends.ollama.base_url", "http://localhost:11434")
 
-    if config_manager.use_qdrant:
-        if not QDRANT_AVAILABLE:
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.warning("Qdrant requested but qdrant-client not installed. Falling back to NumPy-based RAG.")
-            return RAGMemory(
-                memory_path=config_manager.rag_memory_path,
-                ollama_client=ollama_client,
-                embedding_model=embedding_model_name
-            )
+    # Retry configuration
+    max_retries = 3
+    base_delay = 2  # seconds
 
-        return QdrantRAGMemory(
-            memory_path=config_manager.rag_memory_path,
-            ollama_client=ollama_client,
-            embedding_model=embedding_model_name,
-            embedding_endpoint=embedding_endpoint,  # ALWAYS Ollama for embeddings
-            qdrant_url=config_manager.qdrant_url,
-            collection_name=config_manager.get("rag_memory.collection_name", "code_evolver_artifacts"),
-            vector_size=config_manager.embedding_vector_size
-        )
-    else:
-        return RAGMemory(
-            memory_path=config_manager.rag_memory_path,
-            ollama_client=ollama_client,
-            embedding_model=embedding_model_name
-        )
+    for attempt in range(max_retries):
+        try:
+            if config_manager.use_qdrant:
+                if not QDRANT_AVAILABLE:
+                    logger.error("CRITICAL: Qdrant requested but qdrant-client not installed!")
+                    logger.error("Install with: pip install qdrant-client>=1.7.0")
+                    raise RuntimeError("Qdrant client not available - RAG cannot initialize")
+
+                logger.info(f"Initializing Qdrant RAG memory (attempt {attempt + 1}/{max_retries})...")
+                rag = QdrantRAGMemory(
+                    memory_path=config_manager.rag_memory_path,
+                    ollama_client=ollama_client,
+                    embedding_model=embedding_model_name,
+                    embedding_endpoint=embedding_endpoint,  # ALWAYS Ollama for embeddings
+                    qdrant_url=config_manager.qdrant_url,
+                    collection_name=config_manager.get("rag_memory.collection_name", "code_evolver_artifacts"),
+                    vector_size=config_manager.embedding_vector_size
+                )
+            else:
+                logger.info(f"Initializing NumPy RAG memory (attempt {attempt + 1}/{max_retries})...")
+                rag = RAGMemory(
+                    memory_path=config_manager.rag_memory_path,
+                    ollama_client=ollama_client,
+                    embedding_model=embedding_model_name
+                )
+
+            # If we got here, initialization succeeded
+            logger.info("RAG memory initialized successfully")
+            return rag
+
+        except Exception as e:
+            if attempt < max_retries - 1:
+                # Calculate exponential backoff delay
+                delay = base_delay * (2 ** attempt)
+                logger.warning(f"RAG initialization failed (attempt {attempt + 1}/{max_retries}): {e}")
+                logger.warning(f"Retrying in {delay} seconds...")
+                time.sleep(delay)
+            else:
+                # Final attempt failed
+                logger.error("CRITICAL: RAG memory initialization failed after all retries!")
+                logger.error(f"Error: {e}")
+                if config_manager.use_qdrant:
+                    logger.error("Check that Qdrant is running: docker run -p 6333:6333 qdrant/qdrant")
+                logger.error("RAG is critical infrastructure - cannot continue")
+                raise RuntimeError(f"Failed to initialize RAG memory after {max_retries} attempts: {e}")
 
 
 def create_loki_manager(config_manager, scope="global"):

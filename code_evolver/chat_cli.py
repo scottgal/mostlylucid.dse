@@ -328,15 +328,27 @@ class ChatCLI:
         self.runner = NodeRunner(self.config.nodes_path)
         self.evaluator = Evaluator(self.client)
 
-        # Initialize RAG memory for tool selection
+        # Initialize RAG memory for tool selection (CRITICAL INFRASTRUCTURE)
         # Automatically uses Qdrant if configured, otherwise NumPy-based memory
-        self.rag = create_rag_memory(self.config, self.client)
-        if self.config.use_qdrant:
-            from src.qdrant_rag_memory import QDRANT_AVAILABLE
-            if QDRANT_AVAILABLE:
-                log_panel.log("OK Using Qdrant for RAG memory")
-            else:
-                console.print("[yellow]WARNING Qdrant requested but not available, using NumPy-based RAG[/yellow]")
+        # Will retry with exponential backoff if initialization fails
+        try:
+            self.rag = create_rag_memory(self.config, self.client)
+            if self.config.use_qdrant:
+                from src.qdrant_rag_memory import QDRANT_AVAILABLE
+                if QDRANT_AVAILABLE:
+                    log_panel.log("OK Using Qdrant for RAG memory")
+                else:
+                    console.print("[yellow]WARNING Qdrant requested but not available, using NumPy-based RAG[/yellow]")
+        except RuntimeError as e:
+            console.print(f"\n[bold red]CRITICAL ERROR: RAG memory initialization failed![/bold red]")
+            console.print(f"[red]{e}[/red]")
+            console.print("\n[yellow]RAG is required infrastructure for Code Evolver to function.[/yellow]")
+            if self.config.use_qdrant:
+                console.print("[cyan]Make sure Qdrant is running:[/cyan]")
+                console.print("  docker run -p 6333:6333 qdrant/qdrant")
+            console.print("\nExiting...")
+            import sys
+            sys.exit(1)
 
         # Initialize tools manager in background (non-blocking)
         # Progress will be shown via live spinner in BackgroundToolsLoader
