@@ -1,0 +1,81 @@
+# System Optimization Configuration
+# This file configures the /optimize_system command behavior
+
+# Similarity thresholds
+# Threshold for considering tools similar (0.0-1.0)
+similarity_threshold: 0.85
+
+# Threshold for clustering variants together (0.0-1.0)
+# Higher values = more strict clustering
+cluster_similarity_threshold: 0.96
+
+# Scoring thresholds
+# Minimum optimization score to avoid culling (0.0-1.0)
+min_optimization_score: 0.50
+
+# Minimum absolute fitness score (0.0-1.0)
+min_fitness_absolute: 0.50
+
+# Distance thresholds
+# Maximum allowed distance from prime tool (0.0-1.0)
+# Distance = 1 - similarity
+max_distance_from_prime: 0.30
+
+# Weight adjustment
+# Factor to reduce weight for similar tools (0.0-1.0)
+# 1.0 = no reduction, 0.0 = complete reduction
+weight_reduction_factor: 0.7
+
+# Culling settings
+# Enable automatic culling of low-scoring tools
+enable_culling: true
+
+# Keep tools for N days before culling (grace period)
+culling_grace_period_days: 30
+
+# Variant pruning
+# Enable automatic pruning of distant variants
+enable_variant_pruning: true
+
+# Prune archived variants (vs just marking them)
+prune_archived_variants: true
+
+# Safety settings
+# Dry run mode: only report what would be done, don't make changes
+dry_run: false
+
+# Backup before optimization
+backup_before_optimization: true
+
+# Never remove canonical variants
+preserve_canonical: true
+
+# Output settings
+# Verbose logging
+verbose: true
+
+# Path to save optimization report (JSON format)
+# If not specified, no report will be saved
+report_path: "optimization_reports/optimization_report.json"
+
+# Advanced settings (optional)
+# These can be used to fine-tune the optimization process
+
+# Node-type-specific settings
+# Uncomment and customize as needed
+#
+# node_type_configs:
+#   function:
+#     similarity_threshold: 0.90
+#     min_optimization_score: 0.60
+#     weight_reduction_factor: 0.6
+#
+#   workflow:
+#     similarity_threshold: 0.85
+#     min_optimization_score: 0.55
+#     weight_reduction_factor: 0.7
+#
+#   prompt:
+#     similarity_threshold: 0.80
+#     min_optimization_score: 0.50
+#     weight_reduction_factor: 0.75
