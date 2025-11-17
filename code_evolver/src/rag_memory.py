@@ -23,6 +23,15 @@ class ArtifactType(Enum):
     PROMPT = "prompt"                # Reusable prompts
     PATTERN = "pattern"              # Design patterns and solutions
 
+    # Performance and monitoring types
+    PERFORMANCE = "performance"      # Performance metrics and benchmarks
+    EVALUATION = "evaluation"        # Test results and quality assessments
+    FAILURE = "failure"              # Tool/workflow failures and errors
+    BUG_REPORT = "bug_report"        # Bug reports and issue tracking
+
+    # Conversational and history types
+    CONVERSATION = "conversation"    # Tool creation conversations and history
+
 
 class Artifact:
     """Represents a stored artifact with embeddings."""

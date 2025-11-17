@@ -505,10 +505,10 @@ class ScheduledTaskManager:
 
             # Search RAG
             similar = self.rag.find_similar(
-                artifact_type=ArtifactType.PLAN,
                 query=query,
+                artifact_type=ArtifactType.PLAN,
                 tags=tags if len(tags) > 1 else ['scheduled_task'],
-                limit=20,
+                top_k=20,
                 min_similarity=0.3
             )
 

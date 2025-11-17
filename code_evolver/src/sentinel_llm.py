@@ -51,15 +51,19 @@ class SentinelLLM:
     Runs BEFORE main workflow to route appropriately.
     """
 
-    def __init__(self, ollama_client):
+    def __init__(self, ollama_client, rag_memory=None):
         """
         Initialize sentinel LLM.
 
         Args:
             ollama_client: OllamaClient for LLM calls
+            rag_memory: Optional RAG memory for duplicate detection
         """
         self.client = ollama_client
-        self.sentinel_model = "tinyllama"  # 1b model, very fast (~500ms)
+        self.rag = rag_memory
+        self.sentinel_model = "gemma3:1b"  # 1b model, very fast (~500ms)
+        self.reviewer_model = "gemma3:4b"  # 4b model for reviewing near-duplicates
+        self.clarification_history = []  # Store Q&A for context
 
     def detect_intent(self, user_input: str) -> Dict[str, Any]:
         """
@@ -263,6 +267,174 @@ Respond with ONLY a JSON object:
         # Otherwise, use full workflow
         return False
 
+    def check_for_duplicate(self, user_input: str, task_type: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Check if this request is identical or very similar to existing artifacts in RAG.
+
+        Flow:
+        - 100% semantic match (similarity >= 0.98) → Return artifact directly (FAST)
+        - >95% match → Ask 4b LLM to review if mutation needed
+        - <95% match → Run full workflow
+
+        Args:
+            user_input: User's request
+            task_type: Optional task type for filtering (e.g., "translation", "api_integration")
+
+        Returns:
+            Dict with:
+            - is_duplicate: bool
+            - confidence: float (0.0-1.0)
+            - existing_artifact: Artifact if duplicate found
+            - should_reuse: bool
+            - reasoning: str
+        """
+        if not self.rag:
+            return {
+                "is_duplicate": False,
+                "confidence": 0.0,
+                "should_reuse": False,
+                "reasoning": "RAG not available"
+            }
+
+        try:
+            from src.rag_memory import ArtifactType
+
+            # Search for similar functions in RAG
+            similar_results = self.rag.find_similar(
+                query=user_input,
+                artifact_type=ArtifactType.FUNCTION,
+                top_k=3
+            )
+
+            if not similar_results:
+                return {
+                    "is_duplicate": False,
+                    "confidence": 0.0,
+                    "should_reuse": False,
+                    "reasoning": "No similar artifacts found"
+                }
+
+            best_match, similarity = similar_results[0]
+
+            logger.info(f"Found similar artifact: {best_match.name} (similarity: {similarity:.2%})")
+
+            # 100% match (or very close) → Use directly, no review needed
+            if similarity >= 0.98:
+                logger.info(f"✓ 100% match - reusing existing artifact directly")
+                return {
+                    "is_duplicate": True,
+                    "confidence": similarity,
+                    "existing_artifact": best_match,
+                    "should_reuse": True,
+                    "reasoning": "100% semantic match - identical request",
+                    "review_needed": False
+                }
+
+            # Very similar (95-98%) → Ask 4b LLM to review
+            elif similarity >= 0.95:
+                logger.info(f"High similarity ({similarity:.2%}) - asking 4b LLM for review")
+
+                review_result = self._review_duplicate(user_input, best_match)
+
+                return {
+                    "is_duplicate": review_result["is_same_task"],
+                    "confidence": similarity,
+                    "existing_artifact": best_match,
+                    "should_reuse": review_result["is_same_task"],
+                    "reasoning": review_result["reasoning"],
+                    "review_needed": True,
+                    "review": review_result
+                }
+
+            # Low similarity (<95%) → Run full workflow
+            else:
+                logger.info(f"Low similarity ({similarity:.2%}) - running full workflow")
+                return {
+                    "is_duplicate": False,
+                    "confidence": similarity,
+                    "existing_artifact": best_match,
+                    "should_reuse": False,
+                    "reasoning": f"Similarity {similarity:.2%} too low - needs new implementation"
+                }
+
+        except Exception as e:
+            logger.error(f"Error checking for duplicates: {e}")
+            return {
+                "is_duplicate": False,
+                "confidence": 0.0,
+                "should_reuse": False,
+                "reasoning": f"Error during duplicate check: {e}"
+            }
+
+    def _review_duplicate(self, user_request: str, existing_artifact) -> Dict[str, Any]:
+        """
+        Use 4b LLM to review if near-duplicate is the same task or needs mutation.
+
+        Args:
+            user_request: New user request
+            existing_artifact: Existing artifact from RAG
+
+        Returns:
+            Dict with is_same_task (bool) and reasoning (str)
+        """
+        prompt = f"""Compare these two tasks and determine if they are IDENTICAL or need different implementations.
+
+NEW REQUEST:
+"{user_request}"
+
+EXISTING ARTIFACT:
+Name: {existing_artifact.name}
+Description: {existing_artifact.description}
+Tags: {', '.join(existing_artifact.tags)}
+
+QUESTION: Is the NEW REQUEST asking for the EXACT SAME thing as the EXISTING ARTIFACT?
+
+Consider:
+- Are the core requirements identical?
+- Do any parameter differences require code changes?
+- Is the task semantically the same even if worded differently?
+
+Examples of SAME:
+- "translate hello to french" vs "translate 'hello' into french" → SAME
+- "validate email addresses" vs "check if emails are valid" → SAME
+- "sort list of numbers" vs "arrange numbers in order" → SAME
+
+Examples of DIFFERENT (need mutation):
+- "translate hello to french" vs "translate hello to spanish" → DIFFERENT (language changed)
+- "validate emails with regex" vs "validate emails with API" → DIFFERENT (method changed)
+- "sort ascending" vs "sort descending" → DIFFERENT (order changed)
+
+Respond with ONLY "yes" or "no":
+- yes: Exact same task, reuse existing artifact
+- no: Different task, needs new implementation
+
+Answer (yes/no):"""
+
+        try:
+            response = self.client.generate(
+                model=self.reviewer_model,
+                prompt=prompt,
+                temperature=0.1,  # Low temperature for consistent binary decisions
+                max_tokens=10
+            ).strip().lower()
+
+            is_same = "yes" in response
+
+            return {
+                "is_same_task": is_same,
+                "reasoning": f"4b review: {'Identical task - reuse existing' if is_same else 'Different task - needs mutation'}",
+                "review_response": response
+            }
+
+        except Exception as e:
+            logger.error(f"4b review failed: {e}")
+            # Default to false (run new workflow) on error
+            return {
+                "is_same_task": False,
+                "reasoning": f"Review failed, running new workflow for safety: {e}",
+                "review_response": ""
+            }
+
     def route_workflow(self, user_input: str) -> Dict[str, Any]:
         """
         Route user request to appropriate workflow.
@@ -378,6 +550,107 @@ Respond with ONLY a JSON object:
             "quality_level": "production"
         }
 
+    def should_interrupt_background_process(
+        self,
+        process_info: Dict[str, Any],
+        user_input: str
+    ) -> Dict[str, Any]:
+        """
+        Decide if user input requires interrupting a background process.
+
+        Uses the sentinel LLM (gemma3:1b) to intelligently decide when to interrupt.
+
+        Args:
+            process_info: Info about the running background process
+            user_input: New user input/command
+
+        Returns:
+            Dict with:
+            - should_interrupt: bool
+            - reason: str
+            - urgency: str ("low", "medium", "high")
+        """
+
+        # Extract process details
+        process_id = process_info.get('process_id', 'unknown')
+        description = process_info.get('description', 'unknown task')
+        status = process_info.get('status', 'unknown')
+        progress = process_info.get('progress_percent', 0)
+        latest_update = process_info.get('latest_update', {})
+        latest_message = latest_update.get('message', 'no update') if latest_update else 'no update'
+
+        prompt = f"""A background process is currently running:
+
+Process ID: {process_id}
+Task: {description}
+Status: {status}
+Progress: {progress}%
+Latest update: {latest_message}
+
+User says: "{user_input}"
+
+Should we interrupt the background process to handle this user input?
+
+Decision Rules:
+1. User asking ABOUT the background process (status, progress, etc.) → DON'T interrupt, just answer from status
+2. User starting a NEW unrelated task → DON'T interrupt, warn about background process or queue
+3. User requesting CANCELLATION (stop, cancel, abort, etc.) → INTERRUPT, cancel the process
+4. User providing CORRECTIONS or MODIFICATIONS to current task → INTERRUPT, need to restart with new requirements
+5. User saying WAIT or similar → DON'T interrupt, they acknowledge background process
+6. Emergency commands (exit, shutdown, etc.) → INTERRUPT immediately
+
+Format your response:
+DECISION: <CONTINUE|INTERRUPT>
+URGENCY: <LOW|MEDIUM|HIGH>
+REASON: <brief explanation in one sentence>
+"""
+
+        try:
+            response = self.client.generate(
+                model=self.sentinel_model,  # gemma3:1b - very fast
+                prompt=prompt,
+                temperature=0.1,
+                max_tokens=150
+            ).strip()
+
+            # Parse response
+            import re
+            decision_match = re.search(r'DECISION:\s*(CONTINUE|INTERRUPT)', response, re.IGNORECASE)
+            urgency_match = re.search(r'URGENCY:\s*(LOW|MEDIUM|HIGH)', response, re.IGNORECASE)
+            reason_match = re.search(r'REASON:\s*(.+)', response, re.DOTALL)
+
+            decision = decision_match.group(1).upper() if decision_match else "CONTINUE"
+            urgency = urgency_match.group(1).upper() if urgency_match else "LOW"
+            reason = reason_match.group(1).strip() if reason_match else "Unknown reason"
+
+            # Clean up reason (take first line only)
+            reason = reason.split('\n')[0].strip()
+
+            should_interrupt = (decision == "INTERRUPT")
+
+            logger.info(
+                f"Interrupt decision for process {process_id}: "
+                f"{'INTERRUPT' if should_interrupt else 'CONTINUE'} "
+                f"(urgency: {urgency}) - {reason}"
+            )
+
+            return {
+                "should_interrupt": should_interrupt,
+                "reason": reason,
+                "urgency": urgency.lower(),
+                "decision": decision.lower()
+            }
+
+        except Exception as e:
+            logger.error(f"Error in interrupt decision: {e}")
+            # Default to not interrupting on error
+            return {
+                "should_interrupt": False,
+                "reason": f"Error making decision: {str(e)}",
+                "urgency": "low",
+                "decision": "continue"
+            }
+
 
 # Example usage
 def example_usage():
@@ -409,3 +682,4 @@ def example_usage():
 
     workflow2 = sentinel.route_workflow("Create a robust API integration")
     # Returns: {"workflow_type": "optimize", "use_parallel": True}
+

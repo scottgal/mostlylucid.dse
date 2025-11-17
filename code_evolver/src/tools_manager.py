@@ -809,6 +809,8 @@ class ToolsManager:
             category = path_parts[-2] if len(path_parts) >= 2 else "other"
 
             # Store in RAG with comprehensive metadata
+            # NOTE: auto_embed=False to avoid slow initialization (126+ tools × 500ms/embed = 60s+)
+            # Tools are looked up by tool_id or tags, not semantic search during init
             self.rag_memory.store_artifact(
                 artifact_id=f"tool_{tool.tool_id}",
                 artifact_type=ArtifactType.PATTERN,
@@ -831,7 +833,7 @@ class ToolsManager:
                     "output_schema": tool_def.get("output_schema"),
                     "examples": tool_def.get("examples")
                 },
-                auto_embed=True
+                auto_embed=False  # Fast initialization - no embeddings needed for tool lookup
             )
 
             logger.debug(f"Stored YAML tool in RAG: {tool.tool_id} (category: {category})")
@@ -857,6 +859,7 @@ Tags: {', '.join(tool.tags)}
 {tool.to_prompt_format()}"""
 
                 # Store in RAG with type PATTERN (representing a reusable tool pattern)
+                # NOTE: auto_embed=False for fast initialization - tools looked up by ID/tags
                 self.rag_memory.store_artifact(
                     artifact_id=f"tool_{tool_id}",
                     artifact_type=ArtifactType.PATTERN,
@@ -869,7 +872,7 @@ Tags: {', '.join(tool.tags)}
                         "tool_type": tool.tool_type.value,
                         "is_tool": True
                     },
-                    auto_embed=True
+                    auto_embed=False  # Fast initialization
                 )
 
             logger.info(f"✓ Indexed {len(self.tools)} tools in RAG memory")

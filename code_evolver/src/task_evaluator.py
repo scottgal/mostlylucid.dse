@@ -84,10 +84,10 @@ class TaskEvaluator:
 
         # Choose model based on input length
         if input_length < self.SHORT_INPUT:
-            model = "tinyllama"
+            model = "gemma3:1b"
             tier = "very-fast"
         elif input_length < self.MEDIUM_INPUT:
-            model = "phi3:mini"
+            model = "gemma3:4b"  # Changed from phi3:mini which doesn't exist
             tier = "fast"
         elif input_length < self.LONG_INPUT:
             model = "gemma3:4b"

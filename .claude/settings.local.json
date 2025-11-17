@@ -72,7 +72,9 @@
       "Bash(set PYNGUIN_DANGER_AWARE=1)",
       "Bash(test:*)",
       "Bash(=2.0.0 --quiet)",
-      "Bash(SESSION_SUMMARY.md)"
+      "Bash(SESSION_SUMMARY.md)",
+      "Bash(for f in ./rag_memory/index.json ./rag_memory/tags_index.json ./registry/index.json ./tools/index.json)",
+      "Bash(PYTHONDONTWRITEBYTECODE=1 python:*)"
     ],
     "deny": [],
     "ask": []

@@ -63,7 +63,7 @@ Future searches for similar scenarios should demote this tool.
         # Store failure in RAG
         rag.store_artifact(
             artifact_id=failure_id,
-            artifact_type=ArtifactType.PATTERN,
+            artifact_type=ArtifactType.FAILURE,  # Use specific FAILURE type
             name=f"Failure: {tool_id}",
             description=f"Tool failure for scenario: {scenario[:100]}",
             content=failure_content,

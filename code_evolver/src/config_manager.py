@@ -377,10 +377,10 @@ class ConfigManager:
         if model_key:
             # Resolve model key to actual model name
             metadata = self.get_model_metadata(model_key)
-            return metadata.get("name", "tinyllama")
+            return metadata.get("name", "gemma3:1b")
 
         # Fallback to legacy config
-        model, _ = self._parse_model_config("triage", "tinyllama")
+        model, _ = self._parse_model_config("triage", "gemma3:1b")
         return model
 
     @property

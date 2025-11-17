@@ -508,4 +508,4 @@ class RoutingClient(LLMClientBase):
 
     def _get_default_triage_model(self) -> str:
         """Get default triage model from config."""
-        return self.config_manager.get("llm.defaults.veryfast", "tinyllama")
+        return self.config_manager.get("llm.defaults.veryfast", "gemma3:1b")

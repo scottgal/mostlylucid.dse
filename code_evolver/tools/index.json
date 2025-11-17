@@ -28,7 +28,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669488Z"
+      "last_reset": "2025-11-17T16:13:52.594133Z"
     },
     "created_at": "2025-11-16T08:22:00.386029Z",
     "usage_count": 0,
@@ -70,7 +70,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669502Z"
+      "last_reset": "2025-11-17T16:13:52.594146Z"
     },
     "created_at": "2025-11-16T08:22:01.350706Z",
     "usage_count": 0,
@@ -120,7 +120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669508Z"
+      "last_reset": "2025-11-17T16:13:52.594152Z"
     },
     "created_at": "2025-11-16T08:22:01.479592Z",
     "usage_count": 0,
@@ -163,7 +163,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669514Z"
+      "last_reset": "2025-11-17T16:13:52.594158Z"
     },
     "created_at": "2025-11-16T08:22:01.604551Z",
     "usage_count": 0,
@@ -206,7 +206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669519Z"
+      "last_reset": "2025-11-17T16:13:52.594162Z"
     },
     "created_at": "2025-11-16T08:22:01.718302Z",
     "usage_count": 0,
@@ -249,7 +249,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669522Z"
+      "last_reset": "2025-11-17T16:13:52.594166Z"
     },
     "created_at": "2025-11-16T08:22:01.837723Z",
     "usage_count": 0,
@@ -292,7 +292,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669526Z"
+      "last_reset": "2025-11-17T16:13:52.594170Z"
     },
     "created_at": "2025-11-16T08:22:01.944711Z",
     "usage_count": 0,
@@ -341,7 +341,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669530Z"
+      "last_reset": "2025-11-17T16:13:52.594173Z"
     },
     "created_at": "2025-11-16T08:22:02.053755Z",
     "usage_count": 0,
@@ -384,7 +384,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669534Z"
+      "last_reset": "2025-11-17T16:13:52.594177Z"
     },
     "created_at": "2025-11-16T08:22:02.167106Z",
     "usage_count": 0,
@@ -427,7 +427,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669539Z"
+      "last_reset": "2025-11-17T16:13:52.594181Z"
     },
     "created_at": "2025-11-16T08:22:02.276206Z",
     "usage_count": 0,
@@ -471,10 +471,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669542Z"
+      "last_reset": "2025-11-17T16:13:52.594185Z"
     },
     "created_at": "2025-11-16T08:22:02.382327Z",
-    "usage_count": 113,
+    "usage_count": 119,
     "version": "1.0.0",
     "definition_hash": "8ad5b36f555ea1b4ac2a76f37c9331164dc4067e0cd2a5c3a2349bcbf4b15ecc",
     "breaking_changes": []
@@ -520,7 +520,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669546Z"
+      "last_reset": "2025-11-17T16:13:52.594188Z"
     },
     "created_at": "2025-11-16T08:22:02.486280Z",
     "usage_count": 0,
@@ -561,7 +561,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669550Z"
+      "last_reset": "2025-11-17T16:13:52.594192Z"
     },
     "created_at": "2025-11-16T08:22:02.604429Z",
     "usage_count": 0,
@@ -606,7 +606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669553Z"
+      "last_reset": "2025-11-17T16:13:52.594196Z"
     },
     "created_at": "2025-11-16T08:22:02.703608Z",
     "usage_count": 0,
@@ -700,7 +700,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669557Z"
+      "last_reset": "2025-11-17T16:13:52.594199Z"
     },
     "created_at": "2025-11-16T08:22:02.825113Z",
     "usage_count": 0,
@@ -744,7 +744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669561Z"
+      "last_reset": "2025-11-17T16:13:52.594203Z"
     },
     "created_at": "2025-11-16T08:22:02.937138Z",
     "usage_count": 0,
@@ -787,7 +787,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669564Z"
+      "last_reset": "2025-11-17T16:13:52.594207Z"
     },
     "created_at": "2025-11-16T08:22:03.036664Z",
     "usage_count": 0,
@@ -830,10 +830,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669568Z"
+      "last_reset": "2025-11-17T16:13:52.594210Z"
     },
     "created_at": "2025-11-16T08:22:03.146458Z",
-    "usage_count": 113,
+    "usage_count": 119,
     "version": "1.0.0",
     "definition_hash": "526c2d1a47ffd69c25156fc150eeaedb81839cf1b75d6c9ab094dc5fbe4b64ca",
     "breaking_changes": []
@@ -874,7 +874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669571Z"
+      "last_reset": "2025-11-17T16:13:52.594214Z"
     },
     "created_at": "2025-11-16T08:22:03.264641Z",
     "usage_count": 0,
@@ -918,7 +918,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669575Z"
+      "last_reset": "2025-11-17T16:13:52.594219Z"
     },
     "created_at": "2025-11-16T08:22:03.374997Z",
     "usage_count": 0,
@@ -968,7 +968,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669579Z"
+      "last_reset": "2025-11-17T16:13:52.594222Z"
     },
     "created_at": "2025-11-16T08:22:03.492256Z",
     "usage_count": 0,
@@ -1011,7 +1011,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669582Z"
+      "last_reset": "2025-11-17T16:13:52.594226Z"
     },
     "created_at": "2025-11-16T08:22:03.599372Z",
     "usage_count": 0,
@@ -1061,7 +1061,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669586Z"
+      "last_reset": "2025-11-17T16:13:52.594229Z"
     },
     "created_at": "2025-11-16T08:22:03.715162Z",
     "usage_count": 0,
@@ -1105,10 +1105,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669590Z"
+      "last_reset": "2025-11-17T16:13:52.594233Z"
     },
     "created_at": "2025-11-16T08:22:03.824315Z",
-    "usage_count": 113,
+    "usage_count": 119,
     "version": "1.0.0",
     "definition_hash": "38ab46268f048a56aa014787eb4de2bba4629f2e92f819fd45cad82b0e6c6582",
     "breaking_changes": []
@@ -1155,7 +1155,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669594Z"
+      "last_reset": "2025-11-17T16:13:52.594236Z"
     },
     "created_at": "2025-11-16T08:22:03.931733Z",
     "usage_count": 0,
@@ -1196,7 +1196,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669598Z"
+      "last_reset": "2025-11-17T16:13:52.594240Z"
     },
     "created_at": "2025-11-16T08:22:04.044869Z",
     "usage_count": 0,
@@ -1238,7 +1238,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669603Z"
+      "last_reset": "2025-11-17T16:13:52.594244Z"
     },
     "created_at": "2025-11-16T08:22:04.152162Z",
     "usage_count": 0,
@@ -1279,7 +1279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669607Z"
+      "last_reset": "2025-11-17T16:13:52.594248Z"
     },
     "created_at": "2025-11-16T08:22:04.259938Z",
     "usage_count": 0,
@@ -1320,7 +1320,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669611Z"
+      "last_reset": "2025-11-17T16:13:52.594252Z"
     },
     "created_at": "2025-11-16T08:22:04.378119Z",
     "usage_count": 0,
@@ -1361,7 +1361,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669615Z"
+      "last_reset": "2025-11-17T16:13:52.594256Z"
     },
     "created_at": "2025-11-16T08:22:04.495892Z",
     "usage_count": 0,
@@ -1402,7 +1402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669618Z"
+      "last_reset": "2025-11-17T16:13:52.594260Z"
     },
     "created_at": "2025-11-17T01:04:53.135606Z",
     "usage_count": 0,
@@ -1444,7 +1444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669622Z"
+      "last_reset": "2025-11-17T16:13:52.594263Z"
     },
     "created_at": "2025-11-16T08:22:04.712133Z",
     "usage_count": 33,
@@ -1482,7 +1482,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669626Z"
+      "last_reset": "2025-11-17T16:13:52.594268Z"
     },
     "created_at": "2025-11-16T08:22:04.832969Z",
     "usage_count": 1,
@@ -1522,7 +1522,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669629Z"
+      "last_reset": "2025-11-17T16:13:52.594271Z"
     },
     "created_at": "2025-11-16T08:22:04.951266Z",
     "usage_count": 46,
@@ -1563,10 +1563,10 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669633Z"
+      "last_reset": "2025-11-17T16:13:52.594275Z"
     },
     "created_at": "2025-11-16T08:22:05.064105Z",
-    "usage_count": 168,
+    "usage_count": 179,
     "version": "1.0.0",
     "definition_hash": "24ca0d9eda3749fe6a97485047cd8f202c5ed68f438c7e9869d7e22f5c07cb8b",
     "breaking_changes": []
@@ -1606,7 +1606,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669637Z"
+      "last_reset": "2025-11-17T16:13:52.594279Z"
     },
     "created_at": "2025-11-16T08:22:05.186048Z",
     "usage_count": 1,
@@ -1647,7 +1647,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669641Z"
+      "last_reset": "2025-11-17T16:13:52.594283Z"
     },
     "created_at": "2025-11-16T08:22:05.299080Z",
     "usage_count": 1,
@@ -1685,7 +1685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669644Z"
+      "last_reset": "2025-11-17T16:13:52.594286Z"
     },
     "created_at": "2025-11-16T08:22:05.415405Z",
     "usage_count": 0,
@@ -1726,7 +1726,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669648Z"
+      "last_reset": "2025-11-17T16:13:52.594290Z"
     },
     "created_at": "2025-11-16T08:22:05.533947Z",
     "usage_count": 2,
@@ -1767,7 +1767,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669651Z"
+      "last_reset": "2025-11-17T16:13:52.594294Z"
     },
     "created_at": "2025-11-16T08:22:05.650865Z",
     "usage_count": 0,
@@ -1808,7 +1808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669656Z"
+      "last_reset": "2025-11-17T16:13:52.594297Z"
     },
     "created_at": "2025-11-16T08:22:05.760519Z",
     "usage_count": 0,
@@ -1849,7 +1849,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669659Z"
+      "last_reset": "2025-11-17T16:13:52.594301Z"
     },
     "created_at": "2025-11-16T08:22:05.859286Z",
     "usage_count": 3,
@@ -1889,7 +1889,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669663Z"
+      "last_reset": "2025-11-17T16:13:52.594304Z"
     },
     "created_at": "2025-11-16T08:22:05.967523Z",
     "usage_count": 0,
@@ -1930,7 +1930,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669668Z"
+      "last_reset": "2025-11-17T16:13:52.594308Z"
     },
     "created_at": "2025-11-16T08:22:06.073599Z",
     "usage_count": 1,
@@ -1970,7 +1970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669671Z"
+      "last_reset": "2025-11-17T16:13:52.594311Z"
     },
     "created_at": "2025-11-16T08:22:06.179955Z",
     "usage_count": 0,
@@ -2012,7 +2012,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669675Z"
+      "last_reset": "2025-11-17T16:13:52.594315Z"
     },
     "created_at": "2025-11-16T08:22:06.292010Z",
     "usage_count": 0,
@@ -2053,7 +2053,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669678Z"
+      "last_reset": "2025-11-17T16:13:52.594319Z"
     },
     "created_at": "2025-11-17T01:04:53.796074Z",
     "usage_count": 1,
@@ -2087,7 +2087,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669682Z"
+      "last_reset": "2025-11-17T16:13:52.594323Z"
     },
     "created_at": "2025-11-16T10:01:30.396360Z",
     "usage_count": 0,
@@ -2117,7 +2117,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669687Z"
+      "last_reset": "2025-11-17T16:13:52.594326Z"
     },
     "created_at": "2025-11-16T08:22:06.626335Z",
     "usage_count": 0,
@@ -2146,7 +2146,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669691Z"
+      "last_reset": "2025-11-17T16:13:52.594332Z"
     },
     "created_at": "2025-11-16T08:22:06.626352Z",
     "usage_count": 0,
@@ -2175,7 +2175,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669694Z"
+      "last_reset": "2025-11-17T16:13:52.594335Z"
     },
     "created_at": "2025-11-16T08:22:06.626359Z",
     "usage_count": 0,
@@ -2206,7 +2206,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669698Z"
+      "last_reset": "2025-11-17T16:13:52.594339Z"
     },
     "created_at": "2025-11-16T08:22:06.626365Z",
     "usage_count": 0,
@@ -2235,7 +2235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669701Z"
+      "last_reset": "2025-11-17T16:13:52.594342Z"
     },
     "created_at": "2025-11-16T08:22:06.626371Z",
     "usage_count": 0,
@@ -2265,7 +2265,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669706Z"
+      "last_reset": "2025-11-17T16:13:52.594345Z"
     },
     "created_at": "2025-11-16T08:22:06.626376Z",
     "usage_count": 0,
@@ -2295,7 +2295,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669709Z"
+      "last_reset": "2025-11-17T16:13:52.594348Z"
     },
     "created_at": "2025-11-16T08:22:06.626382Z",
     "usage_count": 0,
@@ -2326,7 +2326,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669713Z"
+      "last_reset": "2025-11-17T16:13:52.594353Z"
     },
     "created_at": "2025-11-16T08:22:06.626390Z",
     "usage_count": 0,
@@ -2357,7 +2357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669716Z"
+      "last_reset": "2025-11-17T16:13:52.594356Z"
     },
     "created_at": "2025-11-16T08:22:06.626396Z",
     "usage_count": 0,
@@ -2387,7 +2387,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669720Z"
+      "last_reset": "2025-11-17T16:13:52.594360Z"
     },
     "created_at": "2025-11-16T08:22:06.626402Z",
     "usage_count": 0,
@@ -2430,7 +2430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669723Z"
+      "last_reset": "2025-11-17T16:13:52.594363Z"
     },
     "created_at": "2025-11-16T08:22:06.626410Z",
     "usage_count": 0,
@@ -2460,7 +2460,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669727Z"
+      "last_reset": "2025-11-17T16:13:52.594366Z"
     },
     "created_at": "2025-11-16T08:22:06.626416Z",
     "usage_count": 0,
@@ -2522,9 +2522,9 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:01:31.551201Z"
+      "last_reset": "2025-11-17T16:14:10.224250Z"
     },
-    "created_at": "2025-11-17T13:01:31.551192Z",
+    "created_at": "2025-11-17T16:14:10.224241Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",
@@ -2551,7 +2551,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669735Z"
+      "last_reset": "2025-11-17T16:13:52.594374Z"
     },
     "created_at": "2025-11-16T08:22:06.626426Z",
     "usage_count": 0,
@@ -2583,7 +2583,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669739Z"
+      "last_reset": "2025-11-17T16:13:52.594377Z"
     },
     "created_at": "2025-11-16T08:22:06.626432Z",
     "usage_count": 0,
@@ -2613,7 +2613,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669742Z"
+      "last_reset": "2025-11-17T16:13:52.594381Z"
     },
     "created_at": "2025-11-16T08:22:06.626438Z",
     "usage_count": 0,
@@ -2644,7 +2644,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669746Z"
+      "last_reset": "2025-11-17T16:13:52.594384Z"
     },
     "created_at": "2025-11-16T08:22:06.626443Z",
     "usage_count": 0,
@@ -2680,7 +2680,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669749Z"
+      "last_reset": "2025-11-17T16:13:52.594388Z"
     },
     "created_at": "2025-11-16T13:40:48.563426Z",
     "usage_count": 0,
@@ -2710,7 +2710,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669754Z"
+      "last_reset": "2025-11-17T16:13:52.594391Z"
     },
     "created_at": "2025-11-16T08:22:06.626456Z",
     "usage_count": 0,
@@ -2741,7 +2741,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669757Z"
+      "last_reset": "2025-11-17T16:13:52.594395Z"
     },
     "created_at": "2025-11-16T08:22:06.626471Z",
     "usage_count": 0,
@@ -2770,7 +2770,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669761Z"
+      "last_reset": "2025-11-17T16:13:52.594399Z"
     },
     "created_at": "2025-11-16T08:22:06.626478Z",
     "usage_count": 0,
@@ -2800,7 +2800,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669764Z"
+      "last_reset": "2025-11-17T16:13:52.594403Z"
     },
     "created_at": "2025-11-16T08:22:06.626485Z",
     "usage_count": 0,
@@ -2829,7 +2829,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669768Z"
+      "last_reset": "2025-11-17T16:13:52.594407Z"
     },
     "created_at": "2025-11-16T08:22:06.626493Z",
     "usage_count": 0,
@@ -2860,7 +2860,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669772Z"
+      "last_reset": "2025-11-17T16:13:52.594411Z"
     },
     "created_at": "2025-11-16T08:22:06.626499Z",
     "usage_count": 0,
@@ -2890,7 +2890,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669775Z"
+      "last_reset": "2025-11-17T16:13:52.594414Z"
     },
     "created_at": "2025-11-16T08:22:06.626508Z",
     "usage_count": 0,
@@ -2921,7 +2921,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669779Z"
+      "last_reset": "2025-11-17T16:13:52.594417Z"
     },
     "created_at": "2025-11-16T08:22:06.626513Z",
     "usage_count": 0,
@@ -2950,7 +2950,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669784Z"
+      "last_reset": "2025-11-17T16:13:52.594421Z"
     },
     "created_at": "2025-11-16T08:22:06.626520Z",
     "usage_count": 0,
@@ -2980,7 +2980,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669787Z"
+      "last_reset": "2025-11-17T16:13:52.594424Z"
     },
     "created_at": "2025-11-16T08:22:06.626524Z",
     "usage_count": 0,
@@ -3009,7 +3009,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669790Z"
+      "last_reset": "2025-11-17T16:13:52.594427Z"
     },
     "created_at": "2025-11-16T08:22:06.626530Z",
     "usage_count": 0,
@@ -3038,7 +3038,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669794Z"
+      "last_reset": "2025-11-17T16:13:52.594431Z"
     },
     "created_at": "2025-11-16T08:22:06.626536Z",
     "usage_count": 0,
@@ -3068,7 +3068,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669798Z"
+      "last_reset": "2025-11-17T16:13:52.594434Z"
     },
     "created_at": "2025-11-16T08:22:06.626541Z",
     "usage_count": 0,
@@ -3099,7 +3099,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669801Z"
+      "last_reset": "2025-11-17T16:13:52.594437Z"
     },
     "created_at": "2025-11-16T08:22:06.626546Z",
     "usage_count": 0,
@@ -3129,7 +3129,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669804Z"
+      "last_reset": "2025-11-17T16:13:52.594440Z"
     },
     "created_at": "2025-11-16T08:22:06.626552Z",
     "usage_count": 0,
@@ -3158,7 +3158,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669808Z"
+      "last_reset": "2025-11-17T16:13:52.594444Z"
     },
     "created_at": "2025-11-16T08:22:06.626558Z",
     "usage_count": 0,
@@ -3188,7 +3188,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669812Z"
+      "last_reset": "2025-11-17T16:13:52.594447Z"
     },
     "created_at": "2025-11-16T08:22:06.626564Z",
     "usage_count": 0,
@@ -3218,7 +3218,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669815Z"
+      "last_reset": "2025-11-17T16:13:52.594450Z"
     },
     "created_at": "2025-11-16T08:22:06.626568Z",
     "usage_count": 0,
@@ -3248,7 +3248,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669819Z"
+      "last_reset": "2025-11-17T16:13:52.594454Z"
     },
     "created_at": "2025-11-16T08:22:06.626577Z",
     "usage_count": 0,
@@ -3279,7 +3279,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669822Z"
+      "last_reset": "2025-11-17T16:13:52.594457Z"
     },
     "created_at": "2025-11-16T08:22:06.626582Z",
     "usage_count": 0,
@@ -3308,7 +3308,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669826Z"
+      "last_reset": "2025-11-17T16:13:52.594461Z"
     },
     "created_at": "2025-11-16T08:22:06.626589Z",
     "usage_count": 0,
@@ -3338,7 +3338,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669830Z"
+      "last_reset": "2025-11-17T16:13:52.594466Z"
     },
     "created_at": "2025-11-16T08:22:06.626597Z",
     "usage_count": 0,
@@ -3367,7 +3367,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669834Z"
+      "last_reset": "2025-11-17T16:13:52.594469Z"
     },
     "created_at": "2025-11-16T08:22:06.626602Z",
     "usage_count": 0,
@@ -3397,7 +3397,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669837Z"
+      "last_reset": "2025-11-17T16:13:52.594473Z"
     },
     "created_at": "2025-11-16T08:22:06.626606Z",
     "usage_count": 0,
@@ -3433,7 +3433,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669840Z"
+      "last_reset": "2025-11-17T16:13:52.594477Z"
     },
     "created_at": "2025-11-16T17:58:30.737649Z",
     "usage_count": 0,
@@ -3463,7 +3463,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669844Z"
+      "last_reset": "2025-11-17T16:13:52.594481Z"
     },
     "created_at": "2025-11-16T08:22:06.626617Z",
     "usage_count": 0,
@@ -3499,7 +3499,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669847Z"
+      "last_reset": "2025-11-17T16:13:52.594485Z"
     },
     "created_at": "2025-11-16T10:08:59.498332Z",
     "usage_count": 0,
@@ -3529,7 +3529,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669856Z"
+      "last_reset": "2025-11-17T16:13:52.594489Z"
     },
     "created_at": "2025-11-16T08:22:06.626628Z",
     "usage_count": 0,
@@ -3558,7 +3558,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669860Z"
+      "last_reset": "2025-11-17T16:13:52.594492Z"
     },
     "created_at": "2025-11-16T08:22:06.626633Z",
     "usage_count": 0,
@@ -3587,7 +3587,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669864Z"
+      "last_reset": "2025-11-17T16:13:52.594496Z"
     },
     "created_at": "2025-11-16T08:22:06.626638Z",
     "usage_count": 0,
@@ -3617,7 +3617,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669868Z"
+      "last_reset": "2025-11-17T16:13:52.594500Z"
     },
     "created_at": "2025-11-16T08:22:06.626643Z",
     "usage_count": 0,
@@ -3648,7 +3648,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669871Z"
+      "last_reset": "2025-11-17T16:13:52.594503Z"
     },
     "created_at": "2025-11-16T08:22:06.626648Z",
     "usage_count": 0,
@@ -3678,7 +3678,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669875Z"
+      "last_reset": "2025-11-17T16:13:52.594507Z"
     },
     "created_at": "2025-11-16T08:22:06.626654Z",
     "usage_count": 0,
@@ -3708,7 +3708,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669879Z"
+      "last_reset": "2025-11-17T16:13:52.594511Z"
     },
     "created_at": "2025-11-16T08:22:06.626659Z",
     "usage_count": 0,
@@ -3744,7 +3744,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669884Z"
+      "last_reset": "2025-11-17T16:13:52.594514Z"
     },
     "created_at": "2025-11-16T08:34:44.135406Z",
     "usage_count": 0,
@@ -3780,7 +3780,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669887Z"
+      "last_reset": "2025-11-17T16:13:52.594517Z"
     },
     "created_at": "2025-11-16T08:35:30.164181Z",
     "usage_count": 0,
@@ -3816,7 +3816,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669891Z"
+      "last_reset": "2025-11-17T16:13:52.594521Z"
     },
     "created_at": "2025-11-16T08:36:09.937813Z",
     "usage_count": 0,
@@ -3852,7 +3852,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669895Z"
+      "last_reset": "2025-11-17T16:13:52.594524Z"
     },
     "created_at": "2025-11-16T09:14:20.219639Z",
     "usage_count": 0,
@@ -3888,7 +3888,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669898Z"
+      "last_reset": "2025-11-17T16:13:52.594527Z"
     },
     "created_at": "2025-11-16T09:17:21.481820Z",
     "usage_count": 0,
@@ -3952,7 +3952,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669902Z"
+      "last_reset": "2025-11-17T16:13:52.594531Z"
     },
     "created_at": "2025-11-16T09:07:23.454598Z",
     "usage_count": 0,
@@ -3988,7 +3988,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669905Z"
+      "last_reset": "2025-11-17T16:13:52.594535Z"
     },
     "created_at": "2025-11-16T09:12:45.348005Z",
     "usage_count": 0,
@@ -4024,7 +4024,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669909Z"
+      "last_reset": "2025-11-17T16:13:52.594539Z"
     },
     "created_at": "2025-11-16T09:18:41.770690Z",
     "usage_count": 0,
@@ -4060,7 +4060,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669912Z"
+      "last_reset": "2025-11-17T16:13:52.594542Z"
     },
     "created_at": "2025-11-16T09:25:57.866554Z",
     "usage_count": 0,
@@ -4096,7 +4096,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669916Z"
+      "last_reset": "2025-11-17T16:13:52.594545Z"
     },
     "created_at": "2025-11-16T09:28:27.164898Z",
     "usage_count": 0,
@@ -4132,7 +4132,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669919Z"
+      "last_reset": "2025-11-17T16:13:52.594549Z"
     },
     "created_at": "2025-11-16T09:29:38.153439Z",
     "usage_count": 0,
@@ -4168,7 +4168,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669923Z"
+      "last_reset": "2025-11-17T16:13:52.594552Z"
     },
     "created_at": "2025-11-16T09:35:06.567192Z",
     "usage_count": 0,
@@ -4221,7 +4221,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669926Z"
+      "last_reset": "2025-11-17T16:13:52.594556Z"
     },
     "created_at": "2025-11-16T10:01:29.141239Z",
     "usage_count": 0,
@@ -4274,7 +4274,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669930Z"
+      "last_reset": "2025-11-17T16:13:52.594560Z"
     },
     "created_at": "2025-11-16T10:01:30.181536Z",
     "usage_count": 25,
@@ -4310,7 +4310,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669933Z"
+      "last_reset": "2025-11-17T16:13:52.594563Z"
     },
     "created_at": "2025-11-16T10:06:10.391814Z",
     "usage_count": 0,
@@ -4346,7 +4346,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669938Z"
+      "last_reset": "2025-11-17T16:13:52.594567Z"
     },
     "created_at": "2025-11-16T10:12:47.223241Z",
     "usage_count": 0,
@@ -4382,7 +4382,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669941Z"
+      "last_reset": "2025-11-17T16:13:52.594571Z"
     },
     "created_at": "2025-11-16T10:14:13.615361Z",
     "usage_count": 0,
@@ -4418,7 +4418,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669945Z"
+      "last_reset": "2025-11-17T16:13:52.594574Z"
     },
     "created_at": "2025-11-16T10:15:06.069892Z",
     "usage_count": 0,
@@ -4454,7 +4454,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669948Z"
+      "last_reset": "2025-11-17T16:13:52.594578Z"
     },
     "created_at": "2025-11-16T10:42:33.746191Z",
     "usage_count": 0,
@@ -4490,7 +4490,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669951Z"
+      "last_reset": "2025-11-17T16:13:52.594581Z"
     },
     "created_at": "2025-11-16T11:10:19.359123Z",
     "usage_count": 0,
@@ -4526,7 +4526,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669956Z"
+      "last_reset": "2025-11-17T16:13:52.594584Z"
     },
     "created_at": "2025-11-16T11:31:40.692912Z",
     "usage_count": 0,
@@ -4562,7 +4562,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669960Z"
+      "last_reset": "2025-11-17T16:13:52.594591Z"
     },
     "created_at": "2025-11-16T11:32:50.990789Z",
     "usage_count": 0,
@@ -4598,7 +4598,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669963Z"
+      "last_reset": "2025-11-17T16:13:52.594595Z"
     },
     "created_at": "2025-11-16T11:46:37.640775Z",
     "usage_count": 0,
@@ -4634,7 +4634,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669966Z"
+      "last_reset": "2025-11-17T16:13:52.594598Z"
     },
     "created_at": "2025-11-16T12:20:27.162450Z",
     "usage_count": 0,
@@ -4765,7 +4765,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669970Z"
+      "last_reset": "2025-11-17T16:13:52.594602Z"
     },
     "created_at": "2025-11-16T12:41:08.799526Z",
     "usage_count": 0,
@@ -4845,7 +4845,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669975Z"
+      "last_reset": "2025-11-17T16:13:52.594605Z"
     },
     "created_at": "2025-11-16T12:41:08.807420Z",
     "usage_count": 0,
@@ -4936,7 +4936,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669978Z"
+      "last_reset": "2025-11-17T16:13:52.594609Z"
     },
     "created_at": "2025-11-16T12:41:08.810729Z",
     "usage_count": 0,
@@ -4998,7 +4998,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669982Z"
+      "last_reset": "2025-11-17T16:13:52.594613Z"
     },
     "created_at": "2025-11-16T12:41:08.812165Z",
     "usage_count": 0,
@@ -5107,7 +5107,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669986Z"
+      "last_reset": "2025-11-17T16:13:52.594617Z"
     },
     "created_at": "2025-11-16T12:41:08.831401Z",
     "usage_count": 0,
@@ -5202,7 +5202,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669989Z"
+      "last_reset": "2025-11-17T16:13:52.594620Z"
     },
     "created_at": "2025-11-16T12:41:08.834283Z",
     "usage_count": 0,
@@ -5235,7 +5235,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669993Z"
+      "last_reset": "2025-11-17T16:13:52.594624Z"
     },
     "created_at": "2025-11-16T12:41:08.836868Z",
     "usage_count": 0,
@@ -5269,7 +5269,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.669996Z"
+      "last_reset": "2025-11-17T16:13:52.594628Z"
     },
     "created_at": "2025-11-16T12:41:08.839875Z",
     "usage_count": 0,
@@ -5303,7 +5303,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670000Z"
+      "last_reset": "2025-11-17T16:13:52.594631Z"
     },
     "created_at": "2025-11-16T12:41:08.844259Z",
     "usage_count": 0,
@@ -5344,7 +5344,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670003Z"
+      "last_reset": "2025-11-17T16:13:52.594635Z"
     },
     "created_at": "2025-11-17T01:04:53.469789Z",
     "usage_count": 0,
@@ -5386,7 +5386,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670008Z"
+      "last_reset": "2025-11-17T16:13:52.594638Z"
     },
     "created_at": "2025-11-16T12:41:08.875026Z",
     "usage_count": 0,
@@ -5429,7 +5429,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670012Z"
+      "last_reset": "2025-11-17T16:13:52.594642Z"
     },
     "created_at": "2025-11-16T12:41:08.881445Z",
     "usage_count": 0,
@@ -5472,7 +5472,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670015Z"
+      "last_reset": "2025-11-17T16:13:52.594645Z"
     },
     "created_at": "2025-11-16T12:41:08.887411Z",
     "usage_count": 0,
@@ -5508,7 +5508,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670019Z"
+      "last_reset": "2025-11-17T16:13:52.594649Z"
     },
     "created_at": "2025-11-16T13:44:17.864365Z",
     "usage_count": 0,
@@ -5600,7 +5600,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670023Z"
+      "last_reset": "2025-11-17T16:13:52.594653Z"
     },
     "created_at": "2025-11-16T14:05:46.456088Z",
     "usage_count": 0,
@@ -5709,7 +5709,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670027Z"
+      "last_reset": "2025-11-17T16:13:52.594656Z"
     },
     "created_at": "2025-11-16T14:05:47.598951Z",
     "usage_count": 0,
@@ -5808,7 +5808,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670030Z"
+      "last_reset": "2025-11-17T16:13:52.594660Z"
     },
     "created_at": "2025-11-16T14:05:47.896875Z",
     "usage_count": 0,
@@ -5844,7 +5844,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670034Z"
+      "last_reset": "2025-11-17T16:13:52.594663Z"
     },
     "created_at": "2025-11-16T14:09:32.745489Z",
     "usage_count": 0,
@@ -5940,7 +5940,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670038Z"
+      "last_reset": "2025-11-17T16:13:52.594667Z"
     },
     "created_at": "2025-11-16T14:36:50.752511Z",
     "usage_count": 0,
@@ -5990,7 +5990,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670042Z"
+      "last_reset": "2025-11-17T16:13:52.594670Z"
     },
     "created_at": "2025-11-16T14:44:34.683195Z",
     "usage_count": 0,
@@ -6041,7 +6041,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670045Z"
+      "last_reset": "2025-11-17T16:13:52.594674Z"
     },
     "created_at": "2025-11-17T01:04:52.642072Z",
     "usage_count": 0,
@@ -6095,7 +6095,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670049Z"
+      "last_reset": "2025-11-17T16:13:52.594677Z"
     },
     "created_at": "2025-11-16T14:44:34.699603Z",
     "usage_count": 0,
@@ -6144,7 +6144,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670053Z"
+      "last_reset": "2025-11-17T16:13:52.594681Z"
     },
     "created_at": "2025-11-16T14:44:34.701148Z",
     "usage_count": 0,
@@ -6193,7 +6193,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670056Z"
+      "last_reset": "2025-11-17T16:13:52.594686Z"
     },
     "created_at": "2025-11-16T14:44:34.702597Z",
     "usage_count": 0,
@@ -6244,7 +6244,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670060Z"
+      "last_reset": "2025-11-17T16:13:52.594689Z"
     },
     "created_at": "2025-11-16T14:44:34.707867Z",
     "usage_count": 0,
@@ -6296,7 +6296,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670063Z"
+      "last_reset": "2025-11-17T16:13:52.594693Z"
     },
     "created_at": "2025-11-16T14:44:34.723916Z",
     "usage_count": 0,
@@ -6349,7 +6349,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670068Z"
+      "last_reset": "2025-11-17T16:13:52.594697Z"
     },
     "created_at": "2025-11-16T14:44:34.739060Z",
     "usage_count": 0,
@@ -6402,7 +6402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670072Z"
+      "last_reset": "2025-11-17T16:13:52.594700Z"
     },
     "created_at": "2025-11-16T14:44:34.753760Z",
     "usage_count": 0,
@@ -6444,7 +6444,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670076Z"
+      "last_reset": "2025-11-17T16:13:52.594703Z"
     },
     "created_at": "2025-11-16T14:44:34.775905Z",
     "usage_count": 0,
@@ -6480,7 +6480,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670079Z"
+      "last_reset": "2025-11-17T16:13:52.594707Z"
     },
     "created_at": "2025-11-16T15:16:33.662222Z",
     "usage_count": 0,
@@ -6516,7 +6516,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670083Z"
+      "last_reset": "2025-11-17T16:13:52.594710Z"
     },
     "created_at": "2025-11-16T15:18:49.659263Z",
     "usage_count": 0,
@@ -6528,13 +6528,16 @@
     "tool_id": "store_code_fix_pattern",
     "name": "Store Code Fix Pattern",
     "tool_type": "executable",
-    "description": "Stores code breaks and their fixes as reusable patterns. Learns from errors so similar issues can be fixed earlier next time.",
+    "description": "Pattern Recognizer with RAG Data Store - Stores code breaks and their fixes as reusable patterns.\n\nStores code fix patterns in a shared RAG-based data store for future retrieval. Each pattern\nincludes the error, broken code, fixed code, and context. Patterns are tagged and embedded\nfor semantic search. The data store scope determines visibility:\n- Store patterns at tool level (tool-specific learning)\n- Store patterns at tool+subtools level (hierarchical learning)\n- Store patterns at hierarchy level (contextual learning)\n- Store patterns globally (universal learning)\n",
     "tags": [
       "learning",
       "code-fix",
       "pattern-storage",
       "error-recovery",
-      "self-improvement"
+      "self-improvement",
+      "rag",
+      "data-store",
+      "pattern-recognizer"
     ],
     "parameters": {},
     "metadata": {
@@ -6598,6 +6601,23 @@
           "type": "object",
           "description": "Full debug information (stack trace, variables, locals, etc.)",
           "required": false
+        },
+        "scope": {
+          "type": "string",
+          "description": "Data store scope - defines pattern visibility/accessibility:\n- \"tool\": Pattern only accessible by the current tool\n- \"tool_subttools\": Accessible by current tool and its sub-tools\n- \"hierarchy\": Accessible by all tools in current hierarchy\n- \"global\": Accessible by all tools (default)\n",
+          "enum": [
+            "tool",
+            "tool_subttools",
+            "hierarchy",
+            "global"
+          ],
+          "default": "global",
+          "required": false
+        },
+        "tool_id": {
+          "type": "string",
+          "description": "Current tool identifier (used with scope tagging)",
+          "required": false
         }
       },
       "output_schema": {
@@ -6633,8 +6653,8 @@
       "cost_tier": "free",
       "speed_tier": "fast",
       "quality_tier": "excellent",
-      "version": "1.0.1",
-      "definition_hash": "3c5f1088702c21dde054eb501a8bfebf35d03f9f4e023791ee4b48df6bcd3d37",
+      "version": "1.0.2",
+      "definition_hash": "4d07c6563a4337d1a1d57bb68db6735c332558fd3efc7987c11e86e95709035b",
       "breaking_changes": []
     },
     "constraints": {},
@@ -6642,12 +6662,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670086Z"
+      "last_reset": "2025-11-17T16:13:52.594714Z"
     },
-    "created_at": "2025-11-16T16:37:22.683405Z",
+    "created_at": "2025-11-17T13:37:52.065236Z",
     "usage_count": 0,
-    "version": "1.0.1",
-    "definition_hash": "3c5f1088702c21dde054eb501a8bfebf35d03f9f4e023791ee4b48df6bcd3d37",
+    "version": "1.0.2",
+    "definition_hash": "4d07c6563a4337d1a1d57bb68db6735c332558fd3efc7987c11e86e95709035b",
     "breaking_changes": []
   },
   "check_tool_duplicate": {
@@ -6762,7 +6782,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670090Z"
+      "last_reset": "2025-11-17T16:13:52.594718Z"
     },
     "created_at": "2025-11-16T15:46:53.635925Z",
     "usage_count": 0,
@@ -6774,13 +6794,16 @@
     "tool_id": "find_code_fix_pattern",
     "name": "Find Code Fix Pattern",
     "tool_type": "executable",
-    "description": "Searches for similar code errors and suggests proven fixes. Returns multiple solutions ranked by usage count and similarity.",
+    "description": "Pattern Recognizer with RAG Data Store - Searches for similar code errors and suggests proven fixes.\n\nUses a shared RAG-based pattern data store to find code fix patterns that have been successfully\napplied in the past. Returns multiple solutions ranked by usage count (proven effectiveness) and\nsemantic similarity. The data store scope can be configured to search:\n- Only patterns from the current tool\n- Patterns from the current tool and its sub-tools\n- All patterns across the entire tool hierarchy\n",
     "tags": [
       "learning",
       "code-fix",
       "pattern-search",
       "error-recovery",
-      "self-improvement"
+      "self-improvement",
+      "rag",
+      "data-store",
+      "pattern-recognizer"
     ],
     "parameters": {},
     "metadata": {
@@ -6816,6 +6839,23 @@
           "type": "integer",
           "description": "Number of similar patterns to return",
           "default": 3,
+          "required": false
+        },
+        "scope": {
+          "type": "string",
+          "description": "Data store scope - defines which patterns are accessible:\n- \"tool\": Only patterns stored by the current tool\n- \"tool_subttools\": Patterns from current tool and its sub-tools\n- \"hierarchy\": All patterns in the current tool hierarchy\n- \"global\": All patterns across all tools (default)\n",
+          "enum": [
+            "tool",
+            "tool_subttools",
+            "hierarchy",
+            "global"
+          ],
+          "default": "global",
+          "required": false
+        },
+        "tool_id": {
+          "type": "string",
+          "description": "Current tool identifier (used with scope filtering)",
           "required": false
         }
       },
@@ -6887,8 +6927,8 @@
       "cost_tier": "free",
       "speed_tier": "very-fast",
       "quality_tier": "excellent",
-      "version": "1.0.0",
-      "definition_hash": "b61343309310df75278e225b8b79e6dff8e27a6241b4d7c3ba854577ce7cdf5d",
+      "version": "1.0.1",
+      "definition_hash": "0fd8d435634533419b6255afd50b1a171a9ce8fc5dc48784e50727d12a1665ea",
       "breaking_changes": []
     },
     "constraints": {},
@@ -6896,12 +6936,12 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670094Z"
+      "last_reset": "2025-11-17T16:13:52.594722Z"
     },
-    "created_at": "2025-11-16T15:46:53.660769Z",
+    "created_at": "2025-11-17T13:37:51.765381Z",
     "usage_count": 0,
-    "version": "1.0.0",
-    "definition_hash": "b61343309310df75278e225b8b79e6dff8e27a6241b4d7c3ba854577ce7cdf5d",
+    "version": "1.0.1",
+    "definition_hash": "0fd8d435634533419b6255afd50b1a171a9ce8fc5dc48784e50727d12a1665ea",
     "breaking_changes": []
   },
   "prompt_genericiser": {
@@ -6936,7 +6976,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670097Z"
+      "last_reset": "2025-11-17T16:13:52.594725Z"
     },
     "created_at": "2025-11-16T15:46:53.734260Z",
     "usage_count": 1,
@@ -7074,7 +7114,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670101Z"
+      "last_reset": "2025-11-17T16:13:52.594728Z"
     },
     "created_at": "2025-11-16T16:37:21.157255Z",
     "usage_count": 0,
@@ -7183,7 +7223,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670106Z"
+      "last_reset": "2025-11-17T16:13:52.594732Z"
     },
     "created_at": "2025-11-16T16:37:22.333430Z",
     "usage_count": 0,
@@ -7291,7 +7331,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670109Z"
+      "last_reset": "2025-11-17T16:13:52.594735Z"
     },
     "created_at": "2025-11-16T16:37:23.010156Z",
     "usage_count": 0,
@@ -7331,7 +7371,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670113Z"
+      "last_reset": "2025-11-17T16:13:52.594739Z"
     },
     "created_at": "2025-11-16T16:37:23.342186Z",
     "usage_count": 0,
@@ -7367,7 +7407,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670117Z"
+      "last_reset": "2025-11-17T16:13:52.594742Z"
     },
     "created_at": "2025-11-16T18:18:47.459930Z",
     "usage_count": 0,
@@ -7407,7 +7447,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670120Z"
+      "last_reset": "2025-11-17T16:13:52.594747Z"
     },
     "created_at": "2025-11-16T18:39:13.503483Z",
     "usage_count": 0,
@@ -7443,7 +7483,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670124Z"
+      "last_reset": "2025-11-17T16:13:52.594751Z"
     },
     "created_at": "2025-11-16T18:47:31.754804Z",
     "usage_count": 0,
@@ -7516,7 +7556,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670127Z"
+      "last_reset": "2025-11-17T16:13:52.594754Z"
     },
     "created_at": "2025-11-16T19:12:19.491661Z",
     "usage_count": 0,
@@ -7650,7 +7690,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670132Z"
+      "last_reset": "2025-11-17T16:13:52.594758Z"
     },
     "created_at": "2025-11-16T19:12:20.731463Z",
     "usage_count": 0,
@@ -7692,7 +7732,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670135Z"
+      "last_reset": "2025-11-17T16:13:52.594761Z"
     },
     "created_at": "2025-11-16T18:54:43.788820Z",
     "usage_count": 0,
@@ -7728,7 +7768,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670139Z"
+      "last_reset": "2025-11-17T16:13:52.594765Z"
     },
     "created_at": "2025-11-16T19:40:57.911688Z",
     "usage_count": 0,
@@ -7764,7 +7804,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670142Z"
+      "last_reset": "2025-11-17T16:13:52.594768Z"
     },
     "created_at": "2025-11-16T19:42:34.039153Z",
     "usage_count": 0,
@@ -7800,7 +7840,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670147Z"
+      "last_reset": "2025-11-17T16:13:52.594773Z"
     },
     "created_at": "2025-11-16T20:30:38.048887Z",
     "usage_count": 0,
@@ -7834,7 +7874,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670151Z"
+      "last_reset": "2025-11-17T16:13:52.594776Z"
     },
     "created_at": "2025-11-16T21:05:17.771074Z",
     "usage_count": 0,
@@ -7964,7 +8004,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670154Z"
+      "last_reset": "2025-11-17T16:13:52.594780Z"
     },
     "created_at": "2025-11-16T21:05:19.300501Z",
     "usage_count": 0,
@@ -8080,7 +8120,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670158Z"
+      "last_reset": "2025-11-17T16:13:52.594784Z"
     },
     "created_at": "2025-11-16T21:05:19.850955Z",
     "usage_count": 0,
@@ -8177,7 +8217,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670162Z"
+      "last_reset": "2025-11-17T16:13:52.594787Z"
     },
     "created_at": "2025-11-16T21:05:20.413481Z",
     "usage_count": 0,
@@ -8213,7 +8253,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670165Z"
+      "last_reset": "2025-11-17T16:13:52.594791Z"
     },
     "created_at": "2025-11-16T22:00:32.057386Z",
     "usage_count": 0,
@@ -8247,7 +8287,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670169Z"
+      "last_reset": "2025-11-17T16:13:52.594794Z"
     },
     "created_at": "2025-11-16T22:19:28.154854Z",
     "usage_count": 0,
@@ -8281,7 +8321,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670173Z"
+      "last_reset": "2025-11-17T16:13:52.594798Z"
     },
     "created_at": "2025-11-16T22:19:29.467347Z",
     "usage_count": 0,
@@ -8317,7 +8357,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670177Z"
+      "last_reset": "2025-11-17T16:13:52.594801Z"
     },
     "created_at": "2025-11-16T23:58:51.200477Z",
     "usage_count": 0,
@@ -8353,7 +8393,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670181Z"
+      "last_reset": "2025-11-17T16:13:52.594804Z"
     },
     "created_at": "2025-11-17T00:02:46.175573Z",
     "usage_count": 0,
@@ -8389,7 +8429,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670185Z"
+      "last_reset": "2025-11-17T16:13:52.594808Z"
     },
     "created_at": "2025-11-17T00:06:38.511208Z",
     "usage_count": 0,
@@ -8494,7 +8534,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670189Z"
+      "last_reset": "2025-11-17T16:13:52.594813Z"
     },
     "created_at": "2025-11-17T00:38:55.143090Z",
     "usage_count": 0,
@@ -8571,7 +8611,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670192Z"
+      "last_reset": "2025-11-17T16:13:52.594816Z"
     },
     "created_at": "2025-11-17T00:38:56.295984Z",
     "usage_count": 0,
@@ -8645,7 +8685,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670196Z"
+      "last_reset": "2025-11-17T16:13:52.594819Z"
     },
     "created_at": "2025-11-17T00:38:56.519374Z",
     "usage_count": 0,
@@ -8759,7 +8799,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670200Z"
+      "last_reset": "2025-11-17T16:13:52.594824Z"
     },
     "created_at": "2025-11-17T00:38:56.807759Z",
     "usage_count": 0,
@@ -8846,7 +8886,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670204Z"
+      "last_reset": "2025-11-17T16:13:52.594827Z"
     },
     "created_at": "2025-11-17T00:38:57.017183Z",
     "usage_count": 0,
@@ -8961,7 +9001,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670207Z"
+      "last_reset": "2025-11-17T16:13:52.594830Z"
     },
     "created_at": "2025-11-17T00:38:57.227864Z",
     "usage_count": 0,
@@ -8995,7 +9035,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670211Z"
+      "last_reset": "2025-11-17T16:13:52.594834Z"
     },
     "created_at": "2025-11-17T00:38:57.499268Z",
     "usage_count": 0,
@@ -9031,7 +9071,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670214Z"
+      "last_reset": "2025-11-17T16:13:52.594837Z"
     },
     "created_at": "2025-11-17T00:51:06.562840Z",
     "usage_count": 0,
@@ -9067,7 +9107,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670218Z"
+      "last_reset": "2025-11-17T16:13:52.594841Z"
     },
     "created_at": "2025-11-17T00:57:11.169630Z",
     "usage_count": 0,
@@ -9103,7 +9143,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670221Z"
+      "last_reset": "2025-11-17T16:13:52.594844Z"
     },
     "created_at": "2025-11-17T00:59:55.097042Z",
     "usage_count": 0,
@@ -9139,7 +9179,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670225Z"
+      "last_reset": "2025-11-17T16:13:52.594848Z"
     },
     "created_at": "2025-11-17T01:02:19.708052Z",
     "usage_count": 0,
@@ -9175,7 +9215,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670228Z"
+      "last_reset": "2025-11-17T16:13:52.594852Z"
     },
     "created_at": "2025-11-17T01:59:56.117103Z",
     "usage_count": 0,
@@ -9218,7 +9258,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670232Z"
+      "last_reset": "2025-11-17T16:13:52.594855Z"
     },
     "created_at": "2025-11-17T02:01:13.536751Z",
     "usage_count": 0,
@@ -9254,7 +9294,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670235Z"
+      "last_reset": "2025-11-17T16:13:52.594859Z"
     },
     "created_at": "2025-11-17T02:01:13.548173Z",
     "usage_count": 0,
@@ -9290,7 +9330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670239Z"
+      "last_reset": "2025-11-17T16:13:52.594862Z"
     },
     "created_at": "2025-11-17T02:01:13.554693Z",
     "usage_count": 0,
@@ -9324,7 +9364,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670243Z"
+      "last_reset": "2025-11-17T16:13:52.594866Z"
     },
     "created_at": "2025-11-17T02:01:13.610702Z",
     "usage_count": 0,
@@ -9443,7 +9483,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670247Z"
+      "last_reset": "2025-11-17T16:13:52.594870Z"
     },
     "created_at": "2025-11-17T02:01:13.659419Z",
     "usage_count": 0,
@@ -9486,7 +9526,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670251Z"
+      "last_reset": "2025-11-17T16:13:52.594874Z"
     },
     "created_at": "2025-11-17T02:01:13.709755Z",
     "usage_count": 0,
@@ -9522,7 +9562,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670255Z"
+      "last_reset": "2025-11-17T16:13:52.594877Z"
     },
     "created_at": "2025-11-17T02:08:33.381337Z",
     "usage_count": 0,
@@ -9558,7 +9598,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670259Z"
+      "last_reset": "2025-11-17T16:13:52.594881Z"
     },
     "created_at": "2025-11-17T02:12:13.663970Z",
     "usage_count": 0,
@@ -9594,7 +9634,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670263Z"
+      "last_reset": "2025-11-17T16:13:52.594884Z"
     },
     "created_at": "2025-11-17T02:25:32.423226Z",
     "usage_count": 0,
@@ -9670,7 +9710,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670268Z"
+      "last_reset": "2025-11-17T16:13:52.594888Z"
     },
     "created_at": "2025-11-17T02:43:19.957840Z",
     "usage_count": 0,
@@ -9706,7 +9746,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670271Z"
+      "last_reset": "2025-11-17T16:13:52.594892Z"
     },
     "created_at": "2025-11-17T02:59:48.804498Z",
     "usage_count": 0,
@@ -9742,7 +9782,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670275Z"
+      "last_reset": "2025-11-17T16:13:52.594895Z"
     },
     "created_at": "2025-11-17T03:03:34.975666Z",
     "usage_count": 0,
@@ -9778,7 +9818,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670278Z"
+      "last_reset": "2025-11-17T16:13:52.594898Z"
     },
     "created_at": "2025-11-17T03:12:49.892467Z",
     "usage_count": 0,
@@ -9814,7 +9854,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670281Z"
+      "last_reset": "2025-11-17T16:13:52.594902Z"
     },
     "created_at": "2025-11-17T03:16:24.099833Z",
     "usage_count": 0,
@@ -9850,7 +9890,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670285Z"
+      "last_reset": "2025-11-17T16:13:52.594905Z"
     },
     "created_at": "2025-11-17T03:28:03.846725Z",
     "usage_count": 0,
@@ -9886,7 +9926,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670288Z"
+      "last_reset": "2025-11-17T16:13:52.594908Z"
     },
     "created_at": "2025-11-17T03:42:55.443249Z",
     "usage_count": 0,
@@ -9922,7 +9962,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670292Z"
+      "last_reset": "2025-11-17T16:13:52.594912Z"
     },
     "created_at": "2025-11-17T04:09:12.761259Z",
     "usage_count": 0,
@@ -9958,7 +9998,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670295Z"
+      "last_reset": "2025-11-17T16:13:52.594915Z"
     },
     "created_at": "2025-11-17T04:16:08.569034Z",
     "usage_count": 0,
@@ -9994,7 +10034,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670299Z"
+      "last_reset": "2025-11-17T16:13:52.594918Z"
     },
     "created_at": "2025-11-17T04:24:30.592758Z",
     "usage_count": 0,
@@ -10030,7 +10070,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670302Z"
+      "last_reset": "2025-11-17T16:13:52.594921Z"
     },
     "created_at": "2025-11-17T04:30:31.083564Z",
     "usage_count": 0,
@@ -10066,7 +10106,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670305Z"
+      "last_reset": "2025-11-17T16:13:52.594925Z"
     },
     "created_at": "2025-11-17T04:36:53.081537Z",
     "usage_count": 0,
@@ -10102,7 +10142,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670309Z"
+      "last_reset": "2025-11-17T16:13:52.594928Z"
     },
     "created_at": "2025-11-17T04:39:23.751217Z",
     "usage_count": 0,
@@ -10138,7 +10178,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670312Z"
+      "last_reset": "2025-11-17T16:13:52.594931Z"
     },
     "created_at": "2025-11-17T04:48:59.559249Z",
     "usage_count": 0,
@@ -10174,7 +10214,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670317Z"
+      "last_reset": "2025-11-17T16:13:52.594935Z"
     },
     "created_at": "2025-11-17T04:55:16.638562Z",
     "usage_count": 0,
@@ -10210,7 +10250,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670320Z"
+      "last_reset": "2025-11-17T16:13:52.594939Z"
     },
     "created_at": "2025-11-17T05:01:49.442342Z",
     "usage_count": 0,
@@ -10246,7 +10286,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670324Z"
+      "last_reset": "2025-11-17T16:13:52.594942Z"
     },
     "created_at": "2025-11-17T05:09:10.754336Z",
     "usage_count": 0,
@@ -10282,7 +10322,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670327Z"
+      "last_reset": "2025-11-17T16:13:52.594946Z"
     },
     "created_at": "2025-11-17T05:38:47.388798Z",
     "usage_count": 0,
@@ -10318,7 +10358,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670331Z"
+      "last_reset": "2025-11-17T16:13:52.594950Z"
     },
     "created_at": "2025-11-17T05:41:09.183086Z",
     "usage_count": 0,
@@ -10354,7 +10394,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670334Z"
+      "last_reset": "2025-11-17T16:13:52.594953Z"
     },
     "created_at": "2025-11-17T05:49:10.690635Z",
     "usage_count": 0,
@@ -10390,7 +10430,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670338Z"
+      "last_reset": "2025-11-17T16:13:52.594956Z"
     },
     "created_at": "2025-11-17T05:58:47.567855Z",
     "usage_count": 0,
@@ -10426,7 +10466,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670342Z"
+      "last_reset": "2025-11-17T16:13:52.594960Z"
     },
     "created_at": "2025-11-17T06:03:46.677831Z",
     "usage_count": 0,
@@ -10462,7 +10502,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670346Z"
+      "last_reset": "2025-11-17T16:13:52.594964Z"
     },
     "created_at": "2025-11-17T06:12:10.021269Z",
     "usage_count": 0,
@@ -10498,7 +10538,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670349Z"
+      "last_reset": "2025-11-17T16:13:52.594967Z"
     },
     "created_at": "2025-11-17T06:15:21.982195Z",
     "usage_count": 0,
@@ -10534,7 +10574,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670353Z"
+      "last_reset": "2025-11-17T16:13:52.594970Z"
     },
     "created_at": "2025-11-17T06:22:57.460855Z",
     "usage_count": 0,
@@ -10570,7 +10610,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670356Z"
+      "last_reset": "2025-11-17T16:13:52.594973Z"
     },
     "created_at": "2025-11-17T06:34:06.435092Z",
     "usage_count": 0,
@@ -10606,7 +10646,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670360Z"
+      "last_reset": "2025-11-17T16:13:52.594977Z"
     },
     "created_at": "2025-11-17T06:36:16.533953Z",
     "usage_count": 0,
@@ -10642,7 +10682,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670364Z"
+      "last_reset": "2025-11-17T16:13:52.594980Z"
     },
     "created_at": "2025-11-17T06:46:35.472419Z",
     "usage_count": 0,
@@ -10678,7 +10718,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670367Z"
+      "last_reset": "2025-11-17T16:13:52.594983Z"
     },
     "created_at": "2025-11-17T06:57:23.474669Z",
     "usage_count": 0,
@@ -10714,7 +10754,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670371Z"
+      "last_reset": "2025-11-17T16:13:52.594987Z"
     },
     "created_at": "2025-11-17T07:19:28.135956Z",
     "usage_count": 0,
@@ -10750,7 +10790,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670374Z"
+      "last_reset": "2025-11-17T16:13:52.594990Z"
     },
     "created_at": "2025-11-17T07:27:54.821020Z",
     "usage_count": 0,
@@ -10786,7 +10826,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670378Z"
+      "last_reset": "2025-11-17T16:13:52.594993Z"
     },
     "created_at": "2025-11-17T07:36:21.626770Z",
     "usage_count": 0,
@@ -10822,7 +10862,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670381Z"
+      "last_reset": "2025-11-17T16:13:52.594997Z"
     },
     "created_at": "2025-11-17T07:41:50.257749Z",
     "usage_count": 0,
@@ -10858,7 +10898,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670384Z"
+      "last_reset": "2025-11-17T16:13:52.595000Z"
     },
     "created_at": "2025-11-17T07:46:26.725606Z",
     "usage_count": 0,
@@ -10894,7 +10934,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670389Z"
+      "last_reset": "2025-11-17T16:13:52.595003Z"
     },
     "created_at": "2025-11-17T07:53:41.948140Z",
     "usage_count": 0,
@@ -10930,7 +10970,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670392Z"
+      "last_reset": "2025-11-17T16:13:52.595007Z"
     },
     "created_at": "2025-11-17T08:13:14.546483Z",
     "usage_count": 0,
@@ -10966,7 +11006,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670395Z"
+      "last_reset": "2025-11-17T16:13:52.595010Z"
     },
     "created_at": "2025-11-17T08:24:17.437156Z",
     "usage_count": 0,
@@ -11002,7 +11042,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670399Z"
+      "last_reset": "2025-11-17T16:13:52.595013Z"
     },
     "created_at": "2025-11-17T08:26:56.768446Z",
     "usage_count": 0,
@@ -11038,7 +11078,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670402Z"
+      "last_reset": "2025-11-17T16:13:52.595017Z"
     },
     "created_at": "2025-11-17T08:38:28.375475Z",
     "usage_count": 0,
@@ -11074,7 +11114,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670406Z"
+      "last_reset": "2025-11-17T16:13:52.595021Z"
     },
     "created_at": "2025-11-17T08:43:28.639559Z",
     "usage_count": 0,
@@ -11110,7 +11150,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670409Z"
+      "last_reset": "2025-11-17T16:13:52.595025Z"
     },
     "created_at": "2025-11-17T08:46:02.217903Z",
     "usage_count": 0,
@@ -11146,7 +11186,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670413Z"
+      "last_reset": "2025-11-17T16:13:52.595028Z"
     },
     "created_at": "2025-11-17T08:50:01.442066Z",
     "usage_count": 0,
@@ -11182,7 +11222,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670417Z"
+      "last_reset": "2025-11-17T16:13:52.595031Z"
     },
     "created_at": "2025-11-17T09:04:34.420760Z",
     "usage_count": 0,
@@ -11218,7 +11258,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670421Z"
+      "last_reset": "2025-11-17T16:13:52.595035Z"
     },
     "created_at": "2025-11-17T09:19:06.231216Z",
     "usage_count": 0,
@@ -11254,7 +11294,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670425Z"
+      "last_reset": "2025-11-17T16:13:52.595038Z"
     },
     "created_at": "2025-11-17T09:41:10.255625Z",
     "usage_count": 0,
@@ -11290,7 +11330,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670428Z"
+      "last_reset": "2025-11-17T16:13:52.595042Z"
     },
     "created_at": "2025-11-17T09:51:29.792214Z",
     "usage_count": 0,
@@ -11326,7 +11366,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670431Z"
+      "last_reset": "2025-11-17T16:13:52.595045Z"
     },
     "created_at": "2025-11-17T09:57:55.119005Z",
     "usage_count": 0,
@@ -11362,7 +11402,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670435Z"
+      "last_reset": "2025-11-17T16:13:52.595049Z"
     },
     "created_at": "2025-11-17T10:00:42.922588Z",
     "usage_count": 0,
@@ -11398,7 +11438,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670438Z"
+      "last_reset": "2025-11-17T16:13:52.595053Z"
     },
     "created_at": "2025-11-17T10:15:02.840305Z",
     "usage_count": 0,
@@ -11434,7 +11474,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670442Z"
+      "last_reset": "2025-11-17T16:13:52.595056Z"
     },
     "created_at": "2025-11-17T10:18:33.923485Z",
     "usage_count": 0,
@@ -11470,7 +11510,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670446Z"
+      "last_reset": "2025-11-17T16:13:52.595060Z"
     },
     "created_at": "2025-11-17T10:30:18.677963Z",
     "usage_count": 0,
@@ -11506,7 +11546,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670449Z"
+      "last_reset": "2025-11-17T16:13:52.595063Z"
     },
     "created_at": "2025-11-17T10:38:16.236098Z",
     "usage_count": 0,
@@ -11542,7 +11582,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.670453Z"
+      "last_reset": "2025-11-17T16:13:52.595067Z"
     },
     "created_at": "2025-11-17T11:00:21.662368Z",
     "usage_count": 0,
@@ -11585,7 +11625,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:34.696309Z"
+      "last_reset": "2025-11-17T16:13:52.595070Z"
     },
     "created_at": "2025-11-17T13:00:34.696302Z",
     "usage_count": 0,
@@ -11625,7 +11665,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:36.146970Z"
+      "last_reset": "2025-11-17T16:13:52.595074Z"
     },
     "created_at": "2025-11-17T13:00:36.146962Z",
     "usage_count": 0,
@@ -11657,7 +11697,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:36.522973Z"
+      "last_reset": "2025-11-17T16:13:52.595077Z"
     },
     "created_at": "2025-11-17T13:00:36.522966Z",
     "usage_count": 0,
@@ -11699,7 +11739,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:36.746518Z"
+      "last_reset": "2025-11-17T16:13:52.595080Z"
     },
     "created_at": "2025-11-17T13:00:36.746512Z",
     "usage_count": 0,
@@ -11739,7 +11779,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:36.966904Z"
+      "last_reset": "2025-11-17T16:13:52.595084Z"
     },
     "created_at": "2025-11-17T13:00:36.966897Z",
     "usage_count": 0,
@@ -11779,7 +11819,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:37.166453Z"
+      "last_reset": "2025-11-17T16:13:52.595088Z"
     },
     "created_at": "2025-11-17T13:00:37.166446Z",
     "usage_count": 0,
@@ -11819,7 +11859,7 @@
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:00:37.370318Z"
+      "last_reset": "2025-11-17T16:13:52.595092Z"
     },
     "created_at": "2025-11-17T13:00:37.370311Z",
     "usage_count": 0,
@@ -11847,16 +11887,787 @@
       "created_at": "2025-11-17T13:04:46.704314+00:00",
       "success_count": 1,
       "total_runs": 1,
-      "full_title": "Create the tools required to run do this workflow. It should have optional steps for translations."
+      "full_title": "Create the tools required to run do this workflow. It should have optional steps for translations.",
+      "from_index": true
     },
     "constraints": {},
     "current_usage": {
       "storage_mb": 0.0,
       "memory_mb": 0.0,
       "calls_count": 0,
-      "last_reset": "2025-11-17T13:04:46.704340Z"
+      "last_reset": "2025-11-17T16:13:52.595096Z"
     },
     "created_at": "2025-11-17T13:04:46.704336Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "ask_user": {
+    "tool_id": "ask_user",
+    "name": "Ask User",
+    "tool_type": "custom",
+    "description": "Interactive user input tool for CLI workflows. Prompts the user for input when running in interactive mode, otherwise asks the overseer LLM to make decisions. Enables workflows to get feedback and confirmation without blocking non-interactive execution. Supports yes/no questions, text input, and multiple choice.",
+    "tags": [
+      "user-input",
+      "interactive",
+      "confirmation",
+      "prompt",
+      "cli",
+      "decision",
+      "feedback"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "custom\\ask_user.yaml",
+      "version": "1.0.0",
+      "definition_hash": "4c30d21e4b4f6e3f5848938a283aeb1d8a79231bad397b3dfbba602ec87c2f54",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595099Z"
+    },
+    "created_at": "2025-11-17T13:37:50.170997Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "4c30d21e4b4f6e3f5848938a283aeb1d8a79231bad397b3dfbba602ec87c2f54",
+    "breaking_changes": []
+  },
+  "git": {
+    "tool_id": "git",
+    "name": "Git",
+    "tool_type": "custom",
+    "description": "Powerful yet safe Git integration tool. Provides access to git operations with authentication from config.yaml. Supports status, log, diff, clone, fetch, pull, push, branch, checkout, and more. Includes safety checks for destructive operations.",
+    "tags": [
+      "git",
+      "version-control",
+      "vcs",
+      "repository",
+      "source-control",
+      "scm"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "custom\\git.yaml",
+      "version": "1.0.0",
+      "definition_hash": "dc20e5a2497e4819348ea364448c6be6cf6f7c76dcd4acd570c2b72ab566e7f6",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595103Z"
+    },
+    "created_at": "2025-11-17T13:37:51.251431Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "dc20e5a2497e4819348ea364448c6be6cf6f7c76dcd4acd570c2b72ab566e7f6",
+    "breaking_changes": []
+  },
+  "github": {
+    "tool_id": "github",
+    "name": "GitHub",
+    "tool_type": "custom",
+    "description": "GitHub integration tool for PR management, issue tracking, and repository operations. Works with Git tool for complete GitHub workflow. Supports checking PR status, merge state, comments, reviews, and more. Uses authentication from config.yaml.",
+    "tags": [
+      "github",
+      "git",
+      "pr",
+      "pull-request",
+      "issue",
+      "repository",
+      "code-review",
+      "vcs"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "custom\\github.yaml",
+      "version": "1.0.0",
+      "definition_hash": "ecc130fcde3bc788b9db33dbb12fe882784b22aa84ae747d8840c3cd2181ffb7",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595106Z"
+    },
+    "created_at": "2025-11-17T13:37:51.489353Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "ecc130fcde3bc788b9db33dbb12fe882784b22aa84ae747d8840c3cd2181ffb7",
+    "breaking_changes": []
+  },
+  "workflow_diagram": {
+    "tool_id": "workflow_diagram",
+    "name": "Workflow Diagram Generator",
+    "tool_type": "executable",
+    "description": "Generates visual workflow diagrams showing tool flow and decisions.\n\nCreates beautiful Mermaid diagrams or ASCII art showing:\n- Tool dependencies and flow\n- Decision points and conditions\n- Tool types (LLM, executable, workflow)\n- Complete workflow visualization\n\nPerfect for understanding complex workflows at a glance.\n",
+    "tags": [
+      "visualization",
+      "workflow",
+      "diagram",
+      "documentation",
+      "mermaid",
+      "ascii"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\workflow_diagram.yaml",
+      "command": null,
+      "args": [],
+      "input_schema": null,
+      "output_schema": null,
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "0a302b140973d76d0d6b4b0d3f0e707c75ba026b875768f331b378985029d763",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595109Z"
+    },
+    "created_at": "2025-11-17T13:37:52.281086Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "0a302b140973d76d0d6b4b0d3f0e707c75ba026b875768f331b378985029d763",
+    "breaking_changes": []
+  },
+  "workflow_runner": {
+    "tool_id": "workflow_runner",
+    "name": "Workflow Runner",
+    "tool_type": "executable",
+    "description": "Generates a combined Python script from a workflow with all dependencies inlined.\nThe goal is to reduce the workflow to JUST the required code with all imports properly resolved.\nAnalyzes workflow steps, extracts tool implementations, and generates a standalone script.\n",
+    "tags": [
+      "workflow",
+      "code-generation",
+      "dependency-resolution",
+      "inline",
+      "standalone"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\workflow_runner.yaml",
+      "command": "python",
+      "args": [
+        "{tool_dir}/workflow_runner.py",
+        "{input_json}"
+      ],
+      "input_schema": {
+        "workflow_id": {
+          "type": "string",
+          "required": true,
+          "description": "The workflow ID or name to generate a combined script for"
+        },
+        "tools_root": {
+          "type": "string",
+          "required": false,
+          "description": "Path to tools directory (auto-detected if not specified)",
+          "default": "code_evolver/tools"
+        },
+        "code_evolver_root": {
+          "type": "string",
+          "required": false,
+          "description": "Path to code_evolver root directory (auto-detected if not specified)",
+          "default": "code_evolver"
+        }
+      },
+      "output_schema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the script generation succeeded"
+        },
+        "workflow_id": {
+          "type": "string",
+          "description": "The workflow ID that was processed"
+        },
+        "script": {
+          "type": "string",
+          "description": "The generated combined Python script with all dependencies inlined"
+        },
+        "workflow_spec": {
+          "type": "object",
+          "description": "The original workflow specification"
+        },
+        "dependencies": {
+          "type": "object",
+          "description": "Analyzed dependencies including tools, types, and parallel task info"
+        },
+        "stats": {
+          "type": "object",
+          "description": "Statistics about the generated script (lines, imports, tools, etc.)"
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message if generation failed"
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "83758b2d6134aedcb3f22fa51514127fcdd5723f000126b9155ec3420d8f0d34",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595113Z"
+    },
+    "created_at": "2025-11-17T13:37:52.483609Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "83758b2d6134aedcb3f22fa51514127fcdd5723f000126b9155ec3420d8f0d34",
+    "breaking_changes": []
+  },
+  "explainer": {
+    "tool_id": "explainer",
+    "name": "Explainer",
+    "tool_type": "llm",
+    "description": "Fast AI explainer tool that generates quick, concise descriptions of what's happening in workflows, tools, and system stages. Uses a 1B-class LLM for instant responses. Stage-aware and context-sensitive. Perfect for real-time explanations during tool generation and workflow execution.",
+    "tags": [
+      "explanation",
+      "documentation",
+      "help",
+      "describe",
+      "clarify",
+      "stage-aware",
+      "workflow",
+      "real-time"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "llm\\explainer.yaml",
+      "llm_tier": "veryfast",
+      "llm_role": "code",
+      "system_prompt": "You are a concise technical explainer for a code evolution system.\n\nYour role:\n- Explain what's happening in workflows, tools, and system stages\n- Be EXTREMELY concise (1-3 sentences max)\n- Focus on the \"what\" and \"why\", not implementation details\n- Use clear, simple language\n- Be stage-aware (understand context: planning, executing, testing, etc.)\n\nGuidelines:\n- **Brevity is critical** - No fluff, just facts\n- **Action-oriented** - \"Generating code...\", \"Testing implementation...\", etc.\n- **Context-aware** - Reference the stage or phase when relevant\n- **Technical but accessible** - Use terms developers understand\n\nExamples:\n- \"Generating test cases using pytest framework to validate the calculator function.\"\n- \"Analyzing code complexity with radon to identify optimization opportunities.\"\n- \"Executing workflow step 3/5: Deploying to staging environment.\"\n",
+      "prompt_template": "Explain what's happening:\n\n{query}\n\n{% if context %}\nContext: {{context}}\n{% endif %}\n\n{% if stage %}\nCurrent Stage: {{stage}}\n{% endif %}\n\nProvide a concise 1-2 sentence explanation focusing on what's happening and why.\n",
+      "cost_tier": "very-low",
+      "speed_tier": "very-fast",
+      "quality_tier": "good",
+      "max_output_length": "short",
+      "version": "1.0.0",
+      "definition_hash": "6677703e8b6e068371b8f76ce321954a16cf77b11c93d552540b0ab3b655e478",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595116Z"
+    },
+    "created_at": "2025-11-17T13:37:52.704599Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "6677703e8b6e068371b8f76ce321954a16cf77b11c93d552540b0ab3b655e478",
+    "breaking_changes": []
+  },
+  "write_me_a_diary_entry_that_lo": {
+    "tool_id": "write_me_a_diary_entry_that_lo",
+    "name": "write me a diary entry that looks like one my younger self would write.",
+    "tool_type": "workflow",
+    "description": "write me a diary entry that looks like one my younger self would write.",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_a_diary_entry_that_lo",
+      "quality_score": 1.1,
+      "latency_ms": 67016,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T13:40:44.344568+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write me a diary entry that looks like one my younger self would write.",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595120Z"
+    },
+    "created_at": "2025-11-17T13:40:44.344585Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "make_a_workflow_where_it_gener": {
+    "tool_id": "make_a_workflow_where_it_gener",
+    "name": "make a workflow where it generates a document on the ability of ai to slef optimize' that should be a well structured article 4 pages long in content. Then in parell translate it to german, french and spanish amd save it to disk as markdown docs.",
+    "tool_type": "workflow",
+    "description": "make a workflow where it generates a document on the ability of ai to slef optimize' that should be a well structured article 4 pages long in content. Then in parell translate it to german, french and spanish amd save it to disk as markdown docs.",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "make_a_workflow_where_it_gener",
+      "quality_score": 1.1,
+      "latency_ms": 120431,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T13:47:46.147830+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "make a workflow where it generates a document on the ability of ai to slef optimize' that should be a well structured article 4 pages long in content. Then in parell translate it to german, french and spanish amd save it to disk as markdown docs.",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595123Z"
+    },
+    "created_at": "2025-11-17T13:47:46.147854Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_a_workflow_where_it_make": {
+    "tool_id": "write_a_workflow_where_it_make",
+    "name": "write a workflow where it makes a rosetta stone document with a boting technical bit in english then all the eu languages in the coument with translations below ot (use paralell translation when you can)",
+    "tool_type": "workflow",
+    "description": "write a workflow where it makes a rosetta stone document with a boting technical bit in english then all the eu languages in the coument with translations below ot (use paralell translation when you can)",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_workflow_where_it_make",
+      "quality_score": 1.1,
+      "latency_ms": 111654,
+      "memory_mb_peak": 1.9,
+      "created_at": "2025-11-17T13:53:59.916256+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write a workflow where it makes a rosetta stone document with a boting technical bit in english then all the eu languages in the coument with translations below ot (use paralell translation when you can)",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595126Z"
+    },
+    "created_at": "2025-11-17T13:53:59.916283Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "no_this_is_wrong_fix_the_tool": {
+    "tool_id": "no_this_is_wrong_fix_the_tool",
+    "name": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+    "tool_type": "workflow",
+    "description": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "no_this_is_wrong_fix_the_tool",
+      "quality_score": 1.1,
+      "latency_ms": 83335,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T14:04:02.389334+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595130Z"
+    },
+    "created_at": "2025-11-17T14:04:02.389357Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "no_this_is_wrong_fix_the_tool_1763388526": {
+    "tool_id": "no_this_is_wrong_fix_the_tool_1763388526",
+    "name": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+    "tool_type": "workflow",
+    "description": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "no_this_is_wrong_fix_the_tool_1763388526",
+      "quality_score": 1.1,
+      "latency_ms": 924,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T14:18:25.175706+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "no this is wrong, fix the tool to actually have the translated languagges in the document Running workflow...\n\n================================================================================\n  YOUR RESULT  \n================================================================================\n\n### de\nTranslation:\n\n\"This is a sample text (both technical and non-technical information).\"\n\nNote: The \"(boting)\" part appears to be a typo or a mistake, as \"boting\" doesn't seem to make sense in the context. Assuming it was meant to say \"(both)\", I've translated accordingly.\n\n### fr\nPlease provide the original French text, and I'll be happy to translate it for you.\n\n### es\nHere is the translation:\n\n\"This is a sample text (boting technical bits)\"\n\n### it\nBased on the provided information, I will translate your text with the following settings:\n\n* Priority: Not specified\n* Quality: Normal\n* Speed: Average\n\nHere's my translation of the given text:",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595134Z"
+    },
+    "created_at": "2025-11-17T14:18:25.175722Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "duplicate_style": {
+    "tool_id": "duplicate_style",
+    "name": "duplicate_style",
+    "tool_type": "executable",
+    "description": "Analyzes writing style from a directory of content and creates a comprehensive\nstyle guide. Uses tiered summarization to efficiently process large amounts of content.\n\nFeatures:\n- Recursive directory scanning with smart file filtering\n- Tiered LLM selection based on content size (gemma2:2b, llama3, mistral-nemo)\n- Context-aware chunking and progressive summarization\n- Incremental style analysis that builds understanding across files\n- Optional review and refinement for higher quality output\n\nUse cases:\n- Extract writing style from documentation to replicate in new docs\n- Analyze code comment style for consistency\n- Create style guides from existing content\n- Understand voice and tone patterns\n",
+    "tags": [
+      "style-analysis",
+      "documentation",
+      "content-analysis",
+      "summarization"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\duplicate_style.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/duplicate_style.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "directory"
+        ],
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Path to directory containing content to analyze"
+          },
+          "file_patterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "File patterns to match (e.g., ['*.md', '*.txt']). Default: text and code files"
+          },
+          "max_files": {
+            "type": "integer",
+            "description": "Maximum number of files to analyze (optional)"
+          },
+          "quality_requirement": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Quality requirement for LLM tier selection (0-1, default: 0.8)"
+          },
+          "review_and_refine": {
+            "type": "boolean",
+            "description": "Whether to review and refine the style guide (default: false)"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "style_guide": {
+            "type": "string",
+            "description": "Comprehensive style guide extracted from content"
+          },
+          "files_analyzed": {
+            "type": "integer",
+            "description": "Number of files successfully analyzed"
+          },
+          "total_content_length": {
+            "type": "integer",
+            "description": "Total content length in characters"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the operation succeeded"
+          },
+          "message": {
+            "type": "string",
+            "description": "Status message"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "6115665d948791391b31d596171871132c344f22c84a6ce79c610003c7c4673b",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595137Z"
+    },
+    "created_at": "2025-11-17T15:56:06.087059Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "6115665d948791391b31d596171871132c344f22c84a6ce79c610003c7c4673b",
+    "breaking_changes": []
+  },
+  "write_markdown_doc": {
+    "tool_id": "write_markdown_doc",
+    "name": "write_markdown_doc",
+    "tool_type": "executable",
+    "description": "Generates well-formatted markdown documentation with optional style matching.\nUses tiered LLM selection for optimal quality/speed balance.\n\nFeatures:\n- Smart LLM tier selection (gemma2:2b for quick, llama3 for balanced, mistral-nemo for high-quality)\n- Optional style guide matching (works with output from duplicate_style)\n- Review and refinement capability for higher quality\n- Proper markdown formatting with validation\n- Configurable length (short ~500 words, medium ~1500 words, long ~3000 words)\n- Security guardrails (enforces output only to 'output/' directory)\n\nSecurity:\n- All output paths are validated to be under output/ directory\n- Cannot escape with ../ or absolute paths\n- Only .md files allowed\n\nUse cases:\n- Generate documentation matching existing style\n- Create technical articles and guides\n- Write README files and tutorials\n- Generate API documentation\n",
+    "tags": [
+      "documentation",
+      "markdown",
+      "content-generation",
+      "style-matching"
+    ],
+    "parameters": {},
+    "metadata": {
+      "from_yaml": true,
+      "yaml_file": "executable\\write_markdown_doc.yaml",
+      "command": "python",
+      "args": [
+        "code_evolver/tools/executable/write_markdown_doc.py"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "topic",
+          "output_file"
+        ],
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "What to write about"
+          },
+          "output_file": {
+            "type": "string",
+            "description": "Relative path for output file under output/ directory (e.g., 'docs/readme.md')"
+          },
+          "style_guide": {
+            "type": "string",
+            "description": "Optional style guide to match (from duplicate_style skill)"
+          },
+          "outline": {
+            "type": "string",
+            "description": "Optional outline to follow"
+          },
+          "length": {
+            "type": "string",
+            "enum": [
+              "short",
+              "medium",
+              "long"
+            ],
+            "description": "Target length: short (~500 words), medium (~1500 words), long (~3000 words)",
+            "default": "medium"
+          },
+          "quality_requirement": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Quality requirement for LLM tier selection (0-1, default: 0.8)"
+          },
+          "review_and_refine": {
+            "type": "boolean",
+            "description": "Whether to review and refine the generated content (default: true)"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Absolute path where file was written"
+          },
+          "content_length": {
+            "type": "integer",
+            "description": "Content length in characters"
+          },
+          "word_count": {
+            "type": "integer",
+            "description": "Approximate word count"
+          },
+          "validation": {
+            "type": "object",
+            "description": "Markdown validation results",
+            "properties": {
+              "valid": {
+                "type": "boolean"
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "has_headers": {
+                "type": "boolean"
+              },
+              "has_lists": {
+                "type": "boolean"
+              },
+              "word_count": {
+                "type": "integer"
+              }
+            }
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the operation succeeded"
+          },
+          "message": {
+            "type": "string",
+            "description": "Status message"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed"
+          }
+        }
+      },
+      "cost_tier": "free",
+      "speed_tier": "medium",
+      "quality_tier": "good",
+      "version": "1.0.0",
+      "definition_hash": "ba473a50c054ce2cb99bd04b85c7bbffc21e2d8a258dc64b364327859c451e08",
+      "breaking_changes": []
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595141Z"
+    },
+    "created_at": "2025-11-17T15:56:06.293161Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "ba473a50c054ce2cb99bd04b85c7bbffc21e2d8a258dc64b364327859c451e08",
+    "breaking_changes": []
+  },
+  "write_a_small_book_about_scotl": {
+    "tool_id": "write_a_small_book_about_scotl",
+    "name": "Write a small book about Scotland",
+    "tool_type": "workflow",
+    "description": "Write a small book about Scotland",
+    "tags": [
+      "generated",
+      "chat",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_a_small_book_about_scotl",
+      "quality_score": 1.1,
+      "latency_ms": 42484,
+      "memory_mb_peak": 1.91,
+      "created_at": "2025-11-17T16:04:50.402676+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "Write a small book about Scotland",
+      "from_index": true
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:13:52.595144Z"
+    },
+    "created_at": "2025-11-17T16:04:50.402693Z",
+    "usage_count": 0,
+    "version": "1.0.0",
+    "definition_hash": "",
+    "breaking_changes": []
+  },
+  "write_me_a_poem_conversation": {
+    "tool_id": "write_me_a_poem_conversation",
+    "name": "write me a poem\n\n[Conversation Context:\n- tool interaction with python_syntax_validator: Tool Interaction: python_syntax_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/python_syntax_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no\n- tool interaction with node_runtime_import_validator: Tool Interaction: node_runtime_import_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/node_runtime_import_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\"\n- tool interaction with undefined_name_checker: Tool Interaction: undefined_name_checker\n\nType: tool\n\nInput:\n{\"command\": \"flake8 --select=F821,F401,F811,E999 --format=pylint nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no_\n- llm interaction with general: Tool Interaction: general\n\nType: llm\n\nInput:\n{\"prompt\": \"You are implementing code based on this DETAILED SPECIFICATION:\\n\\n**Problem Definition**\\n\\nThe task is to create a workflow that generates a \n- write a small book about scotland: User: write a small book about scotland\nProcessed successfully in 511.44s]",
+    "tool_type": "workflow",
+    "description": "write me a poem\n\n[Conversation Context:\n- tool interaction with python_syntax_validator: Tool Interaction: python_syntax_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/python_syntax_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no\n- tool interaction with node_runtime_import_validator: Tool Interaction: node_runtime_import_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/node_runtime_import_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\"\n- tool interaction with undefined_name_checker: Tool Interaction: undefined_name_checker\n\nType: tool\n\nInput:\n{\"command\": \"flake8 --select=F821,F401,F811,E999 --format=pylint nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no_\n- llm interaction with general: Tool Interaction: general\n\nType: llm\n\nInput:\n{\"prompt\": \"You are implementing code based on this DETAILED SPECIFICATION:\\n\\n**Problem Definition**\\n\\nThe task is to create a workflow that generates a \n- write a small book about scotland: User: write a small book about scotland\nProcessed successfully in 511.44s]",
+    "tags": [
+      "generated",
+      "chat",
+      "formatting",
+      "auto-generated",
+      "workflow"
+    ],
+    "parameters": {},
+    "metadata": {
+      "node_id": "write_me_a_poem_conversation",
+      "quality_score": 1.1,
+      "latency_ms": 44633,
+      "memory_mb_peak": 1.89,
+      "created_at": "2025-11-17T16:22:40.447768+00:00",
+      "success_count": 1,
+      "total_runs": 1,
+      "full_title": "write me a poem\n\n[Conversation Context:\n- tool interaction with python_syntax_validator: Tool Interaction: python_syntax_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/python_syntax_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no\n- tool interaction with node_runtime_import_validator: Tool Interaction: node_runtime_import_validator\n\nType: tool\n\nInput:\n{\"command\": \"python tools\\\\executable/node_runtime_import_validator.py nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\"\n- tool interaction with undefined_name_checker: Tool Interaction: undefined_name_checker\n\nType: tool\n\nInput:\n{\"command\": \"flake8 --select=F821,F401,F811,E999 --format=pylint nodes\\\\no_this_is_wrong_fix_the_tool\\\\main.py\", \"source_file\": \"nodes\\\\no_\n- llm interaction with general: Tool Interaction: general\n\nType: llm\n\nInput:\n{\"prompt\": \"You are implementing code based on this DETAILED SPECIFICATION:\\n\\n**Problem Definition**\\n\\nThe task is to create a workflow that generates a \n- write a small book about scotland: User: write a small book about scotland\nProcessed successfully in 511.44s]"
+    },
+    "constraints": {},
+    "current_usage": {
+      "storage_mb": 0.0,
+      "memory_mb": 0.0,
+      "calls_count": 0,
+      "last_reset": "2025-11-17T16:22:40.447799Z"
+    },
+    "created_at": "2025-11-17T16:22:40.447794Z",
     "usage_count": 0,
     "version": "1.0.0",
     "definition_hash": "",

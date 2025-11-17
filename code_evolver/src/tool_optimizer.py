@@ -343,7 +343,7 @@ class ToolOptimizer:
     def _suggest_better_model(self, current_model: str) -> str:
         """Suggest a better (more powerful) model."""
         model_ladder = [
-            "tinyllama",
+            "gemma3:1b",
             "gemma2:2b",
             "qwen2.5-coder:3b",
             "codellama:7b",
@@ -364,7 +364,7 @@ class ToolOptimizer:
     def _suggest_faster_model(self, current_model: str) -> str:
         """Suggest a faster (smaller) model."""
         model_ladder = [
-            "tinyllama",
+            "gemma3:1b",
             "gemma2:2b",
             "qwen2.5-coder:3b",
             "codellama:7b",

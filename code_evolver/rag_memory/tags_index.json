@@ -664,14 +664,54 @@
     "interaction_6d3c1477ebca",
     "interaction_122f036a69a0",
     "interaction_7a16dd7f5e23",
-    "tool_create_the_tools_required_to_r_1763384526"
+    "tool_create_the_tools_required_to_r_1763384526",
+    "tool_ask_user",
+    "tool_git",
+    "tool_github",
+    "tool_workflow_diagram",
+    "tool_workflow_runner",
+    "tool_explainer",
+    "interaction_92e725f2a9a6",
+    "interaction_a7813bf1b8c0",
+    "interaction_70c2cd01b05e",
+    "tool_write_me_a_diary_entry_that_lo",
+    "interaction_3d09c1804348",
+    "interaction_530644ef6364",
+    "interaction_b6208ccadef5",
+    "tool_make_a_workflow_where_it_gener",
+    "interaction_69b221d08d85",
+    "interaction_a51768f3a25b",
+    "interaction_6214004a1384",
+    "tool_write_a_workflow_where_it_make",
+    "interaction_21e83144d246",
+    "interaction_208cf4fd32d1",
+    "interaction_e721b9cc83ca",
+    "tool_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool_1763388526",
+    "interaction_f29dc81e0904",
+    "interaction_a0925b326077",
+    "interaction_788695efc4ac",
+    "interaction_d409210b16e8",
+    "interaction_53dba79b35fa",
+    "interaction_6096dad4db0b",
+    "interaction_30d8ba6cfcf3",
+    "tool_duplicate_style",
+    "tool_write_markdown_doc",
+    "tool_write_a_small_book_about_scotl",
+    "interaction_4a7f1927f795",
+    "interaction_222bd648558c",
+    "interaction_e4f6e5c5e7f0",
+    "tool_write_me_a_poem_conversation"
   ],
   "custom": [
     "tool_http_server",
     "tool_model_selector",
     "tool_signalr_websocket_stream",
     "tool_sse_stream",
-    "tool_stream_processor"
+    "tool_stream_processor",
+    "tool_ask_user",
+    "tool_git",
+    "tool_github"
   ],
   "http": [
     "tool_http_server",
@@ -800,7 +840,11 @@
     "tool_smart_faker",
     "tool_remove_unused_node_runtime_import",
     "tool_circular_import_fixer",
-    "tool_content_splitter"
+    "tool_content_splitter",
+    "tool_workflow_diagram",
+    "tool_workflow_runner",
+    "tool_duplicate_style",
+    "tool_write_markdown_doc"
   ],
   "python": [
     "tool_bandit_security",
@@ -1124,7 +1168,22 @@
     "exec_invocation_python_syntax_validator_1763378724422",
     "exec_invocation_node_runtime_import_validator_1763378725588",
     "exec_invocation_python_syntax_validator_1763384603511",
-    "exec_invocation_node_runtime_import_validator_1763384604697"
+    "exec_invocation_node_runtime_import_validator_1763384604697",
+    "exec_invocation_python_syntax_validator_1763386775658",
+    "exec_invocation_node_runtime_import_validator_1763386776708",
+    "exec_invocation_python_syntax_validator_1763387143420",
+    "exec_invocation_node_runtime_import_validator_1763387144897",
+    "exec_invocation_python_syntax_validator_1763387526578",
+    "exec_invocation_node_runtime_import_validator_1763387527610",
+    "exec_invocation_python_syntax_validator_1763388156925",
+    "exec_invocation_node_runtime_import_validator_1763388158271",
+    "exec_invocation_python_syntax_validator_1763393303679",
+    "exec_invocation_node_runtime_import_validator_1763393310028",
+    "exec_invocation_python_syntax_validator_1763393825531",
+    "exec_invocation_node_runtime_import_validator_1763393830498",
+    "exec_invocation_random_data_generator_1763393831680",
+    "exec_invocation_python_syntax_validator_1763396510570",
+    "exec_invocation_node_runtime_import_validator_1763396515196"
   ],
   "security": [
     "tool_bandit_security",
@@ -1221,7 +1280,9 @@
     "spec_write_a_plc_ladder_logic_funct",
     "spec_note_this_workflow_may_be_mul_1763376204",
     "spec_note_this_workflow_may_be_mul_1763378417",
-    "spec_mke_multip_stage_workflow_tha"
+    "spec_mke_multip_stage_workflow_tha",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526"
   ],
   "calculator": [
     "tool_basic_calculator",
@@ -1248,7 +1309,11 @@
   ],
   "formatting": [
     "tool_black_formatter",
-    "tool_text_formatter"
+    "tool_text_formatter",
+    "func_write_me_a_poem_conversation",
+    "conv_write_me_a_poem_conversation_v1",
+    "workflow_write_me_a_poem_conversation",
+    "tool_write_me_a_poem_conversation"
   ],
   "style": [
     "tool_black_formatter",
@@ -1371,7 +1436,11 @@
     "tool_technical_writer",
     "tool_document_workflow",
     "tool_workflow_documenter",
-    "tool_config_file_generator"
+    "tool_config_file_generator",
+    "tool_workflow_diagram",
+    "tool_explainer",
+    "tool_duplicate_style",
+    "tool_write_markdown_doc"
   ],
   "docstrings": [
     "tool_pydocstyle_checker"
@@ -1483,7 +1552,11 @@
     "tool_save_to_disk"
   ],
   "write": [
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "workflow_1763387640",
+    "workflow_1763393832",
+    "workflow_1763395490",
+    "workflow_1763396560"
   ],
   "storage": [
     "tool_save_to_disk",
@@ -1707,7 +1780,19 @@
     "tool_summarizer_fast",
     "tool_summarizer_large",
     "tool_summarizer_medium",
-    "interaction_26d5e7a6a9d0"
+    "interaction_26d5e7a6a9d0",
+    "tool_explainer",
+    "interaction_2c0405bb4a79",
+    "interaction_7d2ed38f8317",
+    "interaction_8c9370d53603",
+    "interaction_7a91284385de",
+    "interaction_962c07b5bfd6",
+    "interaction_dcfb46c1ddaa",
+    "interaction_6cf4b1dcffb4",
+    "interaction_22abdbf9a7b8",
+    "interaction_8fdb613d2673",
+    "interaction_c9ae62db7deb",
+    "interaction_e2d4631c1410"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -1737,7 +1822,8 @@
     "tool_code_reviewer"
   ],
   "explanation": [
-    "tool_code_explainer"
+    "tool_code_explainer",
+    "tool_explainer"
   ],
   "tutorial": [
     "tool_code_explainer",
@@ -1803,7 +1889,17 @@
     "spec_note_this_workflow_may_be_mul_1763364799",
     "spec_note_this_workflow_may_be_mul_1763368133",
     "spec_write_a_plc_ladder_logic_funct",
-    "spec_mke_multip_stage_workflow_tha"
+    "spec_mke_multip_stage_workflow_tha",
+    "spec_write_me_a_diary_entry_that_lo",
+    "spec_make_a_workflow_where_it_gener",
+    "spec_write_a_workflow_where_it_make",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526",
+    "spec_write_a_unit_test_for_a_piece",
+    "spec_write_a_small_book_about_scotl",
+    "spec_write_me_a_poem_conversation",
+    "spec_make_a_translation_workflow_th",
+    "spec_wo_to_www"
   ],
   "articles": [
     "tool_content_generator"
@@ -1827,7 +1923,8 @@
     "tool_fast_code_generator",
     "tool_general",
     "tool_evolve_tool",
-    "tool_api_wrapper_generator"
+    "tool_api_wrapper_generator",
+    "tool_workflow_runner"
   ],
   "general": [
     "tool_general",
@@ -2014,7 +2111,29 @@
     "invocation_general_1763379445664",
     "interaction_8ccb6daf7da8",
     "invocation_general_1763384600591",
-    "interaction_26d5e7a6a9d0"
+    "interaction_26d5e7a6a9d0",
+    "invocation_general_1763386773431",
+    "interaction_2c0405bb4a79",
+    "invocation_general_1763387140202",
+    "interaction_7d2ed38f8317",
+    "invocation_general_1763387524157",
+    "interaction_8c9370d53603",
+    "invocation_general_1763387846132",
+    "interaction_7a91284385de",
+    "invocation_general_1763388553519",
+    "interaction_962c07b5bfd6",
+    "invocation_general_1763393182142",
+    "interaction_dcfb46c1ddaa",
+    "invocation_general_1763393401443",
+    "interaction_6cf4b1dcffb4",
+    "invocation_general_1763395072292",
+    "interaction_22abdbf9a7b8",
+    "invocation_general_1763396145488",
+    "interaction_8fdb613d2673",
+    "invocation_general_1763396771894",
+    "interaction_c9ae62db7deb",
+    "invocation_general_1763397584708",
+    "interaction_e2d4631c1410"
   ],
   "fallback": [
     "tool_general",
@@ -2108,7 +2227,8 @@
     "tool_content_summarizer",
     "tool_summarizer_fast",
     "tool_summarizer_large",
-    "tool_summarizer_medium"
+    "tool_summarizer_medium",
+    "tool_duplicate_style"
   ],
   "condensing": [
     "tool_summarizer"
@@ -2424,7 +2544,25 @@
     "workflow_mke_multip_stage_workflow_tha",
     "tool_content_summarizer",
     "workflow_create_the_tools_required_to_r_1763384526",
-    "tool_create_the_tools_required_to_r_1763384526"
+    "tool_create_the_tools_required_to_r_1763384526",
+    "tool_workflow_diagram",
+    "tool_workflow_runner",
+    "tool_explainer",
+    "tool_write_me_a_diary_entry_that_lo",
+    "tool_make_a_workflow_where_it_gener",
+    "workflow_1763387266",
+    "tool_write_a_workflow_where_it_make",
+    "workflow_1763387640",
+    "tool_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool_1763388526",
+    "workflow_write_a_unit_test_for_a_piece",
+    "workflow_generate_random_words",
+    "workflow_1763393832",
+    "tool_write_a_small_book_about_scotl",
+    "workflow_1763395490",
+    "workflow_write_me_a_poem_conversation",
+    "tool_write_me_a_poem_conversation",
+    "workflow_1763396560"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -2571,7 +2709,14 @@
     "tool_convert_491_rpm_to_rad_s_for_m",
     "tool_write_a_plc_ladder_logic_funct",
     "tool_identify_operations_in_the_tas_1763377030",
-    "tool_create_the_tools_required_to_r_1763384526"
+    "tool_create_the_tools_required_to_r_1763384526",
+    "tool_write_me_a_diary_entry_that_lo",
+    "tool_make_a_workflow_where_it_gener",
+    "tool_write_a_workflow_where_it_make",
+    "tool_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool_1763388526",
+    "tool_write_a_small_book_about_scotl",
+    "tool_write_me_a_poem_conversation"
   ],
   "generated": [
     "tool_save_input_to_database",
@@ -3054,7 +3199,36 @@
     "spec_create_the_tools_required_to_r_1763384526",
     "func_create_the_tools_required_to_r_1763384526",
     "workflow_create_the_tools_required_to_r_1763384526",
-    "tool_create_the_tools_required_to_r_1763384526"
+    "tool_create_the_tools_required_to_r_1763384526",
+    "spec_write_me_a_diary_entry_that_lo",
+    "func_write_me_a_diary_entry_that_lo",
+    "tool_write_me_a_diary_entry_that_lo",
+    "spec_make_a_workflow_where_it_gener",
+    "func_make_a_workflow_where_it_gener",
+    "tool_make_a_workflow_where_it_gener",
+    "spec_write_a_workflow_where_it_make",
+    "func_write_a_workflow_where_it_make",
+    "tool_write_a_workflow_where_it_make",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "func_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526",
+    "tool_no_this_is_wrong_fix_the_tool_1763388526",
+    "spec_write_a_unit_test_for_a_piece",
+    "func_write_a_unit_test_for_a_piece",
+    "workflow_write_a_unit_test_for_a_piece",
+    "spec_generate_random_words",
+    "func_generate_random_words",
+    "workflow_generate_random_words",
+    "spec_write_a_small_book_about_scotl",
+    "tool_write_a_small_book_about_scotl",
+    "spec_write_me_a_poem_conversation",
+    "func_write_me_a_poem_conversation",
+    "conv_write_me_a_poem_conversation_v1",
+    "workflow_write_me_a_poem_conversation",
+    "tool_write_me_a_poem_conversation",
+    "spec_make_a_translation_workflow_th",
+    "spec_wo_to_www"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3399,7 +3573,25 @@
     "workflow_mke_multip_stage_workflow_tha",
     "func_create_the_tools_required_to_r_1763384526",
     "workflow_create_the_tools_required_to_r_1763384526",
-    "tool_create_the_tools_required_to_r_1763384526"
+    "tool_create_the_tools_required_to_r_1763384526",
+    "func_write_me_a_diary_entry_that_lo",
+    "tool_write_me_a_diary_entry_that_lo",
+    "func_make_a_workflow_where_it_gener",
+    "tool_make_a_workflow_where_it_gener",
+    "func_write_a_workflow_where_it_make",
+    "tool_write_a_workflow_where_it_make",
+    "func_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool",
+    "tool_no_this_is_wrong_fix_the_tool_1763388526",
+    "func_write_a_unit_test_for_a_piece",
+    "workflow_write_a_unit_test_for_a_piece",
+    "func_generate_random_words",
+    "workflow_generate_random_words",
+    "tool_write_a_small_book_about_scotl",
+    "func_write_me_a_poem_conversation",
+    "conv_write_me_a_poem_conversation_v1",
+    "workflow_write_me_a_poem_conversation",
+    "tool_write_me_a_poem_conversation"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -3715,7 +3907,8 @@
   ],
   "real-time": [
     "tool_signalr_websocket_stream",
-    "tool_sse_stream"
+    "tool_sse_stream",
+    "tool_explainer"
   ],
   "producer": [
     "tool_signalr_websocket_stream",
@@ -3917,7 +4110,18 @@
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
     "spec_create_the_tools_required_to_r",
-    "spec_create_the_tools_required_to_r_1763384526"
+    "spec_create_the_tools_required_to_r_1763384526",
+    "spec_write_me_a_diary_entry_that_lo",
+    "spec_make_a_workflow_where_it_gener",
+    "spec_write_a_workflow_where_it_make",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526",
+    "spec_write_a_unit_test_for_a_piece",
+    "spec_generate_random_words",
+    "spec_write_a_small_book_about_scotl",
+    "spec_write_me_a_poem_conversation",
+    "spec_make_a_translation_workflow_th",
+    "spec_wo_to_www"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4047,7 +4251,8 @@
     "tool_standalone_exe_compiler"
   ],
   "standalone": [
-    "tool_standalone_exe_compiler"
+    "tool_standalone_exe_compiler",
+    "tool_workflow_runner"
   ],
   "distribution": [
     "tool_standalone_exe_compiler"
@@ -4109,7 +4314,8 @@
   ],
   "version-control": [
     "tool_pin_tool_version",
-    "tool_trim_tool_versions"
+    "tool_trim_tool_versions",
+    "tool_git"
   ],
   "maintenance": [
     "tool_trim_tool_versions"
@@ -4212,7 +4418,9 @@
   "rag": [
     "tool_create_behave_spec",
     "tool_create_locust_spec",
-    "tool_rag_cluster_optimizer"
+    "tool_rag_cluster_optimizer",
+    "tool_find_code_fix_pattern",
+    "tool_store_code_fix_pattern"
   ],
   "locust": [
     "tool_create_locust_spec",
@@ -4401,7 +4609,18 @@
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
     "spec_create_the_tools_required_to_r",
-    "spec_create_the_tools_required_to_r_1763384526"
+    "spec_create_the_tools_required_to_r_1763384526",
+    "spec_write_me_a_diary_entry_that_lo",
+    "spec_make_a_workflow_where_it_gener",
+    "spec_write_a_workflow_where_it_make",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526",
+    "spec_write_a_unit_test_for_a_piece",
+    "spec_generate_random_words",
+    "spec_write_a_small_book_about_scotl",
+    "spec_write_me_a_poem_conversation",
+    "spec_make_a_translation_workflow_th",
+    "spec_wo_to_www"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -4541,7 +4760,18 @@
     "spec_note_this_workflow_may_be_mul_1763378417",
     "spec_mke_multip_stage_workflow_tha",
     "spec_create_the_tools_required_to_r",
-    "spec_create_the_tools_required_to_r_1763384526"
+    "spec_create_the_tools_required_to_r_1763384526",
+    "spec_write_me_a_diary_entry_that_lo",
+    "spec_make_a_workflow_where_it_gener",
+    "spec_write_a_workflow_where_it_make",
+    "spec_no_this_is_wrong_fix_the_tool",
+    "spec_no_this_is_wrong_fix_the_tool_1763388526",
+    "spec_write_a_unit_test_for_a_piece",
+    "spec_generate_random_words",
+    "spec_write_a_small_book_about_scotl",
+    "spec_write_me_a_poem_conversation",
+    "spec_make_a_translation_workflow_th",
+    "spec_wo_to_www"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
@@ -4699,7 +4929,18 @@
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
     "invocation_general_1763379445664",
-    "invocation_general_1763384600591"
+    "invocation_general_1763384600591",
+    "invocation_general_1763386773431",
+    "invocation_general_1763387140202",
+    "invocation_general_1763387524157",
+    "invocation_general_1763387846132",
+    "invocation_general_1763388553519",
+    "invocation_general_1763393182142",
+    "invocation_general_1763393401443",
+    "invocation_general_1763395072292",
+    "invocation_general_1763396145488",
+    "invocation_general_1763396771894",
+    "invocation_general_1763397584708"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -4850,7 +5091,18 @@
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
     "invocation_general_1763379445664",
-    "invocation_general_1763384600591"
+    "invocation_general_1763384600591",
+    "invocation_general_1763386773431",
+    "invocation_general_1763387140202",
+    "invocation_general_1763387524157",
+    "invocation_general_1763387846132",
+    "invocation_general_1763388553519",
+    "invocation_general_1763393182142",
+    "invocation_general_1763393401443",
+    "invocation_general_1763395072292",
+    "invocation_general_1763396145488",
+    "invocation_general_1763396771894",
+    "invocation_general_1763397584708"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -5001,7 +5253,19 @@
     "invocation_general_1763378433872",
     "invocation_general_1763378720750",
     "invocation_general_1763379445664",
-    "invocation_general_1763384600591"
+    "invocation_general_1763384600591",
+    "tool_ask_user",
+    "invocation_general_1763386773431",
+    "invocation_general_1763387140202",
+    "invocation_general_1763387524157",
+    "invocation_general_1763387846132",
+    "invocation_general_1763388553519",
+    "invocation_general_1763393182142",
+    "invocation_general_1763393401443",
+    "invocation_general_1763395072292",
+    "invocation_general_1763396145488",
+    "invocation_general_1763396771894",
+    "invocation_general_1763397584708"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -5553,7 +5817,43 @@
     "interaction_26d5e7a6a9d0",
     "interaction_6d3c1477ebca",
     "interaction_122f036a69a0",
-    "interaction_7a16dd7f5e23"
+    "interaction_7a16dd7f5e23",
+    "interaction_2c0405bb4a79",
+    "interaction_92e725f2a9a6",
+    "interaction_a7813bf1b8c0",
+    "interaction_70c2cd01b05e",
+    "interaction_7d2ed38f8317",
+    "interaction_3d09c1804348",
+    "interaction_530644ef6364",
+    "interaction_b6208ccadef5",
+    "interaction_8c9370d53603",
+    "interaction_69b221d08d85",
+    "interaction_a51768f3a25b",
+    "interaction_6214004a1384",
+    "interaction_7a91284385de",
+    "interaction_21e83144d246",
+    "interaction_208cf4fd32d1",
+    "interaction_e721b9cc83ca",
+    "interaction_962c07b5bfd6",
+    "interaction_dcfb46c1ddaa",
+    "interaction_f29dc81e0904",
+    "interaction_a0925b326077",
+    "interaction_788695efc4ac",
+    "interaction_6cf4b1dcffb4",
+    "interaction_d409210b16e8",
+    "interaction_53dba79b35fa",
+    "interaction_6096dad4db0b",
+    "interaction_30d8ba6cfcf3",
+    "interaction_22abdbf9a7b8",
+    "interaction_1763395490692",
+    "interaction_8fdb613d2673",
+    "interaction_4a7f1927f795",
+    "interaction_222bd648558c",
+    "interaction_e4f6e5c5e7f0",
+    "interaction_1763396560883",
+    "interaction_c9ae62db7deb",
+    "interaction_e2d4631c1410",
+    "interaction_1763398149039"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -5955,7 +6255,37 @@
     "interaction_26d5e7a6a9d0",
     "interaction_6d3c1477ebca",
     "interaction_122f036a69a0",
-    "interaction_7a16dd7f5e23"
+    "interaction_7a16dd7f5e23",
+    "interaction_2c0405bb4a79",
+    "interaction_92e725f2a9a6",
+    "interaction_a7813bf1b8c0",
+    "interaction_70c2cd01b05e",
+    "interaction_7d2ed38f8317",
+    "interaction_3d09c1804348",
+    "interaction_530644ef6364",
+    "interaction_b6208ccadef5",
+    "interaction_8c9370d53603",
+    "interaction_69b221d08d85",
+    "interaction_a51768f3a25b",
+    "interaction_6214004a1384",
+    "interaction_7a91284385de",
+    "interaction_21e83144d246",
+    "interaction_208cf4fd32d1",
+    "interaction_e721b9cc83ca",
+    "interaction_962c07b5bfd6",
+    "interaction_dcfb46c1ddaa",
+    "interaction_f29dc81e0904",
+    "interaction_788695efc4ac",
+    "interaction_6cf4b1dcffb4",
+    "interaction_d409210b16e8",
+    "interaction_30d8ba6cfcf3",
+    "interaction_22abdbf9a7b8",
+    "interaction_8fdb613d2673",
+    "interaction_4a7f1927f795",
+    "interaction_222bd648558c",
+    "interaction_e4f6e5c5e7f0",
+    "interaction_c9ae62db7deb",
+    "interaction_e2d4631c1410"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6106,7 +6436,18 @@
     "interaction_400fea813723",
     "interaction_f38e15597ef4",
     "interaction_8ccb6daf7da8",
-    "interaction_26d5e7a6a9d0"
+    "interaction_26d5e7a6a9d0",
+    "interaction_2c0405bb4a79",
+    "interaction_7d2ed38f8317",
+    "interaction_8c9370d53603",
+    "interaction_7a91284385de",
+    "interaction_962c07b5bfd6",
+    "interaction_dcfb46c1ddaa",
+    "interaction_6cf4b1dcffb4",
+    "interaction_22abdbf9a7b8",
+    "interaction_8fdb613d2673",
+    "interaction_c9ae62db7deb",
+    "interaction_e2d4631c1410"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -6249,7 +6590,18 @@
     "interaction_400fea813723",
     "interaction_f38e15597ef4",
     "interaction_8ccb6daf7da8",
-    "interaction_26d5e7a6a9d0"
+    "interaction_26d5e7a6a9d0",
+    "interaction_2c0405bb4a79",
+    "interaction_7d2ed38f8317",
+    "interaction_8c9370d53603",
+    "interaction_7a91284385de",
+    "interaction_962c07b5bfd6",
+    "interaction_dcfb46c1ddaa",
+    "interaction_6cf4b1dcffb4",
+    "interaction_22abdbf9a7b8",
+    "interaction_8fdb613d2673",
+    "interaction_c9ae62db7deb",
+    "interaction_e2d4631c1410"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -6652,7 +7004,29 @@
     "exec_invocation_node_runtime_import_validator_1763378725588",
     "exec_invocation_python_syntax_validator_1763384603511",
     "exec_invocation_undefined_name_checker_1763384604200",
-    "exec_invocation_node_runtime_import_validator_1763384604697"
+    "exec_invocation_node_runtime_import_validator_1763384604697",
+    "exec_invocation_python_syntax_validator_1763386775658",
+    "exec_invocation_undefined_name_checker_1763386776256",
+    "exec_invocation_node_runtime_import_validator_1763386776708",
+    "exec_invocation_python_syntax_validator_1763387143420",
+    "exec_invocation_undefined_name_checker_1763387144263",
+    "exec_invocation_node_runtime_import_validator_1763387144897",
+    "exec_invocation_python_syntax_validator_1763387526578",
+    "exec_invocation_undefined_name_checker_1763387527170",
+    "exec_invocation_node_runtime_import_validator_1763387527610",
+    "exec_invocation_python_syntax_validator_1763388156925",
+    "exec_invocation_undefined_name_checker_1763388157658",
+    "exec_invocation_node_runtime_import_validator_1763388158271",
+    "exec_invocation_python_syntax_validator_1763393303679",
+    "exec_invocation_undefined_name_checker_1763393309338",
+    "exec_invocation_node_runtime_import_validator_1763393310028",
+    "exec_invocation_python_syntax_validator_1763393825531",
+    "exec_invocation_undefined_name_checker_1763393829889",
+    "exec_invocation_node_runtime_import_validator_1763393830498",
+    "exec_invocation_random_data_generator_1763393831680",
+    "exec_invocation_python_syntax_validator_1763396510570",
+    "exec_invocation_undefined_name_checker_1763396514839",
+    "exec_invocation_node_runtime_import_validator_1763396515196"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7055,7 +7429,29 @@
     "exec_invocation_node_runtime_import_validator_1763378725588",
     "exec_invocation_python_syntax_validator_1763384603511",
     "exec_invocation_undefined_name_checker_1763384604200",
-    "exec_invocation_node_runtime_import_validator_1763384604697"
+    "exec_invocation_node_runtime_import_validator_1763384604697",
+    "exec_invocation_python_syntax_validator_1763386775658",
+    "exec_invocation_undefined_name_checker_1763386776256",
+    "exec_invocation_node_runtime_import_validator_1763386776708",
+    "exec_invocation_python_syntax_validator_1763387143420",
+    "exec_invocation_undefined_name_checker_1763387144263",
+    "exec_invocation_node_runtime_import_validator_1763387144897",
+    "exec_invocation_python_syntax_validator_1763387526578",
+    "exec_invocation_undefined_name_checker_1763387527170",
+    "exec_invocation_node_runtime_import_validator_1763387527610",
+    "exec_invocation_python_syntax_validator_1763388156925",
+    "exec_invocation_undefined_name_checker_1763388157658",
+    "exec_invocation_node_runtime_import_validator_1763388158271",
+    "exec_invocation_python_syntax_validator_1763393303679",
+    "exec_invocation_undefined_name_checker_1763393309338",
+    "exec_invocation_node_runtime_import_validator_1763393310028",
+    "exec_invocation_python_syntax_validator_1763393825531",
+    "exec_invocation_undefined_name_checker_1763393829889",
+    "exec_invocation_node_runtime_import_validator_1763393830498",
+    "exec_invocation_random_data_generator_1763393831680",
+    "exec_invocation_python_syntax_validator_1763396510570",
+    "exec_invocation_undefined_name_checker_1763396514839",
+    "exec_invocation_node_runtime_import_validator_1763396515196"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7291,7 +7687,21 @@
     "exec_invocation_python_syntax_validator_1763378724422",
     "interaction_119350c12b91",
     "exec_invocation_python_syntax_validator_1763384603511",
-    "interaction_6d3c1477ebca"
+    "interaction_6d3c1477ebca",
+    "exec_invocation_python_syntax_validator_1763386775658",
+    "interaction_92e725f2a9a6",
+    "exec_invocation_python_syntax_validator_1763387143420",
+    "interaction_3d09c1804348",
+    "exec_invocation_python_syntax_validator_1763387526578",
+    "interaction_69b221d08d85",
+    "exec_invocation_python_syntax_validator_1763388156925",
+    "interaction_21e83144d246",
+    "exec_invocation_python_syntax_validator_1763393303679",
+    "interaction_f29dc81e0904",
+    "exec_invocation_python_syntax_validator_1763393825531",
+    "interaction_d409210b16e8",
+    "exec_invocation_python_syntax_validator_1763396510570",
+    "interaction_4a7f1927f795"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -7694,7 +8104,29 @@
     "interaction_c7b912eed425",
     "interaction_6d3c1477ebca",
     "interaction_122f036a69a0",
-    "interaction_7a16dd7f5e23"
+    "interaction_7a16dd7f5e23",
+    "interaction_92e725f2a9a6",
+    "interaction_a7813bf1b8c0",
+    "interaction_70c2cd01b05e",
+    "interaction_3d09c1804348",
+    "interaction_530644ef6364",
+    "interaction_b6208ccadef5",
+    "interaction_69b221d08d85",
+    "interaction_a51768f3a25b",
+    "interaction_6214004a1384",
+    "interaction_21e83144d246",
+    "interaction_208cf4fd32d1",
+    "interaction_e721b9cc83ca",
+    "interaction_f29dc81e0904",
+    "interaction_a0925b326077",
+    "interaction_788695efc4ac",
+    "interaction_d409210b16e8",
+    "interaction_53dba79b35fa",
+    "interaction_6096dad4db0b",
+    "interaction_30d8ba6cfcf3",
+    "interaction_4a7f1927f795",
+    "interaction_222bd648558c",
+    "interaction_e4f6e5c5e7f0"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -8105,7 +8537,29 @@
     "interaction_c7b912eed425",
     "interaction_6d3c1477ebca",
     "interaction_122f036a69a0",
-    "interaction_7a16dd7f5e23"
+    "interaction_7a16dd7f5e23",
+    "interaction_92e725f2a9a6",
+    "interaction_a7813bf1b8c0",
+    "interaction_70c2cd01b05e",
+    "interaction_3d09c1804348",
+    "interaction_530644ef6364",
+    "interaction_b6208ccadef5",
+    "interaction_69b221d08d85",
+    "interaction_a51768f3a25b",
+    "interaction_6214004a1384",
+    "interaction_21e83144d246",
+    "interaction_208cf4fd32d1",
+    "interaction_e721b9cc83ca",
+    "interaction_f29dc81e0904",
+    "interaction_a0925b326077",
+    "interaction_788695efc4ac",
+    "interaction_d409210b16e8",
+    "interaction_53dba79b35fa",
+    "interaction_6096dad4db0b",
+    "interaction_30d8ba6cfcf3",
+    "interaction_4a7f1927f795",
+    "interaction_222bd648558c",
+    "interaction_e4f6e5c5e7f0"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8341,7 +8795,21 @@
     "exec_invocation_undefined_name_checker_1763378725068",
     "interaction_be7dec7186dd",
     "exec_invocation_undefined_name_checker_1763384604200",
-    "interaction_122f036a69a0"
+    "interaction_122f036a69a0",
+    "exec_invocation_undefined_name_checker_1763386776256",
+    "interaction_a7813bf1b8c0",
+    "exec_invocation_undefined_name_checker_1763387144263",
+    "interaction_530644ef6364",
+    "exec_invocation_undefined_name_checker_1763387527170",
+    "interaction_a51768f3a25b",
+    "exec_invocation_undefined_name_checker_1763388157658",
+    "interaction_208cf4fd32d1",
+    "exec_invocation_undefined_name_checker_1763393309338",
+    "interaction_a0925b326077",
+    "exec_invocation_undefined_name_checker_1763393829889",
+    "interaction_53dba79b35fa",
+    "exec_invocation_undefined_name_checker_1763396514839",
+    "interaction_222bd648558c"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -8460,7 +8928,14 @@
     "exec_invocation_undefined_name_checker_1763375416709",
     "exec_invocation_undefined_name_checker_1763376075775",
     "exec_invocation_undefined_name_checker_1763378725068",
-    "exec_invocation_undefined_name_checker_1763384604200"
+    "exec_invocation_undefined_name_checker_1763384604200",
+    "exec_invocation_undefined_name_checker_1763386776256",
+    "exec_invocation_undefined_name_checker_1763387144263",
+    "exec_invocation_undefined_name_checker_1763387527170",
+    "exec_invocation_undefined_name_checker_1763388157658",
+    "exec_invocation_undefined_name_checker_1763393309338",
+    "exec_invocation_undefined_name_checker_1763393829889",
+    "exec_invocation_undefined_name_checker_1763396514839"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -8696,7 +9171,21 @@
     "exec_invocation_node_runtime_import_validator_1763378725588",
     "interaction_c7b912eed425",
     "exec_invocation_node_runtime_import_validator_1763384604697",
-    "interaction_7a16dd7f5e23"
+    "interaction_7a16dd7f5e23",
+    "exec_invocation_node_runtime_import_validator_1763386776708",
+    "interaction_70c2cd01b05e",
+    "exec_invocation_node_runtime_import_validator_1763387144897",
+    "interaction_b6208ccadef5",
+    "exec_invocation_node_runtime_import_validator_1763387527610",
+    "interaction_6214004a1384",
+    "exec_invocation_node_runtime_import_validator_1763388158271",
+    "interaction_e721b9cc83ca",
+    "exec_invocation_node_runtime_import_validator_1763393310028",
+    "interaction_788695efc4ac",
+    "exec_invocation_node_runtime_import_validator_1763393830498",
+    "interaction_6096dad4db0b",
+    "exec_invocation_node_runtime_import_validator_1763396515196",
+    "interaction_e4f6e5c5e7f0"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -8815,7 +9304,10 @@
     "workflow_convert_491_rpm_to_rad_s_for_m",
     "workflow_convert_499_pounds_to_kilogram",
     "workflow_mke_multip_stage_workflow_tha",
-    "workflow_create_the_tools_required_to_r_1763384526"
+    "workflow_create_the_tools_required_to_r_1763384526",
+    "workflow_write_a_unit_test_for_a_piece",
+    "workflow_generate_random_words",
+    "workflow_write_me_a_poem_conversation"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -8934,7 +9426,10 @@
     "workflow_convert_491_rpm_to_rad_s_for_m",
     "workflow_convert_499_pounds_to_kilogram",
     "workflow_mke_multip_stage_workflow_tha",
-    "workflow_create_the_tools_required_to_r_1763384526"
+    "workflow_create_the_tools_required_to_r_1763384526",
+    "workflow_write_a_unit_test_for_a_piece",
+    "workflow_generate_random_words",
+    "workflow_write_me_a_poem_conversation"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -9034,10 +9529,16 @@
     "exec_invocation_random_data_generator_1763376078006",
     "interaction_9dfca2a820b7",
     "exec_invocation_random_data_generator_1763377217048",
-    "interaction_d733a6854156"
+    "interaction_d733a6854156",
+    "exec_invocation_random_data_generator_1763393831680",
+    "interaction_30d8ba6cfcf3"
   ],
   "conversation": [
-    "tool_conversation_manager"
+    "tool_conversation_manager",
+    "interaction_1763395490692",
+    "conv_write_me_a_poem_conversation_v1",
+    "interaction_1763396560883",
+    "interaction_1763398149039"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -9219,7 +9720,10 @@
     "interaction_afc3106562b5",
     "interaction_e758ab07b3bc",
     "interaction_a40a5216595b",
-    "interaction_7d81d73def05"
+    "interaction_7d81d73def05",
+    "interaction_a0925b326077",
+    "interaction_53dba79b35fa",
+    "interaction_6096dad4db0b"
   ],
   "multi-step": [
     "workflow_1763345313",
@@ -9238,7 +9742,12 @@
     "workflow_1763373318",
     "workflow_1763373643",
     "workflow_1763375419",
-    "workflow_1763376083"
+    "workflow_1763376083",
+    "workflow_1763387266",
+    "workflow_1763387640",
+    "workflow_1763393832",
+    "workflow_1763395490",
+    "workflow_1763396560"
   ],
   "aggregate": [
     "workflow_1763345313",
@@ -9381,7 +9890,17 @@
     "tool_prompt_generator",
     "tool_summarizer_fast",
     "tool_summarizer_large",
-    "tool_summarizer_medium"
+    "tool_summarizer_medium",
+    "tool_ask_user",
+    "tool_git",
+    "tool_github",
+    "tool_find_code_fix_pattern",
+    "tool_store_code_fix_pattern",
+    "tool_workflow_diagram",
+    "tool_workflow_runner",
+    "tool_explainer",
+    "tool_duplicate_style",
+    "tool_write_markdown_doc"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -9564,5 +10083,145 @@
   ],
   "llama": [
     "tool_summarizer_medium"
+  ],
+  "user-input": [
+    "tool_ask_user"
+  ],
+  "interactive": [
+    "tool_ask_user"
+  ],
+  "confirmation": [
+    "tool_ask_user"
+  ],
+  "cli": [
+    "tool_ask_user"
+  ],
+  "decision": [
+    "tool_ask_user"
+  ],
+  "feedback": [
+    "tool_ask_user"
+  ],
+  "git": [
+    "tool_git",
+    "tool_github"
+  ],
+  "vcs": [
+    "tool_git",
+    "tool_github"
+  ],
+  "repository": [
+    "tool_git",
+    "tool_github"
+  ],
+  "source-control": [
+    "tool_git"
+  ],
+  "scm": [
+    "tool_git"
+  ],
+  "github": [
+    "tool_github"
+  ],
+  "pr": [
+    "tool_github"
+  ],
+  "pull-request": [
+    "tool_github"
+  ],
+  "issue": [
+    "tool_github"
+  ],
+  "code-review": [
+    "tool_github"
+  ],
+  "data-store": [
+    "tool_find_code_fix_pattern",
+    "tool_store_code_fix_pattern"
+  ],
+  "pattern-recognizer": [
+    "tool_find_code_fix_pattern",
+    "tool_store_code_fix_pattern"
+  ],
+  "visualization": [
+    "tool_workflow_diagram"
+  ],
+  "diagram": [
+    "tool_workflow_diagram"
+  ],
+  "mermaid": [
+    "tool_workflow_diagram"
+  ],
+  "ascii": [
+    "tool_workflow_diagram"
+  ],
+  "dependency-resolution": [
+    "tool_workflow_runner"
+  ],
+  "inline": [
+    "tool_workflow_runner"
+  ],
+  "help": [
+    "tool_explainer"
+  ],
+  "describe": [
+    "tool_explainer"
+  ],
+  "clarify": [
+    "tool_explainer"
+  ],
+  "stage-aware": [
+    "tool_explainer"
+  ],
+  "make": [
+    "workflow_1763387266"
+  ],
+  "a": [
+    "workflow_1763387266",
+    "workflow_1763387640",
+    "workflow_1763393832",
+    "workflow_1763395490",
+    "workflow_1763396560"
+  ],
+  "DEBUG": [
+    "tool_no_this_is_wrong_fix_the_tool"
+  ],
+  "debug-version": [
+    "tool_no_this_is_wrong_fix_the_tool"
+  ],
+  "unit": [
+    "workflow_1763393832"
+  ],
+  "style-analysis": [
+    "tool_duplicate_style"
+  ],
+  "content-analysis": [
+    "tool_duplicate_style"
+  ],
+  "markdown": [
+    "tool_write_markdown_doc"
+  ],
+  "content-generation": [
+    "tool_write_markdown_doc"
+  ],
+  "style-matching": [
+    "tool_write_markdown_doc"
+  ],
+  "small": [
+    "workflow_1763395490"
+  ],
+  "user-query": [
+    "interaction_1763395490692",
+    "interaction_1763396560883",
+    "interaction_1763398149039"
+  ],
+  "tool_history": [
+    "conv_write_me_a_poem_conversation_v1"
+  ],
+  "write_me_a_poem_conversation": [
+    "conv_write_me_a_poem_conversation_v1"
+  ],
+  "me": [
+    "workflow_1763396560"
   ]
 }

@@ -240,6 +240,8 @@ from .workflow_spec import (
     create_simple_workflow
 )
 from .workflow_builder import WorkflowBuilder
+from .background_process import BackgroundProcess, ProcessStatus, StatusUpdate
+from .background_process_manager import BackgroundProcessManager
 
 __all__ = [
     "OllamaClient",
@@ -291,5 +293,10 @@ __all__ = [
     "StepType",
     "OperationType",
     "create_simple_workflow",
-    "WorkflowBuilder"
+    "WorkflowBuilder",
+    # Background execution
+    "BackgroundProcess",
+    "BackgroundProcessManager",
+    "ProcessStatus",
+    "StatusUpdate"
 ]

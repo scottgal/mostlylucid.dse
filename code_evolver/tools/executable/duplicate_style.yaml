@@ -44,10 +44,10 @@ input_schema:
       type: number
       minimum: 0
       maximum: 1
-      description: Quality requirement for LLM tier selection (0-1, default: 0.8)
+      description: "Quality requirement for LLM tier selection (0-1, default: 0.8)"
     review_and_refine:
       type: boolean
-      description: Whether to review and refine the style guide (default: false)
+      description: "Whether to review and refine the style guide (default: false)"
 
 output_schema:
   type: object

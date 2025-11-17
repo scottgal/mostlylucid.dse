@@ -246,8 +246,8 @@ role_recommendations:
   ollama:
     fast: "gemma3_1b"
     base: "codellama"
-    powerful: "qwen2.5-coder:14b"
-    god_level: "deepseek-coder:6.7b"
+    powerful: "deepseek-coder:6.7b"
+    god_level: "qwen2.5-coder:14b"
     embedding: "nomic-embed-text"
 
   anthropic:

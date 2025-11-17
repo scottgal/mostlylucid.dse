@@ -324,6 +324,25 @@ class ChatCLI:
             # Fall back to Ollama if factory not available or config incomplete
             console.print(f"[yellow]Falling back to Ollama backend: {e}[/yellow]")
             self.client = OllamaClient(self.config.ollama_url, config_manager=self.config)
+
+        # Validate configured models are available
+        if hasattr(self.client, 'validate_configured_models'):
+            try:
+                validation = self.client.validate_configured_models()
+                if not validation.get("all_present", True):
+                    missing = validation.get("missing", [])
+                    suggestions = validation.get("suggestions", [])
+                    console.print(f"\n[yellow]⚠  Warning: {len(missing)} configured models not found in Ollama[/yellow]")
+                    console.print(f"[yellow]Missing: {', '.join(missing)}[/yellow]")
+                    console.print("\n[cyan]To install missing models, run:[/cyan]")
+                    for suggestion in suggestions:
+                        console.print(f"  [cyan]{suggestion}[/cyan]")
+                    console.print("\n[green]The system will continue with available models and adapt as needed.[/green]\n")
+                else:
+                    log_panel.log(f"OK All {len(validation.get('configured', []))} Ollama models available")
+            except Exception as e:
+                console.print(f"[dim yellow]Model validation skipped: {e}[/dim yellow]")
+
         self.registry = Registry(self.config.registry_path)
         self.runner = NodeRunner(self.config.nodes_path)
         self.evaluator = Evaluator(self.client)
@@ -421,6 +440,17 @@ class ChatCLI:
         self.history = []
         self.display = WorkflowDisplay(console)
 
+        # Initialize conversation memory (enabled by default)
+        # Uses single persistent Qdrant collection: "mostlylucid-dse-interactive"
+        self.memory_enabled = True
+        self._memory_items = []  # Track recent memory items for display
+        console.print(f"[dim green]✓ Conversation memory enabled (collection: mostlylucid-dse-interactive)[/dim green]")
+
+        # Tool conversation tracking - stores conversation ONLY when tool is registered
+        # This creates conversational version history for each tool
+        self._tool_conversations = {}  # {node_id: [{"role": "user", "content": "..."}, ...]}
+        self._current_tool_conversation = []  # Active conversation during tool development
+
         # Set up command history
         self.history_file = Path(self.config.get("chat.history_file", ".code_evolver_history"))
 
@@ -499,6 +529,109 @@ class ChatCLI:
             return (False, f"Syntax error at line {e.lineno}: {e.msg}")
         except Exception as e:
             return (False, f"Parse error: {str(e)}")
+
+    def _generate_smart_tags(self, description: str, base_tags: list) -> list:
+        """
+        Generate smart, specific tags for RAG matching.
+
+        Enhances base tags with:
+        - Language detection for translations
+        - API/service names
+        - Task-specific keywords
+        - Operation types
+
+        Args:
+            description: Task description
+            base_tags: Base tags from LLM
+
+        Returns:
+            Enhanced tag list
+        """
+        import re
+
+        desc_lower = description.lower()
+        enhanced_tags = list(base_tags)  # Start with base tags
+
+        # Language detection for translations
+        # Pattern: "translate X to LANGUAGE" or "translate into LANGUAGE"
+        translate_pattern = r'translate.*(?:to|into)\s+(\w+)'
+        match = re.search(translate_pattern, desc_lower)
+        if match:
+            target_lang = match.group(1)
+            enhanced_tags.extend(["translation", target_lang])
+
+            # Add source language if detected
+            source_pattern = r'translate\s+(\w+)\s+(?:text|from)'
+            source_match = re.search(source_pattern, desc_lower)
+            if source_match:
+                source_lang = source_match.group(1)
+                # Create direction tag (e.g., "en_to_fr")
+                enhanced_tags.append(f"{source_lang}_to_{target_lang}")
+
+        # API/Service detection
+        api_services = {
+            "stripe": ["payment", "billing", "subscription"],
+            "openai": ["ai", "llm", "chatgpt"],
+            "github": ["git", "repository", "vcs"],
+            "aws": ["cloud", "amazon"],
+            "google": ["cloud", "gcp"],
+            "twitter": ["social", "api"],
+            "facebook": ["social", "api"],
+            "slack": ["messaging", "notification"],
+            "twilio": ["sms", "messaging", "phone"],
+            "sendgrid": ["email", "messaging"],
+        }
+
+        for service, extra_tags in api_services.items():
+            if service in desc_lower:
+                enhanced_tags.append(service)
+                enhanced_tags.extend(extra_tags)
+                enhanced_tags.append("api_integration")
+
+        # Task type detection
+        task_types = {
+            "validate": ["validation"],
+            "parse": ["parsing", "extraction"],
+            "format": ["formatting"],
+            "sort": ["sorting", "ordering"],
+            "filter": ["filtering"],
+            "search": ["searching", "finding"],
+            "calculate": ["calculation", "math"],
+            "encrypt": ["encryption", "security"],
+            "decrypt": ["decryption", "security"],
+            "hash": ["hashing", "security"],
+            "compress": ["compression"],
+            "decompress": ["decompression"],
+            "upload": ["file_handling", "io"],
+            "download": ["file_handling", "io"],
+        }
+
+        for keyword, extra_tags in task_types.items():
+            if keyword in desc_lower:
+                enhanced_tags.extend(extra_tags)
+
+        # Data format detection
+        formats = ["json", "xml", "csv", "yaml", "toml", "html", "markdown", "pdf"]
+        for fmt in formats:
+            if fmt in desc_lower:
+                enhanced_tags.append(fmt)
+                enhanced_tags.append("data_format")
+
+        # Email-specific
+        if "email" in desc_lower:
+            enhanced_tags.extend(["email", "communication"])
+            if "validate" in desc_lower or "check" in desc_lower:
+                enhanced_tags.append("regex")
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_tags = []
+        for tag in enhanced_tags:
+            if tag not in seen:
+                seen.add(tag)
+                unique_tags.append(tag)
+
+        return unique_tags
 
     def _clean_code(self, code: str) -> str:
         """
@@ -1238,6 +1371,15 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             console.print("[red]Error: Please provide a description[/red]")
             return False
 
+        # Start tracking conversation for this tool development
+        # This will be stored in RAG ONLY when tool is registered
+        self._current_tool_conversation = []
+        self._current_tool_conversation.append({
+            "role": "user",
+            "content": description,
+            "timestamp": __import__('time').time()
+        })
+
         # Initialize workflow tracker
         show_workflow = self.config.get("chat.show_workflow", True)
         workflow = WorkflowTracker(
@@ -1274,6 +1416,74 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:
             console.print("[yellow]> Creative content task detected - will use LLM content generator[/yellow]")
+
+        # Step 0.5: SMART DUPLICATE DETECTION - Check if this is a duplicate request
+        # Use sentinel LLM to check RAG for identical/similar artifacts
+        from src.sentinel_llm import SentinelLLM
+        sentinel = SentinelLLM(self.client, self.rag)
+
+        duplicate_check = sentinel.check_for_duplicate(description)
+
+        if duplicate_check['should_reuse']:
+            artifact = duplicate_check['existing_artifact']
+            console.print(f"\n[bold green]✓ DUPLICATE DETECTED ({duplicate_check['confidence']:.1%} match)[/bold green]")
+            console.print(f"[green]Reusing: {artifact.name}[/green]")
+            console.print(f"[dim]{duplicate_check['reasoning']}[/dim]")
+
+            # Extract node_id from artifact
+            node_id = artifact.metadata.get("node_id") if artifact.metadata else None
+
+            if node_id and self.registry.get_node(node_id):
+                # Increment usage counter
+                self.rag.increment_usage(artifact.artifact_id)
+
+                # Run the existing node immediately
+                input_data = {
+                    "input": description,
+                    "description": description,
+                    "prompt": description
+                }
+                stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
+
+                # Display results
+                if metrics["success"]:
+                    console.print(f"\n[bold green]✓ Execution successful (reused existing artifact)[/bold green]")
+
+                    if stdout and stdout.strip():
+                        # Extract and show result
+                        result_extracted = False
+                        try:
+                            output_data = json.loads(stdout.strip())
+                            if isinstance(output_data, dict):
+                                for key in ['result', 'output', 'answer', 'content']:
+                                    if key in output_data:
+                                        console.print(f"\n[bold green]RESULT:[/bold green]\n{output_data[key]}\n")
+                                        result_extracted = True
+                                        break
+                            elif isinstance(output_data, str):
+                                console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                                console.print(Panel(output_data, box=box.ROUNDED, border_style="green"))
+                                result_extracted = True
+                        except:
+                            pass
+
+                        if not result_extracted:
+                            if not stdout.strip().startswith('{'):
+                                console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                                console.print(Panel(stdout, box=box.ROUNDED, border_style="green"))
+                            else:
+                                console.print(Panel(stdout, title="[green]Output[/green]", box=box.ROUNDED, border_style="green"))
+
+                    return True
+                else:
+                    console.print(f"[red]Execution failed - falling back to generating new code[/red]")
+                    # Continue to normal workflow if execution fails
+            else:
+                console.print(f"[yellow]Node not found - falling back to generating new code[/yellow]")
+                # Continue to normal workflow if node not found
+        elif duplicate_check['confidence'] > 0.0:
+            # Found similar but not duplicate - show as hint
+            console.print(f"[dim cyan]Found similar artifact ({duplicate_check['confidence']:.1%} match) - generating fresh implementation[/dim cyan]")
 
         # Step 1: Check for existing solutions in RAG (both code and workflows)
         workflow.add_step("check_existing", "rag", "Check for existing solutions in RAG")
@@ -2181,14 +2391,18 @@ ALGORITHM: fibonacci computation"""
 
                 console.print(f"[dim green]Saved interface-defining tests to {test_path.name}[/dim green]")
 
-                # Display the generated tests
-                test_syntax = Syntax(interface_tests, "python", theme="monokai", line_numbers=True)
-                console.print(Panel(
-                    test_syntax,
-                    title="[cyan]Interface-Defining Tests (TDD)[/cyan]",
-                    box=box.ROUNDED,
-                    expand=False
-                ))
+                # Display the generated tests (if verbose mode)
+                if self.config.get("chat.show_generated_content", False):
+                    test_syntax = Syntax(interface_tests, "python", theme="monokai", line_numbers=True)
+                    console.print(Panel(
+                        test_syntax,
+                        title="[cyan]Interface-Defining Tests (TDD)[/cyan]",
+                        box=box.ROUNDED,
+                        expand=False
+                    ))
+                else:
+                    test_lines = len(interface_tests.split('\n'))
+                    console.print(f"[cyan]✓ Generated interface tests ({test_lines} lines)[/cyan]")
 
                 workflow.complete_step("tdd_interface", f"Tests generated ({len(interface_tests)} chars)")
 
@@ -2642,7 +2856,8 @@ Return ONLY the JSON object, nothing else."""
             result = json.loads(response)
             code = result.get("code", "")
             code_description = result.get("description", description)
-            code_tags = result.get("tags", ["generated", "chat"])
+            base_tags = result.get("tags", ["generated", "chat"])
+            code_tags = self._generate_smart_tags(description, base_tags)
 
             if not code:
                 console.print("[red]No code in JSON response[/red]")
@@ -2684,7 +2899,7 @@ Return ONLY the JSON object, nothing else."""
 
                     if code and len(code) > 10:
                         code_description = description
-                        code_tags = ["generated", "chat"]
+                        code_tags = self._generate_smart_tags(description, ["generated", "chat"])
                         console.print(f"[dim]OK Extracted code via regex ({len(code)} chars)[/dim]")
                     else:
                         raise ValueError(f"Extracted code is too short ({len(code) if code else 0} chars)")
@@ -2697,7 +2912,7 @@ Return ONLY the JSON object, nothing else."""
                 console.print("[yellow]Using entire response as code[/yellow]")
                 code = response
                 code_description = description
-                code_tags = ["generated", "chat"]
+                code_tags = self._generate_smart_tags(description, ["generated", "chat"])
 
         # Clean the code (remove any remaining markdown)
         code = self._clean_code(code)
@@ -2848,11 +3063,10 @@ Return ONLY the JSON object, nothing else."""
             code = 'import json\n' + code
             console.print("[dim yellow]Added missing import: json[/dim yellow]")
 
-        if needs_sys and 'import sys' not in code and 'sys.path.insert' not in code:
-            # sys might already be imported in path setup
-            if 'import sys' not in code:
-                code = 'import sys\n' + code
-                console.print("[dim yellow]Added missing import: sys[/dim yellow]")
+        # Add sys import if code uses sys but doesn't import it
+        if (needs_sys or 'sys.path.insert' in code or 'sys.argv' in code) and 'import sys' not in code:
+            code = 'import sys\n' + code
+            console.print("[dim yellow]Added missing import: sys[/dim yellow]")
 
         # CRITICAL: Ensure code has if __name__ == "__main__" block to actually run
         has_main_function = 'def main(' in code
@@ -2944,9 +3158,14 @@ logger = _DummyLogger()
         with open(interface_path, 'w') as f:
             json.dump(interface_schema, f, indent=2)
 
-        # Step 6: Display generated code
-        syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
-        console.print(Panel(syntax, title=f"[green]Generated Code: {node_id}[/green]", box=box.ROUNDED))
+        # Step 6: Display generated code (if verbose mode)
+        if self.config.get("chat.show_generated_content", False):
+            syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
+            console.print(Panel(syntax, title=f"[green]Generated Code: {node_id}[/green]", box=box.ROUNDED))
+        else:
+            # Concise status message
+            lines = len(code.split('\n'))
+            console.print(f"[green]✓ Generated code ({lines} lines)[/green]")
 
         # Step 7: Run unit tests (already generated in TDD mode, or generate now)
         test_success = True
@@ -3015,12 +3234,46 @@ logger = _DummyLogger()
 
             analysis_results = self._run_static_analysis(node_id, code)
 
-            if analysis_results["any_passed"]:
-                workflow.complete_step("static_analysis", f"{analysis_results['passed_count']}/{analysis_results['total_count']} tools passed")
-                console.print(f"[green]OK Static analysis: {analysis_results['passed_count']}/{analysis_results['total_count']} checks passed[/green]")
+            # Iterate to fix issues if not all checks passed
+            max_fix_attempts = 3
+            fix_attempt = 0
+
+            while analysis_results['passed_count'] < analysis_results['total_count'] and fix_attempt < max_fix_attempts:
+                fix_attempt += 1
+                console.print(f"\n[yellow]Attempting auto-fix (attempt {fix_attempt}/{max_fix_attempts})...[/yellow]")
+
+                # Try to auto-fix failing tools
+                fixed_any = self._auto_fix_static_issues(node_id, analysis_results)
+
+                if fixed_any:
+                    # Reload code and re-run static analysis
+                    code_path = self.runner.get_node_path(node_id)
+                    if code_path.exists():
+                        code = code_path.read_text()
+
+                    console.print(f"[cyan]Re-running static analysis...[/cyan]")
+                    analysis_results = self._run_static_analysis(node_id, code)
+
+                    if analysis_results['passed_count'] == analysis_results['total_count']:
+                        console.print(f"[green]✓ All checks now pass![/green]")
+                        break
+                else:
+                    console.print(f"[yellow]No auto-fix available for remaining issues[/yellow]")
+                    break
+
+            # Check if ALL checks passed
+            all_passed = analysis_results['passed_count'] == analysis_results['total_count']
+
+            if all_passed:
+                workflow.complete_step("static_analysis", f"All {analysis_results['total_count']} checks passed")
+                console.print(f"[green]OK Static analysis: {analysis_results['total_count']}/{analysis_results['total_count']} checks passed[/green]")
             else:
-                workflow.fail_step("static_analysis", f"All {analysis_results['total_count']} tools found issues")
-                console.print(f"[yellow]Static analysis found issues (not blocking execution)[/yellow]")
+                workflow.fail_step("static_analysis", f"Only {analysis_results['passed_count']}/{analysis_results['total_count']} checks passed")
+                console.print(f"[red]FAIL Static analysis: {analysis_results['passed_count']}/{analysis_results['total_count']} checks passed[/red]")
+                console.print(f"[yellow]Node creation blocked until all static analysis checks pass[/yellow]")
+
+                # Don't create the node if static analysis failed
+                return False
 
         # Step 8: Store in RAG ONLY if tests passed (don't pollute RAG with broken code)
         if test_success and hasattr(self, 'rag'):
@@ -3059,6 +3312,15 @@ logger = _DummyLogger()
                         'operation_type': workflow_context.get('operation_type')
                     }
 
+                # Add final system response to tool conversation
+                self._current_tool_conversation.append({
+                    "role": "system",
+                    "content": f"Tool '{code_description}' successfully created and tested",
+                    "timestamp": __import__('time').time(),
+                    "node_id": node_id,
+                    "status": "completed"
+                })
+
                 # Store the generated code as a function artifact
                 self.rag.store_artifact(
                     artifact_id=f"func_{node_id}",
@@ -3071,12 +3333,64 @@ logger = _DummyLogger()
                     auto_embed=True
                 )
 
-                # Only save specification file if explicitly requested via config
-                # Use /document command to generate comprehensive documentation
-                if self.config.get("generation.save_specification", False):
-                    spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
+                # NOW store conversation history with the tool (conversational version history)
+                # This is stored ONLY when tool is registered, not during general conversation
+                if self._current_tool_conversation:
+                    conversation_artifact_id = f"conv_{node_id}_v1"
+                    conversation_content = {
+                        "tool_id": node_id,
+                        "tool_name": code_description,
+                        "conversation": self._current_tool_conversation,
+                        "version": 1,
+                        "created_at": __import__('time').time()
+                    }
+
+                    # Store conversation with tool's tags + "conversation" tag
+                    conversation_tags = code_tags + ["conversation", "tool_history", node_id]
+
                     try:
-                        spec_content = f"""# Specification for {node_id}
+                        self.rag.store_artifact(
+                            artifact_id=conversation_artifact_id,
+                            artifact_type=ArtifactType.CONVERSATION,  # Use specific CONVERSATION type
+                            name=f"Conversation: {code_description}",
+                            description=f"Conversational history for tool {node_id}",
+                            content=json.dumps(conversation_content, indent=2),
+                            tags=conversation_tags,
+                            metadata={
+                                "tool_id": node_id,
+                                "version": 1,
+                                "conversation_length": len(self._current_tool_conversation),
+                                "created_at": __import__('time').time()
+                            },
+                            auto_embed=False  # Don't embed the raw conversation
+                        )
+
+                        # Store in tool_conversations dict for future optimizations
+                        self._tool_conversations[node_id] = self._current_tool_conversation.copy()
+
+                        console.print(f"[dim green]✓ Stored conversational version history for {node_id}[/dim green]")
+                    except Exception as e:
+                        console.print(f"[dim yellow]Could not store conversation history: {e}[/dim yellow]")
+
+                # Always save a basic specification
+                spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
+                try:
+                    # Basic spec always saved
+                    basic_spec = f"""# {code_description}
+
+## Task
+{description}
+
+## Implementation
+{specification[:500]}...
+
+Generated: {datetime.now().isoformat()}
+"""
+                    spec_path.write_text(basic_spec, encoding='utf-8')
+
+                    # Save detailed spec if requested via config
+                    if self.config.get("generation.save_specification", False):
+                        detailed_spec = f"""# Specification for {node_id}
 
 ## Description
 {description}
@@ -3096,10 +3410,10 @@ logger = _DummyLogger()
 ## Generated
 {datetime.now().isoformat()}
 """
-                        spec_path.write_text(spec_content, encoding='utf-8')
-                        console.print(f"[dim]Saved specification to specification.md[/dim]")
-                    except Exception as e:
-                        console.print(f"[dim yellow]Could not save specification file: {e}[/dim yellow]")
+                        spec_path.write_text(detailed_spec, encoding='utf-8')
+                        console.print(f"[dim]Saved detailed specification[/dim]")
+                except Exception as e:
+                    console.print(f"[dim yellow]Could not save specification: {e}[/dim yellow]")
 
                 # Store complete workflow for future reuse with embedded specification
                 workflow_content = {
@@ -3927,112 +4241,113 @@ if __name__ == "__main__":
 
             if pynguin_result.get('needed_llm_fix'):
                 console.print("[dim]Tests were improved by LLM to meet coverage threshold[/dim]")
-        elif uses_call_tool:
-            # For code that uses external tools, just create a minimal smoke test
-            # PYTHONPATH is already set by the test runner, so no need to manipulate sys.path
-            test_code = """def test_structure():
-    print("Testing code structure...")
-    # Verify code can be imported without errors (PYTHONPATH is set by runner)
-    try:
-        import main
-        print("OK Code structure is valid")
-        assert hasattr(main, 'main'), "main() function exists"
-        print("OK main() function found")
-    except Exception as e:
-        print("FAIL:", str(e))
-        raise
-
-if __name__ == "__main__":
-    test_structure()
-"""
-            # Save and run this simple test
-            test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
-            with open(test_path, 'w') as f:
-                f.write(test_code)
-
-            console.print("[dim]OK Generated smoke test for external tool code[/dim]")
-
         else:
-            # For regular code, generate comprehensive tests
-            test_prompt = f"""Generate unit tests for this code by analyzing what the code expects as input.
+            # ALWAYS generate comprehensive LLM tests (for all code)
+            # Create mock node_runtime if code uses external tools
+            mock_runtime = None
+            if uses_call_tool:
+                # Save mock node_runtime.py for testing
+                mock_runtime_code = '''"""Mock node_runtime for testing."""
+from typing import Any
 
-TASK DESCRIPTION: {description}
+def call_tool(tool_name: str, prompt_or_data: Any = None, **kwargs) -> Any:
+    """Mock call_tool that returns sensible defaults."""
+    if 'generator' in tool_name or 'writer' in tool_name:
+        return "Mock generated content for testing"
+    elif 'translator' in tool_name:
+        return "Mock translated content"
+    elif 'database' in tool_name or 'storage' in tool_name:
+        return {"status": "success", "id": "mock_123"}
+    else:
+        return {"status": "success", "result": f"Mock {tool_name}"}
 
-SPECIFICATION: {specification[:500]}
+def call_llm(model: str, prompt: str, **kwargs) -> str:
+    """Mock LLM call."""
+    return "Mock LLM response for testing"
+
+def call_tools_parallel(tool_calls: list) -> list:
+    """Mock parallel tool calls."""
+    return [call_tool(call[0] if isinstance(call, tuple) else call.get('tool', 'unknown'), "")
+            for call in tool_calls]
+'''
+                mock_runtime_path = self.runner.get_node_path(node_id).parent / "node_runtime.py"
+                mock_runtime_path.write_text(mock_runtime_code, encoding='utf-8')
+                console.print("[dim]Created mock node_runtime for testing[/dim]")
+
+            # Generate comprehensive tests with mocking instructions
+            mock_instructions = ""
+            if uses_call_tool:
+                mock_instructions = """
+NOTE: A mock node_runtime.py has been created in the same directory with mock implementations of:
+- call_tool() - returns realistic mock data based on tool name
+- call_llm() - returns mock LLM responses
+- call_tools_parallel() - returns list of mock results
+
+You can freely use: from node_runtime import call_tool, call_llm, call_tools_parallel
+These will work in tests because we've provided mocks.
+"""
+
+            test_prompt = f"""Generate comprehensive unit tests for this code with HIGH COVERAGE (aim for 80%+).
+
+TASK: {description}
 
 CODE TO TEST:
 ```python
 {code}
 ```
 
-INSTRUCTIONS:
-1. Look at the code's main() function to see what fields it reads from input_data
-2. Create test cases that match those expected fields
-3. For arithmetic tasks like "add X and Y", create tests that call the functions directly with those numbers
-4. **CRITICAL**: For code using call_tool(), DO NOT import call_tool, DO NOT call it, just create a simple structure test
-5. Focus on testing the logic you CAN test, NOT external dependencies
-6. If code only calls external tools, create a minimal smoke test that imports main.py
+{mock_instructions}
 
-WHAT NOT TO DO:
-- DO NOT write: from node_runtime import call_tool
-- DO NOT write: call_tool("anything", ...)
-- DO NOT try to test external LLM calls
-- DO NOT test things that require network/external services
+REQUIREMENTS:
+1. Create multiple test functions testing different scenarios
+2. Test edge cases (empty input, None, invalid data)
+3. Test the main() function with realistic input_data dictionaries
+4. If code has helper functions, test those too
+5. Use assertions to verify correct behavior
+6. Include print statements for test progress
 
-EXAMPLE FOR ARITHMETIC (if code defines testable functions):
+EXAMPLE STRUCTURE:
 ```python
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from main import add  # If main.py has an add() function
+def test_basic_functionality():
+    print("Testing basic functionality...")
+    from main import main
+    result = main({{"key": "value"}})  # Use actual expected keys from code
+    assert result is not None, "Result should not be None"
+    print("OK Basic test passed")
 
-def test_add():
-    print("Testing add function...")
-    result = add(5, 3)
-    assert result == 8, "Expected 8"
-    print("OK Test passed")
+def test_edge_cases():
+    print("Testing edge cases...")
+    from main import main
+    # Test with empty input
+    result = main({{}})
+    # Add appropriate assertions
+    print("OK Edge cases passed")
 
-if __name__ == "__main__":
-    test_add()
-```
-
-EXAMPLE FOR CONTENT GENERATION (code uses call_tool()):
-```python
-# For code that uses call_tool(), we can't test the external LLM call
-# Instead, just create a simple smoke test that verifies the structure
-def test_structure():
-    print("Testing code structure...")
-    # Just verify the code can be imported without errors
-    import sys
-    import os
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def test_invalid_input():
+    print("Testing invalid input handling...")
+    from main import main
     try:
-        import main
-        print("OK Code structure is valid")
+        result = main(None)
+        # Verify it handles None gracefully
+        print("OK Invalid input handled")
     except Exception as e:
-        print("FAIL:", str(e))
-        raise
+        print(f"OK Caught expected error: {{e}}")
 
 if __name__ == "__main__":
-    test_structure()
+    test_basic_functionality()
+    test_edge_cases()
+    test_invalid_input()
+    print("All tests passed!")
 ```
 
-CRITICAL REQUIREMENTS:
-- Analyze the code structure to understand what it expects
-- If code defines functions (def add(), def process(), etc.), import and test them directly
-- If code uses call_tool(), you can mock it or just test the structure
-- DO NOT assume generic input like {{"input": "test"}} - look at what the code actually reads!
-- Use print() for logging
-- Return ONLY executable Python code
-- NO markdown fences
-- NO explanations WHATSOEVER
-- NO commentary like "These tests..." or "The test checks..."
-- EVERY LINE must be valid Python syntax
+CRITICAL:
+- Analyze the code to see what input_data keys it expects
+- Create realistic test data based on the task description
+- DO NOT just check hasattr() or imports - actually TEST the logic
+- Return ONLY Python code, NO markdown fences, NO explanations
+- Every line must be valid Python syntax
 
-The response must be PURE Python code that can be saved directly to a .py file and executed.
-If you include ANY explanatory text, the tests will fail with a syntax error.
-
-Return valid Python test code only - nothing else."""
+Generate comprehensive tests now:"""
 
             try:
                 test_code = self.client.generate(
@@ -4503,13 +4818,19 @@ Return ONLY the JSON object, nothing else."""
 
                     if metrics["success"]:
                         console.print(f"[green]OK Cleaned code passes tests![/green]")
+                        # Store successful fix pattern for future learning
+                        self._store_fix_pattern(code, cleaned_code, stderr, fixes, analysis, stage)
                         return True
                     else:
                         console.print(f"[yellow]Warning: Cleaned code failed, keeping version with logging[/yellow]")
                         # Restore code with logging
                         self.runner.save_code(node_id, fixed_code)
+                        # Store fix pattern (with logging version)
+                        self._store_fix_pattern(code, fixed_code, stderr, fixes, analysis, stage)
                         return True
                 else:
+                    # Store successful fix pattern for future learning
+                    self._store_fix_pattern(code, fixed_code, stderr, fixes, analysis, stage)
                     return True
             else:
                 # Track this failed attempt with ALL details
@@ -4556,6 +4877,68 @@ Return ONLY the JSON object, nothing else."""
             error_output=error_output,
             god_model=god_level_model
         )
+
+    def _store_fix_pattern(self, broken_code: str, fixed_code: str, error_output: str, fixes: list, analysis: str, stage: str):
+        """
+        Store successful code fix pattern in RAG for future learning.
+
+        Args:
+            broken_code: The code that had errors
+            fixed_code: The corrected code
+            error_output: The error message
+            fixes: List of fixes applied
+            analysis: Analysis of the error
+            stage: Which escalation stage fixed it
+        """
+        try:
+            # Extract error type from error message
+            error_type = "unknown"
+            if "SyntaxError" in error_output:
+                error_type = "syntax"
+            elif "NameError" in error_output or "not defined" in error_output:
+                error_type = "undefined"
+            elif "ImportError" in error_output or "ModuleNotFoundError" in error_output:
+                error_type = "import"
+            elif "IndentationError" in error_output:
+                error_type = "indentation"
+            elif "TypeError" in error_output:
+                error_type = "type"
+            elif "AttributeError" in error_output:
+                error_type = "runtime"
+
+            # Extract error message (first line usually)
+            error_lines = error_output.strip().split('\n')
+            error_message = error_lines[-1] if error_lines else error_output[:200]
+
+            # Build fix description from analysis and fixes
+            fix_description = f"{analysis}\n\nFixes applied:\n"
+            for fix in fixes:
+                fix_description += f"- {fix}\n"
+            fix_description += f"\nFixed at escalation stage: {stage}"
+
+            # Call store_code_fix_pattern tool via node_runtime
+            from node_runtime import call_tool
+            import json
+
+            pattern_data = {
+                "error_message": error_message[:500],
+                "broken_code": broken_code[:1000],
+                "fixed_code": fixed_code[:1000],
+                "fix_description": fix_description[:500],
+                "error_type": error_type,
+                "language": "python",
+                "context": {
+                    "escalation_stage": stage,
+                    "auto_fixed": True
+                }
+            }
+
+            result = call_tool("store_code_fix_pattern", json.dumps(pattern_data))
+            console.print(f"[dim green]✓ Stored fix pattern in RAG for future learning[/dim green]")
+
+        except Exception as e:
+            # Pattern storage is nice-to-have, not critical
+            console.print(f"[dim yellow]Note: Could not store fix pattern: {e}[/dim yellow]")
 
     def _remove_debug_logging(self, code: str) -> str:
         """
@@ -7665,8 +8048,79 @@ Return ONLY the Python test code, no explanations."""
 
                 # Check if this is a special command (starts with '/')
                 if not user_input.startswith('/'):
+                    # Retrieve conversation context if memory enabled
+                    context_summary = ""
+                    if self.memory_enabled:
+                        try:
+                            # Semantic search in RAG for relevant context
+                            from src.rag_memory import ArtifactType
+                            context_artifacts = self.rag.find_by_tags(
+                                tags=["conversation", "interaction"],
+                                limit=5
+                            )
+
+                            # Also do semantic search on the user query
+                            similar_interactions = self.rag.find_similar(
+                                query=user_input,
+                                artifact_type=ArtifactType.CONVERSATION,  # Search conversation history
+                                top_k=3
+                            )
+
+                            self._memory_items = context_artifacts + [item[0] for item in similar_interactions]
+
+                            # Create context summary for LLM
+                            context_parts = []
+                            context_topics = []  # Concise topics for user display
+
+                            if len(self._memory_items) > 0:
+                                for item in self._memory_items[-5:]:  # Last 5 most relevant
+                                    # Full context for LLM
+                                    context_parts.append(f"- {item.description}: {item.content[:200]}")
+
+                                    # Extract concise topic for user
+                                    # Get first few words of description
+                                    topic = item.description.split(':')[0] if ':' in item.description else item.description
+                                    topic = ' '.join(topic.split()[:4])  # First 4 words max
+                                    context_topics.append(topic)
+
+                                context_summary = "\n".join(context_parts)
+
+                                # Display concise summary to user
+                                topics_str = ", ".join(set(context_topics[:3]))  # Unique topics, max 3
+                                console.print(f"[dim cyan]✓ Using context from: {topics_str}[/dim cyan]")
+
+                        except Exception as e:
+                            console.print(f"[dim yellow]Memory retrieval: {e}[/dim yellow]")
+
                     # Default behavior: generate and run the request
-                    self.handle_generate(user_input)
+                    import time
+                    start_time = time.time()
+
+                    # Add context summary to description if available
+                    final_description = user_input
+                    if context_summary:
+                        final_description = f"{user_input}\n\n[Conversation Context:\n{context_summary}]"
+
+                    success = self.handle_generate(final_description)
+                    duration = time.time() - start_time
+
+                    # Store this interaction in RAG memory
+                    if self.memory_enabled:
+                        try:
+                            interaction_id = f"interaction_{int(time.time() * 1000)}"
+                            self.rag.store_artifact(
+                                artifact_id=interaction_id,
+                                artifact_type=ArtifactType.CONVERSATION,  # User interaction is conversation
+                                name=f"User: {user_input[:50]}",
+                                description=user_input[:200],
+                                content=f"User: {user_input}\nProcessed successfully in {duration:.2f}s",
+                                tags=["conversation", "interaction", "user-query"],
+                                metadata={"timestamp": time.time(), "success": success, "duration": duration},
+                                auto_embed=True
+                            )
+                        except Exception:
+                            pass
+
                     continue
 
                 # Parse command (remove the '/' prefix)
@@ -7758,6 +8212,21 @@ Return ONLY the Python test code, no explanations."""
                     else:
                         console.print("[red]Usage: /auto on|off[/red]")
 
+                elif cmd.startswith('memory '):
+                    state = cmd[7:].strip().lower()
+                    if state in ['on', 'off']:
+                        self.memory_enabled = (state == 'on')
+                        console.print(f"[cyan]Conversation memory {state}[/cyan]")
+                        if not self._conversation_tool and state == 'on':
+                            console.print("[yellow]Warning: Conversation tool not initialized, memory will not work[/yellow]")
+                    else:
+                        # Show memory status
+                        status = "on" if self.memory_enabled else "off"
+                        console.print(f"[cyan]Conversation memory: {status}[/cyan]")
+                        if self._conversation_tool and self.memory_enabled:
+                            console.print(f"[dim]Current memory items: {len(self._memory_items)}[/dim]")
+                        console.print("\n[dim]Usage: /memory [on|off][/dim]")
+
                 elif cmd.startswith('mutate tool '):
                     args = cmd[12:].strip()
                     self.handle_mutate_tool(args)
@@ -7782,6 +8251,81 @@ Return ONLY the Python test code, no explanations."""
                 console.print(f"[red]Error: {e}[/red]")
 
         self._save_history()
+
+    def _auto_fix_static_issues(self, node_id: str, analysis_results: Dict[str, Any]) -> bool:
+        """
+        Try to auto-fix static analysis issues.
+
+        Args:
+            node_id: Node ID
+            analysis_results: Results from _run_static_analysis
+
+        Returns:
+            True if any fixes were applied
+        """
+        code_path = self.runner.get_node_path(node_id)
+        fixed_any = False
+
+        for result in analysis_results.get("results", []):
+            if not result["success"]:
+                tool_id = result["tool_id"]
+
+                # Check if tool has auto-fix capability
+                try:
+                    tool = self.tools_manager.get_tool(tool_id)
+                    if tool and hasattr(tool, 'implementation'):
+                        impl = tool.implementation
+                        auto_fix = impl.get("auto_fix", {})
+
+                        if auto_fix.get("enabled", False):
+                            console.print(f"[cyan]  Auto-fixing with {tool_id}...[/cyan]")
+
+                            # Build auto-fix command from YAML config
+                            # auto_fix has: command, args
+                            import subprocess
+                            from pathlib import Path
+
+                            command = auto_fix.get("command", "python")
+                            args = auto_fix.get("args", [])
+
+                            # Get tool directory from tools_manager
+                            tool_dir = str(Path(self.tools_manager.tools_dir) / "executable")
+
+                            # Substitute placeholders
+                            substituted_args = []
+                            for arg in args:
+                                arg = arg.replace("{tool_dir}", tool_dir)
+                                arg = arg.replace("{source_file}", str(code_path))
+                                substituted_args.append(arg)
+
+                            full_command = [command] + substituted_args
+
+                            try:
+                                fix_result = subprocess.run(
+                                    full_command,
+                                    capture_output=True,
+                                    text=True,
+                                    timeout=30
+                                )
+
+                                if fix_result.returncode == 0:
+                                    console.print(f"[green]    ✓ {tool_id} auto-fix applied[/green]")
+                                    fixed_any = True
+                                else:
+                                    console.print(f"[yellow]    ! {tool_id} auto-fix failed (exit code {fix_result.returncode})[/yellow]")
+                                    if fix_result.stderr:
+                                        console.print(f"[dim]      {fix_result.stderr[:200]}[/dim]")
+                            except subprocess.TimeoutExpired:
+                                console.print(f"[yellow]    ! {tool_id} auto-fix timed out[/yellow]")
+                            except Exception as e:
+                                console.print(f"[yellow]    ! {tool_id} auto-fix error: {e}[/yellow]")
+                        else:
+                            console.print(f"[dim]  {tool_id} has no auto-fix capability[/dim]")
+
+                except Exception as e:
+                    console.print(f"[dim red]  Error auto-fixing {tool_id}: {e}[/dim red]")
+
+        return fixed_any
 
     def _run_static_analysis(self, node_id: str, code: str) -> Dict[str, Any]:
         """
@@ -7878,3 +8422,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    def _should_show_generated(self) -> bool:
+        """Check if generated content should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity in ["generated", "debug"]
+    
+    def _should_show_logs(self) -> bool:
+        """Check if log contents should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity in ["log", "debug"]
+    
+    def _should_show_debug(self) -> bool:
+        """Check if debug details should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity == "debug"

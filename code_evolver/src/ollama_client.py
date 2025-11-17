@@ -183,7 +183,7 @@ class OllamaClient:
 
         # Model-specific timeouts (overrides tier)
         MODEL_TIMEOUTS = {
-            "tinyllama": 30,
+            "gemma3:1b": 30,
             "phi3:mini": 60,
             "gemma2:2b": 45,
             "gemma3:4b": 60,
@@ -464,3 +464,71 @@ Return "pass: reason" or "fail: reason"."""
             temperature=0.1,
             model_key="triage"  # Route to triage endpoint
         )
+
+    def validate_configured_models(self) -> Dict[str, Any]:
+        """
+        Validate that all configured models are available in Ollama.
+
+        Returns:
+            Dict with:
+            - configured: List of configured model names
+            - available: List of available models in Ollama
+            - missing: List of configured models not in Ollama
+            - suggestions: Pull commands for missing models
+            - all_present: Boolean - True if all models available
+        """
+        if not self.config_manager:
+            return {
+                "configured": [],
+                "available": [],
+                "missing": [],
+                "suggestions": [],
+                "all_present": True,
+                "message": "No config manager - skipping validation"
+            }
+
+        # Get configured models from config
+        configured_models = set()
+        try:
+            # Get models from unified config
+            models_config = self.config_manager.get("llm.models", {})
+            for model_key, model_info in models_config.items():
+                if isinstance(model_info, dict):
+                    model_name = model_info.get("name")
+                    backend = model_info.get("backend", "ollama")
+                    # Only check Ollama models
+                    if backend == "ollama" and model_name:
+                        configured_models.add(model_name)
+        except Exception as e:
+            logger.warning(f"Could not get configured models: {e}")
+
+        # Get available models from Ollama
+        available_models = set(self.list_models())
+
+        # Find missing models
+        missing_models = configured_models - available_models
+
+        # Generate suggestions
+        suggestions = []
+        for model in sorted(missing_models):
+            suggestions.append(f"ollama pull {model}")
+
+        result = {
+            "configured": sorted(configured_models),
+            "available": sorted(available_models),
+            "missing": sorted(missing_models),
+            "suggestions": suggestions,
+            "all_present": len(missing_models) == 0
+        }
+
+        # Log summary
+        if result["all_present"]:
+            logger.info(f"✓ All {len(configured_models)} configured Ollama models are available")
+        else:
+            logger.warning(f"⚠ {len(missing_models)} configured models are missing from Ollama")
+            logger.warning(f"Missing: {', '.join(sorted(missing_models))}")
+            logger.warning(f"To install missing models, run:")
+            for suggestion in suggestions:
+                logger.warning(f"  {suggestion}")
+
+        return result

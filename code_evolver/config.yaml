@@ -405,6 +405,7 @@ chat:
   show_thinking: false
   show_metrics: true
   show_workflow: true
+  verbosity: "status"  # Verbosity level: debug, log, generated, status (default)
   auto_save_context: true
   workflow_mode:
     enabled: true
