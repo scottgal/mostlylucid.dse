@@ -1,0 +1,67 @@
+{
+  "workflow_id": "test_parallel_workflow",
+  "version": "1.0.0",
+  "description": "Test workflow with parallel task execution",
+  "inputs": {
+    "data": {
+      "type": "string",
+      "required": true,
+      "description": "Input data to process"
+    }
+  },
+  "outputs": {
+    "result": {
+      "type": "object",
+      "source_reference": "steps.combine_results.output",
+      "description": "Combined results"
+    }
+  },
+  "steps": [
+    {
+      "step_id": "process_a",
+      "type": "python_tool",
+      "description": "Process data in parallel - task A",
+      "tool": "data_processor",
+      "input_mapping": {
+        "data": "inputs.data"
+      },
+      "output_name": "result_a",
+      "parallel_group": 1
+    },
+    {
+      "step_id": "process_b",
+      "type": "python_tool",
+      "description": "Process data in parallel - task B",
+      "tool": "data_processor",
+      "input_mapping": {
+        "data": "inputs.data"
+      },
+      "output_name": "result_b",
+      "parallel_group": 1
+    },
+    {
+      "step_id": "process_c",
+      "type": "python_tool",
+      "description": "Process data in parallel - task C",
+      "tool": "data_processor",
+      "input_mapping": {
+        "data": "inputs.data"
+      },
+      "output_name": "result_c",
+      "parallel_group": 1
+    },
+    {
+      "step_id": "combine_results",
+      "type": "python_tool",
+      "description": "Combine all parallel results",
+      "tool": "result_combiner",
+      "input_mapping": {
+        "result_a": "steps.process_a.result_a",
+        "result_b": "steps.process_b.result_b",
+        "result_c": "steps.process_c.result_c"
+      },
+      "output_name": "output",
+      "depends_on": ["process_a", "process_b", "process_c"]
+    }
+  ]
+}
