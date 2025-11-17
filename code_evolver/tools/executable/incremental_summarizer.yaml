@@ -1,0 +1,106 @@
+name: "Incremental Summarizer"
+type: "executable"
+description: "Incrementally summarizes documents chunk-by-chunk. Builds summary by feeding previous summary + next chunk to LLM, adapting to different context windows."
+tool_id: "incremental_summarizer"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/incremental_summarizer.py"]
+  timeout_ms: 300000  # 5 minutes for large documents
+  memory_limit_mb: 512
+
+# Input schema
+input_schema:
+  document_id:
+    type: "string"
+    description: "ID of the document to summarize (must have chunks already created)"
+    required: true
+
+  tier:
+    type: "string"
+    description: "Summarization tier (tier_1, tier_2, tier_3) - matches chunking tier"
+    required: false
+    default: "tier_2"
+    enum: ["tier_1", "tier_2", "tier_3"]
+
+  summarizer_tool:
+    type: "string"
+    description: "Summarizer tool to use (auto-selected based on tier if not specified)"
+    required: false
+
+  max_summary_length:
+    type: "integer"
+    description: "Maximum length of final summary in tokens (default: 1024)"
+    required: false
+    default: 1024
+
+  detailed:
+    type: "boolean"
+    description: "Generate detailed summary with more information (default: false)"
+    required: false
+    default: false
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    document_id:
+      type: "string"
+    tier:
+      type: "string"
+    summary:
+      type: "string"
+    chunk_count:
+      type: "integer"
+    iterations:
+      type: "integer"
+    metadata:
+      type: "object"
+      properties:
+        original_length:
+          type: "integer"
+        summary_length:
+          type: "integer"
+        compression_ratio:
+          type: "number"
+        processing_time:
+          type: "number"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "summarization"
+  - "incremental"
+  - "document-processing"
+  - "workflow"
+  - "orchestration"
+
+weight: 9.5
+priority: 90
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "time"
+      builtin: true
+  tools:
+    - "document_store"
+    - "summarizer_fast"
+    - "summarizer_medium"
+    - "summarizer_large"

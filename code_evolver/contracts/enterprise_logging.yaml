@@ -1,0 +1,61 @@
+# Enterprise Logging Contract
+# Ensures all generated code has proper logging for compliance
+
+contract_id: "enterprise_logging"
+name: "Enterprise Logging Requirements"
+description: |
+  Contract for enterprise environments requiring comprehensive logging.
+  Ensures all tools and generated code have appropriate logging statements
+  for auditing, debugging, and compliance purposes.
+version: "1.0.0"
+tags:
+  - logging
+  - compliance
+  - enterprise
+  - auditing
+author: "Code Evolver System"
+created_at: "2025-01-17"
+
+rules:
+  # Rule 1: Must import logging
+  - rule_id: "LOG-001"
+    name: "Logging Import Required"
+    description: "All code must import the logging module"
+    rule_type: "library"
+    severity: "error"
+    pattern: "^logging$"
+    required: true
+    applies_to:
+      - "module"
+
+  # Rule 2: Must create logger instance
+  - rule_id: "LOG-002"
+    name: "Logger Instance Required"
+    description: "Code must create a logger instance using logging.getLogger(__name__)"
+    rule_type: "structural"
+    severity: "error"
+    validator: "has_logging"
+    validator_config:
+      min_calls: 1
+
+  # Rule 3: Functions must have logging calls
+  - rule_id: "LOG-003"
+    name: "Function Logging Required"
+    description: "All public functions should have at least one logging statement"
+    rule_type: "structural"
+    severity: "warning"
+    validator: "has_logging"
+    validator_config:
+      min_calls: 1
+      skip_private: true
+
+  # Rule 4: Error handling must log exceptions
+  - rule_id: "LOG-004"
+    name: "Exception Logging Required"
+    description: "All exception handlers must log the exception"
+    rule_type: "pattern"
+    severity: "error"
+    pattern: 'logger\.(error|exception|critical)\('
+    required: true
+    applies_to:
+      - "exception_handler"

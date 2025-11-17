@@ -15,10 +15,33 @@ description: |
 mantra: "lightning_fast"
 
 llm:
-  model: "gemma2:2b"
+  tier: "summarization.tier_1"
+  role: "summarizer_fast"  # Fallback for backward compatibility
   temperature: 0.3
-  max_tokens: 500
+  max_tokens: 512
   context_window: 8192
+
+  system_prompt: |
+    You are an expert text summarizer. Create concise, accurate summaries of documents.
+
+    CRITICAL RULES:
+    - Focus ONLY on the main ideas and key points
+    - Be concise but comprehensive
+    - Maintain the original meaning and tone
+    - Use clear, simple language
+    - NEVER add information not present in the source
+    - NEVER include opinions or interpretations
+    - Structure the summary logically
+    - If given a previous summary, integrate it smoothly with new information
+
+  prompt_template: |
+    {previous_summary}{content}
+
+    ---
+
+    Create a concise summary of the above text. Focus on the main ideas and key points.
+
+    Summary:
 
 quality_profile:
   speed_score: 0.95

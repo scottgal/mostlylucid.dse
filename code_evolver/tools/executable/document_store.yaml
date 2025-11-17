@@ -1,0 +1,91 @@
+name: "Document Store"
+type: "executable"
+description: "In-memory document store for summarization workflows. Stores and retrieves documents with metadata."
+tool_id: "document_store"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/document_store.py"]
+  timeout_ms: 5000
+  memory_limit_mb: 512
+
+# Input schema
+input_schema:
+  operation:
+    type: "string"
+    description: "Operation to perform: store, retrieve, list, clear, exists, delete"
+    required: true
+    enum: ["store", "retrieve", "list", "clear", "exists", "delete"]
+
+  document_id:
+    type: "string"
+    description: "Unique identifier for the document (required for store, retrieve, exists, delete)"
+    required: false
+
+  content:
+    type: "string"
+    description: "Document content (required for store operation)"
+    required: false
+
+  metadata:
+    type: "object"
+    description: "Document metadata (optional for store operation)"
+    required: false
+    properties:
+      filename:
+        type: "string"
+      file_path:
+        type: "string"
+      size:
+        type: "integer"
+      format:
+        type: "string"
+      created_at:
+        type: "string"
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    operation:
+      type: "string"
+    document_id:
+      type: "string"
+    content:
+      type: "string"
+    metadata:
+      type: "object"
+    documents:
+      type: "array"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "storage"
+  - "memory"
+  - "document-management"
+  - "summarization"
+  - "workflow"
+
+weight: 8.0
+priority: 80
+mantra: "lightning_fast"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true

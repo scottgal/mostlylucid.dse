@@ -160,6 +160,49 @@ translation:
     quality: "exceptional"
     validation_required: false
 
+# Summarization Tiers (for document summarization, content condensation)
+summarization:
+  tier_1:  # Fast summarization
+    name: "Fast Summarization (Tier 1)"
+    description: "Quick summaries for short documents, basic condensation"
+    models:
+      primary: "gemma2:2b"
+      fallback: ["gemma3:4b", "phi3:3.8b"]
+    cost: "low"
+    speed: "very-fast"
+    quality: "good"
+    context_window: 8192  # Gemma2 has 8K context
+    max_output_tokens: 512  # Shorter summaries
+    escalation_threshold: 0.60  # If confidence < 60%, escalate to tier_2
+
+  tier_2:  # Standard summarization
+    name: "Standard Summarization (Tier 2)"
+    description: "Quality summaries for medium documents, balanced speed/quality"
+    models:
+      primary: "llama3"
+      fallback: ["mistral", "phi3"]
+    cost: "medium"
+    speed: "fast"
+    quality: "excellent"
+    context_window: 8192  # Llama3 has 8K context
+    max_output_tokens: 1024  # Standard summaries
+    escalation_threshold: 0.70  # If confidence < 70%, escalate to tier_3
+    timeout_fallback: "summarization.tier_1"  # On timeout, fall back to faster tier
+
+  tier_3:  # Large-context summarization
+    name: "Large-Context Summarization (Tier 3)"
+    description: "Advanced summaries for long documents, books, large context"
+    models:
+      primary: "mistral-nemo"
+      fallback: ["llama3:70b"]
+    cost: "high"
+    speed: "slow"
+    quality: "exceptional"
+    context_window: 128000  # Mistral-nemo has 128K context
+    max_output_tokens: 2048  # Longer, detailed summaries
+    escalation_threshold: null  # No further escalation (top tier)
+    timeout_fallback: "summarization.tier_2"  # On timeout, fall back to faster tier
+
 # Embeddings (for RAG, semantic search)
 embeddings:
   default:
@@ -214,3 +257,7 @@ aliases:
   translator: "translation.tier_2"
   translator_fast: "translation.tier_1"
   translator_expert: "translation.tier_3"
+
+  summarizer: "summarization.tier_2"
+  summarizer_fast: "summarization.tier_1"
+  summarizer_advanced: "summarization.tier_3"

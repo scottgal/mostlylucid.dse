@@ -1,0 +1,44 @@
+# Call Tool Wrapper Contract
+# Ensures all operations are wrapped with call_tool for tracking and monitoring
+
+contract_id: "call_tool_wrapper"
+name: "Call Tool Wrapper Requirements"
+description: |
+  Contract requiring all tool operations to be wrapped with call_tool
+  at the start and end. This enables:
+  - Operation tracking
+  - Performance monitoring
+  - Audit trails
+  - Error tracking
+version: "1.0.0"
+tags:
+  - monitoring
+  - tracking
+  - tools
+  - instrumentation
+author: "Code Evolver System"
+created_at: "2025-01-17"
+
+rules:
+  # Rule 1: Functions must have call_tool wrapper
+  - rule_id: "TOOL-001"
+    name: "Call Tool Wrapper Required"
+    description: "All public functions must have call_tool() at start and end"
+    rule_type: "structural"
+    severity: "error"
+    validator: "has_call_tool_wrapper"
+    validator_config:
+      skip_private: true
+    applies_to:
+      - "function"
+
+  # Rule 2: Must import call_tool or equivalent
+  - rule_id: "TOOL-002"
+    name: "Call Tool Import Required"
+    description: "Must import call_tool functionality"
+    rule_type: "pattern"
+    severity: "error"
+    pattern: '(from.*import.*call_tool|import.*call_tool)'
+    required: true
+    applies_to:
+      - "module"

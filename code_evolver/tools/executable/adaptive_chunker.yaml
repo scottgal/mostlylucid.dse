@@ -1,0 +1,110 @@
+name: "Adaptive Document Chunker"
+type: "executable"
+description: "Intelligently chunks documents based on model context windows and summarization tier. Adapts chunk size to fit different model capabilities with overlap for context preservation."
+tool_id: "adaptive_chunker"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/adaptive_chunker.py"]
+  timeout_ms: 10000
+  memory_limit_mb: 256
+
+# Input schema
+input_schema:
+  document_id:
+    type: "string"
+    description: "ID of the document in the document store"
+    required: true
+
+  tier:
+    type: "string"
+    description: "Summarization tier (tier_1, tier_2, tier_3) - determines context window"
+    required: false
+    default: "tier_2"
+    enum: ["tier_1", "tier_2", "tier_3"]
+
+  max_chunk_tokens:
+    type: "integer"
+    description: "Maximum tokens per chunk (overrides tier-based default)"
+    required: false
+
+  overlap_tokens:
+    type: "integer"
+    description: "Number of overlapping tokens between chunks (default: 200)"
+    required: false
+    default: 200
+
+  chunk_by:
+    type: "string"
+    description: "Chunking strategy: 'paragraphs', 'sentences', 'tokens'"
+    required: false
+    default: "paragraphs"
+    enum: ["paragraphs", "sentences", "tokens"]
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    document_id:
+      type: "string"
+    tier:
+      type: "string"
+    chunks:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          chunk_id:
+            type: "integer"
+          content:
+            type: "string"
+          token_count:
+            type: "integer"
+          char_count:
+            type: "integer"
+    chunk_count:
+      type: "integer"
+    total_tokens:
+      type: "integer"
+    context_window:
+      type: "integer"
+    metadata:
+      type: "object"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Discovery and routing
+tags:
+  - "chunking"
+  - "document-processing"
+  - "summarization"
+  - "context-aware"
+  - "adaptive"
+
+weight: 8.8
+priority: 84
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "re"
+      builtin: true
+    - name: "yaml"
+      version: ">=5.0"
+  tools:
+    - "document_store"
