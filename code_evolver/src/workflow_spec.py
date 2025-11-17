@@ -261,6 +261,7 @@ class WorkflowSpec:
     # Dependencies (lightweight mode)
     required_tools: List[str] = field(default_factory=list)  # LLM tools needed
     python_tools: List[str] = field(default_factory=list)    # Python files needed
+    pip_packages: List[Dict[str, str]] = field(default_factory=list)  # Pip packages needed
 
     # Embedded tools (portable mode)
     tool_definitions: Dict[str, ToolDefinition] = field(default_factory=dict)
@@ -290,7 +291,8 @@ class WorkflowSpec:
             # Lightweight mode: just list dependencies
             result["dependencies"] = {
                 "llm_tools": self.required_tools,
-                "python_tools": self.python_tools
+                "python_tools": self.python_tools,
+                "pip_packages": self.pip_packages
             }
 
         return result
@@ -339,6 +341,7 @@ class WorkflowSpec:
             tags=data.get("tags", []),
             required_tools=deps.get("llm_tools", []),
             python_tools=deps.get("python_tools", []),
+            pip_packages=deps.get("pip_packages", []),
             tool_definitions=tool_definitions
         )
 
@@ -384,6 +387,23 @@ class WorkflowSpec:
         """Add an embedded tool definition (builder pattern)"""
         self.tool_definitions[tool_def.tool_id] = tool_def
         self.portable = True  # Automatically enable portable mode
+        return self
+
+    def add_pip_package(self, name: str, version: Optional[str] = None) -> 'WorkflowSpec':
+        """
+        Add a pip package dependency (builder pattern).
+
+        Args:
+            name: Package name
+            version: Optional version specifier (e.g., ">=2.0.0")
+
+        Returns:
+            self for chaining
+        """
+        package = {'name': name}
+        if version:
+            package['version'] = version
+        self.pip_packages.append(package)
         return self
 
     def make_portable(self, tools_manager=None) -> 'WorkflowSpec':
