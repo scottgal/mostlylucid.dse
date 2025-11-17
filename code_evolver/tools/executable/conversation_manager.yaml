@@ -1,0 +1,204 @@
+name: conversation_manager
+description: |
+  Manages intelligent conversations with multi-chat context memory, auto-summarization,
+  and semantic search. Provides context-aware conversations that optimize for response
+  speed while maintaining accuracy.
+
+  Features:
+  - Multi-chat context memory (remembers previous conversations)
+  - Auto-summarization based on context window size
+  - Volatile Qdrant storage for semantic search
+  - Related context retrieval from past conversations
+  - Performance tracking (response time, tokens, etc.)
+  - Intent detection (distinguishes conversation from dialogue generation)
+
+  Use this tool for:
+  - Starting/ending conversational sessions
+  - Managing conversation context
+  - Detecting user intent to converse
+  - Retrieving related conversation history
+
+type: executable
+category: conversation
+executable: conversation_manager.py
+
+parameters:
+  action:
+    type: string
+    required: true
+    description: |
+      Action to perform. Options:
+      - start: Start a new conversation
+      - end: End current or specified conversation
+      - add_user_message: Add user message to conversation
+      - add_assistant_message: Add assistant message to conversation
+      - prepare_context: Prepare optimized context for response
+      - detect_intent: Detect if user wants to start conversation
+      - status: Get current conversation status
+      - list: List active conversations
+    enum:
+      - start
+      - end
+      - add_user_message
+      - add_assistant_message
+      - prepare_context
+      - detect_intent
+      - status
+      - list
+
+  topic:
+    type: string
+    required: false
+    description: Conversation topic (for start/end actions)
+
+  content:
+    type: string
+    required: false
+    description: Message content (for add_user_message/add_assistant_message actions)
+
+  user_message:
+    type: string
+    required: false
+    description: Latest user message (for prepare_context action)
+
+  user_input:
+    type: string
+    required: false
+    description: User input to analyze (for detect_intent action)
+
+  response_model:
+    type: string
+    required: false
+    description: Model that will generate response (for context sizing in prepare_context)
+
+  performance_data:
+    type: object
+    required: false
+    description: Performance metrics for assistant message (response_time, tokens, etc.)
+
+  save_metadata:
+    type: boolean
+    required: false
+    default: true
+    description: Whether to save conversation metadata when ending (for future retrieval)
+
+  config_path:
+    type: string
+    required: false
+    default: "code_evolver/config.yaml"
+    description: Path to configuration file
+
+  conversation_model:
+    type: string
+    required: false
+    default: "gemma3:1b"
+    description: Model for conversation management (summarization, intent detection)
+
+returns:
+  type: object
+  description: |
+    Action-specific results:
+    - start: {conversation_id, topic, started_at, status}
+    - end: {conversation_id, topic, message_count, summary, key_points}
+    - add_user_message/add_assistant_message: {message_id, conversation_id, role, timestamp}
+    - prepare_context: {summary, related_context, messages, metadata}
+    - detect_intent: {intent, confidence, method, topic}
+    - status: {active, conversation_id, topic, message_count, metadata}
+    - list: {conversations: [...]}
+
+examples:
+  - description: Start a conversation about Python (with all defaults)
+    input:
+      action: start
+      topic: "Python programming"
+      # Optional defaults shown below:
+      config_path: "code_evolver/config.yaml"  # default
+      conversation_model: "gemma3:1b"  # default (fast model for management)
+    expected_output:
+      success: true
+      result:
+        conversation_id: "550e8400-e29b-41d4-a716-446655440000"
+        topic: "Python programming"
+        status: "active"
+        started_at: "2025-01-15T10:30:00"
+
+  - description: Start a simple conversation (minimal input)
+    input:
+      action: start
+      topic: "machine learning"
+    expected_output:
+      success: true
+      result:
+        conversation_id: "uuid-here"
+        topic: "machine learning"
+        status: "active"
+
+  - description: Detect conversation intent
+    input:
+      action: detect_intent
+      user_input: "let's have a chat about AI"
+    expected_output:
+      success: true
+      result:
+        intent: "start_conversation"
+        confidence: 0.9
+        method: "pattern"
+        topic: "AI"
+
+  - description: Prepare context for response
+    input:
+      action: prepare_context
+      user_message: "What are the benefits of type hints?"
+      response_model: "llama3"
+    expected_output:
+      success: true
+      result:
+        summary: "Previous discussion summary..."
+        related_context: ["Related conversation snippets..."]
+        messages: [...]
+        metadata:
+          preparation_time: 0.5
+          token_count: 1500
+
+  - description: End conversation
+    input:
+      action: end
+      save_metadata: true
+    expected_output:
+      success: true
+      result:
+        conversation_id: "uuid-here"
+        topic: "Python programming"
+        message_count: 15
+        summary: "Conversation summary..."
+        key_points: ["Key point 1", "Key point 2"]
+
+tags:
+  - conversation
+  - context-memory
+  - semantic-search
+  - summarization
+  - intent-detection
+  - qdrant
+
+dependencies:
+  - qdrant-client
+  - requests
+
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+performance:
+  avg_response_time: "0.5s"
+  context_window_optimization: true
+  semantic_search: true
+  auto_summarization: true
+
+notes: |
+  - Requires Qdrant server running at http://localhost:6333
+  - Uses gemma3:1b by default for fast summarization and intent detection
+  - Automatically optimizes context based on model's context window
+  - Volatile collections are created per conversation and deleted on end
+  - Conversation metadata is stored permanently for semantic search
+  - Related context from past conversations is automatically included

@@ -119,7 +119,7 @@ model_tiers:
   validation:
     tier_1:
       name: "Fast Validation"
-      model: "tinyllama"
+      model: "gemma3_1b"
       context_window: 2048
       timeout: 30
       cost_tier: "low"

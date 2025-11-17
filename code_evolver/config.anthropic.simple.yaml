@@ -67,8 +67,8 @@ llm:
       quality: "excellent"
       specialization: "embedding"
 
-    tinyllama:
-      name: "tinyllama"
+    gemma3_1b:
+      name: "gemma3_1b"
       backend: "ollama"
       context_window: 2048
       cost: "very-low"
@@ -84,7 +84,7 @@ llm:
     escalation: claude_sonnet  # Override: use Sonnet for escalation
     general: claude_sonnet     # Override: use Sonnet for general tasks
     fast: claude_haiku         # Override: use Haiku for fast tasks
-    veryfast: tinyllama        # Keep local Ollama for very fast triage (free!)
+    veryfast: gemma3_1b        # Keep local Ollama for very fast triage (free!)
 
   # ==========================================================================
   # EMBEDDING - Keep on Ollama (required)
@@ -129,7 +129,7 @@ testing:
 #   default.god = claude_opus
 #   default.general = claude_sonnet
 #   default.fast = claude_haiku
-#   default.veryfast = tinyllama (local, free!)
+#   default.veryfast = gemma3_1b (local, free!)
 #
 # Role-specific overrides from base config.yaml would still apply if we were
 # doing multi-file loading. Since this is a standalone config, all roles use

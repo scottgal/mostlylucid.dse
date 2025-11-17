@@ -53,8 +53,8 @@ backends:
         quality_tier: "good"
         best_for: ["general", "content", "reasoning"]
 
-      tinyllama:
-        name: "tinyllama"
+      gemma3_1b:
+        name: "gemma3_1b"
         context_window: 2048
         cost_per_1m_input: 0.00
         cost_per_1m_output: 0.00
@@ -244,7 +244,7 @@ backends:
 # Used for automatic role mapping if not specified in config
 role_recommendations:
   ollama:
-    fast: "tinyllama"
+    fast: "gemma3_1b"
     base: "codellama"
     powerful: "qwen2.5-coder:14b"
     god_level: "deepseek-coder:6.7b"

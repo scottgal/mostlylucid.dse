@@ -1,6 +1,6 @@
 name: "Config File Generator"
 type: "executable"
-description: "Generates comprehensive config.yaml files with sensible Ollama defaults (tinyllama, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes."
+description: "Generates comprehensive config.yaml files with sensible Ollama defaults (gemma3_1b, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes."
 
 cost_tier: "free"
 speed_tier: "very-fast"
@@ -12,7 +12,7 @@ executable:
   args: ["{tool_dir}/config_file_generator.py", "{config_json}"]
 
 input_schema:
-  config_json: "str - JSON with: tool_id (required), mode ('docker' or 'standalone', default: docker), default_model ('tinyllama', 'llama3', 'qwen2.5-coder', 'codellama', default: tinyllama)"
+  config_json: "str - JSON with: tool_id (required), mode ('docker' or 'standalone', default: docker), default_model ('gemma3_1b', 'llama3', 'qwen2.5-coder', 'codellama', default: gemma3_1b)"
 
 output_schema:
   success: "bool - Whether generation was successful"

@@ -3,7 +3,7 @@
 # ============================================================================
 #
 # SETUP:
-# 1. ollama pull llama3 codellama tinyllama nomic-embed-text qwen2.5-coder:14b
+# 1. ollama pull llama3 codellama gemma3_1b nomic-embed-text qwen2.5-coder:14b
 # 2. python chat_cli.py --config config.local.minimal.yaml
 #
 # This config just selects backend and maps model roles.
