@@ -1,0 +1,74 @@
+name: "Pyupgrade Checker"
+type: "executable"
+description: "Automatically upgrades Python syntax for newer versions. Modernizes code with f-strings, type hints, and newer Python features."
+
+executable:
+  command: "python"
+  args:
+    - "{tools_dir}/executable/pyupgrade_checker.py"
+    - "{source_file}"
+  install_command: "pip install pyupgrade"
+
+parameters:
+  source_file:
+    type: "string"
+    description: "Path to Python source file to check"
+    required: true
+
+  auto_fix:
+    type: "boolean"
+    description: "Apply fixes in-place"
+    default: false
+
+  python_version:
+    type: "string"
+    description: "Target Python version"
+    default: "py38-plus"
+    enum: ["py36-plus", "py37-plus", "py38-plus", "py39-plus", "py310-plus", "py311-plus"]
+
+  keep_runtime_typing:
+    type: "boolean"
+    description: "Keep runtime typing annotations"
+    default: false
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  changes_needed:
+    type: "boolean"
+    description: "Whether changes were needed/applied"
+
+  output:
+    type: "string"
+    description: "Detailed output or upgraded code"
+
+features:
+  - "Upgrade to f-strings from %-formatting and .format()"
+  - "Modernize type annotations"
+  - "Use dict/set/list comprehensions"
+  - "Remove unnecessary imports (typing for runtime)"
+  - "Use newer syntax features (walrus operator, match/case)"
+  - "Deterministic transformations"
+  - "Safe code modernization"
+
+examples:
+  - "Old: '%s %s' % (a, b) → New: f'{a} {b}'"
+  - "Old: '{} {}'.format(a, b) → New: f'{a} {b}'"
+  - "Old: dict() → New: {}"
+  - "Old: set([1, 2]) → New: {1, 2}"
+
+tags:
+  - "python"
+  - "modernization"
+  - "syntax"
+  - "static-analysis"
+  - "pyupgrade"
+  - "deterministic"
+  - "auto-fix"
+
+version: "1.0.0"
+priority: 125
+supports_autofix: true
+category: "code-modernization"

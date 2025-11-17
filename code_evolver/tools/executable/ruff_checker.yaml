@@ -1,0 +1,81 @@
+name: "Ruff Checker"
+type: "executable"
+description: "Fast Python linter and formatter. Replaces flake8, isort, pyupgrade, and more. Checks code quality and applies safe auto-fixes."
+
+executable:
+  command: "python"
+  args:
+    - "{tools_dir}/executable/ruff_checker.py"
+    - "{source_file}"
+  install_command: "pip install ruff"
+
+parameters:
+  source_file:
+    type: "string"
+    description: "Path to Python source file to check"
+    required: true
+
+  auto_fix:
+    type: "boolean"
+    description: "Apply safe auto-fixes"
+    default: false
+
+  format:
+    type: "boolean"
+    description: "Also run code formatting"
+    default: false
+
+  output_json:
+    type: "boolean"
+    description: "Output results as JSON"
+    default: false
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether check passed (no issues or all fixed)"
+
+  issues_found:
+    type: "integer"
+    description: "Number of issues found"
+
+  issues_fixed:
+    type: "integer"
+    description: "Number of issues automatically fixed"
+
+  output:
+    type: "string"
+    description: "Detailed output from ruff"
+
+features:
+  - "Fast Rust-based linting (10-100x faster than flake8)"
+  - "Auto-fix for hundreds of rules"
+  - "Import sorting (replaces isort)"
+  - "Code modernization (replaces pyupgrade)"
+  - "Unused import removal (replaces autoflake)"
+  - "Format checking and formatting (replaces black)"
+
+rules:
+  - "F (Pyflakes): syntax errors, undefined names"
+  - "E/W (pycodestyle): PEP 8 style violations"
+  - "I (isort): import sorting"
+  - "N (pep8-naming): naming conventions"
+  - "UP (pyupgrade): Python version upgrades"
+  - "S (bandit): security issues"
+  - "B (bugbear): likely bugs"
+  - "And 100+ more rule categories"
+
+tags:
+  - "python"
+  - "linting"
+  - "formatting"
+  - "static-analysis"
+  - "ruff"
+  - "deterministic"
+  - "auto-fix"
+  - "fast"
+
+version: "1.0.0"
+priority: 150
+supports_autofix: true
+category: "code-quality"
