@@ -103,8 +103,10 @@ def test_handle_unknown_command(tools_cli):
 
 def test_command_result_structure(tools_cli):
     """Test CommandResult structure."""
-    with patch.object(tools_cli, 'optimizer') as mock_optimizer:
+    # Patch the _optimizer directly instead of the property
+    with patch.object(tools_cli, '_optimizer') as mock_optimizer:
         mock_optimizer.optimize_all_tools.return_value = []
+        tools_cli._optimizer = mock_optimizer  # Set it directly
 
         result = tools_cli.handle_command("/tools optimize all")
 
@@ -119,53 +121,65 @@ def test_command_result_structure(tools_cli):
 
 def test_optimize_all_success(tools_cli):
     """Test successful optimize all command."""
-    with patch.object(tools_cli, 'optimizer') as mock_optimizer:
-        mock_optimizer.optimize_all_tools.return_value = [
-            {"tool_name": "tool1", "improved": True},
-            {"tool_name": "tool2", "improved": False}
-        ]
+    mock_optimizer = Mock()
+    mock_optimizer.optimize_all_tools.return_value = [
+        {"tool_name": "tool1", "improved": True},
+        {"tool_name": "tool2", "improved": False}
+    ]
+    tools_cli._optimizer = mock_optimizer
 
-        result = tools_cli.handle_command("/tools optimize all")
+    result = tools_cli.handle_command("/tools optimize all")
 
-        assert result.success
-        assert result.command_type == CommandType.OPTIMIZE_ALL
-        assert "2 tools" in result.message
-        assert "1 improved" in result.message
+    assert result.success
+    assert result.command_type == CommandType.OPTIMIZE_ALL
+    assert "2 tools" in result.message
+    assert "1 improved" in result.message
 
 
 def test_test_all_success(tools_cli):
     """Test successful test all command."""
-    with patch.object(tools_cli, 'tester') as mock_tester:
-        mock_tester.test_all_tools.return_value = [
-            {"tool_name": "tool1", "passed": True},
-            {"tool_name": "tool2", "passed": True},
-            {"tool_name": "tool3", "passed": False}
-        ]
+    mock_tester = Mock()
+    mock_tester.test_all_tools.return_value = [
+        {"tool_name": "tool1", "passed": True},
+        {"tool_name": "tool2", "passed": True},
+        {"tool_name": "tool3", "passed": False}
+    ]
+    tools_cli._tester = mock_tester
 
-        result = tools_cli.handle_command("/tools test all")
+    result = tools_cli.handle_command("/tools test all")
 
-        assert result.command_type == CommandType.TEST_ALL
-        assert "2/3 passed" in result.message
+    assert result.command_type == CommandType.TEST_ALL
+    assert "2/3 passed" in result.message
 
 
 def test_lazy_loading_optimizer(tools_cli):
     """Test lazy loading of optimizer."""
     assert tools_cli._optimizer is None
 
-    # Access optimizer property
-    with patch('src.tools_cli.ToolOptimizer') as MockOptimizer:
+    # Access optimizer property - it should create one
+    with patch('src.tool_optimizer.ToolOptimizer') as MockOptimizer:
+        mock_instance = Mock()
+        MockOptimizer.return_value = mock_instance
+
         optimizer = tools_cli.optimizer
+
         MockOptimizer.assert_called_once()
+        assert tools_cli._optimizer is mock_instance
 
 
 def test_lazy_loading_tester(tools_cli):
     """Test lazy loading of tester."""
     assert tools_cli._tester is None
 
-    # Access tester property
-    with patch('src.tools_cli.ToolTester') as MockTester:
+    # Access tester property - it should create one
+    with patch('src.tool_tester.ToolTester') as MockTester:
+        mock_instance = Mock()
+        MockTester.return_value = mock_instance
+
         tester = tools_cli.tester
+
         MockTester.assert_called_once()
+        assert tools_cli._tester is mock_instance
 
 
 if __name__ == "__main__":
