@@ -7800,7 +7800,11 @@ Return ONLY the JSON object, nothing else."""
 
     def handle_tools(self, category: str = None, page: int = 1) -> bool:
         """
-        Handle tools command - list all available tools or filter by category with pagination.
+        Handle tools command - list top tools from RAG by relevance score.
+
+        Uses RAG semantic search to find the most relevant tools, showing:
+        - Top 10 highest scoring tools from RAG
+        - Separate sections for generated vs static tools
 
         Args:
             category: Optional category to filter by (llm, executable, custom, openapi)
@@ -7812,61 +7816,113 @@ Return ONLY the JSON object, nothing else."""
             console.print("[dim]Please wait a moment and try again[/dim]\n")
             return False
 
-        all_tools = self.tools_manager.get_all_tools()
+        # Check if RAG is available
+        if not self.rag:
+            console.print("[yellow]RAG not available, showing all tools from registry[/yellow]")
+            # Fallback to old behavior
+            all_tools = self.tools_manager.get_all_tools()
+            if not all_tools:
+                console.print("[yellow]No tools available[/yellow]")
+                return True
+        else:
+            # Use RAG to find tools with semantic search
+            try:
+                from src.rag_memory import ArtifactType
 
-        if not all_tools:
-            console.print("[yellow]No tools available[/yellow]")
-            return True
+                # Build query based on category or general search
+                if category:
+                    query = f"tools in category {category}"
+                else:
+                    query = "available tools for code generation and workflow execution"
 
-        # Group tools by type
-        from collections import defaultdict
-        tools_by_type = defaultdict(list)
+                # Search RAG for tools - get top 10 by score
+                rag_results = self.rag.find_similar(
+                    query=query,
+                    artifact_type=ArtifactType.TOOL,
+                    top_k=10
+                )
+
+                # Convert RAG results to tools by looking them up in the registry
+                all_tools = []
+                for artifact, score in rag_results:
+                    tool_id = artifact.metadata.get("tool_id") if artifact.metadata else None
+                    if tool_id and tool_id in self.tools_manager.tools:
+                        tool = self.tools_manager.tools[tool_id]
+                        # Attach RAG score to tool for display
+                        tool._rag_score = score
+                        all_tools.append(tool)
+
+                if not all_tools:
+                    console.print("[yellow]No tools found in RAG[/yellow]")
+                    return True
+
+            except Exception as e:
+                console.print(f"[yellow]Error querying RAG: {e}[/yellow]")
+                console.print("[dim]Falling back to registry listing[/dim]")
+                all_tools = self.tools_manager.get_all_tools()
+
+        # Separate generated tools from static tools
+        generated_tools = []
+        static_tools = []
 
         for tool in all_tools:
+            metadata = tool.metadata or {}
+            if metadata.get("generated_by"):
+                generated_tools.append(tool)
+            else:
+                static_tools.append(tool)
+
+        # Display static tools
+        if static_tools:
+            console.print("\n[bold cyan]Static Tools (YAML-based)[/bold cyan]\n")
+            self._display_tools_table(static_tools, category)
+
+        # Display generated tools
+        if generated_tools:
+            console.print("\n[bold magenta]Generated Tools (Dynamically Created)[/bold magenta]\n")
+            self._display_tools_table(generated_tools, category)
+
+        if not static_tools and not generated_tools:
+            console.print("[yellow]No tools available[/yellow]")
+
+        console.print(f"\n[dim]Use /tool <tool_id> for detailed documentation[/dim]\n")
+        console.print(f"[dim]Showing top {len(all_tools)} tools by RAG relevance score[/dim]\n")
+
+        return True
+
+    def _display_tools_table(self, tools: list, category_filter: str = None):
+        """
+        Display a table of tools with optional category filtering.
+
+        Args:
+            tools: List of Tool objects to display
+            category_filter: Optional category to filter by
+        """
+        from collections import defaultdict
+
+        # Group tools by type
+        tools_by_type = defaultdict(list)
+        for tool in tools:
             tools_by_type[tool.tool_type.value].append(tool)
 
-        # If category specified, filter to that category
-        if category:
-            category_lower = category.lower()
+        # Filter by category if specified
+        if category_filter:
+            category_lower = category_filter.lower()
             if category_lower not in tools_by_type:
-                console.print(f"[yellow]No tools found in category: {category}[/yellow]")
+                console.print(f"[yellow]No tools found in category: {category_filter}[/yellow]")
                 console.print(f"[dim]Available categories: {', '.join(sorted(tools_by_type.keys()))}[/dim]\n")
-                return False
+                return
+            tools_by_type = {category_lower: tools_by_type[category_lower]}
 
-            # Show only the specified category
-            console.print(f"\n[bold cyan]{category_lower.upper()} Tools[/bold cyan]\n")
-            tools_to_show = {category_lower: tools_by_type[category_lower]}
-        else:
-            # Show all categories
-            console.print("\n[bold cyan]Available Tools by Category[/bold cyan]\n")
-            tools_to_show = tools_by_type
-
-        # Pagination settings
-        TOOLS_PER_PAGE = 10
-
-        # Flatten all tools for pagination
+        # Flatten all tools
         all_tools_flat = []
-        for tool_type in sorted(tools_to_show.keys()):
-            for tool in tools_to_show[tool_type]:
+        for tool_type in sorted(tools_by_type.keys()):
+            for tool in tools_by_type[tool_type]:
                 all_tools_flat.append((tool_type, tool))
 
-        total_tools_to_show = len(all_tools_flat)
-        total_pages = (total_tools_to_show + TOOLS_PER_PAGE - 1) // TOOLS_PER_PAGE
-
-        # Validate page number
-        if page < 1:
-            page = 1
-        if page > total_pages and total_pages > 0:
-            page = total_pages
-
-        # Calculate slice
-        start_idx = (page - 1) * TOOLS_PER_PAGE
-        end_idx = start_idx + TOOLS_PER_PAGE
-        page_tools = all_tools_flat[start_idx:end_idx]
-
-        # Display paginated tools
+        # Create table
         table = Table(
-            title=f"Tools (Page {page}/{total_pages}) - Showing {len(page_tools)} of {total_tools_to_show}",
+            title=f"Showing {len(all_tools_flat)} tools",
             box=box.ROUNDED,
             show_header=True,
             header_style="bold magenta"
@@ -7876,7 +7932,7 @@ Return ONLY the JSON object, nothing else."""
         table.add_column("Description", width=45)
         table.add_column("Type", style="yellow", no_wrap=True, width=10)
 
-        for tool_type, tool in page_tools:
+        for tool_type, tool in all_tools_flat:
             tool_id = tool.tool_id
             name = getattr(tool, 'name', tool_id)
             description = tool.description[:47] + "..." if len(tool.description) > 50 else tool.description
@@ -7892,41 +7948,14 @@ Return ONLY the JSON object, nothing else."""
                 # Highlight in description
                 description = f"DEBUG VERSION - {description[:30]}..."
 
-            yaml_path = metadata.get("yaml_path", "")
-            if yaml_path:
-                # Extract category from path (e.g., "tools/executable/foo.yaml" -> "executable")
-                from pathlib import Path
-                path_parts = Path(yaml_path).parts
-                if len(path_parts) >= 2:
-                    category_name = path_parts[-2]  # Second to last part
-                else:
-                    category_name = "other"
-            elif metadata.get("from_rag"):
-                category_name = "dynamic"
-            elif metadata.get("from_config"):
-                category_name = "config"
-            else:
-                category_name = "other"
+            # Add RAG score if available
+            if hasattr(tool, '_rag_score'):
+                name = f"{name} [{tool._rag_score:.2%}]"
 
             table.add_row(tool_id, name, description, tool_type)
 
         console.print(table)
         console.print()
-
-        # Navigation hint
-        if total_pages > 1:
-            nav_text = []
-            if page > 1:
-                nav_text.append(f"[cyan]/tools {page - 1}[/cyan] for previous page")
-            if page < total_pages:
-                nav_text.append(f"[cyan]/tools {page + 1}[/cyan] for next page")
-
-            if nav_text:
-                console.print("[dim]" + " | ".join(nav_text) + "[/dim]")
-
-        console.print(f"[dim]Use /tool <tool_id> for detailed documentation[/dim]\n")
-
-        return True
 
     def handle_tool_command(self, args: str) -> bool:
         """
