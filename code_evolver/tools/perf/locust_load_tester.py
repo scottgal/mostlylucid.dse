@@ -25,9 +25,25 @@ def parse_openapi_spec(spec: Dict[str, Any]) -> List[Dict[str, Any]]:
     endpoints = []
     paths = spec.get('paths', {})
 
+    # Validate that paths is a dictionary
+    if not isinstance(paths, dict):
+        return endpoints
+
     for path, methods in paths.items():
+        # Ensure path is a string and methods is a dict
+        if not isinstance(path, str) or not isinstance(methods, dict):
+            continue
+
         for method, details in methods.items():
+            # Ensure method is a string before calling .lower()
+            if not isinstance(method, str):
+                continue
+
             if method.lower() in ['get', 'post', 'put', 'patch', 'delete']:
+                # Ensure details is a dict
+                if not isinstance(details, dict):
+                    continue
+
                 endpoint = {
                     'path': path,
                     'method': method.upper(),
