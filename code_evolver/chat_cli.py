@@ -284,7 +284,7 @@ class WorkflowDisplay:
         """Show workflow stages as a simple pipeline (called once at start)."""
         if not self.stages or len(self.stages) < 2:
             return
-        pipeline = " → ".join(self.stages)
+        pipeline = " -> ".join(self.stages)
         self.console.print(f"[dim]{pipeline}[/dim]")
 
     def start_stage(self, stage_name: str, status_text: str = None):
@@ -294,7 +294,7 @@ class WorkflowDisplay:
             self.current_stage = stage_name
             self.last_stage = stage_name
             display_text = status_text or stage_name
-            self.console.print(f"[cyan]→ {display_text}[/cyan]")
+            self.console.print(f"[cyan]-> {display_text}[/cyan]")
 
         # Return a dummy context manager
         class DummyContext:
@@ -428,7 +428,7 @@ Name (short, descriptive, lowercase with dashes):"""
                 workflow.status = WorkflowStatus.RUNNING
                 workflow.progress = "Starting..."
 
-                console.print(f"\n[dim cyan]→ [{workflow.name}] Starting workflow...[/dim cyan]")
+                console.print(f"\n[dim cyan]-> [{workflow.name}] Starting workflow...[/dim cyan]")
 
                 # Run the actual workflow
                 try:
@@ -1122,10 +1122,10 @@ TASK TO ANALYZE: "{description}"
 
 STEP 1: IDENTIFY OPERATIONS
 Look for these keywords that indicate multiple operations:
-- "and" → SEPARATE operations (create SEPARATE steps)
-- "then" → SEQUENTIAL operations (create SEPARATE steps)
-- "translate" → SEPARATE translation step
-- "convert" → SEPARATE conversion step
+- "and" -> SEPARATE operations (create SEPARATE steps)
+- "then" -> SEQUENTIAL operations (create SEPARATE steps)
+- "translate" -> SEPARATE translation step
+- "convert" -> SEPARATE conversion step
 
 Count how many distinct operations are in the task.
 
@@ -1165,8 +1165,8 @@ For each operation, determine:
 - Which steps can run IN PARALLEL (same parallel_group number)
 
 DEPENDENCY RULES:
-1. If step B uses output from step A → B depends_on: ["stepA"]
-2. If steps B and C are independent → they can run in parallel (same parallel_group)
+1. If step B uses output from step A -> B depends_on: ["stepA"]
+2. If steps B and C are independent -> they can run in parallel (same parallel_group)
 3. Avoid race conditions: steps that modify shared state cannot be parallel
 
 PARALLEL EXECUTION EXAMPLES:
@@ -1670,7 +1670,7 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         if duplicate_check['should_reuse']:
             artifact = duplicate_check['existing_artifact']
-            console.print(f"\n[cyan]→ Using existing tool: {artifact.name}[/cyan]")
+            console.print(f"\n[cyan]-> Using existing tool: {artifact.name}[/cyan]")
             console.print(f"[dim]  ({duplicate_check['confidence']:.0%} match - {duplicate_check['reasoning']})[/dim]")
 
             # Extract node_id from artifact
@@ -1869,12 +1869,12 @@ Classification:
 - DIFFERENT: Completely different domains (e.g., "fibonacci" vs "write a story")
 
 Examples:
-- "fibonacci sequence" vs "fibonaccie sequence and output result" → SAME (typo, same task)
-- "add 10 and 20" vs "sum 10 and 20" → SAME (synonym)
-- "fibonacci sequence" vs "fibonacci backwards" → RELATED (same algorithm, different direction)
-- "write a story" vs "write a technical article" → RELATED (same domain, different style)
-- "fibonacci" vs "prime numbers" → DIFFERENT (different algorithms)
-- "calculate primes" vs "find prime numbers" → SAME (synonym)
+- "fibonacci sequence" vs "fibonaccie sequence and output result" -> SAME (typo, same task)
+- "add 10 and 20" vs "sum 10 and 20" -> SAME (synonym)
+- "fibonacci sequence" vs "fibonacci backwards" -> RELATED (same algorithm, different direction)
+- "write a story" vs "write a technical article" -> RELATED (same domain, different style)
+- "fibonacci" vs "prime numbers" -> DIFFERENT (different algorithms)
+- "calculate primes" vs "find prime numbers" -> SAME (synonym)
 
 Answer with ONLY ONE WORD: SAME, RELATED, or DIFFERENT
 Answer:"""
@@ -2022,12 +2022,12 @@ Classification:
 - DIFFERENT: Completely different domains (e.g., "fibonacci" vs "write a story")
 
 Examples:
-- "fibonacci sequence" vs "fibonaccie sequence and output result" → SAME (typo, same task)
-- "add 10 and 20" vs "sum 10 and 20" → SAME (synonym)
-- "fibonacci sequence" vs "fibonacci backwards" → RELATED (same algorithm, different direction)
-- "write a story" vs "write a technical article" → RELATED (same domain, different style)
-- "fibonacci" vs "prime numbers" → DIFFERENT (different algorithms)
-- "calculate primes" vs "find prime numbers" → SAME (synonym)
+- "fibonacci sequence" vs "fibonaccie sequence and output result" -> SAME (typo, same task)
+- "add 10 and 20" vs "sum 10 and 20" -> SAME (synonym)
+- "fibonacci sequence" vs "fibonacci backwards" -> RELATED (same algorithm, different direction)
+- "write a story" vs "write a technical article" -> RELATED (same domain, different style)
+- "fibonacci" vs "prime numbers" -> DIFFERENT (different algorithms)
+- "calculate primes" vs "find prime numbers" -> SAME (synonym)
 
 Answer with ONLY ONE WORD: SAME, RELATED, or DIFFERENT
 Answer:"""
@@ -2104,8 +2104,8 @@ Answer:"""
                             specific_fields_needed = expected_fields - generic_fields
 
                             if specific_fields_needed:
-                                console.print(f"[yellow]→ Detected specific input fields: {', '.join(specific_fields_needed)}[/yellow]")
-                                console.print(f"[yellow]→ Auto-generating test data...[/yellow]")
+                                console.print(f"[yellow]-> Detected specific input fields: {', '.join(specific_fields_needed)}[/yellow]")
+                                console.print(f"[yellow]-> Auto-generating test data...[/yellow]")
 
                                 try:
                                     # Build a schema from the detected fields
@@ -2130,10 +2130,10 @@ Answer:"""
 
                                     if test_data_result.get("success"):
                                         test_data = json.loads(test_data_result["stdout"])
-                                        console.print(f"[green]→ Generated test data: {json.dumps(test_data, indent=2)}[/green]")
+                                        console.print(f"[green]-> Generated test data: {json.dumps(test_data, indent=2)}[/green]")
                                         input_data.update(test_data)
                                 except Exception as e:
-                                    console.print(f"[yellow]→ Could not auto-generate test data: {e}[/yellow]")
+                                    console.print(f"[yellow]-> Could not auto-generate test data: {e}[/yellow]")
 
                             stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
@@ -2276,7 +2276,7 @@ Answer:"""
 
             # Show workflow stages
             stages = [step['action'] for step in workflow_composition["workflow_steps"]]
-            self.display.add_stage(" → ".join(stages))
+            self.display.add_stage(" -> ".join(stages))
 
             # Show tools being used
             console.print()
@@ -2398,14 +2398,14 @@ A user wants to create code with this goal:
 
 CRITICAL: PREFER SIMPLICITY!
 Before creating a complex specification, ask yourself:
-- Can this be solved with a simple if/else statement? → DO THAT!
-- Can this be solved with a dictionary lookup? → DO THAT!
-- Can this be solved with basic math? → DO THAT!
+- Can this be solved with a simple if/else statement? -> DO THAT!
+- Can this be solved with a dictionary lookup? -> DO THAT!
+- Can this be solved with basic math? -> DO THAT!
 
 Examples of SIMPLE solutions:
-- "translate word X to Y" → Dictionary: {{"hello": "bonjour", "poop": "merde"}}
-- "add two numbers" → Simple: result = a + b
-- "is number prime" → Simple loop checking divisors
+- "translate word X to Y" -> Dictionary: {{"hello": "bonjour", "poop": "merde"}}
+- "add two numbers" -> Simple: result = a + b
+- "is number prime" -> Simple loop checking divisors
 
 ONLY create complex specifications if the task REQUIRES:
 - Creative content generation (stories, poems, complex articles)
@@ -2435,7 +2435,7 @@ Create a comprehensive specification that will guide the code generator. Include
 4. **Input/Output Interface**
    - What JSON fields will the code read from stdin?
    - What JSON fields will the code write to stdout?
-   - Example input → expected output
+   - Example input -> expected output
 
 5. **Test Cases**
    - At least 3 test cases with inputs and expected outputs
@@ -2446,8 +2446,8 @@ Create a comprehensive specification that will guide the code generator. Include
 
    Review the available tools list above. If ANY tool matches the task:
    - STRONGLY RECOMMEND using that tool via call_tool()
-   - Example: If task is translation and quick_translator exists → USE IT!
-   - Example: If task is content generation and content_generator exists → USE IT!
+   - Example: If task is translation and quick_translator exists -> USE IT!
+   - Example: If task is content generation and content_generator exists -> USE IT!
 
    ONLY recommend custom implementation if:
    - NO existing tool matches the task
@@ -2547,7 +2547,7 @@ ALGORITHM: fibonacci computation"""
         if is_simple_task and 'fast_code_generator' in self.tools_manager.tools:
             selected_tool = self.tools_manager.tools['fast_code_generator']
             use_specialized_tool = True
-            console.print(f"[cyan]→ Using tool: {selected_tool.name}[/cyan]")
+            console.print(f"[cyan]-> Using tool: {selected_tool.name}[/cyan]")
         # For ALL content generation (simple or complex), use powerful model
         elif is_simple_content or is_complex_content:
             # Don't search for tools - content needs fresh generation with powerful model
@@ -2556,7 +2556,7 @@ ALGORITHM: fibonacci computation"""
             use_specialized_tool = False
             # Extract first few words for short description
             short_desc = ' '.join(description.split()[:6])
-            console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
+            console.print(f"[cyan]-> Creating tool: {short_desc}...[/cyan]")
         else:
             # For other complex tasks or if no specialized tool, use normal tool selection
             selected_tool = self.tools_manager.get_best_llm_for_task(description)
@@ -2565,16 +2565,16 @@ ALGORITHM: fibonacci computation"""
 
             if selected_tool:
                 if "general" not in selected_tool.tool_id.lower() and "fallback" not in selected_tool.tags:
-                    console.print(f"[cyan]→ Using tool: {selected_tool.name}[/cyan]")
+                    console.print(f"[cyan]-> Using tool: {selected_tool.name}[/cyan]")
                     use_specialized_tool = True
                 else:
                     # Using general/fallback means creating new
                     short_desc = ' '.join(description.split()[:6])
-                    console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
+                    console.print(f"[cyan]-> Creating tool: {short_desc}...[/cyan]")
             else:
                 # No tool found, creating new
                 short_desc = ' '.join(description.split()[:6])
-                console.print(f"[cyan]→ Creating tool: {short_desc}...[/cyan]")
+                console.print(f"[cyan]-> Creating tool: {short_desc}...[/cyan]")
 
         # Step 3: Generate node ID
         import re
@@ -2698,39 +2698,15 @@ CRITICAL: Your code must satisfy the interface defined by these tests.
 Look at what functions the tests import and call - you MUST implement those exact functions.
 """
 
-        code_prompt = f"""You are implementing code based on this DETAILED SPECIFICATION:
+        # Build conditional sections outside f-string (Python doesn't allow nested triple-quotes in f-strings)
+        tdd_header = "CRITICAL TDD MODE INSTRUCTIONS:" if interface_tests else "MANDATORY CODE STRUCTURE:"
 
-{specification}
-
-Task: {description}
-{tdd_section}
-Available LLM Tools you can call:
-{tools_list}
-
-Follow the specification EXACTLY. Generate a Python implementation that:
-1. Matches the problem definition and requirements
-2. Implements the recommended algorithm/approach
-3. Uses the specified input/output interface
-4. {"PASSES THE INTERFACE TESTS ABOVE (TDD mode)" if interface_tests else "Handles all edge cases mentioned"}
-5. Includes proper error handling
-6. Follows the safety limits specified
-
-You MUST respond with ONLY a JSON object in this exact format:
-
-{{
-  "code": "the actual Python code as a string",
-  "description": "brief one-line description",
-  "tags": ["tag1", "tag2"]
-}}
-
-{"CRITICAL TDD MODE INSTRUCTIONS:" if interface_tests else "MANDATORY CODE STRUCTURE:"}
-
-{"""CRITICAL: You are in TEST-DRIVEN DEVELOPMENT mode.
+        tdd_instructions = """CRITICAL: You are in TEST-DRIVEN DEVELOPMENT mode.
 The tests above DEFINE THE INTERFACE - your code MUST implement EXACTLY those functions.
 
 Look at the import statement in the tests:
-- If tests do: `from main import binary_search` → you MUST create `def binary_search(...)`
-- If tests do: `from main import add` → you MUST create `def add(...)`
+- If tests do: `from main import binary_search` -> you MUST create `def binary_search(...)`
+- If tests do: `from main import add` -> you MUST create `def add(...)`
 - If tests call specific functions, you MUST implement those exact functions with matching signatures
 
 ABSOLUTELY FORBIDDEN IN YOUR CODE (main.py):
@@ -2788,14 +2764,43 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 ```
 BEFORE the import statement
-"""}
+"""
+
+        code_prompt = f"""You are implementing code based on this DETAILED SPECIFICATION:
+
+{specification}
+
+Task: {description}
+{tdd_section}
+Available LLM Tools you can call:
+{tools_list}
+
+Follow the specification EXACTLY. Generate a Python implementation that:
+1. Matches the problem definition and requirements
+2. Implements the recommended algorithm/approach
+3. Uses the specified input/output interface
+4. {"PASSES THE INTERFACE TESTS ABOVE (TDD mode)" if interface_tests else "Handles all edge cases mentioned"}
+5. Includes proper error handling
+6. Follows the safety limits specified
+
+You MUST respond with ONLY a JSON object in this exact format:
+
+{{
+  "code": "the actual Python code as a string",
+  "description": "brief one-line description",
+  "tags": ["tag1", "tag2"]
+}}
+
+{tdd_header}
+
+{tdd_instructions}
 
 CRITICAL: PREFER SIMPLICITY!
 - If the task can be solved with simple code (if/else, dictionary lookup, basic math), DO THAT!
 - Examples:
-  * "translate the word poop to french" → Simple dictionary: {{"poop": "merde"}}
-  * "add 2 and 3" → Simple math: result = 2 + 3
-  * "check if 7 is prime" → Simple function with loop
+  * "translate the word poop to french" -> Simple dictionary: {{"poop": "merde"}}
+  * "add 2 and 3" -> Simple math: result = 2 + 3
+  * "check if 7 is prime" -> Simple function with loop
 - ONLY use call_tool() for tasks that REQUIRE LLM capabilities:
   * Generating creative content (stories, poems, articles)
   * Complex reasoning or analysis
@@ -3893,8 +3898,8 @@ This workflow successfully completed with passing tests.
         specific_fields_needed = expected_fields - generic_fields
 
         if specific_fields_needed:
-            console.print(f"[yellow]→ Detected specific input fields needed: {', '.join(specific_fields_needed)}[/yellow]")
-            console.print(f"[yellow]→ Auto-generating test data...[/yellow]")
+            console.print(f"[yellow]-> Detected specific input fields needed: {', '.join(specific_fields_needed)}[/yellow]")
+            console.print(f"[yellow]-> Auto-generating test data...[/yellow]")
 
             # Try to use random_data_generator to create test data
             try:
@@ -3921,12 +3926,12 @@ This workflow successfully completed with passing tests.
 
                 if test_data_result.get("success"):
                     test_data = json.loads(test_data_result["stdout"])
-                    console.print(f"[green]→ Generated test data: {json.dumps(test_data, indent=2)}[/green]")
+                    console.print(f"[green]-> Generated test data: {json.dumps(test_data, indent=2)}[/green]")
                     # Merge generated data into input_data
                     input_data.update(test_data)
             except Exception as e:
-                console.print(f"[yellow]→ Could not auto-generate test data: {e}[/yellow]")
-                console.print(f"[yellow]→ Running with generic input only (may produce empty output)[/yellow]")
+                console.print(f"[yellow]-> Could not auto-generate test data: {e}[/yellow]")
+                console.print(f"[yellow]-> Running with generic input only (may produce empty output)[/yellow]")
 
         stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
 
@@ -4279,15 +4284,15 @@ Linked Pair: {production_tool_id} <-> {debug_tool_id}
                 failure_count = fix_artifact.metadata.get("failure_count", 0)
                 success_rate = success_count / (success_count + failure_count) if (success_count + failure_count) > 0 else 0
 
-                console.print(f"[cyan]→ Found fix in RAG: '{install_command}' (success rate: {success_rate:.0%}, {success_count}/{success_count+failure_count} attempts)[/cyan]")
+                console.print(f"[cyan]-> Found fix in RAG: '{install_command}' (success rate: {success_rate:.0%}, {success_count}/{success_count+failure_count} attempts)[/cyan]")
             else:
-                console.print(f"[yellow]→ No fix found in RAG, attempting install: {install_command}[/yellow]")
+                console.print(f"[yellow]-> No fix found in RAG, attempting install: {install_command}[/yellow]")
 
         except Exception as e:
             logger.debug(f"Could not search RAG for fix: {e}")
 
         # Step 2: Apply the fix (install the package)
-        console.print(f"[cyan]→ Installing {tool_name}...[/cyan]")
+        console.print(f"[cyan]-> Installing {tool_name}...[/cyan]")
 
         import subprocess
         try:
@@ -4313,7 +4318,7 @@ Linked Pair: {production_tool_id} <-> {debug_tool_id}
         # Step 3: Rerun the tool with the fixed dependency
         if install_success:
             try:
-                console.print(f"[cyan]→ Running {tool_name} on code...[/cyan]")
+                console.print(f"[cyan]-> Running {tool_name} on code...[/cyan]")
                 fixed_code = fix_function(code)
 
                 if fixed_code != code:
@@ -4783,10 +4788,10 @@ Extract:
 2. **outputs**: List of output field names in the result (usually just ["result"])
 3. **operation_type**: One of:
    - "generator": Creates content from scratch (uses call_tool, no real inputs needed)
-   - "transformer": Single input → transformed output (e.g., process text, calculate)
-   - "combiner": Multiple inputs → single output (e.g., add two numbers)
-   - "splitter": Single input → multiple outputs
-   - "filter": Input → filtered/validated output
+   - "transformer": Single input -> transformed output (e.g., process text, calculate)
+   - "combiner": Multiple inputs -> single output (e.g., add two numbers)
+   - "splitter": Single input -> multiple outputs
+   - "filter": Input -> filtered/validated output
 
 Return ONLY a JSON object with this structure:
 {{
@@ -4918,7 +4923,7 @@ RULES:
 1. For arithmetic tasks (add, subtract, multiply):
    - Define a function with clear parameters
    - Test it with the specific numbers from the description
-   - Example: "add 5 and 3" → test that add(5, 3) returns 8
+   - Example: "add 5 and 3" -> test that add(5, 3) returns 8
 
 2. For data processing tasks (sort, filter, transform):
    - Define expected input/output formats
@@ -5336,15 +5341,24 @@ Generate comprehensive tests now:"""
                         console.print(f"[dim]Filtering out explanatory line: {stripped[:60]}...[/dim]")
                         continue
 
-                    # Skip lines that don't start with valid Python syntax (unless they're indented continuations)
-                    if stripped and not line.startswith((' ', '\t')) and not any(stripped.startswith(s) for s in [
-                        'import', 'from', 'def', 'class', '@', 'if', 'else', 'elif', 'for', 'while',
-                        'try', 'except', 'finally', 'with', 'return', 'raise', 'assert', 'print',
-                        '#', '"""', "'''", 'pass', 'break', 'continue', 'yield', 'async', 'await'
-                    ]):
-                        # This line doesn't look like Python
-                        console.print(f"[dim]Filtering out non-Python line: {stripped[:60]}...[/dim]")
-                        continue
+                    # Skip lines that are clearly not Python code (but be permissive)
+                    # Only filter out lines that are obviously natural language, not code
+                    if stripped and not line.startswith((' ', '\t')):
+                        # Check if line looks like natural language rather than code
+                        # Look for patterns like sentences ending with periods, questions, etc.
+                        is_natural_language = (
+                            # Long sentences with periods (but not method calls like sys.path)
+                            (stripped.endswith('.') and ' ' in stripped and not '(' in stripped) or
+                            # Questions
+                            stripped.endswith('?') or
+                            # Sentences with multiple words but no Python operators/syntax
+                            (len(stripped.split()) > 5 and
+                             not any(c in stripped for c in ['(', ')', '[', ']', '{', '}', '=', ':', ',']) and
+                             not stripped.startswith('#'))
+                        )
+                        if is_natural_language:
+                            console.print(f"[dim]Filtering out non-Python line: {stripped[:60]}...[/dim]")
+                            continue
 
                     clean_lines.append(line)
 
@@ -5806,24 +5820,84 @@ Return ONLY the JSON object, nothing else."""
                                 fix_validation_failed = True
                                 break
 
-            # If validation failed, skip this attempt and try again
+            # If validation failed, try to programmatically apply common fixes
             if fix_validation_failed:
-                # Track this validation failure to warn the LLM in the next attempt
-                all_attempts.append({
-                    'attempt_num': attempt + 1,
-                    'model': current_model,
-                    'temp': temperature,
-                    'stage': stage,
-                    'fixes': fixes if 'fixes' in locals() else [],
-                    'analysis': analysis if 'analysis' in locals() else '',
-                    'error': 'VALIDATION FAILED - LLM described fix without applying it to code',
-                    'code_attempted': fixed_code[:500] if fixed_code else '',
-                    'validation_failure': True
-                })
+                console.print(f"[yellow]Attempting to programmatically apply fixes...[/yellow]")
 
-                # Don't count this as a valid attempt - the LLM is hallucinating fixes
-                console.print(f"[cyan]Retrying with stronger emphasis on ACTUALLY APPLYING the fix...[/cyan]")
-                continue
+                # Try to apply common fixes that LLM described but didn't implement
+                auto_fixed = False
+                for fix_description in fixes if 'fixes' in locals() and fixes else []:
+                    fix_lower = fix_description.lower()
+
+                    # Auto-fix: Add path setup for node_runtime import
+                    if ('path setup' in fix_lower or 'sys.path' in fix_lower) and 'node_runtime' in error_output.lower():
+                        if 'sys.path.insert' not in fixed_code and 'sys.path.append' not in fixed_code:
+                            # Check if code imports node_runtime
+                            if 'from node_runtime import' in fixed_code or 'import node_runtime' in fixed_code:
+                                console.print(f"[cyan]-> Auto-applying: Add sys.path setup before node_runtime import[/cyan]")
+                                # Add path setup at the beginning
+                                path_setup = "from pathlib import Path\nimport sys\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\n"
+
+                                # Insert after any existing imports from pathlib/sys, or at the start
+                                lines = fixed_code.split('\n')
+                                insert_pos = 0
+
+                                # Find position after module docstring if present
+                                in_docstring = False
+                                for i, line in enumerate(lines):
+                                    stripped = line.strip()
+                                    if i == 0 and (stripped.startswith('"""') or stripped.startswith("'''")):
+                                        in_docstring = True
+                                    elif in_docstring and (stripped.endswith('"""') or stripped.endswith("'''")):
+                                        insert_pos = i + 1
+                                        break
+                                    elif not in_docstring and stripped and not stripped.startswith('#'):
+                                        insert_pos = i
+                                        break
+
+                                # Insert path setup
+                                lines.insert(insert_pos, path_setup)
+                                fixed_code = '\n'.join(lines)
+                                auto_fixed = True
+                                console.print(f"[green]✓ Auto-applied path setup[/green]")
+
+                    # Auto-fix: Remove unused node_runtime import
+                    elif ('remove' in fix_lower or 'delete' in fix_lower) and 'import' in fix_lower and 'node_runtime' in fix_lower:
+                        if 'from node_runtime import' in fixed_code or 'import node_runtime' in fixed_code:
+                            console.print(f"[cyan]-> Auto-applying: Remove unused node_runtime import[/cyan]")
+                            lines = fixed_code.split('\n')
+                            filtered_lines = []
+                            for line in lines:
+                                # Skip node_runtime import lines and path setup lines
+                                if ('from node_runtime import' not in line and
+                                    'import node_runtime' not in line and
+                                    not (line.strip().startswith('sys.path.') and 'node_runtime' in ' '.join(filtered_lines[-5:]))):
+                                    filtered_lines.append(line)
+                            fixed_code = '\n'.join(filtered_lines)
+                            auto_fixed = True
+                            console.print(f"[green]✓ Auto-removed unused import[/green]")
+
+                if auto_fixed:
+                    # Re-validate with auto-fixed code
+                    console.print(f"[cyan]Testing auto-fixed code...[/cyan]")
+                    # Don't track this as a failed attempt since we fixed it
+                else:
+                    # Track this validation failure to warn the LLM in the next attempt
+                    all_attempts.append({
+                        'attempt_num': attempt + 1,
+                        'model': current_model,
+                        'temp': temperature,
+                        'stage': stage,
+                        'fixes': fixes if 'fixes' in locals() else [],
+                        'analysis': analysis if 'analysis' in locals() else '',
+                        'error': 'VALIDATION FAILED - LLM described fix without applying it to code',
+                        'code_attempted': fixed_code[:500] if fixed_code else '',
+                        'validation_failure': True
+                    })
+
+                    # Don't count this as a valid attempt - the LLM is hallucinating fixes
+                    console.print(f"[cyan]Retrying with stronger emphasis on ACTUALLY APPLYING the fix...[/cyan]")
+                    continue
             # ==================== END CRITICAL FIX VALIDATION ====================
 
             # Save fixed code (only if validation passed!)
@@ -6193,15 +6267,56 @@ Return ONLY the JSON object."""
                 console.print(f"[red]ERROR: God-level model returned no response[/red]")
                 return False
 
-            # Parse JSON response
+            # Parse JSON response with robust error handling
             import json
+            import re
+
             response = response.strip()
+
+            # Remove markdown fences
             if response.startswith('```json'):
                 response = response.split('```json')[1].split('```')[0].strip()
             elif response.startswith('```'):
                 response = response.split('```')[1].split('```')[0].strip()
 
-            result = json.loads(response)
+            # Try to parse JSON
+            result = None
+            try:
+                result = json.loads(response)
+            except json.JSONDecodeError as e:
+                console.print(f"[yellow]JSON parse error: {e}. Attempting recovery...[/yellow]")
+
+                # Try to find JSON object in the response
+                json_match = re.search(r'\{[^}]*"code"[^}]*\}', response, re.DOTALL)
+                if json_match:
+                    try:
+                        result = json.loads(json_match.group(0))
+                    except:
+                        pass
+
+                # If still no result, try to extract code directly
+                if not result:
+                    console.print(f"[yellow]Could not parse JSON. Extracting code directly...[/yellow]")
+                    # Try to find Python code
+                    code_match = re.search(r'```python\s*(.*?)\s*```', response, re.DOTALL)
+                    if not code_match:
+                        code_match = re.search(r'```\s*(.*?)\s*```', response, re.DOTALL)
+
+                    if code_match:
+                        result = {
+                            "code": code_match.group(1).strip(),
+                            "root_cause_analysis": "Extracted from malformed response",
+                            "fix_strategy": "Direct code extraction",
+                            "confidence": "Unknown - JSON parse failed"
+                        }
+                    else:
+                        console.print(f"[red]ERROR: Could not extract code from response[/red]")
+                        console.print(f"[dim]Response preview: {response[:300]}...[/dim]")
+                        return False
+
+            if not result:
+                console.print(f"[red]ERROR: Failed to parse god-level response[/red]")
+                return False
 
             root_cause = result.get("root_cause_analysis", "N/A")
             strategy = result.get("fix_strategy", "N/A")
