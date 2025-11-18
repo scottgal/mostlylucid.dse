@@ -1,0 +1,188 @@
+name: "Public APIs Discovery"
+type: "custom"
+description: "Discover and search free public APIs from the public-apis/public-apis repository. Search by category, authentication type, HTTPS support, or CORS. Categories include: Animals, Art & Design, Books, Business, Calendar, Currency, Development, Finance, Geocoding, Health, Jobs, News, Sports, Weather, and many more."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.public_apis_discovery_tool"
+  class: "PublicApisDiscoveryTool"
+  config:
+    api_base: "https://api.publicapis.org"
+    cache_ttl_hours: 168  # 1 week
+
+input_schema:
+  category:
+    type: string
+    description: "Filter by category (e.g., 'Animals', 'Art & Design', 'Books', 'Business', 'Currency', 'Development', 'Finance', 'Geocoding', 'Weather')"
+    required: false
+    example: "Weather"
+
+  title:
+    type: string
+    description: "Search by API title/name"
+    required: false
+    example: "OpenWeatherMap"
+
+  description:
+    type: string
+    description: "Search in API descriptions"
+    required: false
+
+  auth:
+    type: string
+    description: "Filter by authentication type"
+    required: false
+    enum: ["apiKey", "OAuth", "X-Mashape-Key", "None", ""]
+
+  https:
+    type: boolean
+    description: "Filter by HTTPS support"
+    required: false
+
+  cors:
+    type: string
+    description: "Filter by CORS support"
+    required: false
+    enum: ["yes", "no", "unknown"]
+
+  limit:
+    type: integer
+    description: "Limit number of results"
+    required: false
+    default: 20
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    count:
+      type: integer
+      description: "Number of APIs found"
+    entries:
+      type: array
+      description: "Array of API entries"
+      items:
+        type: object
+        properties:
+          API:
+            type: string
+            description: "API name"
+          Description:
+            type: string
+            description: "API description"
+          Auth:
+            type: string
+            description: "Authentication method"
+          HTTPS:
+            type: boolean
+            description: "HTTPS support"
+          Cors:
+            type: string
+            description: "CORS support"
+          Link:
+            type: string
+            description: "API documentation URL"
+          Category:
+            type: string
+            description: "API category"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["apis", "discovery", "public", "free", "reference", "development"]
+
+examples:
+  - description: "Find weather APIs"
+    input:
+      category: "Weather"
+    output:
+      success: true
+      count: 8
+      entries:
+        - API: "OpenWeatherMap"
+          Description: "Weather"
+          Auth: "apiKey"
+          HTTPS: true
+          Cors: "unknown"
+          Link: "https://openweathermap.org/api"
+          Category: "Weather"
+
+  - description: "Find APIs without authentication"
+    input:
+      auth: "None"
+      https: true
+    output:
+      success: true
+      count: 50
+      entries:
+        - API: "REST Countries"
+          Description: "Get information about countries"
+          Auth: ""
+          HTTPS: true
+          Cors: "yes"
+          Category: "Government"
+
+  - description: "Search for geocoding APIs"
+    input:
+      description: "geocoding"
+    output:
+      success: true
+      count: 5
+      entries:
+        - API: "Nominatim"
+          Description: "Geocoding and reverse geocoding"
+          Category: "Geocoding"
+
+usage_notes: |
+  ## Public APIs Discovery Tool
+
+  Discover free public APIs from the curated public-apis repository.
+  Search by category, authentication, HTTPS/CORS support, or keywords.
+
+  ## Usage Examples
+
+  ### Find Weather APIs
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("public_apis_discovery", json.dumps({
+      "category": "Weather"
+  }))
+  ```
+
+  ### Find Free APIs (No Auth Required)
+  ```python
+  result = call_tool("public_apis_discovery", json.dumps({
+      "auth": "None",
+      "https": True,
+      "limit": 10
+  }))
+  ```
+
+  ### Search by Description
+  ```python
+  result = call_tool("public_apis_discovery", json.dumps({
+      "description": "currency exchange",
+      "https": True
+  }))
+  ```
+
+  ## Available Categories
+
+  - Animals, Anime, Anti-Malware, Art & Design
+  - Authentication & Authorization, Blockchain, Books, Business
+  - Calendar, Cryptocurrency, Currency Exchange, Data Validation
+  - Development, Dictionaries, Documents & Productivity
+  - Email, Entertainment, Environment, Events
+  - Finance, Food & Drink, Games & Comics, Geocoding
+  - Government, Health, Jobs, Machine Learning
+  - Music, News, Open Data, Patent, Personality
+  - Phone, Photography, Programming, Science & Math
+  - Security, Shopping, Social, Sports, Test Data
+  - Text Analysis, Tracking, Transportation, URL Shorteners
+  - Vehicle, Video, Weather

@@ -1,0 +1,600 @@
+name: "Nominatim Geocoding"
+type: "custom"
+description: "Free geocoding and reverse geocoding using OpenStreetMap data. Convert addresses to coordinates (geocoding) or coordinates to addresses (reverse geocoding). Search for places, cities, landmarks, and more. No authentication required."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+custom:
+  module: "src.nominatim_geocoding_tool"
+  class: "NominatimGeocodingTool"
+  config:
+    api_base: "https://nominatim.openstreetmap.org"
+    user_agent: "CodeEvolver/1.0"  # Required by Nominatim
+    cache_ttl_hours: 168  # 1 week
+    rate_limit_delay: 1  # 1 second between requests (required by usage policy)
+
+input_schema:
+  operation:
+    type: string
+    description: "Type of operation"
+    required: true
+    enum: ["search", "reverse", "lookup"]
+    default: "search"
+
+  query:
+    type: string
+    description: "Address or place to search for (for 'search' operation)"
+    required: false
+    example: "1600 Pennsylvania Avenue, Washington DC"
+
+  lat:
+    type: number
+    description: "Latitude for reverse geocoding"
+    required: false
+    example: 38.8977
+
+  lon:
+    type: number
+    description: "Longitude for reverse geocoding"
+    required: false
+    example: -77.0365
+
+  osm_ids:
+    type: array
+    description: "OpenStreetMap IDs to lookup (for 'lookup' operation)"
+    required: false
+    items:
+      type: string
+
+  limit:
+    type: integer
+    description: "Maximum number of results"
+    required: false
+    default: 10
+    maximum: 50
+
+  country_codes:
+    type: array
+    description: "Limit search to specific countries (ISO 3166-1alpha2 codes)"
+    required: false
+    items:
+      type: string
+    example: ["us", "ca", "gb"]
+
+  language:
+    type: string
+    description: "Preferred language for results (ISO 639-1)"
+    required: false
+    default: "en"
+
+  format_output:
+    type: string
+    description: "Response format"
+    required: false
+    enum: ["json", "jsonv2", "geojson"]
+    default: "jsonv2"
+
+  address_details:
+    type: boolean
+    description: "Include detailed address breakdown"
+    required: false
+    default: true
+
+  extra_tags:
+    type: boolean
+    description: "Include additional OSM tags"
+    required: false
+    default: false
+
+  zoom:
+    type: integer
+    description: "Zoom level for reverse geocoding (0-18)"
+    required: false
+    default: 18
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    count:
+      type: integer
+      description: "Number of results"
+    results:
+      type: array
+      description: "Geocoding results"
+      items:
+        type: object
+        properties:
+          display_name:
+            type: string
+            description: "Full formatted address"
+          lat:
+            type: string
+            description: "Latitude"
+          lon:
+            type: string
+            description: "Longitude"
+          address:
+            type: object
+            description: "Detailed address components"
+          boundingbox:
+            type: array
+            description: "Bounding box coordinates"
+          importance:
+            type: number
+            description: "Relevance score"
+          type:
+            type: string
+            description: "Place type"
+          class:
+            type: string
+            description: "Place class"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["geocoding", "maps", "location", "address", "coordinates", "free", "no-auth", "openstreetmap"]
+
+examples:
+  - description: "Geocode an address"
+    input:
+      operation: "search"
+      query: "Eiffel Tower, Paris"
+    output:
+      success: true
+      count: 1
+      results:
+        - display_name: "Tour Eiffel, Avenue Anatole France, Paris, France"
+          lat: "48.8583701"
+          lon: "2.2944813"
+          address:
+            tourism: "Tour Eiffel"
+            road: "Avenue Anatole France"
+            city: "Paris"
+            country: "France"
+
+  - description: "Reverse geocode coordinates"
+    input:
+      operation: "reverse"
+      lat: 40.7589
+      lon: -73.9851
+    output:
+      success: true
+      count: 1
+      results:
+        - display_name: "Times Square, Manhattan, New York, NY, USA"
+          address:
+            road: "Times Square"
+            city: "New York"
+            state: "New York"
+            country: "United States"
+
+  - description: "Search with country filter"
+    input:
+      operation: "search"
+      query: "London"
+      country_codes: ["gb"]
+    output:
+      success: true
+      count: 1
+      results:
+        - display_name: "London, Greater London, England, United Kingdom"
+          lat: "51.5073219"
+          lon: "-0.1276474"
+
+usage_notes: |
+  ## Nominatim Geocoding Tool
+
+  Free geocoding and reverse geocoding using OpenStreetMap data.
+  Convert addresses to coordinates and vice versa. No API key required.
+
+  ## Usage Examples
+
+  ### Example 1: Geocode a Street Address
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("nominatim_geocoding", json.dumps({
+      "operation": "search",
+      "query": "1600 Pennsylvania Avenue NW, Washington, DC"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      location = data['results'][0]
+      print(f"Address: {location['display_name']}")
+      print(f"Coordinates: {location['lat']}, {location['lon']}")
+      print(f"City: {location['address']['city']}")
+  ```
+
+  ### Example 2: Reverse Geocode Coordinates
+  ```python
+  result = call_tool("nominatim_geocoding", json.dumps({
+      "operation": "reverse",
+      "lat": 51.5074,
+      "lon": -0.1278
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      location = data['results'][0]
+      print(f"Location: {location['display_name']}")
+      print(f"City: {location['address'].get('city', 'N/A')}")
+      print(f"Country: {location['address'].get('country', 'N/A')}")
+  ```
+
+  ### Example 3: Search for Famous Landmarks
+  ```python
+  landmarks = [
+      "Statue of Liberty, New York",
+      "Big Ben, London",
+      "Taj Mahal, India",
+      "Sydney Opera House",
+      "Colosseum, Rome"
+  ]
+
+  for landmark in landmarks:
+      result = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "search",
+          "query": landmark,
+          "limit": 1
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['count'] > 0:
+          loc = data['results'][0]
+          print(f"{landmark}:")
+          print(f"  Coordinates: {loc['lat']}, {loc['lon']}")
+          print(f"  Full name: {loc['display_name']}\n")
+  ```
+
+  ### Example 4: Search Within Specific Countries
+  ```python
+  # Find "Springfield" only in the USA
+  result = call_tool("nominatim_geocoding", json.dumps({
+      "operation": "search",
+      "query": "Springfield",
+      "country_codes": ["us"],
+      "limit": 10
+  }))
+
+  data = json.loads(result)
+  print(f"Found {data['count']} Springfields in the USA:")
+  for location in data['results']:
+      state = location['address'].get('state', 'Unknown')
+      print(f"  - Springfield, {state}")
+  ```
+
+  ### Example 5: Geocode Multiple Addresses
+  ```python
+  addresses = [
+      "10 Downing Street, London, UK",
+      "24 Sussex Drive, Ottawa, Canada",
+      "The White House, Washington DC, USA"
+  ]
+
+  locations = []
+  for address in addresses:
+      result = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "search",
+          "query": address,
+          "limit": 1
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['count'] > 0:
+          loc = data['results'][0]
+          locations.append({
+              'address': address,
+              'lat': float(loc['lat']),
+              'lon': float(loc['lon']),
+              'full_name': loc['display_name']
+          })
+
+  # Print results
+  for loc in locations:
+      print(f"{loc['address']}")
+      print(f"  → {loc['full_name']}")
+      print(f"  → ({loc['lat']:.4f}, {loc['lon']:.4f})\n")
+  ```
+
+  ### Example 6: Build a Distance Calculator
+  ```python
+  import math
+
+  def haversine_distance(lat1, lon1, lat2, lon2):
+      """Calculate distance between two points in kilometers."""
+      R = 6371  # Earth's radius in kilometers
+
+      lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+      dlat = lat2 - lat1
+      dlon = lon2 - lon1
+
+      a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+      c = 2 * math.asin(math.sqrt(a))
+
+      return R * c
+
+  def distance_between_cities(city1, city2):
+      """Calculate distance between two cities."""
+      # Geocode first city
+      result1 = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "search",
+          "query": city1,
+          "limit": 1
+      }))
+
+      # Geocode second city
+      result2 = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "search",
+          "query": city2,
+          "limit": 1
+      }))
+
+      data1 = json.loads(result1)
+      data2 = json.loads(result2)
+
+      if data1['success'] and data2['success']:
+          loc1 = data1['results'][0]
+          loc2 = data2['results'][0]
+
+          distance = haversine_distance(
+              float(loc1['lat']), float(loc1['lon']),
+              float(loc2['lat']), float(loc2['lon'])
+          )
+
+          return {
+              'city1': loc1['display_name'],
+              'city2': loc2['display_name'],
+              'distance_km': round(distance, 2),
+              'distance_miles': round(distance * 0.621371, 2)
+          }
+
+  # Calculate distances
+  distances = [
+      ("New York", "Los Angeles"),
+      ("London", "Paris"),
+      ("Tokyo", "Sydney")
+  ]
+
+  for city1, city2 in distances:
+      result = distance_between_cities(city1, city2)
+      if result:
+          print(f"{city1} to {city2}:")
+          print(f"  {result['distance_km']} km ({result['distance_miles']} miles)\n")
+  ```
+
+  ### Example 7: Create a Route Planner
+  ```python
+  def plan_route(waypoints):
+      """Geocode multiple waypoints for route planning."""
+      route = []
+
+      for i, waypoint in enumerate(waypoints):
+          result = call_tool("nominatim_geocoding", json.dumps({
+              "operation": "search",
+              "query": waypoint,
+              "limit": 1
+          }))
+
+          data = json.loads(result)
+          if data['success'] and data['count'] > 0:
+              loc = data['results'][0]
+              route.append({
+                  'order': i + 1,
+                  'name': waypoint,
+                  'display_name': loc['display_name'],
+                  'lat': float(loc['lat']),
+                  'lon': float(loc['lon'])
+              })
+
+      return route
+
+  # Plan a road trip
+  trip = plan_route([
+      "Seattle, WA",
+      "Portland, OR",
+      "San Francisco, CA",
+      "Los Angeles, CA",
+      "San Diego, CA"
+  ])
+
+  print("Road Trip Route:")
+  for stop in trip:
+      print(f"{stop['order']}. {stop['display_name']}")
+      print(f"   ({stop['lat']:.4f}, {stop['lon']:.4f})\n")
+  ```
+
+  ### Example 8: Find Nearby Places
+  ```python
+  def find_nearby_place_type(lat, lon, place_type):
+      """
+      Find places near coordinates.
+      Note: This is a simplified example. For production use,
+      consider using Overpass API for more specific queries.
+      """
+      # Get address at location
+      result = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "reverse",
+          "lat": lat,
+          "lon": lon,
+          "zoom": 16  # City block level
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          return data['results'][0]
+
+  # Example usage
+  # Find what's at specific coordinates
+  result = find_nearby_place_type(40.7580, -73.9855, "tourism")
+  if result:
+      print(f"Location: {result['display_name']}")
+  ```
+
+  ### Example 9: Validate and Standardize Addresses
+  ```python
+  def standardize_address(address):
+      """Validate and standardize an address."""
+      result = call_tool("nominatim_geocoding", json.dumps({
+          "operation": "search",
+          "query": address,
+          "limit": 1,
+          "address_details": True
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['count'] > 0:
+          loc = data['results'][0]
+          addr = loc['address']
+
+          return {
+              'input': address,
+              'standardized': loc['display_name'],
+              'components': {
+                  'house_number': addr.get('house_number', ''),
+                  'road': addr.get('road', ''),
+                  'city': addr.get('city', addr.get('town', addr.get('village', ''))),
+                  'state': addr.get('state', ''),
+                  'postcode': addr.get('postcode', ''),
+                  'country': addr.get('country', '')
+              },
+              'coordinates': {
+                  'lat': float(loc['lat']),
+                  'lon': float(loc['lon'])
+              }
+          }
+
+  # Standardize addresses
+  addresses = [
+      "1600 Penn Ave, Washington",
+      "Baker St 221B, London",
+      "10 Downing St, UK"
+  ]
+
+  for addr in addresses:
+      result = standardize_address(addr)
+      if result:
+          print(f"Input: {result['input']}")
+          print(f"Standardized: {result['standardized']}")
+          print(f"City: {result['components']['city']}")
+          print(f"Country: {result['components']['country']}")
+          print(f"Coordinates: {result['coordinates']}\n")
+  ```
+
+  ### Example 10: Batch Geocoding with Error Handling
+  ```python
+  def batch_geocode(addresses, country_filter=None):
+      """Geocode multiple addresses with error handling."""
+      results = []
+      errors = []
+
+      for address in addresses:
+          try:
+              params = {
+                  "operation": "search",
+                  "query": address,
+                  "limit": 1
+              }
+
+              if country_filter:
+                  params["country_codes"] = country_filter
+
+              result = call_tool("nominatim_geocoding", json.dumps(params))
+              data = json.loads(result)
+
+              if data['success'] and data['count'] > 0:
+                  loc = data['results'][0]
+                  results.append({
+                      'address': address,
+                      'lat': float(loc['lat']),
+                      'lon': float(loc['lon']),
+                      'display_name': loc['display_name'],
+                      'status': 'success'
+                  })
+              else:
+                  errors.append({
+                      'address': address,
+                      'status': 'not_found'
+                  })
+
+          except Exception as e:
+              errors.append({
+                  'address': address,
+                  'status': 'error',
+                  'message': str(e)
+              })
+
+      return {
+          'successful': results,
+          'failed': errors,
+          'success_rate': f"{len(results) / len(addresses) * 100:.1f}%"
+      }
+
+  # Batch geocode
+  addresses = [
+      "Times Square, New York",
+      "Invalid Address XYZ123",
+      "Trafalgar Square, London",
+      "Red Square, Moscow"
+  ]
+
+  results = batch_geocode(addresses)
+  print(f"Success Rate: {results['success_rate']}")
+  print(f"\nSuccessful ({len(results['successful'])}):")
+  for r in results['successful']:
+      print(f"  ✓ {r['address']}")
+      print(f"    → {r['display_name']}")
+
+  print(f"\nFailed ({len(results['failed'])}):")
+  for r in results['failed']:
+      print(f"  ✗ {r['address']} ({r['status']})")
+  ```
+
+  ## Address Components
+
+  Results include detailed address breakdown:
+  - house_number, road, neighbourhood
+  - suburb, city, town, village
+  - county, state, postcode
+  - country, country_code
+  - continent
+
+  ## Place Types
+
+  Common place types returned:
+  - amenity, building, highway, historic
+  - leisure, natural, office, place
+  - shop, tourism, waterway
+
+  ## Usage Policy
+
+  - **Attribution Required**: Must credit OpenStreetMap
+  - **Rate Limit**: 1 request per second
+  - **User Agent**: Must provide valid user agent
+  - **No Heavy Usage**: Not for bulk geocoding of entire databases
+  - **Caching Encouraged**: Cache results to reduce load
+
+  ## Zoom Levels (Reverse Geocoding)
+
+  - 3: Country
+  - 5: State
+  - 8: County
+  - 10: City
+  - 14: Suburb
+  - 16: Major streets
+  - 17: Major and minor streets
+  - 18: Building (default)
+
+  ## Best Practices
+
+  1. **Cache Results**: Geocoding data doesn't change often
+  2. **Respect Rate Limits**: Wait 1 second between requests
+  3. **Be Specific**: More detailed addresses get better results
+  4. **Handle Errors**: Not all addresses can be geocoded
+  5. **Validate Input**: Clean addresses before geocoding
+  6. **Use Country Filters**: Reduce ambiguity in results

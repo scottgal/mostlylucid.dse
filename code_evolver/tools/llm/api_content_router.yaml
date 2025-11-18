@@ -1,0 +1,450 @@
+name: "API Content Router"
+type: "llm"
+description: "Intelligent routing system that analyzes user requests and automatically routes them to the most appropriate public API tool. Uses a small, fast sentinel LLM (1B model) to understand intent and select the best API: country data → REST Countries, addresses → Nominatim, currency → Frankfurter, definitions → Dictionary, grammar → LanguageTool, jokes → Jokes API, quotes → Random Data, images → Lorem Picsum, Bible/Quran verses → respective APIs, etc. Returns both the recommended API and ready-to-use parameters."
+cost_tier: "very-low"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+llm:
+  provider: "ollama"
+  model: "qwen2.5:1.5b"  # Fast, small sentinel model
+  temperature: 0.1
+  max_tokens: 500
+  system_prompt: |
+    You are an API routing expert. Analyze user requests and determine which public API tool to use.
+
+    Available APIs and their use cases:
+
+    1. **rest_countries_api**: Country information (name, capital, population, currency, languages, flags, borders)
+       - Triggers: "country", "capital", "population", "flag", "currency of [country]", "languages in"
+
+    2. **nominatim_geocoding**: Address to coordinates or coordinates to address
+       - Triggers: "address", "geocode", "coordinates", "latitude", "longitude", "location of"
+
+    3. **frankfurter_currency**: Currency exchange rates and conversion
+       - Triggers: "currency", "exchange rate", "convert", "USD", "EUR", "price in"
+
+    4. **free_dictionary_api**: Word definitions, synonyms, antonyms, pronunciation
+       - Triggers: "define", "definition", "meaning", "synonym", "antonym", "pronunciation"
+
+    5. **languagetool_api**: Grammar and spelling check
+       - Triggers: "grammar", "spelling", "proofread", "check", "correct", "errors"
+
+    6. **jokes_api**: Random jokes (general, programming, dad jokes)
+       - Triggers: "joke", "funny", "humor", "laugh"
+
+    7. **random_data_api**: Quotes, advice, facts
+       - Triggers: "quote", "advice", "fact", "inspiration", "motivate"
+
+    8. **lorem_picsum_api**: Placeholder images
+       - Triggers: "image", "picture", "photo", "placeholder", "mockup"
+
+    9. **bible_api**: Bible verses and passages
+       - Triggers: "bible", "verse", "scripture", "john", "psalm", "genesis"
+
+    10. **quran_api**: Quran verses and Surahs
+        - Triggers: "quran", "surah", "ayah", "islamic"
+
+    11. **ip_geolocation_api**: IP address location lookup
+        - Triggers: "ip address", "ip location", "geolocation", "my ip"
+
+    12. **public_apis_discovery**: Discover other public APIs
+        - Triggers: "find api", "discover api", "search apis", "available apis"
+
+    Respond with JSON ONLY in this exact format:
+    {
+      "api": "api_name",
+      "confidence": 0.95,
+      "reasoning": "Brief explanation",
+      "parameters": {
+        "param1": "value1"
+      }
+    }
+
+input_schema:
+  query:
+    type: string
+    description: "User's natural language request"
+    required: true
+    example: "What is the capital of France?"
+
+  return_format:
+    type: string
+    description: "How to return the result"
+    required: false
+    enum: ["route_only", "execute"]
+    default: "route_only"
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether routing succeeded"
+    api:
+      type: string
+      description: "Recommended API tool name"
+    confidence:
+      type: number
+      description: "Confidence score (0-1)"
+    reasoning:
+      type: string
+      description: "Why this API was chosen"
+    parameters:
+      type: object
+      description: "Suggested parameters for the API call"
+    example_call:
+      type: string
+      description: "Example code to call the API"
+    alternative_apis:
+      type: array
+      description: "Other possible APIs for this request"
+
+tags: ["routing", "ai", "intelligent", "dispatcher", "llm", "sentinel"]
+
+examples:
+  - description: "Route country query"
+    input:
+      query: "What is the capital of France?"
+    output:
+      success: true
+      api: "rest_countries_api"
+      confidence: 0.98
+      reasoning: "Query asks for country capital information"
+      parameters:
+        search_type: "name"
+        query: "France"
+        fields: ["name", "capital"]
+
+  - description: "Route currency conversion"
+    input:
+      query: "Convert 100 USD to EUR"
+    output:
+      success: true
+      api: "frankfurter_currency"
+      confidence: 0.99
+      reasoning: "Request is for currency conversion"
+      parameters:
+        operation: "convert"
+        amount: 100
+        from_currency: "USD"
+        to_currency: "EUR"
+
+  - description: "Route grammar check"
+    input:
+      query: "Check this for errors: I can has cheezburger"
+    output:
+      success: true
+      api: "languagetool_api"
+      confidence: 0.97
+      reasoning: "User wants grammar/spelling check"
+      parameters:
+        text: "I can has cheezburger"
+        language: "en-US"
+
+usage_notes: |
+  ## API Content Router
+
+  Intelligent routing system that automatically selects the best public API
+  for your request. Powered by a fast 1.5B parameter LLM for instant routing.
+
+  ## Usage Examples
+
+  ### Example 1: Auto-Route and Execute
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # User asks a question
+  query = "What's the population of Japan?"
+
+  # Get routing recommendation
+  route = call_tool("api_content_router", json.dumps({
+      "query": query
+  }))
+
+  route_data = json.loads(route)
+  if route_data['success']:
+      print(f"Recommended API: {route_data['api']}")
+      print(f"Confidence: {route_data['confidence']:.0%}")
+      print(f"Reasoning: {route_data['reasoning']}")
+
+      # Execute the recommended API
+      api_name = route_data['api']
+      params = route_data['parameters']
+
+      result = call_tool(api_name, json.dumps(params))
+      print(f"\nResult: {result}")
+  ```
+
+  ### Example 2: Smart Query Handler
+  ```python
+  def smart_query(question):
+      """Automatically route and answer any question."""
+
+      # Get routing decision
+      route = call_tool("api_content_router", json.dumps({
+          "query": question
+      }))
+
+      route_data = json.loads(route)
+
+      if route_data['success']:
+          # Call the recommended API
+          api_result = call_tool(
+              route_data['api'],
+              json.dumps(route_data['parameters'])
+          )
+
+          return {
+              'question': question,
+              'api_used': route_data['api'],
+              'confidence': route_data['confidence'],
+              'result': json.loads(api_result)
+          }
+
+  # Ask various questions
+  questions = [
+      "What is the capital of Germany?",
+      "Convert 50 EUR to USD",
+      "Define serendipity",
+      "Check grammar: She dont like apples",
+      "Tell me a joke",
+      "Give me an inspirational quote"
+  ]
+
+  for q in questions:
+      answer = smart_query(q)
+      print(f"\nQ: {q}")
+      print(f"API: {answer['api_used']} ({answer['confidence']:.0%} confidence)")
+      print(f"A: {answer['result']}")
+  ```
+
+  ### Example 3: Batch Processing with Auto-Routing
+  ```python
+  def process_requests(requests):
+      """Process multiple requests with auto-routing."""
+      results = []
+
+      for req in requests:
+          # Route the request
+          route = call_tool("api_content_router", json.dumps({
+              "query": req
+          }))
+
+          route_data = json.loads(route)
+
+          if route_data['success']:
+              # Execute the API
+              api_result = call_tool(
+                  route_data['api'],
+                  json.dumps(route_data['parameters'])
+              )
+
+              results.append({
+                  'request': req,
+                  'api': route_data['api'],
+                  'result': api_result
+              })
+
+      return results
+
+  # Process multiple requests
+  requests = [
+      "Population of India",
+      "Currency of Switzerland",
+      "Bible verse John 3:16",
+      "Random programming joke"
+  ]
+
+  results = process_requests(requests)
+  for r in results:
+      print(f"\n{r['request']} → {r['api']}")
+  ```
+
+  ### Example 4: Chatbot Integration
+  ```python
+  def chatbot_response(user_message):
+      """Generate chatbot response using auto-routing."""
+
+      # Route the message
+      route = call_tool("api_content_router", json.dumps({
+          "query": user_message
+      }))
+
+      route_data = json.loads(route)
+
+      if route_data['success'] and route_data['confidence'] > 0.7:
+          # High confidence - execute API
+          api_result = call_tool(
+              route_data['api'],
+              json.dumps(route_data['parameters'])
+          )
+
+          result_data = json.loads(api_result)
+
+          # Format response based on API type
+          if route_data['api'] == 'rest_countries_api':
+              country = result_data['countries'][0]
+              return f"The capital of {country['name']['common']} is {country['capital'][0]}."
+
+          elif route_data['api'] == 'frankfurter_currency':
+              return f"{result_data['amount']} {result_data['base']} = {result_data['rates']} "
+
+          elif route_data['api'] == 'jokes_api':
+              joke = result_data['jokes'][0]
+              return f"{joke['setup']}\n{joke['punchline']}"
+
+          # ... handle other APIs ...
+
+          return str(result_data)
+      else:
+          return "I'm not sure how to help with that. Could you rephrase?"
+
+  # Chatbot conversation
+  messages = [
+      "What's the capital of Brazil?",
+      "Tell me a joke",
+      "What does ubiquitous mean?",
+      "How much is 100 USD in GBP?"
+  ]
+
+  for msg in messages:
+      print(f"\nUser: {msg}")
+      print(f"Bot: {chatbot_response(msg)}")
+  ```
+
+  ### Example 5: API Suggestion System
+  ```python
+  def suggest_api(natural_query):
+      """Suggest the best API for a natural language query."""
+
+      route = call_tool("api_content_router", json.dumps({
+          "query": natural_query
+      }))
+
+      route_data = json.loads(route)
+
+      if route_data['success']:
+          print(f"\n📋 QUERY: {natural_query}\n")
+          print(f"🎯 RECOMMENDED API: {route_data['api']}")
+          print(f"📊 CONFIDENCE: {route_data['confidence']:.0%}")
+          print(f"💭 REASONING: {route_data['reasoning']}\n")
+          print(f"⚙️  PARAMETERS:")
+
+          for key, value in route_data['parameters'].items():
+              print(f"   • {key}: {value}")
+
+          if route_data.get('alternative_apis'):
+              print(f"\n🔀 ALTERNATIVES:")
+              for alt in route_data['alternative_apis']:
+                  print(f"   • {alt}")
+
+          if route_data.get('example_call'):
+              print(f"\n📝 EXAMPLE CODE:")
+              print(route_data['example_call'])
+
+  # Suggest APIs for various queries
+  suggest_api("I need to check if this text has grammar errors")
+  suggest_api("Get me information about Canada")
+  suggest_api("Show me a random cat fact")
+  ```
+
+  ### Example 6: Multi-API Workflow
+  ```python
+  def complex_query_handler(query):
+      """Handle complex queries that might need multiple APIs."""
+
+      # First, route the main query
+      route = call_tool("api_content_router", json.dumps({
+          "query": query
+      }))
+
+      route_data = json.loads(route)
+
+      # Execute primary API
+      primary_result = call_tool(
+          route_data['api'],
+          json.dumps(route_data['parameters'])
+      )
+
+      # Check if we need additional APIs
+      # (This is simplified - real implementation would be more sophisticated)
+
+      return {
+          'primary_api': route_data['api'],
+          'primary_result': json.loads(primary_result),
+          'confidence': route_data['confidence']
+      }
+
+  # Example: "What's the weather like in the capital of France?"
+  # Would route to REST Countries first, then potentially weather API
+  ```
+
+  ### Example 7: API Performance Tracker
+  ```python
+  def track_api_usage(queries):
+      """Track which APIs are used for different query types."""
+
+      api_usage = {}
+
+      for query in queries:
+          route = call_tool("api_content_router", json.dumps({
+              "query": query
+          }))
+
+          route_data = json.loads(route)
+
+          if route_data['success']:
+              api = route_data['api']
+              api_usage[api] = api_usage.get(api, 0) + 1
+
+      print("API USAGE STATISTICS:\n")
+      for api, count in sorted(api_usage.items(), key=lambda x: x[1], reverse=True):
+          print(f"{api:30} {count:3} queries")
+
+  # Track usage
+  sample_queries = [
+      "Capital of Spain", "Capital of Italy", "Capital of Germany",
+      "Convert 100 USD to EUR", "Convert 50 GBP to JPY",
+      "Define word", "Meaning of resilient",
+      "Tell me a joke", "Random quote"
+  ]
+
+  track_api_usage(sample_queries)
+  ```
+
+  ## Routing Logic
+
+  The sentinel LLM analyzes:
+  - **Keywords**: Specific terms that indicate API type
+  - **Intent**: What the user wants to accomplish
+  - **Context**: Additional information in the query
+  - **Patterns**: Common query structures
+
+  ## Confidence Scores
+
+  - **0.9-1.0**: Very high confidence, safe to auto-execute
+  - **0.7-0.89**: High confidence, good match
+  - **0.5-0.69**: Medium confidence, may need confirmation
+  - **0.0-0.49**: Low confidence, suggest alternatives
+
+  ## Benefits
+
+  - **Fast**: Uses 1.5B model for instant routing
+  - **Smart**: Understands natural language queries
+  - **Accurate**: High confidence scores
+  - **Flexible**: Handles various query types
+  - **Extensible**: Easy to add new APIs
+  - **Efficient**: No manual API selection needed
+
+  ## Use Cases
+
+  - Chatbot backends
+  - API gateway/proxy
+  - Natural language interfaces
+  - Voice assistant routing
+  - Multi-API applications
+  - Query understanding
+  - Intent classification
+  - Smart API selection

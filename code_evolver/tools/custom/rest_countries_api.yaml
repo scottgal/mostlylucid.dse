@@ -1,0 +1,319 @@
+name: "REST Countries API"
+type: "custom"
+description: "Get comprehensive information about any country including name, capital, population, area, languages, currencies, flags, borders, timezones, and more. No authentication required. Search by name, code, capital, currency, or language."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.rest_countries_tool"
+  class: "RestCountriesTool"
+  config:
+    api_base: "https://restcountries.com/v3.1"
+    cache_ttl_hours: 720  # 30 days (data rarely changes)
+
+input_schema:
+  search_type:
+    type: string
+    description: "Type of search to perform"
+    required: true
+    enum: ["all", "name", "code", "capital", "currency", "language", "region", "subregion"]
+    default: "name"
+
+  query:
+    type: string
+    description: "Search query (country name, code, capital, etc.)"
+    required: false
+    example: "United States"
+
+  fields:
+    type: array
+    description: "Specific fields to return (e.g., ['name', 'capital', 'population', 'flags']). Leave empty for all fields."
+    required: false
+    items:
+      type: string
+
+  full_text:
+    type: boolean
+    description: "Use full-text search for name queries"
+    required: false
+    default: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    count:
+      type: integer
+      description: "Number of countries found"
+    countries:
+      type: array
+      description: "Array of country data"
+      items:
+        type: object
+        properties:
+          name:
+            type: object
+            description: "Country names (common, official, native)"
+          capital:
+            type: array
+            description: "Capital city/cities"
+          population:
+            type: integer
+            description: "Population count"
+          area:
+            type: number
+            description: "Area in km²"
+          region:
+            type: string
+            description: "Geographic region"
+          subregion:
+            type: string
+            description: "Geographic subregion"
+          languages:
+            type: object
+            description: "Official languages"
+          currencies:
+            type: object
+            description: "Currencies used"
+          flags:
+            type: object
+            description: "Flag image URLs"
+          borders:
+            type: array
+            description: "Border country codes"
+          timezones:
+            type: array
+            description: "Timezones"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["countries", "geography", "reference", "free", "no-auth", "data"]
+
+examples:
+  - description: "Get all information about a country"
+    input:
+      search_type: "name"
+      query: "Germany"
+    output:
+      success: true
+      count: 1
+      countries:
+        - name:
+            common: "Germany"
+            official: "Federal Republic of Germany"
+          capital: ["Berlin"]
+          population: 83240525
+          area: 357114
+          region: "Europe"
+          currencies:
+            EUR:
+              name: "Euro"
+              symbol: "€"
+
+  - description: "Get all countries in a region"
+    input:
+      search_type: "region"
+      query: "Europe"
+    output:
+      success: true
+      count: 53
+      countries:
+        - name:
+            common: "Germany"
+          capital: ["Berlin"]
+
+  - description: "Search by currency code"
+    input:
+      search_type: "currency"
+      query: "USD"
+    output:
+      success: true
+      count: 16
+      countries:
+        - name:
+            common: "United States"
+
+usage_notes: |
+  ## REST Countries API Tool
+
+  Get comprehensive, up-to-date information about any country in the world.
+  No authentication required. Data includes demographics, geography, languages,
+  currencies, flags, borders, and more.
+
+  ## Usage Examples
+
+  ### Get Country by Name
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "name",
+      "query": "Japan"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      country = data['countries'][0]
+      print(f"Capital: {country['capital'][0]}")
+      print(f"Population: {country['population']:,}")
+      print(f"Region: {country['region']}")
+  ```
+
+  ### Get All Countries in a Region
+  ```python
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "region",
+      "query": "Asia"
+  }))
+
+  data = json.loads(result)
+  for country in data['countries']:
+      print(f"{country['name']['common']}: {country['capital']}")
+  ```
+
+  ### Get Countries by Language
+  ```python
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "language",
+      "query": "Spanish"
+  }))
+  ```
+
+  ### Get Countries Using a Currency
+  ```python
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "currency",
+      "query": "EUR"
+  }))
+  ```
+
+  ### Get Specific Fields Only
+  ```python
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "name",
+      "query": "France",
+      "fields": ["name", "capital", "population", "flags"]
+  }))
+  ```
+
+  ### Get All Countries
+  ```python
+  result = call_tool("rest_countries_api", json.dumps({
+      "search_type": "all"
+  }))
+
+  data = json.loads(result)
+  print(f"Total countries: {data['count']}")
+  ```
+
+  ## Available Data Fields
+
+  - **name**: Common and official names in multiple languages
+  - **capital**: Capital city/cities
+  - **population**: Current population estimate
+  - **area**: Total area in km²
+  - **region**: Geographic region (Africa, Americas, Asia, Europe, Oceania)
+  - **subregion**: More specific geographic area
+  - **languages**: Official and regional languages
+  - **currencies**: Currencies with names and symbols
+  - **flags**: PNG and SVG flag images
+  - **coatOfArms**: Coat of arms images
+  - **borders**: Border country codes (ISO 3166-1 alpha-3)
+  - **timezones**: All timezones
+  - **latlng**: Latitude and longitude
+  - **landlocked**: Whether the country is landlocked
+  - **independent**: Independence status
+  - **unMember**: UN membership status
+  - **idd**: International dialing codes
+  - **tld**: Top-level domains
+  - **cioc**: Olympic committee code
+  - **gini**: Gini coefficient (income inequality)
+  - **fifa**: FIFA country code
+  - **car**: Driving side and license plate info
+  - **maps**: Links to Google Maps and OpenStreetMap
+
+  ## Search Types
+
+  - **all**: Get all countries
+  - **name**: Search by country name (common or official)
+  - **code**: Search by ISO code (alpha-2, alpha-3, or numeric)
+  - **capital**: Search by capital city
+  - **currency**: Search by currency code (e.g., USD, EUR)
+  - **language**: Search by language (e.g., Spanish, Arabic)
+  - **region**: Search by region (Africa, Americas, Asia, Europe, Oceania)
+  - **subregion**: Search by subregion (e.g., Western Europe, Southeast Asia)
+
+  ## Use Cases
+
+  ### Country Information Lookup
+  ```python
+  def get_country_info(country_name):
+      result = call_tool("rest_countries_api", json.dumps({
+          "search_type": "name",
+          "query": country_name
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['count'] > 0:
+          country = data['countries'][0]
+          return {
+              'name': country['name']['common'],
+              'capital': country['capital'][0] if country['capital'] else 'N/A',
+              'population': f"{country['population']:,}",
+              'area': f"{country['area']:,} km²",
+              'region': country['region'],
+              'languages': list(country['languages'].values()),
+              'currencies': [curr['name'] for curr in country['currencies'].values()],
+              'flag': country['flags']['png']
+          }
+  ```
+
+  ### Regional Analysis
+  ```python
+  def analyze_region(region_name):
+      result = call_tool("rest_countries_api", json.dumps({
+          "search_type": "region",
+          "query": region_name
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          total_pop = sum(c['population'] for c in data['countries'])
+          total_area = sum(c['area'] for c in data['countries'])
+
+          return {
+              'countries': data['count'],
+              'total_population': f"{total_pop:,}",
+              'total_area': f"{total_area:,} km²",
+              'avg_population': f"{total_pop // data['count']:,}"
+          }
+  ```
+
+  ### Currency Coverage
+  ```python
+  def countries_using_currency(currency_code):
+      result = call_tool("rest_countries_api", json.dumps({
+          "search_type": "currency",
+          "query": currency_code
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          return [c['name']['common'] for c in data['countries']]
+  ```
+
+  ## Benefits
+
+  - **No Authentication**: Free and open API
+  - **Comprehensive Data**: 250+ countries and territories
+  - **Always Updated**: Regular data updates
+  - **Multiple Search Options**: Flexible querying
+  - **Rich Information**: Extensive data points per country
+  - **Fast Response**: Cached for 30 days (data rarely changes)
+  - **Images Included**: Flags and coats of arms
+  - **Multiple Languages**: Country names in various languages

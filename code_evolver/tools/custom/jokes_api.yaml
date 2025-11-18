@@ -1,0 +1,206 @@
+name: "Jokes API"
+type: "custom"
+description: "Get random jokes from various categories including programming, dad jokes, puns, knock-knock jokes, and more. Filter by type, search for specific jokes, or get joke of the day. No authentication required."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+custom:
+  module: "src.jokes_api_tool"
+  class: "JokesApiTool"
+  config:
+    api_base: "https://official-joke-api.appspot.com"
+    cache_ttl_hours: 0  # Don't cache jokes (want fresh random ones)
+
+input_schema:
+  operation:
+    type: string
+    description: "Type of operation"
+    required: true
+    enum: ["random", "random_ten", "joke_of_day", "by_type", "search"]
+    default: "random"
+
+  joke_type:
+    type: string
+    description: "Type of joke"
+    required: false
+    enum: ["general", "programming", "knock-knock", "dad"]
+
+  search_term:
+    type: string
+    description: "Search term for jokes"
+    required: false
+
+  count:
+    type: integer
+    description: "Number of jokes to return"
+    required: false
+    default: 1
+    maximum: 10
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    jokes:
+      type: array
+      description: "Array of jokes"
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            description: "Joke type"
+          setup:
+            type: string
+            description: "Joke setup/question"
+          punchline:
+            type: string
+            description: "Joke punchline/answer"
+          id:
+            type: integer
+            description: "Joke ID"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["jokes", "humor", "entertainment", "fun", "free", "no-auth"]
+
+examples:
+  - description: "Get random joke"
+    input:
+      operation: "random"
+    output:
+      success: true
+      jokes:
+        - type: "general"
+          setup: "Why don't scientists trust atoms?"
+          punchline: "Because they make up everything!"
+          id: 42
+
+  - description: "Get programming jokes"
+    input:
+      operation: "by_type"
+      joke_type: "programming"
+      count: 3
+    output:
+      success: true
+      jokes:
+        - type: "programming"
+          setup: "Why do programmers prefer dark mode?"
+          punchline: "Because light attracts bugs!"
+
+usage_notes: |
+  ## Jokes API
+
+  Get clean, family-friendly jokes for entertainment and engagement.
+  Perfect for chatbots, apps, or just brightening someone's day!
+
+  ## Usage Examples
+
+  ### Example 1: Random Joke
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("jokes_api", json.dumps({
+      "operation": "random"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      joke = data['jokes'][0]
+      print(f"Q: {joke['setup']}")
+      print(f"A: {joke['punchline']}")
+  ```
+
+  ### Example 2: Get 10 Random Jokes
+  ```python
+  result = call_tool("jokes_api", json.dumps({
+      "operation": "random_ten"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      for i, joke in enumerate(data['jokes'], 1):
+          print(f"\n{i}. {joke['setup']}")
+          print(f"   {joke['punchline']}")
+  ```
+
+  ### Example 3: Programming Jokes Only
+  ```python
+  result = call_tool("jokes_api", json.dumps({
+      "operation": "by_type",
+      "joke_type": "programming",
+      "count": 5
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print("PROGRAMMING JOKES:\n")
+      for joke in data['jokes']:
+          print(f"• {joke['setup']}")
+          print(f"  → {joke['punchline']}\n")
+  ```
+
+  ### Example 4: Daily Joke Bot
+  ```python
+  from datetime import datetime
+
+  result = call_tool("jokes_api", json.dumps({
+      "operation": "random"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      joke = data['jokes'][0]
+      today = datetime.now().strftime("%B %d, %Y")
+
+      print(f"═══════════════════════════════")
+      print(f"  JOKE OF THE DAY - {today}")
+      print(f"═══════════════════════════════\n")
+      print(f"{joke['setup']}\n")
+      input("Press Enter for punchline...")
+      print(f"\n{joke['punchline']}\n")
+  ```
+
+  ### Example 5: Joke Collection
+  ```python
+  joke_types = ["general", "programming", "knock-knock", "dad"]
+  collection = {}
+
+  for joke_type in joke_types:
+      result = call_tool("jokes_api", json.dumps({
+          "operation": "by_type",
+          "joke_type": joke_type,
+          "count": 3
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          collection[joke_type] = data['jokes']
+
+  # Display collection
+  for joke_type, jokes in collection.items():
+      print(f"\n{joke_type.upper()} JOKES:")
+      for joke in jokes:
+          print(f"  • {joke['setup']} → {joke['punchline']}")
+  ```
+
+  ## Joke Types
+
+  - **general**: General clean humor
+  - **programming**: Developer and tech jokes
+  - **knock-knock**: Classic knock-knock format
+  - **dad**: Puns and dad jokes
+
+  ## Use Cases
+
+  - Chatbot personality
+  - Ice breaker apps
+  - Team morale boosters
+  - Social media content
+  - Entertainment widgets
+  - Learning engagement
