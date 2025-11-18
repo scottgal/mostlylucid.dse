@@ -5066,7 +5066,14 @@ Code:
 
             # Call the tool to generate BDD tests
             from node_runtime import call_tool
-            result = call_tool("behave_test_generator", feature_input)
+            import json
+            result_str = call_tool("behave_test_generator", feature_input)
+
+            # Parse the JSON result
+            try:
+                result = json.loads(result_str) if result_str else None
+            except json.JSONDecodeError:
+                result = None
 
             if result and result.get("success"):
                 console.print(f"[dim green]✓ Generated Behave feature: {feature_file.name}[/dim green]")
@@ -5140,7 +5147,14 @@ Code to test:
 
             # Call the tool to generate load tests
             from node_runtime import call_tool
-            result = call_tool("locust_load_tester", locust_input)
+            import json
+            result_str = call_tool("locust_load_tester", locust_input)
+
+            # Parse the JSON result
+            try:
+                result = json.loads(result_str) if result_str else None
+            except json.JSONDecodeError:
+                result = None
 
             if result and result.get("success"):
                 console.print(f"[dim green]✓ Generated Locust test: {locust_file.name}[/dim green]")
