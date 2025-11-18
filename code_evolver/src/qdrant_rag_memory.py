@@ -135,10 +135,26 @@ class QdrantRAGMemory:
                     with open(self.index_path, 'r', encoding='utf-8') as f:
                         content = f.read()
 
-                    # Replace unescaped control characters in strings
-                    # This is a simple fix - replace literal tabs, newlines, etc. with escaped versions
-                    # Only do this inside string values (between quotes)
-                    content_fixed = content.replace('\t', '\\t').replace('\r', '\\r').replace('\n', '\\n')
+                    # Proper JSON repair: only escape control characters inside string values
+                    # Use a regex to find string values and escape control chars within them
+                    def escape_string_contents(match):
+                        """Escape control characters inside a JSON string value."""
+                        string_content = match.group(0)
+                        # Escape control characters inside the string
+                        string_content = string_content.replace('\t', '\\t')
+                        string_content = string_content.replace('\r', '\\r')
+                        string_content = string_content.replace('\n', '\\n')
+                        string_content = string_content.replace('\b', '\\b')
+                        string_content = string_content.replace('\f', '\\f')
+                        return string_content
+
+                    # Match JSON strings (accounting for escaped quotes)
+                    # Pattern: " followed by any chars (non-greedy), but skip already-escaped sequences
+                    content_fixed = re.sub(
+                        r'"(?:[^"\\]|\\.)*"',
+                        escape_string_contents,
+                        content
+                    )
 
                     # Try parsing the fixed content
                     index = json.loads(content_fixed)
