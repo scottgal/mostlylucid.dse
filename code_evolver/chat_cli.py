@@ -1085,36 +1085,89 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
         from src.rag_memory import ArtifactType
         import time
 
-        # Step 1: Search RAG for similar workflows to use as examples
-        from src.rag_memory import ArtifactType
+        # Step 1: Check if we have an exact workflow match from earlier search (>= 90% similarity)
+        # If so, REUSE it directly instead of regenerating
+        reuse_workflow_artifact = self.context.get('_reuse_workflow_artifact')
+        adapt_workflow_artifact = self.context.get('_adapt_workflow_artifact')
 
-        similar_workflows = self.rag.find_similar(
-            description,
-            artifact_type=ArtifactType.WORKFLOW,
-            top_k=3
-        )
+        if reuse_workflow_artifact:
+            # EXACT MATCH (>= 90%) - Reuse directly by reconstructing the workflow spec
+            try:
+                import json
+                reuse_similarity = self.context.get('_reuse_workflow_similarity', 0.0)
 
-        workflow_examples = ""
-        if similar_workflows:
-            workflow_examples = "\n\nSIMILAR WORKFLOWS FROM MEMORY (use as templates):\n"
-            for wf_artifact, similarity in similar_workflows:
-                if similarity >= 0.90:  # STRICT: Only show very similar workflows (90%+)
-                    workflow_examples += f"\nWorkflow (similarity: {similarity:.0%}): {wf_artifact.description}\n"
-                    # Include the workflow structure as an example
-                    try:
-                        import json
-                        wf_data = json.loads(wf_artifact.content)
-                        workflow_examples += f"Steps: {len(wf_data.get('steps', []))} steps\n"
-                        for step in wf_data.get('steps', [])[:3]:  # Show first 3 steps
-                            workflow_examples += f"  - {step.get('description', 'N/A')} (tool: {step.get('tool', 'N/A')})\n"
-                    except:
-                        pass
+                console.print(f"[bold green]✓ Reusing existing workflow pattern ({reuse_similarity:.0%} match)[/bold green]")
+                console.print(f"[dim]   {reuse_workflow_artifact.description}[/dim]\n")
 
-        # Step 2: Ask overseer to decompose into workflow steps
-        workflow.add_step("workflow_decomposition", "llm", f"Decompose into workflow steps ({self.config.overseer_model})")
-        workflow.start_step("workflow_decomposition")
+                # Load the workflow structure (content is already JSON string)
+                # Reconstruct WorkflowSpec from stored data
+                from src.workflow_builder import WorkflowBuilder
+                builder = WorkflowBuilder(tools_manager=self.tools_manager)
 
-        workflow_prompt = f"""You are decomposing a task into workflow steps. This is CRITICAL - you MUST create SEPARATE steps for EACH operation.
+                # Build workflow spec from reused workflow (content is JSON string)
+                workflow_spec = builder.build_from_json(
+                    json_str=reuse_workflow_artifact.content,
+                    description=description
+                )
+
+                # Increment usage counter for learning
+                self.rag.increment_usage(reuse_workflow_artifact.artifact_id)
+
+                # Skip to workflow execution (jump to the execution section)
+                workflow.add_step("workflow_decomposition", "reuse", "Reused existing workflow pattern")
+                workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps (reused)")
+
+                # Show reused workflow plan to user
+                console.print(f"\n[bold cyan]Reused Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
+                for i, step in enumerate(workflow_spec.steps, 1):
+                    console.print(f"  {i}. [yellow]{step.description}[/yellow]")
+                    if hasattr(step, 'task_for_node'):
+                        console.print(f"     Node task: {step.task_for_node}")
+                console.print()
+
+                # Continue to execution section - DON'T RETURN YET!
+                # We'll execute the workflow using the standard execution logic below
+
+            except Exception as e:
+                logger.warning(f"Failed to reuse workflow: {e}")
+                console.print(f"[yellow]⚠ Workflow reuse failed, falling back to generation[/yellow]\n")
+                reuse_workflow_artifact = None  # Clear flag to fall through to standard generation
+
+        # Step 2: If we didn't successfully reuse a workflow, decompose with overseer
+        if not reuse_workflow_artifact:
+            # Search RAG for similar workflows to use as templates
+            similar_workflows = self.rag.find_similar(
+                description,
+                artifact_type=ArtifactType.WORKFLOW,
+                top_k=3
+            ) if not adapt_workflow_artifact else [(adapt_workflow_artifact, self.context.get('_adapt_workflow_similarity', 0.0))]
+
+            workflow_examples = ""
+            if similar_workflows:
+                workflow_examples = "\n\nSIMILAR WORKFLOWS FROM MEMORY (use as templates):\n"
+                for wf_artifact, similarity in similar_workflows:
+                    if similarity >= 0.80:  # Show high-similarity workflows (80%+) for adaptation
+                        workflow_examples += f"\nWorkflow (similarity: {similarity:.0%}): {wf_artifact.description}\n"
+                        # Include the workflow structure as an example
+                        try:
+                            import json
+                            wf_data = json.loads(wf_artifact.content)
+                            workflow_examples += f"Steps: {len(wf_data.get('steps', []))} steps\n"
+                            for step in wf_data.get('steps', [])[:3]:  # Show first 3 steps
+                                workflow_examples += f"  - {step.get('description', 'N/A')} (tool: {step.get('tool', 'N/A')})\n"
+
+                            # For adaptation (80-90% similarity), show more detail
+                            if adapt_workflow_artifact and similarity >= 0.80 and similarity < 0.90:
+                                console.print(f"[yellow]~ Adapting workflow pattern ({similarity:.0%} match)[/yellow]")
+                                console.print(f"[dim]   Base: {wf_artifact.description}[/dim]\n")
+                        except:
+                            pass
+
+            # Step 3: Ask overseer to decompose into workflow steps
+            workflow.add_step("workflow_decomposition", "llm", f"Decompose into workflow steps ({self.config.overseer_model})")
+            workflow.start_step("workflow_decomposition")
+
+            workflow_prompt = f"""You are decomposing a task into workflow steps. This is CRITICAL - you MUST create SEPARATE steps for EACH operation.
 
 {workflow_examples}
 
@@ -1252,51 +1305,51 @@ CRITICAL: Use the EXACT tool names listed above, not generic placeholder names.
 
 NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
 
-        with self.display.start_stage("Planning", f"Decomposing workflow"):
-            workflow_json_response = self.client.generate(
-                model=self.config.overseer_model,
-                prompt=workflow_prompt,
-                temperature=0.7,
-                model_key=self.config.overseer_model_key  # Use actual model key for routing
-            )
+            with self.display.start_stage("Planning", f"Decomposing workflow"):
+                workflow_json_response = self.client.generate(
+                    model=self.config.overseer_model,
+                    prompt=workflow_prompt,
+                    temperature=0.7,
+                    model_key=self.config.overseer_model_key  # Use actual model key for routing
+                )
 
-        self.display.complete_stage("Planning", "Workflow decomposed")
+            self.display.complete_stage("Planning", "Workflow decomposed")
 
-        # Parse the workflow JSON
-        builder = WorkflowBuilder(tools_manager=self.tools_manager)
-        try:
-            workflow_spec = builder.build_from_text(description, workflow_json_response)
-        except Exception as e:
-            console.print(f"[red]Failed to parse workflow: {e}[/red]")
-            console.print(f"[yellow]Overseer response:[/yellow]\n{workflow_json_response}")
-            return False
+            # Parse the workflow JSON
+            builder = WorkflowBuilder(tools_manager=self.tools_manager)
+            try:
+                workflow_spec = builder.build_from_text(description, workflow_json_response)
+            except Exception as e:
+                console.print(f"[red]Failed to parse workflow: {e}[/red]")
+                console.print(f"[yellow]Overseer response:[/yellow]\n{workflow_json_response}")
+                return False
 
-        workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps planned")
+            workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps planned")
 
-        # Validate decomposition quality
-        multi_operation_keywords = ["and", "then", "translate", "convert"]
-        description_lower = description.lower()
-        has_multi_keywords = any(kw in description_lower for kw in multi_operation_keywords)
+            # Validate decomposition quality
+            multi_operation_keywords = ["and", "then", "translate", "convert"]
+            description_lower = description.lower()
+            has_multi_keywords = any(kw in description_lower for kw in multi_operation_keywords)
 
-        if has_multi_keywords and len(workflow_spec.steps) == 1:
-            console.print(f"[yellow]Warning: Task contains '{[kw for kw in multi_operation_keywords if kw in description_lower]}' but was decomposed into only 1 step.[/yellow]")
-            console.print(f"[yellow]This may indicate the task should be split into multiple steps.[/yellow]")
+            if has_multi_keywords and len(workflow_spec.steps) == 1:
+                console.print(f"[yellow]Warning: Task contains '{[kw for kw in multi_operation_keywords if kw in description_lower]}' but was decomposed into only 1 step.[/yellow]")
+                console.print(f"[yellow]This may indicate the task should be split into multiple steps.[/yellow]")
 
-            # Additional protection: if the single step has the same description as the original task,
-            # it will trigger infinite recursion. Prevent this by forcing _in_workflow_mode for the step.
-            step = workflow_spec.steps[0]
-            step_desc_lower = getattr(step, 'task_for_node', step.description).lower()
-            if description_lower.strip() == step_desc_lower.strip():
-                console.print(f"[yellow]Single step matches original task - preventing recursive decomposition.[/yellow]")
-                # This will be handled in the step execution by setting _in_workflow_mode
+                # Additional protection: if the single step has the same description as the original task,
+                # it will trigger infinite recursion. Prevent this by forcing _in_workflow_mode for the step.
+                step = workflow_spec.steps[0]
+                step_desc_lower = getattr(step, 'task_for_node', step.description).lower()
+                if description_lower.strip() == step_desc_lower.strip():
+                    console.print(f"[yellow]Single step matches original task - preventing recursive decomposition.[/yellow]")
+                    # This will be handled in the step execution by setting _in_workflow_mode
 
-        # Show workflow plan to user
-        console.print(f"\n[bold cyan]Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
-        for i, step in enumerate(workflow_spec.steps, 1):
-            console.print(f"  {i}. [yellow]{step.description}[/yellow]")
-            if hasattr(step, 'task_for_node'):
-                console.print(f"     Node task: {step.task_for_node}")
-        console.print()
+            # Show workflow plan to user
+            console.print(f"\n[bold cyan]Workflow Plan ({len(workflow_spec.steps)} steps):[/bold cyan]")
+            for i, step in enumerate(workflow_spec.steps, 1):
+                console.print(f"  {i}. [yellow]{step.description}[/yellow]")
+                if hasattr(step, 'task_for_node'):
+                    console.print(f"     Node task: {step.task_for_node}")
+            console.print()
 
         # Step 2: Execute workflow steps (with parallel execution support)
         step_results = {}
@@ -2266,9 +2319,54 @@ Answer:"""
 
         workflow.complete_step("find_tools", available_tools)
 
-        # Step 1.5: Try to compose a novel workflow if no exact match found
+        # Step 1.5: Check RAG for existing WORKFLOW patterns that match this task (EXACT reuse)
+        # This is CRITICAL for efficiency - reuse existing tested workflows instead of regenerating
+        existing_workflow_artifact = None
+        existing_workflow_similarity = 0.0
+
+        try:
+            from .src.rag_memory import ArtifactType
+
+            # Search for existing workflows in RAG
+            existing_workflows = self.rag.find_similar(
+                description,
+                artifact_type=ArtifactType.WORKFLOW,
+                top_k=3,
+                min_similarity=0.80  # Only consider high-similarity matches
+            )
+
+            if existing_workflows:
+                # Get the best match
+                existing_workflow_artifact, existing_workflow_similarity = existing_workflows[0]
+
+                # STRICT threshold for exact reuse: 90%+ similarity
+                if existing_workflow_similarity >= 0.90:
+                    console.print(f"\n[bold green]✓ Found existing workflow pattern[/bold green] [dim]({existing_workflow_similarity:.0%} match)[/dim]")
+                    console.print(f"[dim]   Reusing: {existing_workflow_artifact.name}[/dim]\n")
+
+                    # Store the workflow artifact for reuse in workflow handler
+                    self.context['_reuse_workflow_artifact'] = existing_workflow_artifact
+                    self.context['_reuse_workflow_similarity'] = existing_workflow_similarity
+
+                    # Skip workflow composition - we have an exact match!
+                    existing_workflow_artifact = None  # Will be used later in workflow handler
+                elif existing_workflow_similarity >= 0.80:
+                    # Near match (80-90%) - could mutate/adapt
+                    console.print(f"\n[bold yellow]~ Found similar workflow pattern[/bold yellow] [dim]({existing_workflow_similarity:.0%} match)[/dim]")
+                    console.print(f"[dim]   May adapt: {existing_workflow_artifact.name}[/dim]\n")
+
+                    # Store for potential mutation/adaptation
+                    self.context['_adapt_workflow_artifact'] = existing_workflow_artifact
+                    self.context['_adapt_workflow_similarity'] = existing_workflow_similarity
+        except Exception as e:
+            logger.debug(f"Workflow pattern search failed: {e}")
+
+        # Step 1.6: Try to compose a novel workflow ONLY if no exact match found
         # This is where intelligent tool composition happens for tasks like "write a romance novel"
-        workflow_composition = self.tools_manager.compose_novel_workflow(description)
+        # SKIP if we have an exact match (>= 90% similarity)
+        workflow_composition = None
+        if not self.context.get('_reuse_workflow_artifact'):
+            workflow_composition = self.tools_manager.compose_novel_workflow(description)
         if workflow_composition and workflow_composition.get("workflow_steps"):
             # Show the composed workflow plan cleanly
             characteristics = ', '.join(workflow_composition['characteristics'].keys())
