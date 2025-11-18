@@ -1,0 +1,63 @@
+{
+  "workflow_id": "url_analyzer",
+  "version": "1.0.0",
+  "description": "Analyze a URL and generate a report about its content",
+  "created_by": "code_evolver",
+  "created_at": "2025-01-18T00:00:00Z",
+  "portable": true,
+  "tags": ["web", "analysis", "ollama"],
+
+  "inputs": {
+    "url": {
+      "type": "string",
+      "required": true,
+      "description": "URL to fetch and analyze",
+      "pattern": "^https?://.*"
+    },
+    "analysis_depth": {
+      "type": "string",
+      "required": false,
+      "default": "basic",
+      "description": "Depth of analysis (basic, detailed, comprehensive)",
+      "enum": ["basic", "detailed", "comprehensive"]
+    }
+  },
+
+  "outputs": {
+    "analysis": {
+      "type": "string",
+      "source_reference": "steps.analyze.analysis",
+      "description": "URL content analysis report"
+    }
+  },
+
+  "steps": [
+    {
+      "step_id": "analyze",
+      "type": "llm_call",
+      "description": "Analyze the URL content and generate report",
+      "tool": "analyzer_tool",
+      "prompt_template": "Analyze the content from this URL: {url}\n\nAnalysis depth: {analysis_depth}\n\nProvide a {analysis_depth} analysis report.",
+      "input_mapping": {
+        "url": "inputs.url",
+        "analysis_depth": "inputs.analysis_depth"
+      },
+      "output_name": "analysis",
+      "timeout": 60
+    }
+  ],
+
+  "tools": {
+    "analyzer_tool": {
+      "tool_id": "analyzer_tool",
+      "name": "URL Content Analyzer",
+      "description": "Analyzes web content using Ollama LLM",
+      "type": "llm",
+      "model": "llama3",
+      "system_prompt": "You are a helpful assistant that analyzes web content and generates detailed reports.",
+      "temperature": 0.5,
+      "endpoint": "http://localhost:11434",
+      "timeout": 60
+    }
+  }
+}
