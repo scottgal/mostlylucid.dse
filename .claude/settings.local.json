@@ -9,7 +9,12 @@
       "Bash(cat:*)",
       "Bash(timeout 30 python:*)",
       "Bash(timeout 10 python:*)",
-      "Bash(timeout 15 python:*)"
+      "Bash(timeout 15 python:*)",
+      "Bash(timeout 60 python:*)",
+      "Bash(find nodes -name \"metadata.json\" -exec python -c \"import json, sys; f=sys.argv[1]; \ntry: \n    json.load(open(f)); \nexcept Exception as e: \n    print(f''''{f}: {e}'''')\" {})",
+      "Bash(for file in */metadata.json)",
+      "Bash(do python -m json.tool $file)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

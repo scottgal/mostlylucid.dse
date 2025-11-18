@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
 """
-Factory Task Trainer - Continuous training with random task variations.
+Factory Task Trainer - Sector-based realistic workflow task generation.
 
-Generates random variations of a base prompt and executes them through the
-DSE system continuously. By default, runs indefinitely in continuous mode,
-only stopping when Ctrl+C is pressed. This allows for continuous system
-training without manual intervention.
-
-When started with no parameters, the trainer will:
-- Generate random factory tasks continuously
-- Execute each task through the full DSE pipeline
-- Keep running indefinitely until Ctrl+C is pressed
-- Display statistics upon completion
+Generates realistic workflow tasks for different industry sectors using LLM.
+Supports continuous training with random variations across multiple sectors.
 """
 import argparse
 import json
@@ -87,274 +79,207 @@ class KeyboardMonitor:
             logger.warning(f"Keyboard monitoring error: {e}. Use Ctrl+C to stop.")
 
 
-class FactoryTaskGenerator:
-    """Generate random factory task variations."""
+class SectorTaskGenerator:
+    """Generate realistic sector-based workflow tasks using LLM."""
 
-    # Default factory task templates by category
-    FACTORY_TASKS = {
-        'arithmetic': [
-            "Calculate total production for {quantity} units at {rate} units/hour over {hours} hours",
-            "Compute inventory levels: starting {start} units, produced {produced}, shipped {shipped}",
-            "Calculate efficiency: {output} units produced from {input} raw materials (percentage)",
-            "Determine labor cost: {workers} workers × {hours} hours × ${wage}/hour",
-            "Calculate machine utilization: {runtime} hours used / {available} hours available",
-        ],
-        'data_processing': [
-            "Analyze quality control data: {measurements} and identify outliers beyond {threshold} sigma",
-            "Process production metrics from shift report: {data} and generate summary statistics",
-            "Filter defective items from batch: {items} where defect_rate > {threshold}%",
-            "Aggregate daily production by line: {production_data} and rank by efficiency",
-            "Transform sensor readings {readings} to normalized 0-100 scale",
-        ],
-        'code_generation': [
-            "Write a PLC ladder logic function to control conveyor belt with {sensors} sensors",
-            "Generate Python script to parse production log format: {format}",
-            "Create automation script to monitor {metric} and alert if exceeds {threshold}",
-            "Write function to calculate OEE (Overall Equipment Effectiveness) from availability, performance, quality metrics",
-            "Generate state machine for assembly line with states: {states}",
-        ],
-        'translation': [
-            "Translate safety warning '{text}' to {language}",
-            "Convert product label from English to {languages}: '{label}'",
-            "Translate assembly instructions '{instructions}' to Spanish and French",
-            "Localize error message '{error}' for {market} market",
-            "Translate machine manual section '{section}' to {language} maintaining technical accuracy",
-        ],
-        'question_answering': [
-            "What is the proper lockout/tagout procedure for {equipment}?",
-            "Explain the safety requirements for operating {machine}",
-            "What are the OSHA regulations for {scenario}?",
-            "How should operators respond to {alert_type} alarm?",
-            "What is the correct procedure for {maintenance_task}?",
-        ],
-        'formatting': [
-            "Format production report: Date: {date}, Line: {line}, Output: {output}, Efficiency: {efficiency}%",
-            "Create shift log entry for {shift} shift on {date} with {events} events",
-            "Format inventory table with columns: SKU, Description, Quantity, Location, Status",
-            "Generate downtime report showing {equipment}, {duration}, {reason}, {cost}",
-            "Create quality control report for batchhow {batch} with pass/fail counts",
-        ],
-        'conversion': [
-            "Convert {temp}°F to Celsius for oven temperature specification",
-            "Convert {pressure} PSI to Bar for hydraulic system",
-            "Convert {length} feet to meters for international specifications",
-            "Convert {weight} pounds to kilograms for shipping documentation",
-            "Convert {speed} RPM to rad/s for motor control calculations",
-        ],
-        'creative_content': [
-            "Write a safety notice about {hazard} for factory floor bulletin board",
-            "Create training material introduction for new {equipment} operators",
-            "Draft announcement for new {policy} policy implementation",
-            "Write incident report summary for {incident_type}",
-            "Create motivational message for {milestone} achievement",
-        ],
+    # Industry sectors with descriptions and typical workflows
+    SECTORS = {
+        'manufacturing': {
+            'description': 'Manufacturing and production facilities',
+            'examples': 'quality control workflows, production scheduling, inventory management, equipment monitoring'
+        },
+        'healthcare': {
+            'description': 'Healthcare and medical facilities',
+            'examples': 'patient data processing, appointment scheduling, compliance reporting, medical billing'
+        },
+        'finance': {
+            'description': 'Financial services and banking',
+            'examples': 'transaction processing, fraud detection, regulatory compliance, risk assessment'
+        },
+        'retail': {
+            'description': 'Retail and e-commerce',
+            'examples': 'order processing, inventory tracking, customer service automation, price optimization'
+        },
+        'logistics': {
+            'description': 'Logistics and supply chain',
+            'examples': 'shipment tracking, route optimization, warehouse management, delivery scheduling'
+        },
+        'education': {
+            'description': 'Educational institutions',
+            'examples': 'student enrollment, grade processing, attendance tracking, course scheduling'
+        },
+        'energy': {
+            'description': 'Energy and utilities',
+            'examples': 'meter reading automation, outage detection, billing cycles, resource allocation'
+        },
+        'telecom': {
+            'description': 'Telecommunications',
+            'examples': 'network monitoring, customer provisioning, billing integration, incident management'
+        },
+        'government': {
+            'description': 'Government and public sector',
+            'examples': 'permit processing, compliance checking, citizen services automation, data reporting'
+        },
+        'general': {
+            'description': 'General business operations',
+            'examples': 'document processing, email automation, data entry, report generation, task scheduling'
+        }
     }
 
-    def __init__(self, base_prompt: Optional[str] = None, multistage_probability: Optional[float] = None):
+    def __init__(self, sector: Optional[str] = None):
         """
-        Initialize task generator.
+        Initialize sector task generator.
 
         Args:
-            base_prompt: Base prompt to generate variations from (None for factory tasks)
+            sector: Industry sector (None for random selection across all sectors)
         """
-        self.base_prompt = base_prompt
+        self.sector = sector
         self.variation_count = 0
-        # Probability that a generated task will be expressed as a multi-stage workflow
-        self.multistage_probability = 0.45 if multistage_probability is None else float(multistage_probability)
-        # Clamp to [0.0, 1.0]
-        if self.multistage_probability < 0.0:
-            self.multistage_probability = 0.0
-        if self.multistage_probability > 1.0:
-            self.multistage_probability = 1.0
 
-    def generate_variation(self) -> str:
-        """Generate a random task variation."""
+        # Initialize Ollama client
+        try:
+            sys.path.insert(0, str(Path(__file__).parent))
+            from src.ollama_client import OllamaClient
+            from src.config_manager import ConfigManager
+
+            config = ConfigManager()
+            self.client = OllamaClient(config_manager=config)
+            logger.info("Initialized Ollama client for task generation")
+        except Exception as e:
+            logger.error(f"Failed to initialize Ollama client: {e}")
+            self.client = None
+
+    def generate_realistic_task(self) -> str:
+        """Generate a realistic workflow task using LLM."""
         self.variation_count += 1
 
-        if self.base_prompt:
-            # Generate variation of user's base prompt
-            return self._generate_custom_variation()
-        else:
-            # Generate random factory task
-            return self._generate_factory_task()
+        # If no LLM available, use fallback templates
+        if not self.client:
+            return self._generate_fallback_task()
 
-    def _generate_custom_variation(self) -> str:
-        """Generate variation of user's base prompt."""
-        variations = [
-            self.base_prompt,  # Original
-            f"{self.base_prompt} (variation {self.variation_count})",
-            f"{self.base_prompt} with random parameters",
-            f"Alternative approach: {self.base_prompt}",
-            f"{self.base_prompt} using different method",
-            f"Optimized version: {self.base_prompt}",
-            f"{self.base_prompt} with edge cases",
-            f"Enhanced {self.base_prompt}",
-        ]
+        # Select sector (random if not specified)
+        sector = self.sector if self.sector else random.choice(list(self.SECTORS.keys()))
+        sector_info = self.SECTORS[sector]
 
-        # Add random parameters
-        variation = random.choice(variations)
+        # Generate task using LLM
+        prompt = f"""Generate ONE realistic workflow automation task for the {sector} sector.
 
-        # Inject random values
-        random_params = {
-            'quantity': random.randint(100, 10000),
-            'rate': random.randint(10, 500),
-            'hours': random.randint(1, 24),
-            'threshold': random.randint(1, 10),
-            'value': random.uniform(0.1, 100.0),
-        }
+Sector: {sector_info['description']}
+Typical workflows: {sector_info['examples']}
+
+Requirements:
+- Task should be something that workflow automation tools commonly handle
+- Be specific and practical (include realistic data/parameters)
+- Keep it to 1-2 sentences maximum
+- Use real-world terminology from the sector
+- Make it actionable and concrete
+
+Generate ONE task now (just the task description, no explanation):"""
 
         try:
-            task = variation.format(**random_params)
-        except (KeyError, ValueError):
-            task = variation
-
-        # Optionally wrap as a multi-stage workflow
-        return self._maybe_wrap_with_stages(task, category_hint="custom")
-
-    def _generate_factory_task(self) -> str:
-        """Generate a random factory task."""
-        # Pick random category
-        category = random.choice(list(self.FACTORY_TASKS.keys()))
-        template = random.choice(self.FACTORY_TASKS[category])
-
-        # Generate random parameters
-        params = self._generate_random_params(template)
-
-        try:
-            task = template.format(**params)
-            logger.debug(f"Generated {category} task: {task}")
-            # Optionally wrap as a multi-stage workflow
-            return self._maybe_wrap_with_stages(task, category_hint=category)
-        except (KeyError, ValueError) as e:
-            logger.warning(f"Failed to format template: {e}")
-            return template
-
-    def _generate_random_params(self, template: str) -> Dict[str, Any]:
-        """Generate random parameters for template."""
-        params = {
-            # Numeric parameters
-            'quantity': random.randint(100, 10000),
-            'rate': random.randint(10, 500),
-            'hours': random.randint(1, 24),
-            'start': random.randint(1000, 5000),
-            'produced': random.randint(100, 1000),
-            'shipped': random.randint(50, 500),
-            'output': random.randint(800, 1200),
-            'input': random.randint(1000, 1500),
-            'workers': random.randint(5, 50),
-            'wage': random.randint(15, 50),
-            'runtime': random.randint(160, 720),
-            'available': 720,
-            'threshold': random.randint(2, 5),
-            'temp': random.randint(200, 500),
-            'pressure': random.randint(20, 150),
-            'length': random.randint(10, 1000),
-            'weight': random.randint(100, 5000),
-            'speed': random.randint(100, 3000),
-
-            # String parameters
-            'sensors': ', '.join([f'sensor_{i}' for i in range(1, random.randint(3, 6))]),
-            'measurements': str([round(random.gauss(100, 15), 2) for _ in range(10)]),
-            'data': json.dumps({'line_1': random.randint(800, 1200), 'line_2': random.randint(700, 1100)}),
-            'items': str([{'id': i, 'defect_rate': round(random.uniform(0, 10), 2)} for i in range(10)]),
-            'production_data': json.dumps([{'line': i, 'output': random.randint(500, 1500)} for i in range(1, 5)]),
-            'readings': str([random.randint(0, 1023) for _ in range(10)]),
-            'format': 'timestamp|line_id|product_id|quantity|status',
-            'metric': random.choice(['temperature', 'pressure', 'vibration', 'speed']),
-            'states': ', '.join(['idle', 'loading', 'processing', 'unloading', 'error']),
-            'text': random.choice(['Danger: High Voltage', 'Caution: Wet Floor', 'Warning: Moving Parts']),
-            'language': random.choice(['Spanish', 'French', 'German', 'Chinese', 'Japanese']),
-            'languages': 'Spanish and French',
-            'label': 'Fragile - Handle with Care',
-            'instructions': 'Connect cable A to port B',
-            'error': 'System overload detected',
-            'market': random.choice(['European', 'Asian', 'Latin American']),
-            'section': 'Emergency shutdown procedure',
-            'equipment': random.choice(['forklift', 'press machine', 'conveyor system', 'robotic arm']),
-            'machine': random.choice(['CNC mill', 'injection molder', 'welding station', 'packaging line']),
-            'scenario': random.choice(['confined space entry', 'hot work', 'elevated work', 'chemical handling']),
-            'alert_type': random.choice(['temperature', 'pressure', 'emergency stop', 'quality']),
-            'maintenance_task': random.choice(['bearing replacement', 'filter change', 'calibration', 'lubrication']),
-            'date': datetime.now().strftime('%Y-%m-%d'),
-            'line': f'Line {random.randint(1, 5)}',
-            'efficiency': random.randint(75, 98),
-            'shift': random.choice(['Day', 'Night', 'Swing']),
-            'events': random.randint(3, 10),
-            'batch': f'BATCH-{random.randint(1000, 9999)}',
-            'duration': f'{random.randint(1, 8)} hours',
-            'reason': random.choice(['mechanical failure', 'scheduled maintenance', 'material shortage', 'changeover']),
-            'cost': f'${random.randint(500, 5000)}',
-            'hazard': random.choice(['pinch points', 'chemical spills', 'electrical hazards', 'falling objects']),
-            'policy': random.choice(['safety', 'quality', 'environmental', 'attendance']),
-            'incident_type': random.choice(['near miss', 'minor injury', 'equipment damage', 'quality issue']),
-            'milestone': random.choice(['1 million units', 'zero accidents', 'efficiency target', 'certification']),
-        }
-
-        return params
-
-    def _maybe_wrap_with_stages(self, task: str, category_hint: Optional[str] = None) -> str:
-        """With some probability, wrap the task as a multi-stage workflow.
-
-        The wrapped format explicitly includes a top note and a 'Stages:' section
-        with 2–4 steps, so downstream handlers can execute them sequentially.
-        """
-        try:
-            if random.random() > self.multistage_probability:
-                return task
-
-            # Stage templates pool (generic + light category bias)
-            generic_stages = [
-                "Analyze requirements and clarify constraints",
-                "Plan the approach and outline solution",
-                "Implement the solution step-by-step",
-                "Run quick validation/tests and fix issues",
-                "Document results and assumptions",
-                "Reflect and propose improvements",
-            ]
-
-            category_bias = {
-                'arithmetic': ["Set up calculations", "Compute results", "Verify computations"],
-                'data_processing': ["Load/parse data", "Transform/clean", "Summarize and report"],
-                'code_generation': ["Design API/logic", "Write code", "Run example and test"],
-                'translation': ["Assess terminology", "Translate content", "Review accuracy"],
-                'question_answering': ["Recall policies", "Draft answer", "Cite sources"],
-                'formatting': ["Parse inputs", "Format output", "Validate formatting"],
-                'conversion': ["Identify units", "Convert values", "Double-check results"],
-                'creative_content': ["Brainstorm ideas", "Draft content", "Polish tone/style"],
-                'custom': ["Understand prompt", "Propose approach", "Execute and verify"],
-            }
-
-            stages_source = generic_stages + category_bias.get(category_hint or '', [])
-            # Ensure uniqueness and random order
-            unique = list(dict.fromkeys(stages_source))
-            random.shuffle(unique)
-            stage_count = random.randint(2, 4)
-            chosen = unique[:stage_count]
-
-            # Quality guardrails: ensure a planning-style first step and a verification/documentation last step when possible
-            planning_candidates = [s for s in unique if any(k in s.lower() for k in ["analyze", "plan", "design", "assess", "understand", "identify"])]
-            ending_candidates = [s for s in unique if any(k in s.lower() for k in ["test", "validate", "verify", "document", "review", "reflect"])]
-
-            if chosen:
-                if planning_candidates and not any(chosen[0] is pc for pc in planning_candidates):
-                    chosen[0] = planning_candidates[0]
-                if ending_candidates:
-                    chosen[-1] = ending_candidates[0]
-
-            # Build wrapped prompt
-            header = (
-                "Note: This workflow may be multi-stage. If a 'Stages:' section is present, "
-                "execute the stages sequentially, keeping responses concise per stage and a short final summary."
+            response = self.client.generate(
+                model="gemma3:1b",  # Fast 1B class model
+                prompt=prompt,
+                max_tokens=150,
+                temperature=0.9  # High creativity for variety
             )
-            wrapped = (
-                f"{header}\n\n"
-                f"Task: {task}\n\n"
-                f"Stages:\n" + "\n".join([f"{i+1}. {s}" for i, s in enumerate(chosen)])
-            )
-            return wrapped
-        except Exception:
-            # On any unforeseen error, return the original task
+
+            # Clean up response
+            task = response.strip()
+
+            # Remove any preamble/explanation
+            if '\n' in task:
+                lines = [line.strip() for line in task.split('\n') if line.strip()]
+                # Take first substantial line
+                task = lines[0] if lines else task
+
+            logger.debug(f"Generated {sector} task: {task}")
             return task
+
+        except Exception as e:
+            logger.warning(f"LLM generation failed: {e}, using fallback")
+            return self._generate_fallback_task()
+
+    def _generate_fallback_task(self) -> str:
+        """Generate fallback task using templates when LLM unavailable."""
+        sector = self.sector if self.sector else random.choice(list(self.SECTORS.keys()))
+
+        # Fallback templates per sector
+        templates = {
+            'manufacturing': [
+                "Process quality control data and flag items with defect rate above {threshold}%",
+                "Schedule production runs for {quantity} units across {lines} production lines",
+                "Monitor equipment utilization and alert when downtime exceeds {minutes} minutes",
+            ],
+            'healthcare': [
+                "Process patient admission forms and update electronic health records",
+                "Schedule follow-up appointments for patients discharged in last {days} days",
+                "Generate compliance reports for {department} department monthly metrics",
+            ],
+            'finance': [
+                "Review transactions over ${amount} for potential fraud indicators",
+                "Generate quarterly risk assessment report for portfolio {portfolio_id}",
+                "Process loan applications and calculate approval recommendations",
+            ],
+            'retail': [
+                "Process online orders and generate picking lists for warehouse",
+                "Update inventory levels when stock falls below {threshold} units",
+                "Generate daily sales reports by product category and region",
+            ],
+            'logistics': [
+                "Optimize delivery routes for {vehicles} vehicles covering {zones} zones",
+                "Track shipment status and notify customers of delays over {hours} hours",
+                "Process warehouse receiving documents and update inventory system",
+            ],
+            'education': [
+                "Process student grade submissions and calculate GPA updates",
+                "Generate attendance reports for courses with absences over {threshold}%",
+                "Schedule exam rooms based on enrollment and capacity constraints",
+            ],
+            'energy': [
+                "Process meter readings and flag consumption spikes over {threshold}%",
+                "Generate outage reports by region and duration for the last {days} days",
+                "Schedule maintenance visits for meters due for inspection",
+            ],
+            'telecom': [
+                "Monitor network nodes and alert on packet loss exceeding {threshold}%",
+                "Process service activation requests and provision customer accounts",
+                "Generate billing reconciliation reports for the last billing cycle",
+            ],
+            'government': [
+                "Process permit applications and route to appropriate departments",
+                "Generate compliance reports for regulatory submissions due this quarter",
+                "Schedule inspections for facilities requiring annual review",
+            ],
+            'general': [
+                "Process incoming emails and categorize by priority and department",
+                "Generate weekly status reports from project tracking data",
+                "Schedule recurring tasks for the next {weeks} weeks",
+            ]
+        }
+
+        template = random.choice(templates.get(sector, templates['general']))
+
+        # Fill in random parameters
+        params = {
+            'threshold': random.randint(5, 20),
+            'quantity': random.randint(100, 10000),
+            'lines': random.randint(2, 8),
+            'minutes': random.randint(15, 120),
+            'days': random.randint(7, 30),
+            'department': random.choice(['Surgery', 'Emergency', 'Pediatrics', 'Radiology']),
+            'amount': random.randint(1000, 100000),
+            'portfolio_id': f"P{random.randint(1000, 9999)}",
+            'vehicles': random.randint(5, 50),
+            'zones': random.randint(3, 15),
+            'hours': random.randint(2, 48),
+            'weeks': random.randint(1, 12),
+        }
+
+        try:
+            return template.format(**params)
+        except (KeyError, ValueError):
+            return template
 
 
 class TrainingStatistics:
@@ -367,31 +292,25 @@ class TrainingStatistics:
         self.total_duration = 0.0
         self.start_time = time.time()
         self.task_times = []
-        # Multi-stage accounting
-        self.multistage_tasks = 0
-        self.single_tasks = 0
+        self.sectors_used = {}  # Track sector distribution
 
-    def record_success(self, duration: float, is_multistage: bool = False):
+    def record_success(self, duration: float, sector: Optional[str] = None):
         """Record successful task."""
         self.tasks_attempted += 1
         self.tasks_successful += 1
         self.total_duration += duration
         self.task_times.append(duration)
-        if is_multistage:
-            self.multistage_tasks += 1
-        else:
-            self.single_tasks += 1
+        if sector:
+            self.sectors_used[sector] = self.sectors_used.get(sector, 0) + 1
 
-    def record_failure(self, duration: float, is_multistage: bool = False):
+    def record_failure(self, duration: float, sector: Optional[str] = None):
         """Record failed task."""
         self.tasks_attempted += 1
         self.tasks_failed += 1
         self.total_duration += duration
         self.task_times.append(duration)
-        if is_multistage:
-            self.multistage_tasks += 1
-        else:
-            self.single_tasks += 1
+        if sector:
+            self.sectors_used[sector] = self.sectors_used.get(sector, 0) + 1
 
     def get_summary(self) -> str:
         """Get statistics summary."""
@@ -399,7 +318,12 @@ class TrainingStatistics:
         avg_time = sum(self.task_times) / len(self.task_times) if self.task_times else 0
         success_rate = (self.tasks_successful / self.tasks_attempted * 100) if self.tasks_attempted > 0 else 0
 
-        multistage_rate = (self.multistage_tasks / self.tasks_attempted * 100) if self.tasks_attempted > 0 else 0
+        # Sector distribution
+        sector_summary = "\n".join([
+            f"║  {sector:15s}: {count:4d} tasks"
+            for sector, count in sorted(self.sectors_used.items(), key=lambda x: -x[1])
+        ])
+
         return f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                   TRAINING SESSION SUMMARY                   ║
@@ -407,67 +331,50 @@ class TrainingStatistics:
 ║  Total Tasks:      {self.tasks_attempted:6d}                                ║
 ║  Successful:       {self.tasks_successful:6d} ({success_rate:5.1f}%)                      ║
 ║  Failed:           {self.tasks_failed:6d}                                ║
-║  Multi-stage:      {self.multistage_tasks:6d} ({multistage_rate:5.1f}%)                      ║
-║  Single-stage:     {self.single_tasks:6d}                                ║
 ║  Session Duration: {elapsed:6.1f}s                              ║
 ║  Total Exec Time:  {self.total_duration:6.1f}s                              ║
 ║  Avg Task Time:    {avg_time:6.2f}s                              ║
-║  Tasks/Minute:     {self.tasks_attempted / (elapsed / 60):6.1f}                              ║
+║  Tasks/Minute:     {self.tasks_attempted / (elapsed / 60) if elapsed > 0 else 0:6.1f}                              ║
+╠══════════════════════════════════════════════════════════════╣
+║  Sector Distribution:                                        ║
+{sector_summary if sector_summary else "║  (no sector data)"}
 ╚══════════════════════════════════════════════════════════════╝
 """
 
 
 class FactoryTaskTrainer:
-    """Main trainer that executes random task variations."""
+    """Main trainer that executes random sector-based task variations."""
 
-    def __init__(self, base_prompt: Optional[str] = None, max_tasks: Optional[int] = None,
-                 multistage_probability: Optional[float] = None, seed: Optional[int] = None,
+    def __init__(self, sector: Optional[str] = None, max_tasks: Optional[int] = None,
                  continuous: bool = True):
         """
         Initialize trainer.
 
         Args:
-            base_prompt: Base prompt for variations (None for factory tasks)
+            sector: Industry sector for tasks (None for random across all sectors)
             max_tasks: Maximum number of tasks to run (None for unlimited)
-            continuous: If True, run indefinitely (only Ctrl+C stops). If False, allow keyboard interrupt.
+            continuous: If True, run indefinitely (only Ctrl+C stops)
         """
-        # If a seed is provided, set deterministic randomness
-        self.seed = seed
-        if self.seed is not None:
-            try:
-                random.seed(self.seed)
-                logger.info(f"RNG seed set to {self.seed}")
-            except Exception as _:
-                logger.warning("Failed to set RNG seed")
-
-        self.generator = FactoryTaskGenerator(base_prompt, multistage_probability=multistage_probability)
+        self.generator = SectorTaskGenerator(sector)
         self.statistics = TrainingStatistics()
         self.keyboard = KeyboardMonitor()
         self.max_tasks = max_tasks
         self.continuous = continuous
+        self.sector = sector
 
     def run_training_loop(self):
         """Run continuous training loop until key pressed or Ctrl+C."""
         logger.info("="*60)
-        logger.info("FACTORY TASK TRAINER")
+        logger.info("SECTOR-BASED TASK TRAINER")
         logger.info("="*60)
 
-        if self.generator.base_prompt:
-            logger.info(f"Base prompt: {self.generator.base_prompt}")
+        if self.sector:
+            sector_info = SectorTaskGenerator.SECTORS.get(self.sector, {})
+            logger.info(f"Sector: {self.sector}")
+            logger.info(f"Description: {sector_info.get('description', 'N/A')}")
         else:
-            logger.info("Mode: Random factory tasks")
-
-        # Inform that some tasks will be multi-stage and use a 'Stages:' section
-        logger.info(
-            "Note: Some tasks will be multi-stage. When a 'Stages:' section is present, "
-            "follow the stages sequentially and provide concise per-stage outputs."
-        )
-
-        # Log effective multi-stage probability
-        try:
-            logger.info(f"Effective multi-stage probability: {self.generator.multistage_probability:.2f}")
-        except Exception:
-            pass
+            logger.info("Mode: Random tasks across all sectors")
+            logger.info(f"Available sectors: {', '.join(SectorTaskGenerator.SECTORS.keys())}")
 
         # Log mode
         if self.continuous:
@@ -493,23 +400,23 @@ class FactoryTaskTrainer:
                     logger.info(f"\nReached max tasks limit: {self.max_tasks}")
                     break
 
-                # Generate task variation
-                task = self.generator.generate_variation()
+                # Generate task
+                task = self.generator.generate_realistic_task()
+                current_sector = self.sector if self.sector else "random"
 
                 # Execute task
-                logger.info(f"\n[Task #{self.statistics.tasks_attempted + 1}] {task}")
+                logger.info(f"\n[Task #{self.statistics.tasks_attempted + 1}] [{current_sector}] {task}")
 
                 start_time = time.time()
                 success = self._execute_task(task)
                 duration = time.time() - start_time
-                is_multistage = self._is_multistage_task(task)
 
                 # Record statistics
                 if success:
-                    self.statistics.record_success(duration, is_multistage=is_multistage)
+                    self.statistics.record_success(duration, current_sector)
                     logger.info(f"✓ Success ({duration:.2f}s)")
                 else:
-                    self.statistics.record_failure(duration, is_multistage=is_multistage)
+                    self.statistics.record_failure(duration, current_sector)
                     logger.info(f"✗ Failed ({duration:.2f}s)")
 
                 # Small delay between tasks
@@ -523,7 +430,7 @@ class FactoryTaskTrainer:
 
     def _execute_task(self, task: str) -> bool:
         """
-        Execute a task through the DSE system with full RAG and tool registration.
+        Execute a task through the DSE system.
 
         Args:
             task: Task prompt to execute
@@ -533,24 +440,18 @@ class FactoryTaskTrainer:
         """
         try:
             # Execute via chat_cli integration
-            import sys
-            sys.path.insert(0, str(Path(__file__).parent / 'code_evolver'))
+            sys.path.insert(0, str(Path(__file__).parent))
 
             from chat_cli import ChatCLI
 
-            # Create CLI instance (will initialize all components including RAG)
+            # Create CLI instance
             cli = ChatCLI()
 
-            # Generate node_id from task
-            import hashlib
-            task_hash = hashlib.sha256(task.encode()).hexdigest()[:8]
-            node_id = f"train_{int(time.time() * 1000)}_{task_hash}"
-
-            # Execute the task using handle_generate (which handles RAG, tests, and tool registration)
+            # Execute the task
             success = cli.handle_generate(task)
 
             if success:
-                logger.debug(f"Task completed successfully, node registered as tool")
+                logger.debug(f"Task completed successfully")
             else:
                 logger.debug(f"Task failed to complete")
 
@@ -562,27 +463,19 @@ class FactoryTaskTrainer:
             logger.debug(traceback.format_exc())
             return False
 
-    @staticmethod
-    def _is_multistage_task(task: str) -> bool:
-        """Heuristic to detect multi-stage wrapped tasks."""
-        try:
-            return "\nStages:\n" in task or task.strip().startswith("Note: This workflow may be multi-stage.")
-        except Exception:
-            return False
-
 
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Factory Task Trainer - Continuous training with random task variations. '
-                    'By default, runs indefinitely until Ctrl+C is pressed, continuously generating '
-                    'and running tasks to train the system.'
+        description='Sector-Based Task Trainer - Generate realistic workflow tasks for different industries. '
+                    'By default, runs indefinitely until Ctrl+C is pressed.'
     )
     parser.add_argument(
-        '--prompt',
+        '--sector',
         type=str,
         default=None,
-        help='Base prompt to generate variations from (default: use factory tasks)'
+        choices=list(SectorTaskGenerator.SECTORS.keys()),
+        help='Industry sector for task generation (default: random across all sectors)'
     )
     parser.add_argument(
         '--max-tasks',
@@ -591,16 +484,9 @@ def main():
         help='Maximum number of tasks to run (default: unlimited)'
     )
     parser.add_argument(
-        '--multistage-prob',
-        type=float,
-        default=None,
-        help='Probability [0.0-1.0] that a task is wrapped as a multi-stage workflow'
-    )
-    parser.add_argument(
-        '--seed',
-        type=int,
-        default=None,
-        help='Set RNG seed for deterministic task generation'
+        '--list-sectors',
+        action='store_true',
+        help='List available sectors and exit'
     )
     parser.add_argument(
         '--continuous',
@@ -627,24 +513,21 @@ def main():
     # Set log level
     logging.getLogger().setLevel(getattr(logging, args.log_level))
 
-    # Determine multistage probability from CLI or environment
-    multistage_prob = args.multistage_prob
-    if multistage_prob is None:
-        import os
-        env_val = os.environ.get('FACTORY_MULTISTAGE_PROB')
-        if env_val is not None:
-            try:
-                multistage_prob = float(env_val)
-            except ValueError:
-                logger.warning(f"Invalid FACTORY_MULTISTAGE_PROB '{env_val}', falling back to default")
-                multistage_prob = None
+    # List sectors and exit
+    if args.list_sectors:
+        print("\nAvailable Sectors:")
+        print("=" * 70)
+        for sector, info in sorted(SectorTaskGenerator.SECTORS.items()):
+            print(f"\n{sector.upper()}")
+            print(f"  Description: {info['description']}")
+            print(f"  Typical workflows: {info['examples']}")
+        print("\n" + "=" * 70)
+        return
 
     # Create and run trainer
     trainer = FactoryTaskTrainer(
-        base_prompt=args.prompt,
+        sector=args.sector,
         max_tasks=args.max_tasks,
-        multistage_probability=multistage_prob,
-        seed=args.seed,
         continuous=args.continuous,
     )
     trainer.run_training_loop()

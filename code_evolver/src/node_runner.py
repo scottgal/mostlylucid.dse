@@ -204,6 +204,18 @@ class NodeRunner:
         """
         return self.nodes_dir / node_id / filename
 
+    def get_test_path(self, node_id: str) -> Path:
+        """
+        Get the path to a node's test file.
+
+        Args:
+            node_id: Node identifier
+
+        Returns:
+            Path to test file
+        """
+        return self.nodes_dir / node_id / "test_main.py"
+
     def node_exists(self, node_id: str, filename: str = "main.py") -> bool:
         """
         Check if a node's code file exists.

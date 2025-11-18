@@ -1412,10 +1412,12 @@ class ChatCLI:
 
 Error: {error_msg}
 
-Fix this code. Your response MUST contain ONLY valid, runnable Python code.
+CRITICAL: Return ONLY the FIXED code. DO NOT return the original submitted code.
+Your response MUST contain ONLY the corrected, valid, runnable Python code.
 NO markdown fences (```), NO explanations, NO comments outside the code, NO extra text.
 ONLY pure Python code that will execute without errors.
 
+DO NOT echo back the broken code - return ONLY the working fixed version.
 Start your response with 'import' or 'def' or 'class' - nothing else."""
 
         fixed = self.client.generate(
@@ -1536,6 +1538,8 @@ Start your response with 'import' or 'def' or 'class' - nothing else."""
 {workflow_examples}
 
 TASK TO ANALYZE: "{description}"
+
+IMPORTANT: If you see "[PREVIOUS CONVERSATION HISTORY" in the task above, IGNORE IT completely. Only analyze the ACTUAL task (the text BEFORE any bracketed sections).
 
 STEP 1: IDENTIFY OPERATIONS
 Look for these keywords that indicate multiple operations:
@@ -2081,6 +2085,147 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
             if 'complexity' in task_evaluation:
                 log_panel.log(f"> Complexity: {task_evaluation['complexity']}")
             log_panel.log(f"> Routing: {task_evaluation['recommended_tier']}")
+
+        # CRITICAL: Check if routing specifies a specific tool (e.g., "llm.questions_about_me")
+        # If so, invoke that tool directly instead of doing RAG search
+        recommended_tier = task_evaluation.get('recommended_tier', '')
+        if recommended_tier.startswith('llm.') or recommended_tier.startswith('executable.'):
+            # Extract tool name from tier (e.g., "llm.questions_about_me" -> "questions_about_me")
+            tool_category, tool_name = recommended_tier.split('.', 1)
+
+            console.print(f"[cyan]-> Direct tool routing: {tool_name}[/cyan]")
+
+            # Try to get the tool - wait for tools to fully load first
+            try:
+                self.tools_manager._loading_complete.wait(timeout=5)  # Wait up to 5 seconds
+            except Exception as e:
+                logger.debug(f"Error waiting for tools: {e}")
+
+            tool = self.tools_manager.get_tool(tool_name)
+
+            # DEBUG: Log all available tools if not found
+            if not tool:
+                logger.debug(f"Tool '{tool_name}' not found. Available tools: {list(self.tools_manager.tools.keys())[:20]}")
+
+            if tool:
+                console.print(f"[green]✓ Using {tool_category} tool: {tool.name}[/green]")
+
+                # Execute the tool directly based on category
+                try:
+                    if tool_category == 'executable':
+                        # For executable tools, use platform_info directly
+                        if tool_name == 'platform_info':
+                            from tools.executable.platform_info import main as platform_info_main
+                            result = platform_info_main(detail_level='standard')
+                        else:
+                            # Import and call the executable tool
+                            from node_runtime import call_tool
+                            result = call_tool(tool_name, description)
+                    elif tool_category == 'llm':
+                        # LLM tools - call the LLM with the tool's system prompt
+                        # implementation contains the llm config from YAML
+                        llm_config = tool.implementation if isinstance(tool.implementation, dict) else {}
+                        system_prompt = llm_config.get('system_prompt', '') or tool.metadata.get('system_prompt', '')
+                        model = llm_config.get('model', 'llama3')
+
+                        # Special handling for questions_about_me - it needs actual platform data
+                        if tool_name == 'questions_about_me':
+                            try:
+                                from tools.executable.platform_info import PlatformInfoGatherer
+                                import json
+
+                                # Get real platform info
+                                gatherer = PlatformInfoGatherer()
+                                platform_data = gatherer.gather_info(
+                                    detail_level='standard',
+                                    include_processes=False,
+                                    include_network=False
+                                )
+
+                                # Include platform data in the prompt
+                                prompt = f"""{system_prompt}
+
+PLATFORM DATA (from platform_info):
+{json.dumps(platform_data, indent=2)}
+
+Question: {description}
+
+Use the PLATFORM DATA above to answer the question with REAL data (not examples)."""
+                            except Exception as e:
+                                logger.error(f"Failed to get platform info: {e}")
+                                # Fall back to normal prompt without data
+                                prompt = f"{system_prompt}\n\nQuestion: {description}"
+                        else:
+                            # Get input schema from metadata
+                            input_schema = tool.metadata.get('input_schema', {})
+                            if 'question' in input_schema:
+                                # It expects a "question" parameter
+                                prompt = f"{system_prompt}\n\nQuestion: {description}"
+                            else:
+                                prompt = f"{system_prompt}\n\n{description}"
+
+                        result = self.client.generate(
+                            model=model,
+                            prompt=prompt,
+                            temperature=0.7
+                        )
+                    else:
+                        console.print(f"[yellow]Unknown tool category: {tool_category}[/yellow]")
+                        result = None
+
+                    # Display result
+                    if result:
+                        console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                        console.print(Panel(result, box=box.ROUNDED, border_style="green"))
+                    else:
+                        console.print("[yellow]Tool executed but returned no result[/yellow]")
+
+                    return True
+                except Exception as e:
+                    console.print(f"[red]Tool execution failed: {e}[/red]")
+                    logger.error(f"Direct tool execution error: {e}", exc_info=True)
+                    # Fall through to normal code generation
+            else:
+                # Tool not found - for system_info, fall back to platform_info directly
+                if task_evaluation['task_type'].value == 'system_info':
+                    console.print(f"[yellow]Note: Tool '{tool_name}' not yet loaded - using platform_info directly[/yellow]")
+                    try:
+                        from tools.executable.platform_info import PlatformInfoGatherer
+                        import json
+
+                        # Get platform info using the gatherer class
+                        gatherer = PlatformInfoGatherer()
+                        platform_data = gatherer.gather_info(
+                            detail_level='standard',
+                            include_processes=False,
+                            include_network=False
+                        )
+
+                        # Generate natural language response
+                        if isinstance(platform_data, dict):
+                            memory_info = platform_data.get('memory', {})
+                            if memory_info:
+                                # PlatformInfoGatherer returns keys with _gb suffix
+                                total_gb = memory_info.get('total_gb', 0)
+                                available_gb = memory_info.get('available_gb', 0)
+                                percent_used = memory_info.get('usage_percent', 0)
+
+                                result = f"You have {total_gb:.1f}GB of total RAM, with {available_gb:.1f}GB currently available ({percent_used:.1f}% used)."
+                            else:
+                                result = json.dumps(platform_data, indent=2)
+                        else:
+                            result = str(platform_data)
+
+                        console.print(f"\n[bold green]RESULT:[/bold green]\n")
+                        console.print(Panel(result, box=box.ROUNDED, border_style="green"))
+                        return True
+                    except Exception as e:
+                        console.print(f"[red]Platform info failed: {e}[/red]")
+                        logger.error(f"Platform info error: {e}", exc_info=True)
+                        # Fall through to normal code generation
+
+                console.print(f"[yellow]Warning: Tool '{tool_name}' not found - falling back to normal routing[/yellow]")
+                # Fall through to normal code generation
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:
@@ -2929,12 +3074,30 @@ Create a comprehensive specification that will guide the code generator. Include
 Be VERY specific and technical. Think of this as writing requirements for another developer.
 The code generator will follow this specification EXACTLY, so include ALL critical details."""
 
-        with self.display.start_stage("Thinking", f"Consulting {self.config.overseer_model}"):
+        # TIER ESCALATION: For long prompts, use a more capable model
+        # Estimate token count (rough: 1 token ≈ 4 chars)
+        prompt_tokens = len(overseer_prompt) // 4
+        overseer_model = self.config.overseer_model
+        overseer_model_key = self.config.overseer_model_key
+
+        # Escalation thresholds
+        if prompt_tokens > 4000:  # Very long prompt (>16k chars)
+            # Escalate to most powerful model available
+            console.print(f"[yellow]Long prompt detected ({prompt_tokens} tokens) - using powerful model[/yellow]")
+            overseer_model = "qwen2.5-coder:14b"  # More capable model
+            overseer_model_key = "powerful"
+        elif prompt_tokens > 2000:  # Long prompt (>8k chars)
+            # Escalate to better model
+            console.print(f"[cyan]Medium-long prompt ({prompt_tokens} tokens) - using capable model[/cyan]")
+            overseer_model = "codellama:7b"
+            overseer_model_key = "base"
+
+        with self.display.start_stage("Thinking", f"Consulting {overseer_model}"):
             specification = self.client.generate(
-                model=self.config.overseer_model,
+                model=overseer_model,
                 prompt=overseer_prompt,
                 temperature=0.7,
-                model_key=self.config.overseer_model_key  # Use actual model key for routing
+                model_key=overseer_model_key  # Use escalated model key for routing
             )
 
         self.display.complete_stage("Thinking", "Specification complete")
@@ -3018,15 +3181,22 @@ ALGORITHM: fibonacci computation"""
             selected_tool = self.tools_manager.tools['fast_code_generator']
             use_specialized_tool = True
             console.print(f"[cyan]-> Using tool: {selected_tool.name}[/cyan]")
-        # For ALL content generation (simple or complex), use powerful model
+        # For ALL content generation (simple or complex), search for specialized content tools first
         elif is_simple_content or is_complex_content:
-            # Don't search for tools - content needs fresh generation with powerful model
-            # Use general tool which has proper prompts for content generation
-            selected_tool = None
-            use_specialized_tool = False
-            # Extract first few words for short description
-            short_desc = ' '.join(description.split()[:6])
-            console.print(f"[cyan]-> Creating tool: {short_desc}...[/cyan]")
+            # Search for specialized content generation tools (e.g., technical_writer, creative_writer, etc.)
+            selected_tool = self.tools_manager.get_best_llm_for_task(description)
+
+            # Check if we found a specialized content tool (not just the generic fallback)
+            if selected_tool and "general" not in selected_tool.tool_id.lower() and "fallback" not in selected_tool.tags:
+                # Use the specialized content tool for higher quality
+                use_specialized_tool = True
+                console.print(f"[cyan]-> Using specialized content tool: {selected_tool.name}[/cyan]")
+            else:
+                # No specialized tool found - use general tool with powerful model
+                selected_tool = None
+                use_specialized_tool = False
+                short_desc = ' '.join(description.split()[:6])
+                console.print(f"[cyan]-> Creating tool: {short_desc}...[/cyan]")
         else:
             # For other complex tasks or if no specialized tool, use normal tool selection
             selected_tool = self.tools_manager.get_best_llm_for_task(description)
@@ -4017,14 +4187,14 @@ logger = _DummyLogger()
         # Save specification
         spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
         try:
-            # Basic spec always saved
+            # Basic spec always saved - now includes FULL specification
             basic_spec = f"""# {code_description}
 
 ## Task
 {description}
 
 ## Implementation
-{specification[:500]}...
+{specification}
 
 Generated: {datetime.now().isoformat()}
 """
@@ -5272,7 +5442,8 @@ Code to test:
             # Call the tool to generate load tests
             from node_runtime import call_tool
             import json
-            result_str = call_tool("locust_load_tester", locust_input)
+            # Convert dict to JSON string for call_tool
+            result_str = call_tool("locust_load_tester", json.dumps(locust_input))
 
             # Parse the JSON result
             try:
@@ -6193,7 +6364,7 @@ Generate comprehensive tests now:"""
         # Three-tier model strategy
         fast_model = "codellama"
         powerful_model = self.config.escalation_model  # qwen2.5-coder:14b
-        god_level_model = "deepseek-coder:6.7b"  # Final boss on localhost
+        god_level_model = "deepseek-coder-v2:16b"  # Final boss - 16B parameter god-level model
 
         # Temperature progression: start slightly higher to encourage actual code changes
         # 0.2 gives more creativity while still being precise
@@ -6935,6 +7106,7 @@ Return ONLY the JSON object, nothing else."""
         console.print(f"[bold magenta]║   Model: {god_model:25s} ║[/bold magenta]")
         console.print(f"[bold magenta]║   This is the FINAL BOSS attempt    ║[/bold magenta]")
         console.print(f"[bold magenta]╔═══════════════════════════════════════╗[/bold magenta]\n")
+        console.print(f"[yellow]⚠  This model may take up to 5 minutes to respond - please be patient![/yellow]\n")
 
         # Build comprehensive history summary
         history_summary = "\n=== COMPLETE FAILURE HISTORY ===\n"
@@ -7171,12 +7343,14 @@ You MUST respond with ONLY a JSON object in this exact format:
   "analysis": "one sentence explaining what was wrong"
 }}
 
-Requirements for "code" field:
-- ONLY executable Python code
+CRITICAL Requirements for "code" field:
+- Return ONLY the FIXED code - DO NOT return the original broken code
+- ONLY executable Python code that WORKS
 - NO markdown fences
 - NO explanations mixed with code
 - Must fix ALL errors shown above
 - Must be immediately runnable
+- DO NOT echo back the broken code - return ONLY the working corrected version
 
 Return ONLY the JSON object, nothing else."""
 
@@ -8836,7 +9010,8 @@ Return ONLY the JSON, no other text."""
             return False
 
         try:
-            with open(manual_path, 'r', encoding='utf-8') as f:
+            # Use utf-8-sig to handle UTF-8 BOM if present
+            with open(manual_path, 'r', encoding='utf-8-sig') as f:
                 manual_data = json.load(f)
         except Exception as e:
             console.print(f"[red]Error loading manual: {e}[/red]")
@@ -10047,9 +10222,10 @@ Return ONLY the Python test code, no explanations."""
                     start_time = time.time()
 
                     # Add context summary to description if available (for internal use only)
+                    # IMPORTANT: Mark context clearly so workflow decomposer doesn't treat it as part of current task
                     final_description = user_input
                     if context_summary:
-                        final_description = f"{user_input}\n\n[Conversation Context:\n{context_summary}]"
+                        final_description = f"{user_input}\n\n[PREVIOUS CONVERSATION HISTORY (for reference only, NOT part of current task):\n{context_summary}]"
 
                     success = self.handle_generate(final_description, display_description=user_input)
                     duration = time.time() - start_time
@@ -10360,6 +10536,21 @@ Return ONLY the Python test code, no explanations."""
             "results": results
         }
 
+    def _should_show_generated(self) -> bool:
+        """Check if generated content should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity in ["generated", "debug"]
+
+    def _should_show_logs(self) -> bool:
+        """Check if log contents should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity in ["log", "debug"]
+
+    def _should_show_debug(self) -> bool:
+        """Check if debug details should be displayed."""
+        verbosity = self.config.get("chat.verbosity", "status")
+        return verbosity == "debug"
+
 
 def main():
     """Main entry point."""
@@ -10381,18 +10572,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    def _should_show_generated(self) -> bool:
-        """Check if generated content should be displayed."""
-        verbosity = self.config.get("chat.verbosity", "status")
-        return verbosity in ["generated", "debug"]
-    
-    def _should_show_logs(self) -> bool:
-        """Check if log contents should be displayed."""
-        verbosity = self.config.get("chat.verbosity", "status")
-        return verbosity in ["log", "debug"]
-    
-    def _should_show_debug(self) -> bool:
-        """Check if debug details should be displayed."""
-        verbosity = self.config.get("chat.verbosity", "status")
-        return verbosity == "debug"

@@ -95,7 +95,7 @@ llm:
       cost: "very-high"
       speed: "slow"
       quality: "exceptional"
-      timeout: 600
+      timeout: 300  # 5 minutes - god-level model needs time for deep analysis
       specialization: "code"
 
     mistral_nemo:

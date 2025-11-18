@@ -84,23 +84,69 @@ class TaskEvaluator:
             }
 
         # Quick check for system info queries (keyword-based)
+        # IMPORTANT: Use VERY strict matching to avoid false positives
+        # Only match when it's CLEARLY a question about system information
         desc_lower = description.lower()
-        system_info_keywords = ['how much memory', 'what memory', 'how much ram', 'what ram',
-                                'what os', 'which os', 'operating system', 'system specs',
-                                'machine specs', 'cpu info', 'what cpu', 'which cpu',
-                                'platform info', 'hardware info', 'system information']
-        if any(keyword in desc_lower for keyword in system_info_keywords):
-            logger.info(f"Detected system info query via keywords")
-            routing = self._determine_routing(TaskType.SYSTEM_INFO, description, "simple")
-            return {
-                "task_type": TaskType.SYSTEM_INFO,
-                "complexity": "simple",
-                "understanding": "System information query",
-                "key_aspects": "hardware, specs, platform",
-                "input_length": input_length,
-                "evaluation_model": "keyword-match",
-                **routing
-            }
+
+        # FIRST: Check for action indicators that immediately disqualify system_info
+        # These are tasks that DO something, not query system info
+        action_indicators = [
+            'http://', 'https://',  # URLs indicate external actions
+            'call ', 'ping ', 'download ', 'fetch ', 'upload ',
+            'run ', 'execute ', 'implement ', 'create ', 'build ',
+            'write ', 'develop ', 'make ', 'generate ',
+            'send ', 'post ', 'get ', 'put ', 'delete ',  # HTTP verbs
+        ]
+
+        if any(indicator in desc_lower for indicator in action_indicators):
+            logger.debug(f"Task contains action indicators - not system_info")
+            # Skip system_info classification entirely - this is an action task
+        else:
+            # Only NOW check if it might be a system info query
+            # Check for explicit system info queries (require question words AT START)
+            is_real_question = any(desc_lower.startswith(q) for q in ['what', 'which', 'how much', 'how many', 'tell me', 'show me'])
+            system_info_keywords = ['memory', 'ram', 'os', 'operating system', 'system specs',
+                                    'machine specs', 'cpu', 'gpu', 'platform', 'hardware']
+
+            # Only match if it STARTS with question word AND contains system keywords
+            if is_real_question and any(keyword in desc_lower for keyword in system_info_keywords):
+                # When in doubt, verify with LLM sentinel
+                # Use sentinel to confirm this is REALLY a system info question
+                logger.info(f"Potential system info query detected, verifying with sentinel LLM...")
+
+                verification_prompt = f"""Is this task asking for information ABOUT the current system/machine (hardware, OS, specs)?
+
+Task: "{description}"
+
+Answer ONLY 'yes' if it's asking for information about the system itself (like 'what is my RAM', 'show me CPU specs').
+Answer 'no' if it's asking to DO something (like 'ping X', 'download Y', 'call URL', 'run command').
+
+Answer (yes/no):"""
+
+                try:
+                    verification = self.client.generate(
+                        model="gemma3:1b",  # Fast verification
+                        prompt=verification_prompt,
+                        max_tokens=10,
+                        temperature=0.0  # Deterministic
+                    )
+
+                    if 'yes' in verification.lower().strip():
+                        logger.info(f"Sentinel confirmed: system info query")
+                        routing = self._determine_routing(TaskType.SYSTEM_INFO, description, "simple")
+                        return {
+                            "task_type": TaskType.SYSTEM_INFO,
+                            "complexity": "simple",
+                            "understanding": "System information query",
+                            "key_aspects": "hardware, specs, platform",
+                            "input_length": input_length,
+                            "evaluation_model": "sentinel-verified",
+                            **routing
+                        }
+                    else:
+                        logger.info(f"Sentinel rejected: not a system info query - '{verification.strip()}'")
+                except Exception as e:
+                    logger.warning(f"Sentinel verification failed: {e}, skipping system_info classification")
 
         # Choose model based on input length
         if input_length < self.SHORT_INPUT:
@@ -175,6 +221,14 @@ COMPLEXITY: [pick one]"""
                 # Data generation needs LLM, not code loops
                 logger.info(f"Detected data generation request - overriding to creative_content")
                 category = 'creative_content'
+
+            # CRITICAL: Override system_info for ACTION tasks
+            # If task contains URLs or action verbs, it's NOT a system info query
+            action_indicators = ['http://', 'https://', 'call ', 'ping ', 'download ', 'fetch ',
+                                'upload ', 'send ', 'post ', 'get ', 'put ', 'delete ']
+            if category == 'system_info' and any(indicator in desc_lower for indicator in action_indicators):
+                logger.info(f"Task contains action indicators - overriding system_info to code_generation")
+                category = 'code_generation'  # Action tasks need code execution
 
             # Don't try to parse understanding or key_aspects - tinyllama is too unreliable
             understanding = ""
