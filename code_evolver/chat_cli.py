@@ -5191,7 +5191,7 @@ Code:
             # Call the tool to generate BDD tests
             from node_runtime import call_tool
             import json
-            result_str = call_tool("behave_test_generator", feature_input)
+            result_str = call_tool("behave_test_generator", json.dumps(feature_input))
 
             # Parse the JSON result
             try:
@@ -5272,7 +5272,7 @@ Code to test:
             # Call the tool to generate load tests
             from node_runtime import call_tool
             import json
-            result_str = call_tool("locust_load_tester", locust_input)
+            result_str = call_tool("locust_load_tester", json.dumps(locust_input))
 
             # Parse the JSON result
             try:
