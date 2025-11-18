@@ -132,9 +132,25 @@ def extract_step_patterns(scenarios: List[Dict[str, Any]]) -> List[Tuple[str, st
     seen = set()
 
     for scenario in scenarios:
-        for step in scenario['steps']:
-            text = step['text']
-            keyword = step['keyword']
+        # Ensure scenario is a dict and has steps
+        if not isinstance(scenario, dict):
+            continue
+
+        steps = scenario.get('steps', [])
+        if not isinstance(steps, list):
+            continue
+
+        for step in steps:
+            # Ensure step is a dict with required fields
+            if not isinstance(step, dict):
+                continue
+
+            text = step.get('text', '')
+            keyword = step.get('keyword', '')
+
+            # Ensure both are strings
+            if not isinstance(text, str) or not isinstance(keyword, str):
+                continue
 
             # Normalize keyword (And/But -> Given/When/Then based on context)
             if keyword in ['And', 'But']:
@@ -186,8 +202,16 @@ def generate_step_definitions(feature: Dict[str, Any],
 
     # Generate step definitions
     for i, (text, keyword, pattern) in enumerate(patterns):
+        # Ensure keyword is a string before calling .lower()
+        if not isinstance(keyword, str):
+            continue
+
         # Determine decorator
         decorator = keyword.lower()
+
+        # Ensure text is a string
+        if not isinstance(text, str):
+            continue
 
         # Create step function
         function_name = re.sub(r'[^a-z0-9_]', '_', text.lower())
@@ -368,7 +392,12 @@ def main():
         with open(steps_file_path, 'w') as f:
             f.write(steps_content)
 
-        feature_file_path = os.path.join(feature_output_path, f'{feature["name"].lower().replace(" ", "_")}.feature')
+        # Ensure feature name is a string and sanitize it for filename
+        feature_name = feature.get("name", "unnamed_feature")
+        if not isinstance(feature_name, str):
+            feature_name = "unnamed_feature"
+        safe_feature_name = feature_name.lower().replace(" ", "_")
+        feature_file_path = os.path.join(feature_output_path, f'{safe_feature_name}.feature')
         with open(feature_file_path, 'w') as f:
             f.write(feature_content)
 
