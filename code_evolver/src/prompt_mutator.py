@@ -78,6 +78,9 @@ class MutatedPrompt:
         mutated_prompt_template: str,
         strategy: MutationStrategy,
         use_case: str,
+        llm_backend: Optional[str] = None,
+        llm_model: Optional[str] = None,
+        llm_tier: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None
     ):
         """
@@ -92,6 +95,9 @@ class MutatedPrompt:
             mutated_prompt_template: New prompt template
             strategy: Mutation strategy used
             use_case: Specific use case for this mutation
+            llm_backend: LLM backend used (ollama, anthropic, openai, etc.)
+            llm_model: Specific model (llama3, claude-sonnet-4, gpt-4, etc.)
+            llm_tier: Tier configuration (quality.tier_2, coding.tier_3, etc.)
             metadata: Additional metadata
         """
         self.mutation_id = mutation_id
@@ -102,6 +108,12 @@ class MutatedPrompt:
         self.mutated_prompt_template = mutated_prompt_template
         self.strategy = strategy
         self.use_case = use_case
+
+        # LLM-specific tracking - CRITICAL for mutation portability
+        self.llm_backend = llm_backend  # e.g., "ollama", "anthropic", "openai"
+        self.llm_model = llm_model      # e.g., "llama3", "claude-sonnet-4", "gpt-4"
+        self.llm_tier = llm_tier        # e.g., "quality.tier_2", "coding.tier_3"
+
         self.metadata = metadata or {}
         self.created_at = datetime.utcnow().isoformat() + "Z"
 
@@ -154,6 +166,10 @@ class MutatedPrompt:
             "mutated_prompt_template": self.mutated_prompt_template,
             "strategy": self.strategy.value,
             "use_case": self.use_case,
+            # LLM-specific metadata - tracks what this mutation was optimized for
+            "llm_backend": self.llm_backend,
+            "llm_model": self.llm_model,
+            "llm_tier": self.llm_tier,
             "metadata": self.metadata,
             "created_at": self.created_at,
             "performance_metrics": self.performance_metrics,
@@ -271,7 +287,8 @@ class PromptMutator:
         use_case: str,
         strategy: MutationStrategy,
         additional_constraints: Optional[List[str]] = None,
-        additional_context: Optional[str] = None
+        additional_context: Optional[str] = None,
+        llm_config: Optional[Dict[str, Any]] = None
     ) -> MutatedPrompt:
         """
         Mutate a prompt using specified strategy.
@@ -284,11 +301,22 @@ class PromptMutator:
             strategy: Mutation strategy to apply
             additional_constraints: Extra constraints to add
             additional_context: Extra context to include
+            llm_config: LLM configuration (backend, model, tier) this mutation is for
 
         Returns:
             MutatedPrompt with new prompts and full lineage
         """
         logger.info(f"Mutating {tool_id} with {strategy.value} strategy for: {use_case}")
+
+        # Extract LLM-specific metadata from config
+        llm_backend = None
+        llm_model = None
+        llm_tier = None
+
+        if llm_config:
+            llm_backend = llm_config.get("backend")
+            llm_model = llm_config.get("model")
+            llm_tier = llm_config.get("tier")
 
         # Build mutation prompt based on strategy
         mutation_prompt = self._build_mutation_prompt(
@@ -297,7 +325,10 @@ class PromptMutator:
             use_case=use_case,
             strategy=strategy,
             constraints=additional_constraints or [],
-            context=additional_context or ""
+            context=additional_context or "",
+            llm_backend=llm_backend,
+            llm_model=llm_model,
+            llm_tier=llm_tier
         )
 
         try:
@@ -314,7 +345,7 @@ class PromptMutator:
             # Generate mutation ID
             mutation_id = self._generate_mutation_id(tool_id, use_case, strategy)
 
-            # Create MutatedPrompt
+            # Create MutatedPrompt with LLM tracking
             mutated = MutatedPrompt(
                 mutation_id=mutation_id,
                 parent_tool_id=tool_id,
@@ -324,6 +355,9 @@ class PromptMutator:
                 mutated_prompt_template=mutation_data.get("prompt_template", prompt_template),
                 strategy=strategy,
                 use_case=use_case,
+                llm_backend=llm_backend,
+                llm_model=llm_model,
+                llm_tier=llm_tier,
                 metadata={
                     "constraints": additional_constraints,
                     "context": additional_context,
@@ -366,7 +400,8 @@ class PromptMutator:
         system_prompt: str,
         prompt_template: str,
         use_case: str,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        llm_config: Optional[Dict[str, Any]] = None
     ) -> Optional[MutatedPrompt]:
         """
         Automatically decide and mutate if beneficial.
@@ -382,6 +417,7 @@ class PromptMutator:
             prompt_template: Original prompt template
             use_case: Specific use case
             context: Additional context for decision
+            llm_config: LLM configuration (backend, model, tier) to optimize for
 
         Returns:
             MutatedPrompt if mutation was beneficial, None otherwise
@@ -400,7 +436,8 @@ class PromptMutator:
             system_prompt=system_prompt,
             prompt_template=prompt_template,
             use_case=use_case,
-            strategy=strategy
+            strategy=strategy,
+            llm_config=llm_config
         )
 
     def get_mutation(self, mutation_id: str) -> Optional[MutatedPrompt]:
@@ -515,7 +552,10 @@ Respond in JSON format:
         use_case: str,
         strategy: MutationStrategy,
         constraints: List[str],
-        context: str
+        context: str,
+        llm_backend: Optional[str] = None,
+        llm_model: Optional[str] = None,
+        llm_tier: Optional[str] = None
     ) -> str:
         """Build prompt for LLM to perform mutation."""
         strategy_instructions = {
@@ -534,6 +574,29 @@ Respond in JSON format:
 
         constraints_text = "\n".join(f"- {c}" for c in constraints) if constraints else "None"
 
+        # Build LLM target info
+        llm_info_parts = []
+        if llm_backend:
+            llm_info_parts.append(f"Backend: {llm_backend}")
+        if llm_model:
+            llm_info_parts.append(f"Model: {llm_model}")
+        if llm_tier:
+            llm_info_parts.append(f"Tier: {llm_tier}")
+
+        llm_info = "\n".join(llm_info_parts) if llm_info_parts else "Not specified (mutation will be backend-agnostic)"
+
+        # Add model-specific guidance
+        model_guidance = ""
+        if llm_model:
+            if "gpt" in llm_model.lower():
+                model_guidance = "\n\nNOTE: Optimizing for OpenAI GPT models - prefer clear instructions, examples work well, supports function calling."
+            elif "claude" in llm_model.lower():
+                model_guidance = "\n\nNOTE: Optimizing for Anthropic Claude - prefers detailed context, works well with XML tags, excels at chain-of-thought."
+            elif "llama" in llm_model.lower() or "ollama" in str(llm_backend).lower():
+                model_guidance = "\n\nNOTE: Optimizing for Llama/local models - prefer concise prompts, clear structure, may need more explicit instructions."
+            elif "gemini" in llm_model.lower():
+                model_guidance = "\n\nNOTE: Optimizing for Google Gemini - supports multimodal, prefers structured formats, good at reasoning tasks."
+
         return f"""You are a prompt engineering expert specializing in mutation and optimization.
 
 **Original System Prompt:**
@@ -545,6 +608,9 @@ Respond in JSON format:
 **Target Use Case:**
 {use_case}
 
+**Target LLM Configuration:**
+{llm_info}{model_guidance}
+
 **Mutation Strategy:**
 {strategy.value.upper()}: {instruction}
 
@@ -554,14 +620,15 @@ Respond in JSON format:
 **Additional Context:**
 {context or "None"}
 
-Create a mutated version optimized for the specific use case.
+IMPORTANT: Create a mutated version optimized for the specific use case AND the target LLM configuration.
+Different LLMs have different strengths - tailor the prompt accordingly.
 
 Respond in JSON format:
 {{
-  "system_prompt": "Mutated system prompt",
-  "prompt_template": "Mutated prompt template",
-  "reasoning": "Explanation of changes made",
-  "improvements": ["List of specific improvements"],
+  "system_prompt": "Mutated system prompt (optimized for target LLM)",
+  "prompt_template": "Mutated prompt template (optimized for target LLM)",
+  "reasoning": "Explanation of changes made and LLM-specific optimizations",
+  "improvements": ["List of specific improvements, including LLM-specific ones"],
   "tradeoffs": ["Any tradeoffs or limitations introduced"]
 }}
 """
@@ -650,6 +717,9 @@ Respond in JSON format:
                     mutated_prompt_template=data["mutated_prompt_template"],
                     strategy=MutationStrategy(data["strategy"]),
                     use_case=data["use_case"],
+                    llm_backend=data.get("llm_backend"),
+                    llm_model=data.get("llm_model"),
+                    llm_tier=data.get("llm_tier"),
                     metadata=data.get("metadata", {})
                 )
                 mutation.performance_metrics = data.get("performance_metrics", [])
