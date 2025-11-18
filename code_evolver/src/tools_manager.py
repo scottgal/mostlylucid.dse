@@ -1483,11 +1483,16 @@ Tags: {', '.join(tool.tags)}
 
         # Execute the command
         import subprocess
+        import json
         import time
         start_time = time.time()
         try:
             # If prompt kwarg provided, pass it as stdin
             stdin_input = kwargs.get('prompt', None)
+
+            # If stdin_input is a dict or list, JSON-serialize it (for stdin_mode tools)
+            if stdin_input is not None and isinstance(stdin_input, (dict, list)):
+                stdin_input = json.dumps(stdin_input)
 
             result_obj = subprocess.run(
                 full_command,
