@@ -1,0 +1,427 @@
+name: "LanguageTool Grammar Checker"
+type: "custom"
+description: "Free grammar, spelling, and style checker supporting 30+ languages. Detect typos, grammar errors, punctuation mistakes, and get suggestions for improvement. No authentication required for basic usage."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.languagetool_api_tool"
+  class: "LanguageToolApiTool"
+  config:
+    api_base: "https://api.languagetool.org/v2"
+    cache_ttl_hours: 0  # Don't cache (text may need fresh analysis)
+
+input_schema:
+  text:
+    type: string
+    description: "Text to check for grammar and spelling errors"
+    required: true
+    example: "I can has cheezburger?"
+
+  language:
+    type: string
+    description: "Language code (ISO 639-1)"
+    required: false
+    default: "en-US"
+    example: "en-US"
+
+  enabled_rules:
+    type: array
+    description: "Specific rules to enable"
+    required: false
+    items:
+      type: string
+
+  disabled_rules:
+    type: array
+    description: "Specific rules to disable"
+    required: false
+    items:
+      type: string
+
+  enabled_categories:
+    type: array
+    description: "Rule categories to enable (e.g., 'TYPOS', 'GRAMMAR')"
+    required: false
+    items:
+      type: string
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    original_text:
+      type: string
+      description: "Original text checked"
+    matches:
+      type: array
+      description: "Grammar and spelling errors found"
+      items:
+        type: object
+        properties:
+          message:
+            type: string
+            description: "Error message"
+          short_message:
+            type: string
+            description: "Short error description"
+          offset:
+            type: integer
+            description: "Error position in text"
+          length:
+            type: integer
+            description: "Length of error"
+          replacements:
+            type: array
+            description: "Suggested corrections"
+          context:
+            type: object
+            description: "Error context with text snippet"
+          rule:
+            type: object
+            description: "Rule that triggered"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["grammar", "spelling", "proofreading", "writing", "language", "free", "no-auth"]
+
+examples:
+  - description: "Check grammar"
+    input:
+      text: "I can has cheezburger?"
+      language: "en-US"
+    output:
+      success: true
+      matches:
+        - message: "Possible spelling mistake found"
+          short_message: "Spelling mistake"
+          replacements: ["have"]
+          context: "I can has cheezburger"
+
+  - description: "Check with no errors"
+    input:
+      text: "This sentence is grammatically correct."
+      language: "en-US"
+    output:
+      success: true
+      matches: []
+
+usage_notes: |
+  ## LanguageTool Grammar Checker
+
+  Professional-grade grammar and spell checking for 30+ languages.
+  Detect errors, get suggestions, and improve your writing quality.
+
+  ## Usage Examples
+
+  ### Example 1: Basic Grammar Check
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  text = "I can has cheezburger? Me want foods now."
+
+  result = call_tool("languagetool_api", json.dumps({
+      "text": text,
+      "language": "en-US"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      if data['matches']:
+          print(f"Found {len(data['matches'])} error(s):\n")
+
+          for i, match in enumerate(data['matches'], 1):
+              print(f"{i}. {match['message']}")
+              print(f"   Position: {match['offset']}")
+
+              if match['replacements']:
+                  suggestions = [r['value'] for r in match['replacements'][:3]]
+                  print(f"   Suggestions: {', '.join(suggestions)}")
+              print()
+      else:
+          print("No errors found!")
+  ```
+
+  ### Example 2: Auto-Correct Text
+  ```python
+  def autocorrect(text):
+      """Automatically apply first suggestion for each error."""
+      result = call_tool("languagetool_api", json.dumps({
+          "text": text,
+          "language": "en-US"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          corrected = text
+
+          # Apply corrections in reverse order to maintain positions
+          for match in sorted(data['matches'], key=lambda x: x['offset'], reverse=True):
+              if match['replacements']:
+                  start = match['offset']
+                  end = start + match['length']
+                  replacement = match['replacements'][0]['value']
+
+                  corrected = corrected[:start] + replacement + corrected[end:]
+
+          return {
+              'original': text,
+              'corrected': corrected,
+              'changes': len(data['matches'])
+          }
+
+  # Auto-correct text
+  result = autocorrect("I can has cheezburger? Me want foods now.")
+  if result:
+      print(f"Original:  {result['original']}")
+      print(f"Corrected: {result['corrected']}")
+      print(f"Changes:   {result['changes']}")
+  ```
+
+  ### Example 3: Detailed Error Report
+  ```python
+  def grammar_report(text):
+      """Generate detailed grammar report."""
+      result = call_tool("languagetool_api", json.dumps({
+          "text": text,
+          "language": "en-US"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print("GRAMMAR REPORT")
+          print("=" * 60)
+          print(f"Text: {text}")
+          print(f"Errors found: {len(data['matches'])}\n")
+
+          if data['matches']:
+              categories = {}
+
+              for match in data['matches']:
+                  category = match['rule']['category']['name']
+
+                  if category not in categories:
+                      categories[category] = []
+
+                  categories[category].append(match)
+
+              for category, matches in categories.items():
+                  print(f"\n{category} ({len(matches)}):")
+                  print("-" * 60)
+
+                  for match in matches:
+                      # Extract error context
+                      offset = match['offset']
+                      length = match['length']
+                      error_text = text[offset:offset+length]
+
+                      print(f"\n  Error: '{error_text}'")
+                      print(f"  Issue: {match['message']}")
+
+                      if match['replacements']:
+                          suggestions = [r['value'] for r in match['replacements'][:3]]
+                          print(f"  Fix: {' / '.join(suggestions)}")
+          else:
+              print("\n✓ No errors detected!")
+
+  # Generate report
+  grammar_report("Their going too the store, but there busy.")
+  ```
+
+  ### Example 4: Multi-Language Support
+  ```python
+  texts = [
+      ("en-US", "I are a developer"),
+      ("es", "Yo tengo hambre mucho"),
+      ("fr", "Je suis fatigué beaucoup"),
+      ("de", "Ich bin müde sehr")
+  ]
+
+  for lang, text in texts:
+      result = call_tool("languagetool_api", json.dumps({
+          "text": text,
+          "language": lang
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          error_count = len(data['matches'])
+          print(f"{lang}: '{text}' - {error_count} error(s)")
+  ```
+
+  ### Example 5: Writing Quality Analyzer
+  ```python
+  def analyze_writing_quality(text):
+      """Analyze overall writing quality."""
+      result = call_tool("languagetool_api", json.dumps({
+          "text": text,
+          "language": "en-US"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          total_errors = len(data['matches'])
+          words = len(text.split())
+          error_rate = (total_errors / words * 100) if words > 0 else 0
+
+          # Categorize errors
+          error_types = {}
+          for match in data['matches']:
+              cat = match['rule']['category']['name']
+              error_types[cat] = error_types.get(cat, 0) + 1
+
+          return {
+              'word_count': words,
+              'total_errors': total_errors,
+              'error_rate': round(error_rate, 2),
+              'error_types': error_types,
+              'quality_score': max(0, 100 - (error_rate * 5))
+          }
+
+  # Analyze text
+  text = """
+  This is a sample paragraph with some errors. I can has good grammar
+  most of the time, but their are occasional mistakes that need fixing.
+  Its important to proofread you're writing before publishing it.
+  """
+
+  quality = analyze_writing_quality(text)
+  if quality:
+      print("WRITING QUALITY ANALYSIS")
+      print("=" * 40)
+      print(f"Word count:    {quality['word_count']}")
+      print(f"Total errors:  {quality['total_errors']}")
+      print(f"Error rate:    {quality['error_rate']}%")
+      print(f"Quality score: {quality['quality_score']}/100\n")
+      print("Error breakdown:")
+      for error_type, count in quality['error_types'].items():
+          print(f"  • {error_type}: {count}")
+  ```
+
+  ### Example 6: Batch Proofreading
+  ```python
+  def proofread_documents(documents):
+      """Proofread multiple documents."""
+      results = []
+
+      for doc_name, text in documents.items():
+          result = call_tool("languagetool_api", json.dumps({
+              "text": text,
+              "language": "en-US"
+          }))
+
+          data = json.loads(result)
+          if data['success']:
+              results.append({
+                  'document': doc_name,
+                  'errors': len(data['matches']),
+                  'details': data['matches']
+              })
+
+      return results
+
+  # Proofread multiple docs
+  docs = {
+      'email.txt': "I will be their tomorrow at 3pm.",
+      'report.txt': "The data shows that sales has increased.",
+      'memo.txt': "Please review you're assignment before submitting."
+  }
+
+  results = proofread_documents(docs)
+  for result in results:
+      print(f"\n{result['document']}: {result['errors']} error(s)")
+      if result['errors'] > 0:
+          for error in result['details']:
+              print(f"  - {error['message']}")
+  ```
+
+  ### Example 7: Real-Time Writing Assistant
+  ```python
+  def check_as_you_type(text):
+      """Quick grammar check for real-time feedback."""
+      if len(text.strip()) < 5:  # Don't check very short text
+          return None
+
+      result = call_tool("languagetool_api", json.dumps({
+          "text": text,
+          "language": "en-US"
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['matches']:
+          # Show only first 3 most important errors
+          priority_errors = sorted(
+              data['matches'],
+              key=lambda x: x.get('rule', {}).get('category', {}).get('id', ''),
+              reverse=True
+          )[:3]
+
+          return [{
+              'message': err['message'],
+              'suggestion': err['replacements'][0]['value'] if err['replacements'] else None
+          } for err in priority_errors]
+
+  # Simulate typing
+  text_samples = [
+      "I are",
+      "I are writing",
+      "I are writing a email",
+      "I are writing a email too my boss"
+  ]
+
+  for sample in text_samples:
+      errors = check_as_you_type(sample)
+      if errors:
+          print(f"\nText: '{sample}'")
+          print("Suggestions:")
+          for error in errors:
+              print(f"  • {error['message']}")
+              if error['suggestion']:
+                  print(f"    → Try: {error['suggestion']}")
+  ```
+
+  ## Supported Languages
+
+  English (US, GB, CA, AU, NZ), Spanish, French, German, Italian,
+  Portuguese, Dutch, Polish, Russian, Ukrainian, Chinese, Japanese,
+  and 20+ more languages.
+
+  ## Error Categories
+
+  - **TYPOS**: Spelling mistakes
+  - **GRAMMAR**: Grammar errors
+  - **PUNCTUATION**: Punctuation issues
+  - **STYLE**: Style improvements
+  - **TYPOGRAPHY**: Typography rules
+  - **CASING**: Capitalization errors
+
+  ## Rate Limits
+
+  - Free tier: 20 requests/minute
+  - Max text length: 20,000 characters per request
+  - Consider caching for repeated text
+
+  ## Use Cases
+
+  - Blog post proofreading
+  - Email writing assistance
+  - Academic paper editing
+  - Content creation quality control
+  - Real-time writing feedback
+  - Automated copyediting
+  - Multi-language text correction
+  - Educational writing tools
+
+  ## Benefits
+
+  - **Free**: No API key for basic usage
+  - **Multi-Language**: 30+ languages supported
+  - **Comprehensive**: Grammar, spelling, style
+  - **Actionable**: Specific suggestions provided
+  - **Fast**: Real-time checking possible
+  - **Detailed**: Category-based error reporting

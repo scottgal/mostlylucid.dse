@@ -1,0 +1,521 @@
+name: "Frankfurter Currency Exchange"
+type: "custom"
+description: "Free currency exchange rates and conversion. Get latest rates, historical rates, time series data, and convert between 30+ currencies. Data from European Central Bank. No authentication required."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+custom:
+  module: "src.frankfurter_currency_tool"
+  class: "FrankfurterCurrencyTool"
+  config:
+    api_base: "https://api.frankfurter.app"
+    cache_ttl_hours: 24  # Rates update daily
+
+input_schema:
+  operation:
+    type: string
+    description: "Type of operation"
+    required: true
+    enum: ["latest", "convert", "historical", "timeseries", "currencies"]
+    default: "latest"
+
+  amount:
+    type: number
+    description: "Amount to convert"
+    required: false
+    default: 1
+
+  from_currency:
+    type: string
+    description: "Source currency code (ISO 4217)"
+    required: false
+    default: "EUR"
+    example: "USD"
+
+  to_currency:
+    type: string
+    description: "Target currency code(s). Can be single code or comma-separated list"
+    required: false
+    example: "GBP,JPY,CAD"
+
+  date:
+    type: string
+    description: "Date for historical rates (YYYY-MM-DD)"
+    required: false
+    example: "2024-01-01"
+
+  start_date:
+    type: string
+    description: "Start date for time series (YYYY-MM-DD)"
+    required: false
+    example: "2024-01-01"
+
+  end_date:
+    type: string
+    description: "End date for time series (YYYY-MM-DD)"
+    required: false
+    example: "2024-12-31"
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    amount:
+      type: number
+      description: "Amount converted"
+    base:
+      type: string
+      description: "Base currency"
+    date:
+      type: string
+      description: "Date of rates"
+    rates:
+      type: object
+      description: "Exchange rates"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["currency", "exchange", "conversion", "finance", "rates", "free", "no-auth", "forex"]
+
+examples:
+  - description: "Get latest exchange rates"
+    input:
+      operation: "latest"
+      from_currency: "USD"
+    output:
+      success: true
+      amount: 1
+      base: "USD"
+      date: "2024-01-15"
+      rates:
+        EUR: 0.92
+        GBP: 0.79
+        JPY: 149.50
+
+  - description: "Convert currency"
+    input:
+      operation: "convert"
+      amount: 100
+      from_currency: "USD"
+      to_currency: "EUR,GBP"
+    output:
+      success: true
+      amount: 100
+      base: "USD"
+      rates:
+        EUR: 92.0
+        GBP: 79.0
+
+  - description: "Get historical rates"
+    input:
+      operation: "historical"
+      date: "2024-01-01"
+      from_currency: "EUR"
+    output:
+      success: true
+      date: "2024-01-01"
+      base: "EUR"
+      rates:
+        USD: 1.09
+        GBP: 0.87
+
+usage_notes: |
+  ## Frankfurter Currency Exchange API
+
+  Free currency exchange rates from the European Central Bank.
+  Convert currencies, get historical rates, and analyze trends.
+  No API key required.
+
+  ## Supported Currencies (30+)
+
+  EUR, USD, GBP, JPY, CHF, CAD, AUD, NZD, CNY, INR, SGD, HKD, KRW,
+  MXN, BRL, ZAR, SEK, NOK, DKK, PLN, CZK, HUF, RON, BGN, TRY, ISK, HRK
+
+  ## Usage Examples
+
+  ### Example 1: Get Latest Exchange Rates
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  # Get all rates for USD
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "latest",
+      "from_currency": "USD"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"1 {data['base']} equals:")
+      for currency, rate in data['rates'].items():
+          print(f"  {rate:.4f} {currency}")
+  ```
+
+  ### Example 2: Convert Currency
+  ```python
+  # Convert $1000 USD to EUR
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "convert",
+      "amount": 1000,
+      "from_currency": "USD",
+      "to_currency": "EUR"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      eur_amount = data['rates']['EUR']
+      print(f"$1000 USD = €{eur_amount:.2f} EUR")
+  ```
+
+  ### Example 3: Convert to Multiple Currencies
+  ```python
+  # Convert $100 to multiple currencies
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "convert",
+      "amount": 100,
+      "from_currency": "USD",
+      "to_currency": "EUR,GBP,JPY,CAD,AUD"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"${data['amount']} USD equals:")
+      for currency, amount in data['rates'].items():
+          symbols = {'EUR': '€', 'GBP': '£', 'JPY': '¥', 'CAD': 'C$', 'AUD': 'A$'}
+          symbol = symbols.get(currency, currency)
+          print(f"  {symbol}{amount:.2f}")
+  ```
+
+  ### Example 4: Get Historical Rates
+  ```python
+  # Get rates from a specific date
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "historical",
+      "date": "2024-01-01",
+      "from_currency": "EUR",
+      "to_currency": "USD,GBP,JPY"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"Exchange rates on {data['date']}:")
+      print(f"1 EUR = {data['rates']['USD']:.4f} USD")
+      print(f"1 EUR = {data['rates']['GBP']:.4f} GBP")
+      print(f"1 EUR = {data['rates']['JPY']:.2f} JPY")
+  ```
+
+  ### Example 5: Analyze Currency Trends
+  ```python
+  # Get time series data
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "timeseries",
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-31",
+      "from_currency": "USD",
+      "to_currency": "EUR"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print("USD to EUR - January 2024:")
+      for date, rates in data['rates'].items():
+          print(f"  {date}: {rates['EUR']:.4f}")
+
+      # Calculate average rate
+      all_rates = [rates['EUR'] for rates in data['rates'].values()]
+      avg_rate = sum(all_rates) / len(all_rates)
+      print(f"\nAverage rate: {avg_rate:.4f}")
+      print(f"Min rate: {min(all_rates):.4f}")
+      print(f"Max rate: {max(all_rates):.4f}")
+  ```
+
+  ### Example 6: Currency Converter Function
+  ```python
+  def convert_currency(amount, from_curr, to_curr):
+      """Convert amount from one currency to another."""
+      result = call_tool("frankfurter_currency", json.dumps({
+          "operation": "convert",
+          "amount": amount,
+          "from_currency": from_curr,
+          "to_currency": to_curr
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          converted = data['rates'][to_curr]
+          rate = converted / amount
+          return {
+              'original_amount': amount,
+              'original_currency': from_curr,
+              'converted_amount': converted,
+              'converted_currency': to_curr,
+              'exchange_rate': rate,
+              'date': data['date']
+          }
+
+  # Use the converter
+  result = convert_currency(500, "USD", "EUR")
+  if result:
+      print(f"${result['original_amount']} {result['original_currency']}")
+      print(f"= €{result['converted_amount']:.2f} {result['converted_currency']}")
+      print(f"Rate: {result['exchange_rate']:.4f} (as of {result['date']})")
+  ```
+
+  ### Example 7: Multi-Currency Price Comparison
+  ```python
+  def compare_prices_globally(usd_price):
+      """Compare a USD price across multiple currencies."""
+      result = call_tool("frankfurter_currency", json.dumps({
+          "operation": "convert",
+          "amount": usd_price,
+          "from_currency": "USD",
+          "to_currency": "EUR,GBP,JPY,CAD,AUD,CHF,CNY,INR"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"${usd_price} USD price comparison:\n")
+
+          currency_info = {
+              'EUR': ('Europe', '€'),
+              'GBP': ('UK', '£'),
+              'JPY': ('Japan', '¥'),
+              'CAD': ('Canada', 'C$'),
+              'AUD': ('Australia', 'A$'),
+              'CHF': ('Switzerland', 'CHF'),
+              'CNY': ('China', '¥'),
+              'INR': ('India', '₹')
+          }
+
+          for currency, amount in sorted(data['rates'].items()):
+              region, symbol = currency_info.get(currency, (currency, currency))
+              print(f"  {region:15} {symbol}{amount:>10.2f}")
+
+  # Compare a product price
+  compare_prices_globally(99.99)
+  ```
+
+  ### Example 8: Calculate Exchange Rate Trends
+  ```python
+  def analyze_exchange_trend(from_curr, to_curr, days=30):
+      """Analyze exchange rate trend over time."""
+      from datetime import datetime, timedelta
+
+      end_date = datetime.now()
+      start_date = end_date - timedelta(days=days)
+
+      result = call_tool("frankfurter_currency", json.dumps({
+          "operation": "timeseries",
+          "start_date": start_date.strftime("%Y-%m-%d"),
+          "end_date": end_date.strftime("%Y-%m-%d"),
+          "from_currency": from_curr,
+          "to_currency": to_curr
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          rates = [rates[to_curr] for rates in data['rates'].values()]
+
+          first_rate = rates[0]
+          last_rate = rates[-1]
+          change = last_rate - first_rate
+          change_pct = (change / first_rate) * 100
+
+          return {
+              'currency_pair': f"{from_curr}/{to_curr}",
+              'period_days': days,
+              'start_rate': first_rate,
+              'end_rate': last_rate,
+              'change': change,
+              'change_percent': change_pct,
+              'min_rate': min(rates),
+              'max_rate': max(rates),
+              'avg_rate': sum(rates) / len(rates),
+              'volatility': max(rates) - min(rates),
+              'trend': 'up' if change > 0 else 'down' if change < 0 else 'stable'
+          }
+
+  # Analyze trend
+  trend = analyze_exchange_trend("USD", "EUR", 30)
+  if trend:
+      print(f"Exchange Rate Analysis: {trend['currency_pair']}")
+      print(f"Period: Last {trend['period_days']} days")
+      print(f"Starting rate: {trend['start_rate']:.4f}")
+      print(f"Ending rate: {trend['end_rate']:.4f}")
+      print(f"Change: {trend['change']:+.4f} ({trend['change_percent']:+.2f}%)")
+      print(f"Trend: {trend['trend'].upper()}")
+      print(f"Range: {trend['min_rate']:.4f} - {trend['max_rate']:.4f}")
+      print(f"Average: {trend['avg_rate']:.4f}")
+  ```
+
+  ### Example 9: Travel Budget Calculator
+  ```python
+  def calculate_travel_budget(destinations, budget_usd):
+      """Calculate travel budget in local currencies."""
+      # Get all destination currencies
+      currencies = ",".join([dest['currency'] for dest in destinations])
+
+      result = call_tool("frankfurter_currency", json.dumps({
+          "operation": "convert",
+          "amount": budget_usd,
+          "from_currency": "USD",
+          "to_currency": currencies
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"Travel Budget: ${budget_usd} USD\n")
+
+          for dest in destinations:
+              local_amount = data['rates'][dest['currency']]
+              print(f"{dest['name']:20} {dest['symbol']}{local_amount:>10,.2f}")
+
+  # Plan a world trip
+  destinations = [
+      {'name': 'Paris, France', 'currency': 'EUR', 'symbol': '€'},
+      {'name': 'London, UK', 'currency': 'GBP', 'symbol': '£'},
+      {'name': 'Tokyo, Japan', 'currency': 'JPY', 'symbol': '¥'},
+      {'name': 'Toronto, Canada', 'currency': 'CAD', 'symbol': 'C$'},
+      {'name': 'Sydney, Australia', 'currency': 'AUD', 'symbol': 'A$'}
+  ]
+
+  calculate_travel_budget(destinations, 5000)
+  ```
+
+  ### Example 10: Investment Portfolio Calculator
+  ```python
+  def calculate_portfolio_value(holdings):
+      """Calculate total portfolio value in USD."""
+      total_usd = 0
+
+      print("Investment Portfolio Value:\n")
+
+      for holding in holdings:
+          if holding['currency'] == 'USD':
+              usd_value = holding['amount']
+          else:
+              # Convert to USD
+              result = call_tool("frankfurter_currency", json.dumps({
+                  "operation": "convert",
+                  "amount": holding['amount'],
+                  "from_currency": holding['currency'],
+                  "to_currency": "USD"
+              }))
+
+              data = json.loads(result)
+              if data['success']:
+                  usd_value = data['rates']['USD']
+              else:
+                  usd_value = 0
+
+          total_usd += usd_value
+
+          print(f"{holding['name']:30} "
+                f"{holding['currency']} {holding['amount']:>12,.2f} "
+                f"= ${usd_value:>12,.2f}")
+
+      print(f"\n{'Total Portfolio Value':30} = ${total_usd:>12,.2f}")
+      return total_usd
+
+  # Calculate portfolio
+  portfolio = [
+      {'name': 'US Stocks', 'amount': 50000, 'currency': 'USD'},
+      {'name': 'European Bonds', 'amount': 30000, 'currency': 'EUR'},
+      {'name': 'UK Property Fund', 'amount': 25000, 'currency': 'GBP'},
+      {'name': 'Japanese ETF', 'amount': 5000000, 'currency': 'JPY'},
+      {'name': 'Canadian REIT', 'amount': 40000, 'currency': 'CAD'}
+  ]
+
+  total_value = calculate_portfolio_value(portfolio)
+  ```
+
+  ### Example 11: Compare Historical vs Current Rates
+  ```python
+  def compare_rates_over_time(from_curr, to_curr, comparison_date):
+      """Compare current rate with historical rate."""
+      # Get current rate
+      current = call_tool("frankfurter_currency", json.dumps({
+          "operation": "latest",
+          "from_currency": from_curr,
+          "to_currency": to_curr
+      }))
+
+      # Get historical rate
+      historical = call_tool("frankfurter_currency", json.dumps({
+          "operation": "historical",
+          "date": comparison_date,
+          "from_currency": from_curr,
+          "to_currency": to_curr
+      }))
+
+      current_data = json.loads(current)
+      historical_data = json.loads(historical)
+
+      if current_data['success'] and historical_data['success']:
+          current_rate = current_data['rates'][to_curr]
+          historical_rate = historical_data['rates'][to_curr]
+          change = current_rate - historical_rate
+          change_pct = (change / historical_rate) * 100
+
+          print(f"Exchange Rate Comparison: {from_curr}/{to_curr}\n")
+          print(f"Historical ({comparison_date}): {historical_rate:.4f}")
+          print(f"Current ({current_data['date']}):     {current_rate:.4f}")
+          print(f"Change: {change:+.4f} ({change_pct:+.2f}%)")
+
+          if change > 0:
+              print(f"\n{to_curr} has strengthened against {from_curr}")
+          else:
+              print(f"\n{to_curr} has weakened against {from_curr}")
+
+  # Compare year-over-year
+  compare_rates_over_time("USD", "EUR", "2023-01-01")
+  ```
+
+  ### Example 12: Get All Available Currencies
+  ```python
+  result = call_tool("frankfurter_currency", json.dumps({
+      "operation": "currencies"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print("Available Currencies:")
+      for code, name in sorted(data['currencies'].items()):
+          print(f"  {code}: {name}")
+  ```
+
+  ## Features
+
+  - **No Authentication**: Completely free, no API key needed
+  - **Daily Updates**: Rates updated daily from ECB
+  - **Historical Data**: Access rates from 1999 onwards
+  - **30+ Currencies**: Major world currencies supported
+  - **Time Series**: Track rate changes over time
+  - **CORS Enabled**: Use from browser applications
+  - **Fast & Reliable**: Hosted on modern infrastructure
+
+  ## Data Source
+
+  Exchange rates from the European Central Bank (ECB).
+  Updated daily around 16:00 CET.
+
+  ## Rate Limits
+
+  No official rate limits, but please:
+  - Cache results when possible
+  - Don't make excessive requests
+  - Use responsibly
+
+  ## Use Cases
+
+  - Currency conversion for e-commerce
+  - Travel budget planning
+  - Financial reporting
+  - Investment portfolio tracking
+  - Price comparison across markets
+  - Trend analysis
+  - Historical exchange rate research

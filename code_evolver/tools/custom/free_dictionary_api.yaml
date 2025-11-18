@@ -1,0 +1,590 @@
+name: "Free Dictionary API"
+type: "custom"
+description: "Get comprehensive word definitions, phonetics, pronunciations, meanings, synonyms, antonyms, and usage examples. Supports multiple languages. No authentication required. Perfect for language learning, writing assistance, and vocabulary building."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.free_dictionary_tool"
+  class: "FreeDictionaryTool"
+  config:
+    api_base: "https://api.dictionaryapi.dev/api/v2/entries"
+    cache_ttl_hours: 720  # 30 days (definitions don't change)
+
+input_schema:
+  word:
+    type: string
+    description: "Word to look up"
+    required: true
+    example: "serendipity"
+
+  language:
+    type: string
+    description: "Language code (ISO 639-1)"
+    required: false
+    default: "en"
+    enum: ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "hi", "ar"]
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    word:
+      type: string
+      description: "The word queried"
+    phonetics:
+      type: array
+      description: "Pronunciation information"
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+            description: "Phonetic spelling"
+          audio:
+            type: string
+            description: "Audio pronunciation URL"
+    meanings:
+      type: array
+      description: "Word meanings by part of speech"
+      items:
+        type: object
+        properties:
+          partOfSpeech:
+            type: string
+            description: "Part of speech (noun, verb, adjective, etc.)"
+          definitions:
+            type: array
+            description: "Definitions with examples"
+          synonyms:
+            type: array
+            description: "Synonyms"
+          antonyms:
+            type: array
+            description: "Antonyms"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["dictionary", "language", "definitions", "vocabulary", "education", "free", "no-auth"]
+
+examples:
+  - description: "Look up a word"
+    input:
+      word: "hello"
+      language: "en"
+    output:
+      success: true
+      word: "hello"
+      phonetics:
+        - text: "/həˈləʊ/"
+          audio: "https://api.dictionaryapi.dev/media/pronunciations/en/hello.mp3"
+      meanings:
+        - partOfSpeech: "noun"
+          definitions:
+            - definition: "A greeting (salutation) said when meeting someone"
+              example: "She said hello as she passed by"
+
+  - description: "Get synonyms and antonyms"
+    input:
+      word: "happy"
+    output:
+      success: true
+      word: "happy"
+      meanings:
+        - partOfSpeech: "adjective"
+          definitions:
+            - definition: "Feeling or showing pleasure or contentment"
+          synonyms: ["joyful", "cheerful", "content"]
+          antonyms: ["sad", "unhappy", "miserable"]
+
+usage_notes: |
+  ## Free Dictionary API Tool
+
+  Comprehensive dictionary with definitions, phonetics, pronunciations,
+  examples, synonyms, and antonyms. Perfect for language learning,
+  writing, and vocabulary building. No API key required.
+
+  ## Usage Examples
+
+  ### Example 1: Look Up a Word
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("free_dictionary_api", json.dumps({
+      "word": "serendipity"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"Word: {data['word']}\n")
+
+      # Phonetics
+      if data.get('phonetics'):
+          for phonetic in data['phonetics']:
+              if phonetic.get('text'):
+                  print(f"Pronunciation: {phonetic['text']}")
+              if phonetic.get('audio'):
+                  print(f"Audio: {phonetic['audio']}")
+
+      # Meanings
+      for meaning in data['meanings']:
+          print(f"\n{meaning['partOfSpeech'].upper()}:")
+          for i, definition in enumerate(meaning['definitions'], 1):
+              print(f"  {i}. {definition['definition']}")
+              if definition.get('example'):
+                  print(f"     Example: \"{definition['example']}\"")
+  ```
+
+  ### Example 2: Get All Synonyms
+  ```python
+  result = call_tool("free_dictionary_api", json.dumps({
+      "word": "beautiful"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      all_synonyms = set()
+
+      for meaning in data['meanings']:
+          if meaning.get('synonyms'):
+              all_synonyms.update(meaning['synonyms'])
+
+      if all_synonyms:
+          print(f"Synonyms for '{data['word']}':")
+          for syn in sorted(all_synonyms):
+              print(f"  • {syn}")
+  ```
+
+  ### Example 3: Vocabulary Builder
+  ```python
+  def learn_word(word):
+      """Get comprehensive information about a word."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"\n{'='*60}")
+          print(f"WORD: {data['word'].upper()}")
+          print(f"{'='*60}\n")
+
+          # Pronunciation
+          if data.get('phonetics'):
+              for phonetic in data['phonetics']:
+                  if phonetic.get('text'):
+                      print(f"🔊 Pronunciation: {phonetic['text']}")
+                      break
+
+          # Meanings by part of speech
+          for meaning in data['meanings']:
+              print(f"\n📖 {meaning['partOfSpeech'].upper()}")
+              print("-" * 60)
+
+              for i, defn in enumerate(meaning['definitions'][:3], 1):  # Top 3
+                  print(f"\n{i}. {defn['definition']}")
+
+                  if defn.get('example'):
+                      print(f"   💬 \"{defn['example']}\"")
+
+                  if defn.get('synonyms'):
+                      syns = ', '.join(defn['synonyms'][:5])
+                      print(f"   ➕ Synonyms: {syns}")
+
+                  if defn.get('antonyms'):
+                      ants = ', '.join(defn['antonyms'][:5])
+                      print(f"   ➖ Antonyms: {ants}")
+
+              # Overall synonyms/antonyms for part of speech
+              if meaning.get('synonyms'):
+                  print(f"\n   Similar words: {', '.join(meaning['synonyms'][:10])}")
+
+              if meaning.get('antonyms'):
+                  print(f"   Opposite words: {', '.join(meaning['antonyms'][:10])}")
+
+          print(f"\n{'='*60}\n")
+
+  # Learn some words
+  words = ["ephemeral", "resilient", "paradigm", "ubiquitous"]
+  for word in words:
+      learn_word(word)
+  ```
+
+  ### Example 4: Build a Thesaurus
+  ```python
+  def get_thesaurus_entry(word):
+      """Get synonyms and antonyms for a word."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          thesaurus = {}
+
+          for meaning in data['meanings']:
+              pos = meaning['partOfSpeech']
+
+              if pos not in thesaurus:
+                  thesaurus[pos] = {
+                      'synonyms': set(),
+                      'antonyms': set()
+                  }
+
+              # Collect synonyms
+              if meaning.get('synonyms'):
+                  thesaurus[pos]['synonyms'].update(meaning['synonyms'])
+
+              for defn in meaning.get('definitions', []):
+                  if defn.get('synonyms'):
+                      thesaurus[pos]['synonyms'].update(defn['synonyms'])
+                  if defn.get('antonyms'):
+                      thesaurus[pos]['antonyms'].update(defn['antonyms'])
+
+              # Collect antonyms
+              if meaning.get('antonyms'):
+                  thesaurus[pos]['antonyms'].update(meaning['antonyms'])
+
+          return {
+              'word': data['word'],
+              'thesaurus': {
+                  pos: {
+                      'synonyms': sorted(list(data['synonyms'])),
+                      'antonyms': sorted(list(data['antonyms']))
+                  }
+                  for pos, data in thesaurus.items()
+              }
+          }
+
+  # Use the thesaurus
+  entry = get_thesaurus_entry("happy")
+  if entry:
+      print(f"Thesaurus entry for: {entry['word']}\n")
+      for pos, data in entry['thesaurus'].items():
+          print(f"{pos.upper()}:")
+          if data['synonyms']:
+              print(f"  Synonyms: {', '.join(data['synonyms'])}")
+          if data['antonyms']:
+              print(f"  Antonyms: {', '.join(data['antonyms'])}")
+          print()
+  ```
+
+  ### Example 5: Writing Assistant
+  ```python
+  def suggest_alternatives(word):
+      """Suggest alternative words with definitions."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"Alternatives for '{word}':\n")
+
+          for meaning in data['meanings']:
+              if meaning.get('synonyms'):
+                  print(f"{meaning['partOfSpeech'].upper()} alternatives:")
+
+                  for syn in meaning['synonyms'][:5]:
+                      # Get definition of synonym
+                      syn_result = call_tool("free_dictionary_api", json.dumps({
+                          "word": syn
+                      }))
+
+                      syn_data = json.loads(syn_result)
+                      if syn_data['success']:
+                          # Get first definition
+                          first_def = syn_data['meanings'][0]['definitions'][0]['definition']
+                          print(f"  • {syn}: {first_def}")
+                      else:
+                          print(f"  • {syn}")
+
+                  print()
+
+  # Get alternatives
+  suggest_alternatives("interesting")
+  ```
+
+  ### Example 6: Vocabulary Quiz Generator
+  ```python
+  def create_vocabulary_quiz(words):
+      """Create a vocabulary quiz from a list of words."""
+      quiz = []
+
+      for word in words:
+          result = call_tool("free_dictionary_api", json.dumps({
+              "word": word
+          }))
+
+          data = json.loads(result)
+          if data['success']:
+              # Get first meaning and definition
+              meaning = data['meanings'][0]
+              definition = meaning['definitions'][0]['definition']
+
+              # Get synonyms for multiple choice
+              synonyms = meaning.get('synonyms', [])[:3]
+
+              quiz.append({
+                  'word': word,
+                  'definition': definition,
+                  'part_of_speech': meaning['partOfSpeech'],
+                  'synonyms': synonyms,
+                  'phonetic': data['phonetics'][0].get('text', '') if data.get('phonetics') else ''
+              })
+
+      return quiz
+
+  # Generate quiz
+  vocab_words = ["ubiquitous", "ephemeral", "eloquent", "resilient", "pragmatic"]
+  quiz = create_vocabulary_quiz(vocab_words)
+
+  print("VOCABULARY QUIZ\n")
+  for i, q in enumerate(quiz, 1):
+      print(f"Question {i}: What does '{q['word']}' mean?")
+      print(f"Pronunciation: {q['phonetic']}")
+      print(f"Part of speech: {q['part_of_speech']}")
+      print(f"Answer: {q['definition']}")
+      if q['synonyms']:
+          print(f"Similar words: {', '.join(q['synonyms'])}")
+      print()
+  ```
+
+  ### Example 7: Contextual Example Finder
+  ```python
+  def find_usage_examples(word):
+      """Find all usage examples for a word."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"Usage examples for '{word}':\n")
+
+          for meaning in data['meanings']:
+              print(f"{meaning['partOfSpeech'].upper()}:")
+
+              for i, defn in enumerate(meaning['definitions'], 1):
+                  if defn.get('example'):
+                      print(f"  {i}. {defn['definition']}")
+                      print(f"     → \"{defn['example']}\"")
+                      print()
+
+  # Find examples
+  find_usage_examples("brilliant")
+  ```
+
+  ### Example 8: Part of Speech Analyzer
+  ```python
+  def analyze_parts_of_speech(word):
+      """Analyze all parts of speech for a word."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"'{word}' can be used as:\n")
+
+          for meaning in data['meanings']:
+              pos = meaning['partOfSpeech']
+              num_definitions = len(meaning['definitions'])
+
+              print(f"• {pos.upper()} ({num_definitions} definition(s))")
+
+              # First definition
+              first_def = meaning['definitions'][0]['definition']
+              print(f"  Main meaning: {first_def}")
+
+              # Example
+              if meaning['definitions'][0].get('example'):
+                  print(f"  Example: \"{meaning['definitions'][0]['example']}\"")
+
+              print()
+
+  # Analyze multi-function words
+  analyze_parts_of_speech("light")
+  analyze_parts_of_speech("run")
+  ```
+
+  ### Example 9: Etymology and Pronunciation Guide
+  ```python
+  def pronunciation_guide(words):
+      """Create a pronunciation guide for multiple words."""
+      print("PRONUNCIATION GUIDE\n")
+      print(f"{'Word':<20} {'Phonetic':<20} {'Audio Available'}")
+      print("-" * 60)
+
+      for word in words:
+          result = call_tool("free_dictionary_api", json.dumps({
+              "word": word
+          }))
+
+          data = json.loads(result)
+          if data['success']:
+              phonetic = ""
+              has_audio = "No"
+
+              if data.get('phonetics'):
+                  for p in data['phonetics']:
+                      if p.get('text'):
+                          phonetic = p['text']
+                      if p.get('audio'):
+                          has_audio = "Yes"
+                      if phonetic and has_audio == "Yes":
+                          break
+
+              print(f"{word:<20} {phonetic:<20} {has_audio}")
+
+  # Create pronunciation guide
+  difficult_words = [
+      "epitome", "hyperbole", "quinoa", "colonel",
+      "segue", "rendezvous", "entrepreneur"
+  ]
+  pronunciation_guide(difficult_words)
+  ```
+
+  ### Example 10: Smart Word Lookup with Fallbacks
+  ```python
+  def smart_lookup(word):
+      """Look up a word with smart fallbacks."""
+      # Try exact match
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word.lower()
+      }))
+
+      data = json.loads(result)
+
+      if data['success']:
+          return format_definition(data)
+      else:
+          # Try without special characters
+          cleaned = ''.join(c for c in word if c.isalnum())
+          result = call_tool("free_dictionary_api", json.dumps({
+              "word": cleaned.lower()
+          }))
+
+          data = json.loads(result)
+          if data['success']:
+              print(f"(Showing results for '{cleaned}' instead)\n")
+              return format_definition(data)
+          else:
+              return f"Could not find definition for '{word}'"
+
+  def format_definition(data):
+      """Format definition data nicely."""
+      output = f"\n{data['word'].upper()}\n"
+      output += "=" * len(data['word']) + "\n"
+
+      for meaning in data['meanings'][:2]:  # First 2 parts of speech
+          output += f"\n{meaning['partOfSpeech']}\n"
+          for i, defn in enumerate(meaning['definitions'][:2], 1):  # First 2 definitions
+              output += f"  {i}. {defn['definition']}\n"
+
+      return output
+
+  # Try looking up words
+  print(smart_lookup("programming"))
+  print(smart_lookup("serendipity"))
+  print(smart_lookup("AI"))  # May fail, tries fallback
+  ```
+
+  ### Example 11: Sentence Enhancer
+  ```python
+  def enhance_sentence(sentence, word_to_replace):
+      """Suggest better words to replace a word in a sentence."""
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word_to_replace
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"Original: {sentence}\n")
+          print(f"Alternatives for '{word_to_replace}':\n")
+
+          for meaning in data['meanings']:
+              if meaning.get('synonyms'):
+                  print(f"As a {meaning['partOfSpeech']}:")
+                  for syn in meaning['synonyms'][:3]:
+                      enhanced = sentence.replace(word_to_replace, syn)
+                      print(f"  → {enhanced}")
+                  print()
+
+  # Enhance writing
+  enhance_sentence(
+      "The presentation was very good.",
+      "good"
+  )
+  ```
+
+  ### Example 12: Multi-Language Support
+  ```python
+  # Look up words in different languages
+  languages = [
+      ("en", "hello"),
+      ("es", "hola"),
+      ("fr", "bonjour"),
+      ("de", "hallo")
+  ]
+
+  for lang, word in languages:
+      result = call_tool("free_dictionary_api", json.dumps({
+          "word": word,
+          "language": lang
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"{word} ({lang}): {data['meanings'][0]['definitions'][0]['definition']}")
+  ```
+
+  ## Supported Languages
+
+  - English (en) - Most comprehensive
+  - Spanish (es)
+  - French (fr)
+  - German (de)
+  - Italian (it)
+  - Portuguese (pt)
+  - Russian (ru)
+  - Japanese (ja)
+  - Korean (ko)
+  - Hindi (hi)
+  - Arabic (ar)
+
+  ## Data Included
+
+  - **Phonetics**: Pronunciation in IPA format
+  - **Audio**: MP3 pronunciation files
+  - **Definitions**: Multiple definitions per part of speech
+  - **Examples**: Real-world usage examples
+  - **Synonyms**: Alternative words with similar meaning
+  - **Antonyms**: Words with opposite meaning
+  - **Parts of Speech**: Noun, verb, adjective, adverb, etc.
+
+  ## Use Cases
+
+  - Vocabulary learning and flashcards
+  - Writing assistance and enhancement
+  - Language learning applications
+  - Educational games and quizzes
+  - Content creation and editing
+  - Translation assistance
+  - Pronunciation guides
+  - Thesaurus functionality
+
+  ## Benefits
+
+  - **Free**: No API key or authentication
+  - **Fast**: Quick response times
+  - **Comprehensive**: Rich data per word
+  - **Audio**: Pronunciation recordings
+  - **Multi-language**: Support for 11+ languages
+  - **Examples**: Real usage contexts
+  - **Cached**: 30-day cache (definitions rarely change)

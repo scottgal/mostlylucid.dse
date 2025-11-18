@@ -1,0 +1,197 @@
+name: "Quran API"
+type: "custom"
+description: "Access Quran verses, chapters (Surahs), and translations in multiple languages. Get Arabic text, transliterations, and translations. Search by Surah, Ayah, or Juz. No authentication required."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.quran_api_tool"
+  class: "QuranApiTool"
+  config:
+    api_base: "https://api.alquran.cloud/v1"
+    cache_ttl_hours: 720  # 30 days
+
+input_schema:
+  surah:
+    type: integer
+    description: "Surah number (1-114)"
+    required: false
+    minimum: 1
+    maximum: 114
+    example: 1
+
+  ayah:
+    type: integer
+    description: "Ayah (verse) number within the Surah"
+    required: false
+
+  edition:
+    type: string
+    description: "Translation/edition identifier"
+    required: false
+    default: "en.asad"
+    example: "en.asad"
+
+  operation:
+    type: string
+    description: "Type of operation"
+    required: true
+    enum: ["surah", "ayah", "juz", "editions", "random"]
+    default: "surah"
+
+  juz:
+    type: integer
+    description: "Juz number (1-30)"
+    required: false
+    minimum: 1
+    maximum: 30
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    surah:
+      type: object
+      description: "Surah information"
+    ayahs:
+      type: array
+      description: "Array of verses"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["quran", "islam", "religion", "arabic", "verses", "free", "no-auth"]
+
+examples:
+  - description: "Get Al-Fatiha (first Surah)"
+    input:
+      operation: "surah"
+      surah: 1
+      edition: "en.asad"
+    output:
+      success: true
+      surah:
+        number: 1
+        name: "Al-Fatihah"
+        englishName: "The Opening"
+        revelationType: "Meccan"
+        numberOfAyahs: 7
+
+usage_notes: |
+  ## Quran API
+
+  Access the Holy Quran with translations in multiple languages.
+  Get Arabic text, transliterations, and interpretations.
+
+  ## Usage Examples
+
+  ### Example 1: Read Al-Fatiha
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("quran_api", json.dumps({
+      "operation": "surah",
+      "surah": 1,
+      "edition": "en.asad"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      surah = data['surah']
+      print(f"{surah['englishName']} (Surah {surah['number']})\n")
+
+      for ayah in surah['ayahs']:
+          print(f"{ayah['numberInSurah']}. {ayah['text']}")
+  ```
+
+  ### Example 2: Get Specific Verse
+  ```python
+  result = call_tool("quran_api", json.dumps({
+      "operation": "ayah",
+      "surah": 2,
+      "ayah": 255,
+      "edition": "en.asad"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      ayah = data['ayah']
+      print(f"Ayat al-Kursi (2:255):\n")
+      print(ayah['text'])
+  ```
+
+  ### Example 3: Daily Quran Verse
+  ```python
+  import random
+
+  surah = random.randint(1, 114)
+
+  result = call_tool("quran_api", json.dumps({
+      "operation": "surah",
+      "surah": surah,
+      "edition": "en.asad"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      ayahs = data['surah']['ayahs']
+      verse = random.choice(ayahs)
+
+      print(f"Daily Verse: Surah {surah}:{verse['numberInSurah']}")
+      print(f"\n{verse['text']}")
+  ```
+
+  ### Example 4: Compare Translations
+  ```python
+  editions = ["en.asad", "en.sahih", "en.pickthall"]
+
+  for edition in editions:
+      result = call_tool("quran_api", json.dumps({
+          "operation": "ayah",
+          "surah": 1,
+          "ayah": 1,
+          "edition": edition
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"{edition}:")
+          print(f"  {data['ayah']['text']}\n")
+  ```
+
+  ## Available Editions
+
+  ### English Translations
+  - en.asad - Muhammad Asad
+  - en.sahih - Sahih International
+  - en.pickthall - Marmaduke Pickthall
+  - en.yusufali - Abdullah Yusuf Ali
+
+  ### Other Languages
+  - ar.alafasy - Arabic (Alafasy)
+  - ur.jalandhry - Urdu
+  - fr.hamidullah - French
+  - de.bubenheim - German
+  - es.cortes - Spanish
+  - id.indonesian - Indonesian
+  - tr.diyanet - Turkish
+
+  ## Surah Information
+
+  - 114 Surahs total
+  - Meccan vs Medinan revelation
+  - Surah names in Arabic and English
+  - Number of verses (Ayahs) per Surah
+
+  ## Use Cases
+
+  - Islamic study and education
+  - Daily Quran reading apps
+  - Verse reference and citation
+  - Memorization (Hifz) tools
+  - Multi-language Quran access
+  - Research and comparison

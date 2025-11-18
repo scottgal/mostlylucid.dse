@@ -1,0 +1,143 @@
+name: "IP Geolocation API"
+type: "custom"
+description: "Get geolocation information for any IP address including country, region, city, coordinates, timezone, currency, ISP, and more. No authentication required for basic usage."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+custom:
+  module: "src.ip_geolocation_tool"
+  class: "IpGeolocationTool"
+  config:
+    api_base: "http://ip-api.com/json"
+    cache_ttl_hours: 168  # 1 week
+
+input_schema:
+  ip_address:
+    type: string
+    description: "IP address to lookup (leave empty for current IP)"
+    required: false
+    example: "8.8.8.8"
+
+  fields:
+    type: array
+    description: "Specific fields to return"
+    required: false
+    items:
+      type: string
+    example: ["country", "city", "lat", "lon", "timezone"]
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    query:
+      type: string
+      description: "IP address queried"
+    country:
+      type: string
+      description: "Country name"
+    countryCode:
+      type: string
+      description: "ISO country code"
+    region:
+      type: string
+      description: "Region code"
+    regionName:
+      type: string
+      description: "Region name"
+    city:
+      type: string
+      description: "City name"
+    zip:
+      type: string
+      description: "ZIP/postal code"
+    lat:
+      type: number
+      description: "Latitude"
+    lon:
+      type: number
+      description: "Longitude"
+    timezone:
+      type: string
+      description: "Timezone"
+    isp:
+      type: string
+      description: "ISP name"
+    org:
+      type: string
+      description: "Organization name"
+    as:
+      type: string
+      description: "AS number and name"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["ip", "geolocation", "location", "network", "free", "no-auth"]
+
+examples:
+  - description: "Lookup IP location"
+    input:
+      ip_address: "8.8.8.8"
+    output:
+      success: true
+      query: "8.8.8.8"
+      country: "United States"
+      countryCode: "US"
+      city: "Mountain View"
+      lat: 37.4229
+      lon: -122.085
+      timezone: "America/Los_Angeles"
+      isp: "Google LLC"
+
+usage_notes: |
+  ## IP Geolocation API
+
+  Get detailed geolocation information for any IP address.
+  Free tier includes 45 requests/minute. No API key required.
+
+  ## Usage Examples
+
+  ### Example 1: Lookup Current IP
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("ip_geolocation_api", json.dumps({}))
+
+  data = json.loads(result)
+  if data['success']:
+      print(f"Your location: {data['city']}, {data['country']}")
+      print(f"Coordinates: {data['lat']}, {data['lon']}")
+      print(f"Timezone: {data['timezone']}")
+      print(f"ISP: {data['isp']}")
+  ```
+
+  ### Example 2: Batch IP Lookup
+  ```python
+  ips = ["8.8.8.8", "1.1.1.1", "208.67.222.222"]
+
+  for ip in ips:
+      result = call_tool("ip_geolocation_api", json.dumps({
+          "ip_address": ip
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"\n{ip}:")
+          print(f"  Location: {data['city']}, {data['country']}")
+          print(f"  ISP: {data['isp']}")
+  ```
+
+  ## Available Fields
+
+  country, countryCode, region, regionName, city, zip, lat, lon,
+  timezone, isp, org, as, query, status
+
+  ## Rate Limits
+
+  - Free: 45 requests/minute
+  - Non-commercial: No API key needed

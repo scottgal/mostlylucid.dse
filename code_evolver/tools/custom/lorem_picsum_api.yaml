@@ -1,0 +1,148 @@
+name: "Lorem Picsum Images"
+type: "custom"
+description: "Get random placeholder images for mockups, prototypes, and testing. Specify size, filters (grayscale, blur), and get specific images by ID. No authentication required."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+custom:
+  module: "src.lorem_picsum_tool"
+  class: "LoremPicsumTool"
+  config:
+    api_base: "https://picsum.photos"
+    cache_ttl_hours: 0  # Don't cache random images
+
+input_schema:
+  width:
+    type: integer
+    description: "Image width in pixels"
+    required: true
+    default: 800
+    example: 1920
+
+  height:
+    type: integer
+    description: "Image height in pixels"
+    required: true
+    default: 600
+    example: 1080
+
+  image_id:
+    type: integer
+    description: "Specific image ID (leave empty for random)"
+    required: false
+
+  grayscale:
+    type: boolean
+    description: "Apply grayscale filter"
+    required: false
+    default: false
+
+  blur:
+    type: integer
+    description: "Blur amount (1-10)"
+    required: false
+    minimum: 1
+    maximum: 10
+
+  seed:
+    type: string
+    description: "Seed for consistent random image"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    url:
+      type: string
+      description: "Image URL"
+    width:
+      type: integer
+      description: "Image width"
+    height:
+      type: integer
+      description: "Image height"
+    download_url:
+      type: string
+      description: "Direct download URL"
+
+tags: ["images", "placeholder", "mockup", "design", "free", "no-auth"]
+
+examples:
+  - description: "Get random image"
+    input:
+      width: 800
+      height: 600
+    output:
+      success: true
+      url: "https://picsum.photos/800/600"
+      width: 800
+      height: 600
+
+  - description: "Get grayscale image"
+    input:
+      width: 1920
+      height: 1080
+      grayscale: true
+    output:
+      success: true
+      url: "https://picsum.photos/1920/1080?grayscale"
+
+usage_notes: |
+  ## Lorem Picsum Images API
+
+  Beautiful placeholder images for your projects.
+  Perfect for mockups, prototypes, and testing.
+
+  ## Usage Examples
+
+  ### Random Image
+  ```python
+  result = call_tool("lorem_picsum_api", json.dumps({
+      "width": 1920,
+      "height": 1080
+  }))
+  # Returns: https://picsum.photos/1920/1080
+  ```
+
+  ### Specific Image
+  ```python
+  result = call_tool("lorem_picsum_api", json.dumps({
+      "width": 800,
+      "height": 600,
+      "image_id": 237
+  }))
+  # Returns: https://picsum.photos/id/237/800/600
+  ```
+
+  ### With Filters
+  ```python
+  result = call_tool("lorem_picsum_api", json.dumps({
+      "width": 1200,
+      "height": 800,
+      "grayscale": true,
+      "blur": 5
+  }))
+  # Returns: https://picsum.photos/1200/800?grayscale&blur=5
+  ```
+
+  ### Consistent Random (Same Seed)
+  ```python
+  result = call_tool("lorem_picsum_api", json.dumps({
+      "width": 800,
+      "height": 600,
+      "seed": "my-project"
+  }))
+  # Always returns same image for this seed
+  ```
+
+  ## Common Sizes
+
+  - Mobile: 375x667, 414x896
+  - Tablet: 768x1024, 1024x768
+  - Desktop: 1920x1080, 2560x1440
+  - Card: 400x300, 600x400
+  - Banner: 1200x400, 1920x600

@@ -1,0 +1,443 @@
+name: "Random Data API"
+type: "custom"
+description: "Get random quotes, facts, advice, cat facts, dog facts, Chuck Norris facts, and more. Perfect for adding interesting content to applications. No authentication required."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+custom:
+  module: "src.random_data_api_tool"
+  class: "RandomDataApiTool"
+  config:
+    apis:
+      quotes: "https://api.quotable.io/random"
+      advice: "https://api.adviceslip.com/advice"
+      cat_facts: "https://catfact.ninja/fact"
+      dog_facts: "https://dog-api.kinduff.com/api/facts"
+      chuck_norris: "https://api.chucknorris.io/jokes/random"
+      useless_facts: "https://uselessfacts.jsph.pl/random.json?language=en"
+    cache_ttl_hours: 0  # Don't cache random content
+
+input_schema:
+  data_type:
+    type: string
+    description: "Type of random data to fetch"
+    required: true
+    enum: ["quote", "advice", "cat_fact", "dog_fact", "chuck_norris", "useless_fact", "all"]
+    default: "quote"
+
+  count:
+    type: integer
+    description: "Number of items to return (max 10)"
+    required: false
+    default: 1
+    maximum: 10
+
+  category:
+    type: string
+    description: "Category filter (for quotes and Chuck Norris)"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    data_type:
+      type: string
+      description: "Type of data returned"
+    items:
+      type: array
+      description: "Array of random data items"
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+            description: "The random text/quote/fact"
+          author:
+            type: string
+            description: "Author (for quotes)"
+          source:
+            type: string
+            description: "Source/category"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["random", "quotes", "facts", "fun", "content", "free", "no-auth"]
+
+examples:
+  - description: "Get random quote"
+    input:
+      data_type: "quote"
+    output:
+      success: true
+      data_type: "quote"
+      items:
+        - text: "The only way to do great work is to love what you do."
+          author: "Steve Jobs"
+          source: "inspirational"
+
+  - description: "Get cat fact"
+    input:
+      data_type: "cat_fact"
+    output:
+      success: true
+      data_type: "cat_fact"
+      items:
+        - text: "Cats sleep 70% of their lives."
+          source: "cat_facts"
+
+  - description: "Get multiple random items"
+    input:
+      data_type: "all"
+      count: 3
+    output:
+      success: true
+      items:
+        - text: "Quote..."
+          data_type: "quote"
+        - text: "Fact..."
+          data_type: "cat_fact"
+        - text: "Advice..."
+          data_type: "advice"
+
+usage_notes: |
+  ## Random Data API
+
+  Get random inspirational quotes, advice, facts, and fun content.
+  Perfect for adding variety and engagement to your applications.
+
+  ## Usage Examples
+
+  ### Example 1: Random Quote of the Day
+  ```python
+  from node_runtime import call_tool
+  import json
+  from datetime import datetime
+
+  result = call_tool("random_data_api", json.dumps({
+      "data_type": "quote"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      quote = data['items'][0]
+      today = datetime.now().strftime("%B %d, %Y")
+
+      print(f"╔════════════════════════════════════════╗")
+      print(f"  QUOTE OF THE DAY - {today}")
+      print(f"╚════════════════════════════════════════╝\n")
+      print(f'"{quote["text"]}"')
+      print(f"\n    — {quote['author']}")
+  ```
+
+  ### Example 2: Random Advice Generator
+  ```python
+  def get_random_advice():
+      """Get a random piece of advice."""
+      result = call_tool("random_data_api", json.dumps({
+          "data_type": "advice"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          advice = data['items'][0]
+          return advice['text']
+
+  # Get advice
+  for i in range(5):
+      advice = get_random_advice()
+      print(f"{i+1}. {advice}")
+  ```
+
+  ### Example 3: Fun Facts Collection
+  ```python
+  fact_types = ["cat_fact", "dog_fact", "useless_fact"]
+
+  print("FUN FACTS COLLECTION\n")
+  print("=" * 60)
+
+  for fact_type in fact_types:
+      result = call_tool("random_data_api", json.dumps({
+          "data_type": fact_type,
+          "count": 3
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"\n{fact_type.replace('_', ' ').title()}s:")
+          for i, item in enumerate(data['items'], 1):
+              print(f"  {i}. {item['text']}")
+  ```
+
+  ### Example 4: Motivation Dashboard
+  ```python
+  def create_motivation_dashboard():
+      """Create a motivational dashboard with multiple data types."""
+      print("\n" + "═" * 70)
+      print(" " * 20 + "DAILY MOTIVATION DASHBOARD")
+      print("═" * 70)
+
+      # Get quote
+      quote_result = call_tool("random_data_api", json.dumps({
+          "data_type": "quote"
+      }))
+      quote_data = json.loads(quote_result)
+      if quote_data['success']:
+          quote = quote_data['items'][0]
+          print(f"\n📜 INSPIRATIONAL QUOTE:")
+          print(f'   "{quote["text"]}"')
+          print(f'   — {quote["author"]}\n')
+
+      # Get advice
+      advice_result = call_tool("random_data_api", json.dumps({
+          "data_type": "advice"
+      }))
+      advice_data = json.loads(advice_result)
+      if advice_data['success']:
+          advice = advice_data['items'][0]
+          print(f"💡 RANDOM ADVICE:")
+          print(f"   {advice['text']}\n")
+
+      # Get fun fact
+      fact_result = call_tool("random_data_api", json.dumps({
+          "data_type": "useless_fact"
+      }))
+      fact_data = json.loads(fact_result)
+      if fact_data['success']:
+          fact = fact_data['items'][0]
+          print(f"🎲 FUN FACT:")
+          print(f"   {fact['text']}\n")
+
+      print("═" * 70 + "\n")
+
+  # Create dashboard
+  create_motivation_dashboard()
+  ```
+
+  ### Example 5: Chuck Norris Fact Generator
+  ```python
+  result = call_tool("random_data_api", json.dumps({
+      "data_type": "chuck_norris",
+      "count": 5
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      print("CHUCK NORRIS FACTS:\n")
+      for i, item in enumerate(data['items'], 1):
+          print(f"{i}. {item['text']}\n")
+  ```
+
+  ### Example 6: Content Filler for Apps
+  ```python
+  def fill_content_slots(num_slots):
+      """Fill content slots with random interesting data."""
+      content = []
+
+      data_types = ["quote", "advice", "cat_fact", "useless_fact"]
+
+      for i in range(num_slots):
+          data_type = data_types[i % len(data_types)]
+
+          result = call_tool("random_data_api", json.dumps({
+              "data_type": data_type
+          }))
+
+          data = json.loads(result)
+          if data['success']:
+              item = data['items'][0]
+              content.append({
+                  'slot': i + 1,
+                  'type': data_type,
+                  'content': item['text'],
+                  'meta': item.get('author', item.get('source', ''))
+              })
+
+      return content
+
+  # Fill 8 content slots
+  slots = fill_content_slots(8)
+  for slot in slots:
+      print(f"\nSlot {slot['slot']} ({slot['type']}):")
+      print(f"  {slot['content']}")
+      if slot['meta']:
+          print(f"  [{slot['meta']}]")
+  ```
+
+  ### Example 7: Email Signature Generator
+  ```python
+  def generate_email_signature():
+      """Generate email signature with random quote."""
+      result = call_tool("random_data_api", json.dumps({
+          "data_type": "quote"
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          quote = data['items'][0]
+
+          signature = f"""
+  ──────────────────────────────────────────
+  Best regards,
+  [Your Name]
+
+  💭 Today's Inspiration:
+  "{quote['text']}"
+      — {quote['author']}
+  ──────────────────────────────────────────
+  """
+          return signature
+
+  print(generate_email_signature())
+  ```
+
+  ### Example 8: Slack/Discord Bot Content
+  ```python
+  def bot_random_command(command):
+      """Handle bot commands for random content."""
+      command_map = {
+          '!quote': 'quote',
+          '!advice': 'advice',
+          '!catfact': 'cat_fact',
+          '!dogfact': 'dog_fact',
+          '!chuck': 'chuck_norris',
+          '!fact': 'useless_fact'
+      }
+
+      data_type = command_map.get(command)
+      if not data_type:
+          return "Unknown command!"
+
+      result = call_tool("random_data_api", json.dumps({
+          "data_type": data_type
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          item = data['items'][0]
+          response = f"**{data_type.replace('_', ' ').title()}:**\n{item['text']}"
+
+          if item.get('author'):
+              response += f"\n— *{item['author']}*"
+
+          return response
+
+  # Simulate bot commands
+  commands = ['!quote', '!advice', '!catfact', '!chuck']
+  for cmd in commands:
+      print(f"\nUser: {cmd}")
+      print(f"Bot: {bot_random_command(cmd)}")
+  ```
+
+  ### Example 9: Morning Briefing
+  ```python
+  def morning_briefing():
+      """Generate a morning briefing with various content."""
+      from datetime import datetime
+
+      print("\n" + "┏" + "━" * 68 + "┓")
+      print(f"┃  GOOD MORNING! - {datetime.now().strftime('%A, %B %d, %Y'):^54} ┃")
+      print("┗" + "━" * 68 + "┛\n")
+
+      # Quote
+      quote_result = call_tool("random_data_api", json.dumps({
+          "data_type": "quote"
+      }))
+      if json.loads(quote_result)['success']:
+          quote = json.loads(quote_result)['items'][0]
+          print("💬 QUOTE FOR THE DAY:")
+          print(f'   "{quote["text"]}"')
+          print(f'   — {quote["author"]}\n')
+
+      # Advice
+      advice_result = call_tool("random_data_api", json.dumps({
+          "data_type": "advice"
+      }))
+      if json.loads(advice_result)['success']:
+          advice = json.loads(advice_result)['items'][0]
+          print("💡 TODAY'S ADVICE:")
+          print(f"   {advice['text']}\n")
+
+      # Fun fact
+      fact_result = call_tool("random_data_api", json.dumps({
+          "data_type": "useless_fact"
+      }))
+      if json.loads(fact_result)['success']:
+          fact = json.loads(fact_result)['items'][0]
+          print("🎯 INTERESTING FACT:")
+          print(f"   {fact['text']}\n")
+
+      print("━" * 70)
+      print("Have a great day! 🌟\n")
+
+  morning_briefing()
+  ```
+
+  ### Example 10: Content Variety Mix
+  ```python
+  def get_mixed_content(count=10):
+      """Get a mix of different random content types."""
+      result = call_tool("random_data_api", json.dumps({
+          "data_type": "all",
+          "count": count
+      }))
+
+      data = json.loads(result)
+      if data['success']:
+          print(f"RANDOM CONTENT MIX ({count} items)\n")
+
+          for i, item in enumerate(data['items'], 1):
+              icon = {
+                  'quote': '💭',
+                  'advice': '💡',
+                  'cat_fact': '🐱',
+                  'dog_fact': '🐶',
+                  'chuck_norris': '🥋',
+                  'useless_fact': '🎲'
+              }.get(item.get('data_type', 'quote'), '📝')
+
+              print(f"{i}. {icon} {item['text']}")
+
+              if item.get('author'):
+                  print(f"   — {item['author']}")
+
+              print()
+
+  get_mixed_content(10)
+  ```
+
+  ## Available Data Types
+
+  - **quote**: Inspirational and famous quotes
+  - **advice**: Random life advice
+  - **cat_fact**: Interesting cat facts
+  - **dog_fact**: Interesting dog facts
+  - **chuck_norris**: Chuck Norris facts/jokes
+  - **useless_fact**: Random useless but interesting facts
+  - **all**: Mix of all types
+
+  ## Use Cases
+
+  - Daily motivation apps
+  - Email signatures
+  - Chat bot responses
+  - Loading screen content
+  - Social media posts
+  - Website footer quotes
+  - Slack/Discord bot commands
+  - Content placeholders
+  - Fun fact widgets
+  - Inspiration dashboards
+
+  ## Benefits
+
+  - **Free**: No authentication required
+  - **Variety**: Multiple content types
+  - **Fresh**: Always random content
+  - **Clean**: Family-friendly content
+  - **Fast**: Quick response times
+  - **Engaging**: Interesting and varied
