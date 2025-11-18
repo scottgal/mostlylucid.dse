@@ -573,3 +573,28 @@ git:
     safe_mode: true                        # Enable safety checks
     require_confirmation_for_destructive: true  # Confirm destructive operations
     max_diff_size_kb: 500                  # Maximum diff size to display
+
+# ==============================================================================
+# GOOGLE API CONFIGURATION
+# ==============================================================================
+# Credentials for Google API services (Fact Check, Search, etc.)
+# Use environment variables for sensitive data
+google:
+  # Single API key for all Google services (can be overridden per service)
+  api_key: "${GOOGLE_API_KEY}"
+
+  # Google Fact Check Tools API
+  factcheck:
+    api_key: "${GOOGLE_FACTCHECK_API_KEY}"  # Falls back to google.api_key if not set
+    enabled: true
+    max_results: 10  # Default number of results to return
+
+  # Google Custom Search API
+  search:
+    api_key: "${GOOGLE_SEARCH_API_KEY}"     # Falls back to google.api_key if not set
+    search_engine_id: "${GOOGLE_SEARCH_ENGINE_ID}"  # Custom Search Engine ID (CX)
+    enabled: true
+    max_results: 10  # Default number of results to return
+    safe_search: "active"  # active, moderate, off
+    use_rag_cache: true  # Store and reuse search results from RAG
+    rag_cache_ttl_hours: 24  # Cache results for 24 hours
