@@ -14,7 +14,9 @@
       "Bash(find nodes -name \"metadata.json\" -exec python -c \"import json, sys; f=sys.argv[1]; \ntry: \n    json.load(open(f)); \nexcept Exception as e: \n    print(f''''{f}: {e}'''')\" {})",
       "Bash(for file in */metadata.json)",
       "Bash(do python -m json.tool $file)",
-      "Bash(done)"
+      "Bash(done)",
+      "WebFetch(domain:localhost)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

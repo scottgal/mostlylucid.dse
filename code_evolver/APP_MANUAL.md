@@ -152,7 +152,7 @@ When user says **"Create the tools required to..."**:
 
 **From CLI:**
 ```
-CodeEvolver> /manual tool faker_tool
+DiSE> /manual tool faker_tool
 ```
 
 **From Code:**
@@ -164,8 +164,8 @@ result = call_tool("faker_tool", "Generate 10 users")
 
 **Finding Tools:**
 ```
-CodeEvolver> /tools                    # List all tools
-CodeEvolver> /tools --search "fake"    # Search tools
+DiSE> /tools                    # List all tools
+DiSE> /tools --search "fake"    # Search tools
 ```
 
 ---

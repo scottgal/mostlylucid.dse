@@ -505,7 +505,7 @@ python chat_cli.py
 ```
 
 ```
-CodeEvolver> add 10 and 20
+DiSE> add 10 and 20
 > Task classified as ARITHMETIC
 > Using Fast Code Generator (gemma3:4b)
 ✓ Code generated and tested
@@ -516,25 +516,25 @@ RESULT: 30
 
 **Conversation Mode:**
 ```bash
-CodeEvolver> /conversation_start software design
+DiSE> /conversation_start software design
 
 Started conversation about software design.
 Context memory: Active
 Auto-summarization: Enabled
 
-CodeEvolver> What are the benefits of microservices?
+DiSE> What are the benefits of microservices?
 > [Response with full conversation context]
 
-CodeEvolver> How does that compare to monoliths?
+DiSE> How does that compare to monoliths?
 > [Response aware of previous discussion about microservices]
 
-CodeEvolver> /conversation_end
+DiSE> /conversation_end
 Conversation ended. Summary saved to RAG.
 ```
 
 **Training Mode:**
 ```bash
-CodeEvolver> /train write a function to process data
+DiSE> /train write a function to process data
 
 Training started. Press any key to stop.
 Variation 1: write a function to process user data
@@ -550,7 +550,7 @@ Total variations: 42
 
 **Pattern Optimization:**
 ```bash
-CodeEvolver> /optimize_tools
+DiSE> /optimize_tools
 
 Analyzing RAG patterns...
 Found 5 high-value optimization opportunities
@@ -624,7 +624,7 @@ graph LR
 ### Example 1: Simple Arithmetic
 
 ```bash
-CodeEvolver> add 5 and 8
+DiSE> add 5 and 8
 
 > Task classified as ARITHMETIC (basic arithmetic operation)
 > Using Fast Code Generator (gemma3:4b)
@@ -662,7 +662,7 @@ if __name__ == "__main__":
 ### Example 2: Content Generation
 
 ```bash
-CodeEvolver> write me a joke about programmers
+DiSE> write me a joke about programmers
 
 > Task classified as SIMPLE_CONTENT (short joke generation)
 > Using powerful model for content generation
@@ -696,7 +696,7 @@ if __name__ == "__main__":
 ### Example 3: Complex Algorithm
 
 ```bash
-CodeEvolver> calculate fibonacci sequence
+DiSE> calculate fibonacci sequence
 
 > Task classified as ALGORITHM (fibonacci computation)
 > Using powerful model (qwen2.5-coder:14b)
@@ -991,7 +991,7 @@ tools:
 #### Example: Using Translation API
 
 ```bash
-CodeEvolver> translate "Hello, world!" to Spanish
+DiSE> translate "Hello, world!" to Spanish
 
 > Task classified as API_CALL
 > Found tool: NMT Translation Service
@@ -1940,7 +1940,7 @@ graph LR
 **Usage Example:**
 
 ```bash
-CodeEvolver> write a joke and translate to french and spanish
+DiSE> write a joke and translate to french and spanish
 
 > Task classified as MULTI_STEP_WORKFLOW
 > Decomposing into parallel workflow...
@@ -1981,7 +1981,7 @@ Powerful CLI commands for managing and optimizing tools.
 Improve a tool based on natural language instructions.
 
 ```bash
-CodeEvolver> /mutate tool my_translator make it support more languages
+DiSE> /mutate tool my_translator make it support more languages
 
 > Analyzing tool: my_translator
 > Current implementation: Supports English, French, Spanish
@@ -2008,7 +2008,7 @@ Tool updated successfully.
 Iteratively optimize a tool for specific targets.
 
 ```bash
-CodeEvolver> /optimize tool data_processor performance
+DiSE> /optimize tool data_processor performance
 
 > Starting optimization for 'data_processor'
 > Target: performance
@@ -2048,7 +2048,7 @@ Memory improvement: 40%
 Check status of all configured LLM backends.
 
 ```bash
-CodeEvolver> /backends --test
+DiSE> /backends --test
 
 Checking backend configurations...
 

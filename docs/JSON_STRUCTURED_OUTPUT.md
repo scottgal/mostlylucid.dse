@@ -354,7 +354,7 @@ python chat_cli.py
 ```
 
 ```
-CodeEvolver> generate calculate factorial
+DiSE> generate calculate factorial
 
 Generating code with codellama...
 # Should receive JSON response
@@ -365,7 +365,7 @@ Generating code with codellama...
 ### Test 2: General Fallback
 
 ```
-CodeEvolver> generate some random task
+DiSE> generate some random task
 
 Using general code generator (fallback)  ← Shown to user
 Generating code with General Code Generator...
@@ -374,7 +374,7 @@ Generating code with General Code Generator...
 ### Test 3: Specialized Tool
 
 ```
-CodeEvolver> generate review this code for bugs
+DiSE> generate review this code for bugs
 
 ✓ Selected specialized tool: Code Reviewer  ← Specialized!
 Generating code with Code Reviewer...

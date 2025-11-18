@@ -26,18 +26,39 @@ def get_platform():
 
 def clean_build_dirs():
     """Clean previous build artifacts."""
+    import time
+
     dirs_to_clean = ["build", "dist", "__pycache__"]
 
     for dir_name in dirs_to_clean:
         dir_path = Path(dir_name)
         if dir_path.exists():
             print(f"Cleaning {dir_name}...")
-            shutil.rmtree(dir_path)
+
+            # Retry logic for Windows file locks
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    shutil.rmtree(dir_path)
+                    break
+                except PermissionError as e:
+                    if attempt < max_retries - 1:
+                        print(f"  Warning: {e}")
+                        print(f"  Retrying in 2 seconds... (attempt {attempt + 1}/{max_retries})")
+                        time.sleep(2)
+                    else:
+                        print(f"  Error: Could not remove {dir_name} after {max_retries} attempts")
+                        print(f"  Please close any programs using files in {dir_name} and try again")
+                        # Don't fail - continue with build
+                        break
 
     # Clean spec files
     for spec_file in Path(".").glob("*.spec"):
         print(f"Removing {spec_file}...")
-        spec_file.unlink()
+        try:
+            spec_file.unlink()
+        except PermissionError:
+            print(f"  Warning: Could not remove {spec_file} (file may be in use)")
 
 
 def build_executable(platform_name: str, app_name: str = "CodeEvolver"):
@@ -65,16 +86,24 @@ def build_executable(platform_name: str, app_name: str = "CodeEvolver"):
     data_files = [
         ("prompts", "prompts"),
         ("config.yaml", "."),
+        ("APP_MANUAL.md", "."),
+        ("CLAUDE.md", "."),
+        ("BUILD_SCRIPTS.md", "."),
+        ("QUICKSTART.md", "."),
+        ("README.md", "."),
     ]
 
     for src, dest in data_files:
         if Path(src).exists():
             args.extend(["--add-data", f"{src}{';' if platform_name == 'windows' else ':'}{dest}"])
+        else:
+            print(f"Warning: {src} not found, skipping...")
 
     # Platform-specific settings
     if platform_name == "windows":
-        args.append("--noconsole")  # Hide console window
+        # Keep console visible for CLI app (don't use --noconsole)
         # args.extend(["--icon", "icon.ico"])  # Add if icon exists
+        pass
 
     elif platform_name == "macos":
         args.extend([

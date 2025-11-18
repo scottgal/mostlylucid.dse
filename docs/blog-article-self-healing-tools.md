@@ -5,6 +5,10 @@
 
 **When your tools break themselves, your system should remember why and never repeat the mistake**
 
+When **DiSE* commits murder.
+
+<img src="/scottgal/mostlylucid.dse/raw/main/logo.png" alt="mostlylucid-dse logo" width="120" style="max-width: 100%;">
+
 > **Note:** This is a speculative design for DISE's next evolutionary leap—a self-healing tool ecosystem that tracks lineage, detects bugs, prunes failed branches, and learns from mistakes forever. It's ambitious, slightly terrifying, and might actually be implementable with what we already have.
 
 ## The Problem: Tools That Break Themselves

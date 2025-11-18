@@ -50,7 +50,7 @@ def make_raw_http_request(
     try:
         # Prepare headers
         req_headers = {
-            'User-Agent': 'CodeEvolver-HTTP-Raw-Client/1.0',
+            'User-Agent': 'DiSE-HTTP-Raw-Client/1.0',
         }
 
         if headers:

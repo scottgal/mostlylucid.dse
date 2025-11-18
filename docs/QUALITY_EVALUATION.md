@@ -453,7 +453,7 @@ python chat_cli.py
 ```
 
 ```
-CodeEvolver> generate fibonacci calculator
+DiSE> generate fibonacci calculator
 
 Checking for existing solutions...
 [No similar workflows found]

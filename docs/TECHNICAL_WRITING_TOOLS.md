@@ -19,7 +19,7 @@ The mostlylucid DiSE system now includes **specialized LLM tools for technical w
 
 **Example usage**:
 ```
-CodeEvolver> generate write a blog post about Python async/await
+DiSE> generate write a blog post about Python async/await
 → System selects: Technical Article Writer
 ```
 
@@ -36,7 +36,7 @@ CodeEvolver> generate write a blog post about Python async/await
 
 **Example usage**:
 ```
-CodeEvolver> generate analyze my blog post for readability
+DiSE> generate analyze my blog post for readability
 → System selects: Article Content Analyzer
 ```
 
@@ -53,7 +53,7 @@ CodeEvolver> generate analyze my blog post for readability
 
 **Example usage**:
 ```
-CodeEvolver> generate optimize my article for search engines
+DiSE> generate optimize my article for search engines
 → System selects: SEO Optimizer
 ```
 
@@ -70,7 +70,7 @@ CodeEvolver> generate optimize my article for search engines
 
 **Example usage**:
 ```
-CodeEvolver> generate explain Python decorators for beginners
+DiSE> generate explain Python decorators for beginners
 → System selects: Code Concept Explainer
 ```
 
@@ -87,7 +87,7 @@ CodeEvolver> generate explain Python decorators for beginners
 
 **Example usage**:
 ```
-CodeEvolver> generate create an outline for article about async programming
+DiSE> generate create an outline for article about async programming
 → System selects: Article Outline Generator
 ```
 
@@ -104,7 +104,7 @@ CodeEvolver> generate create an outline for article about async programming
 
 **Example usage**:
 ```
-CodeEvolver> generate proofread this article for errors
+DiSE> generate proofread this article for errors
 → System selects: Technical Proofreader
 ```
 
@@ -136,7 +136,7 @@ python chat_cli.py
 ```
 
 ```
-CodeEvolver> generate create outline for blog post about Python async/await
+DiSE> generate create outline for blog post about Python async/await
 
 → Uses: Article Outline Generator
 → Output: Structured outline with sections
@@ -144,7 +144,7 @@ CodeEvolver> generate create outline for blog post about Python async/await
 
 ### Step 2: Write Content
 ```
-CodeEvolver> generate write technical article about Python async/await
+DiSE> generate write technical article about Python async/await
 
 → Uses: Technical Article Writer
 → Output: Complete article draft
@@ -152,7 +152,7 @@ CodeEvolver> generate write technical article about Python async/await
 
 ### Step 3: Explain Complex Concepts
 ```
-CodeEvolver> generate explain how event loops work in async programming
+DiSE> generate explain how event loops work in async programming
 
 → Uses: Code Concept Explainer
 → Output: Simplified explanation with analogies
@@ -160,7 +160,7 @@ CodeEvolver> generate explain how event loops work in async programming
 
 ### Step 4: Optimize for SEO
 ```
-CodeEvolver> generate optimize article about async/await for SEO
+DiSE> generate optimize article about async/await for SEO
 
 → Uses: SEO Optimizer
 → Output: Keyword suggestions, meta descriptions
@@ -168,7 +168,7 @@ CodeEvolver> generate optimize article about async/await for SEO
 
 ### Step 5: Analyze Quality
 ```
-CodeEvolver> generate analyze readability of async/await article
+DiSE> generate analyze readability of async/await article
 
 → Uses: Article Content Analyzer
 → Output: Readability scores, improvement suggestions
@@ -176,7 +176,7 @@ CodeEvolver> generate analyze readability of async/await article
 
 ### Step 6: Final Proofread
 ```
-CodeEvolver> generate proofread async/await article
+DiSE> generate proofread async/await article
 
 → Uses: Technical Proofreader
 → Output: Grammar fixes, style improvements

@@ -273,7 +273,7 @@ def run(self):
     if not self.client.check_connection():
         console.print("[red]Warning: Cannot connect to Ollama...[/red]")
     
-    prompt_text = self.config.get("chat.prompt", "CodeEvolver> ")
+    prompt_text = self.config.get("chat.prompt", "DiSE> ")
     
     while True:
         try:

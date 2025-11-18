@@ -489,23 +489,23 @@ email_validator_v3:
 ### User Commands
 ```bash
 # Get result NOW (Phase 1)
-CodeEvolver> write email validator
+DiSE> write email validator
 
 # Check optimization status
-CodeEvolver> /status email_validator
+DiSE> /status email_validator
 # Fitness: 0.75 (Phase 1)
 # Next optimization: scheduled for 18:00
 
 # Manually trigger optimization (Phase 2)
-CodeEvolver> /optimize email_validator
+DiSE> /optimize email_validator
 # Running experiments... (3/5 complete)
 # Best so far: 0.89
 
 # Optimize all low-scoring nodes
-CodeEvolver> /optimize all --fitness-below=0.8
+DiSE> /optimize all --fitness-below=0.8
 
 # Optimize when idle
-CodeEvolver> /optimize --background --when-idle
+DiSE> /optimize --background --when-idle
 ```
 
 ---

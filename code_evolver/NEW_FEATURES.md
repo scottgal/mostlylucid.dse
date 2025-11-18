@@ -82,16 +82,16 @@ python chat_cli.py
 Then inside the CLI:
 
 ```
-CodeEvolver> /conversation_start python_best_practices
+DiSE> /conversation_start python_best_practices
 
 # Chat about Python
-CodeEvolver> What are the best practices for error handling?
+DiSE> What are the best practices for error handling?
 
 # Continue conversation with full context
-CodeEvolver> Can you show me an example?
+DiSE> Can you show me an example?
 
 # End when done
-CodeEvolver> /conversation_end
+DiSE> /conversation_end
 ```
 
 #### Programmatic Usage
@@ -556,10 +556,10 @@ python chat_cli.py
 
 Inside CLI:
 ```
-CodeEvolver> /conversation_start test_topic
-CodeEvolver> tell me about Python type hints
-CodeEvolver> can you show an example?
-CodeEvolver> /conversation_end
+DiSE> /conversation_start test_topic
+DiSE> tell me about Python type hints
+DiSE> can you show an example?
+DiSE> /conversation_end
 ```
 
 ### 3. Test Cluster Optimizer

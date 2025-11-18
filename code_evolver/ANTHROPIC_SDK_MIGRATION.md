@@ -343,7 +343,7 @@ Check model_key metadata → backend="anthropic" or "ollama"
 
 3. **Try a simple request:**
    ```
-   CodeEvolver> write a haiku about coding
+   DiSE> write a haiku about coding
    ```
 
 4. **Verify routing is working:**

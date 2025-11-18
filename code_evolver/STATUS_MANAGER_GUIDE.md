@@ -170,7 +170,7 @@ self.status_manager = get_status_manager(console)
 ## Example Session
 
 ```
-CodeEvolver> write a poem
+DiSE> write a poem
 
 ⚡ ollama/tinyllama → generate        # Triage/classification
 ⚡ ollama/nomic-embed-text → embedding # RAG search

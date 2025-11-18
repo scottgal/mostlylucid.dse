@@ -178,7 +178,7 @@ logging:
 # Chat interface settings
 chat:
   # Prompt style
-  prompt: "CodeEvolver> "
+  prompt: "DiSE> "
 
   # History
   history_file: ".code_evolver_history"
@@ -859,7 +859,7 @@ fine_tuning:
 
 # Build settings (for executables)
 build:
-  app_name: "CodeEvolver"
+  app_name: "DiSE"
   version: "0.1.0"
   icon: null  # Path to icon file (optional)
 
@@ -877,4 +877,4 @@ build:
     create_desktop_file: true
 
   macos:
-    bundle_identifier: "com.codeevolver.app"
+    bundle_identifier: "com.DiSE.app"

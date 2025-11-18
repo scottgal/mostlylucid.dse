@@ -218,7 +218,7 @@ async def _get_input_async(self) -> str:
 
     # Use asyncio to read input while allowing status updates
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, self.session.prompt, "CodeEvolver> ")
+    return await loop.run_in_executor(None, self.session.prompt, "DiSE> ")
 ```
 
 ### Status Update Printer
@@ -304,13 +304,13 @@ def _execute_workflow_background(self, workflow_spec: Dict):
 ### Example Session
 
 ```
-CodeEvolver> generate email validator
+DiSE> generate email validator
 Started background process: build_1634567890
 You can continue using the CLI while it runs
 
-CodeEvolver> [build_1634567890] Consulting overseer...
+DiSE> [build_1634567890] Consulting overseer...
 
-CodeEvolver> list
+DiSE> list
 Available tools:
 - string_validator
 - json_parser
@@ -318,16 +318,16 @@ Available tools:
 
 [build_1634567890] Generating code...
 
-CodeEvolver> [build_1634567890] Running tests...
+DiSE> [build_1634567890] Running tests...
 
-CodeEvolver> status
+DiSE> status
 Background Processes:
 - build_1634567890: Running (60%) - Running tests...
 
 [build_1634567890] All tests passed
 [build_1634567890] Complete!
 
-CodeEvolver>
+DiSE>
 ```
 
 ## Configuration

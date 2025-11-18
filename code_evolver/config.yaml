@@ -154,8 +154,8 @@ llm:
     god: deepseek_16b          # Most powerful local model
     escalation: qwen_14b       # Strong model for complex issues
     general: llama3            # General purpose model
-    fast: gemma3_4b            # Fast for simple tasks
-    veryfast: gemma3_1b        # Extremely fast for triage
+    fast: gemma3_1b            # Fast for simple tasks (changed from 4b to 1b)
+    veryfast: gemma3_1b        # Extremely fast for triage (sentinel)
 
   # ==========================================================================
   # ROLE-SPECIFIC OVERRIDES - Only specify what's different from defaults
@@ -447,7 +447,7 @@ bugcatcher:
   auto_install_hooks: true
 
 chat:
-  prompt: "CodeEvolver> "
+  prompt: "DiSE> "
   history_file: ".code_evolver_history"
   max_history: 1000
   show_thinking: false
@@ -466,6 +466,52 @@ chat:
     speed_requirement: "balanced"
     max_iterations: 3
     allow_escalation: true
+
+# ============================================================================
+# LLMAPI INTEGRATION - Test Data Simulator
+# ============================================================================
+llmapi:
+  enabled: true
+  base_url: "http://localhost:5000"  # Default LLMApi instance
+  port: 5000
+  health_check_timeout: 2  # Seconds
+
+  # Auto-detection settings
+  auto_detect:
+    enabled: true  # Automatically detect if LLMApi is available
+    cache_ttl: 300  # Cache health check results for 5 minutes
+    keywords:  # Trigger phrases that suggest using LLMApi
+      - "api simulator"
+      - "use llmapi"
+      - "mock api"
+      - "test data"
+      - "simulate endpoint"
+      - "fake api"
+      - "call http"
+      - "check an api"
+      - "test endpoint"
+
+  # Default request settings
+  defaults:
+    timeout: 10  # Request timeout in seconds
+    include_schema: true  # Include X-Response-Schema header
+    cache_variants: 3  # Number of cached response variants ($cache)
+    accept: "application/json"
+
+  # Common response shapes for different data types
+  shapes:
+    user_list: '{"users":[{"id":0,"name":"string","email":"string","isActive":true}],"meta":{"total":0,"next":"string"}}'
+    product: '{"id":"string","sku":"string","name":"string","price":0.0,"inStock":true,"tags":["string"]}'
+    order: '{"orderId":"string","status":"string","total":0.0,"items":[{"sku":"string","qty":0}],"customer":{"id":"string","name":"string"}}'
+    generic_list: '[{"id":"string","name":"string","value":"string"}]'
+
+  # Features to enable
+  features:
+    streaming: true  # Enable SSE streaming endpoints
+    graphql: true  # Enable GraphQL endpoint
+    error_simulation: true  # Allow error status codes
+    rate_limiting: false  # Simulate rate limits (can slow tests)
+    tools: false  # Enable LLMApi pluggable tools (Phase 2)
 
 testing:
   enabled: true
@@ -576,7 +622,7 @@ fine_tuning:
     - ollama
 
 build:
-  app_name: "CodeEvolver"
+  app_name: "DiSE"
   version: "0.1.0"
   icon: null
   include_data:
@@ -588,7 +634,7 @@ build:
   linux:
     create_desktop_file: true
   macos:
-    bundle_identifier: "com.codeevolver.app"
+    bundle_identifier: "com.DiSE.app"
 
 # ==============================================================================
 # GIT & GITHUB CONFIGURATION

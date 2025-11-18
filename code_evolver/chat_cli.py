@@ -1707,12 +1707,23 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
             workflow.complete_step("workflow_decomposition", f"{len(workflow_spec.steps)} steps planned")
 
             # Validate decomposition quality
-            multi_operation_keywords = ["and", "then", "translate", "convert"]
+            # Look for multi-step patterns like "X and Y", "X then Y", etc.
+            import re
             description_lower = description.lower()
-            has_multi_keywords = any(kw in description_lower for kw in multi_operation_keywords)
 
-            if has_multi_keywords and len(workflow_spec.steps) == 1:
-                console.print(f"[yellow]Warning: Task contains '{[kw for kw in multi_operation_keywords if kw in description_lower]}' but was decomposed into only 1 step.[/yellow]")
+            # More precise patterns that actually indicate multiple operations
+            multi_step_patterns = [
+                r'\b(and|then)\s+(also\s+)?(?:do|write|create|generate|make|build)',  # "and write", "then create"
+                r'\b(?:first|second|third|finally|next|after that)',  # Explicit sequencing
+                r'\bthen\s+\w+',  # "then X" (verb after then)
+                r'\band\s+(?:also\s+)?(?:test|validate|verify|check)',  # "and test", "and also verify"
+                r'->\s*\[',  # Workflow notation like "-> [step]"
+            ]
+
+            has_multi_step_indicators = any(re.search(pattern, description_lower) for pattern in multi_step_patterns)
+
+            if has_multi_step_indicators and len(workflow_spec.steps) == 1:
+                console.print(f"[yellow]Warning: Task appears to contain multiple steps but was decomposed into only 1 step.[/yellow]")
                 console.print(f"[yellow]This may indicate the task should be split into multiple steps.[/yellow]")
 
                 # Additional protection: if the single step has the same description as the original task,
@@ -3381,7 +3392,7 @@ if __name__ == "__main__":
     import sys
     input_data = json.load(sys.stdin)
     result = binary_search(input_data["arr"], input_data["target"])
-    print(json.dumps({{"result": result}}))
+    print(json.dumps({{"result": result}}))  # Note: Use actual result variable
 ```""" if interface_tests else """```python
 import json
 import sys
@@ -3731,6 +3742,12 @@ CRITICAL REQUIREMENTS:
 ║                                                                            ║
 ║  The main() function MUST end with a print(json.dumps(...)) call.         ║
 ║  Even for errors, print: print(json.dumps({{"error": "error message"}}))   ║
+║                                                                            ║
+║  CRITICAL: You MUST call main() at the end of your code:                  ║
+║     if __name__ == '__main__':                                            ║
+║         main()                                                            ║
+║                                                                            ║
+║  Without this, your code will NOT execute and will produce NO OUTPUT!     ║
 ║                                                                            ║
 ╚════════════════════════════════════════════════════════════════════════════╝
 
@@ -5070,13 +5087,48 @@ Linked Pair: {production_tool_id} <-> {debug_tool_id}
             console.print(f"Workflow: {workflow.description}")
             console.print("="*70)
 
-            # Show per-tool timings
+            # Show per-tool timings with context
             if workflow.steps:
                 console.print("\n[dim]Tool execution times:[/dim]")
                 for step in workflow.steps:
                     if step.end_time and step.start_time:
                         duration = step.end_time - step.start_time
-                        console.print(f"  {step.tool_name}: {duration:.2f}s")
+
+                        # Extract prompt preview and model info if available
+                        prompt_preview = ""
+                        model_info = ""
+
+                        # Check metadata for prompt/model info (set during completion)
+                        if step.metadata:
+                            prompt = step.metadata.get('prompt')
+                            model = step.metadata.get('model') or step.metadata.get('generator')
+
+                            if model:
+                                model_info = f" [{model}]"
+
+                            if prompt and isinstance(prompt, str):
+                                # Truncate to 50 chars for display
+                                prompt_clean = prompt.replace('\n', ' ').strip()
+                                if len(prompt_clean) > 50:
+                                    prompt_preview = f", '{prompt_clean[:50]}...'"
+                                else:
+                                    prompt_preview = f", '{prompt_clean}'"
+
+                        # Check inputs as fallback
+                        if not prompt_preview and step.inputs:
+                            prompt = step.inputs.get('prompt') or step.inputs.get('description') or step.inputs.get('task')
+                            if prompt and isinstance(prompt, str):
+                                prompt_clean = prompt.replace('\n', ' ').strip()
+                                if len(prompt_clean) > 50:
+                                    prompt_preview = f", '{prompt_clean[:50]}...'"
+                                else:
+                                    prompt_preview = f", '{prompt_clean}'"
+
+                        # Show tool name + description + prompt preview + model
+                        if step.description and step.description != step.tool_name:
+                            console.print(f"  {step.tool_name}{model_info} ({step.description[:45]}{'...' if len(step.description) > 45 else ''}{prompt_preview}): {duration:.2f}s")
+                        else:
+                            console.print(f"  {step.tool_name}{model_info}{prompt_preview}: {duration:.2f}s")
 
                 # Total time
                 if workflow.end_time and workflow.start_time:
@@ -5368,15 +5420,22 @@ Code:
             # Use the behave_test_generator tool
             console.print(f"[dim]Generating Behave .feature file...[/dim]")
 
-            # Call the tool to generate BDD tests
+            # Try to call the tool to generate BDD tests
             from node_runtime import call_tool
             import json
-            result_str = call_tool("behave_test_generator", feature_input)
 
-            # Parse the JSON result
+            result = None
             try:
-                result = json.loads(result_str) if result_str else None
-            except json.JSONDecodeError:
+                # Convert dict to JSON string for call_tool
+                result_str = call_tool("behave_test_generator", json.dumps(feature_input))
+
+                # Parse the JSON result
+                try:
+                    result = json.loads(result_str) if result_str else None
+                except json.JSONDecodeError:
+                    result = None
+            except Exception as e:
+                console.print(f"[yellow]Warning: Could not generate BDD test: {e}[/yellow]")
                 result = None
 
             if result and result.get("success"):
@@ -5452,13 +5511,21 @@ Code to test:
             # Call the tool to generate load tests
             from node_runtime import call_tool
             import json
-            # Convert dict to JSON string for call_tool
-            result_str = call_tool("locust_load_tester", json.dumps(locust_input))
 
-            # Parse the JSON result
+            result = None
             try:
-                result = json.loads(result_str) if result_str else None
-            except json.JSONDecodeError:
+                # Convert dict to JSON string for call_tool
+                result_str = call_tool("locust_load_tester", json.dumps(locust_input))
+
+                # Parse the JSON result
+                try:
+                    result = json.loads(result_str) if result_str else None
+                except json.JSONDecodeError:
+                    result = None
+
+            except Exception as tool_error:
+                # Tool not found or failed - will use fallback
+                logger.debug(f"Tool call failed: {tool_error}")
                 result = None
 
             if result and result.get("success"):

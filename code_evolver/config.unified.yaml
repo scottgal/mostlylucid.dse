@@ -245,7 +245,7 @@ logging:
     use_colors: true
 
 chat:
-  prompt: "CodeEvolver> "
+  prompt: "DiSE> "
   history_file: ".code_evolver_history"
   max_history: 1000
   show_thinking: false
@@ -369,7 +369,7 @@ fine_tuning:
     - ollama
 
 build:
-  app_name: "CodeEvolver"
+  app_name: "DiSE"
   version: "0.1.0"
   icon: null
   include_data:
@@ -381,4 +381,4 @@ build:
   linux:
     create_desktop_file: true
   macos:
-    bundle_identifier: "com.codeevolver.app"
+    bundle_identifier: "com.DiSE.app"

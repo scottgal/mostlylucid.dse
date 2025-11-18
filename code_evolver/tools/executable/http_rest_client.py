@@ -42,7 +42,7 @@ def make_http_request(
     try:
         # Prepare headers
         req_headers = {
-            'User-Agent': 'CodeEvolver-HTTP-REST-Client/1.0',
+            'User-Agent': 'DiSE-HTTP-REST-Client/1.0',
             'Accept': 'application/json',
         }
 

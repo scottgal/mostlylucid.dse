@@ -267,23 +267,23 @@ reviewer_model = "gemma3:4b"  # Fast (~2s), accurate binary decisions
 
 ```bash
 # First request
-CodeEvolver> translate hello to french
+DiSE> translate hello to french
 [Generates new implementation]
 Result: Bonjour
 
 # Identical request (100% match)
-CodeEvolver> translate hello to french
+DiSE> translate hello to french
 ✓ 100% MATCH - reusing existing artifact
 Result: Bonjour  # Instant!
 
 # Very similar (4b reviews)
-CodeEvolver> translate 'hello' into french
+DiSE> translate 'hello' into french
 Found similar (97% match) - asking 4b for review...
 4b review: yes
 Result: Bonjour  # Fast!
 
 # Different language (new implementation)
-CodeEvolver> translate hello to spanish
+DiSE> translate hello to spanish
 Similarity 92% - generating new
 Result: Hola  # Normal workflow
 ```
@@ -292,16 +292,16 @@ Result: Hola  # Normal workflow
 
 ```bash
 # First request
-CodeEvolver> integrate with Stripe to process payments
+DiSE> integrate with Stripe to process payments
 [Generates new implementation]
 
 # Identical request
-CodeEvolver> integrate with Stripe to process payments
+DiSE> integrate with Stripe to process payments
 ✓ 100% MATCH
 [Reuses existing Stripe integration]
 
 # Different service
-CodeEvolver> integrate with PayPal to process payments
+DiSE> integrate with PayPal to process payments
 Similarity 85% - generating new
 [Creates new PayPal integration]
 ```
@@ -310,17 +310,17 @@ Similarity 85% - generating new
 
 ```bash
 # First request
-CodeEvolver> parse CSV file and convert to JSON
+DiSE> parse CSV file and convert to JSON
 [Generates new implementation]
 
 # Similar wording
-CodeEvolver> convert CSV data to JSON format
+DiSE> convert CSV data to JSON format
 Found similar (96% match) - asking 4b for review...
 4b review: yes (same task, different wording)
 [Reuses existing implementation]
 
 # Different formats
-CodeEvolver> parse XML file and convert to JSON
+DiSE> parse XML file and convert to JSON
 Similarity 78% - generating new
 [Creates new XML parser]
 ```

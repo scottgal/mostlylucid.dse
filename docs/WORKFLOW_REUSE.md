@@ -162,7 +162,7 @@ OK All tests passed!
 ### Example 1: First Time Question
 
 ```
-CodeEvolver> generate a function to calculate factorial
+DiSE> generate a function to calculate factorial
 
 Checking for existing solutions...
 [No similar workflows found]
@@ -186,7 +186,7 @@ OK Node 'factorial_calculator' created successfully!
 ### Example 2: Same Question Asked Again
 
 ```
-CodeEvolver> generate a function to calculate factorial
+DiSE> generate a function to calculate factorial
 
 Checking for existing solutions...
 OK Found similar workflow: Workflow: Factorial Calculator (similarity: 92%)
@@ -202,7 +202,7 @@ Score: 0.85
 ### Example 3: Similar But Different Question
 
 ```
-CodeEvolver> generate code to compute factorial of a number
+DiSE> generate code to compute factorial of a number
 
 Checking for existing solutions...
 OK Found similar workflow: Workflow: Factorial Calculator (similarity: 78%)

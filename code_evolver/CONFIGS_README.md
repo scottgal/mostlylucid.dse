@@ -266,7 +266,7 @@ Use the `backends` command in chat_cli to check what's configured:
 
 ```bash
 python chat_cli.py
-CodeEvolver> backends
+DiSE> backends
 ```
 
 Output:

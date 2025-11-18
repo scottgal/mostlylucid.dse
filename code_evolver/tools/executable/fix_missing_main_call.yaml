@@ -1,0 +1,126 @@
+name: fix_missing_main_call
+type: executable
+description: |
+  Detects and fixes missing 'if __name__ == "__main__": main()' call.
+
+  Handles:
+  - Code with main() function but no execution
+  - Missing if __name__ guard
+  - Code that produces no output due to main() not being called
+
+  This is a critical fix for tools that define main() but never execute it,
+  resulting in "NO OUTPUT WAS PRODUCED" errors.
+
+executable:
+  command: python
+  args:
+    - "code_evolver/tools/executable/fix_missing_main_call.py"
+  input_via: stdin
+  output_format: json
+
+input_schema:
+  type: object
+  required:
+    - source_code
+  properties:
+    source_code:
+      type: string
+      description: Source code to check and fix
+    apply_fix:
+      type: boolean
+      description: "Apply fix to code (default: true)"
+      default: true
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: Whether fix was successful
+    fixed:
+      type: boolean
+      description: Whether any changes were made
+    message:
+      type: string
+      description: Summary message
+    fixed_code:
+      type: string
+      description: Corrected source code with main() call added
+    explanation:
+      type: string
+      description: What was fixed and why
+    has_main_function:
+      type: boolean
+      description: Whether code has a main() function
+    has_main_call:
+      type: boolean
+      description: Whether code already calls main()
+    can_retry:
+      type: boolean
+      description: Whether code should be retested
+    location:
+      type: string
+      description: Where the fix was applied (e.g., "end of file")
+
+examples:
+  - description: Add missing main() call
+    input:
+      source_code: |
+        import json
+        def main():
+            result = {"status": "success"}
+            print(json.dumps(result))
+    expected_output:
+      success: true
+      fixed: true
+      has_main_function: true
+      has_main_call: false
+      explanation: "Added 'if __name__ == \"__main__\": main()' at end of file"
+      location: "end of file"
+      can_retry: true
+
+  - description: Code already has main() call
+    input:
+      source_code: |
+        import json
+        def main():
+            result = {"status": "success"}
+            print(json.dumps(result))
+
+        if __name__ == '__main__':
+            main()
+    expected_output:
+      success: true
+      fixed: false
+      has_main_function: true
+      has_main_call: true
+      message: "Code already calls main()"
+      can_retry: false
+
+tags:
+  - fix
+  - main-call
+  - no-output
+  - execution
+  - auto-fix
+
+auto_fix:
+  enabled: true
+  triggers:
+    - "NO OUTPUT WAS PRODUCED"
+    - "No output produced"
+  priority: critical
+  retry_after_fix: true
+  search_rag_first: false
+
+performance:
+  avg_time_seconds: 0.5
+  timeout_seconds: 10
+  caches_result: false
+
+metadata:
+  version: "1.0.0"
+  author: "code_evolver"
+  category: "auto-fix"
+  reliability: "high"
+  rag_storage: true

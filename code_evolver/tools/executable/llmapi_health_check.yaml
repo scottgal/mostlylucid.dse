@@ -1,0 +1,47 @@
+﻿name: "LLMApi Health Check"
+type: "executable"
+description: "Check if LLMApi test data simulator is running and available"
+version: "1.0.0"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/llmapi_health_check.py"
+  stdin_mode: true
+
+input_schema:
+  base_url:
+    type: "string"
+    description: "Base URL of LLMApi instance"
+    required: false
+    default: "http://localhost:5000"
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether LLMApi is available"
+  status:
+    type: "string"
+    description: "Health status: healthy, unavailable"
+  details:
+    type: "object"
+    description: "Detailed health check information including version and features"
+
+cost_tier: "free"
+speed_tier: "instant"
+quality_tier: "excellent"
+
+tags:
+  - "health-check"
+  - "llmapi"
+  - "testing"
+  - "infrastructure"
+
+examples:
+  - "Check if LLMApi is running"
+  - "Verify test data simulator availability"
+
+use_cases:
+  - "Pre-flight checks before using LLMApi for test data"
+  - "Validate LLMApi connectivity in CI/CD"
+  - "Feature detection for LLMApi capabilities"

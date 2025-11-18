@@ -282,7 +282,7 @@ class ConfigGenerator:
             },
 
             "chat": {
-                "prompt": "CodeEvolver> ",
+                "prompt": "DiSE> ",
                 "show_workflow": True
             }
         }

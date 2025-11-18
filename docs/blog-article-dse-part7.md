@@ -329,7 +329,7 @@ Here's how it feels to use DSE in practice:
 ```bash
 $ python chat_cli.py
 
-CodeEvolver> generate Write a function to validate email addresses
+DiSE> generate Write a function to validate email addresses
 
 Searching for relevant tools...
 ✓ Found validation specialist in RAG memory
@@ -347,7 +347,7 @@ Evaluating quality...
 Node 'validate_email_addresses' created successfully!
 Latency: 127ms | Memory: 2.1MB | Quality: 96%
 
-CodeEvolver> run validate_email_addresses {"email": "test@example.com"}
+DiSE> run validate_email_addresses {"email": "test@example.com"}
 
 ✓ Execution successful
 Output: {

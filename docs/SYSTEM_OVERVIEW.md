@@ -261,7 +261,7 @@ INFO:src.ollama_client:Generating with model 'codellama' at http://localhost:114
 ### Generate Code
 
 ```
-CodeEvolver> generate fibonacci calculator
+DiSE> generate fibonacci calculator
 ```
 
 Output:
@@ -285,25 +285,25 @@ Running tests...
 ### Run Existing Node
 
 ```
-CodeEvolver> run fibonacci_calculator_12345 {"n": 10}
+DiSE> run fibonacci_calculator_12345 {"n": 10}
 ```
 
 ### List All Nodes
 
 ```
-CodeEvolver> list
+DiSE> list
 ```
 
 ### Search RAG
 
 ```
-CodeEvolver> search "calculate fibonacci"
+DiSE> search "calculate fibonacci"
 ```
 
 ### Exit
 
 ```
-CodeEvolver> exit
+DiSE> exit
 ```
 
 ## Configuration Reference

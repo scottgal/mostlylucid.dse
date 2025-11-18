@@ -1,5 +1,5 @@
 """
-Step definitions for: **Task:** Automatically generate patient discharge summaries from the Electronic Health Record (EHR) based on a pre-defined checklist of required information – including medication lists, diagnoses, and physician notes – using a Natural Language Processing (NLP) tool, updating the summary with the latest patient data before sending it to the facility’s billing system.
+Step definitions for: write ahaiku about coding and read it to me
 Auto-generated Behave step definitions
 """
 from behave import given, when, then, step

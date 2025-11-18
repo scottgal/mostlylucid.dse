@@ -5292,7 +5292,7 @@ Return ONLY the JSON, no other text."""
             console.print("[red]Warning: Cannot connect to Ollama. Some features will not work.[/red]")
             console.print("[dim]Start Ollama with: ollama serve[/dim]\n")
 
-        prompt_text = self.config.get("chat.prompt", "CodeEvolver> ")
+        prompt_text = self.config.get("chat.prompt", "DiSE> ")
 
         while True:
             try:

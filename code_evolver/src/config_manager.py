@@ -7,6 +7,14 @@ import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+# Import PyInstaller utilities for resource paths
+try:
+    from .pyinstaller_utils import get_config_path
+except ImportError:
+    # Fallback if pyinstaller_utils not available
+    def get_config_path():
+        return Path("config.yaml")
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -73,7 +81,7 @@ class ConfigManager:
             }
         },
         "chat": {
-            "prompt": "CodeEvolver> ",
+            "prompt": "DiSE> ",
             "history_file": ".code_evolver_history",
             "max_history": 1000,
             "show_thinking": False,
@@ -81,7 +89,7 @@ class ConfigManager:
             "auto_save_context": True
         },
         "build": {
-            "app_name": "CodeEvolver",
+            "app_name": "DiSE",
             "version": "0.1.0",
             "icon": None
         }
@@ -94,7 +102,14 @@ class ConfigManager:
         Args:
             config_path: Path to YAML config file
         """
-        self.config_path = Path(config_path)
+        # Use PyInstaller-aware path resolution
+        if config_path == "config.yaml":
+            # Default config - use PyInstaller-aware helper
+            self.config_path = get_config_path()
+        else:
+            # Custom config path - use as-is
+            self.config_path = Path(config_path)
+
         self.config = self._load_config()
         self._validate_code_models()
 

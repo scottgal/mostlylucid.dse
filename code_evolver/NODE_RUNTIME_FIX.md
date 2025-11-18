@@ -256,7 +256,7 @@ def main():
 
 ### User Request
 ```
-CodeEvolver> write a poem
+DiSE> write a poem
 ```
 
 ### Generated Code (Before Fix)

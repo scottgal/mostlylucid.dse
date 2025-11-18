@@ -212,38 +212,38 @@ rag_memory:
 
 1. **Basic Memory Test**
    ```bash
-   CodeEvolver> Write a hello world function
+   DiSE> Write a hello world function
    [generates function]
 
-   CodeEvolver> Add error handling to that
+   DiSE> Add error handling to that
    [should enhance the hello world function]
    ```
 
 2. **Memory On/Off Test**
    ```bash
-   CodeEvolver> /memory off
+   DiSE> /memory off
    Conversation memory off
 
-   CodeEvolver> Write a function
+   DiSE> Write a function
    [generates function]
 
-   CodeEvolver> Enhance that
+   DiSE> Enhance that
    [should ask "enhance what?" - no memory]
 
-   CodeEvolver> /memory on
+   DiSE> /memory on
    Conversation memory on
 
-   CodeEvolver> Enhance that
+   DiSE> Enhance that
    [should work now]
    ```
 
 3. **Multi-Turn Workflow**
    ```bash
-   CodeEvolver> Create a REST API client
-   CodeEvolver> Add authentication
-   CodeEvolver> Add rate limiting
-   CodeEvolver> Add retry logic
-   CodeEvolver> Test it all
+   DiSE> Create a REST API client
+   DiSE> Add authentication
+   DiSE> Add rate limiting
+   DiSE> Add retry logic
+   DiSE> Test it all
    [Each step builds on previous context]
    ```
 
