@@ -170,9 +170,19 @@ def generate_locustfile(endpoints: List[Dict[str, Any]],
 
     # Generate task methods for each endpoint
     for i, endpoint in enumerate(endpoints):
-        method = endpoint['method'].lower()
-        path = endpoint['path']
-        operation_id = endpoint['operation_id']
+        # Ensure endpoint fields are strings before using them
+        method_value = endpoint.get('method', 'GET')
+        if not isinstance(method_value, str):
+            continue  # Skip invalid endpoints
+        method = method_value.lower()
+
+        path = endpoint.get('path', '/')
+        if not isinstance(path, str):
+            path = '/'
+
+        operation_id = endpoint.get('operation_id', f'task_{i}')
+        if not isinstance(operation_id, str):
+            operation_id = f'task_{i}'
 
         # Replace path parameters with fake data
         path_with_params = path
