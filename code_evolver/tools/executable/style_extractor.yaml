@@ -1,0 +1,295 @@
+name: "Style Extractor"
+type: "executable"
+description: "Extracts comprehensive style information from any source (web pages, files, text) with multi-tier analysis. Analyzes writing style, tone, vocabulary, structure, and formatting patterns to generate detailed JSON profiles. Similar to langextract but for style analysis."
+tool_id: "style_extractor"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "variable"  # Depends on tier: quick=free, detailed=low, comprehensive=medium
+speed_tier: "variable"  # quick=very-fast, detailed=fast, comprehensive=medium
+quality_tier: "excellent"
+max_output_length: "long"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/style_extractor.py"]
+  timeout_ms: 120000  # 2 minutes for comprehensive analysis
+  memory_limit_mb: 512
+
+# Input schema
+input_schema:
+  source_type:
+    type: "string"
+    description: "Type of source: 'url', 'file', or 'text'"
+    required: true
+    enum: ["url", "file", "text"]
+
+  source:
+    type: "string"
+    description: "The actual source: URL, file path, or text content"
+    required: true
+
+  extraction_tier:
+    type: "string"
+    description: "Analysis depth: quick (fast, basic), detailed (balanced), comprehensive (thorough with summarization)"
+    required: false
+    default: "detailed"
+    enum: ["quick", "detailed", "comprehensive"]
+
+  style_aspects:
+    type: "array"
+    description: "Specific style aspects to analyze (empty = all)"
+    required: false
+    items:
+      type: "string"
+      enum:
+        - "tone"
+        - "formality"
+        - "vocabulary"
+        - "sentence_structure"
+        - "paragraph_structure"
+        - "formatting"
+        - "punctuation"
+        - "rhetorical_devices"
+        - "voice"
+        - "pacing"
+        - "imagery"
+        - "technical_level"
+
+  output_format:
+    type: "string"
+    description: "Output format: json (default) or yaml"
+    required: false
+    default: "json"
+    enum: ["json", "yaml"]
+
+  save_to_file:
+    type: "boolean"
+    description: "Whether to save extracted style to tool-scoped filesystem"
+    required: false
+    default: false
+
+  filename:
+    type: "string"
+    description: "Filename for saved output (only if save_to_file=true)"
+    required: false
+
+  include_metadata:
+    type: "boolean"
+    description: "Include extraction metadata (timestamps, source info, tier used)"
+    required: false
+    default: true
+
+  max_content_length:
+    type: "integer"
+    description: "Maximum content length to analyze (longer content triggers summarization)"
+    required: false
+    default: 50000
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+    source_type:
+      type: "string"
+    source:
+      type: "string"
+    extraction_tier:
+      type: "string"
+    style_profile:
+      type: "object"
+      properties:
+        tone:
+          type: "object"
+          description: "Overall tone analysis (formal, casual, professional, friendly, etc.)"
+        formality:
+          type: "object"
+          description: "Formality level and indicators"
+        vocabulary:
+          type: "object"
+          description: "Vocabulary patterns, complexity, common terms"
+        sentence_structure:
+          type: "object"
+          description: "Sentence length, complexity, patterns"
+        paragraph_structure:
+          type: "object"
+          description: "Paragraph organization and flow"
+        formatting:
+          type: "object"
+          description: "Formatting patterns (headings, lists, emphasis)"
+        punctuation:
+          type: "object"
+          description: "Punctuation usage patterns"
+        rhetorical_devices:
+          type: "object"
+          description: "Use of metaphors, analogies, questions, etc."
+        voice:
+          type: "object"
+          description: "Active vs passive voice, person (1st, 2nd, 3rd)"
+        pacing:
+          type: "object"
+          description: "Content pacing and rhythm"
+        imagery:
+          type: "object"
+          description: "Use of descriptive language and imagery"
+        technical_level:
+          type: "object"
+          description: "Technical complexity and jargon usage"
+    metadata:
+      type: "object"
+      properties:
+        content_length:
+          type: "integer"
+        word_count:
+          type: "integer"
+        sentence_count:
+          type: "integer"
+        paragraph_count:
+          type: "integer"
+        extraction_time_ms:
+          type: "number"
+        timestamp:
+          type: "string"
+        tier_used:
+          type: "string"
+        summarization_applied:
+          type: "boolean"
+    saved_file:
+      type: "string"
+      description: "Path to saved file if save_to_file=true"
+    message:
+      type: "string"
+    error:
+      type: "string"
+
+# Extraction tiers with different strategies
+extraction_tiers:
+  quick:
+    name: "Quick Scan"
+    description: "Fast, basic style analysis using pattern matching and simple metrics"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+    timeout_ms: 10000
+    max_content_length: 10000
+    analysis_method: "rule_based"
+    summarization: false
+    llm_required: false
+    expected_accuracy: 0.70
+
+  detailed:
+    name: "Detailed Analysis"
+    description: "Balanced analysis using LLM for nuanced style detection"
+    cost_tier: "low"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    timeout_ms: 60000
+    max_content_length: 50000
+    analysis_method: "llm_assisted"
+    summarization: true  # For content > max_content_length
+    llm_required: true
+    llm_model: "fast"  # Uses config.yaml fast model
+    expected_accuracy: 0.85
+
+  comprehensive:
+    name: "Comprehensive Deep Dive"
+    description: "Thorough analysis with multi-pass LLM evaluation and pattern recognition"
+    cost_tier: "medium"
+    speed_tier: "medium"
+    quality_tier: "exceptional"
+    timeout_ms: 120000
+    max_content_length: 200000
+    analysis_method: "multi_pass_llm"
+    summarization: true
+    chunk_analysis: true  # Analyze in chunks then synthesize
+    llm_required: true
+    llm_model: "general"  # Uses config.yaml general model
+    expected_accuracy: 0.95
+
+# Discovery and routing
+tags:
+  - "style"
+  - "analysis"
+  - "extraction"
+  - "nlp"
+  - "content-analysis"
+  - "writing"
+  - "language"
+  - "web-scraping"
+  - "file-processing"
+
+weight: 8.5
+priority: 80
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "re"
+      builtin: true
+    - name: "sys"
+      builtin: true
+    - name: "pathlib"
+      builtin: true
+    - name: "datetime"
+      builtin: true
+    - name: "requests"
+      version: ">=2.25.0"
+    - name: "beautifulsoup4"
+      version: ">=4.9.0"
+    - name: "yaml"
+      version: ">=5.0"
+  tools:
+    - "filesystem_manager"  # For saving extracted styles
+    - "http_content_fetcher"  # For fetching web content
+    - "adaptive_chunker"  # For chunking long content
+
+# Example usage
+example_usage: |
+  # Extract style from a web page
+  {
+    "source_type": "url",
+    "source": "https://example.com/article",
+    "extraction_tier": "detailed"
+  }
+
+  # Extract style from a file
+  {
+    "source_type": "file",
+    "source": "/path/to/document.txt",
+    "extraction_tier": "comprehensive",
+    "save_to_file": true,
+    "filename": "document_style.json"
+  }
+
+  # Extract style from text with specific aspects
+  {
+    "source_type": "text",
+    "source": "The quick brown fox...",
+    "extraction_tier": "quick",
+    "style_aspects": ["tone", "formality", "vocabulary"]
+  }
+
+# Integration notes
+integration:
+  filesystem:
+    scope: "style_extractor"
+    write_path: "./data/filesystem/style_extractor/"
+    allowed_extensions: [".json", ".yaml", ".txt"]
+    max_file_size_mb: 10
+
+  rag_storage:
+    enabled: true
+    store_extractions: true
+    collection: "style_profiles"
+    use_for_similarity: true
+
+  evaluator:
+    enabled: true
+    evaluator_tool: "style_extraction_evaluator"
+    quality_threshold: 0.75

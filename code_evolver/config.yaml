@@ -360,6 +360,54 @@ filesystem:
   # Storage limits per tool scope
   max_total_size_mb: 1000
 
+# Style Extractor - Extract style information from any source
+style_extractor:
+  enabled: true
+  # Write guardrails - files can only be written to tool-scoped directory
+  write_guardrails:
+    fixed_directory: "./data/filesystem/style_extractor/"
+    allowed_extensions:
+      - ".json"
+      - ".yaml"
+      - ".yml"
+      - ".txt"
+    max_file_size_mb: 10
+    max_files: 1000
+  # Default extraction settings
+  defaults:
+    extraction_tier: "detailed"
+    max_content_length: 50000
+    save_to_rag: true
+    include_metadata: true
+  # RAG storage settings
+  rag:
+    enabled: true
+    collection: "style_profiles"
+    store_extractions: true
+    similarity_threshold: 0.75
+  # Web fetching settings
+  web:
+    enabled: true
+    timeout_seconds: 30
+    max_retries: 3
+    user_agent: "StyleExtractor/1.0"
+  # File reading settings
+  file:
+    enabled: true
+    max_file_size_mb: 50
+    allowed_extensions:
+      - ".txt"
+      - ".md"
+      - ".html"
+      - ".htm"
+      - ".xml"
+      - ".json"
+      - ".yaml"
+      - ".yml"
+      - ".rst"
+      - ".tex"
+    encoding: "utf-8"
+
 logging:
   level: "WARNING"
   file: "code_evolver.log"

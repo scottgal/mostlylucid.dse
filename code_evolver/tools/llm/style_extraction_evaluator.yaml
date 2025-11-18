@@ -1,0 +1,246 @@
+name: "Style Extraction Evaluator"
+type: "llm"
+version: "1.0.0"
+description: "Evaluates the quality and completeness of extracted style profiles. Assesses accuracy, coverage, and usefulness of style analysis results."
+
+llm:
+  model_key: "general"  # Use general purpose model for evaluation
+  endpoint: null
+  system_prompt: |
+    You are an expert evaluator of style analysis quality. Your task is to assess extracted style profiles
+    for accuracy, completeness, and usefulness.
+
+    When evaluating a style extraction result, consider:
+
+    1. COMPLETENESS (0-1):
+       - Are all requested style aspects analyzed?
+       - Is the analysis comprehensive or superficial?
+       - Are metrics and indicators present?
+
+    2. ACCURACY (0-1):
+       - Do the style conclusions match the content?
+       - Are tone, formality, and voice assessments reasonable?
+       - Are quantitative metrics (word count, ratios, etc.) correct?
+
+    3. DEPTH (0-1):
+       - Does the analysis go beyond basic counts?
+       - Are patterns and trends identified?
+       - Are insights meaningful and actionable?
+
+    4. CONSISTENCY (0-1):
+       - Are related aspects consistent (e.g., formality vs vocabulary)?
+       - Do quantitative and qualitative assessments align?
+       - Are tier expectations met (quick vs comprehensive)?
+
+    5. USEFULNESS (0-1):
+       - Can this profile be used to replicate the style?
+       - Are the insights actionable?
+       - Is the format clear and well-organized?
+
+    OUTPUT FORMAT (JSON):
+    {
+      "score": 0.85,  // Overall score (0-1)
+      "scores": {
+        "completeness": 0.90,
+        "accuracy": 0.85,
+        "depth": 0.80,
+        "consistency": 0.85,
+        "usefulness": 0.85
+      },
+      "verdict": "excellent|good|acceptable|poor",
+      "strengths": ["List of key strengths"],
+      "weaknesses": ["List of key weaknesses"],
+      "suggestions": ["List of improvement suggestions"],
+      "tier_appropriate": true,  // Does quality match the tier used?
+      "feedback": "Detailed feedback summary"
+    }
+
+    VERDICT CRITERIA:
+    - excellent: score >= 0.85, all aspects strong
+    - good: score >= 0.70, most aspects solid
+    - acceptable: score >= 0.60, meets minimum standards
+    - poor: score < 0.60, significant issues
+
+    Always return valid JSON in the format above.
+
+  temperature: 0.3  # Lower temperature for consistent evaluation
+
+tags: ["evaluation", "quality", "style", "analysis"]
+
+constraints:
+  max_memory_mb: 512
+  max_execution_time_ms: 60000
+  max_cost_per_evaluation: 0.10
+
+metadata:
+  speed_tier: "fast"
+  cost_tier: "low"
+  reliability: "high"
+  quality_tier: "excellent"
+
+# Evaluation tiers matching extraction tiers
+evaluation_tiers:
+  quick:
+    name: "Quick Check"
+    description: "Basic validation of extraction results"
+    expectations:
+      completeness: 0.60
+      accuracy: 0.65
+      depth: 0.50
+      consistency: 0.60
+      usefulness: 0.60
+
+  detailed:
+    name: "Detailed Review"
+    description: "Thorough assessment of extraction quality"
+    expectations:
+      completeness: 0.75
+      accuracy: 0.80
+      depth: 0.70
+      consistency: 0.75
+      usefulness: 0.75
+
+  comprehensive:
+    name: "Comprehensive Audit"
+    description: "Complete evaluation with deep analysis"
+    expectations:
+      completeness: 0.90
+      accuracy: 0.90
+      depth: 0.85
+      consistency: 0.90
+      usefulness: 0.85
+
+# Input schema
+input_schema:
+  extraction_result:
+    type: "object"
+    description: "The style extraction result to evaluate"
+    required: true
+
+  original_content:
+    type: "string"
+    description: "Original content that was analyzed (for verification)"
+    required: false
+
+  tier:
+    type: "string"
+    description: "Extraction tier used (quick, detailed, comprehensive)"
+    required: false
+    default: "detailed"
+
+  focus_aspects:
+    type: "array"
+    description: "Specific aspects to focus evaluation on"
+    required: false
+    items:
+      type: "string"
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    score:
+      type: "number"
+      description: "Overall quality score (0-1)"
+    scores:
+      type: "object"
+      properties:
+        completeness:
+          type: "number"
+        accuracy:
+          type: "number"
+        depth:
+          type: "number"
+        consistency:
+          type: "number"
+        usefulness:
+          type: "number"
+    verdict:
+      type: "string"
+      enum: ["excellent", "good", "acceptable", "poor"]
+    strengths:
+      type: "array"
+      items:
+        type: "string"
+    weaknesses:
+      type: "array"
+      items:
+        type: "string"
+    suggestions:
+      type: "array"
+      items:
+        type: "string"
+    tier_appropriate:
+      type: "boolean"
+    feedback:
+      type: "string"
+
+# Example usage
+example_usage: |
+  # Evaluate a style extraction result
+  {
+    "extraction_result": {
+      "success": true,
+      "style_profile": { ... },
+      "metadata": { ... }
+    },
+    "tier": "detailed"
+  }
+
+  # Evaluate with original content for verification
+  {
+    "extraction_result": { ... },
+    "original_content": "The quick brown fox...",
+    "tier": "comprehensive",
+    "focus_aspects": ["tone", "formality", "vocabulary"]
+  }
+
+workflow:
+  steps:
+    - id: "1_validate_structure"
+      action: "validate"
+      description: "Check that extraction result has required structure"
+
+    - id: "2_assess_completeness"
+      action: "assess"
+      description: "Evaluate coverage of style aspects"
+
+    - id: "3_verify_accuracy"
+      action: "verify"
+      description: "Check accuracy of style conclusions"
+
+    - id: "4_evaluate_depth"
+      action: "evaluate"
+      description: "Assess depth and quality of analysis"
+
+    - id: "5_check_consistency"
+      action: "check"
+      description: "Verify consistency across aspects"
+
+    - id: "6_rate_usefulness"
+      action: "rate"
+      description: "Evaluate actionability and usefulness"
+
+    - id: "7_generate_feedback"
+      action: "generate"
+      description: "Create comprehensive feedback"
+
+    - id: "8_assign_verdict"
+      action: "decide"
+      description: "Determine overall verdict based on tier"
+
+integration:
+  tools:
+    - "style_extractor"
+
+  auto_evaluate: true  # Automatically evaluate extractions
+
+  quality_thresholds:
+    quick: 0.60
+    detailed: 0.75
+    comprehensive: 0.85
+
+  feedback_storage:
+    enabled: true
+    store_in_rag: true
+    collection: "style_evaluation_feedback"
