@@ -32,8 +32,8 @@ graph TB
     P2[Phase 2: Make It Pretty] --> P2_Refine[Private Refinement]
     P2_Refine --> P2_Clean["Clean up the code<br/>Better names<br/>Type hints/annotations<br/>Clear structure"]
     P2_Clean --> P2_Align["Align with spec<br/>Cover all requirements<br/>Handle edge cases<br/>Polish API surface"]
-    P2_Align --> P2_Optimize["Optimize<br/>Performance<br/>Readability<br/>Maintainability"]
-    P2_Optimize --> P3
+    P2_Align --> P2_Optimise["Optimise<br/>Performance<br/>Readability<br/>Maintainability"]
+    P2_Optimise --> P3
 
     P3[Phase 3: Lock It Down] --> P3_Share[Public Sharing]
     P3_Share --> P3_Tests["Write comprehensive tests<br/>Full coverage<br/>Edge cases<br/>Error conditions"]
@@ -98,7 +98,7 @@ def process_thing(data):
 
 This code is **private.** It's a conversation with myself. It's how I figure out what "working" even means.
 
-Writing tests for this is worse than useless—it's *actively harmful.* Because every time I realize "oh wait, this whole approach is wrong," I'd have to rewrite the tests too.
+Writing tests for this is worse than useless—it's *actively harmful.* Because every time I realise "oh wait, this whole approach is wrong," I'd have to rewrite the tests too.
 
 That's not rigor. That's bureaucracy.
 
@@ -106,7 +106,7 @@ That's not rigor. That's bureaucracy.
 
 Phase 1 is about **learning velocity.**
 
-I need to try five different approaches in an hour. I need to discover that the third-party library I thought I'd use is actually garbage. I need to realize the problem I'm solving isn't the problem I *should* be solving.
+I need to try five different approaches in an hour. I need to discover that the third-party library I thought I'd use is actually garbage. I need to realise the problem I'm solving isn't the problem I *should* be solving.
 
 Tests slow this down. Not because testing is slow, but because **premature specification is death.**
 
@@ -373,7 +373,7 @@ def test_extract_doubled_values_skips_none_values():
     assert extract_doubled_values(items) == [10]
 ```
 
-Tests don't lie. They can't drift. If the behavior changes, the test breaks.
+Tests don't lie. They can't drift. If the behaviour changes, the test breaks.
 
 That's **executable documentation.** That's what makes tests valuable.
 
@@ -426,27 +426,27 @@ The timing of *when* to add unit tests is critical. Too early and you're specify
 
 ### The XP Practices I Keep
 
-Extreme Programming has brilliant practices that I follow religiously:
+Extreme Programming has brilliant practices worth following:
 
 **Continuous Integration**
-- ✅ Every feature goes through CI before merging
-- ✅ Automated test runs on every commit to main
-- ✅ No broken builds tolerated
+- Every feature goes through CI before merging
+- Automated test runs on every commit to main
+- No broken builds tolerated
 
 **Pair Programming / Code Review**
-- ✅ Phase 3 code gets reviewed before sharing
-- ✅ Tests are part of the reviewable artifact
-- ✅ Collaborative refinement improves design
+- Phase 3 code gets reviewed before sharing
+- Tests are part of the reviewable artefact
+- Collaborative refinement improves design
 
 **Simple Design**
-- ✅ Phase 2 is *all about* simplification
-- ✅ Remove what you don't need
-- ✅ Make it as simple as possible, not simpler
+- Phase 2 is *all about* simplification
+- Remove what you don't need
+- Make it as simple as possible, not simpler
 
 **Refactoring**
-- ✅ Phase 2 is dedicated refactoring time
-- ✅ Clean the code *before* locking it down
-- ✅ Tests protect the refactoring (in Phase 3+)
+- Phase 2 is dedicated refactoring time
+- Clean the code *before* locking it down
+- Tests protect the refactoring (in Phase 3+)
 
 ### Where I Diverge From Strict TDD
 
@@ -658,7 +658,7 @@ Why? Because:
 - You misunderstood the requirements
 - You didn't know the edge cases yet
 - You discovered a better API design
-- You realized the feature wasn't needed at all
+- You realised the feature wasn't needed at all
 
 Every test you write in Phase 1 is probably wasted effort.
 
@@ -668,7 +668,7 @@ Better to write *one* set of tests in Phase 3, when you actually know what you'r
 
 **TDD promises:** "Tests drive your design! They help you discover good APIs!"
 
-**TDD reality:** "I wrote tests for an API I thought made sense. Then I implemented it and realized the API was awkward. Now I'm rewriting both the tests and the code."
+**TDD reality:** "I wrote tests for an API I thought made sense. Then I implemented it and realised the API was awkward. Now I'm rewriting both the tests and the code."
 
 That's not design. That's *thrashing.*
 
@@ -685,11 +685,11 @@ Here's what this approach is *not:*
 - "Ship and pray"
 
 By the time I'm done with Phase 3, my code has:
-- ✅ Comprehensive test coverage
-- ✅ Edge cases handled
-- ✅ Clean, readable implementation
-- ✅ Clear API design
-- ✅ Documentation (via tests)
+- Comprehensive test coverage
+- Edge cases handled
+- Clean, readable implementation
+- Clear API design
+- Documentation (via tests)
 
 *Exactly the same as TDD.*
 
@@ -765,7 +765,7 @@ Just get it working."
 The system generates exploratory code:
 - Focused on the happy path
 - Minimal error handling
-- No premature optimization
+- No premature optimisation
 - Just enough to test the approach
 
 Then the **Executor** runs it. Not with formal unit tests—just with the inputs from the specification.
@@ -784,9 +784,9 @@ This is *exactly* Phase 1. The system is exploring the solution space, learning 
 
 **No tests are written during this phase.** The code is private to the generation process.
 
-### Phase 2 in DSE: The Optimization Stage
+### Phase 2 in DSE: The Optimisation Stage
 
-Once the code passes basic execution, DSE moves to **optimization.**
+Once the code passes basic execution, DSE moves to **optimisation.**
 
 This is the refinement phase. The system:
 
@@ -804,14 +804,14 @@ This is the refinement phase. The system:
    - radon (complexity analysis)
    ```
 
-3. **Iteratively optimizes** (3 iterations by default)
+3. **Iteratively optimises** (3 iterations by default)
    ```python
    for iteration in range(3):
        # Measure current performance
        metrics = measure_performance(code)
 
        # Generate improved version
-       better_code = optimize(code, metrics)
+       better_code = optimise(code, metrics)
 
        # Keep if better, discard if worse
        if better_code.score > code.score:
@@ -829,12 +829,12 @@ The shape is no longer fluid. We know what we're building. Now we make it *good.
 
 ### Phase 3 in DSE: The Testing and Storage Stage
 
-Only *after* optimization does DSE generate and run **formal unit tests.**
+Only *after* optimisation does DSE generate and run **formal unit tests.**
 
 Here's the crucial part: the tests are generated from the *refined specification and implementation*, not the initial exploration.
 
 ```python
-# Test generation happens AFTER optimization
+# Test generation happens AFTER optimisation
 def generate_unit_tests(specification, optimized_code):
     """Generate comprehensive tests for refined code.
 
@@ -851,7 +851,7 @@ Implementation: {optimized_code}
 
 Include tests for:
 - Happy path (from spec examples)
-- Edge cases (discovered during optimization)
+- Edge cases (discovered during optimisation)
 - Error conditions (based on actual error handling)
 - Performance bounds (based on measured metrics)
 """
@@ -859,10 +859,10 @@ Include tests for:
 ```
 
 The tests cover:
-- ✅ Specification examples (correctness)
-- ✅ Edge cases discovered during Phase 2
-- ✅ Error handling that was added during refinement
-- ✅ Performance characteristics that were measured
+- Specification examples (correctness)
+- Edge cases discovered during Phase 2
+- Error handling that was added during refinement
+- Performance characteristics that were measured
 
 Then, *only if tests pass*, the code is:
 1. Stored in the **RAG memory** (with embeddings)
@@ -882,7 +882,7 @@ The three-phase approach is *essential* for AI-driven code generation because:
 - Failures provide information for better attempts
 - Premature testing would force premature specification
 
-**Phase 2: Models optimize better with feedback**
+**Phase 2: Models optimise better with feedback**
 - Static analysis reveals real issues
 - Performance metrics guide improvements
 - Complexity scores highlight simplification opportunities
@@ -925,7 +925,7 @@ User: "Calculate fibonacci numbers"
 
 The final code is:
 - Well-tested (8 tests, all passing)
-- Well-optimized (15% better than initial version)
+- Well-optimised (15% better than initial version)
 - Well-documented (via tests and type hints)
 - Ready to share (in the registry)
 
@@ -1002,7 +1002,7 @@ Perfect.
 
 ### 3. You're Refactoring Existing Code
 
-If I already have an implementation and want to change its structure (not behavior), tests are essential *before* I start.
+If I already have an implementation and want to change its structure (not behaviour), tests are essential *before* I start.
 
 But that's not Phase 1. That's Phase 4: Maintenance.
 
