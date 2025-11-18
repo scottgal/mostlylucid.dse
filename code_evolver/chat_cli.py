@@ -3392,7 +3392,7 @@ if __name__ == "__main__":
     import sys
     input_data = json.load(sys.stdin)
     result = binary_search(input_data["arr"], input_data["target"])
-    print(json.dumps({{"result": result}}))  # Note: Use actual result variable
+    print(json.dumps({{{{\"result\": result}}}}))
 ```""" if interface_tests else """```python
 import json
 import sys
@@ -3416,7 +3416,7 @@ def main() -> None:
     # For math: result = calculate(input_data.get("description"))
 
     # ALWAYS print result as JSON
-    print(json.dumps({{"result": result}}))
+    print(json.dumps({{{{\"result\": result}}}}))
 
 if __name__ == "__main__":
     main()
@@ -3532,7 +3532,7 @@ USAGE GUIDELINES:
      def main() -> None:
          input_data: Dict[str, Any] = json.load(sys.stdin)
          result: str = calculate_result(input_data)
-         print(json.dumps({"result": result}))
+         print(json.dumps({{{{\"result\": result}}}}))
      ```
    - Type hints help catch errors early and make code more maintainable
 

@@ -16,7 +16,8 @@
       "Bash(do python -m json.tool $file)",
       "Bash(done)",
       "WebFetch(domain:localhost)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []

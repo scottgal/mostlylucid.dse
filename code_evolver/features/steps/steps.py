@@ -1,5 +1,5 @@
 """
-Step definitions for: write ahaiku about coding and read it to me
+Step definitions for: Extract key data from PDF invoice
 Auto-generated Behave step definitions
 """
 from behave import given, when, then, step

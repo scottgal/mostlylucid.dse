@@ -2,6 +2,8 @@
 
 > **An experiment in Directed Synthetic Evolution** - going with the blog series at [mostlylucid.net](https://www.mostlylucid.net/blog/category/Emergent%20Intelligence)
 
+Directed Synthetic Evolution: Intentional variation, objective evaluation, purposeful inheritance.
+
 Welcome to **DiSE**, the **Directed Synthetic Evolution** project.
 
 <p align="left">

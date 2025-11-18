@@ -6,12 +6,23 @@ Provides PostgreSQL database connectivity and query execution.
 import json
 import sys
 import os
+from pathlib import Path
 import psycopg2
 from psycopg2 import pool, sql
 from psycopg2.extras import RealDictCursor
 from typing import Dict, Any, List, Optional, Tuple
 from contextlib import contextmanager
 import logging
+
+# Load .env file if it exists
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent.parent.parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+except ImportError:
+    # dotenv not available, will use system environment variables
+    pass
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,9 +41,9 @@ class PostgresClient:
             db_config = {
                 "host": os.getenv("POSTGRES_HOST", "localhost"),
                 "port": int(os.getenv("POSTGRES_PORT", "5432")),
-                "database": os.getenv("POSTGRES_DB", "dise_data"),
-                "user": os.getenv("POSTGRES_USER", "dise"),
-                "password": os.getenv("POSTGRES_PASSWORD", "dise123"),
+                "database": os.getenv("POSTGRES_DB", "dise"),
+                "user": os.getenv("POSTGRES_USER", "postgres"),
+                "password": os.getenv("POSTGRES_PASSWORD", ""),
             }
 
             try:
