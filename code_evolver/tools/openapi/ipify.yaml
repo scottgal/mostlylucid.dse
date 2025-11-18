@@ -1,0 +1,89 @@
+name: "IPify"
+type: "openapi"
+description: "Simple IP Address API to get your public IP address. Free API with no authentication required. Returns IP in plain text or JSON format. Useful for networking tests and IP detection."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://api.ipify.org/"
+  base_url: "https://api.ipify.org"
+
+code_template: |
+  # Example: How to use IPify
+  import requests
+
+  def get_ip():
+      """
+      Get your public IP address (plain text).
+
+      Returns:
+          IP address as string
+      """
+      url = "https://api.ipify.org"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  def get_ip_json():
+      """
+      Get your public IP address (JSON format).
+
+      Returns:
+          Dictionary with 'ip' key
+
+      Response Format:
+          {
+            "ip": "123.45.67.89"
+          }
+      """
+      url = "https://api.ipify.org"
+      params = {"format": "json"}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_ipv4():
+      """
+      Get your IPv4 address specifically.
+
+      Returns:
+          IPv4 address as string
+      """
+      url = "https://api.ipify.org"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  def get_ipv6():
+      """
+      Get your IPv6 address specifically.
+
+      Returns:
+          IPv6 address as string
+      """
+      url = "https://api6.ipify.org"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  # Usage examples:
+  # Example 1: Get IP as plain text
+  # ip = get_ip()
+  # print(f"Your IP: {ip}")
+
+  # Example 2: Get IP as JSON
+  # result = get_ip_json()
+  # print(f"Your IP: {result['ip']}")
+
+  # Example 3: Get IPv6 address
+  # ipv6 = get_ipv6()
+  # print(f"Your IPv6: {ipv6}")
+
+tags: ["ip-address", "networking", "detection", "api", "free", "development"]

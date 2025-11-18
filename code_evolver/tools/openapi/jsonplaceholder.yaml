@@ -1,0 +1,208 @@
+name: "JSONPlaceholder"
+type: "openapi"
+description: "Free fake REST API for testing and prototyping. Provides fake posts, comments, albums, photos, todos, and users. No authentication required. Perfect for testing CRUD operations and learning REST APIs."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+openapi:
+  spec_url: "https://jsonplaceholder.typicode.com/"
+  base_url: "https://jsonplaceholder.typicode.com"
+
+code_template: |
+  # Example: How to use JSONPlaceholder
+  import requests
+
+  def get_posts(limit=None):
+      """
+      Get all posts or limited number.
+
+      Args:
+          limit: Optional limit on number of posts (default: all 100)
+
+      Returns:
+          List of posts
+
+      Response Format:
+          [
+            {
+              "userId": 1,
+              "id": 1,
+              "title": "...",
+              "body": "..."
+            }
+          ]
+      """
+      url = "https://jsonplaceholder.typicode.com/posts"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      posts = response.json()
+      return posts[:limit] if limit else posts
+
+  def get_post(post_id):
+      """
+      Get single post by ID.
+
+      Args:
+          post_id: Post ID (1-100)
+
+      Returns:
+          Post dictionary
+      """
+      url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def create_post(title, body, user_id=1):
+      """
+      Create a new post (simulated).
+
+      Args:
+          title: Post title
+          body: Post content
+          user_id: User ID (default: 1)
+
+      Returns:
+          Created post with ID
+      """
+      url = "https://jsonplaceholder.typicode.com/posts"
+      data = {
+          "title": title,
+          "body": body,
+          "userId": user_id
+      }
+
+      response = requests.post(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  def update_post(post_id, title=None, body=None, user_id=None):
+      """
+      Update post (simulated).
+
+      Args:
+          post_id: Post ID
+          title: New title (optional)
+          body: New body (optional)
+          user_id: New user ID (optional)
+
+      Returns:
+          Updated post
+      """
+      url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+      data = {}
+
+      if title:
+          data["title"] = title
+      if body:
+          data["body"] = body
+      if user_id:
+          data["userId"] = user_id
+
+      response = requests.patch(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  def delete_post(post_id):
+      """
+      Delete post (simulated).
+
+      Args:
+          post_id: Post ID
+
+      Returns:
+          True if successful
+      """
+      url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+      response = requests.delete(url)
+      response.raise_for_status()
+
+      return response.status_code == 200
+
+  def get_comments(post_id=None):
+      """
+      Get comments, optionally filtered by post.
+
+      Args:
+          post_id: Optional post ID to filter comments
+
+      Returns:
+          List of comments
+      """
+      if post_id:
+          url = f"https://jsonplaceholder.typicode.com/posts/{post_id}/comments"
+      else:
+          url = "https://jsonplaceholder.typicode.com/comments"
+
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_users():
+      """
+      Get all users.
+
+      Returns:
+          List of users (10 users)
+      """
+      url = "https://jsonplaceholder.typicode.com/users"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_todos(user_id=None, completed=None):
+      """
+      Get todos, optionally filtered.
+
+      Args:
+          user_id: Optional user ID filter
+          completed: Optional completion status filter (True/False)
+
+      Returns:
+          List of todos
+      """
+      url = "https://jsonplaceholder.typicode.com/todos"
+      params = {}
+
+      if user_id:
+          params["userId"] = user_id
+      if completed is not None:
+          params["completed"] = str(completed).lower()
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: Get all posts
+  # posts = get_posts(limit=5)
+  # for post in posts:
+  #     print(f"Post {post['id']}: {post['title']}")
+
+  # Example 2: Create a new post
+  # new_post = create_post("Test Title", "Test body content")
+  # print(f"Created post ID: {new_post['id']}")
+
+  # Example 3: Get comments for a post
+  # comments = get_comments(post_id=1)
+  # print(f"Found {len(comments)} comments")
+
+  # Example 4: Get all users
+  # users = get_users()
+  # for user in users:
+  #     print(f"{user['name']} - {user['email']}")
+
+  # Example 5: Get completed todos for user 1
+  # todos = get_todos(user_id=1, completed=True)
+  # print(f"User 1 has {len(todos)} completed todos")
+
+tags: ["mock-api", "testing", "prototyping", "rest", "api", "free", "development", "fake-data"]

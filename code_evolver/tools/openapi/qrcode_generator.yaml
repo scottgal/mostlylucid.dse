@@ -1,0 +1,151 @@
+name: "QR Code Generator"
+type: "openapi"
+description: "Generate QR codes via API. Free service with no authentication required. Supports custom sizes, colors, and formats. Returns QR code images directly. Perfect for testing and prototyping."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+openapi:
+  spec_url: "https://goqr.me/api/"
+  base_url: "https://api.qrserver.com/v1"
+
+code_template: |
+  # Example: How to use QR Code Generator API
+  import requests
+  from urllib.parse import quote
+
+  def generate_qrcode(data, size=200, format='png'):
+      """
+      Generate QR code for given data.
+
+      Args:
+          data: Text or URL to encode
+          size: Size in pixels (default: 200, max: 1000)
+          format: Image format (png, gif, jpeg, jpg, svg)
+
+      Returns:
+          Binary image data
+
+      Note:
+          - Size is for both width and height (square)
+          - Data is automatically URL-encoded
+      """
+      url = "https://api.qrserver.com/v1/create-qr-code/"
+      params = {
+          'data': data,
+          'size': f"{size}x{size}",
+          'format': format
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.content
+
+  def generate_qrcode_with_colors(data, size=200, fgcolor='000000', bgcolor='ffffff'):
+      """
+      Generate QR code with custom colors.
+
+      Args:
+          data: Text or URL to encode
+          size: Size in pixels
+          fgcolor: Foreground color in hex (without #)
+          bgcolor: Background color in hex (without #)
+
+      Returns:
+          Binary image data
+      """
+      url = "https://api.qrserver.com/v1/create-qr-code/"
+      params = {
+          'data': data,
+          'size': f"{size}x{size}",
+          'color': fgcolor,
+          'bgcolor': bgcolor
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.content
+
+  def generate_qrcode_with_margin(data, size=200, margin=10):
+      """
+      Generate QR code with custom margin.
+
+      Args:
+          data: Text or URL to encode
+          size: Size in pixels
+          margin: Margin in modules (default: 10, min: 0)
+
+      Returns:
+          Binary image data
+      """
+      url = "https://api.qrserver.com/v1/create-qr-code/"
+      params = {
+          'data': data,
+          'size': f"{size}x{size}",
+          'margin': margin
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.content
+
+  def save_qrcode(qrcode_data, filename):
+      """
+      Save QR code to file.
+
+      Args:
+          qrcode_data: Binary QR code data
+          filename: Output filename
+      """
+      with open(filename, 'wb') as f:
+          f.write(qrcode_data)
+
+  def generate_url_for_qrcode(data, size=200):
+      """
+      Generate URL for QR code (no download).
+
+      Args:
+          data: Text or URL to encode
+          size: Size in pixels
+
+      Returns:
+          URL string for the QR code image
+      """
+      base_url = "https://api.qrserver.com/v1/create-qr-code/"
+      return f"{base_url}?data={quote(data)}&size={size}x{size}"
+
+  # Usage examples:
+  # Example 1: Generate basic QR code
+  # qrcode = generate_qrcode("https://example.com")
+  # save_qrcode(qrcode, "qrcode.png")
+
+  # Example 2: Generate large QR code
+  # qrcode = generate_qrcode("Hello World!", size=500)
+  # save_qrcode(qrcode, "large_qrcode.png")
+
+  # Example 3: Generate QR code with custom colors (blue on yellow)
+  # qrcode = generate_qrcode_with_colors(
+  #     "Custom Colors!",
+  #     size=300,
+  #     fgcolor='0000ff',  # Blue
+  #     bgcolor='ffff00'   # Yellow
+  # )
+  # save_qrcode(qrcode, "colored_qrcode.png")
+
+  # Example 4: Generate QR code with minimal margin
+  # qrcode = generate_qrcode_with_margin("Tight margins", size=200, margin=0)
+  # save_qrcode(qrcode, "tight_qrcode.png")
+
+  # Example 5: Generate SVG QR code
+  # qrcode = generate_qrcode("SVG Format", size=300, format='svg')
+  # save_qrcode(qrcode, "qrcode.svg")
+
+  # Example 6: Get URL instead of downloading
+  # url = generate_url_for_qrcode("https://example.com", size=300)
+  # print(f"QR Code URL: {url}")
+
+tags: ["qrcode", "generation", "images", "api", "free", "development", "testing", "barcode"]

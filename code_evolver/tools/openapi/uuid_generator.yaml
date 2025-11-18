@@ -1,0 +1,104 @@
+name: "UUID Generator"
+type: "openapi"
+description: "Generate UUIDs (Universally Unique Identifiers) via API. Free service with no authentication required. Supports multiple UUID versions (v1, v4). Useful for testing, databases, and distributed systems."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://www.uuidgenerator.net/"
+  base_url: "https://www.uuidgenerator.net/api"
+
+code_template: |
+  # Example: How to use UUID Generator API
+  import requests
+
+  def generate_uuid_v4(count=1):
+      """
+      Generate UUID version 4 (random).
+
+      Args:
+          count: Number of UUIDs to generate (1-100)
+
+      Returns:
+          List of UUIDs if count > 1, single UUID string if count = 1
+
+      Response Format (single):
+          "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+
+      Response Format (multiple):
+          [
+            "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+            "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          ]
+      """
+      url = f"https://www.uuidgenerator.net/api/version4/{count}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      text = response.text.strip()
+
+      if count == 1:
+          return text
+      else:
+          return text.split('\n')
+
+  def generate_uuid_v1(count=1):
+      """
+      Generate UUID version 1 (timestamp-based).
+
+      Args:
+          count: Number of UUIDs to generate (1-100)
+
+      Returns:
+          List of UUIDs if count > 1, single UUID string if count = 1
+      """
+      url = f"https://www.uuidgenerator.net/api/version1/{count}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      text = response.text.strip()
+
+      if count == 1:
+          return text
+      else:
+          return text.split('\n')
+
+  def generate_uuid(version=4, count=1):
+      """
+      Generate UUIDs of specified version.
+
+      Args:
+          version: UUID version (1 or 4)
+          count: Number of UUIDs (1-100)
+
+      Returns:
+          UUID(s) as string or list
+      """
+      if version == 1:
+          return generate_uuid_v1(count)
+      elif version == 4:
+          return generate_uuid_v4(count)
+      else:
+          raise ValueError("Only UUID versions 1 and 4 are supported")
+
+  # Usage examples:
+  # Example 1: Generate a single UUID v4
+  # uuid = generate_uuid_v4()
+  # print(f"UUID: {uuid}")
+
+  # Example 2: Generate multiple UUIDs
+  # uuids = generate_uuid_v4(count=5)
+  # for i, uuid in enumerate(uuids, 1):
+  #     print(f"{i}. {uuid}")
+
+  # Example 3: Generate UUID v1 (timestamp-based)
+  # uuid = generate_uuid_v1()
+  # print(f"Timestamp UUID: {uuid}")
+
+  # Example 4: Generate 10 random UUIDs
+  # uuids = generate_uuid(version=4, count=10)
+  # print(f"Generated {len(uuids)} UUIDs")
+
+tags: ["uuid", "identifier", "generation", "api", "free", "development", "testing"]

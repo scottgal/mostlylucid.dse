@@ -1,0 +1,141 @@
+name: "Kroki"
+type: "openapi"
+description: "Creates diagrams from textual descriptions. Supports PlantUML, Mermaid, GraphViz, BlockDiag, and many more. Free API with no authentication required. Returns diagrams as SVG, PNG, or PDF."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "large"
+
+openapi:
+  spec_url: "https://kroki.io/"
+  base_url: "https://kroki.io"
+
+code_template: |
+  # Example: How to use Kroki
+  import requests
+  import base64
+  import zlib
+
+  def encode_diagram(diagram_text):
+      """
+      Encode diagram text for Kroki URL.
+
+      Args:
+          diagram_text: Plain text diagram description
+
+      Returns:
+          URL-safe encoded string
+      """
+      compressed = zlib.compress(diagram_text.encode('utf-8'), 9)
+      encoded = base64.urlsafe_b64encode(compressed).decode('ascii')
+      return encoded
+
+  def generate_diagram(diagram_text, diagram_type="plantuml", output_format="svg"):
+      """
+      Generate diagram from text description.
+
+      Args:
+          diagram_text: Diagram description in the appropriate syntax
+          diagram_type: Type of diagram (plantuml, mermaid, graphviz, blockdiag, etc.)
+          output_format: Output format (svg, png, pdf, jpeg)
+
+      Returns:
+          Diagram content (binary for images)
+
+      Supported diagram types:
+          - plantuml: UML diagrams
+          - mermaid: Flowcharts, sequence diagrams, Gantt charts
+          - graphviz: DOT graph descriptions
+          - blockdiag: Block diagrams
+          - seqdiag: Sequence diagrams
+          - actdiag: Activity diagrams
+          - nwdiag: Network diagrams
+          - c4plantuml: C4 architecture diagrams
+      """
+      encoded = encode_diagram(diagram_text)
+      url = f"https://kroki.io/{diagram_type}/{output_format}/{encoded}"
+
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.content
+
+  def generate_plantuml(diagram_text, output_format="svg"):
+      """
+      Generate PlantUML diagram.
+
+      Args:
+          diagram_text: PlantUML syntax
+          output_format: svg, png, or pdf
+
+      Returns:
+          Diagram content
+      """
+      return generate_diagram(diagram_text, "plantuml", output_format)
+
+  def generate_mermaid(diagram_text, output_format="svg"):
+      """
+      Generate Mermaid diagram.
+
+      Args:
+          diagram_text: Mermaid syntax
+          output_format: svg, png, or pdf
+
+      Returns:
+          Diagram content
+      """
+      return generate_diagram(diagram_text, "mermaid", output_format)
+
+  def save_diagram(diagram_content, filename):
+      """
+      Save diagram to file.
+
+      Args:
+          diagram_content: Binary diagram content
+          filename: Output filename
+      """
+      with open(filename, 'wb') as f:
+          f.write(diagram_content)
+
+  # Usage examples:
+  # Example 1: Generate PlantUML class diagram
+  # plantuml_text = """
+  # @startuml
+  # class User {
+  #   +name: string
+  #   +email: string
+  #   +login()
+  # }
+  # class Admin {
+  #   +permissions: list
+  # }
+  # User <|-- Admin
+  # @enduml
+  # """
+  # diagram = generate_plantuml(plantuml_text)
+  # save_diagram(diagram, "class_diagram.svg")
+
+  # Example 2: Generate Mermaid flowchart
+  # mermaid_text = """
+  # graph TD
+  #     A[Start] --> B{Is it?}
+  #     B -->|Yes| C[OK]
+  #     B -->|No| D[Error]
+  #     C --> E[End]
+  #     D --> E
+  # """
+  # diagram = generate_mermaid(mermaid_text)
+  # save_diagram(diagram, "flowchart.svg")
+
+  # Example 3: Generate GraphViz diagram
+  # graphviz_text = """
+  # digraph G {
+  #     A -> B
+  #     B -> C
+  #     C -> A
+  # }
+  # """
+  # diagram = generate_diagram(graphviz_text, "graphviz")
+  # save_diagram(diagram, "graph.svg")
+
+tags: ["diagrams", "visualization", "plantuml", "mermaid", "graphviz", "api", "free", "development"]

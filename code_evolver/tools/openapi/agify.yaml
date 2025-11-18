@@ -1,0 +1,78 @@
+name: "Agify.io"
+type: "openapi"
+description: "Estimates the age from a first name using statistical data. Free API with no authentication required. Returns age prediction and count (sample size). Useful for data enrichment and demographic analysis."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://api.agify.io/"
+  base_url: "https://api.agify.io"
+
+code_template: |
+  # Example: How to use Agify.io
+  import requests
+
+  def predict_age(name, country_id=None):
+      """
+      Predict age from a first name.
+
+      Args:
+          name: First name to predict age for (string)
+          country_id: Optional two-letter country code to improve accuracy (e.g., 'US', 'GB')
+
+      Returns:
+          Dictionary with 'name', 'age', and 'count' (sample size)
+
+      Response Format:
+          {
+            "name": "michael",
+            "age": 66,
+            "count": 233514
+          }
+      """
+      url = "https://api.agify.io"
+      params = {"name": name}
+
+      if country_id:
+          params["country_id"] = country_id
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def predict_age_batch(names):
+      """
+      Predict ages for multiple names in a single request.
+
+      Args:
+          names: List of names (max 10 per request)
+
+      Returns:
+          List of predictions for each name
+      """
+      url = "https://api.agify.io"
+      params = [("name[]", name) for name in names[:10]]  # Max 10 names
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: Predict age for a single name
+  # result = predict_age("michael")
+  # print(f"Age prediction: {result['age']}, Sample size: {result['count']}")
+
+  # Example 2: Predict with country context
+  # result = predict_age("michael", country_id="US")
+  # print(f"Age prediction for US: {result['age']}")
+
+  # Example 3: Batch prediction
+  # results = predict_age_batch(["michael", "jennifer", "david"])
+  # for r in results:
+  #     print(f"{r['name']}: {r['age']} years")
+
+tags: ["demographics", "age-prediction", "data-enrichment", "api", "free", "development"]

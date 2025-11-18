@@ -1,0 +1,160 @@
+name: "Placeholder Images"
+type: "openapi"
+description: "Generate placeholder images for mockups and testing. Free service with no authentication required. Supports custom sizes, colors, text, and formats. Perfect for UI/UX development and prototyping."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "large"
+
+openapi:
+  spec_url: "https://via.placeholder.com/"
+  base_url: "https://via.placeholder.com"
+
+code_template: |
+  # Example: How to use Placeholder Images
+  import requests
+
+  def generate_placeholder(width, height=None, bgcolor=None, textcolor=None, text=None, format='png'):
+      """
+      Generate placeholder image.
+
+      Args:
+          width: Image width in pixels
+          height: Image height (defaults to width for square)
+          bgcolor: Background color in hex (without #)
+          textcolor: Text color in hex (without #)
+          text: Custom text to display
+          format: Image format (png, jpg, jpeg, gif, webp)
+
+      Returns:
+          Binary image data
+
+      URL Format:
+          https://via.placeholder.com/WIDTHxHEIGHT/BGCOLOR/TEXTCOLOR?text=TEXT
+      """
+      if height is None:
+          height = width
+
+      url = f"https://via.placeholder.com/{width}x{height}"
+
+      # Add colors if specified
+      if bgcolor:
+          url += f"/{bgcolor}"
+          if textcolor:
+              url += f"/{textcolor}"
+
+      # Add format
+      url += f".{format}"
+
+      # Add custom text
+      params = {}
+      if text:
+          params['text'] = text
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.content
+
+  def generate_square_placeholder(size, text=None):
+      """
+      Generate square placeholder image.
+
+      Args:
+          size: Width and height in pixels
+          text: Optional custom text
+
+      Returns:
+          Binary image data
+      """
+      return generate_placeholder(size, size, text=text)
+
+  def generate_colored_placeholder(width, height, bgcolor='cccccc', textcolor='000000', text=None):
+      """
+      Generate colored placeholder image.
+
+      Args:
+          width: Image width
+          height: Image height
+          bgcolor: Background color (hex without #)
+          textcolor: Text color (hex without #)
+          text: Custom text
+
+      Returns:
+          Binary image data
+      """
+      return generate_placeholder(width, height, bgcolor, textcolor, text)
+
+  def save_placeholder(image_data, filename):
+      """
+      Save placeholder image to file.
+
+      Args:
+          image_data: Binary image data
+          filename: Output filename
+      """
+      with open(filename, 'wb') as f:
+          f.write(image_data)
+
+  def get_placeholder_url(width, height=None, bgcolor=None, textcolor=None, text=None):
+      """
+      Get URL for placeholder image (no download).
+
+      Args:
+          width: Image width
+          height: Image height (defaults to width)
+          bgcolor: Background color
+          textcolor: Text color
+          text: Custom text
+
+      Returns:
+          URL string for the placeholder image
+      """
+      if height is None:
+          height = width
+
+      url = f"https://via.placeholder.com/{width}x{height}"
+
+      if bgcolor:
+          url += f"/{bgcolor}"
+          if textcolor:
+              url += f"/{textcolor}"
+
+      if text:
+          url += f"?text={text}"
+
+      return url
+
+  # Usage examples:
+  # Example 1: Generate basic square placeholder
+  # img = generate_square_placeholder(300)
+  # save_placeholder(img, "placeholder_300x300.png")
+
+  # Example 2: Generate rectangle placeholder with custom size
+  # img = generate_placeholder(800, 600)
+  # save_placeholder(img, "placeholder_800x600.png")
+
+  # Example 3: Generate placeholder with custom colors (blue background, white text)
+  # img = generate_colored_placeholder(400, 300, bgcolor='0066cc', textcolor='ffffff')
+  # save_placeholder(img, "blue_placeholder.png")
+
+  # Example 4: Generate placeholder with custom text
+  # img = generate_placeholder(500, 300, text='Product Image')
+  # save_placeholder(img, "product_placeholder.png")
+
+  # Example 5: Generate with all custom options
+  # img = generate_placeholder(
+  #     width=600,
+  #     height=400,
+  #     bgcolor='ff6600',  # Orange
+  #     textcolor='ffffff',  # White
+  #     text='Coming Soon',
+  #     format='jpg'
+  # )
+  # save_placeholder(img, "custom_placeholder.jpg")
+
+  # Example 6: Get URL instead of downloading
+  # url = get_placeholder_url(800, 600, bgcolor='eeeeee', text='Banner')
+  # print(f"Placeholder URL: {url}")
+
+tags: ["placeholder", "images", "mockup", "testing", "api", "free", "development", "ui", "prototyping"]

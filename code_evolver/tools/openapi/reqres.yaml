@@ -1,0 +1,197 @@
+name: "ReqRes"
+type: "openapi"
+description: "Hosted REST-API ready to respond to your AJAX requests. Mock user data API for testing and prototyping. Free API with no authentication required. Returns realistic user data, supports CRUD operations."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+openapi:
+  spec_url: "https://reqres.in/"
+  base_url: "https://reqres.in/api"
+
+code_template: |
+  # Example: How to use ReqRes
+  import requests
+
+  def list_users(page=1):
+      """
+      Get list of users (paginated).
+
+      Args:
+          page: Page number (default: 1)
+
+      Returns:
+          Dictionary with user data and pagination info
+
+      Response Format:
+          {
+            "page": 1,
+            "per_page": 6,
+            "total": 12,
+            "total_pages": 2,
+            "data": [
+              {
+                "id": 1,
+                "email": "george.bluth@reqres.in",
+                "first_name": "George",
+                "last_name": "Bluth",
+                "avatar": "https://..."
+              }
+            ]
+          }
+      """
+      url = "https://reqres.in/api/users"
+      params = {"page": page}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_user(user_id):
+      """
+      Get single user by ID.
+
+      Args:
+          user_id: User ID (1-12)
+
+      Returns:
+          Dictionary with user data
+      """
+      url = f"https://reqres.in/api/users/{user_id}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def create_user(name, job):
+      """
+      Create a new user (simulated).
+
+      Args:
+          name: User name
+          job: User job title
+
+      Returns:
+          Dictionary with created user data including ID and timestamp
+      """
+      url = "https://reqres.in/api/users"
+      data = {
+          "name": name,
+          "job": job
+      }
+
+      response = requests.post(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  def update_user(user_id, name=None, job=None):
+      """
+      Update user (simulated).
+
+      Args:
+          user_id: User ID
+          name: New name (optional)
+          job: New job title (optional)
+
+      Returns:
+          Dictionary with updated user data and timestamp
+      """
+      url = f"https://reqres.in/api/users/{user_id}"
+      data = {}
+
+      if name:
+          data["name"] = name
+      if job:
+          data["job"] = job
+
+      response = requests.put(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  def delete_user(user_id):
+      """
+      Delete user (simulated).
+
+      Args:
+          user_id: User ID
+
+      Returns:
+          True if successful (204 status)
+      """
+      url = f"https://reqres.in/api/users/{user_id}"
+      response = requests.delete(url)
+      response.raise_for_status()
+
+      return response.status_code == 204
+
+  def register_user(email, password):
+      """
+      Register user (simulated).
+
+      Args:
+          email: User email
+          password: User password
+
+      Returns:
+          Dictionary with token
+      """
+      url = "https://reqres.in/api/register"
+      data = {
+          "email": email,
+          "password": password
+      }
+
+      response = requests.post(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  def login_user(email, password):
+      """
+      Login user (simulated).
+
+      Args:
+          email: User email
+          password: User password
+
+      Returns:
+          Dictionary with token
+      """
+      url = "https://reqres.in/api/login"
+      data = {
+          "email": email,
+          "password": password
+      }
+
+      response = requests.post(url, json=data)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: List users
+  # users = list_users(page=1)
+  # for user in users['data']:
+  #     print(f"{user['first_name']} {user['last_name']}: {user['email']}")
+
+  # Example 2: Get specific user
+  # user = get_user(2)
+  # print(f"User: {user['data']['first_name']}")
+
+  # Example 3: Create user
+  # new_user = create_user("John Doe", "Developer")
+  # print(f"Created user {new_user['id']}: {new_user['name']}")
+
+  # Example 4: Update user
+  # updated = update_user(1, name="Jane Doe", job="Senior Developer")
+  # print(f"Updated: {updated}")
+
+  # Example 5: Delete user
+  # deleted = delete_user(1)
+  # print(f"Deleted: {deleted}")
+
+tags: ["mock-api", "testing", "prototyping", "rest", "api", "free", "development", "users"]

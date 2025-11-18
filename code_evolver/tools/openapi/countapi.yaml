@@ -1,0 +1,147 @@
+name: "CountAPI"
+type: "openapi"
+description: "Free and simple counting service. Create counters, increment, decrement, and track values. No authentication required. Great for analytics, visitor tracking, and simple statistics."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://countapi.xyz/"
+  base_url: "https://api.countapi.xyz"
+
+code_template: |
+  # Example: How to use CountAPI
+  import requests
+
+  def create_counter(namespace, key, initial_value=0):
+      """
+      Create a new counter.
+
+      Args:
+          namespace: Namespace for the counter (e.g., domain name)
+          key: Unique key for the counter
+          initial_value: Starting value (default: 0)
+
+      Returns:
+          Dictionary with counter info
+
+      Response Format:
+          {
+            "namespace": "my-namespace",
+            "key": "my-key",
+            "value": 0
+          }
+      """
+      url = f"https://api.countapi.xyz/create"
+      params = {
+          "namespace": namespace,
+          "key": key,
+          "value": initial_value
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def increment_counter(namespace, key, amount=1):
+      """
+      Increment a counter.
+
+      Args:
+          namespace: Namespace for the counter
+          key: Counter key
+          amount: Amount to increment by (default: 1)
+
+      Returns:
+          Dictionary with new counter value
+      """
+      url = f"https://api.countapi.xyz/hit/{namespace}/{key}"
+
+      if amount != 1:
+          url = f"https://api.countapi.xyz/update/{namespace}/{key}"
+          params = {"amount": amount}
+          response = requests.get(url, params=params)
+      else:
+          response = requests.get(url)
+
+      response.raise_for_status()
+      return response.json()
+
+  def get_counter(namespace, key):
+      """
+      Get current counter value without incrementing.
+
+      Args:
+          namespace: Namespace for the counter
+          key: Counter key
+
+      Returns:
+          Dictionary with counter value
+      """
+      url = f"https://api.countapi.xyz/get/{namespace}/{key}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def set_counter(namespace, key, value):
+      """
+      Set counter to a specific value.
+
+      Args:
+          namespace: Namespace for the counter
+          key: Counter key
+          value: New value to set
+
+      Returns:
+          Dictionary with updated counter value
+      """
+      url = f"https://api.countapi.xyz/set/{namespace}/{key}"
+      params = {"value": value}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_stats(namespace, key):
+      """
+      Get counter statistics.
+
+      Args:
+          namespace: Namespace for the counter
+          key: Counter key
+
+      Returns:
+          Dictionary with counter statistics
+      """
+      url = f"https://api.countapi.xyz/info/{namespace}/{key}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: Create a new counter
+  # result = create_counter("my-app", "visitors", initial_value=0)
+  # print(f"Counter created: {result['value']}")
+
+  # Example 2: Increment a counter (hit)
+  # result = increment_counter("my-app", "visitors")
+  # print(f"New count: {result['value']}")
+
+  # Example 3: Get current value
+  # result = get_counter("my-app", "visitors")
+  # print(f"Current count: {result['value']}")
+
+  # Example 4: Set to specific value
+  # result = set_counter("my-app", "visitors", 100)
+  # print(f"Set to: {result['value']}")
+
+  # Example 5: Get statistics
+  # stats = get_stats("my-app", "visitors")
+  # print(f"Stats: {stats}")
+
+tags: ["counting", "analytics", "tracking", "statistics", "api", "free", "development"]
