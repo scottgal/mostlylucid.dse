@@ -225,6 +225,147 @@ class Tool:
             else:
                 self.current_usage[key] = value
 
+    # Optimization weight methods (for auto-optimization)
+    def set_optimization_weight(self, tool_name: str, distance: float, score: float) -> None:
+        """
+        Set optimization weight for a specific tool.
+
+        Args:
+            tool_name: Name of the tool being optimized
+            distance: Distance metric from last optimization
+            score: Optimization score (0-100)
+
+        Example:
+            tool.set_optimization_weight("llm_analyzer", 0.15, 85.5)
+        """
+        from .rag_memory import OptimizationWeight
+        opt_weight = OptimizationWeight(
+            last_optimized_distance=distance,
+            score=score
+        )
+        self.metadata[f"optimization-{tool_name}"] = opt_weight.to_dict()
+
+    def get_optimization_weight(self, tool_name: str) -> Optional[Any]:
+        """
+        Get optimization weight for a specific tool.
+
+        Args:
+            tool_name: Name of the tool
+
+        Returns:
+            OptimizationWeight if found, None otherwise
+        """
+        from .rag_memory import OptimizationWeight
+        key = f"optimization-{tool_name}"
+        if key in self.metadata:
+            return OptimizationWeight.from_dict(self.metadata[key])
+        return None
+
+    def get_all_optimization_weights(self) -> Dict[str, Any]:
+        """
+        Get all optimization weights stored in metadata.
+
+        Returns:
+            Dictionary mapping tool names to OptimizationWeight objects
+        """
+        from .rag_memory import OptimizationWeight
+        weights = {}
+        for key, value in self.metadata.items():
+            if key.startswith("optimization-"):
+                tool_name = key.replace("optimization-", "")
+                weights[tool_name] = OptimizationWeight.from_dict(value)
+        return weights
+
+    # Bug tracking methods (for auto-optimization)
+    def add_bug(
+        self,
+        bug_id: str,
+        embedding: List[float],
+        severity: str = "medium",
+        resolved: bool = False
+    ) -> None:
+        """
+        Add a bug embedding to this tool.
+
+        Args:
+            bug_id: Unique identifier for the bug
+            embedding: Vector embedding of the bug
+            severity: Severity level ("critical", "high", "medium", "low")
+            resolved: Whether the bug is resolved
+
+        Example:
+            tool.add_bug("BUG-123", embedding_vector, severity="high")
+        """
+        from .rag_memory import BugEmbedding
+        if "bugs" not in self.metadata:
+            self.metadata["bugs"] = []
+
+        bug = BugEmbedding(
+            bug_id=bug_id,
+            embedding=embedding,
+            severity=severity,
+            resolved=resolved
+        )
+        self.metadata["bugs"].append(bug.to_dict())
+
+    def get_bugs(self, include_resolved: bool = True) -> List[Any]:
+        """
+        Get all bugs associated with this tool.
+
+        Args:
+            include_resolved: Whether to include resolved bugs
+
+        Returns:
+            List of BugEmbedding objects
+        """
+        from .rag_memory import BugEmbedding
+        if "bugs" not in self.metadata:
+            return []
+
+        bugs = [BugEmbedding.from_dict(bug_dict) for bug_dict in self.metadata["bugs"]]
+
+        if not include_resolved:
+            bugs = [bug for bug in bugs if not bug.resolved]
+
+        return bugs
+
+    def mark_bug_resolved(self, bug_id: str) -> bool:
+        """
+        Mark a bug as resolved.
+
+        Args:
+            bug_id: ID of the bug to mark as resolved
+
+        Returns:
+            True if bug was found and marked, False otherwise
+        """
+        if "bugs" not in self.metadata:
+            return False
+
+        for bug_dict in self.metadata["bugs"]:
+            if bug_dict["bug_id"] == bug_id:
+                bug_dict["resolved"] = True
+                return True
+
+        return False
+
+    def clear_resolved_bugs(self) -> int:
+        """
+        Remove all resolved bugs from metadata.
+
+        Returns:
+            Number of bugs cleared
+        """
+        if "bugs" not in self.metadata:
+            return 0
+
+        original_count = len(self.metadata["bugs"])
+        self.metadata["bugs"] = [
+            bug_dict for bug_dict in self.metadata["bugs"]
+            if not bug_dict.get("resolved", False)
+        ]
+        return original_count - len(self.metadata["bugs"])
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert tool to dictionary (for serialization)."""
         return {
