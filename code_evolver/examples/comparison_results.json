@@ -1,0 +1,34 @@
+{
+  "type": "performance",
+  "item_a": "endpoint_a",
+  "item_b": "endpoint_b",
+  "score": 41.37524072949384,
+  "winner": "endpoint_b",
+  "details": {
+    "endpoint_a": {
+      "mean_ms": 50.73758999933489,
+      "median_ms": 50.743749998218846,
+      "stdev_ms": 0.3180836890805996,
+      "min_ms": 50.23280000023078,
+      "max_ms": 51.08449999534059,
+      "samples": 10,
+      "errors": 0
+    },
+    "endpoint_b": {
+      "mean_ms": 20.9928000025684,
+      "median_ms": 20.923449999827426,
+      "stdev_ms": 0.3431066437039143,
+      "min_ms": 20.48520000244025,
+      "max_ms": 21.800999995321035,
+      "samples": 10,
+      "errors": 0
+    },
+    "relative_performance": {
+      "score": 41.37524072949384,
+      "speedup_ratio": 2.416904366884232,
+      "faster_endpoint": "endpoint_b"
+    }
+  },
+  "summary": "Performance Comparison Results:\n\nEndpoint B is 2.42x faster\n\nEndpoint A: 50.74ms avg (50.74ms median, \u00b10.32ms)\nEndpoint B: 20.99ms avg (20.92ms median, \u00b10.34ms)\n\nRelative Performance Score: 41.4/100\n(0=dead stop, 100=identical, >100=A faster, <100=B faster)",
+  "timestamp": "2025-11-18T22:05:07.982634"
+}

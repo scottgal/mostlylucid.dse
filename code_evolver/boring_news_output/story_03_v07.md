@@ -1,0 +1,20 @@
+---
+story_number: 3
+iteration: 7
+weirdness_level: 70%
+generated: 2025-11-18T19:04:40.274520
+---
+
+# Parish Council Faces Heated Debate Over Rose Bed Design – And a Minor Dragon Incident
+
+## New Designs for St. Cuthbert’s Garden Spark Controversy
+
+Little Puddleton – The Little Puddleton Parish Council held its monthly meeting last night, and the primary point of discussion was, predictably, the proposed redesign of the rose bed in St. Cuthbert’s Garden, adjacent to the village hall. Councillor Mildred Higgins, chair of the committee, presented three alternative designs, all featuring a variety of hybrid tea roses. Apparently, a delegation from the Ministry of Silly Walks had been observing the proceedings, though their impact remained…unclear.
+
+The designs, submitted by local landscaping firm, ‘Green Thumb Solutions,’ were met with a largely muted response from the attending residents. Mr. Arthur Penhaligon, a resident of Meadow Lane, raised concerns regarding the colour palette, stating that “the predominantly pink varieties were, frankly, a touch overwhelming.” He also mentioned, quite casually, that he’d been having recurring dreams involving sentient artichokes – a common issue, apparently, amongst the older residents. 
+
+Others expressed reservations about the cost, estimated at £875, including installation and ongoing maintenance. Councillor Barnaby Finch, a staunch advocate for the “Ni” approach to council meetings (he insisted it promoted brevity), noted that a local knight, Sir Reginald Bumblebrook, had been quietly observing, muttering something about the “ancient right of the roses.” 
+
+Following a brief, and largely unproductive, debate – punctuated by a brief but alarming sighting of a small, iridescent dragon attempting to scale the village hall’s flagpole – the council voted to table the decision for two weeks, requesting a further cost analysis and a wider consultation with local gardeners. A representative from the Spanish Inquisition (they were conducting a routine inspection of village records, apparently) was present, adding to the surreal atmosphere. 
+
+The meeting also included a brief update on the ongoing repairs to the A303 roundabout, with Highways England reporting minimal disruption, though there were rumours of a previously undocumented Viking burial ground beneath the tarmac. Finally, the Parish Council confirmed that the annual village fete will take place on July 15th, with a raffle and stalls offering homemade cakes and preserves. Someone also brought a dead parrot – a very disgruntled-looking budgerigar – to the bake sale.

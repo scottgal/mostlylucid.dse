@@ -1,0 +1,519 @@
+{% extends "base.html" %}
+
+{% block title %}{{ story.headline }} - Older Dailly Gazette{% endblock %}
+
+{% block extra_css %}
+<style>
+    .story-header {
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .story-headline {
+        font-size: 2.5em;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        color: #1a1a1a;
+    }
+
+    .story-meta {
+        font-size: 0.95em;
+        color: #666;
+        font-style: italic;
+    }
+
+    .story-content {
+        font-size: 1.1em;
+        line-height: 1.8;
+        margin-bottom: 40px;
+    }
+
+    .story-content p {
+        margin-bottom: 20px;
+    }
+
+    .fit-my-likes-container {
+        position: sticky;
+        top: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        border-radius: 10px;
+        margin: 30px 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    .fit-my-likes-container h3 {
+        color: white;
+        margin-bottom: 10px;
+        font-size: 1.3em;
+    }
+
+    .fit-my-likes-container p {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.95em;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .fit-button {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.1em;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .fit-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        background: #f0f0f0;
+    }
+
+    .fit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .version-indicator {
+        color: rgba(255,255,255,0.8);
+        font-size: 0.85em;
+        margin-top: 15px;
+        font-style: italic;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #c41e3a;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    #story-display {
+        position: relative;
+    }
+
+    /* Word morphing animation */
+    .word-morph {
+        display: inline-block;
+        animation: morphIn 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    @keyframes morphIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            filter: blur(3px);
+        }
+        50% {
+            opacity: 0.5;
+            filter: blur(1px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+    }
+
+    .word-morph-out {
+        display: inline-block;
+        animation: morphOut 0.4s ease-in forwards;
+    }
+
+    @keyframes morphOut {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(10px) scale(1.05);
+            filter: blur(3px);
+        }
+    }
+
+    /* Headline morphing - more dramatic */
+    .headline-morph {
+        display: inline-block;
+        animation: headlineMorph 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        opacity: 0;
+    }
+
+    @keyframes headlineMorph {
+        0% {
+            opacity: 0;
+            transform: translateX(-30px) rotate(-2deg) scale(0.9);
+            filter: blur(5px);
+        }
+        60% {
+            transform: translateX(5px) rotate(1deg);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0) rotate(0) scale(1);
+            filter: blur(0);
+        }
+    }
+
+    /* Container transition */
+    .story-content {
+        min-height: 400px;
+        position: relative;
+    }
+
+    .morphing-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(102, 126, 234, 0.1), transparent);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 999;
+    }
+
+    .morphing-overlay.active {
+        opacity: 1;
+    }
+
+    /* AI Processing indicator */
+    .ai-indicator {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 30px;
+        font-size: 0.9em;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        pointer-events: none;
+    }
+
+    .ai-indicator.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .ai-indicator::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #4ade80;
+        border-radius: 50%;
+        margin-right: 10px;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+    }
+
+    .ai-indicator .dots {
+        display: inline-block;
+    }
+
+    .ai-indicator .dots::after {
+        content: '';
+        animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+        0%, 20% { content: ''; }
+        40% { content: '.'; }
+        60% { content: '..'; }
+        80%, 100% { content: '...'; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="/" class="back-link">&laquo; Back to News</a>
+
+<!-- AI Processing indicator -->
+<div class="ai-indicator" id="ai-indicator">
+    AI Analyzing<span class="dots"></span>
+</div>
+
+<!-- Morphing overlay for AI effect -->
+<div class="morphing-overlay" id="morphing-overlay"></div>
+
+<div class="fit-my-likes-container">
+    <h3>AI-Powered Personalization</h3>
+    <p>Our advanced AI learns your preferences and adapts the story in real-time!</p>
+    <button id="fit-button" class="fit-button" onclick="fitMyLikes()">
+        Fit My Likes
+    </button>
+    <div class="version-indicator" id="version-info">
+        Personalization Level: <span id="current-version">0</span> / <span id="max-version">{{ story.max_version }}</span>
+    </div>
+</div>
+
+<article id="story-display">
+    <div class="story-header">
+        <h1 class="story-headline" id="story-headline">{{ story.headline }}</h1>
+        <div class="story-meta">
+            By {{ story.byline }} | {{ story.date }}
+        </div>
+    </div>
+
+    <div class="story-content" id="story-content">
+        {{ story.versions[0].content | safe }}
+    </div>
+</article>
+
+<script>
+// Story data embedded from Flask
+const STORY_NUM = "{{ story.story_num }}";
+const MAX_VERSION = {{ story.max_version }};
+
+// Get current version from localStorage
+function getCurrentVersion() {
+    const key = `story-${STORY_NUM}-version`;
+    const saved = localStorage.getItem(key);
+    return saved ? parseInt(saved) : 0;
+}
+
+// Save current version to localStorage
+function saveCurrentVersion(version) {
+    const key = `story-${STORY_NUM}-version`;
+    localStorage.setItem(key, version.toString());
+}
+
+// Update the display
+function updateDisplay(version) {
+    document.getElementById('current-version').textContent = version;
+
+    // Disable button if at max version
+    const button = document.getElementById('fit-button');
+    if (version >= MAX_VERSION) {
+        button.disabled = true;
+        button.textContent = 'Maximum Weirdness Achieved!';
+    }
+}
+
+// Load the saved version on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const currentVersion = getCurrentVersion();
+    if (currentVersion > 0) {
+        loadVersion(currentVersion);
+    }
+    updateDisplay(currentVersion);
+});
+
+// AI "live rewriting" effect
+function wrapWordsInSpans(element) {
+    const text = element.textContent;
+    const words = text.split(/(\s+)/); // Keep whitespace
+    element.innerHTML = '';
+
+    words.forEach(word => {
+        if (word.trim()) {
+            const span = document.createElement('span');
+            span.textContent = word;
+            element.appendChild(span);
+        } else {
+            element.appendChild(document.createTextNode(word));
+        }
+    });
+}
+
+function morphOutElement(element) {
+    return new Promise(resolve => {
+        const spans = element.querySelectorAll('span');
+        if (spans.length === 0) {
+            wrapWordsInSpans(element);
+        }
+
+        const words = element.querySelectorAll('span');
+        words.forEach((word, index) => {
+            setTimeout(() => {
+                word.classList.add('word-morph-out');
+            }, index * 15); // Stagger the animation
+        });
+
+        setTimeout(resolve, words.length * 15 + 400);
+    });
+}
+
+function morphInElement(element, newContent) {
+    return new Promise(resolve => {
+        element.innerHTML = newContent;
+
+        // Wrap words in spans
+        const textNodes = [];
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        while (node = walker.nextNode()) {
+            if (node.textContent.trim()) {
+                textNodes.push(node);
+            }
+        }
+
+        textNodes.forEach(textNode => {
+            const parent = textNode.parentNode;
+            const words = textNode.textContent.split(/(\s+)/);
+            const fragment = document.createDocumentFragment();
+
+            words.forEach(word => {
+                if (word.trim()) {
+                    const span = document.createElement('span');
+                    span.className = 'word-morph';
+                    span.textContent = word;
+                    fragment.appendChild(span);
+                } else {
+                    fragment.appendChild(document.createTextNode(word));
+                }
+            });
+
+            parent.replaceChild(fragment, textNode);
+        });
+
+        // Stagger the morph-in animation
+        const morphWords = element.querySelectorAll('.word-morph');
+        morphWords.forEach((word, index) => {
+            word.style.animationDelay = `${index * 15}ms`;
+        });
+
+        setTimeout(resolve, morphWords.length * 15 + 600);
+    });
+}
+
+function morphHeadline(newHeadline) {
+    return new Promise(resolve => {
+        const headlineEl = document.getElementById('story-headline');
+        const words = headlineEl.textContent.split(' ');
+
+        // Morph out
+        headlineEl.innerHTML = '';
+        words.forEach(word => {
+            const span = document.createElement('span');
+            span.className = 'word-morph-out';
+            span.textContent = word + ' ';
+            headlineEl.appendChild(span);
+        });
+
+        setTimeout(() => {
+            // Morph in new headline
+            const newWords = newHeadline.split(' ');
+            headlineEl.innerHTML = '';
+            newWords.forEach((word, index) => {
+                const span = document.createElement('span');
+                span.className = 'headline-morph';
+                span.style.animationDelay = `${index * 80}ms`;
+                span.textContent = word + ' ';
+                headlineEl.appendChild(span);
+            });
+
+            setTimeout(resolve, newWords.length * 80 + 800);
+        }, 400);
+    });
+}
+
+// Fit My Likes button handler with AI effect
+async function fitMyLikes() {
+    const currentVersion = getCurrentVersion();
+
+    if (currentVersion >= MAX_VERSION) {
+        return;
+    }
+
+    const nextVersion = currentVersion + 1;
+
+    const button = document.getElementById('fit-button');
+    const overlay = document.getElementById('morphing-overlay');
+    const aiIndicator = document.getElementById('ai-indicator');
+    const contentEl = document.getElementById('story-content');
+
+    button.disabled = true;
+    button.textContent = 'AI Personalizing...';
+
+    // Show AI processing effects
+    overlay.classList.add('active');
+    aiIndicator.classList.add('active');
+
+    try {
+        // Fetch the next version (cached static content)
+        const response = await fetch(`/api/story/${STORY_NUM}/version/${nextVersion}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Morph headline first
+            await morphHeadline(data.headline);
+
+            // Then morph content with "AI rewriting" effect
+            await morphOutElement(contentEl);
+            await morphInElement(contentEl, data.content);
+
+            // Save the new version
+            saveCurrentVersion(nextVersion);
+
+            // Update display
+            overlay.classList.remove('active');
+            aiIndicator.classList.remove('active');
+            updateDisplay(nextVersion);
+            button.disabled = false;
+            button.textContent = nextVersion < MAX_VERSION ? 'Fit My Likes' : 'Perfectly Personalized!';
+        } else {
+            console.error('Failed to load version:', data.error);
+            overlay.classList.remove('active');
+            aiIndicator.classList.remove('active');
+            button.disabled = false;
+            button.textContent = 'Fit My Likes';
+        }
+    } catch (error) {
+        console.error('Error loading version:', error);
+        overlay.classList.remove('active');
+        aiIndicator.classList.remove('active');
+        button.disabled = false;
+        button.textContent = 'Fit My Likes';
+    }
+}
+
+// Helper function to load a specific version (for initial load)
+async function loadVersion(version) {
+    if (version === 0) return;
+
+    try {
+        const response = await fetch(`/api/story/${STORY_NUM}/version/${version}`);
+        const data = await response.json();
+
+        if (data.success) {
+            document.getElementById('story-headline').textContent = data.headline;
+            document.getElementById('story-content').innerHTML = data.content;
+        }
+    } catch (error) {
+        console.error('Error loading saved version:', error);
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+**Writer:** a former tabloid writer trying to write serious news
+**Temperature:** 0.920
+**Bin Blues, Blue Jays, and a Curious Collection of Buttons – Little Puddleton Residents Voice Concern Over Overflowing Recycling**
+Little Puddleton – Residents of Elderwood Lane are expressing growing concern over the overflowing recycling bins outside the village hall. Mr. Arthur Finch, a resident of 32 Elderwood Lane, contacted the Parish Council yesterday to report the issue, stating that the bins “have been consistently full for the past three days, attracting unwanted pests.”
+“It’s simply not acceptable,” Mr. Finch commented. “The smell is quite unpleasant, particularly with the recent rain.” 
+Parish Council Clerk, Mrs. Beatrice Higgins, confirmed the issue is being addressed. “We’ve contacted the Waste Management Service and they are scheduled to collect an extra load of recycling this morning. We’ll also be monitoring the situation closely.” 
+Adding a peculiar note, residents have reported an increasing number of blue jays gathering around the overflowing bins, seemingly fascinated by the discarded cardboard. Local ornithologist, Dr. Silas Blackwood, theorizes that the birds are attracted to the unusually high concentration of brightly coloured packaging. 
+“It's a rather unusual behaviour,” Dr. Blackwood noted. “They’ve been observed meticulously sorting through the plastics, though, of course, they aren't actually recycling anything.” 
+Adding to the strangeness, Mrs. Higgins also reported that a collection of mismatched, iridescent buttons – predominantly pearlescent and rose-coloured – had begun appearing amongst the plastic waste. “It’s quite baffling,” she stated. “They seem to multiply overnight. We suspect a mischievous magpie, but the sheer volume is…remarkable.” 
+Parish Council Clerk, Mrs. Higgins, confirmed the issue is being addressed. “We’ve contacted the Waste Management Service and they are scheduled to collect an extra load of recycling this morning. We’ll also be monitoring the situation closely.” 
+Residents are advised to refrain from using the bins until the collection is complete. The Parish Council assures residents that efforts are being made to ensure a smoother collection process moving forward. Further updates will be posted on the Little Puddleton website.
+---

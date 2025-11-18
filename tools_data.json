@@ -1,0 +1,2764 @@
+{
+  "custom": [
+    {
+      "file": "ask_user.yaml",
+      "name": "Ask User",
+      "type": "custom",
+      "description": "Interactive user input tool for CLI workflows. Prompts the user for input when running in interactive mode, otherwise asks the overseer LLM to make decisions. Enables workflows to get feedback and confirmation without blocking non-interactive execution. Supports yes/no questions, text input, and multiple choice.",
+      "tags": [
+        "user-input",
+        "interactive",
+        "confirmation",
+        "prompt",
+        "cli",
+        "decision",
+        "feedback"
+      ]
+    },
+    {
+      "file": "git.yaml",
+      "name": "Git",
+      "type": "custom",
+      "description": "Powerful yet safe Git integration tool. Provides access to git operations with authentication from config.yaml. Supports status, log, diff, clone, fetch, pull, push, branch, checkout, and more. Includes safety checks for destructive operations.",
+      "tags": [
+        "git",
+        "version-control",
+        "vcs",
+        "repository",
+        "source-control",
+        "scm"
+      ]
+    },
+    {
+      "file": "github.yaml",
+      "name": "GitHub",
+      "type": "custom",
+      "description": "GitHub integration tool for PR management, issue tracking, and repository operations. Works with Git tool for complete GitHub workflow. Supports checking PR status, merge state, comments, reviews, and more. Uses authentication from config.yaml.",
+      "tags": [
+        "github",
+        "git",
+        "pr",
+        "pull-request",
+        "issue",
+        "repository",
+        "code-review",
+        "vcs"
+      ]
+    },
+    {
+      "file": "google_factcheck.yaml",
+      "name": "Google Fact Check",
+      "type": "custom",
+      "description": "Google Fact Check Tools API integration for verifying claims and checking facts. Responds to natural language questions like 'can you check if this is true' and returns fact-check data from ClaimReview sources. Uses authentication from config.yaml.",
+      "tags": [
+        "google",
+        "api",
+        "fact-check",
+        "verification",
+        "claims",
+        "truth",
+        "research"
+      ]
+    },
+    {
+      "file": "google_search.yaml",
+      "name": "Google Search",
+      "type": "custom",
+      "description": "Google Custom Search API integration for web searches. Responds to natural language queries like 'search for X', 'find out Y', 'top 10 Z results'. Includes RAG caching to store and reuse previous search results. Uses authentication from config.yaml.",
+      "tags": [
+        "google",
+        "api",
+        "search",
+        "web",
+        "research",
+        "rag-cached",
+        "knowledge"
+      ]
+    },
+    {
+      "file": "http_server.yaml",
+      "name": "HTTP Server",
+      "type": "custom",
+      "description": "HTTP server that allows workflows to serve content via HTTP. Supports both HTML and JSON/API responses. Enable workflows to be exposed as web services or REST APIs. Can register endpoints, handle requests, and return formatted responses.",
+      "tags": [
+        "http",
+        "server",
+        "api",
+        "web",
+        "rest",
+        "endpoint",
+        "service",
+        "html",
+        "json"
+      ]
+    }
+  ],
+  "debug": [
+    {
+      "file": "bugcatcher.yaml",
+      "name": "BugCatcher Exception Monitor",
+      "type": "executable",
+      "description": "Global exception monitoring tool that watches for exceptions and logs them to Loki",
+      "tags": []
+    },
+    {
+      "file": "call_tool_validator.yaml",
+      "name": "call_tool() Usage Validator",
+      "type": "executable",
+      "description": "Validates that call_tool() is used correctly with proper arguments (tool_name, prompt)",
+      "tags": [
+        "python",
+        "validation",
+        "call_tool",
+        "node_runtime",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "dependency_analyzer.yaml",
+      "name": "Dependency Analyzer",
+      "type": "executable",
+      "description": "Analyzes tool dependencies using RAG and metadata for tree shaking. Recursively resolves all required tools, files, and packages to create minimal deployments.",
+      "tags": [
+        "dependencies",
+        "tree-shaking",
+        "optimization",
+        "analysis",
+        "packaging",
+        "deployment"
+      ]
+    },
+    {
+      "file": "internal_test_validator.yaml",
+      "name": "Internal Test Validator",
+      "type": "executable",
+      "description": "Internal tool for validating test outputs. Usage tracking disabled since this is internal tooling.",
+      "tags": [
+        "internal",
+        "testing",
+        "validation",
+        "no-tracking"
+      ]
+    },
+    {
+      "file": "isort_import_checker.yaml",
+      "name": "Isort Import Checker",
+      "type": "executable",
+      "description": "Checks if Python imports are sorted correctly",
+      "tags": [
+        "python",
+        "imports",
+        "style",
+        "organization"
+      ]
+    },
+    {
+      "file": "json_output_validator.yaml",
+      "name": "JSON Output Validator",
+      "type": "executable",
+      "description": "Validates that node code outputs valid JSON using json.dumps() and print()",
+      "tags": [
+        "python",
+        "json",
+        "validation",
+        "output",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "main_function_checker.yaml",
+      "name": "Main Function Checker",
+      "type": "executable",
+      "description": "Validates that node code has a proper main() function and __main__ block",
+      "tags": [
+        "python",
+        "structure",
+        "validation",
+        "main",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "mypy_type_checker.yaml",
+      "name": "MyPy Type Checker",
+      "type": "executable",
+      "description": "Runs mypy type checking on Python code to find type errors before runtime",
+      "tags": [
+        "python",
+        "type-checking",
+        "static-analysis",
+        "types"
+      ]
+    },
+    {
+      "file": "node_runtime_import_validator.yaml",
+      "name": "Node Runtime Import Validator",
+      "type": "executable",
+      "description": "Validates that node_runtime imports come AFTER sys.path.insert() setup to prevent ModuleNotFoundError",
+      "tags": [
+        "python",
+        "imports",
+        "validation",
+        "node_runtime",
+        "static-analysis",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "output_validator.yaml",
+      "name": "Output Validator",
+      "type": "executable",
+      "description": "Validates that every tool produces output (print, return, or file write). For stdin-based tools, ensures JSON output.",
+      "tags": [
+        "python",
+        "output",
+        "validation",
+        "json",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "parse_static_analysis.yaml",
+      "name": "Parse Static Analysis Results",
+      "type": "executable",
+      "description": "Parse and aggregate static analysis results for test data generation and tool optimization",
+      "tags": [
+        "analysis",
+        "static-analysis",
+        "parsing",
+        "quality-metrics",
+        "test-data",
+        "optimization"
+      ]
+    },
+    {
+      "file": "python_syntax_validator.yaml",
+      "name": "Python Syntax Validator",
+      "type": "executable",
+      "description": "Fast syntax check using Python's AST parser - catches syntax errors before expensive LLM tools",
+      "tags": [
+        "python",
+        "syntax",
+        "validation",
+        "static-analysis",
+        "fast"
+      ]
+    },
+    {
+      "file": "run_static_analysis.yaml",
+      "name": "Static Analysis Runner",
+      "type": "executable",
+      "description": "Runs all static validators on generated code and reports results. Can run all validators or specific ones. Supports auto-fix and retry-failed modes.",
+      "tags": [
+        "python",
+        "validation",
+        "static-analysis",
+        "testing",
+        "quality",
+        "comprehensive"
+      ]
+    },
+    {
+      "file": "stdin_usage_validator.yaml",
+      "name": "Stdin Usage Validator",
+      "type": "executable",
+      "description": "Validates that node code properly reads from stdin using json.load(sys.stdin)",
+      "tags": [
+        "python",
+        "validation",
+        "stdin",
+        "input",
+        "static-analysis"
+      ]
+    }
+  ],
+  "executable": [
+    {
+      "file": "adaptive_chunker.yaml",
+      "name": "Adaptive Document Chunker",
+      "type": "executable",
+      "description": "Intelligently chunks documents based on model context windows and summarization tier. Adapts chunk size to fit different model capabilities with overlap for context preservation.",
+      "tags": [
+        "chunking",
+        "document-processing",
+        "summarization",
+        "context-aware",
+        "adaptive"
+      ]
+    },
+    {
+      "file": "api_wrapper_generator.yaml",
+      "name": "API Wrapper Generator",
+      "type": "executable",
+      "description": "Generates a Flask API wrapper script for any tool or workflow, creating REST endpoints for tool invocation",
+      "tags": [
+        "api",
+        "flask",
+        "rest",
+        "wrapper",
+        "code-generation",
+        "web-service"
+      ]
+    },
+    {
+      "file": "autoflake_checker.yaml",
+      "name": "Autoflake Checker",
+      "type": "executable",
+      "description": "Removes unused imports and unused variables from Python code. Deterministic and fast cleanup tool.",
+      "tags": [
+        "python",
+        "cleanup",
+        "imports",
+        "static-analysis",
+        "autoflake",
+        "deterministic",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "bandit_security.yaml",
+      "name": "Bandit Security Scanner",
+      "type": "executable",
+      "description": "Runs bandit security scanner to find common security issues in Python code",
+      "tags": [
+        "python",
+        "security",
+        "vulnerability",
+        "scanning"
+      ]
+    },
+    {
+      "file": "basic_calculator.yaml",
+      "name": "Basic Calculator",
+      "type": "executable",
+      "description": "Fast arithmetic operations (add, subtract, multiply, divide, power, modulo). Direct Python execution - no LLM needed. Use for simple math.",
+      "tags": [
+        "math",
+        "arithmetic",
+        "calculator",
+        "fast",
+        "deterministic"
+      ]
+    },
+    {
+      "file": "behave_test_generator.yaml",
+      "name": "Behave BDD Test Generator",
+      "type": "executable",
+      "description": "Generate Behave BDD tests with step definitions from Gherkin feature files, tool specs, or workflow definitions with plausible test data",
+      "tags": [
+        "testing",
+        "bdd",
+        "behave",
+        "test-generation",
+        "gherkin",
+        "acceptance-testing",
+        "behavior-driven",
+        "characterization"
+      ]
+    },
+    {
+      "file": "black_formatter.yaml",
+      "name": "Black Code Formatter",
+      "type": "executable",
+      "description": "Runs black formatter to check if Python code follows black style (with --check flag)",
+      "tags": [
+        "python",
+        "formatting",
+        "style",
+        "black"
+      ]
+    },
+    {
+      "file": "buffer.yaml",
+      "name": "Buffer",
+      "type": "executable",
+      "description": "Buffers data to smooth fast traffic. Batches items and flushes based on size, time, or manual trigger. Perfect for smoothing rapid usage tracking updates to Qdrant or rate-limiting API calls.",
+      "tags": [
+        "buffer",
+        "batching",
+        "rate-limiting",
+        "smoothing",
+        "traffic-control"
+      ]
+    },
+    {
+      "file": "bugcatcher.yaml",
+      "name": "BugCatcher Exception Monitor",
+      "type": "executable",
+      "description": "Global exception monitoring tool that watches for exceptions and logs them to Loki",
+      "tags": []
+    },
+    {
+      "file": "bulk_data_store.yaml",
+      "name": "Bulk Data Store",
+      "type": "executable",
+      "description": "High-level bulk data storage tool using Postgres for storing detailed logs, bug histories, tool ancestry, performance data, and generated tools. Complements RAG by storing detailed bulk data while RAG handles semantic search.",
+      "tags": [
+        "database",
+        "storage",
+        "bulk-data",
+        "logs",
+        "bugs",
+        "ancestry",
+        "history"
+      ]
+    },
+    {
+      "file": "call_tool_validator.yaml",
+      "name": "call_tool() Usage Validator",
+      "type": "executable",
+      "description": "Validates that call_tool() is used correctly with proper arguments (tool_name, prompt)",
+      "tags": [
+        "python",
+        "validation",
+        "call_tool",
+        "node_runtime",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "check_tool_duplicate.yaml",
+      "name": "Check Tool Duplicate",
+      "type": "executable",
+      "description": "Searches for semantically similar tools to avoid creating duplicates. Prevents tool proliferation by finding existing tools that match the functionality.",
+      "tags": [
+        "deduplication",
+        "tool-search",
+        "semantic-similarity",
+        "meta-programming"
+      ]
+    },
+    {
+      "file": "circular_import_fixer.yaml",
+      "name": "Circular Import Fixer",
+      "type": "executable",
+      "description": "Detects and automatically fixes circular import errors in generated Python code.\n\nCommon pattern fixed:\n- main.py containing \"from main import ...\" (circular import)\n- This happens when the LLM copies test file imports into the main code\n\nUsage:\n  echo '{\"code\": \"<python_code>\", \"filename\": \"main.py\"}' | python circular_import_fixer.py\n\nReturns:\n  - fixed: true/false\n  - removed_imports: list of removed import lines\n  - fixed_code: cleaned code\n  - message: summary of what was fixed\n",
+      "tags": [
+        "fix",
+        "error_handler",
+        "circular_import",
+        "import_error",
+        "code_repair",
+        "auto_fix",
+        "tdd",
+        "code_generation"
+      ]
+    },
+    {
+      "file": "config_file_generator.yaml",
+      "name": "Config File Generator",
+      "type": "executable",
+      "description": "Generates comprehensive config.yaml files with sensible Ollama defaults (gemma3_1b, llama3), detailed documentation, and instructions for changing settings. Supports both Docker and standalone modes.",
+      "tags": [
+        "configuration",
+        "config",
+        "yaml",
+        "ollama",
+        "settings",
+        "documentation"
+      ]
+    },
+    {
+      "file": "connect_signalr.yaml",
+      "name": "Connect SignalR (Natural Language)",
+      "type": "executable",
+      "description": "Simple natural language interface to connect to SignalR hubs. Just say what you want in plain English and it will parse your request, connect to the hub, and automatically create workflows from streaming tasks. Sequential processing - one task at a time.",
+      "tags": [
+        "signalr",
+        "natural-language",
+        "streaming",
+        "realtime",
+        "workflow-generation",
+        "training",
+        "easy"
+      ]
+    },
+    {
+      "file": "content_splitter.yaml",
+      "name": "Content Splitter",
+      "type": "executable",
+      "description": "Splits large content into chunks for progressive summarization.\n\nStrategies:\n- paragraph: Split on paragraph boundaries (default)\n- sentence: Split on sentence boundaries (more granular)\n- fixed: Fixed-size chunks (simple, may break sentences)\n\nRespects max chunk size while maintaining readability.\n",
+      "tags": [
+        "content_processing",
+        "splitting",
+        "chunking",
+        "summarization",
+        "utility"
+      ]
+    },
+    {
+      "file": "conversation_manager.yaml",
+      "name": "conversation_manager",
+      "type": "executable",
+      "description": "Manages intelligent conversations with multi-chat context memory, auto-summarization,\nand semantic search. Provides context-aware conversations that optimize for response\nspeed while maintaining accuracy.\n\nFeatures:\n- Multi-chat context memory (remembers previous conversations)\n- Auto-summarization based on context window size\n- Volatile Qdrant storage for semantic search\n- Related context retrieval from past conversations\n- Performance tracking (response time, tokens, etc.)\n- Intent detection (distinguishes conversation from dialogue generation)\n\nUse this tool for:\n- Starting/ending conversational sessions\n- Managing conversation context\n- Detecting user intent to converse\n- Retrieving related conversation history\n",
+      "tags": [
+        "conversation",
+        "context-memory",
+        "semantic-search",
+        "summarization",
+        "intent-detection",
+        "qdrant"
+      ]
+    },
+    {
+      "file": "create_behave_spec.yaml",
+      "name": "Create Behave Spec",
+      "type": "executable",
+      "description": "Create a Behave BDD specification file for RAG storage and future test generation",
+      "tags": [
+        "testing",
+        "spec-creation",
+        "behave",
+        "bdd",
+        "rag"
+      ]
+    },
+    {
+      "file": "create_locust_spec.yaml",
+      "name": "Create Locust Spec",
+      "type": "executable",
+      "description": "Create a Locust load test specification file for RAG storage and future test generation",
+      "tags": [
+        "testing",
+        "spec-creation",
+        "locust",
+        "performance",
+        "rag"
+      ]
+    },
+    {
+      "file": "cron_deconstructor.yaml",
+      "name": "cron_deconstructor",
+      "type": "executable",
+      "description": "Deconstructs cron expressions into rich structured metadata for semantic embedding.\n\nThis tool analyzes a cron expression and generates detailed metadata including:\n- Human-readable description\n- Frequency classification (daily, weekly, monthly, etc.)\n- Time of day categorization (morning, afternoon, evening, night)\n- Day names (Monday, Tuesday, etc.)\n- Next scheduled run times\n- Semantic tags for RAG embedding\n- Inferred task grouping (reports, backups, monitoring, etc.)\n\nThe structured output is designed to be embedded in RAG storage for better\nsemantic search and grouping of scheduled tasks.\n",
+      "tags": []
+    },
+    {
+      "file": "cron_querier.yaml",
+      "name": "cron_querier",
+      "type": "executable",
+      "description": "Converts natural language queries about scheduled tasks into structured search filters.\n\nThis tool enables intuitive querying of scheduled tasks using plain English instead\nof complex filter syntax. It parses queries to extract:\n- Task groups (reports, backups, monitoring, etc.)\n- Frequency (daily, weekly, hourly, etc.)\n- Time windows (\"next 3 hours\", \"tonight\", \"tomorrow\")\n- Time of day (morning, afternoon, evening, night)\n- Day names (Monday, Tuesday, etc.)\n\nThe structured output can be used directly with the task search system.\n",
+      "tags": []
+    },
+    {
+      "file": "dependency_analyzer.yaml",
+      "name": "Dependency Analyzer",
+      "type": "executable",
+      "description": "Analyzes tool dependencies using RAG and metadata for tree shaking. Recursively resolves all required tools, files, and packages to create minimal deployments.",
+      "tags": [
+        "dependencies",
+        "tree-shaking",
+        "optimization",
+        "analysis",
+        "packaging",
+        "deployment"
+      ]
+    },
+    {
+      "file": "docker_compose_generator.yaml",
+      "name": "Docker Compose Generator",
+      "type": "executable",
+      "description": "Generates docker-compose.yml configuration for containerized tool API wrappers",
+      "tags": [
+        "docker",
+        "docker-compose",
+        "orchestration",
+        "containerization",
+        "devops"
+      ]
+    },
+    {
+      "file": "docker_helper_scripts_generator.yaml",
+      "name": "Docker Helper Scripts Generator",
+      "type": "executable",
+      "description": "Generates helper scripts (build.sh, run.sh, test.sh, stop.sh) for Docker packages",
+      "tags": [
+        "docker",
+        "scripts",
+        "automation",
+        "devops",
+        "helpers"
+      ]
+    },
+    {
+      "file": "document_store.yaml",
+      "name": "Document Store",
+      "type": "executable",
+      "description": "In-memory document store for summarization workflows. Stores and retrieves documents with metadata.",
+      "tags": [
+        "storage",
+        "memory",
+        "document-management",
+        "summarization",
+        "workflow"
+      ]
+    },
+    {
+      "file": "document_workflow.yaml",
+      "name": "Document Workflow",
+      "type": "executable",
+      "description": "Generates comprehensive 'How to Use' documentation for a workflow and saves it to README.txt in the workflow directory. Analyzes the code, detects inputs/outputs, identifies tool calls, and creates detailed documentation with examples, flowcharts, and usage instructions.",
+      "tags": [
+        "documentation",
+        "workflow",
+        "readme",
+        "generator",
+        "automation",
+        "metadata"
+      ]
+    },
+    {
+      "file": "duplicate_style.yaml",
+      "name": "duplicate_style",
+      "type": "executable",
+      "description": "Analyzes writing style from a directory of content and creates a comprehensive\nstyle guide. Uses tiered summarization to efficiently process large amounts of content.\n\nFeatures:\n- Recursive directory scanning with smart file filtering\n- Tiered LLM selection based on content size (gemma2:2b, llama3, mistral-nemo)\n- Context-aware chunking and progressive summarization\n- Incremental style analysis that builds understanding across files\n- Optional review and refinement for higher quality output\n\nUse cases:\n- Extract writing style from documentation to replicate in new docs\n- Analyze code comment style for consistency\n- Create style guides from existing content\n- Understand voice and tone patterns\n",
+      "tags": [
+        "style-analysis",
+        "documentation",
+        "content-analysis",
+        "summarization"
+      ]
+    },
+    {
+      "file": "env_file_generator.yaml",
+      "name": "Environment File Generator",
+      "type": "executable",
+      "description": "Generates .env and .env.example files with complete configuration documentation for Docker containers",
+      "tags": [
+        "environment",
+        "configuration",
+        "docker",
+        "dotenv",
+        "settings"
+      ]
+    },
+    {
+      "file": "evolve_tool.yaml",
+      "name": "Evolve Tool",
+      "type": "executable",
+      "description": "Evolves a failing tool by regenerating it with fixes and mutations. Creates a promoted version for the current workflow.",
+      "tags": [
+        "evolution",
+        "tool-mutation",
+        "code-generation",
+        "self-improvement"
+      ]
+    },
+    {
+      "file": "extract_spec_from_file.yaml",
+      "name": "Extract Spec From File",
+      "type": "executable",
+      "description": "Extracts specifications from text files for overseer planning. Handles large files by summarizing and sectioning.",
+      "tags": [
+        "spec",
+        "file",
+        "extraction",
+        "overseer",
+        "planning"
+      ]
+    },
+    {
+      "file": "extract_text_content.yaml",
+      "name": "Extract Text Content",
+      "type": "executable",
+      "description": "Extracts structured text content from documents. Parses into paragraphs, sentences, and sections. Handles various text formats with comprehensive error handling.",
+      "tags": [
+        "text-extraction",
+        "parsing",
+        "nlp",
+        "summarization",
+        "document-processing"
+      ]
+    },
+    {
+      "file": "fake_data_generator.yaml",
+      "name": "Fake Data Generator",
+      "type": "executable",
+      "description": "Generates realistic fake data using Faker library for API testing and data simulation",
+      "tags": [
+        "testing",
+        "data-generation",
+        "faker",
+        "api-testing",
+        "mock-data"
+      ]
+    },
+    {
+      "file": "filesystem.yaml",
+      "name": "Tool-Scoped Filesystem",
+      "type": "executable",
+      "description": "Isolated filesystem operations for tool-scoped data storage with automatic directory management",
+      "tags": []
+    },
+    {
+      "file": "find_code_fix_pattern.yaml",
+      "name": "Find Code Fix Pattern",
+      "type": "executable",
+      "description": "Pattern Recognizer with RAG Data Store - Searches for similar code errors and suggests proven fixes.\n\nUses a shared RAG-based pattern data store to find code fix patterns that have been successfully\napplied in the past. Returns multiple solutions ranked by usage count (proven effectiveness) and\nsemantic similarity. The data store scope can be configured to search:\n- Only patterns from the current tool\n- Patterns from the current tool and its sub-tools\n- All patterns across the entire tool hierarchy\n",
+      "tags": [
+        "learning",
+        "code-fix",
+        "pattern-search",
+        "error-recovery",
+        "self-improvement",
+        "rag",
+        "data-store",
+        "pattern-recognizer"
+      ]
+    },
+    {
+      "file": "fix_attribute_error.yaml",
+      "name": "fix_attribute_error",
+      "type": "executable",
+      "description": "Detects and fixes Python AttributeError.\n\nHandles:\n- Missing attributes on objects\n- Typos in attribute names\n- Wrong object type\n- None object attribute access\n- Method vs property confusion\n\nUses RAG to learn from past fixes and suggest corrections.\n",
+      "tags": [
+        "fix",
+        "attribute-error",
+        "typo",
+        "none-check",
+        "fuzzy-match",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_indentation_error.yaml",
+      "name": "fix_indentation_error",
+      "type": "executable",
+      "description": "Detects and fixes Python indentation errors.\n\nHandles:\n- Inconsistent indentation (tabs vs spaces)\n- Unexpected indent\n- Expected indent\n- Unindent does not match\n- Mixed indentation styles\n\nAutomatically normalizes indentation to 4 spaces (PEP 8).\n",
+      "tags": [
+        "fix",
+        "indentation",
+        "whitespace",
+        "pep8",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_missing_main_call.yaml",
+      "name": "fix_missing_main_call",
+      "type": "executable",
+      "description": "Detects and fixes missing 'if __name__ == \"__main__\": main()' call.\n\nHandles:\n- Code with main() function but no execution\n- Missing if __name__ guard\n- Code that produces no output due to main() not being called\n\nThis is a critical fix for tools that define main() but never execute it,\nresulting in \"NO OUTPUT WAS PRODUCED\" errors.\n",
+      "tags": [
+        "fix",
+        "main-call",
+        "no-output",
+        "execution",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_missing_pip_packages.yaml",
+      "name": "fix_missing_pip_packages",
+      "type": "executable",
+      "description": "Detects and fixes missing pip package errors (ModuleNotFoundError).\n\nAutomatically maps module names to pip packages (e.g., bs4 \u2192 beautifulsoup4)\nand installs missing dependencies.\n\nFeatures:\n- Detects ModuleNotFoundError from test/execution output\n- Maps common module \u2192 package names (bs4, cv2, PIL, etc.)\n- Automatically installs missing packages\n- Verifies installation succeeded\n- Returns list of installed packages\n\nUse cases:\n- Auto-fix \"No module named 'bs4'\" errors\n- Handle missing dependencies in generated code\n- Ensure all imports are available before running tests\n",
+      "tags": [
+        "fix",
+        "pip",
+        "packages",
+        "dependencies",
+        "import",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_name_error.yaml",
+      "name": "fix_name_error",
+      "type": "executable",
+      "description": "Detects and fixes Python NameError (undefined variables/functions).\n\nHandles:\n- Undefined variables\n- Typos in variable names\n- Missing imports\n- Scope issues\n- Function name typos\n\nUses fuzzy matching and RAG search to suggest corrections.\n",
+      "tags": [
+        "fix",
+        "name-error",
+        "undefined",
+        "typo",
+        "fuzzy-match",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_syntax_error.yaml",
+      "name": "fix_syntax_error",
+      "type": "executable",
+      "description": "Detects and fixes Python syntax errors in code.\n\nUses AST parsing and pattern matching to identify and correct:\n- Missing colons after if/for/while/def/class\n- Mismatched parentheses, brackets, braces\n- Invalid operators or keywords\n- Missing commas in lists/dicts/tuples\n- Incorrect string quotes\n\nStores successful fixes in RAG as CODE_FIX artifacts for future reference.\n",
+      "tags": [
+        "fix",
+        "syntax",
+        "parser",
+        "ast",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "fix_type_error.yaml",
+      "name": "fix_type_error",
+      "type": "executable",
+      "description": "Detects and fixes Python type errors.\n\nHandles:\n- Type mismatches (string vs int, etc.)\n- Unsupported operations between types\n- None type errors\n- Attribute errors on wrong types\n- Iteration over non-iterables\n\nSearches RAG for similar fixes before applying new solutions.\n",
+      "tags": [
+        "fix",
+        "type-error",
+        "type-checking",
+        "auto-fix",
+        "rag-search"
+      ]
+    },
+    {
+      "file": "http_raw_client.yaml",
+      "name": "HTTP Raw Client",
+      "type": "executable",
+      "description": "Raw HTTP client that returns content as string without parsing. Perfect for HTML, text files, binary data, or any non-JSON content.",
+      "tags": [
+        "http",
+        "raw",
+        "html",
+        "scraping",
+        "binary",
+        "text",
+        "client"
+      ]
+    },
+    {
+      "file": "http_rest_client.yaml",
+      "name": "HTTP REST Client",
+      "type": "executable",
+      "description": "Standard REST API client with automatic JSON parsing. Supports GET, POST, PUT, PATCH, DELETE methods with JSON request/response handling.",
+      "tags": [
+        "http",
+        "rest",
+        "api",
+        "json",
+        "web",
+        "client",
+        "request"
+      ]
+    },
+    {
+      "file": "incremental_summarizer.yaml",
+      "name": "Incremental Summarizer",
+      "type": "executable",
+      "description": "Incrementally summarizes documents chunk-by-chunk. Builds summary by feeding previous summary + next chunk to LLM, adapting to different context windows.",
+      "tags": [
+        "summarization",
+        "incremental",
+        "document-processing",
+        "workflow",
+        "orchestration"
+      ]
+    },
+    {
+      "file": "inline_tool.yaml",
+      "name": "Inline Tool",
+      "type": "executable",
+      "description": "Bakes tool code directly into workflow scripts with version tracking. Enables enterprise reproducibility by embedding dependencies with RAG references.",
+      "tags": [
+        "enterprise",
+        "reproducibility",
+        "deployment",
+        "dependency-management"
+      ]
+    },
+    {
+      "file": "internal_test_validator.yaml",
+      "name": "Internal Test Validator",
+      "type": "executable",
+      "description": "Internal tool for validating test outputs. Usage tracking disabled since this is internal tooling.",
+      "tags": [
+        "internal",
+        "testing",
+        "validation",
+        "no-tracking"
+      ]
+    },
+    {
+      "file": "isort_import_checker.yaml",
+      "name": "Isort Import Checker",
+      "type": "executable",
+      "description": "Checks if Python imports are sorted correctly",
+      "tags": [
+        "python",
+        "imports",
+        "style",
+        "organization"
+      ]
+    },
+    {
+      "file": "json_output_validator.yaml",
+      "name": "JSON Output Validator",
+      "type": "executable",
+      "description": "Validates that node code outputs valid JSON using json.dumps() and print()",
+      "tags": [
+        "python",
+        "json",
+        "validation",
+        "output",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "language_detector.yaml",
+      "name": "Language Detector",
+      "type": "executable",
+      "description": "Detects the language of text content using multiple methods: NMT API (fast, accurate), heuristic patterns (fast, moderate accuracy), or LLM fallback (slower, high accuracy). Automatically tries NMT first, then falls back to heuristics or LLM.",
+      "tags": [
+        "language",
+        "detection",
+        "nlp",
+        "i18n",
+        "localization",
+        "nmt",
+        "analysis"
+      ]
+    },
+    {
+      "file": "llmapi_health_check.yaml",
+      "name": "LLMApi Health Check",
+      "type": "executable",
+      "description": "Check if LLMApi test data simulator is running and available",
+      "tags": [
+        "health-check",
+        "llmapi",
+        "testing",
+        "infrastructure"
+      ]
+    },
+    {
+      "file": "load_document.yaml",
+      "name": "Load Document",
+      "type": "executable",
+      "description": "Loads a text document from disk and stores it in the document store for summarization workflows. Extracts metadata and validates content.",
+      "tags": [
+        "file-io",
+        "load",
+        "document-loading",
+        "summarization",
+        "workflow"
+      ]
+    },
+    {
+      "file": "load_from_disk.yaml",
+      "name": "Load from Disk",
+      "type": "executable",
+      "description": "Loads content from any file path on disk. Use for reading specifications, code, documentation, or configuration files. Can read from anywhere on the filesystem (not restricted to ./output/). Useful for self-optimization tasks where the system reads its own code.",
+      "tags": [
+        "file-io",
+        "load",
+        "read",
+        "disk",
+        "input"
+      ]
+    },
+    {
+      "file": "locust_load_tester.yaml",
+      "name": "Locust Load Test Generator",
+      "type": "executable",
+      "description": "Generate and execute Locust performance/load tests from API specs, OpenAPI definitions, or BDD scenarios with plausible test data",
+      "tags": [
+        "testing",
+        "load-testing",
+        "performance",
+        "locust",
+        "api-testing",
+        "stress-testing",
+        "benchmarking",
+        "characterization"
+      ]
+    },
+    {
+      "file": "loki.yaml",
+      "name": "Loki Log Aggregation",
+      "type": "executable",
+      "description": "Manages Grafana Loki instance for log aggregation and monitoring (tool/global scope)",
+      "tags": []
+    },
+    {
+      "file": "main_function_checker.yaml",
+      "name": "Main Function Checker",
+      "type": "executable",
+      "description": "Validates that node code has a proper main() function and __main__ block",
+      "tags": [
+        "python",
+        "structure",
+        "validation",
+        "main",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "mark_tool_failure.yaml",
+      "name": "Mark Tool Failure",
+      "type": "executable",
+      "description": "Records tool failures for specific scenarios, enabling demotion in search rankings and tag refinement. Helps the system learn which tools work where.",
+      "tags": [
+        "failure-tracking",
+        "tool-quality",
+        "demotion",
+        "learning",
+        "internal"
+      ]
+    },
+    {
+      "file": "module_not_found_fixer.yaml",
+      "name": "ModuleNotFoundError Fixer",
+      "type": "executable",
+      "description": "Fixes ModuleNotFoundError by adding sys.path setup before imports.\n\nThis tool has ENCAPSULATED validation:\n- fix() method: Applies the fix to the code\n- validate() method: Validates the fix was actually applied\n\nCommon patterns handled:\n- Adds path setup (sys.path.insert) before imports\n- Removes unused imports that cause the error\n- Validates all changes are actually in the fixed code\n",
+      "tags": [
+        "fix",
+        "error_handler",
+        "module_error",
+        "import_error",
+        "auto_fix",
+        "tdd",
+        "validated"
+      ]
+    },
+    {
+      "file": "mutate_tool.yaml",
+      "name": "Tool Mutator",
+      "type": "executable",
+      "description": "CLI for prompt mutation management. Enables on-demand mutation of LLM tools with overseer consultation. Treats LLM tools like code - enables mutation and specialization for specific use cases.",
+      "tags": [
+        "mutation",
+        "prompt-engineering",
+        "tool-evolution",
+        "specialization",
+        "cli"
+      ]
+    },
+    {
+      "file": "mypy_type_checker.yaml",
+      "name": "MyPy Type Checker",
+      "type": "executable",
+      "description": "Runs mypy type checking on Python code to find type errors before runtime",
+      "tags": [
+        "python",
+        "type-checking",
+        "static-analysis",
+        "types"
+      ]
+    },
+    {
+      "file": "nmt_translate.yaml",
+      "name": "NMT Translator",
+      "type": "executable",
+      "description": "Fast neural machine translation using the NMT service at localhost:8000. Supports many languages. Use format: 'Translate to <language>: <text>' or 'Translate from <src> to <tgt>: <text>'",
+      "tags": [
+        "translation",
+        "nmt",
+        "neural",
+        "languages",
+        "fast",
+        "api"
+      ]
+    },
+    {
+      "file": "node_runtime_import_validator.yaml",
+      "name": "Node Runtime Import Validator",
+      "type": "executable",
+      "description": "Validates that node_runtime imports come AFTER sys.path.insert() setup to prevent ModuleNotFoundError",
+      "tags": [
+        "python",
+        "imports",
+        "validation",
+        "node_runtime",
+        "static-analysis",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "optimize_cluster.yaml",
+      "name": "Optimize Cluster",
+      "type": "executable",
+      "description": "Optimize RAG artifact clusters using iterative self-optimization loop. Can optimize specific workflows, functions, prompts, or entire node types. Supports conversational usage: 'optimize this workflow' or CLI: '/optimize workflow_name'",
+      "tags": []
+    },
+    {
+      "file": "package_recovery_tool.yaml",
+      "name": "Package Recovery Tool",
+      "type": "executable",
+      "description": "Automatically detects missing packages from error messages and installs them. Supports Python packages (via pip) and system commands (via apt). Enables self-healing workflows.",
+      "tags": [
+        "recovery",
+        "dependencies",
+        "error-handling",
+        "self-healing",
+        "package-management",
+        "resilience"
+      ]
+    },
+    {
+      "file": "parse_static_analysis.yaml",
+      "name": "Parse Static Analysis Results",
+      "type": "executable",
+      "description": "Parse and aggregate static analysis results for test data generation and tool optimization",
+      "tags": [
+        "analysis",
+        "static-analysis",
+        "parsing",
+        "quality-metrics",
+        "test-data",
+        "optimization"
+      ]
+    },
+    {
+      "file": "pin_tool_version.yaml",
+      "name": "Pin Tool Version",
+      "type": "executable",
+      "description": "Locks a workflow to specific tool versions. Pinned versions are protected from trimming and can be inlined into workflow scripts for enterprise reproducibility.",
+      "tags": [
+        "enterprise",
+        "version-control",
+        "dependency-management",
+        "workflow"
+      ]
+    },
+    {
+      "file": "pip_install.yaml",
+      "name": "Install Python Package",
+      "type": "executable",
+      "description": "Installs Python packages using pip. Use when code requires external dependencies like requests, numpy, pandas, etc. Can install single packages or multiple packages at once. Supports version specifications (e.g., 'requests>=2.28.0'). Essential for code that imports third-party libraries.",
+      "tags": [
+        "dependencies",
+        "pip",
+        "install",
+        "packages",
+        "requirements",
+        "setup"
+      ]
+    },
+    {
+      "file": "platform_info.yaml",
+      "name": "Platform Information",
+      "type": "executable",
+      "description": "Gathers comprehensive information about the underlying platform including OS, CPU, GPU, memory, disk, processes, and network. Enables decision-making based on platform characteristics like 'when running with low memory' or 'when running on Windows'. Supports multiple detail levels from basic to full.",
+      "tags": [
+        "platform",
+        "system",
+        "info",
+        "monitoring",
+        "cpu",
+        "gpu",
+        "memory",
+        "diagnostic",
+        "conditional"
+      ]
+    },
+    {
+      "file": "postgres_client.yaml",
+      "name": "Postgres Client",
+      "type": "executable",
+      "description": "PostgreSQL database client for executing queries, managing connections, and performing bulk data operations. Provides connection pooling and transaction management.",
+      "tags": [
+        "database",
+        "postgres",
+        "sql",
+        "storage",
+        "data"
+      ]
+    },
+    {
+      "file": "pydocstyle_checker.yaml",
+      "name": "Pydocstyle Docstring Checker",
+      "type": "executable",
+      "description": "Checks docstring style and completeness according to PEP 257",
+      "tags": [
+        "python",
+        "documentation",
+        "docstrings",
+        "pep257"
+      ]
+    },
+    {
+      "file": "pyinstrument_profiler.yaml",
+      "name": "PyInstrument Profiler",
+      "type": "executable",
+      "description": "Performance profiling using PyInstrument - provides detailed call stack analysis, line-level timing, and performance bottleneck identification. Generates text, HTML, and JSON reports for optimization analysis.",
+      "tags": [
+        "python",
+        "profiling",
+        "performance",
+        "optimization",
+        "pyinstrument"
+      ]
+    },
+    {
+      "file": "pynguin_config.yaml",
+      "name": "Pynguin Test Generator",
+      "type": "executable",
+      "description": "Automatically generates unit tests using evolutionary algorithms. Windows-compatible configuration.",
+      "tags": [
+        "testing",
+        "test-generation",
+        "pynguin",
+        "automated",
+        "windows",
+        "python"
+      ]
+    },
+    {
+      "file": "pynguin_test_generator.yaml",
+      "name": "Pynguin Test Generator",
+      "type": "executable",
+      "description": "Fast automated unit test generation using Pynguin's evolutionary algorithm. Generates high-coverage pytest tests automatically from source code.",
+      "tags": [
+        "testing",
+        "test-generation",
+        "unit-tests",
+        "pytest",
+        "coverage",
+        "fast",
+        "automated",
+        "pynguin",
+        "evolutionary",
+        "first-line-defense"
+      ]
+    },
+    {
+      "file": "pytest_coverage.yaml",
+      "name": "Pytest with Coverage",
+      "type": "executable",
+      "description": "Runs pytest with code coverage analysis",
+      "tags": [
+        "python",
+        "testing",
+        "coverage",
+        "pytest"
+      ]
+    },
+    {
+      "file": "pytest_runner.yaml",
+      "name": "Pytest Test Runner",
+      "type": "executable",
+      "description": "Runs pytest unit tests with coverage reporting",
+      "tags": [
+        "python",
+        "testing",
+        "pytest",
+        "unit-tests"
+      ]
+    },
+    {
+      "file": "python_syntax_validator.yaml",
+      "name": "Python Syntax Validator",
+      "type": "executable",
+      "description": "Fast syntax check using Python's AST parser - catches syntax errors before expensive LLM tools",
+      "tags": [
+        "python",
+        "syntax",
+        "validation",
+        "static-analysis",
+        "fast"
+      ]
+    },
+    {
+      "file": "pyupgrade_checker.yaml",
+      "name": "Pyupgrade Checker",
+      "type": "executable",
+      "description": "Automatically upgrades Python syntax for newer versions. Modernizes code with f-strings, type hints, and newer Python features.",
+      "tags": [
+        "python",
+        "modernization",
+        "syntax",
+        "static-analysis",
+        "pyupgrade",
+        "deterministic",
+        "auto-fix"
+      ]
+    },
+    {
+      "file": "radon_complexity.yaml",
+      "name": "Radon Complexity Analyzer",
+      "type": "executable",
+      "description": "Analyzes code complexity metrics (cyclomatic complexity, maintainability index)",
+      "tags": [
+        "python",
+        "complexity",
+        "metrics",
+        "maintainability"
+      ]
+    },
+    {
+      "file": "random_data_generator.yaml",
+      "name": "Random Test Data Generator",
+      "type": "executable",
+      "description": "Generates random test data for workflows based on schemas or natural language descriptions. Context-aware for common fields like email, name, age, translation text, etc. Use this when you need test data to validate workflows.",
+      "tags": [
+        "testing",
+        "data",
+        "random",
+        "generator",
+        "workflow",
+        "validation"
+      ]
+    },
+    {
+      "file": "remove_unused_node_runtime_import.yaml",
+      "name": "Remove Unused node_runtime Import",
+      "type": "executable",
+      "description": "Detects and removes unused 'from node_runtime import call_tool' imports and related\npath setup code when call_tool is not actually used in the code.\n\nThis fixes the common error where generated code imports node_runtime but never calls\nany tools, causing ModuleNotFoundError in tests.\n\nThe tool:\n- Checks if call_tool() is actually called in the code\n- If NOT used, removes:\n  * from node_runtime import call_tool\n  * from pathlib import Path (if only for node_runtime)\n  * sys.path.insert(...) for node_runtime\n  * import logging (if only added by repair system)\n  * logging.basicConfig(...)\n  * logging.debug(...) calls\n  * try/except wrappers added by repair system\n- If used, keeps everything intact\n",
+      "tags": [
+        "code-cleanup",
+        "import",
+        "node_runtime",
+        "unused",
+        "static-analysis",
+        "autofix"
+      ]
+    },
+    {
+      "file": "resilient_tool_call.yaml",
+      "name": "Resilient Tool Call",
+      "type": "executable",
+      "description": "Self-recovering tool execution. Automatically tries alternative tools when one fails, marking failures and learning from them. Fulfills the prompt at all costs.",
+      "tags": [
+        "resilience",
+        "fallback",
+        "auto-recovery",
+        "tool-selection",
+        "internal"
+      ]
+    },
+    {
+      "file": "ruff_checker.yaml",
+      "name": "Ruff Checker",
+      "type": "executable",
+      "description": "Fast Python linter and formatter. Replaces flake8, isort, pyupgrade, and more. Checks code quality and applies safe auto-fixes.",
+      "tags": [
+        "python",
+        "linting",
+        "formatting",
+        "static-analysis",
+        "ruff",
+        "deterministic",
+        "auto-fix",
+        "fast"
+      ]
+    },
+    {
+      "file": "run_static_analysis.yaml",
+      "name": "Static Analysis Runner",
+      "type": "executable",
+      "description": "Runs all static validators on generated code and reports results. Can run all validators or specific ones. Supports auto-fix and retry-failed modes.",
+      "tags": [
+        "python",
+        "validation",
+        "static-analysis",
+        "testing",
+        "quality",
+        "comprehensive"
+      ]
+    },
+    {
+      "file": "save_to_disk.yaml",
+      "name": "Save to Disk",
+      "type": "executable",
+      "description": "Saves content to a file in the tool_content/<datetime>/ directory. For safety and organization, ALL content is saved to timestamped directories under tool_content/. This ensures outputs are organized, safe from overwrites, and easy to find.",
+      "tags": [
+        "file-io",
+        "save",
+        "write",
+        "disk",
+        "output",
+        "storage"
+      ]
+    },
+    {
+      "file": "schedule_task.yaml",
+      "name": "schedule_task",
+      "type": "executable",
+      "description": "Schedule a task to run at specific times using cron expressions or natural language descriptions.\n\nThis tool is IMMUTABLE - scheduled tasks persist across sessions and run automatically\nin the background. Use this for polling events, periodic checks, or recurring operations.\n\nExamples:\n- \"Check for new emails every 5 minutes\"\n- \"Generate report every Sunday at noon\"\n- \"Backup data daily at 2am\"\n\nThe scheduler uses low priority execution to avoid interfering with active workflows.\n",
+      "tags": []
+    },
+    {
+      "file": "selective_file_copier.yaml",
+      "name": "Selective File Copier",
+      "type": "executable",
+      "description": "Copies only required files based on dependency analysis for tree-shaken deployments. Maintains directory structure and creates Python package init files.",
+      "tags": [
+        "file-operations",
+        "tree-shaking",
+        "optimization",
+        "deployment",
+        "packaging"
+      ]
+    },
+    {
+      "file": "signalr_hub_connector.yaml",
+      "name": "SignalR Hub Connector",
+      "type": "executable",
+      "description": "Connects to a SignalR hub to receive streaming task data. Automatically routes received tasks to the workflow generator for training. Supports real-time task processing and automatic workflow creation from hub messages.",
+      "tags": [
+        "signalr",
+        "streaming",
+        "realtime",
+        "integration",
+        "hub",
+        "websocket",
+        "training"
+      ]
+    },
+    {
+      "file": "signalr_llmapi_skill.yaml",
+      "name": "SignalR LLMApi Skill",
+      "type": "executable",
+      "description": "Complete skill for interacting with LLMApi SignalR simulator. Manages contexts, controls streaming, and executes SSE streams. This orchestrates calls to signalr_llmapi_management (planning) and sse_stream (streaming).",
+      "tags": [
+        "signalr",
+        "llmapi",
+        "stream",
+        "skill",
+        "orchestrator",
+        "executable"
+      ]
+    },
+    {
+      "file": "signalr_tool_trigger.yaml",
+      "name": "SignalR Tool Trigger",
+      "type": "executable",
+      "description": "Listens to SignalR endpoint and dynamically triggers tools based on incoming messages. Supports direct tool invocation, workflow generation, and dynamic tool creation from API specs.",
+      "tags": [
+        "signalr",
+        "realtime",
+        "integration",
+        "dynamic",
+        "tool-trigger",
+        "workflow-generation"
+      ]
+    },
+    {
+      "file": "signalr_websocket_stream.yaml",
+      "name": "SignalR WebSocket Stream",
+      "type": "stream_producer",
+      "description": "Connects to a SignalR hub via WebSocket and streams data continuously. Subscribes to a specific hub context/method and yields each message received.",
+      "tags": [
+        "signalr",
+        "websocket",
+        "stream",
+        "real-time",
+        "producer"
+      ]
+    },
+    {
+      "file": "smart_api_parser.yaml",
+      "name": "Smart API Parser",
+      "type": "executable",
+      "description": "Intelligently parses OpenAPI specs, generates realistic test data, and tests all endpoints. Can use Faker or LLM for data generation.",
+      "tags": [
+        "api-testing",
+        "openapi",
+        "swagger",
+        "testing",
+        "data-generation",
+        "integration-testing"
+      ]
+    },
+    {
+      "file": "smart_faker.yaml",
+      "name": "Smart Faker",
+      "type": "executable",
+      "description": "Intelligent fake data generator that accepts plain English, code, JSON schemas, or any LLM-interpretable input. Supports multiple output formats including streaming, arrays, and CSV.",
+      "tags": [
+        "testing",
+        "data-generation",
+        "faker",
+        "llm",
+        "flexible",
+        "smart",
+        "csv",
+        "streaming"
+      ]
+    },
+    {
+      "file": "sse_stream.yaml",
+      "name": "SSE Stream Producer",
+      "type": "stream_producer",
+      "description": "Connects to a Server-Sent Events (SSE) endpoint and streams data continuously. Simpler and more reliable than WebSocket for one-way streaming.",
+      "tags": [
+        "sse",
+        "server-sent-events",
+        "stream",
+        "real-time",
+        "producer",
+        "http"
+      ]
+    },
+    {
+      "file": "standalone_exe_compiler.yaml",
+      "name": "Standalone Executable Compiler",
+      "type": "executable",
+      "description": "Compiles tools/workflows into standalone executables (.exe, .app) using PyInstaller. Generates wrapper script, spec file, and build instructions",
+      "tags": [
+        "compiler",
+        "executable",
+        "pyinstaller",
+        "standalone",
+        "packaging",
+        "distribution"
+      ]
+    },
+    {
+      "file": "stdin_usage_validator.yaml",
+      "name": "Stdin Usage Validator",
+      "type": "executable",
+      "description": "Validates that node code properly reads from stdin using json.load(sys.stdin)",
+      "tags": [
+        "python",
+        "validation",
+        "stdin",
+        "input",
+        "static-analysis"
+      ]
+    },
+    {
+      "file": "store_code_fix_pattern.yaml",
+      "name": "Store Code Fix Pattern",
+      "type": "executable",
+      "description": "Pattern Recognizer with RAG Data Store - Stores code breaks and their fixes as reusable patterns.\n\nStores code fix patterns in a shared RAG-based data store for future retrieval. Each pattern\nincludes the error, broken code, fixed code, and context. Patterns are tagged and embedded\nfor semantic search. The data store scope determines visibility:\n- Store patterns at tool level (tool-specific learning)\n- Store patterns at tool+subtools level (hierarchical learning)\n- Store patterns at hierarchy level (contextual learning)\n- Store patterns globally (universal learning)\n",
+      "tags": [
+        "learning",
+        "code-fix",
+        "pattern-storage",
+        "error-recovery",
+        "self-improvement",
+        "rag",
+        "data-store",
+        "pattern-recognizer"
+      ]
+    },
+    {
+      "file": "stream_processor.yaml",
+      "name": "Stream Processor",
+      "type": "stream_consumer",
+      "description": "Generic stream processor that connects a stream producer to a consumer tool. Handles filtering, transformation, and routing of stream events.",
+      "tags": [
+        "stream",
+        "processor",
+        "consumer",
+        "filter",
+        "transform",
+        "orchestrator"
+      ]
+    },
+    {
+      "file": "style_extractor.yaml",
+      "name": "Style Extractor",
+      "type": "executable",
+      "description": "Extracts comprehensive style information from any source (web pages, files, text) with multi-tier analysis. Analyzes writing style, tone, vocabulary, structure, and formatting patterns to generate detailed JSON profiles. Similar to langextract but for style analysis.",
+      "tags": [
+        "style",
+        "analysis",
+        "extraction",
+        "nlp",
+        "content-analysis",
+        "writing",
+        "language",
+        "web-scraping",
+        "file-processing"
+      ]
+    },
+    {
+      "file": "summarize_document.yaml",
+      "name": "Summarize Document",
+      "type": "executable",
+      "description": "Complete document summarization workflow. Loads document, extracts content, chunks adaptively, and generates incremental summary. Auto-adapts to different model context windows.",
+      "tags": [
+        "summarization",
+        "workflow",
+        "document-processing",
+        "orchestration",
+        "end-to-end"
+      ]
+    },
+    {
+      "file": "text_formatter.yaml",
+      "name": "Text Formatter",
+      "type": "executable",
+      "description": "Fast text formatting operations (uppercase, lowercase, title case, reverse, trim, etc.). Direct Python execution - instant results.",
+      "tags": [
+        "text",
+        "formatting",
+        "string",
+        "fast",
+        "deterministic"
+      ]
+    },
+    {
+      "file": "trim_tool_versions.yaml",
+      "name": "Trim Tool Versions",
+      "type": "executable",
+      "description": "Keeps tools tidy by retaining only recent versions (2-3 back) plus original. Archives or deletes old versions for rollback capability.",
+      "tags": [
+        "maintenance",
+        "version-control",
+        "cleanup",
+        "storage-optimization"
+      ]
+    },
+    {
+      "file": "undefined_name_checker.yaml",
+      "name": "Undefined Name Checker",
+      "type": "executable",
+      "description": "Fast check for undefined variables/imports using flake8 (F821 errors)",
+      "tags": [
+        "python",
+        "validation",
+        "imports",
+        "static-analysis",
+        "undefined"
+      ]
+    },
+    {
+      "file": "unit_converter.yaml",
+      "name": "Unit Converter",
+      "type": "executable",
+      "description": "Fast unit conversions (length, weight, temperature, time). Direct Python execution. Supports common units like meters/feet, kg/lbs, celsius/fahrenheit, etc.",
+      "tags": [
+        "conversion",
+        "units",
+        "measurement",
+        "fast",
+        "deterministic"
+      ]
+    },
+    {
+      "file": "validate_contract.yaml",
+      "name": "Contract Validator",
+      "type": "executable",
+      "description": "Validates generated code against a specified contract.\nReturns compliance report with violations and suggestions.\n\nUse this tool after code generation to ensure the code meets\norganizational standards for logging, structure, libraries, etc.\n",
+      "tags": [
+        "validation",
+        "contracts",
+        "quality",
+        "compliance"
+      ]
+    },
+    {
+      "file": "vulture_deadcode.yaml",
+      "name": "Vulture Dead Code Finder",
+      "type": "executable",
+      "description": "Finds unused code (dead code) in Python projects",
+      "tags": [
+        "python",
+        "dead-code",
+        "optimization",
+        "cleanup"
+      ]
+    },
+    {
+      "file": "workflow_datastore.yaml",
+      "name": "Workflow Datastore",
+      "type": "executable",
+      "description": "Save and retrieve workflow data persistently. Allows workflows to store project schedules, task lists, and other structured data.",
+      "tags": [
+        "workflow",
+        "datastore",
+        "persistence",
+        "storage",
+        "state"
+      ]
+    },
+    {
+      "file": "workflow_diagram.yaml",
+      "name": "Workflow Diagram Generator",
+      "type": "executable",
+      "description": "Generates visual workflow diagrams showing tool flow and decisions.\n\nCreates beautiful Mermaid diagrams or ASCII art showing:\n- Tool dependencies and flow\n- Decision points and conditions\n- Tool types (LLM, executable, workflow)\n- Complete workflow visualization\n\nPerfect for understanding complex workflows at a glance.\n",
+      "tags": [
+        "visualization",
+        "workflow",
+        "diagram",
+        "documentation",
+        "mermaid",
+        "ascii"
+      ]
+    },
+    {
+      "file": "workflow_runner.yaml",
+      "name": "Workflow Runner",
+      "type": "executable",
+      "description": "Generates a combined Python script from a workflow with all dependencies inlined.\nThe goal is to reduce the workflow to JUST the required code with all imports properly resolved.\nAnalyzes workflow steps, extracts tool implementations, and generates a standalone script.\n",
+      "tags": [
+        "workflow",
+        "code-generation",
+        "dependency-resolution",
+        "inline",
+        "standalone"
+      ]
+    },
+    {
+      "file": "write_markdown_doc.yaml",
+      "name": "write_markdown_doc",
+      "type": "executable",
+      "description": "Generates well-formatted markdown documentation with optional style matching.\nUses tiered LLM selection for optimal quality/speed balance.\n\nFeatures:\n- Smart LLM tier selection (gemma2:2b for quick, llama3 for balanced, mistral-nemo for high-quality)\n- Optional style guide matching (works with output from duplicate_style)\n- Review and refinement capability for higher quality\n- Proper markdown formatting with validation\n- Configurable length (short ~500 words, medium ~1500 words, long ~3000 words)\n- Security guardrails (enforces output only to 'output/' directory)\n\nSecurity:\n- All output paths are validated to be under output/ directory\n- Cannot escape with ../ or absolute paths\n- Only .md files allowed\n\nUse cases:\n- Generate documentation matching existing style\n- Create technical articles and guides\n- Write README files and tutorials\n- Generate API documentation\n",
+      "tags": [
+        "documentation",
+        "markdown",
+        "content-generation",
+        "style-matching"
+      ]
+    }
+  ],
+  "fixer": [
+    {
+      "file": "circular_import_fixer.yaml",
+      "name": "Circular Import Fixer",
+      "type": "executable",
+      "description": "Detects and automatically fixes circular import errors in generated Python code.\n\nCommon pattern fixed:\n- main.py containing \"from main import ...\" (circular import)\n- This happens when the LLM copies test file imports into the main code\n\nUsage:\n  echo '{\"code\": \"<python_code>\", \"filename\": \"main.py\"}' | python circular_import_fixer.py\n\nReturns:\n  - fixed: true/false\n  - removed_imports: list of removed import lines\n  - fixed_code: cleaned code\n  - message: summary of what was fixed\n",
+      "tags": [
+        "fix",
+        "error_handler",
+        "circular_import",
+        "import_error",
+        "code_repair",
+        "auto_fix",
+        "tdd",
+        "code_generation"
+      ]
+    },
+    {
+      "file": "find_code_fix_pattern.yaml",
+      "name": "Find Code Fix Pattern",
+      "type": "executable",
+      "description": "Pattern Recognizer with RAG Data Store - Searches for similar code errors and suggests proven fixes.\n\nUses a shared RAG-based pattern data store to find code fix patterns that have been successfully\napplied in the past. Returns multiple solutions ranked by usage count (proven effectiveness) and\nsemantic similarity. The data store scope can be configured to search:\n- Only patterns from the current tool\n- Patterns from the current tool and its sub-tools\n- All patterns across the entire tool hierarchy\n",
+      "tags": [
+        "learning",
+        "code-fix",
+        "pattern-search",
+        "error-recovery",
+        "self-improvement",
+        "rag",
+        "data-store",
+        "pattern-recognizer"
+      ]
+    },
+    {
+      "file": "module_not_found_fixer.yaml",
+      "name": "ModuleNotFoundError Fixer",
+      "type": "executable",
+      "description": "Fixes ModuleNotFoundError by adding sys.path setup before imports.\n\nThis tool has ENCAPSULATED validation:\n- fix() method: Applies the fix to the code\n- validate() method: Validates the fix was actually applied\n\nCommon patterns handled:\n- Adds path setup (sys.path.insert) before imports\n- Removes unused imports that cause the error\n- Validates all changes are actually in the fixed code\n",
+      "tags": [
+        "fix",
+        "error_handler",
+        "module_error",
+        "import_error",
+        "auto_fix",
+        "tdd",
+        "validated"
+      ]
+    },
+    {
+      "file": "store_code_fix_pattern.yaml",
+      "name": "Store Code Fix Pattern",
+      "type": "executable",
+      "description": "Pattern Recognizer with RAG Data Store - Stores code breaks and their fixes as reusable patterns.\n\nStores code fix patterns in a shared RAG-based data store for future retrieval. Each pattern\nincludes the error, broken code, fixed code, and context. Patterns are tagged and embedded\nfor semantic search. The data store scope determines visibility:\n- Store patterns at tool level (tool-specific learning)\n- Store patterns at tool+subtools level (hierarchical learning)\n- Store patterns at hierarchy level (contextual learning)\n- Store patterns globally (universal learning)\n",
+      "tags": [
+        "learning",
+        "code-fix",
+        "pattern-storage",
+        "error-recovery",
+        "self-improvement",
+        "rag",
+        "data-store",
+        "pattern-recognizer"
+      ]
+    }
+  ],
+  "llm": [
+    {
+      "file": "article_analyzer.yaml",
+      "name": "Article Content Analyzer",
+      "type": "llm",
+      "description": "Analyzes blog posts and articles for clarity, technical accuracy, SEO, and readability. Provides improvement suggestions.",
+      "tags": [
+        "analysis",
+        "blog",
+        "seo",
+        "readability",
+        "content",
+        "review"
+      ]
+    },
+    {
+      "file": "code_explainer.yaml",
+      "name": "Code Concept Explainer",
+      "type": "llm",
+      "description": "Explains complex programming concepts in simple terms for blog articles and tutorials. Creates analogies and examples.",
+      "tags": [
+        "explanation",
+        "tutorial",
+        "teaching",
+        "concepts",
+        "examples"
+      ]
+    },
+    {
+      "file": "code_optimizer.yaml",
+      "name": "Code Optimizer",
+      "type": "llm",
+      "description": "Comprehensive code optimization tool with profiling, hierarchical optimization (local \u2192 cloud \u2192 deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle.",
+      "tags": [
+        "optimization",
+        "performance",
+        "refactoring",
+        "testing",
+        "profiling"
+      ]
+    },
+    {
+      "file": "code_reviewer.yaml",
+      "name": "Code Reviewer",
+      "type": "llm",
+      "description": "Reviews code for quality, best practices, and potential issues. Uses base model for thorough analysis.",
+      "tags": [
+        "review",
+        "quality",
+        "code-analysis",
+        "best-practices",
+        "assessment"
+      ]
+    },
+    {
+      "file": "code_translation_validator.yaml",
+      "name": "Code Translation Validator",
+      "type": "llm",
+      "description": "Fast validator that ensures translation hasn't corrupted Python code blocks. Checks that code syntax remains valid, only comments are translated, and no code keywords were mistranslated. Use AFTER translating documents containing code.",
+      "tags": [
+        "code",
+        "validation",
+        "translation",
+        "syntax-check",
+        "fast"
+      ]
+    },
+    {
+      "file": "content_generator.yaml",
+      "name": "Content Generator",
+      "type": "llm",
+      "description": "General purpose content generation for creative writing, articles, stories, and text content. Uses base model for quality output.",
+      "tags": [
+        "content",
+        "generation",
+        "creative",
+        "writing",
+        "articles",
+        "stories"
+      ]
+    },
+    {
+      "file": "content_summarizer.yaml",
+      "name": "Content Summarizer",
+      "type": "workflow",
+      "description": "Smart content summarizer that automatically selects best tier and strategy.\n\nFeatures:\n- Automatic tier selection (fast/medium/large)\n- Progressive summarization for large content\n- Split-summarize-merge for very large docs\n- Mantra-aware (respects speed/quality hints)\n- Caching of results\n\nThis is the HIGH WEIGHT tool that should be used for all summarization.\n",
+      "tags": [
+        "summarization",
+        "smart_routing",
+        "high_priority",
+        "workflow"
+      ]
+    },
+    {
+      "file": "detect_tool_specialization.yaml",
+      "name": "Detect Tool Specialization",
+      "type": "llm",
+      "description": "Detects when an evolved tool has diverged far enough to become a new specialized tool with its own directory. Prevents tools from evolving beyond their original purpose.",
+      "tags": [
+        "tool-evolution",
+        "specialization",
+        "meta-programming",
+        "organization"
+      ]
+    },
+    {
+      "file": "doc_generator.yaml",
+      "name": "Documentation Generator",
+      "type": "llm",
+      "description": "Generates comprehensive code documentation",
+      "tags": [
+        "documentation",
+        "docs"
+      ]
+    },
+    {
+      "file": "dockerfile_generator.yaml",
+      "name": "Dockerfile Generator",
+      "type": "llm",
+      "description": "Generates optimized Dockerfiles for wrapping tools and workflows with best practices including multi-stage builds, security hardening, and layer caching",
+      "tags": [
+        "docker",
+        "dockerfile",
+        "containerization",
+        "devops",
+        "infrastructure",
+        "api-wrapper"
+      ]
+    },
+    {
+      "file": "explainer.yaml",
+      "name": "Explainer",
+      "type": "llm",
+      "description": "Fast AI explainer tool that generates quick, concise descriptions of what's happening in workflows, tools, and system stages. Uses a 1B-class LLM for instant responses. Stage-aware and context-sensitive. Perfect for real-time explanations during tool generation and workflow execution.",
+      "tags": [
+        "explanation",
+        "documentation",
+        "help",
+        "describe",
+        "clarify",
+        "stage-aware",
+        "workflow",
+        "real-time"
+      ]
+    },
+    {
+      "file": "fast_code_generator.yaml",
+      "name": "Fast Code Generator",
+      "type": "llm",
+      "description": "Fast code generation for simple tasks. Best for basic arithmetic, simple functions, straightforward algorithms. NOT suitable for complex logic or multi-step workflows.",
+      "tags": [
+        "fast",
+        "simple",
+        "basic",
+        "code-generation"
+      ]
+    },
+    {
+      "file": "general.yaml",
+      "name": "General Code Generator",
+      "type": "llm",
+      "description": "General purpose code generation for any programming task. Used as fallback when no specialized tool matches. Handles complex logic, multi-step workflows, and sophisticated algorithms.",
+      "tags": [
+        "general",
+        "fallback",
+        "code-generation",
+        "any-task",
+        "complex"
+      ]
+    },
+    {
+      "file": "llm_fake_data_generator.yaml",
+      "name": "LLM Fake Data Generator",
+      "type": "llm",
+      "description": "Uses LLM to generate contextually appropriate fake data based on field names and descriptions. Better for complex, domain-specific data.",
+      "tags": [
+        "llm",
+        "data-generation",
+        "testing",
+        "api-testing",
+        "mock-data",
+        "contextual"
+      ]
+    },
+    {
+      "file": "long_form_writer.yaml",
+      "name": "Long-Form Content Writer",
+      "type": "llm",
+      "description": "Specialized for writing long-form content (novels, books, long articles) using mistral-nemo's massive 128K context window. Best for creative writing, story generation, and content that requires maintaining continuity over many pages. Use with summarizer for ultra-long content.",
+      "tags": [
+        "creative-writing",
+        "novel",
+        "story",
+        "long-form",
+        "article",
+        "book",
+        "large-context"
+      ]
+    },
+    {
+      "file": "model_selector.yaml",
+      "name": "Model and Backend Selector",
+      "type": "llm",
+      "description": "Analyzes natural language requests to select the optimal LLM backend and model combination. Routes requests like 'using the most powerful code llm review this' to the appropriate provider and model (e.g., Anthropic Claude Opus).",
+      "tags": [
+        "routing",
+        "model-selection",
+        "backend-selection",
+        "llm",
+        "intelligent-routing"
+      ]
+    },
+    {
+      "file": "outline_generator.yaml",
+      "name": "Article Outline Generator",
+      "type": "llm",
+      "description": "Creates detailed outlines for technical articles based on topics. Structures content logically.",
+      "tags": [
+        "outline",
+        "structure",
+        "planning",
+        "article",
+        "organization"
+      ]
+    },
+    {
+      "file": "performance_optimizer.yaml",
+      "name": "Performance Optimizer",
+      "type": "llm",
+      "description": "Suggests performance optimizations",
+      "tags": [
+        "performance",
+        "optimization"
+      ]
+    },
+    {
+      "file": "performance_profiler.yaml",
+      "name": "Performance Profiler",
+      "type": "llm",
+      "description": "Analyzes code performance using PyInstrument profiling and provides detailed performance metrics, bottleneck identification, and optimization recommendations. Use this when asked to profile code, find performance issues, or analyze execution time.",
+      "tags": [
+        "performance",
+        "profiling",
+        "optimization",
+        "analysis",
+        "pyinstrument"
+      ]
+    },
+    {
+      "file": "prompt_generator.yaml",
+      "name": "Layered Prompt Generator",
+      "type": "llm",
+      "description": "Generates sophisticated layered prompts with weight adjustment and model selection. Supports conversational model queries and dynamic tool creation. Uses tiered architecture with roles (system, role, context, task, constraints, output, examples).",
+      "tags": [
+        "prompt-engineering",
+        "prompt-generation",
+        "layered",
+        "dynamic",
+        "tool-creation",
+        "model-selection"
+      ]
+    },
+    {
+      "file": "prompt_genericiser.yaml",
+      "name": "Prompt Genericiser",
+      "type": "llm",
+      "description": "Converts specific prompts into generic, reusable tool descriptions. Prevents unnecessary specialization by identifying the underlying generic pattern.",
+      "tags": [
+        "generalization",
+        "deduplication",
+        "pattern-extraction",
+        "meta-programming"
+      ]
+    },
+    {
+      "file": "prompt_mutator.yaml",
+      "name": "Prompt Mutator",
+      "type": "llm",
+      "description": "Mutates LLM tool prompts for specific use cases. Specializes general prompts instead of forcing one prompt to fit all scenarios. Integrates with overseer for intelligent mutation decisions.",
+      "tags": [
+        "mutation",
+        "prompt-engineering",
+        "specialization",
+        "optimization",
+        "evolution"
+      ]
+    },
+    {
+      "file": "proofreader.yaml",
+      "name": "Technical Proofreader",
+      "type": "llm",
+      "description": "Proofreads technical content for grammar, style, consistency, and technical accuracy",
+      "tags": [
+        "proofreading",
+        "grammar",
+        "style",
+        "editing",
+        "quality"
+      ]
+    },
+    {
+      "file": "questions_about_me.yaml",
+      "name": "Questions About Me",
+      "type": "llm",
+      "description": "Answers questions about the current system (memory, CPU, GPU, OS, disk, etc.) by gathering platform information and providing natural language responses. Handles questions like 'what memory do you have?', 'is the GPU busy?', 'what OS am I running?', etc.",
+      "tags": [
+        "system",
+        "platform",
+        "info",
+        "diagnostic",
+        "conversational",
+        "qa",
+        "memory",
+        "cpu",
+        "gpu"
+      ]
+    },
+    {
+      "file": "quick_feedback.yaml",
+      "name": "Quick Feedback Checker",
+      "type": "llm",
+      "description": "Fast proofreading and quick feedback for text. Uses fast model for speed.",
+      "tags": [
+        "spellcheck",
+        "grammar",
+        "quick-feedback",
+        "proofreading",
+        "fast"
+      ]
+    },
+    {
+      "file": "quick_translator.yaml",
+      "name": "Quick Translator",
+      "type": "llm",
+      "description": "Direct translation for words and short phrases. Returns immediate results without code generation. For longer translations (paragraphs, documents), use NMT translator or full translation workflow instead.",
+      "tags": [
+        "translation",
+        "quick",
+        "words",
+        "phrases",
+        "llm"
+      ]
+    },
+    {
+      "file": "rag_cluster_optimizer.yaml",
+      "name": "RAG Cluster Optimizer",
+      "type": "llm",
+      "description": "Iterative self-optimization loop for artifact clusters. Explores variants, generates candidates, validates them through tests and benchmarks, and promotes fitter implementations while preserving lineage. The system learns patterns and converges toward high-fitness implementations over time.",
+      "tags": [
+        "optimization",
+        "rag",
+        "clustering",
+        "self-improvement",
+        "evolution",
+        "fitness",
+        "variants"
+      ]
+    },
+    {
+      "file": "security_auditor.yaml",
+      "name": "Security Auditor",
+      "type": "llm",
+      "description": "Audits code for security vulnerabilities using the most capable model for thorough analysis",
+      "tags": [
+        "security",
+        "audit",
+        "vulnerability",
+        "powerful-model"
+      ]
+    },
+    {
+      "file": "semantic_comparator.yaml",
+      "name": "Semantic Comparator",
+      "type": "llm",
+      "description": "Decides if two prompts have the EXACT same meaning (100% match) or are similar enough for mutation (>50%). Used to prevent inappropriate workflow reuse for creative tasks.",
+      "tags": [
+        "comparison",
+        "semantic",
+        "routing",
+        "cache-decision"
+      ]
+    },
+    {
+      "file": "seo_optimizer.yaml",
+      "name": "SEO Optimizer",
+      "type": "llm",
+      "description": "Optimizes technical content for search engines, suggests keywords, meta descriptions, and structure improvements",
+      "tags": [
+        "seo",
+        "keywords",
+        "optimization",
+        "search",
+        "metadata"
+      ]
+    },
+    {
+      "file": "signalr_connection_parser.yaml",
+      "name": "SignalR Connection Parser",
+      "type": "llm",
+      "description": "Parses natural language requests to connect to SignalR hubs and converts them into proper connection configuration. Extracts hub URL, context/method name, and workflow generation settings from conversational input.",
+      "tags": [
+        "signalr",
+        "parser",
+        "nlp",
+        "configuration",
+        "natural-language"
+      ]
+    },
+    {
+      "file": "signalr_llmapi_management.yaml",
+      "name": "SignalR LLMApi Skill",
+      "type": "llm",
+      "description": "Complete skill for interacting with LLMApi SignalR simulator. Supports context management (create, list, delete), stream control (start/stop), and SSE streaming of API data.",
+      "tags": [
+        "signalr",
+        "llmapi",
+        "stream",
+        "admin",
+        "skill",
+        "management"
+      ]
+    },
+    {
+      "file": "style_extraction_evaluator.yaml",
+      "name": "Style Extraction Evaluator",
+      "type": "llm",
+      "description": "Evaluates the quality and completeness of extracted style profiles. Assesses accuracy, coverage, and usefulness of style analysis results.",
+      "tags": [
+        "evaluation",
+        "quality",
+        "style",
+        "analysis"
+      ]
+    },
+    {
+      "file": "summarizer.yaml",
+      "name": "Content Summarizer",
+      "type": "llm",
+      "description": "Summarizes content concisely while capturing all key points. Uses base model for quality.",
+      "tags": [
+        "summarization",
+        "analysis",
+        "condensing",
+        "key-points"
+      ]
+    },
+    {
+      "file": "summarizer_fast.yaml",
+      "name": "Fast Summarizer",
+      "type": "llm",
+      "description": "Quick content summarization with small, fast model.\n\nUse when:\n- User says \"quickly summarize\"\n- Speed is priority\n- Basic quality is acceptable\n- Content < 8k tokens\n\nModel: gemma2:2b (very fast, 8k context)\n",
+      "tags": [
+        "summarization",
+        "fast",
+        "small_context",
+        "gemma"
+      ]
+    },
+    {
+      "file": "summarizer_large.yaml",
+      "name": "Large Context Summarizer",
+      "type": "llm",
+      "description": "High-quality summarization with large context window.\n\nUse when:\n- User says \"carefully summarize\" or \"thoroughly\"\n- Quality is critical\n- Content 32k-128k tokens\n- Complex documents\n- Books, research papers\n\nModel: mistral-nemo (large, 128k context)\n",
+      "tags": [
+        "summarization",
+        "high_quality",
+        "large_context",
+        "mistral"
+      ]
+    },
+    {
+      "file": "summarizer_medium.yaml",
+      "name": "Medium Summarizer",
+      "type": "llm",
+      "description": "Balanced summarization with medium-sized model.\n\nUse when:\n- Quality matters\n- Reasonable speed needed\n- Content 8k-32k tokens\n- Need comprehensive summary\n\nModel: llama3 (balanced, 32k context)\n",
+      "tags": [
+        "summarization",
+        "balanced",
+        "medium_context",
+        "llama"
+      ]
+    },
+    {
+      "file": "task_to_workflow_router.yaml",
+      "name": "Task to Workflow Router",
+      "type": "llm",
+      "description": "Analyzes streaming task data from SignalR hub and automatically generates appropriate workflow code. Routes tasks to correct workflow patterns based on task type (summarize, generate, translate). Creates executable Python workflows for training the system.",
+      "tags": [
+        "workflow",
+        "generator",
+        "routing",
+        "task",
+        "automation",
+        "training",
+        "llm"
+      ]
+    },
+    {
+      "file": "technical_writer.yaml",
+      "name": "Technical Article Writer",
+      "type": "llm",
+      "description": "Writes comprehensive technical articles, tutorials, and blog posts on software development topics",
+      "tags": [
+        "writing",
+        "technical",
+        "article",
+        "blog",
+        "tutorial",
+        "documentation"
+      ]
+    },
+    {
+      "file": "translation_quality_checker.yaml",
+      "name": "Translation Quality Validator",
+      "type": "llm",
+      "description": "Fast quality check for translation output using gemma3_1b. Detects repeated characters, garbled text, encoding errors, and translation failures. MUST be used after nmt_translator to validate output quality.",
+      "tags": [
+        "translation",
+        "validation",
+        "quality-check",
+        "error-detection",
+        "fast"
+      ]
+    },
+    {
+      "file": "workflow_documenter.yaml",
+      "name": "Workflow Documenter",
+      "type": "llm",
+      "description": "Generates comprehensive 'How to Use' documentation for workflows by analyzing code, inputs, outputs, and purpose. Creates user-friendly guides for front-end generation and API consumption.",
+      "tags": [
+        "documentation",
+        "workflow",
+        "api",
+        "guide",
+        "tutorial",
+        "how-to",
+        "frontend"
+      ]
+    }
+  ],
+  "mcp": [
+    {
+      "file": "_template.yaml",
+      "name": "Your Tool Name MCP",
+      "type": "mcp",
+      "description": "Brief description of what this MCP tool provides",
+      "tags": [
+        "mcp",
+        "mcp-tool"
+      ]
+    },
+    {
+      "file": "fetch_mcp.yaml",
+      "name": "Fetch MCP",
+      "type": "mcp",
+      "description": "Web content fetching and conversion via MCP. Fetches web pages and converts them to markdown for LLM consumption with support for caching and robots.txt compliance.",
+      "tags": [
+        "mcp",
+        "mcp-tool",
+        "web",
+        "http",
+        "fetch",
+        "scraping",
+        "markdown",
+        "html",
+        "internet",
+        "url"
+      ]
+    },
+    {
+      "file": "filesystem_mcp.yaml",
+      "name": "Filesystem MCP",
+      "type": "mcp",
+      "description": "Secure filesystem operations via MCP server. Provides controlled read/write access to specified directories with safety controls.",
+      "tags": [
+        "mcp",
+        "mcp-tool",
+        "filesystem",
+        "files",
+        "storage",
+        "io",
+        "read",
+        "write",
+        "directory"
+      ]
+    },
+    {
+      "file": "github_mcp.yaml",
+      "name": "GitHub MCP",
+      "type": "mcp",
+      "description": "GitHub integration via MCP server. Provides repository operations, issue management, PR handling, and code search through the Model Context Protocol.",
+      "tags": [
+        "mcp",
+        "mcp-tool",
+        "github",
+        "git",
+        "repository",
+        "api",
+        "pr",
+        "pull-request",
+        "issue",
+        "code-hosting",
+        "version-control"
+      ]
+    },
+    {
+      "file": "memory_mcp.yaml",
+      "name": "Memory MCP",
+      "type": "mcp",
+      "description": "Knowledge graph-based persistent memory system via MCP. Stores and retrieves information using entities and relations for contextual knowledge management.",
+      "tags": [
+        "mcp",
+        "mcp-tool",
+        "memory",
+        "knowledge-graph",
+        "storage",
+        "persistence",
+        "entities",
+        "relations",
+        "context"
+      ]
+    },
+    {
+      "file": "time_mcp.yaml",
+      "name": "Time MCP",
+      "type": "mcp",
+      "description": "Time and timezone conversion utilities via MCP. Provides current time, date conversion, and timezone operations for time-aware applications.",
+      "tags": [
+        "mcp",
+        "mcp-tool",
+        "time",
+        "timezone",
+        "date",
+        "datetime",
+        "utilities",
+        "clock"
+      ]
+    }
+  ],
+  "networking": [
+    {
+      "file": "binary_decoder.yaml",
+      "name": "Binary Decoder",
+      "type": "custom",
+      "description": "Decode binary data to Python objects (struct, msgpack, protobuf, json, custom). Supports automatic unpacking of C-style binary data, MessagePack deserialization, and custom binary protocols.",
+      "tags": [
+        "networking",
+        "binary",
+        "decoding",
+        "deserialization",
+        "struct",
+        "msgpack"
+      ]
+    },
+    {
+      "file": "binary_encoder.yaml",
+      "name": "Binary Encoder",
+      "type": "custom",
+      "description": "Encode data to binary formats (struct, msgpack, protobuf, json, custom). Supports C-style struct packing, MessagePack serialization, and custom binary schemas.",
+      "tags": [
+        "networking",
+        "binary",
+        "encoding",
+        "serialization",
+        "struct",
+        "msgpack"
+      ]
+    },
+    {
+      "file": "dns_resolver.yaml",
+      "name": "DNS Resolver",
+      "type": "custom",
+      "description": "DNS resolution and reverse lookup. Forward DNS (hostname to IP), reverse DNS (IP to hostname), with caching for performance.",
+      "tags": [
+        "networking",
+        "dns",
+        "resolution",
+        "lookup",
+        "cache"
+      ]
+    },
+    {
+      "file": "network_diagnostics.yaml",
+      "name": "Network Diagnostics",
+      "type": "custom",
+      "description": "Network diagnostic utilities. TCP ping, latency measurement, and connection testing for network troubleshooting and monitoring.",
+      "tags": [
+        "networking",
+        "diagnostics",
+        "ping",
+        "latency",
+        "monitoring",
+        "troubleshooting"
+      ]
+    },
+    {
+      "file": "port_scanner.yaml",
+      "name": "Port Scanner",
+      "type": "custom",
+      "description": "Network port scanner. TCP/UDP port scanning with parallel execution, service detection, and common port identification. Security testing and network discovery.",
+      "tags": [
+        "networking",
+        "port-scanning",
+        "security",
+        "discovery",
+        "tcp",
+        "udp"
+      ]
+    },
+    {
+      "file": "rate_limiter.yaml",
+      "name": "Rate Limiter",
+      "type": "custom",
+      "description": "Rate limiting for network operations. Supports token bucket, sliding window, and fixed window algorithms to prevent overload and throttle requests.",
+      "tags": [
+        "networking",
+        "rate-limiting",
+        "throttling",
+        "token-bucket",
+        "resilience"
+      ]
+    },
+    {
+      "file": "resilient_caller.yaml",
+      "name": "Resilient Caller",
+      "type": "custom",
+      "description": "Wrap any network call with retry logic and circuit breaker. Provides exponential backoff, jitter, and automatic failure handling for improved reliability.",
+      "tags": [
+        "networking",
+        "resilience",
+        "retry",
+        "circuit-breaker",
+        "reliability"
+      ]
+    },
+    {
+      "file": "string_serializer.yaml",
+      "name": "String Serializer",
+      "type": "custom",
+      "description": "String encoding and decoding utilities. Supports UTF-8, ASCII, Base64, Hex, URL encoding/decoding with configurable error handling.",
+      "tags": [
+        "networking",
+        "string",
+        "encoding",
+        "base64",
+        "hex",
+        "serialization"
+      ]
+    },
+    {
+      "file": "tcp_client.yaml",
+      "name": "TCP Client",
+      "type": "custom",
+      "description": "TCP client for binary protocols. Connect to server, send/receive binary data with automatic encoding/decoding. Supports connection pooling and keepalive.",
+      "tags": [
+        "networking",
+        "tcp",
+        "client",
+        "binary",
+        "connection"
+      ]
+    },
+    {
+      "file": "tcp_server.yaml",
+      "name": "TCP Server",
+      "type": "custom",
+      "description": "TCP server for binary protocols. Multi-threaded connection handling with automatic decoding/encoding. Supports echo, uppercase, and custom handlers.",
+      "tags": [
+        "networking",
+        "tcp",
+        "server",
+        "binary",
+        "connection"
+      ]
+    },
+    {
+      "file": "udp_listener.yaml",
+      "name": "UDP Listener",
+      "type": "custom",
+      "description": "Listen for UDP packets on a specified port. Supports automatic binary decoding, packet filtering, and configurable timeouts. Perfect for receiving sensor data, game packets, or any UDP-based protocol.",
+      "tags": [
+        "networking",
+        "udp",
+        "listener",
+        "binary",
+        "packets",
+        "server"
+      ]
+    },
+    {
+      "file": "udp_sender.yaml",
+      "name": "UDP Sender",
+      "type": "custom",
+      "description": "Send UDP datagrams to a remote host. Supports automatic binary encoding, broadcast, and multicast. Great for sending sensor commands, game state updates, or any UDP protocol.",
+      "tags": [
+        "networking",
+        "udp",
+        "sender",
+        "binary",
+        "broadcast",
+        "multicast"
+      ]
+    }
+  ],
+  "openapi": [
+    {
+      "file": "nmt_translator.yaml",
+      "name": "NMT Translation Service",
+      "type": "openapi",
+      "description": "Neural Machine Translation service for translating text between languages using GET requests. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses ISO 639 two-letter language codes (e.g., 'en', 'es', 'fr', 'de'). Get supported languages from GET /languages endpoint. API returns 'translations' array. Uses OpenAPI spec from http://localhost:8000/openapi.json.",
+      "tags": [
+        "translation",
+        "nmt",
+        "neural",
+        "languages",
+        "openapi",
+        "api"
+      ]
+    }
+  ],
+  "optimization": [
+    {
+      "file": "code_optimizer.yaml",
+      "name": "Code Optimizer",
+      "type": "llm",
+      "description": "Comprehensive code optimization tool with profiling, hierarchical optimization (local \u2192 cloud \u2192 deep), automatic test updating, and version comparison. Handles the complete optimization lifecycle.",
+      "tags": [
+        "optimization",
+        "performance",
+        "refactoring",
+        "testing",
+        "profiling"
+      ]
+    },
+    {
+      "file": "optimize_cluster.yaml",
+      "name": "Optimize Cluster",
+      "type": "executable",
+      "description": "Optimize RAG artifact clusters using iterative self-optimization loop. Can optimize specific workflows, functions, prompts, or entire node types. Supports conversational usage: 'optimize this workflow' or CLI: '/optimize workflow_name'",
+      "tags": []
+    },
+    {
+      "file": "performance_optimizer.yaml",
+      "name": "Performance Optimizer",
+      "type": "llm",
+      "description": "Suggests performance optimizations",
+      "tags": [
+        "performance",
+        "optimization"
+      ]
+    },
+    {
+      "file": "rag_cluster_optimizer.yaml",
+      "name": "RAG Cluster Optimizer",
+      "type": "llm",
+      "description": "Iterative self-optimization loop for artifact clusters. Explores variants, generates candidates, validates them through tests and benchmarks, and promotes fitter implementations while preserving lineage. The system learns patterns and converges toward high-fitness implementations over time.",
+      "tags": [
+        "optimization",
+        "rag",
+        "clustering",
+        "self-improvement",
+        "evolution",
+        "fitness",
+        "variants"
+      ]
+    }
+  ],
+  "perf": [
+    {
+      "file": "behave_test_generator.yaml",
+      "name": "Behave BDD Test Generator",
+      "type": "executable",
+      "description": "Generate Behave BDD tests with step definitions from Gherkin feature files, tool specs, or workflow definitions with plausible test data",
+      "tags": [
+        "testing",
+        "bdd",
+        "behave",
+        "test-generation",
+        "gherkin",
+        "acceptance-testing",
+        "behavior-driven",
+        "characterization"
+      ]
+    },
+    {
+      "file": "comprehensive_tool_profiler.yaml",
+      "name": "Comprehensive Tool Profiler",
+      "type": "executable",
+      "description": "Complete tool profiling orchestrator that combines performance benchmarking,\nstatic analysis, regression evaluation, and RAG metadata updates into a single\nworkflow. This is the master tool for fully profiling a tool after code generation\nor mutation. Tags tools in RAG with performance metrics, static analysis findings\n(complexity, security, correctness), regression evaluation scores, source code,\nand documentation. Prevents false-positive regressions while ensuring quality.\n",
+      "tags": [
+        "profiling",
+        "orchestration",
+        "performance",
+        "static-analysis",
+        "regression",
+        "rag",
+        "workflow",
+        "comprehensive"
+      ]
+    },
+    {
+      "file": "create_behave_spec.yaml",
+      "name": "Create Behave Spec",
+      "type": "executable",
+      "description": "Create a Behave BDD specification file for RAG storage and future test generation",
+      "tags": [
+        "testing",
+        "spec-creation",
+        "behave",
+        "bdd",
+        "rag"
+      ]
+    },
+    {
+      "file": "create_locust_spec.yaml",
+      "name": "Create Locust Spec",
+      "type": "executable",
+      "description": "Create a Locust load test specification file for RAG storage and future test generation",
+      "tags": [
+        "testing",
+        "spec-creation",
+        "locust",
+        "performance",
+        "rag"
+      ]
+    },
+    {
+      "file": "locust_load_tester.yaml",
+      "name": "Locust Load Test Generator",
+      "type": "executable",
+      "description": "Generate and execute Locust performance/load tests from API specs, OpenAPI definitions, or BDD scenarios with plausible test data",
+      "tags": [
+        "testing",
+        "load-testing",
+        "performance",
+        "locust",
+        "api-testing",
+        "stress-testing",
+        "benchmarking",
+        "characterization"
+      ]
+    },
+    {
+      "file": "performance_profiler.yaml",
+      "name": "Performance Profiler",
+      "type": "llm",
+      "description": "Analyzes code performance using PyInstrument profiling and provides detailed performance metrics, bottleneck identification, and optimization recommendations. Use this when asked to profile code, find performance issues, or analyze execution time.",
+      "tags": [
+        "performance",
+        "profiling",
+        "optimization",
+        "analysis",
+        "pyinstrument"
+      ]
+    },
+    {
+      "file": "performance_regression_evaluator.yaml",
+      "name": "Performance Regression Evaluator",
+      "type": "executable",
+      "description": "Intelligent performance regression assessment using 4B-class LLM evaluation.\nPrevents being locked into never accepting performance regressions by evaluating\nwhether performance changes are reasonable given requirement changes. Combines\nstatic analysis (complexity, security, correctness) with LLM reasoning to score\nregression acceptability from 0 (reject) to 100 (accept). Essential for avoiding\nfalse positives in performance regression testing during feature evolution.\n",
+      "tags": [
+        "performance",
+        "regression",
+        "evaluation",
+        "llm",
+        "static-analysis",
+        "optimization",
+        "testing",
+        "quality"
+      ]
+    },
+    {
+      "file": "pyinstrument_profiler.yaml",
+      "name": "PyInstrument Profiler",
+      "type": "executable",
+      "description": "Performance profiling using PyInstrument - provides detailed call stack analysis, line-level timing, and performance bottleneck identification. Generates text, HTML, and JSON reports for optimization analysis.",
+      "tags": [
+        "python",
+        "profiling",
+        "performance",
+        "optimization",
+        "pyinstrument"
+      ]
+    },
+    {
+      "file": "timeit_optimizer.yaml",
+      "name": "Timeit Performance Optimizer",
+      "type": "executable",
+      "description": "Advanced performance testing and optimization tool. Generates self-contained benchmark scripts,\nruns performance tests with automatic mocking of tool calls and external services,\ncollects execution time and memory metrics across 3 runs, and updates RAG metadata\nwith performance data. Essential for optimization workflows and performance tracking.\n",
+      "tags": [
+        "performance",
+        "optimization",
+        "benchmarking",
+        "timeit",
+        "profiling",
+        "testing",
+        "metrics",
+        "memory",
+        "mocking"
+      ]
+    }
+  ]
+}

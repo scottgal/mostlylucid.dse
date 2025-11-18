@@ -1,0 +1,59 @@
+# Grafana Datasources Configuration
+# Auto-provisioned data sources for Code Evolver
+
+apiVersion: 1
+
+datasources:
+  # Loki - Logs
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: false
+    version: 1
+    editable: true
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - datasourceUid: jaeger
+          matcherRegex: "trace_id=(\\w+)"
+          name: TraceID
+          url: "$${__value.raw}"
+
+  # Prometheus - Metrics
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    version: 1
+    editable: true
+    jsonData:
+      timeInterval: "15s"
+
+  # Jaeger - Traces
+  - name: Jaeger
+    type: jaeger
+    uid: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    isDefault: false
+    version: 1
+    editable: true
+
+  # PostgreSQL - Application database
+  - name: PostgreSQL
+    type: postgres
+    url: postgres:5432
+    database: code_evolver
+    user: codeevolver
+    secureJsonData:
+      password: devpassword
+    jsonData:
+      sslmode: disable
+      maxOpenConns: 10
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+    isDefault: false
+    version: 1
+    editable: true

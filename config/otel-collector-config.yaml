@@ -1,0 +1,137 @@
+# OpenTelemetry Collector Configuration
+# Central telemetry pipeline for traces, metrics, and logs
+
+receivers:
+  # OTLP receiver (gRPC and HTTP)
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # Prometheus receiver (scrape metrics)
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otel-collector'
+          scrape_interval: 30s
+          static_configs:
+            - targets: ['localhost:8888']  # Collector's own metrics
+
+processors:
+  # Batch processor - reduces number of outgoing connections
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+  # Memory limiter - prevents OOM
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+
+  # Resource processor - add/modify resource attributes
+  resource:
+    attributes:
+      - key: service.name
+        value: code-evolver
+        action: upsert
+      - key: deployment.environment
+        value: development
+        action: upsert
+
+  # Attributes processor - modify span/metric attributes
+  attributes:
+    actions:
+      - key: environment
+        value: development
+        action: insert
+
+exporters:
+  # Loki exporter for logs
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+    labels:
+      attributes:
+        service.name: "service_name"
+        deployment.environment: "environment"
+    # Format logs as JSON
+    format: json
+
+  # Prometheus exporter for metrics
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: code_evolver
+    const_labels:
+      environment: development
+
+  # Prometheus remote write (alternative)
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
+    tls:
+      insecure: true
+
+  # Jaeger exporter for traces (if using Jaeger)
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # OTLP exporter (for forwarding to other collectors)
+  otlp:
+    endpoint: localhost:4317
+    tls:
+      insecure: true
+
+  # Logging exporter for debugging
+  logging:
+    verbosity: detailed
+    sampling_initial: 5
+    sampling_thereafter: 200
+
+  # File exporter for local storage
+  file:
+    path: /var/log/otel/telemetry.json
+
+extensions:
+  # Health check extension
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+  # pprof extension for profiling
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+  # zpages extension for debugging
+  zpages:
+    endpoint: 0.0.0.0:55679
+
+service:
+  extensions: [health_check, pprof, zpages]
+
+  pipelines:
+    # Traces pipeline
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource, attributes]
+      exporters: [logging, jaeger]  # Add other exporters as needed
+
+    # Metrics pipeline
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [memory_limiter, batch, resource]
+      exporters: [logging, prometheus, prometheusremotewrite]
+
+    # Logs pipeline
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource, attributes]
+      exporters: [logging, loki]
+
+  # Telemetry for the collector itself
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      level: detailed
+      address: 0.0.0.0:8888

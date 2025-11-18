@@ -1,0 +1,88 @@
+# OpenTelemetry Telemetry Configuration
+# Replaces tool_perf_limits.yaml with industry-standard observability
+
+telemetry:
+  # Global settings
+  enabled: true
+  service_name: "code-evolver"
+  environment: "development"  # development, staging, production
+
+  # Distributed Tracing Configuration
+  traces_enabled: true
+  traces_exporter: "otlp"  # Options: otlp, console, jaeger, zipkin
+  traces_endpoint: "http://localhost:4318/v1/traces"  # OTLP HTTP endpoint
+  traces_protocol: "http"  # http or grpc
+  traces_sample_rate: 1.0  # 0.0 to 1.0 (1.0 = sample everything)
+
+  # Metrics Configuration
+  metrics_enabled: true
+  metrics_exporter: "otlp"  # Options: otlp, console, prometheus
+  metrics_endpoint: "http://localhost:4318/v1/metrics"  # OTLP HTTP endpoint
+  metrics_protocol: "http"  # http or grpc
+  metrics_export_interval_ms: 30000  # Export every 30 seconds
+
+  # Loki Logging Configuration
+  loki_enabled: true
+  loki_url: "http://localhost:3100/loki/api/v1/push"
+  loki_labels:
+    application: "code-evolver"
+    environment: "development"
+    service: "tool-execution"
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+  # Drift Detection Configuration
+  drift_detection_enabled: true
+  drift_threshold: 0.15  # 15% deviation triggers alert
+  drift_window_size: 100  # Number of samples for baseline calculation
+
+  # Performance Thresholds (for anomaly detection)
+  thresholds:
+    # Tool-specific duration thresholds (in milliseconds)
+    llm_generate: 5000  # LLM calls should complete within 5s
+    code_execution: 10000  # Code execution within 10s
+    rag_query: 1000  # RAG queries within 1s
+    default: 3000  # Default threshold for unknown tools
+
+# Alternative Exporter Configurations
+# Uncomment and configure as needed
+
+# Jaeger Configuration (for traces)
+# telemetry:
+#   traces_exporter: "jaeger"
+#   traces_endpoint: "http://localhost:14268/api/traces"
+
+# Zipkin Configuration (for traces)
+# telemetry:
+#   traces_exporter: "zipkin"
+#   traces_endpoint: "http://localhost:9411/api/v2/spans"
+
+# Prometheus Configuration (for metrics)
+# telemetry:
+#   metrics_exporter: "prometheus"
+#   metrics_endpoint: "http://localhost:9090"
+
+# Grafana Cloud Configuration (OTLP)
+# telemetry:
+#   traces_endpoint: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1/traces"
+#   metrics_endpoint: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp/v1/metrics"
+#   loki_url: "https://logs-prod-us-central1.grafana.net/loki/api/v1/push"
+
+# Honeycomb Configuration (OTLP)
+# telemetry:
+#   traces_endpoint: "https://api.honeycomb.io/v1/traces"
+#   metrics_endpoint: "https://api.honeycomb.io/v1/metrics"
+
+# New Relic Configuration (OTLP)
+# telemetry:
+#   traces_endpoint: "https://otlp.nr-data.net/v1/traces"
+#   metrics_endpoint: "https://otlp.nr-data.net/v1/metrics"
+
+# Datadog Configuration (OTLP)
+# telemetry:
+#   traces_endpoint: "http://localhost:4318/v1/traces"  # Datadog Agent
+#   metrics_endpoint: "http://localhost:4318/v1/metrics"
+
+# AWS X-Ray Configuration (via OTLP Collector)
+# telemetry:
+#   traces_endpoint: "http://localhost:4318/v1/traces"  # X-Ray Collector
+#   metrics_endpoint: "http://localhost:4318/v1/metrics"

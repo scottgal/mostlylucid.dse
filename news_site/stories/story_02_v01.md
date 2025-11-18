@@ -1,0 +1,8 @@
+**Writer:** a poetic writer who finds beauty in everyday moments
+**Temperature:** 0.904
+**New Bench Honored Former Councillor in Little Puddleton – And a Collection of Perfectly Organized Stones**
+LITTLE PUDDLETON – A modest ceremony took place yesterday afternoon at the village green to formally dedicate a new memorial bench in memory of Arthur Penhaligon, former Little Puddleton Parish Councillor. The bench, a standard oak design sourced from Miller’s Timber Merchants, was officially unveiled by Reverend Davies, who delivered a brief, and frankly rather predictable, address on Mr. Penhaligon’s “quiet dedication” and “service to the community.” 
+Approximately twenty residents, mostly retirees and members of the Little Puddleton Gardening Club, attended. Mrs. Higgins, a regular visitor to the green, commented that the bench “should be right.” 
+Mr. Penhaligon, who served on the council for twenty years before stepping down last autumn, was described as “a reliable sort.” The bench is now situated near the rose bed, where, according to sources, Mrs. Penhaligon intends to spend most of her afternoons. However, and this is where things took an unexpected turn, a meticulously arranged collection of precisely 37 smooth river stones now sits beneath the bench, each one painstakingly polished and aligned in a spiral pattern. 
+No one seems to know where they came from, but local folklore suggests they were a favoured pastime of Mr. Penhaligon’s – a secret ritual he practiced every Tuesday at precisely 3:17 pm. No further events are planned.
+---

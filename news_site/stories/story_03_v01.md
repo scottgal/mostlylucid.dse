@@ -1,0 +1,8 @@
+**Writer:** an eccentric columnist with a quirky writing style
+**Temperature:** 0.947
+**Little Puddleton Library Receives Book Donation… and a Surprisingly Detailed Map of Imaginary Creatures**
+Little Puddleton, Somerset – The Little Puddleton Village Library received a welcome boost this week with a donation of over 150 books from local resident, Mr. Arthur Finch. Mr. Finch, a retired accountant, stated he’d been “clearing out some old reading material” and felt the library – a vital resource for the community – would appreciate it. 
+“It’s a lovely little place,” Mr. Finch commented. “I always enjoyed reading as a boy, and I thought these might be useful for the children.” Alongside the books, however, Mr. Finch presented a meticulously drawn, full-scale map charting the territories of “The Whispering Woods,” a realm populated entirely by fantastical beasts. 
+Library staff, headed by Mrs. Penelope Higgins, expressed their gratitude. “We’re absolutely delighted,” she said. “The books are a fantastic addition to our collection, particularly a range of classic children’s stories. And, well, this… this is certainly… unique. We’re hoping this will encourage more young people to visit us – perhaps to consult the map!” 
+The donated books are currently being catalogued and the map is undergoing initial assessment by the village’s resident historian, Mr. Barnaby Crumb. The library is open Tuesday to Saturday, 10am to 4pm. Mrs. Higgins added, with a thoughtful frown, “We’re hoping the creatures depicted on the map might inspire some particularly inventive story-telling sessions.”
+---

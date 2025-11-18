@@ -1,0 +1,51 @@
+# Prometheus Configuration
+# Metrics collection and storage for Code Evolver
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'code-evolver'
+    environment: 'development'
+
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Load rules once and periodically evaluate them
+# rule_files:
+#   - "alert_rules.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # OpenTelemetry Collector metrics
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8889']
+    metrics_path: '/metrics'
+
+  # Code Evolver application metrics (if exposing Prometheus endpoint)
+  - job_name: 'code-evolver'
+    static_configs:
+      - targets: ['host.docker.internal:8000']  # Adjust port as needed
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # PostgreSQL exporter (if using)
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+
+  # Qdrant metrics
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+    metrics_path: '/metrics'

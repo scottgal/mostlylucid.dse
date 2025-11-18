@@ -1,0 +1,41 @@
+# OpenTelemetry and Observability Dependencies
+# Install with: pip install -r requirements-telemetry.txt
+
+# Core OpenTelemetry
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-instrumentation==0.42b0
+
+# OTLP Exporters
+opentelemetry-exporter-otlp-proto-grpc==1.21.0
+opentelemetry-exporter-otlp-proto-http==1.21.0
+
+# Prometheus exporter
+opentelemetry-exporter-prometheus==0.42b0
+
+# Jaeger exporter (optional)
+opentelemetry-exporter-jaeger==1.21.0
+
+# Loki logging handler
+python-logging-loki==0.3.1
+
+# Data processing
+numpy==1.24.3
+scipy==1.11.4
+
+# Configuration
+pyyaml==6.0.1
+
+# Database clients (optional, for drift detector storage)
+psycopg2-binary==2.9.9
+asyncpg==0.29.0
+
+# Async support
+aiohttp==3.9.1
+
+# Monitoring helpers
+psutil==5.9.6  # For system metrics
+
+# Development/testing
+pytest==7.4.3
+pytest-asyncio==0.21.1

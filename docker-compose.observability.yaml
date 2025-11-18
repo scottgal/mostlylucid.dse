@@ -1,0 +1,179 @@
+version: '3.8'
+
+# Complete observability stack for Code Evolver
+# Services: PostgreSQL, Qdrant, Loki, Grafana, OpenTelemetry Collector, Prometheus
+
+services:
+  # PostgreSQL - Primary database
+  postgres:
+    image: postgres:16-alpine
+    container_name: code-evolver-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-code_evolver}
+      POSTGRES_USER: ${POSTGRES_USER:-codeevolver}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-codeevolver}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # Qdrant - Vector database for embeddings
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: code-evolver-qdrant
+    ports:
+      - "${QDRANT_HTTP_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+      QDRANT__SERVICE__HTTP_PORT: 6333
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # Loki - Log aggregation
+  loki:
+    image: grafana/loki:2.9.3
+    container_name: code-evolver-loki
+    ports:
+      - "${LOKI_PORT:-3100}:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./config/loki-config.yaml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3100/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # Prometheus - Metrics storage
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: code-evolver-prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # OpenTelemetry Collector - Telemetry pipeline
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: code-evolver-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      # OTLP receivers
+      - "${OTEL_GRPC_PORT:-4317}:4317"   # OTLP gRPC
+      - "${OTEL_HTTP_PORT:-4318}:4318"   # OTLP HTTP
+      # Prometheus exporter
+      - "${OTEL_METRICS_PORT:-8889}:8889"
+      # Health check
+      - "${OTEL_HEALTH_PORT:-13133}:13133"
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    depends_on:
+      - loki
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:13133"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # Grafana - Visualization and dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: code-evolver-grafana
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: false
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3000}
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - loki
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+
+  # Jaeger - Distributed tracing (optional, alternative to Grafana Tempo)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: code-evolver-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "${JAEGER_UI_PORT:-16686}:16686"      # Jaeger UI
+      - "${JAEGER_OLTP_GRPC:-4317}:4317"      # OTLP gRPC
+      - "${JAEGER_OLTP_HTTP:-4318}:4318"      # OTLP HTTP
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:16686"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - code-evolver-network
+    profiles:
+      - jaeger  # Only start if --profile jaeger is specified
+
+volumes:
+  postgres_data:
+    driver: local
+  qdrant_data:
+    driver: local
+  loki_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  code-evolver-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

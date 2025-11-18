@@ -17,7 +17,13 @@
       "Bash(done)",
       "WebFetch(domain:localhost)",
       "Bash(chmod:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(ollama list:*)",
+      "Bash(taskkill:*)",
+      "Bash(nul)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)",
+      "Bash(tools_data.json)"
     ],
     "deny": [],
     "ask": []
