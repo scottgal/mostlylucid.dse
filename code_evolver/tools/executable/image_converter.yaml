@@ -1,0 +1,396 @@
+tool_id: "image_converter"
+version: "1.0.0"
+name: "Image Converter"
+description: "Comprehensive image format converter supporting PNG, JPEG, GIF, BMP, TIFF, WEBP, and more. Load from paths, convert formats, resize, and save to disk for workflow integration."
+category: "media"
+type: "executable"
+
+metadata:
+  tags:
+    - "image"
+    - "conversion"
+    - "media"
+    - "graphics"
+    - "format"
+    - "resize"
+  author: "mostlylucid DiSE"
+  license: "MIT"
+  status: "stable"
+
+purpose: |
+  Image Converter provides comprehensive image format conversion capabilities:
+  - Load images from file paths
+  - Convert between multiple formats (PNG, JPEG, GIF, BMP, TIFF, WEBP, ICO, etc.)
+  - Resize images with aspect ratio control
+  - Extract image metadata (dimensions, format, mode)
+  - Save images to disk with quality control
+  - Base64 encoding/decoding for data transfer between tools
+  - Workflow integration for image processing pipelines
+
+  Perfect for automating image processing tasks, format standardization,
+  and building image manipulation workflows.
+
+capabilities:
+  - "Load images from file paths"
+  - "Convert between 10+ image formats"
+  - "Resize images with aspect ratio preservation"
+  - "Extract image metadata and information"
+  - "Save images to disk with quality settings"
+  - "Base64 encoding for data transfer"
+  - "JPEG/WEBP quality control"
+  - "PNG optimization"
+  - "Automatic format detection"
+  - "Transparency handling (RGBA to RGB conversion)"
+  - "Batch conversion support"
+
+inputs:
+  - name: "operation"
+    type: "string"
+    description: "Operation to perform"
+    required: true
+    enum:
+      - "load"       # Load image from path
+      - "convert"    # Convert image format
+      - "save"       # Save image to path
+      - "info"       # Get image information
+      - "resize"     # Resize image
+
+  - name: "path"
+    type: "string"
+    description: "Input file path (for load operation)"
+    required: false
+    example: "/path/to/image.png"
+
+  - name: "image_data"
+    type: "string"
+    description: "Base64 encoded image data (for convert/save/info/resize)"
+    required: false
+
+  - name: "from_format"
+    type: "string"
+    description: "Source format (optional, auto-detected)"
+    required: false
+    example: "png"
+
+  - name: "to_format"
+    type: "string"
+    description: "Target format for conversion"
+    required: false
+    enum: ["png", "jpeg", "jpg", "gif", "bmp", "tiff", "webp", "ico", "ppm"]
+    example: "jpeg"
+
+  - name: "output_path"
+    type: "string"
+    description: "Output file path (for save operation)"
+    required: false
+    example: "/path/to/output.jpg"
+
+  - name: "quality"
+    type: "integer"
+    description: "Image quality (1-100, for JPEG/WEBP)"
+    required: false
+    default: 95
+    min: 1
+    max: 100
+
+  - name: "width"
+    type: "integer"
+    description: "Target width for resize (pixels)"
+    required: false
+    example: 800
+
+  - name: "height"
+    type: "integer"
+    description: "Target height for resize (pixels)"
+    required: false
+    example: 600
+
+  - name: "resize"
+    type: "array"
+    description: "Resize dimensions [width, height] for convert operation"
+    required: false
+    example: [800, 600]
+
+  - name: "maintain_aspect"
+    type: "boolean"
+    description: "Maintain aspect ratio when resizing"
+    required: false
+    default: true
+
+  - name: "create_dirs"
+    type: "boolean"
+    description: "Create parent directories when saving"
+    required: false
+    default: true
+
+  - name: "format"
+    type: "string"
+    description: "Output format override (for save/resize operations)"
+    required: false
+
+outputs:
+  - name: "status"
+    type: "string"
+    description: "Operation status (success/error)"
+
+  - name: "message"
+    type: "string"
+    description: "Human-readable status message"
+
+  - name: "image_data"
+    type: "string"
+    description: "Base64 encoded image data (for load/convert/resize)"
+
+  - name: "format"
+    type: "string"
+    description: "Image format"
+
+  - name: "width"
+    type: "integer"
+    description: "Image width in pixels"
+
+  - name: "height"
+    type: "integer"
+    description: "Image height in pixels"
+
+  - name: "mode"
+    type: "string"
+    description: "Image mode (RGB, RGBA, L, etc.)"
+
+  - name: "size_bytes"
+    type: "integer"
+    description: "Image size in bytes"
+
+  - name: "path"
+    type: "string"
+    description: "File path (for save operation)"
+
+  - name: "original_size"
+    type: "array"
+    description: "Original dimensions [width, height]"
+
+  - name: "new_size"
+    type: "array"
+    description: "New dimensions [width, height]"
+
+execution:
+  language: "python"
+  entry_point: "tools/executable/image_converter.py"
+  timeout_ms: 30000
+  memory_limit_mb: 512
+
+dependencies:
+  python_packages:
+    - "Pillow>=10.0.0"
+
+integration:
+  auto_install: false
+  install_on: "on_demand"
+
+usage_example: |
+  # Load image from path
+  {
+    "operation": "load",
+    "path": "/images/photo.png"
+  }
+  # Returns: image_data (base64), format, width, height, mode
+
+  # Convert PNG to JPEG
+  {
+    "operation": "convert",
+    "image_data": "<base64_data>",
+    "from_format": "png",
+    "to_format": "jpeg",
+    "quality": 90
+  }
+
+  # Convert and resize
+  {
+    "operation": "convert",
+    "image_data": "<base64_data>",
+    "to_format": "webp",
+    "resize": [800, 600],
+    "maintain_aspect": true,
+    "quality": 85
+  }
+
+  # Save image to disk
+  {
+    "operation": "save",
+    "image_data": "<base64_data>",
+    "output_path": "/output/converted.jpg",
+    "quality": 95,
+    "create_dirs": true
+  }
+
+  # Get image information
+  {
+    "operation": "info",
+    "image_data": "<base64_data>"
+  }
+  # Returns: width, height, mode, format, size
+
+  # Resize image
+  {
+    "operation": "resize",
+    "image_data": "<base64_data>",
+    "width": 1920,
+    "height": 1080,
+    "maintain_aspect": true,
+    "quality": 95
+  }
+
+supported_formats: |
+  Input/Output Formats:
+  - PNG (.png) - Portable Network Graphics (lossless, transparency)
+  - JPEG (.jpg, .jpeg) - Joint Photographic Experts Group (lossy)
+  - GIF (.gif) - Graphics Interchange Format (animation, limited colors)
+  - BMP (.bmp) - Bitmap (uncompressed)
+  - TIFF (.tiff, .tif) - Tagged Image File Format (lossless)
+  - WEBP (.webp) - Modern web format (lossy/lossless)
+  - ICO (.ico) - Icon format
+  - PPM (.ppm) - Portable Pixmap
+  - PGM (.pgm) - Portable Graymap
+  - PBM (.pbm) - Portable Bitmap
+  - PCX (.pcx) - PC Paintbrush
+
+best_practices:
+  - "Use PNG for images with transparency"
+  - "Use JPEG for photos (quality 85-95 recommended)"
+  - "Use WEBP for modern web applications (smaller file size)"
+  - "Maintain aspect ratio to avoid distortion"
+  - "Set quality 90-95 for high-quality images"
+  - "Set quality 75-85 for web optimization"
+  - "Use resize operation for thumbnails"
+  - "Load once, convert multiple times for batch processing"
+
+examples:
+  - name: "Web Optimization Pipeline"
+    description: "Convert and resize images for web use"
+    usage: |
+      # Step 1: Load source image
+      {"operation": "load", "path": "/uploads/photo.png"}
+
+      # Step 2: Convert to WebP with resize
+      {"operation": "convert", "image_data": "<base64>",
+       "to_format": "webp", "resize": [1920, 1080],
+       "maintain_aspect": true, "quality": 85}
+
+      # Step 3: Save optimized image
+      {"operation": "save", "image_data": "<base64>",
+       "output_path": "/web/optimized.webp"}
+
+  - name: "Thumbnail Generation"
+    description: "Create multiple thumbnail sizes"
+    usage: |
+      # Load original
+      {"operation": "load", "path": "/photos/original.jpg"}
+
+      # Create small thumbnail (200x200)
+      {"operation": "resize", "image_data": "<base64>",
+       "width": 200, "height": 200, "maintain_aspect": true}
+
+      # Create medium thumbnail (400x400)
+      {"operation": "resize", "image_data": "<base64>",
+       "width": 400, "height": 400, "maintain_aspect": true}
+
+      # Save thumbnails
+      {"operation": "save", "image_data": "<base64>",
+       "output_path": "/thumbnails/small.jpg"}
+
+  - name: "Format Standardization"
+    description: "Convert all images to standard format"
+    usage: |
+      # Load image (any format)
+      {"operation": "load", "path": "/mixed/image.bmp"}
+
+      # Convert to PNG
+      {"operation": "convert", "image_data": "<base64>",
+       "to_format": "png"}
+
+      # Save standardized image
+      {"operation": "save", "image_data": "<base64>",
+       "output_path": "/standard/image.png"}
+
+  - name: "Image Metadata Extraction"
+    description: "Extract dimensions and format information"
+    usage: |
+      # Load and get info in one step
+      {"operation": "load", "path": "/images/photo.jpg"}
+      # Returns: width, height, format, mode, size_bytes
+
+      # Or get info from existing data
+      {"operation": "info", "image_data": "<base64>"}
+
+workflow_integration: |
+  The Image Converter is designed for workflow integration:
+
+  1. **Load Step**: Load images from file paths
+     - Returns base64 data for use in subsequent steps
+     - Extracts metadata automatically
+
+  2. **Processing Steps**: Convert, resize, or analyze
+     - Use base64 data from previous steps
+     - Chain multiple operations
+
+  3. **Save Step**: Write results to disk
+     - Specify output path and format
+     - Automatic directory creation
+
+  Example Workflow:
+  ```json
+  {
+    "steps": [
+      {"tool": "image_converter", "operation": "load", "path": "input.png"},
+      {"tool": "image_converter", "operation": "resize", "width": 800},
+      {"tool": "image_converter", "operation": "convert", "to_format": "jpeg"},
+      {"tool": "image_converter", "operation": "save", "output_path": "output.jpg"}
+    ]
+  }
+  ```
+
+troubleshooting:
+  - issue: "Pillow library not found"
+    solution: "Run: pip install Pillow"
+
+  - issue: "File not found error"
+    solution: "Check file path is correct and file exists"
+
+  - issue: "Unsupported format error"
+    solution: "Check format is in supported list, use lowercase format names"
+
+  - issue: "JPEG doesn't support transparency"
+    solution: "Tool automatically converts RGBA to RGB with white background"
+
+  - issue: "Image too large / memory error"
+    solution: "Resize image first, or increase memory_limit_mb in config"
+
+  - issue: "Quality setting has no effect"
+    solution: "Quality only applies to JPEG and WEBP formats"
+
+  - issue: "Aspect ratio not maintained"
+    solution: "Set maintain_aspect: true in request"
+
+related_tools:
+  - "filesystem"
+  - "workflow_runner"
+  - "buffer"
+
+notes: |
+  The Image Converter tool provides comprehensive image processing capabilities
+  with workflow integration:
+
+  - **Format Support**: 10+ image formats including modern formats like WebP
+  - **Quality Control**: Configurable quality settings for lossy formats
+  - **Resizing**: Maintain aspect ratio or specify exact dimensions
+  - **Data Transfer**: Base64 encoding for seamless tool-to-tool data flow
+  - **Metadata**: Extract dimensions, format, and mode information
+  - **Optimization**: Automatic optimization for PNG, JPEG, and WebP
+  - **Transparency**: Smart handling of alpha channels
+
+  Use in workflows to build powerful image processing pipelines for:
+  - Web optimization (resize + convert to WebP)
+  - Thumbnail generation (multiple sizes)
+  - Format standardization (convert all to PNG/JPEG)
+  - Batch processing (loop through images)
+  - Image analysis (extract metadata)
