@@ -2062,7 +2062,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # NOTE: This is ONLY for routing hints - the original description is ALWAYS
         # passed to overseer and code generators. task_evaluation just helps us
         # choose the right tier/model, not replace the original instruction.
-        log_panel.log("> Evaluating task type...", style="dim cyan")
+        if self._should_show_debug():
+            log_panel.log("> Evaluating task type...", style="dim cyan")
         task_evaluation = self.task_evaluator.evaluate_task_type(description)
 
         # Check if input appears accidental
@@ -2076,9 +2077,10 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
         # Show task categorization with complexity
         console.print(f"[cyan]> Task type: {task_evaluation['task_type'].value}[/cyan]")
-        if 'complexity' in task_evaluation:
-            log_panel.log(f"> Complexity: {task_evaluation['complexity']}")
-        log_panel.log(f"> Routing: {task_evaluation['recommended_tier']}")
+        if self._should_show_debug():
+            if 'complexity' in task_evaluation:
+                log_panel.log(f"> Complexity: {task_evaluation['complexity']}")
+            log_panel.log(f"> Routing: {task_evaluation['recommended_tier']}")
 
         # CRITICAL: If task requires content LLM, ensure we don't over-optimize
         if task_evaluation['requires_content_llm']:
@@ -9805,6 +9807,9 @@ Return ONLY the Python test code, no explanations."""
 
         while True:
             try:
+                # Clear log panel from previous commands to prevent old messages from lingering
+                log_panel.clear()
+
                 # Suppress log panel output during user input to avoid cursor stealing
                 log_panel.suppress_output = True
 
