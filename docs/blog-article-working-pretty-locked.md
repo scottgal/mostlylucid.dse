@@ -1,4 +1,4 @@
-# Get It Working, Make It Pretty, Lock It Down: A Software Building Mantra
+# How I Build Software: Make It Work, Make It Pretty, Lock It Down
 
 <datetime class="hidden">2025-01-18T10:00</datetime>
 <!-- category -- Software Development, Testing, TDD, Craftsmanship, Best Practices -->
@@ -9,9 +9,9 @@
 
 ## The Three Phases of Building Software That Doesn't Suck
 
-I have a mantra when I build software. It's simple, it's effective, and it pisses off TDD purists:
+This is how I build software. It's simple, it's effective, and it pisses off TDD purists:
 
-**Get it working. Make it pretty. Lock it down with tests.**
+**Make it work. Make it pretty. Lock it down with tests.**
 
 In that order. Always.
 
@@ -19,7 +19,7 @@ Not because I'm lazy. Not because I don't value testing. But because *this is ho
 
 ```mermaid
 graph TB
-    Start[New Feature Request] --> P1[Phase 1: Get It Working]
+    Start[New Feature Request] --> P1[Phase 1: Make It Work]
 
     P1 --> P1_Private[Private Exploration]
     P1_Private --> P1_Sketch["Sketch the solution<br/>Messy code OK<br/>No tests yet<br/>Focus on learning"]
@@ -54,7 +54,7 @@ Let me explain.
 
 [TOC]
 
-## Phase 1: Get It Working (The Private Sketch)
+## Phase 1: Make It Work (The Private Sketch)
 
 This is the messy part. The part where I have no idea what I'm doing.
 
