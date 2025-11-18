@@ -1,0 +1,124 @@
+# Example Translation Pipeline Workflow
+# Demonstrates multi-tool orchestration with variants
+
+workflow:
+  id: "translation_pipeline_v1"
+  name: "Multi-Language Translation Pipeline"
+  description: "Translate content to multiple languages with summarization"
+  version: "1.0.0"
+
+# Input specification
+inputs:
+  - name: "content"
+    type: "string"
+    required: true
+    description: "Content to translate"
+  - name: "target_languages"
+    type: "array"
+    required: true
+    description: "List of target language codes"
+  - name: "summarize"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Summarize before translating"
+
+# Output specification
+outputs:
+  - name: "translations"
+    type: "object"
+    source_reference: "steps.combine.output"
+    description: "Translations for each target language"
+
+# Workflow tasks with tool candidates
+tasks:
+  - id: "summarize"
+    role: "summarizer"
+    description: "Summarize content if requested"
+    depends_on: []
+    parallel_group: null
+    condition: "inputs.summarize == true"
+    candidates:
+      - tool_id: "sum_fast_v2"
+        version: "2.0.0"
+        variant_tag: "fast"
+        priority: 2
+      - tool_id: "sum_accurate_v5"
+        version: "5.0.0"
+        variant_tag: "accurate"
+        priority: 1
+      - tool_id: "sum_safe_v3"
+        version: "3.0.0"
+        variant_tag: "safe"
+        priority: 3
+    input_mapping:
+      text: "${inputs.content}"
+      max_length: 500
+
+  - id: "translate_batch"
+    role: "translator"
+    description: "Translate to all target languages"
+    depends_on: ["summarize"]
+    parallel_group: 1
+    candidates:
+      - tool_id: "nmt_translator"
+        version: "2.1.0"
+        variant_tag: "accurate"
+        priority: 1
+      - tool_id: "fast_translator"
+        version: "1.2.0"
+        variant_tag: "fast"
+        priority: 2
+      - tool_id: "secure_translator"
+        version: "1.5.0"
+        variant_tag: "secure"
+        priority: 3
+    input_mapping:
+      text: "${steps.summarize.output || inputs.content}"
+      target_languages: "${inputs.target_languages}"
+    batch_mode: true
+
+  - id: "combine"
+    role: "aggregator"
+    description: "Combine translation results"
+    depends_on: ["translate_batch"]
+    parallel_group: null
+    candidates:
+      - tool_id: "json_combiner"
+        version: "1.0.0"
+        variant_tag: "default"
+    input_mapping:
+      results: "${steps.translate_batch.output}"
+
+# Performance constraints
+constraints:
+  max_latency_ms_p95: 800
+  max_risk_score: 0.2
+  min_correctness: 0.95
+  max_cost_per_run: 0.01
+
+# Optimization configuration
+optimization:
+  enabled: true
+  characterization_runs: 50
+  dataset_ref: "datasets/translation_benchmark"
+  specialization_triggers:
+    - condition: "candidate.correctness >= 0.99 AND candidate.latency_ms_p95 <= 400"
+      action: "fork_variant"
+      variant_tags: ["prime", "accurate_and_fast"]
+    - condition: "candidate.cost_per_call <= 0.0001 AND candidate.correctness >= 0.90"
+      action: "fork_variant"
+      variant_tags: ["ultra_cheap", "good_quality"]
+
+# Validation requirements
+validation:
+  required_stages:
+    - "unit_tests"
+    - "load_tests"
+    - "security_static"
+  min_validation_score: 0.90
+
+# Metadata
+tags: ["translation", "pipeline", "multi-language", "optimizable"]
+created_at: "2025-11-18T14:00:00Z"
+created_by: "forge_system"
