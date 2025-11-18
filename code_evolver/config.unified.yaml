@@ -305,6 +305,7 @@ optimization_pressure:
     max_latency_ms: 1000
     can_reject: true
     fallback_pressure: "medium"
+    evolutionary_pressure: "granular"  # "granular" (small specific functions) or "generic" (large encompassing functions) or "balanced"
 
   medium:
     optimization_level: "local"
@@ -317,6 +318,7 @@ optimization_pressure:
     max_latency_ms: 10000
     can_reject: true
     fallback_pressure: "low"
+    evolutionary_pressure: "balanced"  # "granular" (small specific functions) or "generic" (large encompassing functions) or "balanced"
 
   low:
     optimization_level: "cloud"
@@ -330,6 +332,7 @@ optimization_pressure:
     max_latency_ms: null
     can_reject: false
     fallback_pressure: null
+    evolutionary_pressure: "generic"  # "granular" (small specific functions) or "generic" (large encompassing functions) or "balanced"
 
   training:
     optimization_level: "none"
@@ -343,6 +346,7 @@ optimization_pressure:
     max_latency_ms: null
     can_reject: false
     fallback_pressure: null
+    evolutionary_pressure: "balanced"  # "granular" (small specific functions) or "generic" (large encompassing functions) or "balanced"
 
   auto:
     enabled: true

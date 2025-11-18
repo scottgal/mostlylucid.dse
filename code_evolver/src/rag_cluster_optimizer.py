@@ -98,7 +98,20 @@ class TrimmingPolicy:
     # Special rules
     always_keep_canonical: bool = True
     keep_high_coverage_variants: bool = True  # Keep variants with >90% coverage
+
     preserve_lineage_endpoints: bool = True  # Keep leaf nodes in lineage tree
+
+    def apply_evolutionary_adjustments(self, adjustments: Dict[str, Any]) -> None:
+        """
+        Apply evolutionary pressure adjustments from PressureManager.
+
+        Args:
+            adjustments: Dict from PressureManager.get_evolutionary_adjustments()
+        """
+        self.max_distance_from_fittest = adjustments.get("max_distance_from_fittest", self.max_distance_from_fittest)
+
+        logger.debug(f"Applied evolutionary adjustments to {self.node_type.value} trimming policy: "
+                    f"max_distance={self.max_distance_from_fittest:.2f}")
 
     def should_prune(
         self,
@@ -229,6 +242,22 @@ class NodeTypeOptimizerConfig:
                 'success_rate': 0.30,
                 'coverage': 0.20
             }
+
+    def apply_evolutionary_adjustments(self, adjustments: Dict[str, Any]) -> None:
+        """
+        Apply evolutionary pressure adjustments from PressureManager.
+
+        Args:
+            adjustments: Dict from PressureManager.get_evolutionary_adjustments()
+        """
+        self.similarity_threshold = adjustments.get("similarity_threshold", self.similarity_threshold)
+
+        # Apply adjustments to trimming policy if it exists
+        if self.trimming_policy:
+            self.trimming_policy.apply_evolutionary_adjustments(adjustments)
+
+        logger.debug(f"Applied evolutionary adjustments to {self.node_type.value} optimizer config: "
+                    f"similarity={self.similarity_threshold:.2f}")
 
 
 class OptimizationStrategy(Enum):

@@ -155,9 +155,88 @@ class PressureManager:
 
         logger.info(f"Optimization settings for {pressure.value} pressure: "
                    f"level={settings.get('optimization_level')}, "
-                   f"max_cost=${settings.get('max_cost', 0):.2f}")
+                   f"max_cost=${settings.get('max_cost', 0):.2f}, "
+                   f"evolutionary_pressure={settings.get('evolutionary_pressure', 'balanced')}")
 
         return settings
+
+    def get_evolutionary_adjustments(
+        self,
+        pressure: PressureLevel,
+        base_similarity: float = 0.96,
+        base_max_distance: float = 0.30
+    ) -> Dict[str, Any]:
+        """
+        Get evolutionary pressure adjustments for optimizer parameters.
+
+        Evolutionary pressure controls whether the optimizer tends towards:
+        - "granular": Smaller, more specific functions (tighter clustering, more specialized nodes)
+        - "generic": Larger, more encompassing functions (looser clustering, more general nodes)
+        - "balanced": Middle ground (default behavior)
+
+        Args:
+            pressure: Current pressure level
+            base_similarity: Base similarity threshold for clustering (default: 0.96)
+            base_max_distance: Base max distance from fittest for pruning (default: 0.30)
+
+        Returns:
+            Dict with adjusted parameters:
+                - similarity_threshold: Adjusted threshold for variant clustering
+                - max_distance_from_fittest: Adjusted max fitness gap for pruning
+                - min_cluster_size: Minimum variants in a cluster
+                - merge_similar_functions: Whether to merge similar function nodes
+                - specialization_bias: Float 0.0-1.0 (0=generic, 1=specialized)
+        """
+        settings = self.pressure_config.get(pressure.value, {})
+        evo_pressure = settings.get("evolutionary_pressure", "balanced")
+
+        # Default adjustments for balanced evolutionary pressure
+        adjustments = {
+            "evolutionary_pressure": evo_pressure,
+            "similarity_threshold": base_similarity,
+            "max_distance_from_fittest": base_max_distance,
+            "min_cluster_size": 2,
+            "merge_similar_functions": False,
+            "specialization_bias": 0.5
+        }
+
+        if evo_pressure == "granular":
+            # Tend towards smaller, more specific functions
+            # - Tighter similarity thresholds (require more similarity to cluster)
+            # - Smaller distance tolerance (prune variants that deviate more)
+            # - Higher minimum cluster size (avoid tiny clusters)
+            # - Don't merge similar functions (keep them separate)
+            # - High specialization bias
+            adjustments.update({
+                "similarity_threshold": min(0.98, base_similarity + 0.02),
+                "max_distance_from_fittest": max(0.15, base_max_distance - 0.15),
+                "min_cluster_size": 3,
+                "merge_similar_functions": False,
+                "specialization_bias": 0.8
+            })
+            logger.debug(f"Granular evolutionary pressure: tighter clustering (sim={adjustments['similarity_threshold']:.2f})")
+
+        elif evo_pressure == "generic":
+            # Tend towards larger, more encompassing functions
+            # - Looser similarity thresholds (allow more variants to cluster together)
+            # - Larger distance tolerance (keep more diverse variants)
+            # - Lower minimum cluster size (allow smaller clusters)
+            # - Merge similar functions (consolidate related functionality)
+            # - Low specialization bias
+            adjustments.update({
+                "similarity_threshold": max(0.85, base_similarity - 0.11),
+                "max_distance_from_fittest": min(0.50, base_max_distance + 0.20),
+                "min_cluster_size": 1,
+                "merge_similar_functions": True,
+                "specialization_bias": 0.2
+            })
+            logger.debug(f"Generic evolutionary pressure: looser clustering (sim={adjustments['similarity_threshold']:.2f})")
+
+        else:  # balanced
+            # Keep defaults
+            logger.debug(f"Balanced evolutionary pressure: standard clustering (sim={adjustments['similarity_threshold']:.2f})")
+
+        return adjustments
 
     def is_low_memory_device(self) -> bool:
         """
