@@ -4569,21 +4569,6 @@ This workflow successfully completed with passing tests.
                 "exit_code": metrics["exit_code"],
                 "latency_ms": metrics["latency_ms"]
             })
-            if not stdout or not stdout.strip():
-                # CRITICAL: This should NEVER happen - all tools MUST produce output!
-                console.print("\n" + "="*80)
-                console.print("[bold red on white]  ⚠ CRITICAL ERROR: NO OUTPUT PRODUCED  [/bold red on white]")
-                console.print("="*80)
-                console.print("[red]The code executed successfully but produced NO output![/red]")
-                console.print("[yellow]This is a BUG in code generation - ALL tools MUST output something![/yellow]")
-                console.print("[yellow]Possible causes:[/yellow]")
-                console.print("  1. Missing print() statement in the generated code")
-                console.print("  2. Code didn't call the main() function")
-                console.print("  3. Output was written to stderr instead of stdout")
-                if stderr and stderr.strip():
-                    console.print(f"\n[yellow]stderr output:[/yellow]")
-                    console.print(Panel(stderr, border_style="yellow"))
-                console.print("="*80 + "\n")
         else:
             console.print(f"[red]FAIL Execution failed (exit code: {metrics['exit_code']})[/red]")
             workflow.fail_step("execution", f"Exit code {metrics['exit_code']}")
@@ -4595,6 +4580,143 @@ This workflow successfully completed with passing tests.
 
         if self.config.get("chat.show_metrics", True):
             self._display_metrics(metrics)
+
+        # Step 8.7: Runtime error detection and fixing
+        # Check for runtime failures: no output, stderr, non-zero exit, or empty output
+        has_runtime_error = False
+        runtime_error_description = []
+
+        if not metrics["success"]:
+            has_runtime_error = True
+            runtime_error_description.append(f"Exit code: {metrics['exit_code']}")
+            if stderr:
+                runtime_error_description.append(f"Error output: {stderr[:500]}")
+
+        if not stdout or not stdout.strip():
+            has_runtime_error = True
+            runtime_error_description.append("No output produced")
+        elif has_empty_output:
+            has_runtime_error = True
+            runtime_error_description.append("Empty/null output in result fields")
+
+        # If runtime errors detected, feed into fix cycle
+        if has_runtime_error and self.config.get("testing.auto_escalate", True):
+            console.print(f"\n[yellow]Runtime errors detected. Starting adaptive escalation...[/yellow]")
+            for error_desc in runtime_error_description:
+                console.print(f"[yellow]  - {error_desc}[/yellow]")
+
+            # Generate a test that captures the runtime failure
+            console.print(f"\n[cyan]Generating test for runtime failure condition...[/cyan]")
+            test_path = self.runner.get_test_path(node_id)
+
+            try:
+                # Create a test that validates the runtime behavior
+                runtime_test_code = f'''"""
+Test for runtime execution validation
+Generated to capture runtime failure condition
+"""
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+def test_runtime_execution():
+    """Test that code executes without errors and produces output"""
+    node_dir = Path(__file__).parent
+    main_py = node_dir / "main.py"
+
+    # Test input
+    test_input = {json.dumps(input_data)}
+
+    # Run the code
+    result = subprocess.run(
+        [sys.executable, str(main_py)],
+        input=test_input,
+        capture_output=True,
+        text=True,
+        timeout=10
+    )
+
+    # Verify exit code
+    assert result.returncode == 0, f"Non-zero exit code: {{result.returncode}}\\nstderr: {{result.stderr}}"
+
+    # Verify output exists
+    assert result.stdout.strip(), "No output produced"
+
+    # Verify output is valid JSON
+    output_data = json.loads(result.stdout)
+
+    # Verify output has expected structure
+    assert isinstance(output_data, dict), "Output must be a dict"
+
+    # Verify result field exists and is non-empty
+    result_fields = ['result', 'output', 'answer', 'content', 'translated_article',
+                     'summary', 'text', 'data', 'response']
+    has_result = False
+    for field in result_fields:
+        if field in output_data:
+            assert output_data[field], f"Field '{{field}}' is empty"
+            has_result = True
+            break
+
+    assert has_result, f"No recognized result field found in output: {{list(output_data.keys())}}"
+
+if __name__ == "__main__":
+    test_runtime_execution()
+    print("OK Runtime test passed")
+'''
+
+                # Write the runtime test
+                with open(test_path, 'w') as f:
+                    f.write(runtime_test_code)
+
+                console.print(f"[green]✓ Runtime test generated[/green]")
+
+                # Now call adaptive escalation to fix the code
+                workflow.add_step("runtime_fix", "llm", "Fix runtime errors via adaptive escalation")
+                workflow.start_step("runtime_fix")
+
+                # Build error message for escalation
+                error_msg = "\\n".join(runtime_error_description)
+                if stderr:
+                    error_msg += f"\\n\\nFull stderr:\\n{stderr}"
+
+                # Call adaptive escalation (same as test failures)
+                escalation_success = self._adaptive_escalate_and_fix(
+                    node_id=node_id,
+                    code=code,
+                    description=description,
+                    specification=specification,
+                    available_tools=available_tools
+                )
+
+                if escalation_success:
+                    console.print(f"[green]✓ Runtime errors fixed via adaptive escalation[/green]")
+                    workflow.complete_step("runtime_fix", "Fixed successfully")
+
+                    # Re-run the node to get new output
+                    console.print(f"\\n[cyan]Re-running fixed code...[/cyan]")
+                    stdout, stderr, metrics = self.runner.run_node(node_id, input_data)
+
+                    # Display new output
+                    console.print("\\n" + "="*80)
+                    console.print("[bold magenta on white]  FIXED RESULT  [/bold magenta on white]")
+                    console.print("="*80 + "\\n")
+
+                    if stdout and stdout.strip():
+                        console.print(stdout)
+                    else:
+                        console.print("[yellow]Still no output after fix[/yellow]")
+
+                    console.print("\\n" + "="*80 + "\\n")
+                else:
+                    console.print(f"[yellow]! Could not fix runtime errors automatically[/yellow]")
+                    workflow.fail_step("runtime_fix", "Escalation failed")
+
+            except Exception as e:
+                console.print(f"[yellow]! Could not generate runtime test or fix: {e}[/yellow]")
+                import traceback
+                console.print(f"[dim]{traceback.format_exc()}[/dim]")
 
         # Finish workflow tracking
         workflow.finish()
