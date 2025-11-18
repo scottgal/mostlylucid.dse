@@ -1,0 +1,63 @@
+name: "Mermaid Renderer"
+type: "executable"
+description: "Renders Mermaid diagram syntax to image files (SVG, PNG, PDF). Converts text-based Mermaid diagrams into visual outputs."
+command: "python"
+args: ["code_evolver/tools/visualization/mermaid_renderer.py"]
+input_format: "json"
+output_format: "json"
+parameters:
+  mermaid:
+    type: "string"
+    required: true
+    description: "Mermaid diagram syntax to render"
+
+  output_path:
+    type: "string"
+    required: false
+    description: "Path to save the rendered image. If not provided, uses a temp file"
+
+  format:
+    type: "string"
+    required: false
+    description: "Output format: svg, png, pdf"
+    default: "svg"
+    enum: ["svg", "png", "pdf"]
+
+  theme:
+    type: "string"
+    required: false
+    description: "Mermaid theme: default, forest, dark, neutral, base"
+    default: "default"
+
+  background_color:
+    type: "string"
+    required: false
+    description: "Background color (transparent, white, #hexcolor)"
+    default: "transparent"
+
+  width:
+    type: "integer"
+    required: false
+    description: "Width in pixels (for PNG/PDF)"
+    default: 800
+
+  height:
+    type: "integer"
+    required: false
+    description: "Height in pixels (for PNG/PDF). If not set, auto-calculated"
+
+  scale:
+    type: "number"
+    required: false
+    description: "Scale factor for PNG output (1-3)"
+    default: 1
+
+  cache:
+    type: "boolean"
+    required: false
+    description: "Use cached version if available"
+    default: true
+
+tags: ["visualization", "diagram", "mermaid", "rendering", "image", "svg", "png"]
+weight: 8.0
+version: "1.0.0"
