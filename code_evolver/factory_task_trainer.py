@@ -3,7 +3,15 @@
 Factory Task Trainer - Continuous training with random task variations.
 
 Generates random variations of a base prompt and executes them through the
-DSE system continuously until a key is pressed.
+DSE system continuously. By default, runs indefinitely in continuous mode,
+only stopping when Ctrl+C is pressed. This allows for continuous system
+training without manual intervention.
+
+When started with no parameters, the trainer will:
+- Generate random factory tasks continuously
+- Execute each task through the full DSE pipeline
+- Keep running indefinitely until Ctrl+C is pressed
+- Display statistics upon completion
 """
 import argparse
 import json
@@ -413,13 +421,15 @@ class FactoryTaskTrainer:
     """Main trainer that executes random task variations."""
 
     def __init__(self, base_prompt: Optional[str] = None, max_tasks: Optional[int] = None,
-                 multistage_probability: Optional[float] = None, seed: Optional[int] = None):
+                 multistage_probability: Optional[float] = None, seed: Optional[int] = None,
+                 continuous: bool = True):
         """
         Initialize trainer.
 
         Args:
             base_prompt: Base prompt for variations (None for factory tasks)
             max_tasks: Maximum number of tasks to run (None for unlimited)
+            continuous: If True, run indefinitely (only Ctrl+C stops). If False, allow keyboard interrupt.
         """
         # If a seed is provided, set deterministic randomness
         self.seed = seed
@@ -434,9 +444,10 @@ class FactoryTaskTrainer:
         self.statistics = TrainingStatistics()
         self.keyboard = KeyboardMonitor()
         self.max_tasks = max_tasks
+        self.continuous = continuous
 
     def run_training_loop(self):
-        """Run continuous training loop until key pressed."""
+        """Run continuous training loop until key pressed or Ctrl+C."""
         logger.info("="*60)
         logger.info("FACTORY TASK TRAINER")
         logger.info("="*60)
@@ -458,13 +469,25 @@ class FactoryTaskTrainer:
         except Exception:
             pass
 
+        # Log mode
+        if self.continuous:
+            logger.info("Mode: CONTINUOUS (only Ctrl+C will stop)")
+        else:
+            logger.info("Mode: Interactive (press any key or Ctrl+C to stop)")
+
         logger.info("="*60)
 
-        # Start keyboard monitor
-        self.keyboard.start()
+        # Start keyboard monitor only if not in continuous mode
+        if not self.continuous:
+            self.keyboard.start()
 
         try:
-            while not self.keyboard.stop_requested:
+            while True:
+                # In non-continuous mode, check if keyboard stop was requested
+                if not self.continuous and self.keyboard.stop_requested:
+                    logger.info("\nStopping due to keyboard interrupt...")
+                    break
+
                 # Check if max tasks reached
                 if self.max_tasks and self.statistics.tasks_attempted >= self.max_tasks:
                     logger.info(f"\nReached max tasks limit: {self.max_tasks}")
@@ -551,7 +574,9 @@ class FactoryTaskTrainer:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Factory Task Trainer - Continuous training with random task variations'
+        description='Factory Task Trainer - Continuous training with random task variations. '
+                    'By default, runs indefinitely until Ctrl+C is pressed, continuously generating '
+                    'and running tasks to train the system.'
     )
     parser.add_argument(
         '--prompt',
@@ -576,6 +601,18 @@ def main():
         type=int,
         default=None,
         help='Set RNG seed for deterministic task generation'
+    )
+    parser.add_argument(
+        '--continuous',
+        action='store_true',
+        default=True,
+        help='Run in continuous mode - only Ctrl+C stops (default: True)'
+    )
+    parser.add_argument(
+        '--interactive',
+        dest='continuous',
+        action='store_false',
+        help='Run in interactive mode - any key press or Ctrl+C stops'
     )
     parser.add_argument(
         '--log-level',
@@ -608,6 +645,7 @@ def main():
         max_tasks=args.max_tasks,
         multistage_probability=multistage_prob,
         seed=args.seed,
+        continuous=args.continuous,
     )
     trainer.run_training_loop()
 
