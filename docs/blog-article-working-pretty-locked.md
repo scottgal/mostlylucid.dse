@@ -9,7 +9,7 @@
 
 ## The Three Phases of Building Software That Doesn't Suck
 
-This is how I build software. It's simple, it's effective, and it pisses off TDD purists:
+This is how I build software. It's simple, it's effective, and it makes TDD purists shake their heads in dismay:
 
 **Make it work. Make it pretty. Lock it down with tests.**
 
