@@ -7559,7 +7559,7 @@ Return ONLY the JSON object, nothing else."""
         Handle conversation commands.
 
         Usage:
-            /conversation start [topic]  - Start a new conversation
+            /conversation start [topic] [--tools tool1,tool2,tool3]  - Start a new conversation with optional preferred tools
             /conversation end [topic]    - End current or specified conversation
             /conversation status         - Show conversation status
             /conversation list           - List active conversations
@@ -7583,11 +7583,30 @@ Return ONLY the JSON object, nothing else."""
 
         try:
             if subcommand == "start":
+                # Parse topic and preferred tools
+                topic = "general"
+                preferred_tools = None
+
+                if sub_args:
+                    # Check for --tools flag
+                    if "--tools" in sub_args:
+                        parts_split = sub_args.split("--tools", 1)
+                        topic = parts_split[0].strip() or "general"
+                        tools_str = parts_split[1].strip()
+                        if tools_str:
+                            preferred_tools = [t.strip() for t in tools_str.split(",") if t.strip()]
+                    else:
+                        topic = sub_args
+
                 # Start new conversation
-                topic = sub_args if sub_args else "general"
-                result = self._conversation_tool.start_conversation(topic=topic)
+                result = self._conversation_tool.start_conversation(
+                    topic=topic,
+                    preferred_tools=preferred_tools
+                )
                 console.print(f"\n[green]✓ Started conversation: {result['topic']}[/green]")
                 console.print(f"[dim]Conversation ID: {result['conversation_id']}[/dim]")
+                if result.get('preferred_tools'):
+                    console.print(f"[cyan]Preferred tools:[/cyan] {', '.join(result['preferred_tools'])}")
                 console.print("[cyan]You are now in conversation mode.[/cyan]")
                 console.print("[dim]Use /conversation end to finish this conversation[/dim]\n")
 
@@ -7617,6 +7636,11 @@ Return ONLY the JSON object, nothing else."""
                     console.print(f"[cyan]Topic:[/cyan] {status['topic']}")
                     console.print(f"[cyan]Messages:[/cyan] {status['message_count']}")
                     console.print(f"[cyan]Has Summary:[/cyan] {'Yes' if status['has_summary'] else 'No'}")
+                    # Show preferred tools if any
+                    metadata = status.get('metadata', {})
+                    preferred_tools = metadata.get('preferred_tools', [])
+                    if preferred_tools:
+                        console.print(f"[cyan]Preferred tools:[/cyan] {', '.join(preferred_tools)}")
                     console.print(f"[dim]Conversation ID: {status['conversation_id']}[/dim]\n")
                 else:
                     console.print("\n[dim]No active conversation[/dim]")

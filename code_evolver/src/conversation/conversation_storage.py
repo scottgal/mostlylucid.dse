@@ -104,12 +104,17 @@ class ConversationStorage:
         """Get Qdrant collection name for conversation."""
         return f"conversation_{conversation_id}"
 
-    def create_conversation(self, topic: str = "general") -> str:
+    def create_conversation(
+        self,
+        topic: str = "general",
+        preferred_tools: Optional[List[str]] = None
+    ) -> str:
         """
         Create a new conversation collection.
 
         Args:
             topic: Topic/name of the conversation
+            preferred_tools: Optional list of preferred tool names to prioritize
 
         Returns:
             Conversation ID (GUID)
@@ -138,10 +143,13 @@ class ConversationStorage:
             "created_at": datetime.now().isoformat(),
             "message_count": 0,
             "total_response_time": 0.0,
-            "collection_name": collection_name
+            "collection_name": collection_name,
+            "preferred_tools": preferred_tools or []
         }
 
         logger.info(f"Created conversation '{topic}' with ID {conversation_id}")
+        if preferred_tools:
+            logger.info(f"Preferred tools for this conversation: {', '.join(preferred_tools)}")
         return conversation_id
 
     def add_message(

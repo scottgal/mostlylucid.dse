@@ -194,7 +194,8 @@ Your analysis:"""
         self,
         task_description: str,
         task_type: str,
-        available_tools: Optional[List[str]] = None
+        available_tools: Optional[List[str]] = None,
+        preferred_tools: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         Select appropriate tools for a task.
@@ -203,13 +204,37 @@ Your analysis:"""
             task_description: Description of the task
             task_type: Type of task
             available_tools: Optional list of available tool names
+            preferred_tools: Optional list of preferred tool names to prioritize
 
         Returns:
             Dict with:
             - recommended_tools: List of tool names
             - reasoning: Why these tools were selected
             - execution_order: Suggested order of tool execution
+            - used_preferred: Whether preferred tools were used
         """
+        # If preferred tools are specified, prioritize them
+        if preferred_tools:
+            logger.info(f"Prioritizing preferred tools: {', '.join(preferred_tools)}")
+
+            # Filter preferred tools to only those that are available
+            if available_tools:
+                valid_preferred = [t for t in preferred_tools if t in available_tools]
+            else:
+                valid_preferred = preferred_tools
+
+            if valid_preferred:
+                # Use preferred tools directly
+                return {
+                    "recommended_tools": valid_preferred,
+                    "reasoning": f"Using user-specified preferred tools: {', '.join(valid_preferred)}",
+                    "execution_order": valid_preferred,
+                    "used_preferred": True
+                }
+            else:
+                logger.warning(f"Preferred tools {preferred_tools} not found in available tools, falling back to semantic search")
+
+        # Fall back to LLM-based tool selection
         tools_list = ""
         if available_tools:
             tools_list = f"\n\nAvailable tools:\n" + "\n".join(f"- {tool}" for tool in available_tools[:20])
@@ -251,7 +276,8 @@ Your recommendation:"""
         return {
             "recommended_tools": tools,
             "reasoning": reasoning,
-            "execution_order": execution_order
+            "execution_order": execution_order,
+            "used_preferred": False
         }
 
     def generate_workflow_for_task(
@@ -344,14 +370,15 @@ Your workflow:"""
         self,
         user_message: str,
         conversation_context: Optional[str] = None,
-        execute_tasks: bool = True
+        execute_tasks: bool = True,
+        preferred_tools: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         Orchestrate a smart response to user message.
 
         This is the main entry point that:
         1. Analyzes message for tasks
-        2. Selects tools if needed
+        2. Selects tools if needed (prioritizing preferred tools)
         3. Generates workflow if complex
         4. Optionally executes the workflow
         5. Returns results with conversation context
@@ -360,6 +387,7 @@ Your workflow:"""
             user_message: User's message
             conversation_context: Optional conversation context
             execute_tasks: Whether to actually execute detected tasks
+            preferred_tools: Optional list of preferred tool names to prioritize
 
         Returns:
             Dict with:
@@ -401,14 +429,16 @@ Your workflow:"""
             tools_selected = self.select_tools_for_task(
                 task_description=task_analysis["task_description"],
                 task_type=task_analysis["task_type"],
-                available_tools=available_tools
+                available_tools=available_tools,
+                preferred_tools=preferred_tools
             )
             result["tools_selected"] = tools_selected
         else:
             result["tools_selected"] = {
                 "recommended_tools": [],
                 "reasoning": "No tools required",
-                "execution_order": []
+                "execution_order": [],
+                "used_preferred": False
             }
 
         # Generate workflow if complex
@@ -710,20 +740,22 @@ Your workflow:"""
     def orchestrate_with_parallel_execution(
         self,
         user_message: str,
-        conversation_context: Optional[str] = None
+        conversation_context: Optional[str] = None,
+        preferred_tools: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         Orchestrate response with parallel task execution.
 
         This method:
         1. Analyzes the message
-        2. Starts tasks in background if needed
+        2. Starts tasks in background if needed (prioritizing preferred tools)
         3. Returns immediately with task ID for tracking
         4. Conversation continues while tasks run in parallel
 
         Args:
             user_message: User's message
             conversation_context: Optional conversation context
+            preferred_tools: Optional list of preferred tool names to prioritize
 
         Returns:
             Dict with:
@@ -762,14 +794,16 @@ Your workflow:"""
             tools_selected = self.select_tools_for_task(
                 task_description=task_analysis["task_description"],
                 task_type=task_analysis["task_type"],
-                available_tools=available_tools
+                available_tools=available_tools,
+                preferred_tools=preferred_tools
             )
             result["tools_selected"] = tools_selected
         else:
             result["tools_selected"] = {
                 "recommended_tools": [],
                 "reasoning": "No tools required",
-                "execution_order": []
+                "execution_order": [],
+                "used_preferred": False
             }
 
         # Generate workflow

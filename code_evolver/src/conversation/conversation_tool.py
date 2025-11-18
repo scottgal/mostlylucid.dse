@@ -95,12 +95,17 @@ class ConversationTool:
 
         logger.info(f"Conversation tool initialized with model: {conversation_model}")
 
-    def start_conversation(self, topic: str = "general") -> Dict[str, Any]:
+    def start_conversation(
+        self,
+        topic: str = "general",
+        preferred_tools: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
         """
         Start a new conversation.
 
         Args:
             topic: Conversation topic
+            preferred_tools: Optional list of preferred tool names to prioritize in planner
 
         Returns:
             Dict with conversation info
@@ -111,15 +116,21 @@ class ConversationTool:
             self.end_conversation()
 
         # Create new conversation
-        conversation_id = self.storage.create_conversation(topic=topic)
+        conversation_id = self.storage.create_conversation(
+            topic=topic,
+            preferred_tools=preferred_tools
+        )
         self.current_conversation_id = conversation_id
         self.current_summary = None
 
         logger.info(f"Started conversation '{topic}' (ID: {conversation_id})")
+        if preferred_tools:
+            logger.info(f"Preferred tools: {', '.join(preferred_tools)}")
 
         return {
             "conversation_id": conversation_id,
             "topic": topic,
+            "preferred_tools": preferred_tools or [],
             "started_at": datetime.now().isoformat(),
             "status": "active"
         }
