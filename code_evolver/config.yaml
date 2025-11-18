@@ -262,6 +262,53 @@ rag_memory:
   collection_name: "mostlylucid-dse-tools-rag"
   max_embedding_content_length: 1000
 
+# Database Configuration - Postgres for Bulk Data Storage
+# Complements RAG by storing detailed bulk data (logs, bugs, ancestry, etc.)
+# while RAG handles semantic search
+database:
+  enabled: true
+  type: "postgres"
+  host: "${POSTGRES_HOST:-localhost}"
+  port: "${POSTGRES_PORT:-5432}"
+  database: "${POSTGRES_DB:-dise_data}"
+  user: "${POSTGRES_USER:-dise}"
+  password: "${POSTGRES_PASSWORD:-dise123}"
+
+  # Connection pooling
+  min_connections: 1
+  max_connections: 10
+
+  # What to store in Postgres vs RAG
+  # RAG: Semantic search (find similar tools, patterns, functions)
+  # Postgres: Bulk data (detailed logs, full bug histories, ancestry trees)
+  storage_strategy:
+    # Store generated tools in database (on by default)
+    store_generated_tools: true
+
+    # Artifact types to store in Postgres bulk storage
+    bulk_storage_types:
+      - "failure"        # Tool failures with detailed error logs
+      - "bug_report"     # Bug reports with full stack traces
+      - "debug_data"     # Detailed debug information
+      - "perf_data"      # Performance metrics and benchmarks
+      - "conversation"   # Tool creation conversations/ancestry
+
+    # Artifact types to keep in RAG for semantic search
+    rag_storage_types:
+      - "plan"           # Overseer strategies
+      - "function"       # Reusable code functions
+      - "sub_workflow"   # Workflow parts
+      - "workflow"       # Complete workflows
+      - "tool"           # Tool definitions (for discovery)
+      - "prompt"         # Reusable prompts
+      - "pattern"        # Design patterns
+      - "code_fix"       # Code fixes (searchable)
+
+    # Store in BOTH for redundancy and different query patterns
+    hybrid_storage_types:
+      - "performance"    # RAG for similarity, Postgres for detailed metrics
+      - "evaluation"     # RAG for quality scores, Postgres for full test results
+
 # Pattern Recognizer - Code Fix Pattern Learning with RAG Data Store
 pattern_recognizer:
   enabled: true

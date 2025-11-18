@@ -1,0 +1,192 @@
+name: "Bulk Data Store"
+type: "executable"
+description: "High-level bulk data storage tool using Postgres for storing detailed logs, bug histories, tool ancestry, performance data, and generated tools. Complements RAG by storing detailed bulk data while RAG handles semantic search."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+
+tags:
+  - "database"
+  - "storage"
+  - "bulk-data"
+  - "logs"
+  - "bugs"
+  - "ancestry"
+  - "history"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/bulk_data_store.py"
+  stdin_mode: true
+  timeout: 60
+
+input_schema:
+  operation:
+    type: "string"
+    description: "Operation: store_log, store_bug, store_ancestry, store_perf_data, store_tool, query_logs, query_bugs, get_ancestry, initialize_schema"
+    required: true
+
+  # For store_log operation
+  tool_id:
+    type: "string"
+    description: "Tool ID associated with this data"
+    required: false
+
+  log_level:
+    type: "string"
+    description: "Log level: debug, info, warning, error, critical"
+    required: false
+
+  message:
+    type: "string"
+    description: "Log message or description"
+    required: false
+
+  details:
+    type: "object"
+    description: "Detailed data (JSON object)"
+    required: false
+
+  # For store_bug operation
+  bug_id:
+    type: "string"
+    description: "Unique bug identifier"
+    required: false
+
+  severity:
+    type: "string"
+    description: "Bug severity: critical, high, medium, low"
+    required: false
+
+  stack_trace:
+    type: "string"
+    description: "Full stack trace"
+    required: false
+
+  resolved:
+    type: "boolean"
+    description: "Whether bug is resolved"
+    required: false
+
+  # For store_ancestry operation
+  parent_tool_id:
+    type: "string"
+    description: "Parent tool ID"
+    required: false
+
+  child_tool_id:
+    type: "string"
+    description: "Child tool ID"
+    required: false
+
+  relationship_type:
+    type: "string"
+    description: "Type of relationship: derived_from, optimized_from, fixed_by, etc."
+    required: false
+
+  # For store_tool operation (generated tools)
+  tool_name:
+    type: "string"
+    description: "Tool name"
+    required: false
+
+  tool_type:
+    type: "string"
+    description: "Tool type (llm, executable, custom, etc.)"
+    required: false
+
+  tool_yaml:
+    type: "string"
+    description: "YAML definition of the tool"
+    required: false
+
+  tool_code:
+    type: "string"
+    description: "Implementation code of the tool"
+    required: false
+
+  metadata:
+    type: "object"
+    description: "Tool metadata"
+    required: false
+
+  # For query operations
+  filters:
+    type: "object"
+    description: "Query filters (column: value pairs)"
+    required: false
+
+  limit:
+    type: "integer"
+    description: "Maximum number of results to return"
+    required: false
+    default: 100
+
+  offset:
+    type: "integer"
+    description: "Number of results to skip"
+    required: false
+    default: 0
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether the operation succeeded"
+
+  data:
+    type: "array"
+    description: "Query results or stored data"
+
+  count:
+    type: "integer"
+    description: "Number of records affected or returned"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+examples:
+  - operation: "initialize_schema"
+    description: "Initialize database schema for bulk data storage"
+
+  - operation: "store_log"
+    tool_id: "my_tool"
+    log_level: "error"
+    message: "Failed to execute query"
+    details: {"query": "SELECT * FROM users", "error": "Table not found"}
+    description: "Store a detailed error log"
+
+  - operation: "store_bug"
+    tool_id: "parser_tool"
+    bug_id: "BUG-2024-001"
+    severity: "high"
+    message: "Parser crashes on malformed JSON"
+    stack_trace: "Traceback (most recent call last):\n  File..."
+    description: "Store a bug report with stack trace"
+
+  - operation: "store_ancestry"
+    parent_tool_id: "code_optimizer_v1"
+    child_tool_id: "code_optimizer_v2"
+    relationship_type: "optimized_from"
+    details: {"optimization_type": "performance", "improvement": "2x faster"}
+    description: "Record tool ancestry/lineage"
+
+  - operation: "store_tool"
+    tool_id: "generated_parser"
+    tool_name: "JSON Parser"
+    tool_type: "executable"
+    tool_yaml: "name: JSON Parser\ntype: executable\n..."
+    tool_code: "import json\n..."
+    metadata: {"created_by": "tool_generator", "version": "1.0.0"}
+    description: "Store a generated tool with its definition and code"
+
+  - operation: "query_logs"
+    filters: {"tool_id": "my_tool", "log_level": "error"}
+    limit: 50
+    description: "Query error logs for a specific tool"
+
+  - operation: "get_ancestry"
+    tool_id: "my_tool"
+    description: "Get full ancestry tree for a tool"
