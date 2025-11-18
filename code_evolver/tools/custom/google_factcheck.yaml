@@ -1,0 +1,468 @@
+name: "Google Fact Check"
+type: "custom"
+description: "Google Fact Check Tools API integration for verifying claims and checking facts. Responds to natural language questions like 'can you check if this is true' and returns fact-check data from ClaimReview sources. Uses authentication from config.yaml."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+custom:
+  module: "src.google_factcheck_tool"
+  class: "GoogleFactCheckTool"
+  config:
+    api_base: "https://factchecktools.googleapis.com/v1alpha1"
+    max_results: 10
+
+input_schema:
+  query:
+    type: string
+    description: "The claim or statement to fact-check"
+    required: true
+    example: "climate change is real"
+
+  language_code:
+    type: string
+    description: "BCP-47 language code (e.g., 'en', 'en-US', 'es')"
+    required: false
+    default: "en"
+
+  max_age_days:
+    type: integer
+    description: "Maximum age of the returned fact-checks in days"
+    required: false
+
+  page_size:
+    type: integer
+    description: "Number of results to return (max 100)"
+    required: false
+    default: 10
+
+  page_token:
+    type: string
+    description: "Token for pagination (from previous response)"
+    required: false
+
+  review_publisher_site_filter:
+    type: string
+    description: "Filter results by reviewer publisher site (e.g., 'politifact.com')"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the operation succeeded"
+    query:
+      type: string
+      description: "The query that was checked"
+    data:
+      type: object
+      description: "Fact-check results"
+      properties:
+        claims:
+          type: array
+          description: "Array of fact-check claims"
+        next_page_token:
+          type: string
+          description: "Token for next page (if available)"
+    error:
+      type: string
+      description: "Error message if failed"
+
+tags: ["google", "api", "fact-check", "verification", "claims", "truth", "research"]
+
+examples:
+  - description: "Check a simple claim"
+    input:
+      query: "the earth is flat"
+    output:
+      success: true
+      query: "the earth is flat"
+      data:
+        claims:
+          - claim_text: "The Earth is flat"
+            claimant: "Various sources"
+            claim_date: "2024-01-15"
+            claim_review:
+              publisher:
+                name: "Snopes"
+                site: "snopes.com"
+              url: "https://www.snopes.com/fact-check/flat-earth/"
+              title: "Is the Earth Flat?"
+              review_date: "2024-01-16"
+              textual_rating: "False"
+              language_code: "en"
+
+  - description: "Check a political claim with language filter"
+    input:
+      query: "unemployment rate decreased"
+      language_code: "en-US"
+      max_age_days: 30
+    output:
+      success: true
+      query: "unemployment rate decreased"
+      data:
+        claims:
+          - claim_text: "Unemployment rate decreased to 3.5%"
+            claimant: "John Doe"
+            claim_date: "2024-01-10"
+            claim_review:
+              publisher:
+                name: "PolitiFact"
+                site: "politifact.com"
+              url: "https://www.politifact.com/..."
+              title: "Fact-checking unemployment claims"
+              textual_rating: "Mostly True"
+
+  - description: "Check with specific publisher filter"
+    input:
+      query: "vaccines cause autism"
+      review_publisher_site_filter: "snopes.com"
+    output:
+      success: true
+      query: "vaccines cause autism"
+      data:
+        claims:
+          - claim_text: "Vaccines cause autism"
+            claim_review:
+              publisher:
+                name: "Snopes"
+                site: "snopes.com"
+              textual_rating: "False"
+
+usage_notes: |
+  ## Google Fact Check Tool - Verify Claims and Check Facts
+
+  This tool provides integration with Google's Fact Check Tools API to verify
+  claims and check facts using data from ClaimReview-tagged sources across
+  the web. Perfect for verifying information, checking claims, and researching
+  fact-checks.
+
+  ## Features
+
+  - [OK] Search fact-checks for claims and statements
+  - [OK] Filter by language, age, and publisher
+  - [OK] Pagination support for large result sets
+  - [OK] Natural language query support
+  - [OK] Authentication from config.yaml or environment
+  - [OK] Detailed claim and review information
+  - [OK] Multiple fact-checking sources
+
+  ## Authentication Setup
+
+  ### Option 1: Environment Variable (Recommended)
+
+  ```bash
+  export GOOGLE_FACTCHECK_API_KEY="your_api_key_here"
+  ```
+
+  ### Option 2: Config File
+
+  Add to your `config.yaml`:
+
+  ```yaml
+  google:
+    factcheck:
+      api_key: "${GOOGLE_FACTCHECK_API_KEY}"
+  ```
+
+  ### Getting an API Key
+
+  1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+  2. Create or select a project
+  3. Enable "Fact Check Tools API"
+  4. Go to "Credentials" and create an API key
+  5. (Optional) Restrict the key to Fact Check Tools API
+
+  ## Usage Examples
+
+  ### Example 1: Check a Simple Claim
+
+  ```python
+  from node_runtime import call_tool
+  import json
+
+  result = call_tool("google_factcheck", json.dumps({
+      "query": "the earth is flat"
+  }))
+
+  data = json.loads(result)
+  if data['success']:
+      claims = data['data']['claims']
+      for claim in claims:
+          print(f"Claim: {claim['claim_text']}")
+          review = claim['claim_review']
+          print(f"Rating: {review['textual_rating']}")
+          print(f"Source: {review['publisher']['name']}")
+          print(f"URL: {review['url']}")
+  ```
+
+  ### Example 2: Natural Language Usage
+
+  The tool responds to natural language questions:
+
+  ```python
+  # Ask: "Can you check if vaccines cause autism?"
+  # The tool will automatically extract "vaccines cause autism" as the query
+
+  result = call_tool("google_factcheck", json.dumps({
+      "query": "vaccines cause autism"
+  }))
+  ```
+
+  ### Example 3: Filter by Language and Age
+
+  ```python
+  result = call_tool("google_factcheck", json.dumps({
+      "query": "COVID-19 vaccines are unsafe",
+      "language_code": "en-US",
+      "max_age_days": 90  # Only recent fact-checks
+  }))
+
+  data = json.loads(result)
+  for claim in data['data']['claims']:
+      claim_date = claim.get('claim_date', 'Unknown')
+      print(f"Claim from {claim_date}: {claim['claim_text']}")
+  ```
+
+  ### Example 4: Filter by Specific Publisher
+
+  ```python
+  result = call_tool("google_factcheck", json.dumps({
+      "query": "climate change is a hoax",
+      "review_publisher_site_filter": "politifact.com"  # Only PolitiFact
+  }))
+  ```
+
+  ### Example 5: Pagination Through Results
+
+  ```python
+  # Get first page
+  result = call_tool("google_factcheck", json.dumps({
+      "query": "election fraud",
+      "page_size": 5
+  }))
+
+  data = json.loads(result)
+  print(f"Found {len(data['data']['claims'])} claims")
+
+  # Get next page if available
+  if 'next_page_token' in data['data']:
+      result = call_tool("google_factcheck", json.dumps({
+          "query": "election fraud",
+          "page_size": 5,
+          "page_token": data['data']['next_page_token']
+      }))
+  ```
+
+  ### Example 6: Comprehensive Fact-Check Report
+
+  ```python
+  def generate_factcheck_report(query):
+      result = call_tool("google_factcheck", json.dumps({
+          "query": query,
+          "page_size": 10
+      }))
+
+      data = json.loads(result)
+      if not data['success']:
+          return f"Error: {data['error']}"
+
+      claims = data['data']['claims']
+      if not claims:
+          return f"No fact-checks found for: {query}"
+
+      report = f"Fact-Check Report for: {query}\n"
+      report += "=" * 50 + "\n\n"
+
+      for i, claim in enumerate(claims, 1):
+          report += f"{i}. {claim['claim_text']}\n"
+          review = claim['claim_review']
+          report += f"   Publisher: {review['publisher']['name']}\n"
+          report += f"   Rating: {review['textual_rating']}\n"
+          report += f"   URL: {review['url']}\n"
+          report += f"   Date: {claim.get('claim_date', 'Unknown')}\n\n"
+
+      return report
+
+  # Usage
+  print(generate_factcheck_report("masks prevent COVID-19 transmission"))
+  ```
+
+  ## Response Structure
+
+  ### Successful Response
+
+  ```json
+  {
+    "success": true,
+    "query": "the earth is flat",
+    "data": {
+      "claims": [
+        {
+          "claim_text": "The Earth is flat",
+          "claimant": "Various sources",
+          "claim_date": "2024-01-15",
+          "claim_review": {
+            "publisher": {
+              "name": "Snopes",
+              "site": "snopes.com"
+            },
+            "url": "https://www.snopes.com/fact-check/flat-earth/",
+            "title": "Is the Earth Flat?",
+            "review_date": "2024-01-16",
+            "textual_rating": "False",
+            "language_code": "en"
+          }
+        }
+      ],
+      "next_page_token": "token_for_next_page"
+    }
+  }
+  ```
+
+  ### Error Response
+
+  ```json
+  {
+    "success": false,
+    "error": "API key not configured",
+    "query": "some claim"
+  }
+  ```
+
+  ## Common Rating Values
+
+  Fact-check sources use various rating systems:
+
+  - **Snopes**: True, Mostly True, Mixture, Mostly False, False, Unproven
+  - **PolitiFact**: True, Mostly True, Half True, Mostly False, False, Pants on Fire
+  - **FactCheck.org**: Various narrative ratings
+  - **Others**: Custom rating systems
+
+  ## Natural Language Patterns
+
+  The tool recognizes these natural language patterns:
+
+  - "Can you check if [claim]?"
+  - "Is it true that [claim]?"
+  - "Fact-check: [claim]"
+  - "Verify [claim]"
+  - "[claim] true or false?"
+
+  ## API Limits
+
+  - **Free tier**: 10,000 queries/day
+  - **Rate limit**: 100 queries/minute
+  - **Max results per page**: 100
+
+  The tool automatically handles rate limiting and provides informative error messages.
+
+  ## Use Cases
+
+  ### Research and Journalism
+
+  ```python
+  # Verify claims before publishing
+  claims_to_verify = [
+      "Unemployment is at record lows",
+      "Crime rates have doubled",
+      "Vaccine efficacy is 95%"
+  ]
+
+  for claim in claims_to_verify:
+      result = call_tool("google_factcheck", json.dumps({"query": claim}))
+      # Process results...
+  ```
+
+  ### Educational Applications
+
+  ```python
+  # Help students learn critical thinking
+  student_claim = "The Great Wall of China is visible from space"
+  result = call_tool("google_factcheck", json.dumps({"query": student_claim}))
+  # Show fact-check results to student
+  ```
+
+  ### Content Moderation
+
+  ```python
+  # Check user-submitted content
+  user_content = "5G causes coronavirus"
+  result = call_tool("google_factcheck", json.dumps({
+      "query": user_content,
+      "max_age_days": 30  # Recent fact-checks only
+  }))
+  # Flag if multiple sources rate as false
+  ```
+
+  ## Integration with Workflows
+
+  ### Pattern 1: Automated Claim Verification
+
+  ```python
+  def verify_article_claims(article_text):
+      # Extract claims from article (use NLP or manual extraction)
+      claims = extract_claims(article_text)
+
+      results = []
+      for claim in claims:
+          result = call_tool("google_factcheck", json.dumps({
+              "query": claim,
+              "page_size": 3
+          }))
+          results.append(json.loads(result))
+
+      return generate_verification_report(results)
+  ```
+
+  ### Pattern 2: Real-time Fact Checking
+
+  ```python
+  def check_statement(statement):
+      result = call_tool("google_factcheck", json.dumps({
+          "query": statement,
+          "max_age_days": 7,  # Only very recent
+          "page_size": 1
+      }))
+
+      data = json.loads(result)
+      if data['success'] and data['data']['claims']:
+          claim = data['data']['claims'][0]
+          return {
+              "verified": True,
+              "rating": claim['claim_review']['textual_rating'],
+              "source": claim['claim_review']['publisher']['name']
+          }
+      return {"verified": False}
+  ```
+
+  ## Best Practices
+
+  1. **Be specific**: More specific queries yield better results
+  2. **Use language codes**: Filter to your target audience's language
+  3. **Check multiple sources**: Review multiple fact-check results
+  4. **Consider recency**: Use `max_age_days` for time-sensitive claims
+  5. **Handle no results**: Not all claims have been fact-checked
+  6. **Respect ratings**: Different publishers use different rating scales
+
+  ## Troubleshooting
+
+  ### No Results Found
+
+  - Try rephrasing the query
+  - Remove specific details (names, dates, etc.)
+  - Broaden the search (remove filters)
+  - Check if the claim has been fact-checked at all
+
+  ### API Key Issues
+
+  - Verify the API key is set in environment or config
+  - Ensure Fact Check Tools API is enabled in Google Cloud
+  - Check API key restrictions
+
+  ### Rate Limiting
+
+  - Implement delays between requests
+  - Use pagination instead of multiple queries
+  - Cache results when appropriate
