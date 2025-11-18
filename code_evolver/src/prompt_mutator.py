@@ -455,7 +455,9 @@ class PromptMutator:
         self,
         tool_id: str,
         use_case: str,
-        min_quality: float = 0.7
+        min_quality: float = 0.7,
+        current_llm_config: Optional[Dict[str, Any]] = None,
+        strict_compatibility: bool = False
     ) -> Optional[MutatedPrompt]:
         """
         Find the best mutation for a specific use case based on performance.
@@ -464,6 +466,8 @@ class PromptMutator:
             tool_id: Original tool ID
             use_case: Use case to optimize for
             min_quality: Minimum quality threshold
+            current_llm_config: Current LLM configuration to check compatibility
+            strict_compatibility: If True, only return mutations for exact LLM match
 
         Returns:
             Best performing mutation or None
@@ -477,11 +481,140 @@ class PromptMutator:
             and m.get_average_quality() >= min_quality
         ]
 
+        # Filter by LLM compatibility if config provided
+        if current_llm_config:
+            compatible = []
+            for mutation in candidates:
+                is_compatible, _ = self.check_mutation_compatibility(
+                    mutation,
+                    current_llm_config,
+                    strict=strict_compatibility
+                )
+                if is_compatible:
+                    compatible.append(mutation)
+            candidates = compatible
+
         if not candidates:
             return None
 
         # Return highest quality
         return max(candidates, key=lambda m: m.get_average_quality())
+
+    def check_mutation_compatibility(
+        self,
+        mutation: MutatedPrompt,
+        current_llm_config: Dict[str, Any],
+        strict: bool = False
+    ) -> Tuple[bool, str]:
+        """
+        Check if a mutation is compatible with current LLM configuration.
+
+        CRITICAL: Use this before applying mutations in workflows to ensure
+        the mutation was optimized for a compatible LLM.
+
+        Args:
+            mutation: The mutation to check
+            current_llm_config: Current LLM config (backend, model, tier)
+            strict: If True, require exact match. If False, allow compatible models
+
+        Returns:
+            (is_compatible, reason) tuple
+
+        Examples:
+            >>> config = {"backend": "anthropic", "model": "claude-sonnet-4"}
+            >>> is_compat, reason = mutator.check_mutation_compatibility(mutation, config)
+            >>> if not is_compat:
+            >>>     logger.warning(f"Mutation incompatible: {reason}")
+        """
+        if not mutation.llm_backend and not mutation.llm_model:
+            # Backend-agnostic mutation - compatible with everything
+            return True, "Backend-agnostic mutation (no LLM restrictions)"
+
+        current_backend = current_llm_config.get("backend")
+        current_model = current_llm_config.get("model")
+        current_tier = current_llm_config.get("tier")
+
+        if strict:
+            # Require exact match for strict mode
+            mismatches = []
+
+            if mutation.llm_backend and mutation.llm_backend != current_backend:
+                mismatches.append(f"backend ({mutation.llm_backend} != {current_backend})")
+
+            if mutation.llm_model and mutation.llm_model != current_model:
+                mismatches.append(f"model ({mutation.llm_model} != {current_model})")
+
+            if mutation.llm_tier and mutation.llm_tier != current_tier:
+                mismatches.append(f"tier ({mutation.llm_tier} != {current_tier})")
+
+            if mismatches:
+                return False, f"Strict mode mismatch: {', '.join(mismatches)}"
+
+            return True, "Exact match (strict mode)"
+
+        else:
+            # Allow compatible backends and models
+            compatible_backends = {
+                "anthropic": ["anthropic"],
+                "openai": ["openai", "azure", "azure_openai"],
+                "ollama": ["ollama", "local"],
+                "google": ["google", "gemini"],
+                "cohere": ["cohere"]
+            }
+
+            # Check backend compatibility
+            if mutation.llm_backend:
+                mutation_backend = mutation.llm_backend
+                if mutation_backend not in compatible_backends.get(current_backend, []):
+                    # Check reverse compatibility
+                    is_reverse_compatible = any(
+                        current_backend in backends
+                        for backends in compatible_backends.values()
+                        if mutation_backend in backends
+                    )
+
+                    if not is_reverse_compatible:
+                        return False, f"Incompatible backend: mutation for {mutation_backend}, current is {current_backend}"
+
+            # Check model family compatibility (loose matching)
+            if mutation.llm_model and current_model:
+                mutation_model_family = self._get_model_family(mutation.llm_model)
+                current_model_family = self._get_model_family(current_model)
+
+                if mutation_model_family != current_model_family:
+                    logger.warning(
+                        f"Model family mismatch: mutation for {mutation_model_family}, "
+                        f"current is {current_model_family}. Mutation may be suboptimal."
+                    )
+                    # Don't fail, just warn
+
+            return True, f"Compatible (mutation for {mutation.llm_backend or 'any'}/{mutation.llm_model or 'any'})"
+
+    def _get_model_family(self, model: str) -> str:
+        """Extract model family from full model name."""
+        model_lower = model.lower()
+
+        # Map to families
+        if "gpt-4" in model_lower:
+            return "gpt-4"
+        elif "gpt-3.5" in model_lower or "gpt-35" in model_lower:
+            return "gpt-3.5"
+        elif "claude-3-opus" in model_lower or "opus" in model_lower:
+            return "claude-opus"
+        elif "claude-3-sonnet" in model_lower or "claude-sonnet" in model_lower or "sonnet" in model_lower:
+            return "claude-sonnet"
+        elif "claude-3-haiku" in model_lower or "haiku" in model_lower:
+            return "claude-haiku"
+        elif "llama-3" in model_lower or "llama3" in model_lower:
+            return "llama-3"
+        elif "llama-2" in model_lower or "llama2" in model_lower:
+            return "llama-2"
+        elif "gemini-pro" in model_lower:
+            return "gemini-pro"
+        elif "gemini" in model_lower:
+            return "gemini"
+        else:
+            return model.split(":")[0].split("-")[0]  # First part of name
 
     def _use_case_similarity(self, use_case1: str, use_case2: str) -> float:
         """Simple similarity check between use cases."""
