@@ -3314,7 +3314,14 @@ USAGE GUIDELINES:
 5. ALWAYS include these standard imports at the top:
    - import json
    - import sys
-   - from node_runtime import call_tool (ONLY if you actually call this function - do NOT import if unused)
+   - from pathlib import Path
+   - CRITICAL: If you need to use call_tool(), you MUST add the path setup BEFORE importing:
+     ```python
+     # Add code_evolver root to path BEFORE importing node_runtime
+     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+     from node_runtime import call_tool
+     ```
+     (Do NOT import call_tool if you don't use it)
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
