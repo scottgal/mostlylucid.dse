@@ -1,0 +1,54 @@
+name: "Mermaid Diagram Builder"
+type: "executable"
+description: "Generates Mermaid diagram syntax from structured data, conversations, or tool execution flows. Supports flowcharts, sequence diagrams, state diagrams, class diagrams, and more."
+command: "python"
+args: ["code_evolver/tools/visualization/mermaid_builder.py"]
+input_format: "json"
+output_format: "json"
+parameters:
+  diagram_type:
+    type: "string"
+    required: true
+    description: "Type of diagram to generate: flowchart, sequence, state, class, er, gantt, journey, git, mindmap, timeline, tool_flow, conversation"
+    enum: ["flowchart", "sequence", "state", "class", "er", "gantt", "journey", "git", "mindmap", "timeline", "tool_flow", "conversation"]
+
+  data:
+    type: "object"
+    required: false
+    description: "Structured data describing the diagram content. Format depends on diagram_type"
+
+  conversation:
+    type: "array"
+    required: false
+    description: "Array of conversation messages with role and content fields"
+
+  tool_calls:
+    type: "array"
+    required: false
+    description: "Array of tool call objects with name, args, results, and timestamp"
+
+  title:
+    type: "string"
+    required: false
+    description: "Diagram title"
+
+  direction:
+    type: "string"
+    required: false
+    description: "Flow direction for flowcharts: TD (top-down), LR (left-right), RL, BT"
+    default: "TD"
+
+  theme:
+    type: "string"
+    required: false
+    description: "Mermaid theme: default, forest, dark, neutral, base"
+    default: "default"
+
+  style:
+    type: "object"
+    required: false
+    description: "Custom styling options for nodes and edges"
+
+tags: ["visualization", "diagram", "mermaid", "flowchart", "sequence", "documentation"]
+weight: 8.5
+version: "1.0.0"
