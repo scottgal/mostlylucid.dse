@@ -6094,35 +6094,64 @@ CODE TO TEST:
 
 REQUIREMENTS:
 1. Create multiple test functions testing different scenarios
-2. Test edge cases (empty input, None, invalid data)
-3. Test the main() function with realistic input_data dictionaries
-4. If code has helper functions, test those too
+2. Test edge cases (empty input, invalid data)
+3. Test the main() function by mocking stdin with realistic JSON test data
+4. If code has helper functions, test those directly with proper parameters
 5. Use assertions to verify correct behavior
 6. Include print statements for test progress
 
 EXAMPLE STRUCTURE:
 ```python
+import sys
+import json
+from io import StringIO
+
 def test_basic_functionality():
     print("Testing basic functionality...")
     from main import main
-    result = main({{"key": "value"}})  # Use actual expected keys from code
-    assert result is not None, "Result should not be None"
-    print("OK Basic test passed")
+
+    # Mock stdin with test data
+    test_input = {{"key": "value"}}
+    sys.stdin = StringIO(json.dumps(test_input))
+
+    # Capture stdout
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        main()
+        output = sys.stdout.getvalue()
+        result = json.loads(output) if output.strip() else None
+        assert result is not None, "Result should not be None"
+        print("OK Basic test passed", file=old_stdout)
+    finally:
+        sys.stdout = old_stdout
 
 def test_edge_cases():
     print("Testing edge cases...")
     from main import main
+
     # Test with empty input
-    result = main({{}})
-    # Add appropriate assertions
-    print("OK Edge cases passed")
+    sys.stdin = StringIO(json.dumps({{}}))
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        main()
+        output = sys.stdout.getvalue()
+        # Add appropriate assertions
+        print("OK Edge cases passed", file=old_stdout)
+    finally:
+        sys.stdout = old_stdout
 
 def test_invalid_input():
     print("Testing invalid input handling...")
     from main import main
+
+    # Test with invalid JSON
+    sys.stdin = StringIO("not valid json")
     try:
-        result = main(None)
-        # Verify it handles None gracefully
+        main()
         print("OK Invalid input handled")
     except Exception as e:
         print(f"OK Caught expected error: {{e}}")
@@ -6138,6 +6167,8 @@ CRITICAL:
 - Analyze the code to see what input_data keys it expects
 - Create realistic test data based on the task description
 - DO NOT just check hasattr() or imports - actually TEST the logic
+- main() functions typically read from stdin and write to stdout - use StringIO to mock them
+- Always restore sys.stdin and sys.stdout after tests to avoid affecting other tests
 - Return ONLY Python code, NO markdown fences, NO explanations
 - Every line must be valid Python syntax
 
