@@ -1,0 +1,102 @@
+name: "TCP Server"
+type: "custom"
+description: "TCP server for binary protocols. Multi-threaded connection handling with automatic decoding/encoding. Supports echo, uppercase, and custom handlers."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.tcp_tools"
+  class: "TCPServer"
+  config:
+    connection_pool_size: 100
+    keepalive: true
+    nodelay: true
+
+input_schema:
+  port:
+    type: "integer"
+    description: "Port to listen on (1-65535)"
+    minimum: 1
+    maximum: 65535
+    required: true
+
+  host:
+    type: "string"
+    description: "Host to bind to"
+    default: "0.0.0.0"
+
+  max_connections:
+    type: "integer"
+    description: "Maximum concurrent connections"
+    default: 10
+
+  timeout:
+    type: "number"
+    description: "Socket timeout in seconds"
+    default: 30.0
+
+  decoder:
+    type: "object"
+    description: "Decoder configuration for incoming data"
+    required: false
+    properties:
+      format:
+        type: "string"
+        enum: ["struct", "msgpack", "json", "custom"]
+
+  encoder:
+    type: "object"
+    description: "Encoder configuration for outgoing data"
+    required: false
+    properties:
+      format:
+        type: "string"
+        enum: ["struct", "msgpack", "json", "custom"]
+
+  handler:
+    type: "string"
+    description: "Handler type"
+    enum: ["echo", "uppercase", "custom"]
+    default: "echo"
+
+  backlog:
+    type: "integer"
+    description: "Listen backlog size"
+    default: 5
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether server operation succeeded"
+
+  connections:
+    type: "array"
+    description: "Array of connection information"
+
+  total_connections:
+    type: "integer"
+    description: "Total number of connections handled"
+
+  listen_duration:
+    type: "number"
+    description: "Total server runtime in seconds"
+
+  host:
+    type: "string"
+    description: "Host address"
+
+  port:
+    type: "integer"
+    description: "Port number"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+tags:
+  - "networking"
+  - "tcp"
+  - "server"
+  - "binary"
+  - "connection"

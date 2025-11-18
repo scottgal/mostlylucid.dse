@@ -1,0 +1,97 @@
+name: "Port Scanner"
+type: "custom"
+description: "Network port scanner. TCP/UDP port scanning with parallel execution, service detection, and common port identification. Security testing and network discovery."
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.network_utils"
+  class: "PortScanner"
+  config: {}
+
+input_schema:
+  host:
+    type: "string"
+    description: "Target hostname or IP address"
+    required: true
+
+  ports:
+    type: "array"
+    description: "List of specific ports to scan"
+    required: false
+
+  port_range:
+    type: "array"
+    description: "Array [start_port, end_port] for range scan"
+    required: false
+
+  protocol:
+    type: "string"
+    description: "Protocol to scan"
+    enum: ["tcp", "udp"]
+    default: "tcp"
+
+  timeout:
+    type: "number"
+    description: "Connection timeout per port"
+    default: 2.0
+
+  parallel:
+    type: "boolean"
+    description: "Use parallel scanning"
+    default: true
+
+  max_workers:
+    type: "integer"
+    description: "Maximum parallel workers"
+    default: 50
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether scan succeeded"
+
+  host:
+    type: "string"
+    description: "Target hostname"
+
+  target_ip:
+    type: "string"
+    description: "Resolved IP address"
+
+  protocol:
+    type: "string"
+    description: "Protocol scanned"
+
+  total_ports_scanned:
+    type: "integer"
+    description: "Total number of ports scanned"
+
+  open_ports:
+    type: "array"
+    description: "Array of open ports with service info"
+
+  closed_ports:
+    type: "array"
+    description: "Array of closed ports"
+
+  filtered_ports:
+    type: "array"
+    description: "Array of filtered ports"
+
+  scan_duration:
+    type: "number"
+    description: "Scan duration in seconds"
+
+  error:
+    type: "string"
+    description: "Error message if scan failed"
+
+tags:
+  - "networking"
+  - "port-scanning"
+  - "security"
+  - "discovery"
+  - "tcp"
+  - "udp"

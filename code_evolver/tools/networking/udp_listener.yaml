@@ -1,0 +1,96 @@
+name: "UDP Listener"
+type: "custom"
+description: "Listen for UDP packets on a specified port. Supports automatic binary decoding, packet filtering, and configurable timeouts. Perfect for receiving sensor data, game packets, or any UDP-based protocol."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.udp_tools"
+  class: "UDPListener"
+  config:
+    default_buffer_size: 65536
+    default_timeout: 30
+
+input_schema:
+  port:
+    type: "integer"
+    description: "Port number to listen on (1-65535)"
+    minimum: 1
+    maximum: 65535
+    required: true
+
+  host:
+    type: "string"
+    description: "Host address to bind to (default: 0.0.0.0 for all interfaces)"
+    default: "0.0.0.0"
+
+  max_packets:
+    type: "integer"
+    description: "Maximum number of packets to receive (null = unlimited)"
+    required: false
+
+  timeout:
+    type: "number"
+    description: "Timeout in seconds (null = no timeout)"
+    default: 30.0
+
+  buffer_size:
+    type: "integer"
+    description: "UDP receive buffer size"
+    default: 65536
+
+  decoder:
+    type: "object"
+    description: "Decoder configuration (format, pattern, fields, etc.)"
+    required: false
+    properties:
+      format:
+        type: "string"
+        enum: ["struct", "msgpack", "json", "custom"]
+      pattern:
+        type: "string"
+      fields:
+        type: "array"
+
+  return_raw:
+    type: "boolean"
+    description: "Return raw bytes instead of decoding"
+    default: false
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether listening succeeded"
+
+  packets_received:
+    type: "integer"
+    description: "Number of packets received"
+
+  packets:
+    type: "array"
+    description: "Array of received packets with metadata"
+
+  listen_duration:
+    type: "number"
+    description: "Total listening duration in seconds"
+
+  host:
+    type: "string"
+    description: "Host address listened on"
+
+  port:
+    type: "integer"
+    description: "Port listened on"
+
+  error:
+    type: "string"
+    description: "Error message if listening failed"
+
+tags:
+  - "networking"
+  - "udp"
+  - "listener"
+  - "binary"
+  - "packets"
+  - "server"

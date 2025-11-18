@@ -1,0 +1,73 @@
+name: "Rate Limiter"
+type: "custom"
+description: "Rate limiting for network operations. Supports token bucket, sliding window, and fixed window algorithms to prevent overload and throttle requests."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.resilience"
+  class: "RateLimiter"
+  config:
+    default_algorithm: "token_bucket"
+    default_rate: 100
+    default_window: 60
+
+input_schema:
+  key:
+    type: "string"
+    description: "Unique key for this rate limit (e.g., 'user:123' or 'api:endpoint')"
+    required: true
+
+  algorithm:
+    type: "string"
+    description: "Rate limiting algorithm"
+    enum: ["token_bucket", "sliding_window", "fixed_window"]
+    default: "token_bucket"
+
+  rate:
+    type: "integer"
+    description: "Number of requests allowed per window"
+    default: 100
+
+  window:
+    type: "number"
+    description: "Time window in seconds"
+    default: 60.0
+
+  burst:
+    type: "integer"
+    description: "Burst capacity (for token bucket)"
+    default: 20
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether check succeeded"
+
+  allowed:
+    type: "boolean"
+    description: "Whether request is allowed under rate limit"
+
+  key:
+    type: "string"
+    description: "Rate limit key"
+
+  algorithm:
+    type: "string"
+    description: "Algorithm used"
+
+  stats:
+    type: "object"
+    description: "Current rate limiter stats"
+
+  error:
+    type: "string"
+    description: "Error message if check failed"
+
+tags:
+  - "networking"
+  - "rate-limiting"
+  - "throttling"
+  - "token-bucket"
+  - "resilience"
