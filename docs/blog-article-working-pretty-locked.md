@@ -744,13 +744,13 @@ They:
 
 The glaze is crucial. But it comes last.
 
-## How This Maps to the DSE Codegen Pipeline
+## How This Maps to the DiSE Codegen Pipeline
 
 Here's where this gets interesting: I've actually *implemented* this philosophy in the DiSE (Directed Synthetic Evolution) system.
 
 The codegen pipeline explicitly embodies these three phases:
 
-### Phase 1 in DSE: The Exploration Stage
+### Phase 1 in DiSE: The Exploration Stage
 
 When you ask DiSE to solve a problem, it doesn't jump straight to writing perfect, tested code.
 
@@ -784,9 +784,9 @@ This is *exactly* Phase 1. The system is exploring the solution space, learning 
 
 **No tests are written during this phase.** The code is private to the generation process.
 
-### Phase 2 in DSE: The Optimisation Stage
+### Phase 2 in DiSE: The Optimisation Stage
 
-Once the code passes basic execution, DSE moves to **optimisation.**
+Once the code passes basic execution, DiSE moves to **optimisation.**
 
 This is the refinement phase. The system:
 
@@ -827,9 +827,9 @@ This is *exactly* Phase 2. The code is still private (not in the registry yet), 
 
 The shape is no longer fluid. We know what we're building. Now we make it *good.*
 
-### Phase 3 in DSE: The Testing and Storage Stage
+### Phase 3 in DiSE: The Testing and Storage Stage
 
-Only *after* optimisation does DSE generate and run **formal unit tests.**
+Only *after* optimisation does DiSE generate and run **formal unit tests.**
 
 Here's the crucial part: the tests are generated from the *refined specification and implementation*, not the initial exploration.
 
@@ -896,7 +896,7 @@ The three-phase approach is *essential* for AI-driven code generation because:
 
 ### The Evidence: It Actually Works
 
-Here's a real example from the DSE system:
+Here's a real example from the DiSE system:
 
 ```
 User: "Calculate fibonacci numbers"
@@ -933,7 +933,7 @@ The final code is:
 
 ### The Meta-Level: The System Optimizes Itself
 
-Here's where it gets really interesting: DSE applies this three-phase approach *to itself.*
+Here's where it gets really interesting: DiSE applies this three-phase approach *to itself.*
 
 The **Recursive System Optimizer** has 4 levels:
 1. **Level 0:** Optimize code artifacts (get them working, make them pretty, lock them down)
