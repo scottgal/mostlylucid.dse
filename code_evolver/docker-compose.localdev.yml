@@ -107,6 +107,39 @@ services:
       timeout: 5s
       retries: 5
 
+  # ==========================================================================
+  # Postgres - Bulk Data Storage Database
+  # ==========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: code_evolver_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      # Database credentials
+      POSTGRES_DB: dise_data
+      POSTGRES_USER: dise
+      POSTGRES_PASSWORD: dise123
+
+      # Performance tuning
+      POSTGRES_SHARED_BUFFERS: 256MB
+      POSTGRES_MAX_CONNECTIONS: 100
+      POSTGRES_WORK_MEM: 16MB
+
+      # Logging
+      POSTGRES_LOG_STATEMENT: all
+      POSTGRES_LOG_DURATION: "on"
+    networks:
+      - code_evolver_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dise -d dise_data"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 # ============================================================================
 # Docker Volumes - Persistent Storage
 # ============================================================================
@@ -122,6 +155,10 @@ volumes:
   grafana_data:
     driver: local
     name: code_evolver_grafana_data
+
+  postgres_data:
+    driver: local
+    name: code_evolver_postgres_data
 
 # ============================================================================
 # Docker Network

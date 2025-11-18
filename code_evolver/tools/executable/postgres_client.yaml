@@ -1,0 +1,95 @@
+name: "Postgres Client"
+type: "executable"
+description: "PostgreSQL database client for executing queries, managing connections, and performing bulk data operations. Provides connection pooling and transaction management."
+
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+
+tags:
+  - "database"
+  - "postgres"
+  - "sql"
+  - "storage"
+  - "data"
+
+executable:
+  command: "python"
+  args:
+    - "{tool_dir}/postgres_client.py"
+  stdin_mode: true
+  timeout: 60
+
+input_schema:
+  operation:
+    type: "string"
+    description: "Operation to perform: query, execute, insert, update, delete, create_table, transaction"
+    required: true
+
+  sql:
+    type: "string"
+    description: "SQL query or statement to execute"
+    required: false
+
+  params:
+    type: "object"
+    description: "Query parameters for prepared statements (prevents SQL injection)"
+    required: false
+
+  table:
+    type: "string"
+    description: "Table name for insert/update operations"
+    required: false
+
+  data:
+    type: "object"
+    description: "Data to insert or update (key-value pairs)"
+    required: false
+
+  where:
+    type: "object"
+    description: "WHERE clause conditions for update/delete operations"
+    required: false
+
+  fetch_one:
+    type: "boolean"
+    description: "Fetch only one result (default: false, fetch all)"
+    required: false
+    default: false
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether the operation succeeded"
+
+  data:
+    type: "array"
+    description: "Query results (for SELECT operations)"
+
+  rows_affected:
+    type: "integer"
+    description: "Number of rows affected (for INSERT/UPDATE/DELETE)"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+examples:
+  - operation: "query"
+    sql: "SELECT * FROM tools WHERE type = %(tool_type)s"
+    params: {"tool_type": "llm"}
+    description: "Execute a parameterized SELECT query"
+
+  - operation: "insert"
+    table: "tool_logs"
+    data: {"tool_id": "test_tool", "message": "Test log", "level": "info"}
+    description: "Insert a new record"
+
+  - operation: "execute"
+    sql: "CREATE INDEX IF NOT EXISTS idx_tool_logs_timestamp ON tool_logs(created_at DESC)"
+    description: "Execute DDL statement"
+
+constraints:
+  max_result_size_mb: 100
+  max_query_time_seconds: 60
+  connection_pool_size: 10

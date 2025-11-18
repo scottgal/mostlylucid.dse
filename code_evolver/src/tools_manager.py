@@ -489,6 +489,17 @@ class ToolsManager:
             logger.warning(f"Could not initialize interaction logger: {e}")
             self.interaction_logger = None
 
+        # Initialize database storage for bulk data
+        try:
+            from .database_storage import DatabaseStorage
+            self.db_storage = DatabaseStorage(
+                config_manager=config_manager,
+                tools_path=self.tools_path
+            )
+        except Exception as e:
+            logger.warning(f"Could not initialize database storage: {e}")
+            self.db_storage = None
+
         # Start tool loading in background thread
         import threading
         self._loading_complete = threading.Event()
@@ -1753,6 +1764,23 @@ Tags: {', '.join(tool.tags)}
         self.tools[tool.tool_id] = tool
         self._save_index()
         logger.info(f"OK Registered tool: {tool.tool_id} ({tool.tool_type.value})")
+
+        # Store in database if enabled
+        if self.db_storage and self.db_storage.store_generated_tools:
+            try:
+                # Determine if this is a generated tool (not from YAML files)
+                is_generated = not tool.metadata.get("from_yaml", False)
+
+                if is_generated:
+                    self.db_storage.store_generated_tool(
+                        tool_id=tool.tool_id,
+                        tool_name=tool.name,
+                        tool_type=tool.tool_type.value,
+                        metadata=tool.metadata
+                    )
+            except Exception as e:
+                logger.warning(f"Could not store tool in database: {e}")
+
         return tool
 
     def register_function(
@@ -1804,6 +1832,20 @@ Tags: {', '.join(tool.tags)}
         self._save_index()
 
         logger.info(f"OK Registered function tool: {tool_id}")
+
+        # Store in database if enabled
+        if self.db_storage and self.db_storage.store_generated_tools:
+            try:
+                self.db_storage.store_generated_tool(
+                    tool_id=tool_id,
+                    tool_name=name,
+                    tool_type="function",
+                    tool_code=source_code,
+                    metadata={"implementation_file": impl_file}
+                )
+            except Exception as e:
+                logger.warning(f"Could not store function tool in database: {e}")
+
         return tool
 
     def register_llm(
@@ -1843,6 +1885,33 @@ Tags: {', '.join(tool.tags)}
         self._save_index()
 
         logger.info(f"OK Registered LLM tool: {tool_id}")
+
+        # Store in database if enabled
+        if self.db_storage and self.db_storage.store_generated_tools:
+            try:
+                # Create YAML representation for LLM tool
+                import yaml
+                tool_yaml = yaml.dump({
+                    "name": name,
+                    "type": "llm",
+                    "description": description,
+                    "tags": tags or ["llm"],
+                    "llm": {
+                        "model": model_name,
+                        "system_prompt": system_prompt
+                    }
+                })
+
+                self.db_storage.store_generated_tool(
+                    tool_id=tool_id,
+                    tool_name=name,
+                    tool_type="llm",
+                    tool_yaml=tool_yaml,
+                    metadata={"model_name": model_name}
+                )
+            except Exception as e:
+                logger.warning(f"Could not store LLM tool in database: {e}")
+
         return tool
 
     def register_workflow(
