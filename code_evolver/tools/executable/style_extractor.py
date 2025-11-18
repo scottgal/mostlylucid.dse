@@ -37,6 +37,13 @@ try:
 except ImportError:
     HAS_YAML = False
 
+# Import language detector
+try:
+    from language_detector import LanguageDetector
+    HAS_LANGUAGE_DETECTOR = True
+except ImportError:
+    HAS_LANGUAGE_DETECTOR = False
+
 
 class StyleExtractor:
     """
@@ -67,14 +74,16 @@ class StyleExtractor:
         "lots", "tons", "really", "very", "pretty", "quite"
     ]
 
-    def __init__(self, tier: str = "detailed"):
+    def __init__(self, tier: str = "detailed", detect_language: bool = True):
         """
         Initialize Style Extractor.
 
         Args:
             tier: Analysis tier (quick, detailed, comprehensive)
+            detect_language: Whether to detect content language
         """
         self.tier = tier
+        self.detect_language = detect_language
         self.start_time = time.time()
 
     def extract_from_source(
@@ -115,8 +124,17 @@ class StyleExtractor:
                 max_length=kwargs.get('max_content_length', 50000)
             )
 
+            # Detect language if requested
+            language_info = None
+            if self.detect_language:
+                language_info = self._detect_language(content)
+
             # Calculate metadata
             metadata = self._calculate_metadata(content)
+
+            # Add language info to metadata if detected
+            if language_info:
+                metadata['language'] = language_info
 
             # Build result
             result = {
@@ -659,6 +677,50 @@ class StyleExtractor:
             'technical_level': 'very high' if technical_ratio > 0.05 else 'high' if technical_ratio > 0.02 else 'medium' if technical_ratio > 0.005 else 'low'
         }
 
+    def _detect_language(self, content: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect the language of content.
+
+        Uses the LanguageDetector class to detect language via:
+        1. NMT API (if available)
+        2. Heuristic pattern matching (fallback)
+
+        Returns:
+            Language detection result or None if detection failed
+        """
+        if not HAS_LANGUAGE_DETECTOR:
+            return {
+                'detected': False,
+                'error': 'Language detector not available',
+                'method': None
+            }
+
+        try:
+            detector = LanguageDetector()
+            result = detector.detect(content, method='auto')
+
+            if result.get('success'):
+                return {
+                    'detected': True,
+                    'language': result.get('language'),
+                    'language_name': result.get('language_name'),
+                    'confidence': result.get('confidence'),
+                    'method': result.get('method_used')
+                }
+            else:
+                return {
+                    'detected': False,
+                    'error': result.get('error', 'Language detection failed'),
+                    'method': result.get('method_used')
+                }
+
+        except Exception as e:
+            return {
+                'detected': False,
+                'error': f'Language detection error: {str(e)}',
+                'method': None
+            }
+
     def _calculate_metadata(self, content: str) -> Dict[str, Any]:
         """Calculate content metadata."""
         words = content.split()
@@ -757,6 +819,7 @@ def main():
         source_type = input_data.get('source_type')
         source = input_data.get('source')
         tier = input_data.get('extraction_tier', 'detailed')
+        detect_language = input_data.get('detect_language', True)
 
         if not source_type:
             print(json.dumps({
@@ -773,7 +836,7 @@ def main():
             sys.exit(1)
 
         # Create extractor
-        extractor = StyleExtractor(tier=tier)
+        extractor = StyleExtractor(tier=tier, detect_language=detect_language)
 
         # Extract style
         result = extractor.extract_from_source(

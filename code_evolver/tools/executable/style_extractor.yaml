@@ -87,6 +87,12 @@ input_schema:
     required: false
     default: 50000
 
+  detect_language:
+    type: "boolean"
+    description: "Whether to detect the content language (uses NMT API if available, falls back to heuristics)"
+    required: false
+    default: true
+
 # Output schema
 output_schema:
   type: "object"
@@ -157,6 +163,24 @@ output_schema:
           type: "string"
         summarization_applied:
           type: "boolean"
+        language:
+          type: "object"
+          description: "Language detection results (if detect_language=true)"
+          properties:
+            detected:
+              type: "boolean"
+            language:
+              type: "string"
+              description: "ISO 639-1 language code"
+            language_name:
+              type: "string"
+            confidence:
+              type: "number"
+            method:
+              type: "string"
+              description: "Detection method used (nmt, heuristic)"
+            error:
+              type: "string"
     saved_file:
       type: "string"
       description: "Path to saved file if save_to_file=true"
@@ -248,14 +272,16 @@ dependencies:
     - "filesystem_manager"  # For saving extracted styles
     - "http_content_fetcher"  # For fetching web content
     - "adaptive_chunker"  # For chunking long content
+    - "language_detector"  # For detecting content language (optional)
 
 # Example usage
 example_usage: |
-  # Extract style from a web page
+  # Extract style from a web page with language detection
   {
     "source_type": "url",
     "source": "https://example.com/article",
-    "extraction_tier": "detailed"
+    "extraction_tier": "detailed",
+    "detect_language": true
   }
 
   # Extract style from a file
@@ -264,7 +290,8 @@ example_usage: |
     "source": "/path/to/document.txt",
     "extraction_tier": "comprehensive",
     "save_to_file": true,
-    "filename": "document_style.json"
+    "filename": "document_style.json",
+    "detect_language": true
   }
 
   # Extract style from text with specific aspects
@@ -272,7 +299,16 @@ example_usage: |
     "source_type": "text",
     "source": "The quick brown fox...",
     "extraction_tier": "quick",
-    "style_aspects": ["tone", "formality", "vocabulary"]
+    "style_aspects": ["tone", "formality", "vocabulary"],
+    "detect_language": false
+  }
+
+  # Extract style with language detection
+  {
+    "source_type": "text",
+    "source": "Bonjour, comment allez-vous?",
+    "extraction_tier": "detailed",
+    "detect_language": true
   }
 
 # Integration notes

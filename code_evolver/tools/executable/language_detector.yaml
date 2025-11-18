@@ -1,0 +1,254 @@
+name: "Language Detector"
+type: "executable"
+description: "Detects the language of text content using multiple methods: NMT API (fast, accurate), heuristic patterns (fast, moderate accuracy), or LLM fallback (slower, high accuracy). Automatically tries NMT first, then falls back to heuristics or LLM."
+tool_id: "language_detector"
+version: "1.0.0"
+
+# Performance characteristics
+cost_tier: "variable"  # auto=free-to-low, nmt=free, heuristic=free, llm=low
+speed_tier: "variable"  # nmt=very-fast, heuristic=very-fast, llm=fast
+quality_tier: "excellent"
+max_output_length: "short"
+
+# Executable configuration
+executable:
+  command: "python"
+  args: ["code_evolver/tools/executable/language_detector.py"]
+  timeout_ms: 10000  # 10 seconds
+  memory_limit_mb: 128
+
+# Input schema
+input_schema:
+  text:
+    type: "string"
+    description: "Text to detect language for (first 2000 chars will be used)"
+    required: true
+
+  method:
+    type: "string"
+    description: "Detection method: 'auto' (try NMT, then heuristic, then LLM), 'nmt' (NMT service only), 'heuristic' (pattern matching), or 'llm' (LLM-based)"
+    required: false
+    default: "auto"
+    enum: ["auto", "nmt", "heuristic", "llm"]
+
+  max_chunk_size:
+    type: "integer"
+    description: "Maximum text chunk size for LLM method (default: 500)"
+    required: false
+    default: 500
+
+  nmt_url:
+    type: "string"
+    description: "Base URL for NMT service (default: http://localhost:8000)"
+    required: false
+    default: "http://localhost:8000"
+
+# Output schema
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+      description: "Whether detection was successful"
+    language:
+      type: "string"
+      description: "ISO 639-1 two-letter language code (e.g., 'en', 'es', 'fr')"
+    language_name:
+      type: "string"
+      description: "Human-readable language name (e.g., 'English', 'Spanish')"
+    confidence:
+      type: "number"
+      description: "Confidence score (0.0 to 1.0)"
+    method_used:
+      type: "string"
+      description: "Detection method that was used ('nmt', 'heuristic', or 'llm')"
+    message:
+      type: "string"
+      description: "Status message"
+    error:
+      type: "string"
+      description: "Error message (if success=false)"
+    scores:
+      type: "object"
+      description: "Language scores (for heuristic method)"
+
+# Detection methods
+detection_methods:
+  nmt:
+    name: "NMT Service"
+    description: "Uses NMT API /detect endpoint for fast, accurate detection"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "excellent"
+    requires_service: true
+    service_url: "http://localhost:8000"
+    accuracy: 0.95
+
+  heuristic:
+    name: "Pattern Matching"
+    description: "Fast pattern-based detection using language-specific markers"
+    cost_tier: "free"
+    speed_tier: "very-fast"
+    quality_tier: "good"
+    requires_service: false
+    accuracy: 0.75
+    supported_languages:
+      - en  # English
+      - es  # Spanish
+      - fr  # French
+      - de  # German
+      - it  # Italian
+      - pt  # Portuguese
+      - ru  # Russian
+      - zh  # Chinese
+      - ja  # Japanese
+      - ko  # Korean
+      - ar  # Arabic
+      - el  # Greek
+      - he  # Hebrew
+      - th  # Thai
+
+  llm:
+    name: "LLM-Based Detection"
+    description: "Uses LLM to detect language from text chunk"
+    cost_tier: "low"
+    speed_tier: "fast"
+    quality_tier: "excellent"
+    requires_service: true
+    accuracy: 0.90
+    note: "Currently not implemented - requires LLM service integration"
+
+# Discovery and routing
+tags:
+  - "language"
+  - "detection"
+  - "nlp"
+  - "i18n"
+  - "localization"
+  - "nmt"
+  - "analysis"
+
+weight: 8.0
+priority: 75
+mantra: "pragmatically_effective"
+
+# Dependencies
+dependencies:
+  python:
+    - name: "json"
+      builtin: true
+    - name: "re"
+      builtin: true
+    - name: "sys"
+      builtin: true
+    - name: "requests"
+      version: ">=2.25.0"
+      optional: true
+      note: "Required for NMT method"
+  services:
+    - name: "NMT Translation Service"
+      url: "http://localhost:8000"
+      required: false
+      note: "Required for 'nmt' detection method"
+
+# Example usage
+example_usage: |
+  # Auto-detect language (tries NMT, then heuristic)
+  {
+    "text": "Hello, how are you?",
+    "method": "auto"
+  }
+  # Output: {"success": true, "language": "en", "language_name": "English", ...}
+
+  # Use NMT service only
+  {
+    "text": "Bonjour, comment allez-vous?",
+    "method": "nmt"
+  }
+
+  # Use heuristic detection
+  {
+    "text": "Hola, ¿cómo estás?",
+    "method": "heuristic"
+  }
+
+  # Detect from file content
+  {
+    "text": "<content from file>",
+    "method": "auto"
+  }
+
+# Integration notes
+integration:
+  style_extractor:
+    enabled: true
+    description: "Can be integrated into style_extractor to detect content language"
+    usage: "Add language detection as metadata in style extraction"
+
+  nmt_service:
+    enabled: true
+    description: "Primary detection method when NMT service is available"
+    endpoint: "http://localhost:8000/detect"
+    fallback: "heuristic"
+
+# Supported languages (ISO 639-1 codes)
+supported_languages:
+  common:
+    - code: "en"
+      name: "English"
+    - code: "es"
+      name: "Spanish"
+    - code: "fr"
+      name: "French"
+    - code: "de"
+      name: "German"
+    - code: "it"
+      name: "Italian"
+    - code: "pt"
+      name: "Portuguese"
+    - code: "zh"
+      name: "Chinese"
+    - code: "ja"
+      name: "Japanese"
+    - code: "ko"
+      name: "Korean"
+    - code: "ar"
+      name: "Arabic"
+    - code: "ru"
+      name: "Russian"
+    - code: "hi"
+      name: "Hindi"
+
+  additional:
+    - code: "nl"
+      name: "Dutch"
+    - code: "pl"
+      name: "Polish"
+    - code: "tr"
+      name: "Turkish"
+    - code: "vi"
+      name: "Vietnamese"
+    - code: "th"
+      name: "Thai"
+    - code: "sv"
+      name: "Swedish"
+    - code: "da"
+      name: "Danish"
+    - code: "fi"
+      name: "Finnish"
+    - code: "no"
+      name: "Norwegian"
+    - code: "cs"
+      name: "Czech"
+    - code: "el"
+      name: "Greek"
+    - code: "he"
+      name: "Hebrew"
+    - code: "id"
+      name: "Indonesian"
+    - code: "ms"
+      name: "Malay"
+    - code: "ro"
+      name: "Romanian"
+    - code: "uk"
+      name: "Ukrainian"
