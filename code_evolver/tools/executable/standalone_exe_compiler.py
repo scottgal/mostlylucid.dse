@@ -126,6 +126,7 @@ def parse_python_file(file_path: str) -> Dict[str, Any]:
 def inline_tool_code(tool_id: str, config: Dict[str, Any]) -> str:
     """
     Tree-shake and inline all dependencies into a single file
+    Recursively inlines all tool dependencies down the hierarchy
 
     Args:
         tool_id: Tool to inline
@@ -141,6 +142,7 @@ def inline_tool_code(tool_id: str, config: Dict[str, Any]) -> str:
     # Collect all Python files
     python_files = deps.get('python_files', [])
     core_modules = deps.get('dependencies', {}).get('core_modules', [])
+    nested_tools = deps.get('dependencies', {}).get('tools', [])
 
     # Add core module files
     all_files = set(python_files)
@@ -148,6 +150,19 @@ def inline_tool_code(tool_id: str, config: Dict[str, Any]) -> str:
         module_file = f"src/{module}.py"
         if os.path.exists(module_file):
             all_files.add(module_file)
+
+    # Recursively add nested tool files
+    # This ensures we inline all tools that are called by this tool
+    print(f"Found {len(nested_tools) if nested_tools else 0} nested tools to inline...", file=sys.stderr)
+    for nested_tool_id in (nested_tools or []):
+        if nested_tool_id != tool_id:  # Avoid circular dependency
+            print(f"  - Analyzing nested tool: {nested_tool_id}", file=sys.stderr)
+            try:
+                nested_deps = analyze_tool_dependencies(nested_tool_id)
+                nested_files = nested_deps.get('python_files', [])
+                all_files.update(nested_files)
+            except Exception as e:
+                print(f"Warning: Could not analyze nested tool {nested_tool_id}: {e}", file=sys.stderr)
 
     # Parse all files
     parsed_files = {}
@@ -262,7 +277,43 @@ Original tool: {tool_id}
 
         # Add tool functions
         for func in parsed_tool['functions']:
-            inlined_code += f"{func['code']}\n\n"
+            # Keep the main() function for the primary tool
+            # but rename it if this is a nested tool to avoid conflicts
+            func_code = func['code']
+
+            # If this is the primary tool's main(), keep it as main()
+            # Otherwise, skip other main() functions or rename them
+            if func['name'] == 'main':
+                # This is the main entry point - keep it
+                inlined_code += f"{func_code}\n\n"
+            else:
+                inlined_code += f"{func_code}\n\n"
+
+    # Also add nested tool code if they're not already included
+    # This handles tools that call other tools
+    inlined_code += "\n# ==================== NESTED TOOLS ====================\n"
+    nested_tool_files = [f for f in all_files if f not in [tool_file] and 'tools/executable' in f]
+
+    for nested_file in nested_tool_files:
+        if os.path.exists(nested_file):
+            parsed_nested = parsed_files.get(nested_file, parse_python_file(nested_file))
+            nested_tool_name = Path(nested_file).stem
+
+            inlined_code += f"\n# Nested Tool: {nested_tool_name}\n"
+
+            # Add classes
+            for cls in parsed_nested.get('classes', []):
+                inlined_code += f"{cls['code']}\n\n"
+
+            # Add functions, renaming main() to avoid conflicts
+            for func in parsed_nested.get('functions', []):
+                func_code = func['code']
+                if func['name'] == 'main':
+                    # Rename to main_{tool_name}() to avoid conflicts
+                    func_code = func_code.replace('def main(', f'def main_{nested_tool_name}(')
+                    inlined_code += f"{func_code}\n\n"
+                else:
+                    inlined_code += f"{func_code}\n\n"
 
     return inlined_code
 
