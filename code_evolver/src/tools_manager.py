@@ -558,7 +558,6 @@ class ToolsManager:
                     )
                     self.tools[tool_id] = tool
                     logger.info(f"✓ Loaded MCP tool from YAML: {tool_id}")
-                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim magenta](mcp)[/dim magenta]")
 
                     # Store YAML tool in RAG for semantic search
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
