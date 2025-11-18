@@ -5897,9 +5897,17 @@ Generate comprehensive tests now:"""
                     if any(phrase in stripped.lower() for phrase in [
                         'these tests', 'this test', 'the test checks', 'note that', 'by adding',
                         'the code', 'we can see', 'this will', 'this should', 'the above',
-                        'as you can', 'for example', 'in this case', 'it is important'
+                        'as you can', 'for example', 'in this case', 'it is important',
+                        'to analyze', 'function expects', 'following keys', 'the `', '` function',
+                        'input dictionary with', 'expects an input'
                     ]):
                         console.print(f"[dim]Filtering out explanatory line: {stripped[:60]}...[/dim]")
+                        continue
+
+                    # Filter out lines with markdown-style backticks (code references in text)
+                    if '`' in stripped and not stripped.startswith('#'):
+                        # This is likely explanatory text with inline code, not actual Python
+                        console.print(f"[dim]Filtering out line with markdown backticks: {stripped[:60]}...[/dim]")
                         continue
 
                     # Skip lines that are clearly not Python code (but be permissive)
