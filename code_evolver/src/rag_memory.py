@@ -9,9 +9,78 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 from enum import Enum
+from dataclasses import dataclass, field, asdict
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class OptimizationWeight:
+    """
+    Optimization weight metadata for a tool.
+
+    Stores optimization state for auto-optimization and weight adjustment.
+    Used in metadata as: metadata["optimization-{toolname}"] = OptimizationWeight(...)
+
+    Attributes:
+        last_optimized_distance: Distance metric from last optimization run
+        score: Optimization score (0-100) indicating tool quality/fitness
+        last_updated: ISO timestamp of last optimization
+    """
+    last_optimized_distance: float
+    score: float  # 0-100
+    last_updated: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for metadata storage."""
+        return asdict(self)
+
+    @staticmethod
+    def from_dict(data: Dict[str, Any]) -> 'OptimizationWeight':
+        """Create from dictionary."""
+        return OptimizationWeight(
+            last_optimized_distance=data["last_optimized_distance"],
+            score=data["score"],
+            last_updated=data.get("last_updated", datetime.utcnow().isoformat() + "Z")
+        )
+
+
+@dataclass
+class BugEmbedding:
+    """
+    Bug embedding reference for tracking tool-related bugs.
+
+    Stores embeddings of bugs this tool has encountered for pattern analysis
+    and auto-optimization. Stored in metadata["bugs"] as a list.
+
+    Attributes:
+        bug_id: Unique identifier for the bug
+        embedding: Vector embedding of the bug description/context
+        severity: Bug severity level (e.g., "critical", "high", "medium", "low")
+        created_at: ISO timestamp when bug was recorded
+        resolved: Whether the bug has been resolved
+    """
+    bug_id: str
+    embedding: List[float]
+    severity: str = "medium"
+    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+    resolved: bool = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for metadata storage."""
+        return asdict(self)
+
+    @staticmethod
+    def from_dict(data: Dict[str, Any]) -> 'BugEmbedding':
+        """Create from dictionary."""
+        return BugEmbedding(
+            bug_id=data["bug_id"],
+            embedding=data["embedding"],
+            severity=data.get("severity", "medium"),
+            created_at=data.get("created_at", datetime.utcnow().isoformat() + "Z"),
+            resolved=data.get("resolved", False)
+        )
 
 
 class ArtifactType(Enum):
@@ -111,6 +180,142 @@ class Artifact:
         artifact.usage_count = data.get("usage_count", 0)
         artifact.quality_score = data.get("quality_score", 0.0)
         return artifact
+
+    # Optimization weight methods
+    def set_optimization_weight(self, tool_name: str, distance: float, score: float) -> None:
+        """
+        Set optimization weight for a specific tool.
+
+        Args:
+            tool_name: Name of the tool being optimized
+            distance: Distance metric from last optimization
+            score: Optimization score (0-100)
+
+        Example:
+            artifact.set_optimization_weight("llm_tool", 0.15, 85.5)
+        """
+        opt_weight = OptimizationWeight(
+            last_optimized_distance=distance,
+            score=score
+        )
+        self.metadata[f"optimization-{tool_name}"] = opt_weight.to_dict()
+
+    def get_optimization_weight(self, tool_name: str) -> Optional[OptimizationWeight]:
+        """
+        Get optimization weight for a specific tool.
+
+        Args:
+            tool_name: Name of the tool
+
+        Returns:
+            OptimizationWeight if found, None otherwise
+        """
+        key = f"optimization-{tool_name}"
+        if key in self.metadata:
+            return OptimizationWeight.from_dict(self.metadata[key])
+        return None
+
+    def get_all_optimization_weights(self) -> Dict[str, OptimizationWeight]:
+        """
+        Get all optimization weights stored in metadata.
+
+        Returns:
+            Dictionary mapping tool names to OptimizationWeight objects
+        """
+        weights = {}
+        for key, value in self.metadata.items():
+            if key.startswith("optimization-"):
+                tool_name = key.replace("optimization-", "")
+                weights[tool_name] = OptimizationWeight.from_dict(value)
+        return weights
+
+    # Bug tracking methods
+    def add_bug(
+        self,
+        bug_id: str,
+        embedding: List[float],
+        severity: str = "medium",
+        resolved: bool = False
+    ) -> None:
+        """
+        Add a bug embedding to this artifact.
+
+        Args:
+            bug_id: Unique identifier for the bug
+            embedding: Vector embedding of the bug
+            severity: Severity level ("critical", "high", "medium", "low")
+            resolved: Whether the bug is resolved
+
+        Example:
+            artifact.add_bug("BUG-123", embedding_vector, severity="high")
+        """
+        if "bugs" not in self.metadata:
+            self.metadata["bugs"] = []
+
+        bug = BugEmbedding(
+            bug_id=bug_id,
+            embedding=embedding,
+            severity=severity,
+            resolved=resolved
+        )
+        self.metadata["bugs"].append(bug.to_dict())
+
+    def get_bugs(self, include_resolved: bool = True) -> List[BugEmbedding]:
+        """
+        Get all bugs associated with this artifact.
+
+        Args:
+            include_resolved: Whether to include resolved bugs
+
+        Returns:
+            List of BugEmbedding objects
+        """
+        if "bugs" not in self.metadata:
+            return []
+
+        bugs = [BugEmbedding.from_dict(bug_dict) for bug_dict in self.metadata["bugs"]]
+
+        if not include_resolved:
+            bugs = [bug for bug in bugs if not bug.resolved]
+
+        return bugs
+
+    def mark_bug_resolved(self, bug_id: str) -> bool:
+        """
+        Mark a bug as resolved.
+
+        Args:
+            bug_id: ID of the bug to mark as resolved
+
+        Returns:
+            True if bug was found and marked, False otherwise
+        """
+        if "bugs" not in self.metadata:
+            return False
+
+        for bug_dict in self.metadata["bugs"]:
+            if bug_dict["bug_id"] == bug_id:
+                bug_dict["resolved"] = True
+                return True
+
+        return False
+
+    def clear_resolved_bugs(self) -> int:
+        """
+        Remove all resolved bugs from metadata.
+
+        Returns:
+            Number of bugs cleared
+        """
+        if "bugs" not in self.metadata:
+            return 0
+
+        original_count = len(self.metadata["bugs"])
+        self.metadata["bugs"] = [
+            bug_dict for bug_dict in self.metadata["bugs"]
+            if not bug_dict.get("resolved", False)
+        ]
+        return original_count - len(self.metadata["bugs"])
 
 
 class RAGMemory:
