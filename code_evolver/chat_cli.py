@@ -6072,35 +6072,36 @@ Generate comprehensive tests now:"""
                     console.print("[yellow]⚠ Test calls main() but doesn't import it - injecting import...[/yellow]")
 
                     # Find the right place to inject the import
-                    # It should go after any existing imports but before the first function definition
+                    # Strategy: Insert after the last import, or before the first def/class if no imports
                     lines = test_code.split('\n')
-                    import_lines = []
-                    other_lines = []
-                    found_first_def = False
+                    injection_index = 0
+                    last_import_index = -1
+                    first_code_index = -1
 
-                    for line in lines:
+                    # Find the last import and first def/class
+                    for i, line in enumerate(lines):
                         stripped = line.strip()
-                        if not found_first_def and (stripped.startswith('def ') or stripped.startswith('class ')):
-                            found_first_def = True
-                            # Inject import before first def/class
-                            if not import_lines:
-                                # No imports yet, add both node_runtime and main imports
-                                import_lines.append('from main import main')
-                            else:
-                                # Add main import after existing imports
-                                import_lines.append('from main import main')
-                            other_lines.append(line)
-                        elif not found_first_def and (stripped.startswith('import ') or stripped.startswith('from ')):
-                            import_lines.append(line)
-                        else:
-                            other_lines.append(line)
+                        # Track imports (but skip those inside functions - they start with whitespace)
+                        if (stripped.startswith('import ') or stripped.startswith('from ')) and not line.startswith((' ', '\t')):
+                            last_import_index = i
+                        # Track first def/class
+                        elif first_code_index == -1 and (stripped.startswith('def ') or stripped.startswith('class ')):
+                            first_code_index = i
 
-                    # Reconstruct with injected import
-                    if import_lines:
-                        test_code = '\n'.join(import_lines) + '\n' + '\n'.join(other_lines)
+                    # Determine where to inject
+                    if last_import_index >= 0:
+                        # Insert after the last import
+                        injection_index = last_import_index + 1
+                    elif first_code_index >= 0:
+                        # No imports found, insert before first def/class
+                        injection_index = first_code_index
                     else:
-                        # No imports found at all, add at the very top
-                        test_code = 'from main import main\n' + test_code
+                        # No imports and no def/class, insert at top
+                        injection_index = 0
+
+                    # Inject the import
+                    lines.insert(injection_index, 'from main import main')
+                    test_code = '\n'.join(lines)
 
                     console.print("[green]✓ Injected 'from main import main'[/green]")
 
