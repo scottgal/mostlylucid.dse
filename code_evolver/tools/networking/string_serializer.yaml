@@ -1,0 +1,74 @@
+name: "String Serializer"
+type: "custom"
+description: "String encoding and decoding utilities. Supports UTF-8, ASCII, Base64, Hex, URL encoding/decoding with configurable error handling."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.binary_codec"
+  class: "StringSerializer"
+  config: {}
+
+input_schema:
+  data:
+    type: ["string", "bytes"]
+    description: "String or bytes to process"
+    required: true
+
+  action:
+    type: "string"
+    description: "Action to perform"
+    enum: ["encode", "decode"]
+    default: "encode"
+
+  encoding:
+    type: "string"
+    description: "Character encoding"
+    enum: ["utf-8", "ascii", "latin-1", "utf-16", "utf-32"]
+    default: "utf-8"
+
+  representation:
+    type: "string"
+    description: "Output format"
+    enum: ["raw", "base64", "hex", "url"]
+    default: "raw"
+
+  errors:
+    type: "string"
+    description: "Error handling mode"
+    enum: ["strict", "ignore", "replace"]
+    default: "strict"
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  data:
+    type: ["string", "bytes"]
+    description: "Processed data"
+
+  encoding:
+    type: "string"
+    description: "Encoding used"
+
+  representation:
+    type: "string"
+    description: "Representation used"
+
+  size:
+    type: "integer"
+    description: "Size in bytes"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+tags:
+  - "networking"
+  - "string"
+  - "encoding"
+  - "base64"
+  - "hex"
+  - "serialization"

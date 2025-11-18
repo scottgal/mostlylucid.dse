@@ -1,0 +1,99 @@
+name: "Network Diagnostics"
+type: "custom"
+description: "Network diagnostic utilities. TCP ping, latency measurement, and connection testing for network troubleshooting and monitoring."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.network_utils"
+  class: "NetworkDiagnostics"
+  config: {}
+
+input_schema:
+  host:
+    type: "string"
+    description: "Target host"
+    required: true
+
+  port:
+    type: "integer"
+    description: "Target port for connection tests"
+    default: 80
+
+  action:
+    type: "string"
+    description: "Diagnostic action"
+    enum: ["ping", "latency", "connection_test"]
+    default: "ping"
+
+  count:
+    type: "integer"
+    description: "Number of test iterations"
+    default: 4
+
+  timeout:
+    type: "number"
+    description: "Timeout per test"
+    default: 5.0
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  host:
+    type: "string"
+    description: "Target host"
+
+  port:
+    type: "integer"
+    description: "Target port"
+
+  packets_sent:
+    type: "integer"
+    description: "Number of packets sent (for ping)"
+
+  packets_received:
+    type: "integer"
+    description: "Number of packets received (for ping)"
+
+  packet_loss_percent:
+    type: "number"
+    description: "Packet loss percentage (for ping)"
+
+  average_response_time_ms:
+    type: "number"
+    description: "Average response time"
+
+  min_latency_ms:
+    type: "number"
+    description: "Minimum latency (for latency test)"
+
+  max_latency_ms:
+    type: "number"
+    description: "Maximum latency (for latency test)"
+
+  avg_latency_ms:
+    type: "number"
+    description: "Average latency (for latency test)"
+
+  status:
+    type: "string"
+    description: "Connection status (for connection_test)"
+
+  connection_time_ms:
+    type: "integer"
+    description: "Connection time (for connection_test)"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+tags:
+  - "networking"
+  - "diagnostics"
+  - "ping"
+  - "latency"
+  - "monitoring"
+  - "troubleshooting"

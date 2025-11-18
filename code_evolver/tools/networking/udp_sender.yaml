@@ -1,0 +1,99 @@
+name: "UDP Sender"
+type: "custom"
+description: "Send UDP datagrams to a remote host. Supports automatic binary encoding, broadcast, and multicast. Great for sending sensor commands, game state updates, or any UDP protocol."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.udp_tools"
+  class: "UDPSender"
+  config: {}
+
+input_schema:
+  host:
+    type: "string"
+    description: "Destination host (IP address or hostname)"
+    required: true
+
+  port:
+    type: "integer"
+    description: "Destination port (1-65535)"
+    minimum: 1
+    maximum: 65535
+    required: true
+
+  data:
+    type: "any"
+    description: "Data to send (will be encoded if encoder is specified)"
+    required: true
+
+  encoder:
+    type: "object"
+    description: "Encoder configuration (format, pattern, etc.)"
+    required: false
+    properties:
+      format:
+        type: "string"
+        enum: ["struct", "msgpack", "json", "custom"]
+      pattern:
+        type: "string"
+      fields:
+        type: "array"
+
+  source_port:
+    type: "integer"
+    description: "Source port to bind to (optional)"
+    required: false
+
+  broadcast:
+    type: "boolean"
+    description: "Enable broadcast mode"
+    default: false
+
+  multicast:
+    type: "boolean"
+    description: "Enable multicast mode"
+    default: false
+
+  ttl:
+    type: "integer"
+    description: "Time-to-live for multicast packets"
+    default: 64
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether sending succeeded"
+
+  bytes_sent:
+    type: "integer"
+    description: "Number of bytes sent"
+
+  destination:
+    type: "string"
+    description: "Destination host:port"
+
+  data_size:
+    type: "integer"
+    description: "Size of data sent"
+
+  broadcast:
+    type: "boolean"
+    description: "Whether broadcast was enabled"
+
+  multicast:
+    type: "boolean"
+    description: "Whether multicast was enabled"
+
+  error:
+    type: "string"
+    description: "Error message if sending failed"
+
+tags:
+  - "networking"
+  - "udp"
+  - "sender"
+  - "binary"
+  - "broadcast"
+  - "multicast"

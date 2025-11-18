@@ -1,0 +1,79 @@
+name: "Binary Decoder"
+type: "custom"
+description: "Decode binary data to Python objects (struct, msgpack, protobuf, json, custom). Supports automatic unpacking of C-style binary data, MessagePack deserialization, and custom binary protocols."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.binary_codec"
+  class: "BinaryDecoder"
+  config: {}
+
+input_schema:
+  binary_data:
+    type: ["bytes", "string"]
+    description: "Binary data to decode (bytes, hex string, or base64 string)"
+    required: true
+
+  format:
+    type: "string"
+    description: "Decoding format"
+    enum: ["struct", "msgpack", "protobuf", "json", "custom"]
+    default: "msgpack"
+
+  pattern:
+    type: "string"
+    description: "Struct format pattern (required for struct format)"
+    required: false
+
+  fields:
+    type: "array"
+    description: "Field names for struct format (converts to dict if provided)"
+    required: false
+
+  schema:
+    type: "object"
+    description: "Custom schema definition for custom format"
+    required: false
+
+  endian:
+    type: "string"
+    description: "Byte order for struct"
+    enum: ["!", "<", ">", "=", "@"]
+    default: "!"
+
+  input_encoding:
+    type: "string"
+    description: "How binary_data is encoded"
+    enum: ["raw", "hex", "base64"]
+    default: "raw"
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether decoding succeeded"
+
+  data:
+    type: "any"
+    description: "Decoded data"
+
+  format:
+    type: "string"
+    description: "Format used for decoding"
+
+  size:
+    type: "integer"
+    description: "Size of binary data in bytes"
+
+  error:
+    type: "string"
+    description: "Error message if decoding failed"
+
+tags:
+  - "networking"
+  - "binary"
+  - "decoding"
+  - "deserialization"
+  - "struct"
+  - "msgpack"

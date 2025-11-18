@@ -1,0 +1,75 @@
+name: "DNS Resolver"
+type: "custom"
+description: "DNS resolution and reverse lookup. Forward DNS (hostname to IP), reverse DNS (IP to hostname), with caching for performance."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.network_utils"
+  class: "DNSResolver"
+  config:
+    cache_ttl: 300
+
+input_schema:
+  hostname:
+    type: "string"
+    description: "Hostname to resolve"
+    required: false
+
+  ip_address:
+    type: "string"
+    description: "IP address for reverse lookup"
+    required: false
+
+  action:
+    type: "string"
+    description: "Action to perform"
+    enum: ["resolve", "reverse", "both"]
+    default: "resolve"
+
+  timeout:
+    type: "number"
+    description: "DNS query timeout"
+    default: 5.0
+
+  use_cache:
+    type: "boolean"
+    description: "Use cached results if available"
+    default: true
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  hostname:
+    type: "string"
+    description: "Resolved hostname"
+
+  ip_addresses:
+    type: "array"
+    description: "Array of IP addresses"
+
+  ipv4_addresses:
+    type: "array"
+    description: "IPv4 addresses"
+
+  ipv6_addresses:
+    type: "array"
+    description: "IPv6 addresses"
+
+  query_time_ms:
+    type: "integer"
+    description: "Query time in milliseconds"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+tags:
+  - "networking"
+  - "dns"
+  - "resolution"
+  - "lookup"
+  - "cache"

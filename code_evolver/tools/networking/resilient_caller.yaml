@@ -1,0 +1,107 @@
+name: "Resilient Caller"
+type: "custom"
+description: "Wrap any network call with retry logic and circuit breaker. Provides exponential backoff, jitter, and automatic failure handling for improved reliability."
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.resilience"
+  class: "ResilientCaller"
+  config:
+    default_max_retries: 3
+    default_backoff: "exponential"
+
+input_schema:
+  tool_name:
+    type: "string"
+    description: "Name of the tool to call"
+    required: true
+
+  tool_params:
+    type: "object"
+    description: "Parameters to pass to the tool"
+    required: true
+
+  max_retries:
+    type: "integer"
+    description: "Maximum number of retry attempts"
+    default: 3
+
+  backoff:
+    type: "string"
+    description: "Backoff strategy"
+    enum: ["exponential", "linear", "constant"]
+    default: "exponential"
+
+  initial_delay:
+    type: "number"
+    description: "Initial delay in seconds"
+    default: 1.0
+
+  max_delay:
+    type: "number"
+    description: "Maximum delay between retries"
+    default: 30.0
+
+  jitter:
+    type: "boolean"
+    description: "Add random jitter to delays"
+    default: true
+
+  timeout:
+    type: "number"
+    description: "Overall timeout for all retries"
+    required: false
+
+  circuit_breaker:
+    type: "boolean"
+    description: "Enable circuit breaker"
+    default: false
+
+  circuit_breaker_config:
+    type: "object"
+    description: "Circuit breaker configuration"
+    required: false
+    properties:
+      failure_threshold:
+        type: "integer"
+        default: 5
+      success_threshold:
+        type: "integer"
+        default: 2
+      timeout:
+        type: "number"
+        default: 60.0
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether operation succeeded"
+
+  result:
+    type: "any"
+    description: "Result from the tool call"
+
+  attempts:
+    type: "array"
+    description: "Array of attempt information"
+
+  total_duration:
+    type: "number"
+    description: "Total duration in seconds"
+
+  circuit_state:
+    type: "string"
+    description: "Circuit breaker state if enabled"
+
+  error:
+    type: "string"
+    description: "Error message if operation failed"
+
+tags:
+  - "networking"
+  - "resilience"
+  - "retry"
+  - "circuit-breaker"
+  - "reliability"

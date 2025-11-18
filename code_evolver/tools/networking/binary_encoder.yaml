@@ -1,0 +1,81 @@
+name: "Binary Encoder"
+type: "custom"
+description: "Encode data to binary formats (struct, msgpack, protobuf, json, custom). Supports C-style struct packing, MessagePack serialization, and custom binary schemas."
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+
+custom:
+  module: "src.networking.binary_codec"
+  class: "BinaryEncoder"
+  config: {}
+
+input_schema:
+  data:
+    type: "any"
+    description: "Data to encode (dict, list, or primitive types)"
+    required: true
+
+  format:
+    type: "string"
+    description: "Encoding format"
+    enum: ["struct", "msgpack", "protobuf", "json", "custom"]
+    default: "msgpack"
+
+  pattern:
+    type: "string"
+    description: "Struct format pattern (e.g., '!IHH' for struct format). Required for struct format."
+    required: false
+
+  fields:
+    type: "array"
+    description: "Field names for struct format (must match pattern). Required when data is dict."
+    required: false
+
+  schema:
+    type: "object"
+    description: "Custom schema definition for custom format"
+    required: false
+
+  endian:
+    type: "string"
+    description: "Byte order for struct (! = network/big-endian, < = little, > = big, = = native)"
+    enum: ["!", "<", ">", "=", "@"]
+    default: "!"
+
+output_schema:
+  success:
+    type: "boolean"
+    description: "Whether encoding succeeded"
+
+  binary_data:
+    type: "bytes"
+    description: "Encoded binary data"
+
+  hex:
+    type: "string"
+    description: "Hex representation of binary data"
+
+  base64:
+    type: "string"
+    description: "Base64 representation of binary data"
+
+  size:
+    type: "integer"
+    description: "Size of binary data in bytes"
+
+  format:
+    type: "string"
+    description: "Format used for encoding"
+
+  error:
+    type: "string"
+    description: "Error message if encoding failed"
+
+tags:
+  - "networking"
+  - "binary"
+  - "encoding"
+  - "serialization"
+  - "struct"
+  - "msgpack"
