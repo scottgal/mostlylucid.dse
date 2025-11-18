@@ -1,0 +1,287 @@
+name: "Tool Mutator"
+type: "executable"
+description: "CLI for prompt mutation management. Enables on-demand mutation of LLM tools with overseer consultation. Treats LLM tools like code - enables mutation and specialization for specific use cases."
+
+executable:
+  command: "python"
+  args:
+    - "code_evolver/tools/executable/mutate_tool.py"
+
+input_schema:
+  tool:
+    type: string
+    description: "Tool ID to mutate"
+    required: false
+  use_case:
+    type: string
+    description: "Specific use case for mutation"
+    required: false
+  mode:
+    type: string
+    description: "Mode: auto (with overseer), force (skip overseer), list, best-for, export"
+    enum: ["auto", "force", "list", "best-for", "export"]
+    default: "auto"
+  strategy:
+    type: string
+    description: "Mutation strategy (for force mode)"
+    enum: ["specialize", "optimize", "constrain", "simplify", "expand", "reframe"]
+    required: false
+  constraints:
+    type: string
+    description: "Additional constraints (comma-separated, for force mode)"
+    required: false
+  mutation_id:
+    type: string
+    description: "Mutation ID (for export mode)"
+    required: false
+  output_file:
+    type: string
+    description: "Output file path (for export mode)"
+    required: false
+
+output_schema:
+  type: object
+  description: "Mutation result or list of mutations"
+
+tags:
+  - mutation
+  - prompt-engineering
+  - tool-evolution
+  - specialization
+  - cli
+
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+priority: 85
+
+usage_notes: |
+  ## Overview
+
+  The Tool Mutator enables prompt mutation - treating LLM tools like code.
+  Instead of forcing general prompts to fit all scenarios, create specialized
+  versions for specific use cases.
+
+  ## Modes
+
+  ### 1. Auto Mode (Recommended)
+  Consults overseer to decide if mutation is beneficial.
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --use-case "security audit" --auto
+  ```
+
+  ### 2. Force Mode
+  Skip overseer and force mutation with specific strategy.
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --use-case "security audit" --strategy specialize
+  ```
+
+  ### 3. Interactive Mode
+  No arguments - interactive prompts.
+
+  ```bash
+  python mutate_tool.py
+  ```
+
+  ### 4. List Mode
+  Show all mutations for a tool.
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --list
+  ```
+
+  ### 5. Best-For Mode
+  Get best mutation for a use case.
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --best-for "security review"
+  ```
+
+  ### 6. Export Mode
+  Export mutation as new tool YAML.
+
+  ```bash
+  python mutate_tool.py --mutation-id xxx --export output.yaml
+  ```
+
+  ## Mutation Strategies
+
+  - **specialize** - Make prompt specific for a use case
+  - **optimize** - Improve clarity and effectiveness
+  - **constrain** - Add requirements/constraints
+  - **simplify** - Remove unnecessary complexity
+  - **expand** - Add more detail/context
+  - **reframe** - Change approach while keeping intent
+
+  ## Integration with Overseer
+
+  The overseer evaluates:
+  - **Efficiency**: Is specialized version more efficient?
+  - **Necessity**: Is use case different enough?
+  - **Cost/Benefit**: Worth the maintenance overhead?
+  - **Frequency**: How often will this be used?
+
+  The overseer prevents:
+  - Unnecessary tool proliferation
+  - Over-specialization
+  - Wasted mutation effort
+
+  ## Examples
+
+  ### Example 1: Auto-mutate for specific use case
+
+  ```bash
+  # Let overseer decide
+  python mutate_tool.py \
+    --tool code_reviewer \
+    --use-case "Security audit of authentication code" \
+    --auto \
+    --context '{"frequency": "daily", "current_quality": 0.6}'
+  ```
+
+  Output:
+  ```json
+  {
+    "mutation_id": "code_reviewer_specialize_security_audit_20250118_143022",
+    "parent_tool_id": "code_reviewer",
+    "use_case": "Security audit of authentication code",
+    "strategy": "specialize",
+    "mutated_system_prompt": "You are a security-focused code reviewer...",
+    "mutated_prompt_template": "Perform SECURITY audit of:\n{code}...",
+    "metadata": {...}
+  }
+  ```
+
+  ### Example 2: Force mutation without overseer
+
+  ```bash
+  python mutate_tool.py \
+    --tool technical_writer \
+    --use-case "API documentation for Python libraries" \
+    --strategy specialize \
+    --constraints "Include type hints,Add usage examples,Follow Google style"
+  ```
+
+  ### Example 3: List all mutations
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --list
+  ```
+
+  Output:
+  ```json
+  [
+    {
+      "mutation_id": "code_reviewer_specialize_security_20250118_120000",
+      "use_case": "Security audit",
+      "strategy": "specialize",
+      "avg_quality": 0.92,
+      "avg_speed_ms": 1200,
+      "usage_count": 15
+    },
+    {
+      "mutation_id": "code_reviewer_constrain_perf_20250118_130000",
+      "use_case": "Performance review",
+      "strategy": "constrain",
+      "avg_quality": 0.88,
+      "avg_speed_ms": 1100,
+      "usage_count": 8
+    }
+  ]
+  ```
+
+  ### Example 4: Get best mutation for use case
+
+  ```bash
+  python mutate_tool.py --tool code_reviewer --best-for "security review"
+  ```
+
+  Returns the highest-quality mutation for similar use cases.
+
+  ### Example 5: Export mutation as new tool
+
+  ```bash
+  python mutate_tool.py \
+    --mutation-id code_reviewer_specialize_security_20250118_120000 \
+    --export code_evolver/tools/llm/security_code_reviewer.yaml
+  ```
+
+  Creates a new tool YAML file that can be loaded like any other tool.
+
+  ## Programmatic Usage
+
+  ```python
+  from src.prompt_mutator import PromptMutator, MutationStrategy
+  from src import OllamaClient, ConfigManager
+  from src.overseer_llm import OverseerLlm
+
+  # Setup
+  config = ConfigManager("config.yaml")
+  client = OllamaClient(config.ollama_url, config_manager=config)
+  overseer = OverseerLlm(client=client)
+  mutator = PromptMutator(ollama_client=client, overseer_llm=overseer)
+
+  # Auto-mutate (with overseer consultation)
+  mutated = mutator.auto_mutate(
+      tool_id="code_reviewer",
+      system_prompt="You are a code reviewer.",
+      prompt_template="Review:\n{code}",
+      use_case="Security audit of auth code",
+      context={"frequency": "daily"}
+  )
+
+  if mutated:
+      print(f"Created: {mutated.mutation_id}")
+      print(f"System: {mutated.mutated_system_prompt}")
+  ```
+
+  ## Best Practices
+
+  1. **Always use auto mode first** - Let overseer decide
+  2. **Track performance** - Monitor quality/speed metrics
+  3. **Export successful mutations** - Create permanent tools
+  4. **Clean up unused mutations** - Prevent proliferation
+  5. **Document use cases clearly** - Enables reuse
+
+  ## Anti-patterns
+
+  ❌ **Don't:**
+  - Force mutate without overseer consultation
+  - Create mutations for one-off use cases
+  - Ignore performance metrics
+  - Create too many similar mutations
+
+  ✅ **Do:**
+  - Consult overseer first
+  - Mutate for frequent, specific use cases
+  - Track and optimize based on metrics
+  - Consolidate similar mutations
+
+examples:
+  - inputs:
+      tool: "code_reviewer"
+      use_case: "Security audit"
+      mode: "auto"
+    output: |
+      {
+        "mutation_id": "code_reviewer_specialize_security_audit_20250118_143022",
+        "parent_tool_id": "code_reviewer",
+        "strategy": "specialize",
+        "mutated_system_prompt": "You are a security-focused code reviewer...",
+        "avg_quality": 0.92
+      }
+
+  - inputs:
+      tool: "code_reviewer"
+      mode: "list"
+    output: |
+      [
+        {
+          "mutation_id": "code_reviewer_specialize_security_20250118_120000",
+          "use_case": "Security audit",
+          "avg_quality": 0.92,
+          "usage_count": 15
+        }
+      ]

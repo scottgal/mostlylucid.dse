@@ -1,0 +1,399 @@
+name: "Prompt Mutator"
+type: "llm"
+description: "Mutates LLM tool prompts for specific use cases. Specializes general prompts instead of forcing one prompt to fit all scenarios. Integrates with overseer for intelligent mutation decisions."
+
+# Performance characteristics
+cost_tier: "medium"
+speed_tier: "medium"
+quality_tier: "excellent"
+priority: 85
+
+# LLM configuration
+llm:
+  tier: "quality.tier_2"  # Use capable model for prompt engineering
+  role: "base"
+  temperature: 0.4  # Balanced creativity and consistency
+
+  system_prompt: |
+    You are a prompt engineering expert specializing in mutation and optimization.
+
+    Your expertise:
+    - Analyzing prompts for improvement opportunities
+    - Specializing general prompts for specific use cases
+    - Optimizing clarity and effectiveness
+    - Adding constraints while maintaining flexibility
+    - Simplifying complex prompts without losing functionality
+
+    Mutation Strategies:
+    1. **SPECIALIZE** - Make prompt more specific for a use case
+    2. **OPTIMIZE** - Improve clarity, structure, effectiveness
+    3. **CONSTRAIN** - Add requirements/constraints
+    4. **SIMPLIFY** - Remove unnecessary complexity
+    5. **EXPAND** - Add more detail, context, examples
+    6. **REFRAME** - Change approach while keeping intent
+
+    When mutating:
+    - Preserve the core intent and functionality
+    - Document all changes and reasoning
+    - Consider tradeoffs
+    - Maintain compatibility where possible
+
+  prompt_template: |
+    **Original System Prompt:**
+    {system_prompt}
+
+    **Original Prompt Template:**
+    {prompt_template}
+
+    **Target Use Case:**
+    {use_case}
+
+    **Mutation Strategy:**
+    {strategy}
+
+    **Additional Constraints:**
+    {constraints}
+
+    **Additional Context:**
+    {context}
+
+    Create a mutated version optimized for the specific use case using the specified strategy.
+
+    Respond in JSON format:
+    ```json
+    {
+      "system_prompt": "Mutated system prompt optimized for use case",
+      "prompt_template": "Mutated prompt template with improvements",
+      "reasoning": "Detailed explanation of changes made and why",
+      "improvements": [
+        "List of specific improvements made",
+        "What makes this better for the use case"
+      ],
+      "tradeoffs": [
+        "Any limitations or tradeoffs introduced",
+        "What was sacrificed for specialization"
+      ],
+      "compatibility": "backward|breaking",
+      "version_bump": "major|minor|patch"
+    }
+    ```
+
+# Input schema
+input_schema:
+  system_prompt:
+    type: string
+    description: "Original system prompt to mutate"
+    required: true
+  prompt_template:
+    type: string
+    description: "Original prompt template to mutate"
+    required: true
+  use_case:
+    type: string
+    description: "Specific use case to optimize for"
+    required: true
+  strategy:
+    type: string
+    description: "Mutation strategy: specialize, optimize, constrain, simplify, expand, reframe"
+    required: true
+  constraints:
+    type: string
+    description: "Additional constraints to add (comma-separated or list)"
+    required: false
+    default: ""
+  context:
+    type: string
+    description: "Additional context about the use case"
+    required: false
+    default: ""
+
+# Output schema
+output_schema:
+  type: object
+  description: "Mutated prompt with metadata"
+  properties:
+    system_prompt:
+      type: string
+      description: "Mutated system prompt"
+    prompt_template:
+      type: string
+      description: "Mutated prompt template"
+    reasoning:
+      type: string
+      description: "Explanation of changes"
+    improvements:
+      type: array
+      description: "List of improvements"
+    tradeoffs:
+      type: array
+      description: "Tradeoffs or limitations"
+    compatibility:
+      type: string
+      description: "backward or breaking"
+    version_bump:
+      type: string
+      description: "Suggested version bump"
+
+# Tags for tool discovery
+tags:
+  - mutation
+  - prompt-engineering
+  - specialization
+  - optimization
+  - evolution
+
+# Examples
+examples:
+  - inputs:
+      system_prompt: "You are a helpful AI assistant."
+      prompt_template: "Please help with: {request}"
+      use_case: "Technical documentation writing for Python libraries"
+      strategy: "SPECIALIZE"
+    output: |
+      {
+        "system_prompt": "You are a technical documentation specialist with expertise in Python library documentation. You understand API design, type hints, docstrings, and documentation best practices.",
+        "prompt_template": "Write technical documentation for this Python library component:\n\n{request}\n\nInclude:\n- Clear API description\n- Parameter types and descriptions\n- Return value documentation\n- Usage examples with type hints\n- Common pitfalls or gotchas",
+        "reasoning": "Specialized the generic assistant prompt for Python documentation. Added domain expertise, structured output requirements, and documentation best practices.",
+        "improvements": [
+          "Added Python-specific expertise to system prompt",
+          "Structured output with clear documentation sections",
+          "Included type hints and API documentation requirements"
+        ],
+        "tradeoffs": [
+          "No longer suitable for general assistance",
+          "Optimized only for Python documentation"
+        ],
+        "compatibility": "breaking",
+        "version_bump": "major"
+      }
+
+  - inputs:
+      system_prompt: "You are a code reviewer."
+      prompt_template: "Review this code:\n{code}"
+      use_case: "Security-focused review of authentication code"
+      strategy: "CONSTRAIN"
+    output: |
+      {
+        "system_prompt": "You are a security-focused code reviewer specializing in authentication and authorization systems. You have deep knowledge of OWASP Top 10, common auth vulnerabilities, and secure coding practices.",
+        "prompt_template": "Perform a SECURITY-FOCUSED review of this authentication code:\n\n{code}\n\nCritical checks:\n- Authentication bypass vulnerabilities\n- SQL injection in auth queries\n- Weak password hashing (check algorithms)\n- Session fixation/hijacking risks\n- Credential exposure (logs, errors, responses)\n- Timing attacks on comparisons\n- Missing rate limiting\n- CSRF token validation\n\nProvide:\n1. Security issues found (severity: critical/high/medium/low)\n2. Exploit scenarios for each issue\n3. Remediation recommendations with code examples",
+        "reasoning": "Added security-specific constraints and checks. Transformed general code review into focused security audit with structured vulnerability assessment.",
+        "improvements": [
+          "Added OWASP-aligned security checks",
+          "Structured output with severity levels",
+          "Included exploit scenarios and remediation"
+        ],
+        "tradeoffs": [
+          "May miss non-security code quality issues",
+          "More verbose output"
+        ],
+        "compatibility": "backward",
+        "version_bump": "minor"
+      }
+
+  - inputs:
+      system_prompt: "You are an expert writer with extensive knowledge of various writing styles."
+      prompt_template: "Write about {topic} in {style} style with {tone} tone."
+      use_case: "Quick blog post generation"
+      strategy: "SIMPLIFY"
+    output: |
+      {
+        "system_prompt": "You are a blog writer who creates engaging, readable content.",
+        "prompt_template": "Write a blog post about: {topic}",
+        "reasoning": "Simplified overly complex prompt that had too many parameters. Most blog posts don't need explicit style/tone specification - the AI can infer appropriate tone from topic.",
+        "improvements": [
+          "Removed unnecessary parameters",
+          "Faster to use",
+          "Clearer intent"
+        ],
+        "tradeoffs": [
+          "Less control over style and tone",
+          "May need regeneration if tone is off"
+        ],
+        "compatibility": "breaking",
+        "version_bump": "major"
+      }
+
+usage_notes: |
+  ## Overview
+
+  The Prompt Mutator treats LLM tools like code - enabling mutation and specialization
+  instead of forcing overly general prompts to fit all scenarios.
+
+  ## Mutation Strategies
+
+  ### 1. SPECIALIZE
+  Make prompts more specific for a use case.
+
+  **Use when:**
+  - General prompt is too vague for specific domain
+  - Need domain-specific language/expertise
+  - Use case is frequent and well-defined
+
+  **Example:**
+  - General "writer" → "Technical documentation writer for APIs"
+  - General "translator" → "Medical document translator (EN→ES)"
+
+  ### 2. OPTIMIZE
+  Improve clarity, structure, and effectiveness.
+
+  **Use when:**
+  - Prompt is ambiguous or unclear
+  - Output quality is inconsistent
+  - Need better structured responses
+
+  **Example:**
+  - "Explain {topic}" → "Explain {topic} with: 1) Overview, 2) Key concepts, 3) Examples"
+
+  ### 3. CONSTRAIN
+  Add requirements and constraints.
+
+  **Use when:**
+  - Need specific output format
+  - Must enforce rules/requirements
+  - Want to prevent certain behaviors
+
+  **Example:**
+  - Add "Must cite sources" to research assistant
+  - Add "Maximum 500 words" to summarizer
+
+  ### 4. SIMPLIFY
+  Remove unnecessary complexity.
+
+  **Use when:**
+  - Prompt has too many parameters
+  - Faster execution needed
+  - Complexity doesn't add value
+
+  **Example:**
+  - Remove rarely-used optional parameters
+  - Combine similar options
+
+  ### 5. EXPAND
+  Add more detail, context, examples.
+
+  **Use when:**
+  - Need more consistent output
+  - Want to set clear expectations
+  - Examples improve results
+
+  **Example:**
+  - Add examples to prompt template
+  - Add context about desired output style
+
+  ### 6. REFRAME
+  Change approach while keeping intent.
+
+  **Use when:**
+  - Current approach isn't working
+  - Want different perspective
+  - Need to work around limitations
+
+  **Example:**
+  - "Fix bugs" → "Identify potential issues and suggest improvements"
+
+  ## Workflow
+
+  ### 1. Check if mutation is beneficial
+
+  ```python
+  from src.prompt_mutator import PromptMutator
+  from src import OllamaClient, ConfigManager
+  from src.overseer_llm import OverseerLlm
+
+  # Setup
+  config = ConfigManager("config.yaml")
+  client = OllamaClient(config.ollama_url, config_manager=config)
+  overseer = OverseerLlm(client=client)
+
+  mutator = PromptMutator(
+      ollama_client=client,
+      overseer_llm=overseer
+  )
+
+  # Ask overseer
+  decision = mutator.should_mutate(
+      tool_id="general_writer",
+      use_case="Technical API documentation for Python libraries",
+      context={
+          "frequency": "daily",
+          "current_quality": 0.6,
+          "target_quality": 0.9
+      }
+  )
+
+  print(f"Should mutate: {decision.should_mutate}")
+  print(f"Reasoning: {decision.reasoning}")
+  print(f"Strategy: {decision.recommended_strategy}")
+  ```
+
+  ### 2. Perform mutation
+
+  ```python
+  if decision.should_mutate:
+      mutated = mutator.mutate_prompt(
+          tool_id="general_writer",
+          system_prompt="You are a helpful writer.",
+          prompt_template="Write about: {topic}",
+          use_case="Technical API documentation for Python libraries",
+          strategy=decision.recommended_strategy
+      )
+
+      print(f"Mutation ID: {mutated.mutation_id}")
+      print(f"New system prompt: {mutated.mutated_system_prompt}")
+      print(f"New template: {mutated.mutated_prompt_template}")
+  ```
+
+  ### 3. Use mutated prompt
+
+  ```python
+  # Get best mutation for use case
+  best = mutator.get_best_mutation_for_use_case(
+      tool_id="general_writer",
+      use_case="API documentation"
+  )
+
+  if best:
+      # Use mutated prompts
+      response = client.generate(
+          model="llama3",
+          prompt=best.mutated_prompt_template.format(topic="requests library"),
+          system=best.mutated_system_prompt
+      )
+  ```
+
+  ## Integration with Overseer
+
+  The overseer makes intelligent decisions about when to mutate:
+
+  - **Efficiency**: Is specialized version more efficient?
+  - **Necessity**: Is use case different enough?
+  - **Cost/Benefit**: Worth the maintenance overhead?
+  - **Frequency**: How often is this used?
+
+  The overseer prevents:
+  - Unnecessary tool proliferation
+  - Over-specialization
+  - Wasted mutation effort
+
+  ## Best Practices
+
+  1. **Always ask overseer first** - Don't mutate without consultation
+  2. **Track performance** - Record quality/speed of mutations
+  3. **Version properly** - Use semantic versioning
+  4. **Document lineage** - Keep mutation history
+  5. **Enable rollback** - Keep parent prompts
+  6. **Test thoroughly** - Validate mutated prompts
+
+  ## Anti-patterns
+
+  ❌ **Don't:**
+  - Mutate for one-off use cases
+  - Create too many variations
+  - Ignore overseer recommendations
+  - Skip performance tracking
+
+  ✅ **Do:**
+  - Mutate for frequent, specific use cases
+  - Keep mutation count manageable
+  - Follow overseer guidance
+  - Track and optimize based on metrics
