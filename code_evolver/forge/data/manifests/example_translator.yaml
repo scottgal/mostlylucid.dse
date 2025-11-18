@@ -1,0 +1,128 @@
+tool_id: "nmt_translator"
+version: "2.1.0"
+name: "Neural Machine Translation Tool"
+type: "mcp"
+description: "High-performance neural machine translation supporting 50+ languages"
+
+origin:
+  author: "system"
+  source_model: "claude-3.5-sonnet"
+  created_at: "2025-10-15T12:30:00Z"
+
+lineage:
+  ancestor_tool_id: "nmt_translator_v1"
+  mutation_reason: "improved latency under load"
+  commits:
+    - id: "c9a2f8b"
+      message: "Optimize batch processing for parallel requests"
+      timestamp: "2025-10-15T12:30:00Z"
+    - id: "d4e3c1a"
+      message: "Add caching layer for common phrases"
+      timestamp: "2025-10-16T09:15:00Z"
+
+mcp:
+  server_name: "nmt_server"
+  command: "npx"
+  args: ["-y", "@modelcontextprotocol/server-nmt"]
+  env:
+    DEBUG: "false"
+    MAX_BATCH_SIZE: "32"
+  enabled: true
+  auto_start: true
+
+capabilities:
+  - name: "translate"
+    description: "Translate text between languages"
+    interface_schema_ref: "interfaces/translate.json"
+    parameters:
+      text:
+        type: "string"
+        required: true
+        description: "Text to translate"
+      source_lang:
+        type: "string"
+        required: false
+        description: "Source language code (auto-detect if not specified)"
+      target_lang:
+        type: "string"
+        required: true
+        description: "Target language code"
+
+interfaces:
+  - id: "interfaces/translate.json"
+    schema: |
+      {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "text": {"type": "string"},
+          "source_lang": {"type": "string"},
+          "target_lang": {"type": "string"}
+        },
+        "required": ["text", "target_lang"]
+      }
+
+specs:
+  feature_spec_md_ref: "specs/nmt_translator.md"
+
+tests:
+  behave_feature_ref: "tests/behave/nmt_translator.feature"
+  unit_test_ref: "tests/unit/test_nmt_translator.py"
+  load_test_ref: "tests/load/test_nmt_translator.py"
+
+security:
+  policies_ref: "security/policies/nmt_translator.md"
+  scanners: ["semgrep", "bandit", "llm_static"]
+  findings:
+    critical: 0
+    high: 0
+    medium: 1
+    low: 2
+
+trust:
+  level: "core"
+  validation_score: 0.98
+  risk_score: 0.05
+
+optimization:
+  specialize_on: ["latency", "accuracy"]
+  variant_tags: ["fast", "accurate"]
+  auto_optimize: true
+
+tags: ["mcp", "translation", "nmt", "multilingual", "secure"]
+
+embeddings:
+  keys: ["name", "description", "capabilities", "specs"]
+  vector_store_id: "rag/tools_index_v1"
+
+usage_notes_ref: "docs/usage/nmt_translator.md"
+
+examples:
+  - description: "Translate English to Spanish"
+    tool_name: "translate"
+    input:
+      text: "Hello, how are you?"
+      source_lang: "en"
+      target_lang: "es"
+    expected_output: "Hola, ¿cómo estás?"
+
+  - description: "Auto-detect source language"
+    tool_name: "translate"
+    input:
+      text: "Bonjour le monde"
+      target_lang: "en"
+    expected_output: "Hello world"
+
+metrics:
+  latest:
+    correctness: 0.98
+    latency_ms_p50: 120
+    latency_ms_p95: 180
+    latency_ms_p99: 250
+    cost_per_call: 0.0003
+    security_findings: 3
+    failure_rate: 0.005
+  history_ref: "metrics/nmt_translator_history.jsonl"
+  execution_count: 15247
+  success_count: 15171
+  last_executed: "2025-11-18T13:45:00Z"
