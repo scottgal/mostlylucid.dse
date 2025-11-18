@@ -4569,21 +4569,6 @@ This workflow successfully completed with passing tests.
                 "exit_code": metrics["exit_code"],
                 "latency_ms": metrics["latency_ms"]
             })
-            if not stdout or not stdout.strip():
-                # CRITICAL: This should NEVER happen - all tools MUST produce output!
-                console.print("\n" + "="*80)
-                console.print("[bold red on white]  ⚠ CRITICAL ERROR: NO OUTPUT PRODUCED  [/bold red on white]")
-                console.print("="*80)
-                console.print("[red]The code executed successfully but produced NO output![/red]")
-                console.print("[yellow]This is a BUG in code generation - ALL tools MUST output something![/yellow]")
-                console.print("[yellow]Possible causes:[/yellow]")
-                console.print("  1. Missing print() statement in the generated code")
-                console.print("  2. Code didn't call the main() function")
-                console.print("  3. Output was written to stderr instead of stdout")
-                if stderr and stderr.strip():
-                    console.print(f"\n[yellow]stderr output:[/yellow]")
-                    console.print(Panel(stderr, border_style="yellow"))
-                console.print("="*80 + "\n")
         else:
             console.print(f"[red]FAIL Execution failed (exit code: {metrics['exit_code']})[/red]")
             workflow.fail_step("execution", f"Exit code {metrics['exit_code']}")
