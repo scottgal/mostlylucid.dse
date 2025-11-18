@@ -1,0 +1,507 @@
+tool_id: "statistical_analysis"
+version: "1.0.0"
+name: "Statistical Analysis"
+type: "executable"
+description: |
+  Comprehensive statistical analysis tool using scikit-learn, scipy, and numpy.
+
+  Performs a wide range of statistical analyses including:
+  - Descriptive statistics (mean, median, mode, variance, percentiles, etc.)
+  - Hypothesis testing (t-tests, ANOVA, Mann-Whitney, Wilcoxon, etc.)
+  - Correlation analysis (Pearson, Spearman, Kendall)
+  - Regression analysis (linear, polynomial)
+  - Outlier detection (IQR, Z-score, Isolation Forest)
+  - Clustering analysis (K-Means, DBSCAN, Hierarchical)
+  - Comparative analysis between multiple datasets
+
+  Complements the pattern recognition tool by providing statistical insights into
+  patterns, trends, and relationships in data.
+
+category: "stats"
+
+track_usage: true
+
+executable:
+  command: "python"
+  args: ["tools/stats/statistical_analysis.py"]
+
+input_schema:
+  analysis_type:
+    type: string
+    description: "Type of analysis to perform"
+    enum: ["descriptive", "hypothesis_test", "correlation", "regression", "outliers", "clustering", "comparative"]
+    required: true
+
+  # For descriptive statistics
+  data:
+    type: array
+    description: "Dataset(s) for analysis - single array or array of arrays"
+    required: false
+
+  labels:
+    type: array
+    description: "Optional labels for datasets"
+    required: false
+
+  # For hypothesis testing
+  data1:
+    type: array
+    description: "First dataset (for hypothesis tests, correlation, etc.)"
+    required: false
+
+  data2:
+    type: array
+    description: "Second dataset (for two-sample tests, correlation, etc.)"
+    required: false
+
+  test_type:
+    type: string
+    description: "Type of hypothesis test"
+    enum: ["ttest", "paired_ttest", "mann_whitney", "wilcoxon", "ks_test", "shapiro"]
+    default: "ttest"
+    required: false
+
+  alpha:
+    type: number
+    description: "Significance level for hypothesis tests"
+    default: 0.05
+    required: false
+
+  # For correlation
+  method:
+    type: string
+    description: "Method for correlation or outlier detection"
+    enum: ["pearson", "spearman", "kendall", "iqr", "zscore", "isolation_forest", "kmeans", "dbscan", "hierarchical"]
+    default: "pearson"
+    required: false
+
+  # For regression
+  x_data:
+    type: array
+    description: "Independent variable for regression"
+    required: false
+
+  y_data:
+    type: array
+    description: "Dependent variable for regression"
+    required: false
+
+  regression_type:
+    type: string
+    description: "Type of regression (linear, polynomial_2, polynomial_3, etc.)"
+    default: "linear"
+    required: false
+
+  # For outlier detection
+  threshold:
+    type: number
+    description: "Threshold for outlier detection (1.5 for IQR, 3 for z-score)"
+    default: 1.5
+    required: false
+
+  # For clustering
+  n_clusters:
+    type: integer
+    description: "Number of clusters for clustering analysis"
+    default: 3
+    required: false
+
+  # For comparative analysis
+  datasets:
+    type: array
+    description: "Multiple datasets for comparative analysis"
+    required: false
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    error:
+      type: string
+      description: "Error message if analysis failed"
+
+    # Descriptive statistics output
+    statistics:
+      type: object
+      description: "Statistical measures for dataset(s)"
+
+    # Hypothesis testing output
+    test:
+      type: string
+      description: "Name of the test performed"
+    statistic:
+      type: number
+      description: "Test statistic"
+    p_value:
+      type: number
+      description: "P-value"
+    is_significant:
+      type: boolean
+      description: "Whether result is statistically significant"
+    interpretation:
+      type: string
+      description: "Human-readable interpretation"
+
+    # Correlation output
+    correlation:
+      type: number
+      description: "Correlation coefficient"
+    strength:
+      type: string
+      description: "Strength of correlation"
+    direction:
+      type: string
+      description: "Direction of correlation"
+
+    # Regression output
+    coefficients:
+      type: object
+      description: "Regression coefficients"
+    r_squared:
+      type: number
+      description: "R-squared value"
+    equation:
+      type: string
+      description: "Regression equation"
+
+    # Outlier detection output
+    outlier_count:
+      type: integer
+      description: "Number of outliers detected"
+    outlier_indices:
+      type: array
+      description: "Indices of outliers"
+    outlier_values:
+      type: array
+      description: "Values of outliers"
+
+    # Clustering output
+    labels:
+      type: array
+      description: "Cluster labels"
+    centroids:
+      type: array
+      description: "Cluster centroids (for k-means)"
+    cluster_sizes:
+      type: array
+      description: "Size of each cluster"
+
+tags: ["stats", "statistics", "analysis", "data-science", "scikit-learn", "hypothesis-testing", "correlation", "regression", "clustering", "outliers"]
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+priority: 90
+
+metadata:
+  author: "mostlylucid DiSE"
+  license: "MIT"
+  status: "stable"
+  dependencies:
+    - "numpy"
+    - "scipy"
+    - "scikit-learn"
+
+purpose: |
+  Comprehensive Statistical Analysis Tool
+
+  This tool provides a complete suite of statistical analysis capabilities to complement
+  the pattern recognition system. It enables:
+
+  1. **Data Understanding**: Descriptive statistics to understand data distributions
+  2. **Pattern Validation**: Hypothesis testing to validate observed patterns
+  3. **Relationship Discovery**: Correlation and regression to find relationships
+  4. **Anomaly Detection**: Outlier detection to identify unusual patterns
+  5. **Data Segmentation**: Clustering to group similar patterns
+  6. **Comparative Analysis**: Statistical comparison between different datasets
+
+  Use cases:
+  - Analyze error patterns statistically
+  - Validate fix effectiveness with hypothesis tests
+  - Find correlations between code metrics and error rates
+  - Detect anomalous performance patterns
+  - Cluster similar error types
+  - Compare code quality metrics across different tools
+
+capabilities:
+  - "Descriptive statistics (mean, median, mode, std, variance, percentiles, skewness, kurtosis)"
+  - "Hypothesis testing (t-test, ANOVA, Mann-Whitney, Wilcoxon, Kolmogorov-Smirnov, Shapiro-Wilk)"
+  - "Correlation analysis (Pearson, Spearman, Kendall) with significance testing"
+  - "Regression analysis (linear, polynomial) with R², RMSE, MAE metrics"
+  - "Outlier detection (IQR, Z-score, Isolation Forest)"
+  - "Clustering (K-Means, DBSCAN, Hierarchical)"
+  - "Comparative analysis with ANOVA and Kruskal-Wallis tests"
+  - "Effect size calculations (Cohen's d)"
+  - "Confidence interval support"
+
+usage_notes: |
+  ## Overview
+
+  The Statistical Analysis tool provides comprehensive statistical capabilities for
+  analyzing code patterns, performance metrics, and error data. It complements the
+  pattern recognition tool by adding rigorous statistical validation.
+
+  ## Analysis Types
+
+  ### 1. Descriptive Statistics
+
+  Get comprehensive statistical summaries of your data:
+
+  ```bash
+  echo '{
+    "analysis_type": "descriptive",
+    "data": [23, 45, 67, 89, 34, 56, 78, 90, 12, 45]
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  Returns: mean, median, mode, std, variance, min, max, quartiles, percentiles, skewness, kurtosis, CV
+
+  ### 2. Hypothesis Testing
+
+  Test whether two datasets are significantly different:
+
+  ```bash
+  # Independent t-test
+  echo '{
+    "analysis_type": "hypothesis_test",
+    "data1": [23, 45, 67, 89, 34],
+    "data2": [56, 78, 90, 12, 45],
+    "test_type": "ttest",
+    "alpha": 0.05
+  }' | python tools/stats/statistical_analysis.py
+
+  # Mann-Whitney U (non-parametric)
+  echo '{
+    "analysis_type": "hypothesis_test",
+    "data1": [23, 45, 67, 89, 34],
+    "data2": [56, 78, 90, 12, 45],
+    "test_type": "mann_whitney"
+  }' | python tools/stats/statistical_analysis.py
+
+  # Normality test
+  echo '{
+    "analysis_type": "hypothesis_test",
+    "data1": [23, 45, 67, 89, 34, 56, 78],
+    "test_type": "shapiro"
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  ### 3. Correlation Analysis
+
+  Find relationships between two variables:
+
+  ```bash
+  echo '{
+    "analysis_type": "correlation",
+    "data1": [1, 2, 3, 4, 5],
+    "data2": [2, 4, 6, 8, 10],
+    "method": "pearson"
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  Methods: pearson, spearman, kendall
+
+  ### 4. Regression Analysis
+
+  Model relationships between variables:
+
+  ```bash
+  # Linear regression
+  echo '{
+    "analysis_type": "regression",
+    "x_data": [1, 2, 3, 4, 5],
+    "y_data": [2, 4, 6, 8, 10],
+    "regression_type": "linear"
+  }' | python tools/stats/statistical_analysis.py
+
+  # Polynomial regression
+  echo '{
+    "analysis_type": "regression",
+    "x_data": [1, 2, 3, 4, 5],
+    "y_data": [1, 4, 9, 16, 25],
+    "regression_type": "polynomial_2"
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  ### 5. Outlier Detection
+
+  Identify anomalous data points:
+
+  ```bash
+  # IQR method
+  echo '{
+    "analysis_type": "outliers",
+    "data": [23, 45, 67, 89, 34, 56, 78, 90, 12, 450],
+    "method": "iqr",
+    "threshold": 1.5
+  }' | python tools/stats/statistical_analysis.py
+
+  # Z-score method
+  echo '{
+    "analysis_type": "outliers",
+    "data": [23, 45, 67, 89, 34, 56, 78, 90, 12, 450],
+    "method": "zscore",
+    "threshold": 3
+  }' | python tools/stats/statistical_analysis.py
+
+  # Isolation Forest (ML-based)
+  echo '{
+    "analysis_type": "outliers",
+    "data": [23, 45, 67, 89, 34, 56, 78, 90, 12, 450],
+    "method": "isolation_forest",
+    "threshold": 0.1
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  ### 6. Clustering Analysis
+
+  Group similar data points:
+
+  ```bash
+  # K-Means
+  echo '{
+    "analysis_type": "clustering",
+    "data": [[1, 2], [1.5, 1.8], [5, 8], [8, 8], [1, 0.6], [9, 11]],
+    "n_clusters": 2,
+    "method": "kmeans"
+  }' | python tools/stats/statistical_analysis.py
+
+  # DBSCAN (density-based)
+  echo '{
+    "analysis_type": "clustering",
+    "data": [[1, 2], [1.5, 1.8], [5, 8], [8, 8], [1, 0.6], [9, 11]],
+    "method": "dbscan"
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  ### 7. Comparative Analysis
+
+  Compare multiple datasets statistically:
+
+  ```bash
+  echo '{
+    "analysis_type": "comparative",
+    "datasets": [
+      [23, 45, 67, 89, 34],
+      [56, 78, 90, 12, 45],
+      [34, 56, 78, 90, 23]
+    ],
+    "labels": ["Tool A", "Tool B", "Tool C"]
+  }' | python tools/stats/statistical_analysis.py
+  ```
+
+  ## Integration with Pattern Recognition
+
+  Use statistical analysis to enhance pattern recognition:
+
+  ```python
+  # 1. Analyze error patterns statistically
+  errors_by_tool = {
+      "tool_a": [12, 15, 13, 14, 16],
+      "tool_b": [45, 48, 50, 47, 49]
+  }
+
+  # Test if tools have significantly different error rates
+  result = call_tool("statistical_analysis", json.dumps({
+      "analysis_type": "hypothesis_test",
+      "data1": errors_by_tool["tool_a"],
+      "data2": errors_by_tool["tool_b"],
+      "test_type": "ttest"
+  }))
+
+  # 2. Find correlation between code complexity and errors
+  result = call_tool("statistical_analysis", json.dumps({
+      "analysis_type": "correlation",
+      "data1": complexity_scores,
+      "data2": error_counts,
+      "method": "spearman"
+  }))
+
+  # 3. Detect anomalous performance metrics
+  result = call_tool("statistical_analysis", json.dumps({
+      "analysis_type": "outliers",
+      "data": execution_times,
+      "method": "isolation_forest"
+  }))
+
+  # 4. Cluster similar error patterns
+  result = call_tool("statistical_analysis", json.dumps({
+      "analysis_type": "clustering",
+      "data": error_feature_vectors,
+      "n_clusters": 5,
+      "method": "kmeans"
+  }))
+  ```
+
+  ## Use Cases
+
+  1. **Validate Pattern Effectiveness**: Test if a fix pattern actually reduces errors
+  2. **Performance Regression Detection**: Identify statistically significant slowdowns
+  3. **Error Clustering**: Group similar errors for pattern discovery
+  4. **Quality Metrics Correlation**: Find relationships between code quality and bugs
+  5. **Anomaly Detection**: Identify unusual code patterns or metrics
+  6. **A/B Testing**: Compare different code optimization strategies
+  7. **Trend Analysis**: Analyze changes in metrics over time
+
+examples:
+  - inputs:
+      analysis_type: "descriptive"
+      data: [23, 45, 67, 89, 34, 56, 78, 90, 12, 45]
+    output: |
+      {
+        "success": true,
+        "statistics": {
+          "count": 10,
+          "mean": 53.9,
+          "median": 50.5,
+          "std": 25.18,
+          "min": 12,
+          "max": 90,
+          "q1": 34.75,
+          "q3": 74.25,
+          "iqr": 39.5
+        }
+      }
+
+  - inputs:
+      analysis_type: "hypothesis_test"
+      data1: [23, 45, 67, 89, 34]
+      data2: [56, 78, 90, 12, 45]
+      test_type: "ttest"
+    output: |
+      {
+        "success": true,
+        "test": "Independent Samples t-test",
+        "p_value": 0.7234,
+        "is_significant": false,
+        "interpretation": "No significant difference in means"
+      }
+
+  - inputs:
+      analysis_type: "correlation"
+      data1: [1, 2, 3, 4, 5]
+      data2: [2, 4, 6, 8, 10]
+      method: "pearson"
+    output: |
+      {
+        "success": true,
+        "correlation": 1.0,
+        "p_value": 0.0,
+        "strength": "very strong",
+        "direction": "positive",
+        "interpretation": "Very strong positive correlation (r=1.000, p=0.0000)"
+      }
+
+  - inputs:
+      analysis_type: "outliers"
+      data: [23, 45, 67, 89, 34, 56, 78, 90, 12, 450]
+      method: "iqr"
+    output: |
+      {
+        "success": true,
+        "method": "IQR (Interquartile Range)",
+        "outlier_count": 1,
+        "outlier_indices": [9],
+        "outlier_values": [450],
+        "outlier_percentage": 10.0
+      }
