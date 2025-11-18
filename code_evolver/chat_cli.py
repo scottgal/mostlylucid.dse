@@ -1025,6 +1025,18 @@ class ChatCLI:
         self._tool_conversations = {}  # {node_id: [{"role": "user", "content": "..."}, ...]}
         self._current_tool_conversation = []  # Active conversation during tool development
 
+        # Initialize conversation tool for /conversation mode
+        try:
+            from src.conversation.conversation_tool import ConversationTool
+            self._conversation_tool = ConversationTool.create_from_config_file(
+                config_path="config.yaml",
+                conversation_model="gemma3:1b"
+            )
+            log_panel.log("OK Conversation tool initialized")
+        except Exception as e:
+            console.print(f"[dim yellow]Conversation tool not available: {e}[/dim yellow]")
+            self._conversation_tool = None
+
         # Initialize background workflow manager for parallel execution
         self.workflow_manager = BackgroundWorkflowManager(self)
 
@@ -1056,7 +1068,7 @@ class ChatCLI:
                 self.slash_commands = [
                     "/generate", "/tools", "/tool", "/status", "/clear", "/clear_rag",
                     "/help", "/manual", "/config", "/auto", "/delete", "/evolve",
-                    "/list", "/exit", "/quit", "/workflows", "/wf"
+                    "/list", "/exit", "/quit", "/workflows", "/wf", "/conversation"
                 ]
 
             def get_completions(self, document, complete_event):
@@ -7542,6 +7554,98 @@ Return ONLY the JSON object, nothing else."""
         console.print(table)
         return True
 
+    def handle_conversation(self, args: str) -> bool:
+        """
+        Handle conversation commands.
+
+        Usage:
+            /conversation start [topic]  - Start a new conversation
+            /conversation end [topic]    - End current or specified conversation
+            /conversation status         - Show conversation status
+            /conversation list           - List active conversations
+
+        Args:
+            args: Command arguments
+        """
+        if not self._conversation_tool:
+            console.print("[red]Conversation tool not available[/red]")
+            console.print("[yellow]Make sure Qdrant is running and configured[/yellow]")
+            return False
+
+        # Parse subcommand
+        parts = args.split(None, 1)
+        if not parts:
+            # No args - show status
+            parts = ["status"]
+
+        subcommand = parts[0].lower()
+        sub_args = parts[1] if len(parts) > 1 else ""
+
+        try:
+            if subcommand == "start":
+                # Start new conversation
+                topic = sub_args if sub_args else "general"
+                result = self._conversation_tool.start_conversation(topic=topic)
+                console.print(f"\n[green]✓ Started conversation: {result['topic']}[/green]")
+                console.print(f"[dim]Conversation ID: {result['conversation_id']}[/dim]")
+                console.print("[cyan]You are now in conversation mode.[/cyan]")
+                console.print("[dim]Use /conversation end to finish this conversation[/dim]\n")
+
+            elif subcommand == "end":
+                # End conversation
+                topic = sub_args if sub_args else None
+                result = self._conversation_tool.end_conversation(topic=topic, save_metadata=True)
+                console.print(f"\n[green]✓ Ended conversation: {result['topic']}[/green]")
+                console.print(f"[dim]Messages: {result['message_count']}[/dim]")
+
+                if "summary" in result:
+                    console.print(f"\n[cyan]Summary:[/cyan]")
+                    console.print(f"[dim]{result['summary']}[/dim]")
+
+                if "key_points" in result:
+                    console.print(f"\n[cyan]Key Points:[/cyan]")
+                    for point in result['key_points']:
+                        console.print(f"  • [dim]{point}[/dim]")
+                console.print()
+
+            elif subcommand == "status":
+                # Show status
+                status = self._conversation_tool.get_conversation_status()
+
+                if status['active']:
+                    console.print(f"\n[green]✓ Active conversation[/green]")
+                    console.print(f"[cyan]Topic:[/cyan] {status['topic']}")
+                    console.print(f"[cyan]Messages:[/cyan] {status['message_count']}")
+                    console.print(f"[cyan]Has Summary:[/cyan] {'Yes' if status['has_summary'] else 'No'}")
+                    console.print(f"[dim]Conversation ID: {status['conversation_id']}[/dim]\n")
+                else:
+                    console.print("\n[dim]No active conversation[/dim]")
+                    console.print("[dim]Use /conversation start [topic] to begin[/dim]\n")
+
+            elif subcommand == "list":
+                # List active conversations
+                conversations = self._conversation_tool.list_active_conversations()
+
+                if not conversations:
+                    console.print("\n[dim]No active conversations[/dim]\n")
+                else:
+                    console.print(f"\n[cyan]Active Conversations ({len(conversations)}):[/cyan]\n")
+                    for conv in conversations:
+                        console.print(f"  • [green]{conv['topic']}[/green]")
+                        console.print(f"    [dim]ID: {conv['conversation_id']}[/dim]")
+                    console.print()
+
+            else:
+                console.print(f"[red]Unknown subcommand: {subcommand}[/red]")
+                console.print("[dim]Usage: /conversation [start|end|status|list] [args][/dim]")
+                return False
+
+        except Exception as e:
+            console.print(f"[red]Error: {e}[/red]")
+            return False
+
+        return True
+
     def handle_backends(self, test_connection: bool = False) -> bool:
         """Handle backends command - check status of all LLM backends."""
         console.print("\n[bold cyan]LLM Backend Status[/bold cyan]\n")
@@ -8809,12 +8913,137 @@ Return ONLY the JSON, no other text."""
         return True
 
     def handle_workflow(self, node_id: str) -> bool:
-        """Handle workflow command - display the complete workflow for a node."""
+        """
+        Handle workflow command - display, list, or manage workflows.
+
+        Usage:
+            /workflow              - List all workflows
+            /workflow list         - List all workflows
+            /workflow info <id>    - Show workflow details
+            /workflow run <id>     - Run a workflow
+            /workflow compile ...  - Compile workflow (see compile options)
+            /workflow <id>         - Show workflow details (legacy)
+        """
+        # Parse subcommand
         if not node_id:
-            console.print("[red]Error: Please specify a node ID[/red]")
-            console.print("[dim]Usage: workflow <node_id>[/dim]")
+            # No args - list all workflows
+            return self.handle_list_workflows()
+
+        parts = node_id.split(None, 1)
+        subcommand = parts[0].lower()
+        sub_args = parts[1] if len(parts) > 1 else ""
+
+        # Route subcommands
+        if subcommand == "list":
+            return self.handle_list_workflows()
+
+        elif subcommand == "info":
+            if not sub_args:
+                console.print("[red]Error: Workflow ID required[/red]")
+                console.print("[dim]Usage: /workflow info <workflow_id>[/dim]")
+                return False
+            return self.handle_workflow_info(sub_args)
+
+        elif subcommand == "run":
+            if not sub_args:
+                console.print("[red]Error: Workflow ID required[/red]")
+                console.print("[dim]Usage: /workflow run <workflow_id>[/dim]")
+                return False
+            return self.handle_workflow_run(sub_args)
+
+        elif subcommand == "compile":
+            return self.handle_workflow_compile(sub_args)
+
+        else:
+            # Legacy behavior: treat as workflow ID
+            return self.handle_workflow_info(node_id)
+
+    def handle_workflow_info(self, workflow_id: str) -> bool:
+        """Show detailed information about a workflow."""
+        from pathlib import Path
+        import json
+
+        # First, try to load as JSON workflow
+        workflows_dir = Path("code_evolver/workflows")
+        workflow_file = workflows_dir / f"{workflow_id}.json"
+
+        if workflow_file.exists():
+            return self._show_json_workflow_info(workflow_id, workflow_file)
+        else:
+            # Fall back to node-based workflow
+            return self._show_node_workflow_info(workflow_id)
+
+    def _show_json_workflow_info(self, workflow_id: str, workflow_file: Path) -> bool:
+        """Show info for a JSON workflow definition."""
+        import json
+
+        try:
+            with open(workflow_file, 'r') as f:
+                workflow = json.load(f)
+        except Exception as e:
+            console.print(f"[red]Error loading workflow: {e}[/red]")
             return False
 
+        console.print(f"\n[bold cyan]Workflow: {workflow.get('name', workflow_id)}[/bold cyan]\n")
+
+        # Basic info
+        info_table = Table(box=box.SIMPLE, show_header=False)
+        info_table.add_column("Property", style="cyan")
+        info_table.add_column("Value")
+
+        info_table.add_row("ID", workflow.get("workflow_id", workflow_id))
+        info_table.add_row("Version", workflow.get("version", "1.0"))
+        info_table.add_row("Priority", workflow.get("priority", "medium"))
+        info_table.add_row("Quality Level", workflow.get("quality_level", "production"))
+        info_table.add_row("Description", workflow.get("description", ""))
+
+        console.print(info_table)
+        console.print()
+
+        # Workflow steps
+        steps = workflow.get("steps", [])
+        if steps:
+            console.print(f"[bold]Workflow Steps ({len(steps)})[/bold]\n")
+
+            steps_table = Table(box=box.ROUNDED)
+            steps_table.add_column("Step", justify="right", style="cyan", no_wrap=True)
+            steps_table.add_column("ID", style="green")
+            steps_table.add_column("Tool", style="magenta")
+            steps_table.add_column("Description", style="dim", max_width=50)
+
+            for i, step in enumerate(steps, 1):
+                steps_table.add_row(
+                    str(i),
+                    step.get("step_id", f"step_{i}"),
+                    step.get("tool", "unknown"),
+                    step.get("description", "")[:60]
+                )
+
+            console.print(steps_table)
+            console.print()
+
+        # Metadata
+        metadata = workflow.get("metadata", {})
+        if metadata:
+            meta_table = Table(title="Metadata", box=box.SIMPLE)
+            meta_table.add_column("Property", style="cyan")
+            meta_table.add_column("Value", style="dim")
+
+            for key, value in metadata.items():
+                meta_table.add_row(key, str(value))
+
+            console.print(meta_table)
+            console.print()
+
+        # Tags
+        tags = workflow.get("tags", [])
+        if tags:
+            console.print(f"[cyan]Tags:[/cyan] {', '.join(tags)}\n")
+
+        return True
+
+    def _show_node_workflow_info(self, node_id: str) -> bool:
+        """Show info for a node-based workflow (legacy)."""
         console.print(f"\n[bold cyan]Workflow for: {node_id}[/bold cyan]\n")
 
         # Get node info from registry
@@ -8901,6 +9130,429 @@ Return ONLY the JSON, no other text."""
         console.print()
         console.print(meta_table)
         console.print()
+
+        return True
+
+    def handle_workflow_run(self, args: str) -> bool:
+        """
+        Run a workflow.
+
+        Usage:
+            /workflow run <workflow_id> [input_json]
+
+        Args:
+            args: Workflow ID and optional input
+        """
+        from pathlib import Path
+        import json
+
+        # Parse args
+        parts = args.split(None, 1)
+        workflow_id = parts[0]
+        input_json = parts[1] if len(parts) > 1 else "{}"
+
+        # Try to parse input JSON
+        try:
+            inputs = json.loads(input_json)
+        except json.JSONDecodeError:
+            console.print(f"[red]Error: Invalid JSON input[/red]")
+            console.print(f"[dim]Usage: /workflow run <workflow_id> [input_json][/dim]")
+            return False
+
+        # Check if workflow exists
+        workflows_dir = Path("code_evolver/workflows")
+        workflow_file = workflows_dir / f"{workflow_id}.json"
+
+        if workflow_file.exists():
+            # JSON workflow
+            try:
+                # Import workflow runner
+                from run_workflow import WorkflowRunner
+
+                console.print(f"\n[cyan]Running workflow: {workflow_id}[/cyan]\n")
+
+                runner = WorkflowRunner()
+                workflow_spec = runner.load_workflow(workflow_file)
+
+                # Execute workflow
+                with console.status("[bold green]Executing workflow..."):
+                    result = runner.execute_workflow(workflow_spec, inputs)
+
+                console.print(f"\n[green]✓ Workflow completed successfully![/green]")
+                console.print(f"\n[cyan]Results:[/cyan]")
+                console.print(json.dumps(result, indent=2))
+                console.print()
+
+            except Exception as e:
+                console.print(f"\n[red]Workflow execution failed: {e}[/red]\n")
+                import traceback
+                console.print(f"[dim]{traceback.format_exc()}[/dim]")
+                return False
+        else:
+            # Try node-based workflow
+            console.print(f"\n[cyan]Running node workflow: {workflow_id}[/cyan]\n")
+
+            try:
+                success = self.handle_run(workflow_id)
+                if success:
+                    console.print(f"\n[green]✓ Workflow completed![/green]\n")
+                else:
+                    console.print(f"\n[red]Workflow failed[/red]\n")
+                return success
+            except Exception as e:
+                console.print(f"\n[red]Error: {e}[/red]\n")
+                return False
+
+        return True
+
+    def handle_tool_compile(self, args: str) -> bool:
+        """
+        Handle tool compilation.
+
+        Usage:
+            /tool compile <tool_id> --app [--platform <platform>]
+            /tool compile <tool_id> --script [single|tools]
+            /tool compile --help
+
+        Args:
+            args: Compilation arguments
+        """
+        import argparse
+        import shlex
+
+        # Parse arguments
+        if not args or args == "--help":
+            console.print("\n[bold cyan]Tool Compilation Options[/bold cyan]\n")
+            console.print("[green]--app[/green]")
+            console.print("  Compile to executable for current platform")
+            console.print("  Example: /tool compile my_tool --app\n")
+            console.print("[green]--platform <name> --app[/green]")
+            console.print("  Compile to executable for specified platform")
+            console.print("  Platforms: windows, linux, darwin")
+            console.print("  Example: /tool compile my_tool --platform windows --app\n")
+            console.print("[green]--script [single|tools][/green]")
+            console.print("  Compile to Python script")
+            console.print("  - single: All code in one file (default)")
+            console.print("  - tools: Modular structure with separate directories")
+            console.print("  Example: /tool compile my_tool --script")
+            console.print("  Example: /tool compile my_tool --script tools\n")
+            console.print("[green]--output <path>[/green]")
+            console.print("  Custom output path")
+            console.print("  Example: /tool compile my_tool --app --output ./my_app\n")
+            return True
+
+        try:
+            # Split args respecting quotes
+            arg_parts = shlex.split(args)
+        except Exception:
+            arg_parts = args.split()
+
+        if not arg_parts:
+            console.print("[red]Error: Tool ID required[/red]")
+            console.print("[dim]Usage: /tool compile <tool_id> [options][/dim]")
+            return False
+
+        tool_id = arg_parts[0]
+
+        # Parse options
+        parser = argparse.ArgumentParser(add_help=False)
+        parser.add_argument('--app', action='store_true')
+        parser.add_argument('--platform', type=str, default=None)
+        parser.add_argument('--script', nargs='?', const='single', default=None)
+        parser.add_argument('--output', type=str, default=None)
+
+        try:
+            opts = parser.parse_args(arg_parts[1:])
+        except SystemExit:
+            console.print("[red]Error parsing arguments[/red]")
+            console.print("[dim]Use /tool compile --help for usage[/dim]")
+            return False
+
+        # Import compiler
+        from src.compiler import Compiler, CompilationError
+        from pathlib import Path
+
+        try:
+            compiler = Compiler(tools_manager=self._tools_manager)
+
+            if opts.app:
+                # Compile to executable
+                console.print(f"\n[cyan]Compiling tool '{tool_id}' to executable...[/cyan]")
+
+                output_path = Path(opts.output) if opts.output else None
+
+                with console.status("[bold green]Building executable..."):
+                    result = compiler.compile_tool_to_app(
+                        tool_id=tool_id,
+                        output_path=output_path,
+                        target_platform=opts.platform,
+                        app_name=tool_id
+                    )
+
+                console.print(f"\n[green]✓ Executable created successfully![/green]")
+                console.print(f"[cyan]Output:[/cyan] {result['output_path']}")
+                console.print(f"[dim]Platform: {result['platform']}[/dim]")
+                console.print(f"[dim]Size: {result['size_bytes'] / 1024:.1f} KB[/dim]\n")
+
+            elif opts.script is not None:
+                # Compile to script
+                script_type = opts.script if opts.script in ['single', 'tools'] else 'single'
+                console.print(f"\n[cyan]Compiling tool '{tool_id}' to {script_type} script...[/cyan]")
+
+                output_path = Path(opts.output) if opts.output else None
+
+                result = compiler.compile_tool_to_script(
+                    tool_id=tool_id,
+                    output_path=output_path,
+                    script_type=script_type
+                )
+
+                console.print(f"\n[green]✓ Script created successfully![/green]")
+                console.print(f"[cyan]Output:[/cyan] {result['output_path']}")
+                console.print(f"[dim]Type: {result['script_type']}[/dim]")
+
+                if 'files_created' in result:
+                    console.print(f"[dim]Files: {len(result['files_created'])}[/dim]")
+                elif 'lines' in result:
+                    console.print(f"[dim]Lines: {result['lines']}[/dim]")
+                console.print()
+
+            else:
+                console.print("[red]Error: Must specify either --app or --script[/red]")
+                console.print("[dim]Use /tool compile --help for usage[/dim]")
+                return False
+
+        except CompilationError as e:
+            console.print(f"\n[red]Compilation failed: {e}[/red]\n")
+            return False
+        except Exception as e:
+            console.print(f"\n[red]Unexpected error: {e}[/red]\n")
+            import traceback
+            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+            return False
+
+        return True
+
+    def handle_workflow_compile(self, args: str) -> bool:
+        """
+        Handle workflow compilation.
+
+        Usage:
+            /workflow compile <workflow_id> --app [--platform <platform>]
+            /workflow compile <workflow_id> --script [single|tools]
+            /workflow compile --help
+
+        Args:
+            args: Compilation arguments
+        """
+        import argparse
+        import shlex
+
+        # Parse arguments
+        if not args or args == "--help":
+            console.print("\n[bold cyan]Workflow Compilation Options[/bold cyan]\n")
+            console.print("[green]--app[/green]")
+            console.print("  Compile to executable for current platform")
+            console.print("  Example: /workflow compile api_server_workflow --app\n")
+            console.print("[green]--platform <name> --app[/green]")
+            console.print("  Compile to executable for specified platform")
+            console.print("  Platforms: windows, linux, darwin")
+            console.print("  Example: /workflow compile api_server_workflow --platform linux --app\n")
+            console.print("[green]--script [single|tools][/green]")
+            console.print("  Compile to Python script")
+            console.print("  - single: All code in one file (default)")
+            console.print("  - tools: Modular structure with workflow definition")
+            console.print("  Example: /workflow compile api_server_workflow --script\n")
+            console.print("[green]--output <path>[/green]")
+            console.print("  Custom output path")
+            console.print("  Example: /workflow compile api_server_workflow --app --output ./dist\n")
+            return True
+
+        try:
+            arg_parts = shlex.split(args)
+        except Exception:
+            arg_parts = args.split()
+
+        if not arg_parts:
+            console.print("[red]Error: Workflow ID required[/red]")
+            console.print("[dim]Usage: /workflow compile <workflow_id> [options][/dim]")
+            return False
+
+        workflow_id = arg_parts[0]
+
+        # Parse options
+        parser = argparse.ArgumentParser(add_help=False)
+        parser.add_argument('--app', action='store_true')
+        parser.add_argument('--platform', type=str, default=None)
+        parser.add_argument('--script', nargs='?', const='single', default=None)
+        parser.add_argument('--output', type=str, default=None)
+
+        try:
+            opts = parser.parse_args(arg_parts[1:])
+        except SystemExit:
+            console.print("[red]Error parsing arguments[/red]")
+            console.print("[dim]Use /workflow compile --help for usage[/dim]")
+            return False
+
+        # Import compiler
+        from src.compiler import Compiler, CompilationError
+        from pathlib import Path
+
+        try:
+            compiler = Compiler(tools_manager=self._tools_manager)
+
+            if opts.app:
+                # Compile to executable
+                console.print(f"\n[cyan]Compiling workflow '{workflow_id}' to executable...[/cyan]")
+
+                output_path = Path(opts.output) if opts.output else None
+
+                with console.status("[bold green]Building executable..."):
+                    result = compiler.compile_workflow_to_app(
+                        workflow_id=workflow_id,
+                        output_path=output_path,
+                        target_platform=opts.platform,
+                        app_name=workflow_id
+                    )
+
+                console.print(f"\n[green]✓ Executable created successfully![/green]")
+                console.print(f"[cyan]Output:[/cyan] {result['output_path']}")
+                console.print(f"[dim]Platform: {result['platform']}[/dim]")
+                console.print(f"[dim]Size: {result['size_bytes'] / 1024:.1f} KB[/dim]\n")
+
+            elif opts.script is not None:
+                # Compile to script
+                script_type = opts.script if opts.script in ['single', 'tools'] else 'single'
+                console.print(f"\n[cyan]Compiling workflow '{workflow_id}' to {script_type} script...[/cyan]")
+
+                output_path = Path(opts.output) if opts.output else None
+
+                result = compiler.compile_workflow_to_script(
+                    workflow_id=workflow_id,
+                    output_path=output_path,
+                    script_type=script_type
+                )
+
+                console.print(f"\n[green]✓ Script created successfully![/green]")
+                console.print(f"[cyan]Output:[/cyan] {result['output_path']}")
+                console.print(f"[dim]Type: {result['script_type']}[/dim]")
+
+                if 'workflow_file' in result:
+                    console.print(f"[dim]Workflow definition: {result['workflow_file']}[/dim]")
+                elif 'steps' in result:
+                    console.print(f"[dim]Steps: {result['steps']}[/dim]")
+                console.print()
+
+            else:
+                console.print("[red]Error: Must specify either --app or --script[/red]")
+                console.print("[dim]Use /workflow compile --help for usage[/dim]")
+                return False
+
+        except CompilationError as e:
+            console.print(f"\n[red]Compilation failed: {e}[/red]\n")
+            return False
+        except Exception as e:
+            console.print(f"\n[red]Unexpected error: {e}[/red]\n")
+            import traceback
+            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+            return False
+
+        return True
+
+    def handle_list_workflows(self) -> bool:
+        """List all available workflows from the workflows directory."""
+        from pathlib import Path
+        import json
+
+        workflows_dir = Path("code_evolver/workflows")
+
+        if not workflows_dir.exists():
+            console.print("[red]Workflows directory not found[/red]")
+            return False
+
+        # Load all workflow JSON files
+        workflow_files = list(workflows_dir.glob("*.json"))
+
+        if not workflow_files:
+            console.print("\n[dim]No workflows found[/dim]\n")
+            return True
+
+        # Parse workflows
+        workflows = []
+        for wf_file in workflow_files:
+            try:
+                with open(wf_file, 'r') as f:
+                    wf_data = json.load(f)
+                    workflows.append({
+                        "id": wf_data.get("workflow_id", wf_file.stem),
+                        "name": wf_data.get("name", wf_file.stem),
+                        "description": wf_data.get("description", ""),
+                        "version": wf_data.get("version", "1.0"),
+                        "priority": wf_data.get("priority", "medium"),
+                        "quality": wf_data.get("quality_level", "production"),
+                        "steps": len(wf_data.get("steps", [])),
+                        "tags": wf_data.get("tags", []),
+                        "metadata": wf_data.get("metadata", {})
+                    })
+            except Exception as e:
+                console.print(f"[yellow]Warning: Could not load {wf_file.name}: {e}[/yellow]")
+
+        if not workflows:
+            console.print("\n[dim]No valid workflows found[/dim]\n")
+            return True
+
+        # Display workflows
+        console.print(f"\n[bold cyan]Available Workflows ({len(workflows)})[/bold cyan]\n")
+
+        table = Table(box=box.ROUNDED, show_header=True, header_style="bold magenta")
+        table.add_column("ID", style="cyan", no_wrap=True)
+        table.add_column("Name", style="green")
+        table.add_column("Description", style="dim", max_width=40)
+        table.add_column("Steps", justify="center", style="yellow")
+        table.add_column("Priority", justify="center")
+        table.add_column("Quality", justify="center")
+        table.add_column("Tags", style="dim")
+
+        # Sort workflows by priority and name
+        priority_order = {"high": 0, "medium": 1, "low": 2}
+        workflows.sort(key=lambda w: (priority_order.get(w["priority"], 1), w["name"]))
+
+        for wf in workflows:
+            # Color code priority
+            priority_str = wf["priority"]
+            if wf["priority"] == "high":
+                priority_str = f"[red]{wf['priority']}[/red]"
+            elif wf["priority"] == "medium":
+                priority_str = f"[yellow]{wf['priority']}[/yellow]"
+            else:
+                priority_str = f"[dim]{wf['priority']}[/dim]"
+
+            # Color code quality
+            quality_str = wf["quality"]
+            if wf["quality"] == "production":
+                quality_str = f"[green]{wf['quality']}[/green]"
+            elif wf["quality"] == "beta":
+                quality_str = f"[yellow]{wf['quality']}[/yellow]"
+            else:
+                quality_str = f"[dim]{wf['quality']}[/dim]"
+
+            tags_str = ", ".join(wf["tags"][:3])  # Show first 3 tags
+            if len(wf["tags"]) > 3:
+                tags_str += "..."
+
+            table.add_row(
+                wf["id"],
+                wf["name"],
+                wf["description"][:60] + ("..." if len(wf["description"]) > 60 else ""),
+                str(wf["steps"]),
+                priority_str,
+                quality_str,
+                tags_str
+            )
+
+        console.print(table)
+        console.print(f"\n[dim]Use /workflow <id> to see workflow details[/dim]")
+        console.print(f"[dim]Use /workflow compile --help for compilation options[/dim]\n")
 
         return True
 
@@ -10294,6 +10946,10 @@ Return ONLY the Python test code, no explanations."""
                     if not args:
                         # /tool with trailing space - list tools
                         self.handle_tools()
+                    elif args[0] == 'compile':
+                        # /tool compile <tool_id> [options]
+                        compile_args = args[1] if len(args) > 1 else ""
+                        self.handle_tool_compile(compile_args)
                     elif args[0] in ['test', 'optimize']:
                         # /tool test <tool_id|all>
                         # /tool optimize <tool_id|all>
@@ -10318,6 +10974,19 @@ Return ONLY the Python test code, no explanations."""
                 elif cmd.lower() == 'backends' or cmd.lower().startswith('backends '):
                     test_connection = '--test' in cmd.lower()
                     self.handle_backends(test_connection=test_connection)
+
+                elif cmd.lower() == 'conversation':
+                    # /conversation with no args - show status
+                    self.handle_conversation("")
+
+                elif cmd.startswith('conversation '):
+                    # /conversation <subcommand> [args]
+                    args = cmd[13:].strip()
+                    self.handle_conversation(args)
+
+                elif cmd.lower() == 'workflow' or cmd.lower() == 'workflows':
+                    # /workflow with no args - list all workflows
+                    self.handle_workflow("")
 
                 elif cmd.startswith('workflow '):
                     node_id = cmd[9:].strip()
