@@ -1,0 +1,211 @@
+# Filesystem MCP Server Tool
+# Provides secure file system operations through Model Context Protocol
+
+name: "Filesystem MCP"
+type: "mcp"
+description: "Secure filesystem operations via MCP server. Provides controlled read/write access to specified directories with safety controls."
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# MCP server configuration
+mcp:
+  server_name: "filesystem"
+  command: "npx"
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-filesystem"
+    - "/tmp/mcp_workspace"  # Default allowed directory - override in config
+  description: "Secure file operations with configurable access controls"
+  enabled: false  # Disabled by default for security
+  auto_start: false
+
+# Tool capabilities provided by this MCP server
+capabilities:
+  - name: "read_file"
+    description: "Read the complete contents of a file from the file system"
+  - name: "read_multiple_files"
+    description: "Read the contents of multiple files simultaneously"
+  - name: "write_file"
+    description: "Create a new file or completely overwrite an existing file"
+  - name: "edit_file"
+    description: "Make selective edits to a file using advanced pattern matching"
+  - name: "create_directory"
+    description: "Create a new directory or ensure a directory exists"
+  - name: "list_directory"
+    description: "Get a detailed listing of files and directories"
+  - name: "move_file"
+    description: "Move or rename files and directories"
+  - name: "search_files"
+    description: "Search for files matching patterns"
+  - name: "get_file_info"
+    description: "Retrieve detailed metadata about a file or directory"
+
+# Tags for tool discovery
+tags:
+  - mcp
+  - mcp-tool
+  - filesystem
+  - files
+  - storage
+  - io
+  - read
+  - write
+  - directory
+
+# Setup instructions
+setup:
+  required_config:
+    - allowed_directory
+  installation: |
+    # Install the Filesystem MCP server (automatic via npx)
+    npx -y @modelcontextprotocol/server-filesystem
+
+    # Configure the allowed directory in your config
+    # Edit config.yaml and set the path for filesystem access
+
+# Usage examples
+examples:
+  - description: "Read a file from the allowed directory"
+    tool_name: "read_file"
+    input:
+      path: "/tmp/mcp_workspace/data.txt"
+
+  - description: "Write content to a file"
+    tool_name: "write_file"
+    input:
+      path: "/tmp/mcp_workspace/output.txt"
+      content: "Hello, World!"
+
+  - description: "List directory contents"
+    tool_name: "list_directory"
+    input:
+      path: "/tmp/mcp_workspace"
+
+  - description: "Search for files matching a pattern"
+    tool_name: "search_files"
+    input:
+      path: "/tmp/mcp_workspace"
+      pattern: "*.yaml"
+
+usage_notes: |
+  ## Filesystem MCP Tool
+
+  This tool provides secure filesystem operations through the Model Context Protocol (MCP).
+  It wraps the official @modelcontextprotocol/server-filesystem package.
+
+  ## Security Features
+
+  - **Restricted Access**: Only operates within configured allowed directories
+  - **Path Validation**: Prevents directory traversal attacks
+  - **Safe Defaults**: Disabled by default, must be explicitly enabled
+  - **Audit Trail**: All operations are logged
+
+  ## Configuration
+
+  Set the allowed directory in your MCP configuration:
+
+  ```yaml
+  mcp_servers:
+    - name: filesystem
+      command: npx
+      args:
+        - "-y"
+        - "@modelcontextprotocol/server-filesystem"
+        - "/your/allowed/path"  # Configure this path
+      enabled: true
+  ```
+
+  ## Available Tools
+
+  The Filesystem MCP server provides these tools:
+
+  | Tool | Description | Safe |
+  |------|-------------|------|
+  | read_file | Read file contents | ✓ |
+  | read_multiple_files | Read multiple files at once | ✓ |
+  | write_file | Write or overwrite files | ⚠️ |
+  | edit_file | Make selective file edits | ⚠️ |
+  | create_directory | Create directories | ⚠️ |
+  | list_directory | List directory contents | ✓ |
+  | move_file | Move/rename files | ⚠️ |
+  | search_files | Search for files | ✓ |
+  | get_file_info | Get file metadata | ✓ |
+
+  ## Usage Patterns
+
+  ### Pattern 1: Batch File Processing
+
+  ```python
+  from node_runtime import call_mcp_tool
+  import json
+
+  # Read multiple files at once
+  result = call_mcp_tool("filesystem", "read_multiple_files", json.dumps({
+      "paths": [
+          "/tmp/mcp_workspace/file1.txt",
+          "/tmp/mcp_workspace/file2.txt",
+          "/tmp/mcp_workspace/file3.txt"
+      ]
+  }))
+
+  # Process the contents
+  files = json.loads(result)
+  for file_data in files['files']:
+      print(f"File: {file_data['path']}")
+      print(f"Content: {file_data['content']}")
+  ```
+
+  ### Pattern 2: Safe File Editing
+
+  ```python
+  # Use edit_file for selective changes (safer than write_file)
+  result = call_mcp_tool("filesystem", "edit_file", json.dumps({
+      "path": "/tmp/mcp_workspace/config.yaml",
+      "edits": [
+          {
+              "oldText": "enabled: false",
+              "newText": "enabled: true"
+          }
+      ]
+  }))
+  ```
+
+  ### Pattern 3: Directory Operations
+
+  ```python
+  # Create directory structure
+  call_mcp_tool("filesystem", "create_directory", json.dumps({
+      "path": "/tmp/mcp_workspace/output/processed"
+  }))
+
+  # List contents
+  result = call_mcp_tool("filesystem", "list_directory", json.dumps({
+      "path": "/tmp/mcp_workspace/output"
+  }))
+
+  # Search for specific files
+  result = call_mcp_tool("filesystem", "search_files", json.dumps({
+      "path": "/tmp/mcp_workspace",
+      "pattern": "*.yaml",
+      "excludePatterns": ["*test*"]
+  }))
+  ```
+
+  ## Best Practices
+
+  1. **Minimize Allowed Paths**: Only grant access to necessary directories
+  2. **Use Read Operations**: Prefer read_file over write_file when possible
+  3. **Validate Paths**: Always validate paths before operations
+  4. **Error Handling**: Check operation results for errors
+  5. **Backup Important Data**: Make backups before destructive operations
+
+  ## Security Considerations
+
+  - The server can only access the configured allowed directory
+  - Symbolic links are resolved to prevent escape
+  - Hidden files and system files should be handled carefully
+  - Consider running with minimal permissions

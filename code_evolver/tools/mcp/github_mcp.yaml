@@ -1,0 +1,188 @@
+# GitHub MCP Server Tool
+# Provides GitHub integration through Model Context Protocol
+
+name: "GitHub MCP"
+type: "mcp"
+description: "GitHub integration via MCP server. Provides repository operations, issue management, PR handling, and code search through the Model Context Protocol."
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "long"
+
+# MCP server configuration
+mcp:
+  server_name: "github"
+  command: "npx"
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-github"
+  env:
+    GITHUB_TOKEN: "${GITHUB_TOKEN}"
+  description: "GitHub API access via MCP"
+  enabled: true
+  auto_start: true
+
+# Tool capabilities provided by this MCP server
+capabilities:
+  - name: "create_or_update_file"
+    description: "Create or update a single file in a GitHub repository"
+  - name: "search_repositories"
+    description: "Search for GitHub repositories"
+  - name: "create_repository"
+    description: "Create a new GitHub repository"
+  - name: "get_file_contents"
+    description: "Get the contents of a file or directory from a GitHub repository"
+  - name: "push_files"
+    description: "Push multiple files to a GitHub repository in a single commit"
+  - name: "create_issue"
+    description: "Create a new issue in a GitHub repository"
+  - name: "create_pull_request"
+    description: "Create a new pull request in a GitHub repository"
+  - name: "fork_repository"
+    description: "Fork a GitHub repository"
+  - name: "create_branch"
+    description: "Create a new branch in a GitHub repository"
+
+# Tags for tool discovery
+tags:
+  - mcp
+  - mcp-tool
+  - github
+  - git
+  - repository
+  - api
+  - pr
+  - pull-request
+  - issue
+  - code-hosting
+  - version-control
+
+# Setup instructions
+setup:
+  required_env:
+    - GITHUB_TOKEN
+  installation: |
+    # Install the GitHub MCP server (automatic via npx)
+    npx -y @modelcontextprotocol/server-github
+
+    # Set your GitHub token
+    export GITHUB_TOKEN="ghp_your_token_here"
+
+    # Or add to your .env file
+    echo "GITHUB_TOKEN=ghp_your_token_here" >> .env
+
+# Usage examples
+examples:
+  - description: "Create a new issue in a repository"
+    tool_name: "create_issue"
+    input:
+      owner: "scottgal"
+      repo: "mostlylucid.dse"
+      title: "Bug: Application crashes on startup"
+      body: "The application crashes when starting with error XYZ"
+
+  - description: "Get file contents from a repository"
+    tool_name: "get_file_contents"
+    input:
+      owner: "scottgal"
+      repo: "mostlylucid.dse"
+      path: "README.md"
+
+  - description: "Create a pull request"
+    tool_name: "create_pull_request"
+    input:
+      owner: "scottgal"
+      repo: "mostlylucid.dse"
+      title: "Add new feature"
+      head: "feature/new-feature"
+      base: "main"
+      body: "This PR adds a new feature that..."
+
+usage_notes: |
+  ## GitHub MCP Tool
+
+  This tool provides GitHub integration through the Model Context Protocol (MCP).
+  It wraps the official @modelcontextprotocol/server-github package.
+
+  ## Features
+
+  - [OK] Repository operations (create, fork, search)
+  - [OK] File operations (read, write, update)
+  - [OK] Issue management (create, update)
+  - [OK] Pull request handling (create, update)
+  - [OK] Branch management
+  - [OK] Commit operations
+
+  ## Authentication
+
+  Requires a GitHub Personal Access Token with appropriate scopes:
+  - `repo` - Full control of private repositories
+  - `public_repo` - Access to public repositories
+  - `workflow` - Update GitHub Actions workflows (optional)
+
+  Set the token via environment variable:
+  ```bash
+  export GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxx"
+  ```
+
+  ## MCP Server Auto-Start
+
+  This tool automatically starts the GitHub MCP server when needed.
+  The server runs as a background process and communicates via stdio.
+
+  ## Available Tools
+
+  The GitHub MCP server provides these tools:
+
+  | Tool | Description |
+  |------|-------------|
+  | create_or_update_file | Create or update files in a repository |
+  | search_repositories | Search for repositories on GitHub |
+  | create_repository | Create a new repository |
+  | get_file_contents | Read file contents from a repository |
+  | push_files | Push multiple files in one commit |
+  | create_issue | Create a new issue |
+  | create_pull_request | Create a new pull request |
+  | fork_repository | Fork a repository |
+  | create_branch | Create a new branch |
+
+  ## Integration with Workflows
+
+  Use with other tools for complete GitHub workflows:
+
+  ```python
+  # Example: Create branch, commit files, and open PR
+  from node_runtime import call_mcp_tool
+  import json
+
+  # 1. Create a branch
+  call_mcp_tool("github", "create_branch", json.dumps({
+      "owner": "scottgal",
+      "repo": "mostlylucid.dse",
+      "branch": "feature/new-feature",
+      "from_branch": "main"
+  }))
+
+  # 2. Push files
+  call_mcp_tool("github", "push_files", json.dumps({
+      "owner": "scottgal",
+      "repo": "mostlylucid.dse",
+      "branch": "feature/new-feature",
+      "files": [
+          {"path": "src/new_file.py", "content": "# New code here"}
+      ],
+      "message": "Add new feature"
+  }))
+
+  # 3. Create PR
+  call_mcp_tool("github", "create_pull_request", json.dumps({
+      "owner": "scottgal",
+      "repo": "mostlylucid.dse",
+      "title": "Add new feature",
+      "head": "feature/new-feature",
+      "base": "main",
+      "body": "This PR adds..."
+  }))
+  ```

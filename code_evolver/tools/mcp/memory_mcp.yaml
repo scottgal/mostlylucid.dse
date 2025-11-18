@@ -1,0 +1,298 @@
+# Memory MCP Server Tool
+# Provides persistent knowledge graph memory through Model Context Protocol
+
+name: "Memory MCP"
+type: "mcp"
+description: "Knowledge graph-based persistent memory system via MCP. Stores and retrieves information using entities and relations for contextual knowledge management."
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+# MCP server configuration
+mcp:
+  server_name: "memory"
+  command: "npx"
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-memory"
+  description: "Knowledge graph-based persistent memory system"
+  enabled: true
+  auto_start: true
+
+# Tool capabilities provided by this MCP server
+capabilities:
+  - name: "create_entities"
+    description: "Create multiple new entities in the knowledge graph"
+  - name: "create_relations"
+    description: "Create typed relationships between entities"
+  - name: "add_observations"
+    description: "Add observations to existing entities"
+  - name: "delete_entities"
+    description: "Delete entities and their associated relations"
+  - name: "delete_observations"
+    description: "Delete specific observations from entities"
+  - name: "delete_relations"
+    description: "Delete relations between entities"
+  - name: "read_graph"
+    description: "Read the entire knowledge graph"
+  - name: "search_nodes"
+    description: "Search for nodes based on query"
+  - name: "open_nodes"
+    description: "Retrieve specific nodes by name"
+
+# Tags for tool discovery
+tags:
+  - mcp
+  - mcp-tool
+  - memory
+  - knowledge-graph
+  - storage
+  - persistence
+  - entities
+  - relations
+  - context
+
+# Setup instructions
+setup:
+  installation: |
+    # Install the Memory MCP server (automatic via npx)
+    npx -y @modelcontextprotocol/server-memory
+
+    # No additional configuration required
+    # Memory is stored in-process
+
+# Usage examples
+examples:
+  - description: "Create entities in the knowledge graph"
+    tool_name: "create_entities"
+    input:
+      entities:
+        - name: "Project_MostlyLucid"
+          entityType: "project"
+          observations:
+            - "Written in Python"
+            - "Uses DiSE framework"
+            - "Has MCP integration"
+
+  - description: "Create relations between entities"
+    tool_name: "create_relations"
+    input:
+      relations:
+        - from: "Project_MostlyLucid"
+          to: "Python"
+          relationType: "uses_language"
+
+  - description: "Search for specific information"
+    tool_name: "search_nodes"
+    input:
+      query: "Python projects"
+
+  - description: "Read the entire knowledge graph"
+    tool_name: "read_graph"
+    input: {}
+
+usage_notes: |
+  ## Memory MCP Tool
+
+  This tool provides a knowledge graph-based memory system through the Model Context Protocol (MCP).
+  It wraps the official @modelcontextprotocol/server-memory package.
+
+  ## Features
+
+  - [OK] Knowledge graph storage (entities and relations)
+  - [OK] Persistent memory across sessions
+  - [OK] Entity observations (facts/attributes)
+  - [OK] Typed relationships
+  - [OK] Search and retrieval
+  - [OK] Graph traversal
+
+  ## Concepts
+
+  ### Entities
+  Nodes in the knowledge graph representing concepts, objects, or ideas.
+  Each entity has:
+  - **name**: Unique identifier
+  - **entityType**: Classification (person, project, concept, etc.)
+  - **observations**: List of facts or attributes
+
+  ### Relations
+  Connections between entities with semantic meaning.
+  Each relation has:
+  - **from**: Source entity name
+  - **to**: Target entity name
+  - **relationType**: Type of relationship
+
+  ### Observations
+  Facts or attributes attached to entities.
+  Can be added, updated, or deleted independently.
+
+  ## Available Tools
+
+  | Tool | Description |
+  |------|-------------|
+  | create_entities | Create new entities with observations |
+  | create_relations | Link entities with typed relations |
+  | add_observations | Add facts to existing entities |
+  | delete_entities | Remove entities from graph |
+  | delete_observations | Remove specific facts |
+  | delete_relations | Remove connections |
+  | read_graph | Get entire knowledge graph |
+  | search_nodes | Search for entities |
+  | open_nodes | Retrieve specific entities |
+
+  ## Usage Patterns
+
+  ### Pattern 1: Building a Knowledge Base
+
+  ```python
+  from node_runtime import call_mcp_tool
+  import json
+
+  # Create entities for a project
+  call_mcp_tool("memory", "create_entities", json.dumps({
+      "entities": [
+          {
+              "name": "MostlyLucid_Project",
+              "entityType": "project",
+              "observations": [
+                  "Python-based DiSE framework",
+                  "Supports MCP integration",
+                  "Has 60+ pull requests"
+              ]
+          },
+          {
+              "name": "Scott_Galloway",
+              "entityType": "person",
+              "observations": [
+                  "Project maintainer",
+                  "GitHub user: scottgal"
+              ]
+          }
+      ]
+  }))
+
+  # Create relations
+  call_mcp_tool("memory", "create_relations", json.dumps({
+      "relations": [
+          {
+              "from": "Scott_Galloway",
+              "to": "MostlyLucid_Project",
+              "relationType": "maintains"
+          }
+      ]
+  }))
+  ```
+
+  ### Pattern 2: Contextual Conversations
+
+  ```python
+  # Before starting a conversation, load context
+  result = call_mcp_tool("memory", "search_nodes", json.dumps({
+      "query": "user preferences and history"
+  }))
+
+  context = json.loads(result)
+
+  # Use context in conversation
+  # ... conversation with LLM using context ...
+
+  # After conversation, save new learnings
+  call_mcp_tool("memory", "add_observations", json.dumps({
+      "observations": [
+          {
+              "entityName": "User_Preferences",
+              "contents": ["Prefers concise responses", "Interested in Python"]
+          }
+      ]
+  }))
+  ```
+
+  ### Pattern 3: Project Tracking
+
+  ```python
+  # Track project milestones
+  call_mcp_tool("memory", "create_entities", json.dumps({
+      "entities": [
+          {
+              "name": "Milestone_MCP_Integration",
+              "entityType": "milestone",
+              "observations": [
+                  "Status: Completed",
+                  "Completion date: 2025-01-18",
+                  "Tools created: 5 MCP servers"
+              ]
+          }
+      ]
+  }))
+
+  # Link to project
+  call_mcp_tool("memory", "create_relations", json.dumps({
+      "relations": [
+          {
+              "from": "MostlyLucid_Project",
+              "to": "Milestone_MCP_Integration",
+              "relationType": "has_milestone"
+          }
+      ]
+  }))
+  ```
+
+  ### Pattern 4: Retrieving Relevant Context
+
+  ```python
+  # Get all information about a specific topic
+  result = call_mcp_tool("memory", "open_nodes", json.dumps({
+      "names": ["MostlyLucid_Project", "Scott_Galloway"]
+  }))
+
+  nodes = json.loads(result)
+  for node in nodes:
+      print(f"Entity: {node['name']}")
+      print(f"Type: {node['entityType']}")
+      print(f"Facts: {node['observations']}")
+  ```
+
+  ## Best Practices
+
+  1. **Consistent Naming**: Use clear, consistent entity names (e.g., "Project_X" not "project-x")
+  2. **Typed Relations**: Use meaningful relation types (e.g., "created_by", "depends_on")
+  3. **Granular Observations**: Keep observations atomic and specific
+  4. **Regular Updates**: Update observations as information changes
+  5. **Search First**: Search before creating to avoid duplicates
+
+  ## Integration Examples
+
+  ### With Workflows
+
+  ```python
+  # Example: Remember user preferences across workflow runs
+
+  # At workflow start, load preferences
+  prefs = call_mcp_tool("memory", "open_nodes", json.dumps({
+      "names": ["User_Workflow_Preferences"]
+  }))
+
+  # During workflow, use preferences
+  # ... workflow execution ...
+
+  # At workflow end, update learnings
+  call_mcp_tool("memory", "add_observations", json.dumps({
+      "observations": [
+          {
+              "entityName": "User_Workflow_Preferences",
+              "contents": ["Last run: 2025-01-18", "Successful completion"]
+          }
+      ]
+  }))
+  ```
+
+  ### With LLM Conversations
+
+  Use memory to maintain context across conversations:
+  - Store user preferences and history
+  - Track conversation topics
+  - Remember decisions and outcomes
+  - Build personalized knowledge graphs

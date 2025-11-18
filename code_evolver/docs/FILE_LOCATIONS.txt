@@ -1,0 +1,257 @@
+# MCP SYSTEM IMPLEMENTATION - FILE LOCATIONS
+# mostlylucid DiSE Codebase
+# Working Directory: /home/user/mostlylucid.dse
+
+==================== CORE MCP IMPLEMENTATION ====================
+
+MCPClientManager (MCP server lifecycle management)
+  /home/user/mostlylucid.dse/code_evolver/src/mcp_client_manager.py
+  - Size: 11,572 bytes (314 lines)
+  - Classes: MCPServerConfig, MCPServerConnection, MCPClientManager
+  - Global: get_mcp_client_manager() singleton
+
+MCPToolAdapter (Convert MCP tools to system Tools)
+  /home/user/mostlylucid.dse/code_evolver/src/mcp_tool_adapter.py
+  - Size: 10,442 bytes (288 lines)
+  - Classes: MCPToolAdapter
+  - Global: get_mcp_tool_adapter() singleton
+
+ToolsManager (Central tool registry)
+  /home/user/mostlylucid.dse/code_evolver/src/tools_manager.py
+  - Size: 117,731 bytes (1200+ lines)
+  - Key method: _load_mcp_tools() at lines 889-931
+  - Handles all tool loading: YAML, config, RAG, MCP
+
+==================== CONFIGURATION FILES ====================
+
+MCP Server Configuration
+  /home/user/mostlylucid.dse/code_evolver/config.mcp.yaml
+  - Size: 194 lines
+  - Defines MCP servers: fetch, memory, time, filesystem, git
+  - Example configuration with detailed comments
+
+Main Configuration Files
+  /home/user/mostlylucid.dse/code_evolver/config.anthropic.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.anthropic.simple.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.anthropic.unified.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.local.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.local.minimal.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.lmstudio.minimal.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.openai.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.openai.minimal.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.azure.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.azure.minimal.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.unified.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.tiered.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.CLOUD_ANTHROPIC_COSTS_MONEY.minimal.yaml
+  /home/user/mostlylucid.dse/code_evolver/config.CLOUD_HYBRID_COSTS_MONEY.yaml
+  /home/user/mostlylucid.dse/config.anthropic-simple.yaml
+  /home/user/mostlylucid.dse/config.example.yaml
+
+==================== TOOL DEFINITIONS (174 YAML FILES) ====================
+
+Executable Tools (140+ files)
+  /home/user/mostlylucid.dse/code_evolver/tools/executable/*.yaml
+  Examples:
+    - smart_faker.yaml
+    - pytest_runner.yaml
+    - mypy_type_checker.yaml
+    - workflow_diagram.yaml
+    + 136 more...
+
+LLM-Based Tools (50+ files)
+  /home/user/mostlylucid.dse/code_evolver/tools/llm/*.yaml
+  Examples:
+    - code_optimizer.yaml
+    - general.yaml
+    - code_reviewer.yaml
+    - performance_profiler.yaml
+    + 46 more...
+
+Custom Tools (4 files)
+  /home/user/mostlylucid.dse/code_evolver/tools/custom/
+    - ask_user.yaml
+    - git.yaml
+    - github.yaml
+    - http_server.yaml
+
+OpenAPI Tools (1 file)
+  /home/user/mostlylucid.dse/code_evolver/tools/openapi/
+    - nmt_translator.yaml
+
+Tool Organization Documentation
+  /home/user/mostlylucid.dse/code_evolver/tools/TOOL_ORGANIZATION.md
+  /home/user/mostlylucid.dse/code_evolver/tools/SUMMARIZATION_TOOLS_README.md
+  /home/user/mostlylucid.dse/code_evolver/tools/DETERMINISTIC_TOOLS_README.md
+  /home/user/mostlylucid.dse/code_evolver/tools/DETERMINISTIC_TOOLS_PYTEST_README.md
+  /home/user/mostlylucid.dse/code_evolver/tools/DETERMINISTIC_TOOLS_INTERFACE.md
+
+Tool Registry Index
+  /home/user/mostlylucid.dse/code_evolver/tools/index.json
+  - Size: 515,215 bytes
+  - Contains: Metadata for all 174 tools
+
+Other Tool Directories (for organization)
+  /home/user/mostlylucid.dse/code_evolver/tools/fixer/     (Bug fixing tools)
+  /home/user/mostlylucid.dse/code_evolver/tools/perf/      (Performance testing)
+  /home/user/mostlylucid.dse/code_evolver/tools/optimization/
+  /home/user/mostlylucid.dse/code_evolver/tools/debug/     (Debug tools)
+
+==================== DOCUMENTATION ====================
+
+MCP Quick Start Guide
+  /home/user/mostlylucid.dse/code_evolver/MCP_README.md
+  - Size: 220 lines
+  - Quick start examples
+  - Available servers list
+  - Architecture diagram
+
+Complete MCP Integration Documentation
+  /home/user/mostlylucid.dse/code_evolver/docs/MCP_INTEGRATION.md
+  - Size: 420 lines
+  - Detailed architecture
+  - Configuration reference
+  - Security best practices
+  - Troubleshooting guide
+  - Advanced usage patterns
+
+MCP System Analysis (NEW)
+  /home/user/mostlylucid.dse/code_evolver/docs/MCP_SYSTEM_ANALYSIS.md
+  - Comprehensive implementation analysis
+  - 13 major sections
+  - Architecture details
+  - Configuration structure
+  - Tool loading pipeline
+  - Integration points
+
+MCP Quick Reference Guide (NEW)
+  /home/user/mostlylucid.dse/code_evolver/docs/MCP_QUICK_REFERENCE.md
+  - Quick lookup guide
+  - Code examples
+  - Common tasks
+  - Debugging tips
+
+==================== TESTING ====================
+
+MCP Integration Test Script
+  /home/user/mostlylucid.dse/code_evolver/test_mcp_integration.py
+  - Size: 145 lines
+  - Tests 6 integration steps
+  - Verifies server connections
+  - Validates tool loading
+  - Usage: python test_mcp_integration.py --config config.mcp.yaml
+
+==================== RELATED PYTHON IMPLEMENTATIONS ====================
+
+Git Integration Tool
+  /home/user/mostlylucid.dse/code_evolver/src/git_tool.py
+  - Implements custom Git tool from git.yaml
+
+GitHub Integration Tool
+  /home/user/mostlylucid.dse/code_evolver/src/github_tool.py
+  - Implements custom GitHub tool from github.yaml
+
+HTTP Server Tool
+  /home/user/mostlylucid.dse/code_evolver/src/http_server_tool.py
+  - Implements HTTP server from http_server.yaml
+
+HTTP REST Client
+  /home/user/mostlylucid.dse/code_evolver/tools/executable/http_rest_client.py
+  - Used by REST API tools
+
+Ask User Tool
+  /home/user/mostlylucid.dse/code_evolver/src/ask_user_tool.py
+  - Interactive user input tool
+
+OpenAPI Tool Handler
+  /home/user/mostlylucid.dse/code_evolver/src/openapi_tool.py
+  - Handles OpenAPI-based tool definitions
+
+==================== CONFIGURATION MANAGEMENT ====================
+
+Config Manager (loads YAML configs)
+  /home/user/mostlylucid.dse/code_evolver/src/config_manager.py
+  - Parses configuration files
+  - Handles environment variable substitution
+  - Manages MCP server configurations
+
+==================== TOOL EXECUTION ====================
+
+Tool Interceptors
+  /home/user/mostlylucid.dse/code_evolver/src/tool_interceptors.py
+  - Intercepts and monitors tool execution
+
+Tool Tester
+  /home/user/mostlylucid.dse/code_evolver/src/tool_tester.py
+  - Tests tool functionality
+
+==================== STATISTICS ====================
+
+Total Tool Files: 174
+  - Executable: 140+
+  - LLM-based: 50+
+  - Custom: 4
+  - OpenAPI: 1
+
+Total Lines of Code (MCP core): ~1,900
+  - mcp_client_manager.py: 314 lines
+  - mcp_tool_adapter.py: 288 lines
+  - ToolsManager._load_mcp_tools(): ~40 lines
+  - Integration points: ~100 lines
+
+Configuration Files: 16+ variants
+  - Base configs: 8+
+  - MCP-specific: 1 (config.mcp.yaml)
+  - Cost-focused: 3
+  - Minimal variants: 4
+
+==================== KEY ENTRY POINTS ====================
+
+Initialize ToolsManager with MCP Support
+  Code:
+    from src.config_manager import ConfigManager
+    from src.tools_manager import ToolsManager
+    
+    config = ConfigManager("config.mcp.yaml")
+    tools_manager = ToolsManager(config_manager=config)
+
+Access MCP Tools
+  Code:
+    # All MCP tools
+    mcp_tools = tools_manager.find_by_tags(["mcp"])
+    
+    # Tools from specific server
+    fetch_tools = tools_manager.find_by_tags(["mcp", "fetch"])
+    
+    # Get tool by ID
+    tool = tools_manager.get_tool("mcp_fetch_fetch_url")
+    
+    # Execute tool
+    result = tool.implementation(url="https://example.com")
+
+Direct MCP Usage
+  Code:
+    from src.mcp_client_manager import get_mcp_client_manager
+    from src.mcp_tool_adapter import get_mcp_tool_adapter
+    
+    manager = get_mcp_client_manager()
+    manager.load_from_config(config_data)
+    manager.connect_all_sync()
+    
+    adapter = get_mcp_tool_adapter()
+    tools = adapter.load_all_tools_sync()
+
+==================== GIT BRANCH INFO ====================
+
+Current Branch: claude/fix-mcp-yaml-config-012DV9tcrvhJ4ZvS8nHnto5P
+Main Branch: (to be determined)
+Repository: mostlylucid.dse
+Platform: linux
+
+Recent Commits:
+  aeacbe9 - Merge pull request #61 from scottgal/claude/fix-workflow-check-pattern-019WLqzxJGuHjW8XinqzjbH7
+  5f2f9c4 - Add workflow pattern matching and reuse from RAG
+  a9b0778 - Merge pull request #60 from scottgal/claude/fix-broken-feature-01Mc5bMkh2NDgmFTLZ8uG2eE
+
+==================== END OF FILE LOCATIONS ====================
