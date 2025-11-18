@@ -247,8 +247,29 @@ class RAGMemory:
 
                 logger.info(f"✓ Loaded tags index with {len(self.tags_index)} tags")
 
+            except json.JSONDecodeError as e:
+                logger.warning(f"JSON decode error in tags index: {e}")
+                logger.warning("Starting with empty tags index (can be rebuilt)...")
+
+                # Backup corrupted file
+                import shutil
+                backup_path = self.tags_index_path.with_suffix(f'.backup.{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
+                try:
+                    shutil.copy2(self.tags_index_path, backup_path)
+                    logger.info(f"Backed up corrupted tags index to {backup_path}")
+                except Exception:
+                    pass
+
+                # Remove corrupted file to start fresh
+                try:
+                    self.tags_index_path.unlink()
+                except Exception:
+                    pass
+                self.tags_index = {}
+
             except Exception as e:
                 logger.error(f"Error loading tags index: {e}")
+                self.tags_index = {}
 
     def _save_index(self):
         """Save artifacts index to disk."""

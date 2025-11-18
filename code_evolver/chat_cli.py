@@ -6073,8 +6073,9 @@ Generate comprehensive tests now:"""
         powerful_model = self.config.escalation_model  # qwen2.5-coder:14b
         god_level_model = "deepseek-coder:6.7b"  # Final boss on localhost
 
-        # Temperature progression: start low, gradually increase
-        temperature_schedule = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+        # Temperature progression: start slightly higher to encourage actual code changes
+        # 0.2 gives more creativity while still being precise
+        temperature_schedule = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
 
         # Get error details from context
         error_output = self.context.get('last_error', 'Unknown error')
@@ -6275,15 +6276,35 @@ TEST ERROR OUTPUT:
 
 {validation_warning}
 
+**CRITICAL INSTRUCTION - READ CAREFULLY:**
+You MUST respond with ONLY a JSON object. The "code" field MUST contain the ACTUAL FIXED CODE with all changes applied.
+
+DO NOT just describe what to fix - ACTUALLY FIX IT in the code field!
+
+WRONG example (DO NOT DO THIS):
+{{
+  "code": "{code[:100]}...",  # <- Same as input, NOT FIXED!
+  "fixes_applied": ["Added import statement"],  # <- You described the fix but didn't apply it!
+  "analysis": "Missing import"
+}}
+
+CORRECT example (DO THIS):
+{{
+  "code": "from pathlib import Path\\nimport sys\\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\\nfrom node_runtime import call_tool\\n\\ndef main():\\n    ...",  # <- ACTUALLY CHANGED with fix applied!
+  "fixes_applied": ["Added path setup and import for call_tool"],
+  "analysis": "Missing import caused ModuleNotFoundError"
+}}
+
 You MUST respond with ONLY a JSON object in this exact format:
 
 {{
-  "code": "the fixed Python code as a string",
+  "code": "the fixed Python code as a string WITH ALL FIXES APPLIED",
   "fixes_applied": ["brief description of fix 1", "fix 2"],
   "analysis": "one sentence explaining what was wrong"
 }}
 
 Requirements for "code" field:
+- MUST be DIFFERENT from the input code if you claim to have fixed it
 - ONLY executable Python code
 - NO markdown fences
 - NO explanations mixed with code

@@ -125,6 +125,49 @@ class QdrantRAGMemory:
 
                 logger.info(f"✓ Loaded {len(self.artifacts)} artifacts from metadata")
 
+            except json.JSONDecodeError as e:
+                # Try to repair JSON with control characters
+                logger.warning(f"JSON decode error in metadata: {e}")
+                logger.warning("Attempting to repair JSON by escaping control characters...")
+
+                try:
+                    import re
+                    with open(self.index_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+
+                    # Replace unescaped control characters in strings
+                    # This is a simple fix - replace literal tabs, newlines, etc. with escaped versions
+                    # Only do this inside string values (between quotes)
+                    content_fixed = content.replace('\t', '\\t').replace('\r', '\\r').replace('\n', '\\n')
+
+                    # Try parsing the fixed content
+                    index = json.loads(content_fixed)
+
+                    for artifact_id, artifact_data in index.items():
+                        artifact = Artifact.from_dict(artifact_data)
+                        self.artifacts[artifact_id] = artifact
+
+                    logger.info(f"✓ Repaired and loaded {len(self.artifacts)} artifacts from metadata")
+
+                    # Save the repaired version
+                    logger.info("Saving repaired metadata file...")
+                    self._save_metadata()
+
+                except Exception as repair_error:
+                    logger.error(f"Could not repair metadata: {repair_error}")
+                    logger.warning("Backing up corrupted file and starting fresh...")
+
+                    # Backup corrupted file
+                    import shutil
+                    from datetime import datetime
+                    backup_path = self.index_path.with_suffix(f'.backup.{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
+                    shutil.copy2(self.index_path, backup_path)
+                    logger.info(f"Backed up to {backup_path}")
+
+                    # Remove corrupted file to start fresh
+                    self.index_path.unlink()
+                    self.artifacts = {}
+
             except Exception as e:
                 logger.error(f"Error loading metadata: {e}")
 
@@ -135,6 +178,21 @@ class QdrantRAGMemory:
                     self.tags_index = json.load(f)
 
                 logger.info(f"✓ Loaded tags index with {len(self.tags_index)} tags")
+
+            except json.JSONDecodeError as e:
+                logger.warning(f"JSON decode error in tags index: {e}")
+                logger.warning("Starting with empty tags index...")
+                # If tags index is corrupted, just start fresh (it can be rebuilt)
+                import shutil
+                from datetime import datetime
+                backup_path = self.tags_index_path.with_suffix(f'.backup.{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
+                try:
+                    shutil.copy2(self.tags_index_path, backup_path)
+                    logger.info(f"Backed up corrupted tags index to {backup_path}")
+                except Exception:
+                    pass
+                self.tags_index_path.unlink()
+                self.tags_index = {}
 
             except Exception as e:
                 logger.error(f"Error loading tags index: {e}")
