@@ -7,9 +7,9 @@
 
 > **Controversial take:** Test-Driven Development is a brilliant practice that solves the wrong problem for most creative work. Here's what works better.
 
-## The Three Phases of Building Software That Doesn't Suck
+## The Three Phases of Building Software (That Actually Works)
 
-This is how I build software. It's simple, it's effective, and it makes TDD purists shake their heads in dismay:
+This is how I build software. It's simple, it's effective, and it makes TDD purists politely furrow their brows:
 
 **Make it work. Make it pretty. Lock it down with tests.**
 
@@ -76,7 +76,7 @@ Imagine you're a sculptor. You have a block of marble and a vague idea: "I want 
 
 TDD says: "Before you touch that marble, write down exactly what a bird looks like. Define its wingspan. Specify the angle of each feather. Now carve to those specifications."
 
-That's insane.
+That's... not how birds get carved. (Or software gets written, as it turns out.)
 
 Real sculptors *rough out the form first.* They sketch. They make maquettes. They chip away big chunks of stone to find the general shape. Only later do they refine the details.
 
@@ -106,7 +106,7 @@ That's not rigor. That's bureaucracy.
 
 Phase 1 is about **learning velocity.**
 
-I need to try five different approaches in an hour. I need to discover that the third-party library I thought I'd use is actually garbage. I need to realise the problem I'm solving isn't the problem I *should* be solving.
+I need to try five different approaches in an hour. I need to discover that the third-party library I thought I'd use... isn't quite as advertised. I need to realise the problem I'm solving isn't the problem I *should* be solving.
 
 Tests slow this down. Not because testing is slow, but because **premature specification is death.**
 
@@ -1028,6 +1028,6 @@ I just got there via a different path—one that respects how creative work actu
 
 ---
 
-**What's your software building mantra? Do you TDD everything, or do you have a different approach? Let me know in the comments.**
+**What's your software building mantra? Do you TDD everything, or do you have a different approach? I'd genuinely love to hear your thoughts in the comments.**
 
-*P.S. - If you're a TDD purist and this post made you angry, good. That means you're thinking about it. Go write a rebuttal. I'll read it. Maybe you'll convince me. (Probably not, but I'm open to it.)*
+*P.S. - If you're a TDD purist and this post made you raise an eyebrow, excellent! That means we're having a proper engineering discussion. I've been wrong about plenty of things before (just ask my git history), so I'm always curious to hear different perspectives. Maybe you'll convince me there's a better way.*
