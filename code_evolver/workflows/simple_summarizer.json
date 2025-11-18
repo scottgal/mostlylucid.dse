@@ -1,0 +1,61 @@
+{
+  "workflow_id": "simple_summarizer",
+  "version": "1.0.0",
+  "description": "Simple text summarization workflow using local Ollama",
+  "created_by": "code_evolver",
+  "created_at": "2025-01-18T00:00:00Z",
+  "portable": true,
+  "tags": ["summarization", "nlp", "ollama"],
+
+  "inputs": {
+    "text": {
+      "type": "string",
+      "required": true,
+      "description": "Text to summarize"
+    },
+    "max_length": {
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "description": "Maximum summary length in words"
+    }
+  },
+
+  "outputs": {
+    "summary": {
+      "type": "string",
+      "source_reference": "steps.summarize.summary",
+      "description": "Generated summary"
+    }
+  },
+
+  "steps": [
+    {
+      "step_id": "summarize",
+      "type": "llm_call",
+      "description": "Generate concise summary of input text",
+      "tool": "summarizer_tool",
+      "prompt_template": "Summarize the following text in {max_length} words or less:\n\n{text}\n\nSummary:",
+      "input_mapping": {
+        "text": "inputs.text",
+        "max_length": "inputs.max_length"
+      },
+      "output_name": "summary",
+      "timeout": 60
+    }
+  ],
+
+  "tools": {
+    "summarizer_tool": {
+      "tool_id": "summarizer_tool",
+      "name": "Text Summarizer",
+      "description": "Summarizes text using Ollama LLM",
+      "type": "llm",
+      "model": "llama3",
+      "system_prompt": "You are a helpful assistant that creates concise, accurate summaries. Focus on the main points and key information.",
+      "temperature": 0.3,
+      "endpoint": "http://localhost:11434",
+      "timeout": 60
+    }
+  }
+}
