@@ -2070,11 +2070,13 @@ Tags: {', '.join(tool.tags)}
                 # 2. COMMUNITY/committee tools (composite workflows)
                 # 3. Specialized LLM tools from config
                 # 4. General fallback tools
+                # 5. MCP tools (lowest priority - only use when no specialized tools available)
 
                 workflows = []      # Priority 1: Complete workflow nodes
                 communities = []    # Priority 2: Composite workflows
                 specialized = []    # Priority 3: Specialized LLM tools
                 general = []        # Priority 4: General tools
+                mcp_tools = []      # Priority 5: MCP tools (fallback only)
 
                 seen_tool_ids = set()  # Deduplicate
 
@@ -2095,6 +2097,9 @@ Tags: {', '.join(tool.tags)}
                                     general.append((tool, similarity))
                                 else:
                                     specialized.append((tool, similarity))
+                            elif tool.tool_type == ToolType.MCP:
+                                # MCP tools are fallback only - lowest priority
+                                mcp_tools.append((tool, similarity))
                             else:
                                 general.append((tool, similarity))
 
@@ -2184,6 +2189,19 @@ Tags: {', '.join(tool.tags)}
                             fitness += 15  # Template modification, moderate effort
                         # Below 0.70: no effort bonus, might be more work to adapt
 
+                    # MCP tool penalty: Use specialized tools first
+                    # MCP tools are generic fallbacks - heavily penalize to ensure
+                    # they're only used when no specialized tools are available
+                    if tool.tool_type == ToolType.MCP:
+                        fitness -= 40  # Significant penalty to deprioritize MCP tools
+
+                    # Manual weight override: Allow users to manually adjust tool priority
+                    # This is useful for favoring specific tools or deprioritizing others
+                    manual_weight = metadata.get("manual_weight", None)
+                    if manual_weight is not None:
+                        fitness += manual_weight  # Add or subtract based on manual setting
+                        logger.debug(f"Manual weight adjustment for {tool.name}: {manual_weight:+.1f} points")
+
                     return fitness
 
                 # Calculate fitness for all tools
@@ -2191,13 +2209,15 @@ Tags: {', '.join(tool.tags)}
                 communities_with_fitness = [(t, s, calculate_fitness(t, s)) for t, s in communities]
                 specialized_with_fitness = [(t, s, calculate_fitness(t, s)) for t, s in specialized]
                 general_with_fitness = [(t, s, calculate_fitness(t, s)) for t, s in general]
+                mcp_with_fitness = [(t, s, calculate_fitness(t, s)) for t, s in mcp_tools]
 
-                # Combine all candidates
+                # Combine all candidates (MCP tools last due to lowest priority)
                 all_candidates = (
                     workflows_with_fitness +
                     communities_with_fitness +
                     specialized_with_fitness +
-                    general_with_fitness
+                    general_with_fitness +
+                    mcp_with_fitness
                 )
 
                 # Sort by FITNESS score (highest first), not just similarity
@@ -2218,7 +2238,13 @@ Tags: {', '.join(tool.tags)}
                 # Log top choice with reasoning
                 if usable_candidates:
                     top_tool, top_sim, top_fitness = usable_candidates[0]
-                    logger.info(f"Top choice: {top_tool.name} (similarity: {top_sim:.1%}, fitness: {top_fitness:.0f})")
+                    tool_type_display = f"[MCP-FALLBACK]" if top_tool.tool_type == ToolType.MCP else f"[{top_tool.tool_type.value.upper()}]"
+                    logger.info(f"Top choice: {top_tool.name} {tool_type_display} (similarity: {top_sim:.1%}, fitness: {top_fitness:.0f})")
+
+                    # Warn if MCP tool was selected despite having specialized tools available
+                    if top_tool.tool_type == ToolType.MCP and (specialized or workflows or communities):
+                        logger.warning(f"MCP tool '{top_tool.name}' selected despite having {len(specialized)} specialized, {len(workflows)} workflow, and {len(communities)} community tools available")
+                        logger.info(f"Consider using more specific search terms or checking tool configurations")
 
 
                 # If no high-level workflows found, ensure relevant config tools are included

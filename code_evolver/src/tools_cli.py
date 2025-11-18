@@ -9,6 +9,9 @@ Commands:
 - /tools optimize --n <name> - Optimize specific tool
 - /tools test all - Test all tools
 - /tools test --n <name> - Test specific tool and dependencies
+- /tools weight --n <name> - Get weight/priority for a specific tool
+- /tools weight --n <name> --set <value> - Set manual weight for a tool
+- /tools search --prompt "<query>" - Search tools and show fitness scores
 
 USAGE:
     from src.tools_cli import ToolsCLI
@@ -37,6 +40,9 @@ class CommandType(Enum):
     OPTIMIZE_SINGLE = "optimize_single"
     TEST_ALL = "test_all"
     TEST_SINGLE = "test_single"
+    WEIGHT_GET = "weight_get"
+    WEIGHT_SET = "weight_set"
+    SEARCH = "search"
     UNKNOWN = "unknown"
 
 
@@ -139,6 +145,16 @@ class ToolsCLI:
             result = self._test_all()
         elif cmd_type == CommandType.TEST_SINGLE:
             result = self._test_single(tool_name)
+        elif cmd_type == CommandType.WEIGHT_GET:
+            result = self._weight_get(tool_name)
+        elif cmd_type == CommandType.WEIGHT_SET:
+            # Parse weight value from command
+            weight_value = self._parse_weight_value(command)
+            result = self._weight_set(tool_name, weight_value)
+        elif cmd_type == CommandType.SEARCH:
+            # Parse search prompt from command
+            search_prompt = self._parse_search_prompt(command)
+            result = self._search_tools(search_prompt)
         else:
             result = {
                 "success": False,
@@ -194,6 +210,16 @@ class ToolsCLI:
                 return (CommandType.TEST_SINGLE, tool_name)
             elif "all" in parts:
                 return (CommandType.TEST_ALL, None)
+        elif action == "weight":
+            if tool_name:
+                # Check if --set flag is present
+                if "--set" in parts:
+                    return (CommandType.WEIGHT_SET, tool_name)
+                else:
+                    return (CommandType.WEIGHT_GET, tool_name)
+        elif action == "search":
+            # Search command uses --prompt flag
+            return (CommandType.SEARCH, None)
 
         return (CommandType.UNKNOWN, None)
 
@@ -298,6 +324,267 @@ class ToolsCLI:
             "success": result.get("passed", False),
             "message": message,
             "details": result
+        }
+
+    def _parse_weight_value(self, command: str) -> Optional[float]:
+        """
+        Parse weight value from command.
+
+        Args:
+            command: Command string
+
+        Returns:
+            Weight value or None
+        """
+        parts = command.strip().split()
+        if "--set" in parts:
+            try:
+                set_index = parts.index("--set")
+                if set_index + 1 < len(parts):
+                    return float(parts[set_index + 1])
+            except (ValueError, IndexError):
+                pass
+        return None
+
+    def _parse_search_prompt(self, command: str) -> str:
+        """
+        Parse search prompt from command.
+
+        Args:
+            command: Command string
+
+        Returns:
+            Search prompt
+        """
+        # Extract text after --prompt flag
+        if "--prompt" in command:
+            prompt_part = command.split("--prompt", 1)[1].strip()
+            # Remove quotes if present
+            if prompt_part.startswith('"') and prompt_part.endswith('"'):
+                return prompt_part[1:-1]
+            elif prompt_part.startswith("'") and prompt_part.endswith("'"):
+                return prompt_part[1:-1]
+            return prompt_part
+        return ""
+
+    def _weight_get(self, tool_name: str) -> Dict[str, Any]:
+        """
+        Get weight/priority for a tool.
+
+        Args:
+            tool_name: Tool name
+
+        Returns:
+            Result dictionary
+        """
+        tool = self.tools.get_tool(tool_name)
+        if not tool:
+            return {
+                "success": False,
+                "message": f"Tool '{tool_name}' not found",
+                "details": {}
+            }
+
+        # Get manual weight from metadata
+        manual_weight = tool.metadata.get("manual_weight", None)
+
+        # Calculate base fitness score
+        metadata = tool.metadata or {}
+        base_fitness = 0
+
+        # Speed tier
+        speed_tier = metadata.get('speed_tier', 'medium')
+        if speed_tier == 'very-fast':
+            base_fitness += 20
+        elif speed_tier == 'fast':
+            base_fitness += 10
+        elif speed_tier == 'slow':
+            base_fitness -= 10
+        elif speed_tier == 'very-slow':
+            base_fitness -= 20
+
+        # Cost tier
+        cost_tier = metadata.get('cost_tier', 'medium')
+        if cost_tier == 'free':
+            base_fitness += 15
+        elif cost_tier == 'low':
+            base_fitness += 10
+        elif cost_tier == 'high':
+            base_fitness -= 10
+        elif cost_tier == 'very-high':
+            base_fitness -= 15
+
+        # Quality tier
+        quality_tier = metadata.get('quality_tier', 'good')
+        if quality_tier == 'excellent':
+            base_fitness += 15
+        elif quality_tier == 'very-good':
+            base_fitness += 10
+        elif quality_tier == 'poor':
+            base_fitness -= 15
+
+        # MCP penalty
+        from src.tools_manager import ToolType
+        if tool.tool_type == ToolType.MCP:
+            base_fitness -= 40
+
+        details = {
+            "tool_name": tool_name,
+            "tool_type": tool.tool_type.value,
+            "manual_weight": manual_weight,
+            "base_fitness": base_fitness,
+            "speed_tier": metadata.get('speed_tier', 'medium'),
+            "cost_tier": metadata.get('cost_tier', 'medium'),
+            "quality_tier": metadata.get('quality_tier', 'good')
+        }
+
+        if manual_weight is not None:
+            message = f"Tool '{tool_name}' has manual weight: {manual_weight} (base fitness: {base_fitness})"
+        else:
+            message = f"Tool '{tool_name}' has no manual weight set (base fitness: {base_fitness})"
+
+        return {
+            "success": True,
+            "message": message,
+            "details": details
+        }
+
+    def _weight_set(self, tool_name: str, weight: Optional[float]) -> Dict[str, Any]:
+        """
+        Set manual weight for a tool.
+
+        Args:
+            tool_name: Tool name
+            weight: Weight value
+
+        Returns:
+            Result dictionary
+        """
+        if weight is None:
+            return {
+                "success": False,
+                "message": "Weight value not provided. Use: /tools weight --n <name> --set <value>",
+                "details": {}
+            }
+
+        tool = self.tools.get_tool(tool_name)
+        if not tool:
+            return {
+                "success": False,
+                "message": f"Tool '{tool_name}' not found",
+                "details": {}
+            }
+
+        # Set manual weight in metadata
+        tool.metadata["manual_weight"] = weight
+
+        # Save to tool file if it's a YAML-based tool
+        if tool.metadata.get("from_yaml"):
+            # TODO: Update YAML file with new weight
+            # For now, just store in memory
+            pass
+
+        return {
+            "success": True,
+            "message": f"Set manual weight for '{tool_name}' to {weight}",
+            "details": {
+                "tool_name": tool_name,
+                "weight": weight
+            }
+        }
+
+    def _search_tools(self, prompt: str) -> Dict[str, Any]:
+        """
+        Search for tools and show fitness scores.
+
+        Args:
+            prompt: Search prompt
+
+        Returns:
+            Result dictionary with top 10 matches
+        """
+        if not prompt:
+            return {
+                "success": False,
+                "message": "Search prompt not provided. Use: /tools search --prompt \"<query>\"",
+                "details": {}
+            }
+
+        if self.verbose:
+            print(f"\n[SEARCH] Searching tools for: {prompt}")
+
+        # Use tools manager's search function
+        matching_tools = self.tools.search(prompt, top_k=10, use_rag=True)
+
+        results = []
+        for tool in matching_tools:
+            metadata = tool.metadata or {}
+
+            # Calculate fitness score (same as in search function)
+            base_fitness = 0
+
+            # Speed tier
+            speed_tier = metadata.get('speed_tier', 'medium')
+            if speed_tier == 'very-fast':
+                base_fitness += 20
+            elif speed_tier == 'fast':
+                base_fitness += 10
+            elif speed_tier == 'slow':
+                base_fitness -= 10
+            elif speed_tier == 'very-slow':
+                base_fitness -= 20
+
+            # Cost tier
+            cost_tier = metadata.get('cost_tier', 'medium')
+            if cost_tier == 'free':
+                base_fitness += 15
+            elif cost_tier == 'low':
+                base_fitness += 10
+            elif cost_tier == 'high':
+                base_fitness -= 10
+            elif cost_tier == 'very-high':
+                base_fitness -= 15
+
+            # Quality tier
+            quality_tier = metadata.get('quality_tier', 'good')
+            if quality_tier == 'excellent':
+                base_fitness += 15
+            elif quality_tier == 'very-good':
+                base_fitness += 10
+            elif quality_tier == 'poor':
+                base_fitness -= 15
+
+            # MCP penalty
+            from src.tools_manager import ToolType
+            if tool.tool_type == ToolType.MCP:
+                base_fitness -= 40
+
+            # Manual weight
+            manual_weight = metadata.get("manual_weight", None)
+            if manual_weight is not None:
+                base_fitness += manual_weight
+
+            results.append({
+                "name": tool.name,
+                "tool_id": tool.tool_id,
+                "type": tool.tool_type.value,
+                "description": tool.description[:100] + "..." if len(tool.description) > 100 else tool.description,
+                "fitness": base_fitness,
+                "speed_tier": speed_tier,
+                "cost_tier": cost_tier,
+                "quality_tier": quality_tier,
+                "manual_weight": manual_weight,
+                "tags": tool.tags[:5]  # Limit tags for display
+            })
+
+        return {
+            "success": True,
+            "message": f"Found {len(results)} matching tools",
+            "details": {
+                "query": prompt,
+                "count": len(results),
+                "results": results
+            }
         }
 
 
