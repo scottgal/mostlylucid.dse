@@ -1,0 +1,166 @@
+name: "Random User API"
+type: "openapi"
+description: "Generate random user data including names, emails, addresses, and photos. Free API with no authentication required. Perfect for testing, mockups, and prototyping with realistic user data."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "medium"
+
+openapi:
+  spec_url: "https://randomuser.me/"
+  base_url: "https://randomuser.me/api"
+
+code_template: |
+  # Example: How to use Random User API
+  import requests
+
+  def generate_users(count=1, gender=None, nationality=None):
+      """
+      Generate random user data.
+
+      Args:
+          count: Number of users to generate (default: 1)
+          gender: Optional gender filter ('male' or 'female')
+          nationality: Optional nationality (e.g., 'us', 'gb', 'fr', 'de')
+
+      Returns:
+          Dictionary with user data
+
+      Response Format:
+          {
+            "results": [
+              {
+                "gender": "female",
+                "name": {
+                  "title": "Miss",
+                  "first": "Jennie",
+                  "last": "Nichols"
+                },
+                "location": {...},
+                "email": "jennie.nichols@example.com",
+                "login": {...},
+                "dob": {...},
+                "registered": {...},
+                "phone": "(272) 790-0888",
+                "cell": "(489) 330-2385",
+                "id": {...},
+                "picture": {
+                  "large": "https://...",
+                  "medium": "https://...",
+                  "thumbnail": "https://..."
+                },
+                "nat": "US"
+              }
+            ],
+            "info": {
+              "seed": "...",
+              "results": 1,
+              "page": 1,
+              "version": "1.4"
+            }
+          }
+      """
+      url = "https://randomuser.me/api/"
+      params = {"results": count}
+
+      if gender:
+          params["gender"] = gender
+      if nationality:
+          params["nat"] = nationality
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def generate_user(gender=None, nationality=None):
+      """
+      Generate a single random user.
+
+      Args:
+          gender: Optional gender ('male' or 'female')
+          nationality: Optional nationality code
+
+      Returns:
+          Single user dictionary
+      """
+      result = generate_users(count=1, gender=gender, nationality=nationality)
+      return result['results'][0]
+
+  def generate_users_with_fields(count=1, include_fields=None, exclude_fields=None):
+      """
+      Generate users with specific fields only.
+
+      Args:
+          count: Number of users
+          include_fields: List of fields to include (e.g., ['name', 'email'])
+          exclude_fields: List of fields to exclude
+
+      Returns:
+          Dictionary with user data
+
+      Available fields:
+          gender, name, location, email, login, registered, dob, phone, cell, id, picture, nat
+      """
+      url = "https://randomuser.me/api/"
+      params = {"results": count}
+
+      if include_fields:
+          params["inc"] = ",".join(include_fields)
+      if exclude_fields:
+          params["exc"] = ",".join(exclude_fields)
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def generate_users_with_seed(seed, count=1):
+      """
+      Generate users with a specific seed for reproducibility.
+
+      Args:
+          seed: Seed string for reproducible results
+          count: Number of users
+
+      Returns:
+          Dictionary with user data
+      """
+      url = "https://randomuser.me/api/"
+      params = {
+          "results": count,
+          "seed": seed
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: Generate a single random user
+  # user = generate_user()
+  # print(f"Name: {user['name']['first']} {user['name']['last']}")
+  # print(f"Email: {user['email']}")
+  # print(f"Photo: {user['picture']['large']}")
+
+  # Example 2: Generate 10 random users
+  # users_data = generate_users(count=10)
+  # for user in users_data['results']:
+  #     print(f"{user['name']['first']} - {user['email']}")
+
+  # Example 3: Generate only female users from the US
+  # users = generate_users(count=5, gender='female', nationality='us')
+  # print(f"Generated {len(users['results'])} female US users")
+
+  # Example 4: Generate users with only name and email
+  # users = generate_users_with_fields(count=3, include_fields=['name', 'email'])
+  # for user in users['results']:
+  #     print(f"{user['name']['first']}: {user['email']}")
+
+  # Example 5: Generate reproducible users with seed
+  # users1 = generate_users_with_seed('myseed123', count=2)
+  # users2 = generate_users_with_seed('myseed123', count=2)
+  # # Both will return the same users
+
+tags: ["random-data", "users", "testing", "mockups", "api", "free", "development", "fake-data"]

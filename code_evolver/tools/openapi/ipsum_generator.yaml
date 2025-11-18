@@ -1,0 +1,140 @@
+name: "Lorem Ipsum Generator"
+type: "openapi"
+description: "Generate Lorem Ipsum placeholder text. Free API with no authentication required. Supports paragraphs, words, and bytes. Perfect for testing layouts and mockups with realistic-length content."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "excellent"
+max_output_length: "large"
+
+openapi:
+  spec_url: "https://loripsum.net/"
+  base_url: "https://loripsum.net/api"
+
+code_template: |
+  # Example: How to use Lorem Ipsum Generator
+  import requests
+
+  def generate_paragraphs(count=4, length='medium'):
+      """
+      Generate Lorem Ipsum paragraphs.
+
+      Args:
+          count: Number of paragraphs (default: 4)
+          length: Paragraph length ('short', 'medium', 'long', 'verylong')
+
+      Returns:
+          HTML string with paragraphs
+
+      Note:
+          Returns HTML with <p> tags
+      """
+      url = f"https://loripsum.net/api/{count}/{length}"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  def generate_plaintext(count=4):
+      """
+      Generate Lorem Ipsum as plain text (no HTML tags).
+
+      Args:
+          count: Number of paragraphs
+
+      Returns:
+          Plain text string
+      """
+      url = f"https://loripsum.net/api/{count}/plaintext"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  def generate_with_options(count=4, options=None):
+      """
+      Generate Lorem Ipsum with custom options.
+
+      Args:
+          count: Number of paragraphs
+          options: List of options
+
+      Available options:
+          - short/medium/long/verylong: Paragraph length
+          - decorate: Add bold, italic, marked text
+          - link: Add links
+          - ul: Add unordered lists
+          - ol: Add ordered lists
+          - dl: Add definition lists
+          - bq: Add blockquotes
+          - code: Add code samples
+          - headers: Add headers
+          - allcaps: Use ALL CAPS
+          - prude: Prude version (no potentially offensive words)
+          - plaintext: Return plain text instead of HTML
+
+      Returns:
+          Text string (HTML or plain)
+      """
+      if options is None:
+          options = []
+
+      url = f"https://loripsum.net/api/{count}"
+
+      if options:
+          url += "/" + "/".join(options)
+
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.text
+
+  def generate_short_text(paragraphs=2):
+      """
+      Generate short Lorem Ipsum text.
+
+      Args:
+          paragraphs: Number of paragraphs (default: 2)
+
+      Returns:
+          Plain text string
+      """
+      return generate_with_options(paragraphs, ['short', 'plaintext'])
+
+  def generate_with_formatting(count=3):
+      """
+      Generate Lorem Ipsum with rich formatting.
+
+      Args:
+          count: Number of paragraphs
+
+      Returns:
+          HTML string with formatting
+      """
+      return generate_with_options(count, ['medium', 'decorate', 'link', 'headers'])
+
+  # Usage examples:
+  # Example 1: Generate basic paragraphs
+  # text = generate_paragraphs(5)
+  # print(text)
+
+  # Example 2: Generate plain text
+  # text = generate_plaintext(3)
+  # print(text)
+
+  # Example 3: Generate short plain text
+  # text = generate_short_text(2)
+  # print(text)
+
+  # Example 4: Generate with lists and code
+  # text = generate_with_options(4, ['medium', 'ul', 'code'])
+  # print(text)
+
+  # Example 5: Generate with all formatting options
+  # text = generate_with_formatting(3)
+  # print(text)
+
+  # Example 6: Generate prude version (no potentially offensive words)
+  # text = generate_with_options(4, ['medium', 'prude', 'plaintext'])
+  # print(text)
+
+tags: ["lorem-ipsum", "placeholder", "text-generation", "api", "free", "development", "testing", "mockup"]

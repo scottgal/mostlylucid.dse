@@ -1,0 +1,98 @@
+name: "Nationalize.io"
+type: "openapi"
+description: "Estimates nationality from a first name using statistical data. Free API with no authentication required. Returns list of countries with probabilities. Useful for data enrichment and demographic analysis."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://api.nationalize.io/"
+  base_url: "https://api.nationalize.io"
+
+code_template: |
+  # Example: How to use Nationalize.io
+  import requests
+
+  def predict_nationality(name):
+      """
+      Predict nationality from a first name.
+
+      Args:
+          name: First name to predict nationality for (string)
+
+      Returns:
+          Dictionary with 'name' and 'country' list with probabilities
+
+      Response Format:
+          {
+            "name": "michael",
+            "country": [
+              {"country_id": "US", "probability": 0.065},
+              {"country_id": "AU", "probability": 0.059},
+              {"country_id": "GB", "probability": 0.048}
+            ]
+          }
+      """
+      url = "https://api.nationalize.io"
+      params = {"name": name}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def predict_nationality_batch(names):
+      """
+      Predict nationalities for multiple names in a single request.
+
+      Args:
+          names: List of names (max 10 per request)
+
+      Returns:
+          List of predictions for each name
+      """
+      url = "https://api.nationalize.io"
+      params = [("name[]", name) for name in names[:10]]  # Max 10 names
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_top_country(name):
+      """
+      Get the most likely country for a given name.
+
+      Args:
+          name: First name (string)
+
+      Returns:
+          Dictionary with country_id and probability, or None if no prediction
+      """
+      result = predict_nationality(name)
+      countries = result.get('country', [])
+
+      if countries:
+          return countries[0]  # First is most likely
+      return None
+
+  # Usage examples:
+  # Example 1: Predict nationality for a single name
+  # result = predict_nationality("michael")
+  # for country in result['country'][:3]:  # Top 3
+  #     print(f"{country['country_id']}: {country['probability']:.1%}")
+
+  # Example 2: Get most likely country
+  # top = get_top_country("hans")
+  # if top:
+  #     print(f"Most likely: {top['country_id']} ({top['probability']:.1%})")
+
+  # Example 3: Batch prediction
+  # results = predict_nationality_batch(["michael", "hans", "pierre"])
+  # for r in results:
+  #     if r.get('country'):
+  #         top = r['country'][0]
+  #         print(f"{r['name']}: {top['country_id']} ({top['probability']:.1%})")
+
+tags: ["demographics", "nationality-prediction", "data-enrichment", "api", "free", "development"]

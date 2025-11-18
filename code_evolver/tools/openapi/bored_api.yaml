@@ -1,0 +1,118 @@
+name: "Bored API"
+type: "openapi"
+description: "Find random activities to fight boredom. Free API with no authentication required. Returns activity suggestions with type, participants, and accessibility info. Great for generating ideas and testing randomization."
+cost_tier: "free"
+speed_tier: "very-fast"
+quality_tier: "good"
+max_output_length: "short"
+
+openapi:
+  spec_url: "https://www.boredapi.com/api/activity"
+  base_url: "https://www.boredapi.com/api"
+
+code_template: |
+  # Example: How to use Bored API
+  import requests
+
+  def get_random_activity():
+      """
+      Get a random activity suggestion.
+
+      Returns:
+          Dictionary with activity details
+
+      Response Format:
+          {
+            "activity": "Learn Express.js",
+            "type": "education",
+            "participants": 1,
+            "price": 0.1,
+            "link": "https://expressjs.com/",
+            "key": "3943506",
+            "accessibility": 0.1
+          }
+      """
+      url = "https://www.boredapi.com/api/activity"
+      response = requests.get(url)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_activity_by_type(activity_type):
+      """
+      Get a random activity of a specific type.
+
+      Args:
+          activity_type: Type of activity (education, recreational, social, diy,
+                        charity, cooking, relaxation, music, busywork)
+
+      Returns:
+          Dictionary with activity details
+      """
+      url = "https://www.boredapi.com/api/activity"
+      params = {"type": activity_type}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_activity_by_participants(participants):
+      """
+      Get a random activity for a specific number of participants.
+
+      Args:
+          participants: Number of people (1-5)
+
+      Returns:
+          Dictionary with activity details
+      """
+      url = "https://www.boredapi.com/api/activity"
+      params = {"participants": participants}
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  def get_activity_by_price_range(min_price=0.0, max_price=1.0):
+      """
+      Get a random activity within a price range.
+
+      Args:
+          min_price: Minimum price (0.0-1.0, where 0 is free)
+          max_price: Maximum price (0.0-1.0)
+
+      Returns:
+          Dictionary with activity details
+      """
+      url = "https://www.boredapi.com/api/activity"
+      params = {
+          "minprice": min_price,
+          "maxprice": max_price
+      }
+
+      response = requests.get(url, params=params)
+      response.raise_for_status()
+
+      return response.json()
+
+  # Usage examples:
+  # Example 1: Get any random activity
+  # activity = get_random_activity()
+  # print(f"Try this: {activity['activity']}")
+  # print(f"Type: {activity['type']}, Participants: {activity['participants']}")
+
+  # Example 2: Get educational activity
+  # activity = get_activity_by_type("education")
+  # print(f"Learn something: {activity['activity']}")
+
+  # Example 3: Get social activity for 2 people
+  # activity = get_activity_by_participants(2)
+  # print(f"Do together: {activity['activity']}")
+
+  # Example 4: Get free activities
+  # activity = get_activity_by_price_range(0.0, 0.0)
+  # print(f"Free activity: {activity['activity']}")
+
+tags: ["activities", "random", "entertainment", "ideas", "api", "free", "development"]
