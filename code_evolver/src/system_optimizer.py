@@ -72,6 +72,31 @@ class OptimizationConfig:
     verbose: bool = True
     report_path: Optional[Path] = None
 
+    # Evolutionary pressure settings
+    evolutionary_pressure: str = "balanced"  # "granular", "generic", or "balanced"
+    min_cluster_size: int = 2  # Minimum variants in a cluster
+    merge_similar_functions: bool = False  # Whether to merge similar function nodes
+    specialization_bias: float = 0.5  # 0.0 = generic, 1.0 = specialized
+
+    def apply_evolutionary_adjustments(self, adjustments: Dict[str, Any]) -> None:
+        """
+        Apply evolutionary pressure adjustments from PressureManager.
+
+        Args:
+            adjustments: Dict from PressureManager.get_evolutionary_adjustments()
+        """
+        self.evolutionary_pressure = adjustments.get("evolutionary_pressure", self.evolutionary_pressure)
+        self.cluster_similarity_threshold = adjustments.get("similarity_threshold", self.cluster_similarity_threshold)
+        self.max_distance_from_prime = adjustments.get("max_distance_from_fittest", self.max_distance_from_prime)
+        self.min_cluster_size = adjustments.get("min_cluster_size", self.min_cluster_size)
+        self.merge_similar_functions = adjustments.get("merge_similar_functions", self.merge_similar_functions)
+        self.specialization_bias = adjustments.get("specialization_bias", self.specialization_bias)
+
+        logger.info(f"Applied evolutionary pressure adjustments: "
+                   f"pressure={self.evolutionary_pressure}, "
+                   f"similarity={self.cluster_similarity_threshold:.2f}, "
+                   f"max_distance={self.max_distance_from_prime:.2f}")
+
 
 @dataclass
 class ClusterInfo:
