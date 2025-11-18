@@ -1,0 +1,12 @@
+name: "Output Validator"
+type: "executable"
+description: "Validates that every tool produces output (print, return, or file write). For stdin-based tools, ensures JSON output."
+executable:
+  command: "python"
+  args: ["{tool_dir}/output_validator.py", "{source_file}"]
+  install_command: null  # Built-in Python module
+tags: ["python", "output", "validation", "json", "static-analysis"]
+speed_tier: "very-fast"
+cost: "free"
+priority: 100  # Run early (highest priority = most restrictive)
+auto_fix: false

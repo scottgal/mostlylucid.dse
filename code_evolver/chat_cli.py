@@ -3386,6 +3386,7 @@ if __name__ == "__main__":
 import json
 import sys
 from pathlib import Path
+from typing import Dict, Any
 
 # CRITICAL: Add code_evolver root to path BEFORE importing node_runtime
 # Only add if not using local mock (for testing)
@@ -3395,9 +3396,9 @@ if not (Path(__file__).parent / "node_runtime.py").exists():
 # Now you can import from node_runtime (only if you need to call LLM tools):
 from node_runtime import call_tool
 
-def main():
+def main() -> None:
     # ALWAYS read input from stdin as JSON
-    input_data = json.load(sys.stdin)
+    input_data: Dict[str, Any] = json.load(sys.stdin)
 
     # Your logic here
     # For content: content = call_tool("content_generator", input_data.get("description"))
@@ -3499,6 +3500,7 @@ USAGE GUIDELINES:
    - import json
    - import sys
    - from pathlib import Path
+   - from typing import Dict, Any, List, Optional (as needed for type hints)
    - CRITICAL: If you need to use call_tool(), you MUST add the path setup BEFORE importing:
      ```python
      # Add code_evolver root to path BEFORE importing node_runtime
@@ -3506,6 +3508,22 @@ USAGE GUIDELINES:
      from node_runtime import call_tool
      ```
      (Do NOT import call_tool if you don't use it)
+
+6. ALWAYS include type hints on functions:
+   - main() -> None (since it doesn't return, it prints)
+   - Helper functions should have parameter and return type hints
+   - Example:
+     ```python
+     def calculate_result(data: Dict[str, Any]) -> str:
+         # Your logic here
+         return result
+
+     def main() -> None:
+         input_data: Dict[str, Any] = json.load(sys.stdin)
+         result: str = calculate_result(input_data)
+         print(json.dumps({"result": result}))
+     ```
+   - Type hints help catch errors early and make code more maintainable
 
 IMPORTANT - DEMO SAFETY:
 For potentially infinite or resource-intensive tasks, include SENSIBLE LIMITS:
@@ -4323,49 +4341,29 @@ Generated: {datetime.now().isoformat()}
                     workflow.fail_step("escalation", "Could not fix all issues")
 
         # Step 7.5: Run static analysis tools if tests passed
+        # PROGRESSIVE VALIDATION: Run tools from most to least restrictive,
+        # fixing each before moving to the next. Max 6 iterations total.
         if test_success and self.config.get("testing.enabled", True):
-            workflow.add_step("static_analysis", "test", "Running static analysis tools")
+            workflow.add_step("static_analysis", "test", "Running progressive static analysis")
             workflow.start_step("static_analysis")
-            console.print(f"\n[cyan]Running static analysis...[/cyan]")
+            console.print(f"\n[cyan]Running progressive static analysis (most to least restrictive)...[/cyan]")
 
-            analysis_results = self._run_static_analysis(node_id, code)
+            # Progressive static validation with max 6 total iterations
+            analysis_success = self._progressive_static_validation(
+                node_id=node_id,
+                code=code,
+                description=description,
+                specification=specification,
+                available_tools=available_tools,
+                max_total_iterations=6
+            )
 
-            # Iterate to fix issues if not all checks passed
-            max_fix_attempts = 3
-            fix_attempt = 0
-
-            while analysis_results['passed_count'] < analysis_results['total_count'] and fix_attempt < max_fix_attempts:
-                fix_attempt += 1
-                console.print(f"\n[yellow]Attempting auto-fix (attempt {fix_attempt}/{max_fix_attempts})...[/yellow]")
-
-                # Try to auto-fix failing tools
-                fixed_any = self._auto_fix_static_issues(node_id, analysis_results)
-
-                if fixed_any:
-                    # Reload code and re-run static analysis
-                    code_path = self.runner.get_node_path(node_id)
-                    if code_path.exists():
-                        code = code_path.read_text()
-
-                    console.print(f"[cyan]Re-running static analysis...[/cyan]")
-                    analysis_results = self._run_static_analysis(node_id, code)
-
-                    if analysis_results['passed_count'] == analysis_results['total_count']:
-                        console.print(f"[green]✓ All checks now pass![/green]")
-                        break
-                else:
-                    console.print(f"[yellow]No auto-fix available for remaining issues[/yellow]")
-                    break
-
-            # Check if ALL checks passed
-            all_passed = analysis_results['passed_count'] == analysis_results['total_count']
-
-            if all_passed:
-                workflow.complete_step("static_analysis", f"All {analysis_results['total_count']} checks passed")
-                console.print(f"[green]OK Static analysis: {analysis_results['total_count']}/{analysis_results['total_count']} checks passed[/green]")
+            if analysis_success:
+                workflow.complete_step("static_analysis", "All static checks passed")
+                console.print(f"[green]OK Static analysis: All checks passed[/green]")
             else:
-                workflow.fail_step("static_analysis", f"Only {analysis_results['passed_count']}/{analysis_results['total_count']} checks passed")
-                console.print(f"[red]FAIL Static analysis: {analysis_results['passed_count']}/{analysis_results['total_count']} checks passed[/red]")
+                workflow.fail_step("static_analysis", "Static analysis checks failed")
+                console.print(f"[red]FAIL Static analysis: Not all checks passed after 6 iterations[/red]")
                 console.print(f"[yellow]Node creation blocked until all static analysis checks pass[/yellow]")
 
                 # Don't create the node if static analysis failed
@@ -6094,35 +6092,64 @@ CODE TO TEST:
 
 REQUIREMENTS:
 1. Create multiple test functions testing different scenarios
-2. Test edge cases (empty input, None, invalid data)
-3. Test the main() function with realistic input_data dictionaries
-4. If code has helper functions, test those too
+2. Test edge cases (empty input, invalid data)
+3. Test the main() function by mocking stdin with realistic JSON test data
+4. If code has helper functions, test those directly with proper parameters
 5. Use assertions to verify correct behavior
 6. Include print statements for test progress
 
 EXAMPLE STRUCTURE:
 ```python
+import sys
+import json
+from io import StringIO
+
 def test_basic_functionality():
     print("Testing basic functionality...")
     from main import main
-    result = main({{"key": "value"}})  # Use actual expected keys from code
-    assert result is not None, "Result should not be None"
-    print("OK Basic test passed")
+
+    # Mock stdin with test data
+    test_input = {{"key": "value"}}
+    sys.stdin = StringIO(json.dumps(test_input))
+
+    # Capture stdout
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        main()
+        output = sys.stdout.getvalue()
+        result = json.loads(output) if output.strip() else None
+        assert result is not None, "Result should not be None"
+        print("OK Basic test passed", file=old_stdout)
+    finally:
+        sys.stdout = old_stdout
 
 def test_edge_cases():
     print("Testing edge cases...")
     from main import main
+
     # Test with empty input
-    result = main({{}})
-    # Add appropriate assertions
-    print("OK Edge cases passed")
+    sys.stdin = StringIO(json.dumps({{}}))
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        main()
+        output = sys.stdout.getvalue()
+        # Add appropriate assertions
+        print("OK Edge cases passed", file=old_stdout)
+    finally:
+        sys.stdout = old_stdout
 
 def test_invalid_input():
     print("Testing invalid input handling...")
     from main import main
+
+    # Test with invalid JSON
+    sys.stdin = StringIO("not valid json")
     try:
-        result = main(None)
-        # Verify it handles None gracefully
+        main()
         print("OK Invalid input handled")
     except Exception as e:
         print(f"OK Caught expected error: {{e}}")
@@ -6138,6 +6165,8 @@ CRITICAL:
 - Analyze the code to see what input_data keys it expects
 - Create realistic test data based on the task description
 - DO NOT just check hasattr() or imports - actually TEST the logic
+- main() functions typically read from stdin and write to stdout - use StringIO to mock them
+- Always restore sys.stdin and sys.stdout after tests to avoid affecting other tests
 - Return ONLY Python code, NO markdown fences, NO explanations
 - Every line must be valid Python syntax
 
@@ -11164,6 +11193,222 @@ Return ONLY the Python test code, no explanations."""
 
         return fixed_any
 
+    def _progressive_static_validation(
+        self,
+        node_id: str,
+        code: str,
+        description: str,
+        specification: str,
+        available_tools: str,
+        max_total_iterations: int = 6
+    ) -> bool:
+        """
+        Progressive static validation with fix loop.
+
+        Runs static checks from most to least restrictive. When a check fails:
+        1. Enter fix loop for that specific check
+        2. After fixing, re-run ALL checks up to and including the failed one
+        3. Only proceed to next check when all previous checks pass
+        4. Guard against infinite recursion with max_total_iterations (default 6)
+        5. If max iterations exceeded, invoke god mode (deepseek-coder) for final attempt
+
+        Args:
+            node_id: Node identifier
+            code: Current code
+            description: Task description
+            specification: Detailed specification
+            available_tools: Available tools string
+            max_total_iterations: Max iterations across all fixes (default 6)
+
+        Returns:
+            bool: True if all checks passed, False otherwise
+        """
+        # Get ordered list of tools (most to least restrictive)
+        essential_tools = [
+            "python_syntax_validator",        # Priority 200: Most restrictive
+            "output_validator",                # Priority 100: Output validation
+            "main_function_checker",          # Priority 90: Main structure
+            "json_output_validator",          # Priority 80: JSON format
+            "node_runtime_import_validator",  # Priority 70: Imports (has auto-fix)
+            "undefined_name_checker",         # Priority 60: Undefined names
+        ]
+
+        code_path = self.runner.get_node_path(node_id)
+        total_iterations = 0
+        current_tool_index = 0  # Start with first (most restrictive) tool
+
+        while current_tool_index < len(essential_tools) and total_iterations < max_total_iterations:
+            # Run all tools up to and including current_tool_index
+            tools_to_run = essential_tools[:current_tool_index + 1]
+
+            console.print(f"\n[dim]Validating with {len(tools_to_run)} check(s) (iteration {total_iterations + 1}/{max_total_iterations})...[/dim]")
+
+            all_passed = True
+            failed_tool = None
+            failed_result = None
+
+            for tool_id in tools_to_run:
+                try:
+                    console.print(f"[dim]  Running {tool_id}...[/dim]")
+
+                    result = self.tools_manager.invoke_executable_tool(
+                        tool_id=tool_id,
+                        source_file=str(code_path)
+                    )
+
+                    if result["success"]:
+                        console.print(f"[green]    ✓ {tool_id}[/green]")
+                    else:
+                        # Check if it's "command not found" - skip those
+                        if result["exit_code"] == 127:
+                            console.print(f"[dim yellow]    SKIP {tool_id} (not installed)[/dim yellow]")
+                        else:
+                            console.print(f"[yellow]    ✗ {tool_id} failed[/yellow]")
+                            all_passed = False
+                            failed_tool = tool_id
+                            failed_result = result
+                            break  # Stop at first failure
+
+                except Exception as e:
+                    console.print(f"[red]    ERROR {tool_id}: {e}[/red]")
+                    all_passed = False
+                    failed_tool = tool_id
+                    failed_result = {"success": False, "error": str(e), "stderr": str(e)}
+                    break
+
+            if all_passed:
+                # All checks up to current_tool_index passed
+                if current_tool_index == len(essential_tools) - 1:
+                    # We've validated all tools successfully!
+                    console.print(f"[green]✓ All {len(essential_tools)} static checks passed![/green]")
+                    return True
+                else:
+                    # Move to next tool
+                    current_tool_index += 1
+                    console.print(f"[dim]Moving to next check ({essential_tools[current_tool_index]})...[/dim]")
+            else:
+                # A check failed - enter fix loop
+                total_iterations += 1
+
+                console.print(f"\n[yellow]Fix attempt {total_iterations}/{max_total_iterations} for {failed_tool}[/yellow]")
+
+                # Show error details
+                if failed_result:
+                    error_msg = failed_result.get("stderr", "") or failed_result.get("stdout", "") or failed_result.get("error", "")
+                    console.print(f"[dim]Error: {error_msg[:300]}[/dim]")
+
+                # Try auto-fix first
+                auto_fixed = self._auto_fix_static_issues(node_id, {
+                    'results': [{'tool_id': failed_tool, 'success': False, **failed_result}]
+                })
+
+                if auto_fixed:
+                    console.print(f"[green]✓ Auto-fix applied for {failed_tool}[/green]")
+                    # Reload code after auto-fix
+                    if code_path.exists():
+                        code = code_path.read_text()
+                    # Stay at current_tool_index to re-validate from the beginning
+                    continue
+
+                # Auto-fix failed, try LLM-based fix
+                console.print(f"[cyan]Attempting LLM-based fix for {failed_tool}...[/cyan]")
+
+                # Store error context
+                self.context['last_error'] = error_msg if failed_result else "Unknown error"
+                self.context['last_stdout'] = failed_result.get("stdout", "") if failed_result else ""
+
+                # Use adaptive escalation for fix
+                fix_success = self._adaptive_escalate_and_fix(
+                    node_id=node_id,
+                    code=code,
+                    description=f"Fix {failed_tool} failure: {description}",
+                    specification=f"{specification}\n\nSTATIC CHECK FAILURE:\nTool: {failed_tool}\nError: {error_msg[:500] if failed_result else 'Unknown'}",
+                    available_tools=available_tools
+                )
+
+                if fix_success:
+                    console.print(f"[green]✓ LLM fix successful for {failed_tool}[/green]")
+                    # Reload code after fix
+                    if code_path.exists():
+                        code = code_path.read_text()
+                    # Stay at current_tool_index to re-validate from the beginning
+                    continue
+                else:
+                    console.print(f"[yellow]Could not fix {failed_tool}[/yellow]")
+
+                    # If we've hit max iterations, try god mode one last time
+                    if total_iterations >= max_total_iterations:
+                        console.print(f"\n[red]Max iterations ({max_total_iterations}) reached[/red]")
+                        console.print(f"[cyan]Invoking GOD MODE (deepseek-coder-v2:16b) for final attempt...[/cyan]")
+
+                        # Use god-level model directly
+                        god_prompt = f"""CRITICAL: Static analysis check '{failed_tool}' is failing after {max_total_iterations} attempts.
+
+ERROR:
+{error_msg[:1000] if failed_result else 'Unknown error'}
+
+CURRENT CODE:
+```python
+{code}
+```
+
+TASK: {description}
+
+SPECIFICATION:
+{specification}
+
+YOU MUST fix this issue. Analyze the error carefully and provide WORKING code.
+
+Return a JSON response:
+{{
+    "analysis": "What's wrong and why previous attempts failed",
+    "fixes_applied": ["Specific fix 1", "Specific fix 2"],
+    "code": "COMPLETE fixed code here"
+}}"""
+
+                        try:
+                            import json
+                            god_response = self.client.generate(
+                                model="deepseek-coder-v2:16b",
+                                prompt=god_prompt,
+                                temperature=0.4,
+                                model_key="god_fixer"
+                            )
+
+                            # Parse response
+                            god_response_clean = self._extract_json_from_response(god_response)
+                            god_data = json.loads(god_response_clean)
+
+                            fixed_code = god_data.get("code", "")
+                            if fixed_code and len(fixed_code) > 50:
+                                console.print(f"[green]✓ God mode produced a fix![/green]")
+                                console.print(f"[dim]Analysis: {god_data.get('analysis', 'N/A')[:200]}...[/dim]")
+
+                                # Save fixed code
+                                self.runner.save_code(node_id, fixed_code)
+                                code = fixed_code
+
+                                # One final validation attempt
+                                console.print(f"[cyan]Final validation...[/cyan]")
+                                # Reset to beginning to validate all checks
+                                current_tool_index = 0
+                                total_iterations += 1
+                                continue
+                            else:
+                                console.print(f"[red]✗ God mode failed to produce valid code[/red]")
+                                return False
+
+                        except Exception as e:
+                            console.print(f"[red]✗ God mode error: {e}[/red]")
+                            return False
+
+                    # Haven't hit max yet, continue trying
+                    # Stay at current_tool_index to retry
+
+        # Exceeded max iterations without passing all checks
+        console.print(f"[red]✗ Could not pass all static checks after {max_total_iterations} iterations[/red]")
+        return False
+
     def _run_static_analysis(self, node_id: str, code: str) -> Dict[str, Any]:
         """
         Run static analysis tools on generated code.
@@ -11178,12 +11423,16 @@ Return ONLY the Python test code, no explanations."""
                 - results: List of tool results
         """
         # Define the most useful static analysis tools to run
+        # ORDERED FROM MOST TO LEAST RESTRICTIVE (priority order)
         # (lighter/faster tools for normal workflow; heavy tools for optimization later)
         # Note: Use run_static_analysis tool for comprehensive checking or these individually
         essential_tools = [
-            "python_syntax_validator",        # Fast AST-based syntax check
-            "undefined_name_checker",         # Flake8-based undefined names check
-            "node_runtime_import_validator",  # Validate import order (has auto-fix)
+            "python_syntax_validator",        # Priority 200: Most restrictive - syntax must be valid
+            "output_validator",                # Priority 100: Ensures every tool produces output
+            "main_function_checker",          # Priority 90: Checks main() structure
+            "json_output_validator",          # Priority 80: Validates JSON output format
+            "node_runtime_import_validator",  # Priority 70: Validate import order (has auto-fix)
+            "undefined_name_checker",         # Priority 60: Flake8-based undefined names check
             # mypy requires type hints which generated code may not have
             # bandit for security is important but can be slow
         ]
