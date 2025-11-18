@@ -83,11 +83,16 @@ def fix(code: str, filename: str, error_message: str) -> Dict[str, Any]:
             "message": "Path setup already exists in code"
         }
 
-    # Build path setup code
+    # Build path setup code that dynamically finds code_evolver directory
     path_setup = [
         "from pathlib import Path",
         "import sys",
-        f"sys.path.insert(0, str(Path(__file__).parent.parent.parent))"
+        "# Add code_evolver directory to path",
+        "current = Path(__file__).resolve()",
+        "while current.name != 'code_evolver' and current.parent != current:",
+        "    current = current.parent",
+        "if current.name == 'code_evolver':",
+        "    sys.path.insert(0, str(current))"
     ]
 
     # Insert path setup BEFORE the import
@@ -109,11 +114,16 @@ def fix(code: str, filename: str, error_message: str) -> Dict[str, Any]:
     return {
         "fixed": True,
         "fixed_code": fixed_code,
-        "message": f"Added path setup for {module_name} import",
+        "message": f"Added dynamic path setup for {module_name} import",
         "changes_made": [
             "Added: from pathlib import Path",
             "Added: import sys",
-            f"Added: sys.path.insert(0, str(Path(__file__).parent.parent.parent))"
+            "Added: # Add code_evolver directory to path",
+            "Added: current = Path(__file__).resolve()",
+            "Added: while current.name != 'code_evolver' and current.parent != current:",
+            "Added:     current = current.parent",
+            "Added: if current.name == 'code_evolver':",
+            "Added:     sys.path.insert(0, str(current))"
         ]
     }
 
