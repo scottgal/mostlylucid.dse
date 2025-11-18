@@ -1,0 +1,327 @@
+# Time MCP Server Tool
+# Provides time and timezone utilities through Model Context Protocol
+
+name: "Time MCP"
+type: "mcp"
+description: "Time and timezone conversion utilities via MCP. Provides current time, date conversion, and timezone operations for time-aware applications."
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "instant"
+quality_tier: "excellent"
+max_output_length: "short"
+
+# MCP server configuration
+mcp:
+  server_name: "time"
+  command: "npx"
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-time"
+  description: "Time and timezone conversion utilities"
+  enabled: true
+  auto_start: true
+
+# Tool capabilities provided by this MCP server
+capabilities:
+  - name: "get_current_time"
+    description: "Get the current time in a specific timezone"
+  - name: "convert_time"
+    description: "Convert time between timezones"
+  - name: "get_timezone_info"
+    description: "Get information about a timezone"
+
+# Tags for tool discovery
+tags:
+  - mcp
+  - mcp-tool
+  - time
+  - timezone
+  - date
+  - datetime
+  - utilities
+  - clock
+
+# Setup instructions
+setup:
+  installation: |
+    # Install the Time MCP server (automatic via npx)
+    npx -y @modelcontextprotocol/server-time
+
+    # No additional configuration required
+
+# Usage examples
+examples:
+  - description: "Get current time in UTC"
+    tool_name: "get_current_time"
+    input:
+      timezone: "UTC"
+
+  - description: "Get current time in New York"
+    tool_name: "get_current_time"
+    input:
+      timezone: "America/New_York"
+
+  - description: "Convert time between timezones"
+    tool_name: "convert_time"
+    input:
+      time: "2025-01-18T14:30:00"
+      from_timezone: "America/New_York"
+      to_timezone: "Europe/London"
+
+  - description: "Get timezone information"
+    tool_name: "get_timezone_info"
+    input:
+      timezone: "Asia/Tokyo"
+
+usage_notes: |
+  ## Time MCP Tool
+
+  This tool provides time and timezone utilities through the Model Context Protocol (MCP).
+  It wraps the official @modelcontextprotocol/server-time package.
+
+  ## Features
+
+  - [OK] Current time in any timezone
+  - [OK] Timezone conversion
+  - [OK] Timezone information
+  - [OK] ISO 8601 format support
+  - [OK] Handles DST automatically
+  - [OK] 400+ timezones supported
+
+  ## Available Tools
+
+  | Tool | Description |
+  |------|-------------|
+  | get_current_time | Get current time in a timezone |
+  | convert_time | Convert between timezones |
+  | get_timezone_info | Get timezone details |
+
+  ## Timezone Formats
+
+  Use standard IANA timezone names:
+  - `UTC` - Coordinated Universal Time
+  - `America/New_York` - Eastern Time
+  - `America/Los_Angeles` - Pacific Time
+  - `Europe/London` - GMT/BST
+  - `Asia/Tokyo` - Japan Standard Time
+  - `Australia/Sydney` - Australian Eastern Time
+
+  ## Usage Patterns
+
+  ### Pattern 1: Get Current Time
+
+  ```python
+  from node_runtime import call_mcp_tool
+  import json
+
+  # Get current time in different zones
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "UTC"
+  }))
+
+  time_data = json.loads(result)
+  print(f"UTC time: {time_data['time']}")
+
+  # Get local time in multiple zones
+  zones = ["America/New_York", "Europe/London", "Asia/Tokyo"]
+  for zone in zones:
+      result = call_mcp_tool("time", "get_current_time", json.dumps({
+          "timezone": zone
+      }))
+      time_data = json.loads(result)
+      print(f"{zone}: {time_data['time']}")
+  ```
+
+  ### Pattern 2: Schedule Coordination
+
+  ```python
+  # Find good meeting time across timezones
+  meeting_time_utc = "2025-01-20T15:00:00"
+
+  # Convert to different team member timezones
+  timezones = {
+      "New York": "America/New_York",
+      "London": "Europe/London",
+      "Tokyo": "Asia/Tokyo",
+      "Sydney": "Australia/Sydney"
+  }
+
+  print("Meeting time for all locations:")
+  for location, tz in timezones.items():
+      result = call_mcp_tool("time", "convert_time", json.dumps({
+          "time": meeting_time_utc,
+          "from_timezone": "UTC",
+          "to_timezone": tz
+      }))
+      converted = json.loads(result)
+      print(f"{location}: {converted['time']}")
+  ```
+
+  ### Pattern 3: Workflow Scheduling
+
+  ```python
+  # Schedule workflow execution for specific timezone
+  import datetime
+
+  # Get current time in target timezone
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "America/New_York"
+  }))
+
+  current_time = json.loads(result)['time']
+
+  # Parse and check if it's during business hours (9 AM - 5 PM)
+  dt = datetime.datetime.fromisoformat(current_time.replace('Z', '+00:00'))
+  hour = dt.hour
+
+  if 9 <= hour < 17:
+      print("During business hours - proceed with workflow")
+      # Execute workflow...
+  else:
+      print("Outside business hours - schedule for later")
+      # Schedule for next business day...
+  ```
+
+  ### Pattern 4: Log Timestamping
+
+  ```python
+  # Add timezone-aware timestamps to logs
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "UTC"
+  }))
+
+  timestamp = json.loads(result)['time']
+  log_entry = f"[{timestamp}] Workflow executed successfully"
+  print(log_entry)
+
+  # Store in different timezone for local viewing
+  result = call_mcp_tool("time", "convert_time", json.dumps({
+      "time": timestamp,
+      "from_timezone": "UTC",
+      "to_timezone": "America/New_York"
+  }))
+
+  local_time = json.loads(result)['time']
+  print(f"Local time: {local_time}")
+  ```
+
+  ### Pattern 5: Deadline Management
+
+  ```python
+  # Check time until deadline
+  deadline_utc = "2025-01-25T23:59:59"
+
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "UTC"
+  }))
+
+  current = datetime.datetime.fromisoformat(
+      json.loads(result)['time'].replace('Z', '+00:00')
+  )
+  deadline = datetime.datetime.fromisoformat(
+      deadline_utc.replace('Z', '+00:00')
+  )
+
+  time_remaining = deadline - current
+  hours_remaining = time_remaining.total_seconds() / 3600
+
+  print(f"Hours until deadline: {hours_remaining:.1f}")
+
+  if hours_remaining < 24:
+      print("URGENT: Less than 24 hours remaining!")
+  ```
+
+  ## Integration Examples
+
+  ### With Workflows
+
+  ```python
+  # Example: Schedule periodic workflow in specific timezone
+
+  # Check if it's time to run (e.g., daily at 2 AM UTC)
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "UTC"
+  }))
+
+  current_time = json.loads(result)['time']
+  dt = datetime.datetime.fromisoformat(current_time.replace('Z', '+00:00'))
+
+  if dt.hour == 2 and dt.minute < 5:  # 5-minute window
+      print("Running scheduled workflow...")
+      # Execute workflow
+  ```
+
+  ### With Memory MCP
+
+  ```python
+  # Store timezone preferences
+  call_mcp_tool("memory", "create_entities", json.dumps({
+      "entities": [
+          {
+              "name": "User_Timezone_Preference",
+              "entityType": "preference",
+              "observations": [
+                  "Preferred timezone: America/New_York",
+                  "Work hours: 9 AM - 5 PM EST"
+              ]
+          }
+      ]
+  }))
+
+  # Later, retrieve and use
+  prefs = call_mcp_tool("memory", "open_nodes", json.dumps({
+      "names": ["User_Timezone_Preference"]
+  }))
+
+  # Use timezone for time display
+  result = call_mcp_tool("time", "get_current_time", json.dumps({
+      "timezone": "America/New_York"  # From preferences
+  }))
+  ```
+
+  ## Time Format
+
+  All times are in ISO 8601 format:
+  - `2025-01-18T14:30:00Z` - UTC time
+  - `2025-01-18T14:30:00+00:00` - UTC with offset
+  - `2025-01-18T09:30:00-05:00` - EST with offset
+
+  ## Best Practices
+
+  1. **Always Use IANA Names**: Use standard timezone names, not abbreviations
+  2. **Store in UTC**: Store times in UTC, convert for display
+  3. **Handle DST**: The server handles DST automatically
+  4. **Validate Timezones**: Check timezone info before using
+  5. **ISO 8601**: Use standard ISO format for compatibility
+
+  ## Common Timezones
+
+  | Region | Timezone | Example City |
+  |--------|----------|--------------|
+  | US East | America/New_York | New York |
+  | US West | America/Los_Angeles | Los Angeles |
+  | UK | Europe/London | London |
+  | Europe | Europe/Paris | Paris |
+  | India | Asia/Kolkata | Mumbai |
+  | China | Asia/Shanghai | Shanghai |
+  | Japan | Asia/Tokyo | Tokyo |
+  | Australia | Australia/Sydney | Sydney |
+
+  ## Error Handling
+
+  ```python
+  try:
+      result = call_mcp_tool("time", "get_current_time", json.dumps({
+          "timezone": "Invalid/Timezone"
+      }))
+
+      data = json.loads(result)
+      if data.get('error'):
+          print(f"Invalid timezone: {data['error']}")
+      else:
+          print(f"Time: {data['time']}")
+
+  except Exception as e:
+      print(f"Error: {e}")
+  ```

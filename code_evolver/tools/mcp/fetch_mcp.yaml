@@ -1,0 +1,285 @@
+# Fetch MCP Server Tool
+# Provides web content fetching and conversion through Model Context Protocol
+
+name: "Fetch MCP"
+type: "mcp"
+description: "Web content fetching and conversion via MCP. Fetches web pages and converts them to markdown for LLM consumption with support for caching and robots.txt compliance."
+
+# Performance characteristics
+cost_tier: "free"
+speed_tier: "medium"
+quality_tier: "excellent"
+max_output_length: "very_long"
+
+# MCP server configuration
+mcp:
+  server_name: "fetch"
+  command: "npx"
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-fetch"
+  description: "Fetch and convert web content to markdown"
+  enabled: true
+  auto_start: true
+
+# Tool capabilities provided by this MCP server
+capabilities:
+  - name: "fetch"
+    description: "Fetches a URL and converts it to markdown"
+  - name: "fetch_html"
+    description: "Fetches raw HTML from a URL"
+
+# Tags for tool discovery
+tags:
+  - mcp
+  - mcp-tool
+  - web
+  - http
+  - fetch
+  - scraping
+  - markdown
+  - html
+  - internet
+  - url
+
+# Setup instructions
+setup:
+  installation: |
+    # Install the Fetch MCP server (automatic via npx)
+    npx -y @modelcontextprotocol/server-fetch
+
+    # No additional configuration required
+
+# Usage examples
+examples:
+  - description: "Fetch and convert a web page to markdown"
+    tool_name: "fetch"
+    input:
+      url: "https://example.com"
+
+  - description: "Fetch raw HTML from a URL"
+    tool_name: "fetch_html"
+    input:
+      url: "https://example.com"
+
+  - description: "Fetch documentation page"
+    tool_name: "fetch"
+    input:
+      url: "https://docs.python.org/3/library/asyncio.html"
+
+  - description: "Fetch GitHub README"
+    tool_name: "fetch"
+    input:
+      url: "https://github.com/anthropics/anthropic-sdk-python/blob/main/README.md"
+
+usage_notes: |
+  ## Fetch MCP Tool
+
+  This tool provides web content fetching through the Model Context Protocol (MCP).
+  It wraps the official @modelcontextprotocol/server-fetch package.
+
+  ## Features
+
+  - [OK] HTTP/HTTPS URL fetching
+  - [OK] HTML to Markdown conversion
+  - [OK] Raw HTML access
+  - [OK] robots.txt compliance
+  - [OK] Content caching
+  - [OK] Timeout handling
+  - [OK] Error recovery
+
+  ## Available Tools
+
+  | Tool | Description | Output |
+  |------|-------------|--------|
+  | fetch | Fetch and convert to markdown | Markdown text |
+  | fetch_html | Fetch raw HTML | HTML source |
+
+  ## Usage Patterns
+
+  ### Pattern 1: Documentation Scraping
+
+  ```python
+  from node_runtime import call_mcp_tool
+  import json
+
+  # Fetch documentation and convert to markdown
+  result = call_mcp_tool("fetch", "fetch", json.dumps({
+      "url": "https://docs.python.org/3/library/asyncio.html"
+  }))
+
+  markdown = json.loads(result)['content']
+
+  # Now use the markdown with an LLM
+  # llm.query(f"Summarize this documentation: {markdown}")
+  ```
+
+  ### Pattern 2: Web Research
+
+  ```python
+  # Fetch multiple sources for research
+  urls = [
+      "https://en.wikipedia.org/wiki/Model_Context_Protocol",
+      "https://github.com/modelcontextprotocol/specification",
+      "https://anthropic.com/mcp"
+  ]
+
+  research_content = []
+  for url in urls:
+      result = call_mcp_tool("fetch", "fetch", json.dumps({
+          "url": url
+      }))
+      content = json.loads(result)['content']
+      research_content.append({
+          "url": url,
+          "content": content
+      })
+
+  # Combine and analyze
+  # combined = "\n\n".join([f"Source: {r['url']}\n{r['content']}" for r in research_content])
+  ```
+
+  ### Pattern 3: Monitoring Web Changes
+
+  ```python
+  # Fetch and compare content over time
+  import hashlib
+
+  def fetch_and_hash(url):
+      result = call_mcp_tool("fetch", "fetch", json.dumps({
+          "url": url
+      }))
+      content = json.loads(result)['content']
+      content_hash = hashlib.md5(content.encode()).hexdigest()
+      return content, content_hash
+
+  # Store baseline
+  url = "https://status.github.com"
+  baseline_content, baseline_hash = fetch_and_hash(url)
+
+  # Later, check for changes
+  current_content, current_hash = fetch_and_hash(url)
+  if current_hash != baseline_hash:
+      print("Content has changed!")
+      # Analyze differences...
+  ```
+
+  ### Pattern 4: GitHub Content Fetching
+
+  ```python
+  # Fetch README files, issues, PRs (public)
+  result = call_mcp_tool("fetch", "fetch", json.dumps({
+      "url": "https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/README.md"
+  }))
+
+  readme = json.loads(result)['content']
+  ```
+
+  ### Pattern 5: API Documentation Analysis
+
+  ```python
+  # Fetch API docs and extract endpoints
+  result = call_mcp_tool("fetch", "fetch", json.dumps({
+      "url": "https://api.github.com"  # API documentation page
+  }))
+
+  docs = json.loads(result)['content']
+
+  # Use LLM to extract API endpoints
+  # endpoints = llm.extract_api_endpoints(docs)
+  ```
+
+  ## Content Conversion
+
+  The `fetch` tool automatically converts HTML to clean markdown:
+
+  - **Headers**: Converted to markdown headers (#, ##, ###)
+  - **Links**: Preserved as markdown links [text](url)
+  - **Code blocks**: Maintained with proper formatting
+  - **Lists**: Converted to markdown lists
+  - **Tables**: Preserved as markdown tables
+  - **Images**: Converted to markdown image syntax
+
+  ## Best Practices
+
+  1. **Respect robots.txt**: The server checks robots.txt automatically
+  2. **Handle Errors**: URLs may be unavailable or blocked
+  3. **Cache Results**: Avoid repeated fetches of the same URL
+  4. **Timeout Awareness**: Large pages may timeout
+  5. **Rate Limiting**: Respect target site's rate limits
+  6. **Use Raw HTML**: For custom parsing, use fetch_html
+
+  ## Error Handling
+
+  ```python
+  try:
+      result = call_mcp_tool("fetch", "fetch", json.dumps({
+          "url": "https://example.com/page"
+      }))
+      data = json.loads(result)
+
+      if data.get('error'):
+          print(f"Fetch failed: {data['error']}")
+      else:
+          content = data['content']
+          # Process content...
+
+  except Exception as e:
+      print(f"Error calling fetch tool: {e}")
+  ```
+
+  ## Use Cases
+
+  ### Research and Analysis
+  - Fetch documentation for analysis
+  - Compare multiple sources
+  - Extract information from web pages
+  - Monitor web content changes
+
+  ### Integration with Workflows
+  - Fetch release notes during updates
+  - Check API documentation
+  - Retrieve public issue discussions
+  - Access public repository information
+
+  ### LLM Context Enhancement
+  - Provide current web content to LLMs
+  - Enable web-grounded responses
+  - Fetch examples and tutorials
+  - Access up-to-date information
+
+  ## Limitations
+
+  - Cannot access authenticated content (use GitHub MCP for GitHub)
+  - Respects robots.txt (some sites may block)
+  - JavaScript-heavy sites may not render fully
+  - Large pages may timeout
+  - Rate limits apply (be respectful)
+
+  ## Advanced Usage
+
+  ### Combining with Memory MCP
+
+  ```python
+  # Fetch content and store in knowledge graph
+  result = call_mcp_tool("fetch", "fetch", json.dumps({
+      "url": "https://docs.python.org/3/library/asyncio.html"
+  }))
+
+  content = json.loads(result)['content']
+
+  # Store in memory for later use
+  call_mcp_tool("memory", "create_entities", json.dumps({
+      "entities": [
+          {
+              "name": "Python_Asyncio_Docs",
+              "entityType": "documentation",
+              "observations": [
+                  f"URL: https://docs.python.org/3/library/asyncio.html",
+                  f"Fetched: {datetime.now().isoformat()}",
+                  f"Summary: {content[:200]}..."  # Store summary
+              ]
+          }
+      ]
+  }))
+  ```

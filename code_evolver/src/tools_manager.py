@@ -80,6 +80,7 @@ class ToolType(Enum):
     OPENAPI = "openapi"               # OpenAPI/REST API tool
     EXECUTABLE = "executable"         # Executable command-line tool
     CUSTOM = "custom"                    # Custom tool type
+    MCP = "mcp"                       # Model Context Protocol tool
 
     # Storage & Data Nodes
     DATABASE = "database"             # SQL/NoSQL database connections
@@ -333,6 +334,9 @@ class ToolsManager:
         # In-memory registry
         self.tools: Dict[str, Tool] = {}
 
+        # MCP server configurations from YAML files
+        self.mcp_server_configs: List[Dict[str, Any]] = []
+
         # Initialize interaction logger for comprehensive tracking
         try:
             from .interaction_logger import InteractionLogger
@@ -539,6 +543,46 @@ class ToolsManager:
 
                     # Store YAML tool in RAG for semantic search
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
+
+                # Handle MCP tools
+                elif tool_type == ToolType.MCP:
+                    mcp_config = tool_def.get("mcp", {})
+
+                    tool = Tool(
+                        tool_id=tool_id,
+                        name=tool_def.get("name", tool_id),
+                        tool_type=tool_type,
+                        description=tool_def.get("description", ""),
+                        tags=tool_def.get("tags", []),
+                        implementation=mcp_config,
+                        metadata={
+                            "from_yaml": True,
+                            "yaml_file": str(yaml_file.relative_to(self.tools_path)),
+                            "server_name": mcp_config.get("server_name"),
+                            "command": mcp_config.get("command"),
+                            "args": mcp_config.get("args", []),
+                            "env": mcp_config.get("env", {}),
+                            "enabled": mcp_config.get("enabled", True),
+                            "auto_start": mcp_config.get("auto_start", True),
+                            "capabilities": tool_def.get("capabilities", []),
+                            "setup": tool_def.get("setup", {}),
+                            "cost_tier": tool_def.get("cost_tier", "free"),
+                            "speed_tier": tool_def.get("speed_tier", "medium"),
+                            "quality_tier": tool_def.get("quality_tier", "good"),
+                            "version": version,
+                            "definition_hash": new_hash,
+                            "breaking_changes": breaking_changes
+                        }
+                    )
+                    self.tools[tool_id] = tool
+                    logger.info(f"✓ Loaded MCP tool from YAML: {tool_id}")
+                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim magenta](mcp)[/dim magenta]")
+
+                    # Store YAML tool in RAG for semantic search
+                    self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
+
+                    # Register MCP server configuration for later connection
+                    self._register_mcp_server_config(mcp_config)
 
                 # Handle other tool types
                 else:
@@ -886,27 +930,63 @@ Tags: {', '.join(tool.tags)}
         except Exception as e:
             logger.error(f"Error indexing tools in RAG: {e}")
 
+    def _register_mcp_server_config(self, mcp_config: Dict[str, Any]):
+        """
+        Register MCP server configuration from YAML file.
+
+        Args:
+            mcp_config: MCP server configuration from YAML
+        """
+        # Only register if enabled
+        if mcp_config.get("enabled", True):
+            # Check if server already registered (avoid duplicates)
+            server_name = mcp_config.get("server_name")
+            if not any(s.get("name") == server_name for s in self.mcp_server_configs):
+                # Convert to the format expected by MCPClientManager
+                server_config = {
+                    "name": server_name,
+                    "command": mcp_config.get("command"),
+                    "args": mcp_config.get("args", []),
+                    "env": mcp_config.get("env"),
+                    "description": mcp_config.get("description"),
+                    "enabled": mcp_config.get("enabled", True)
+                }
+                self.mcp_server_configs.append(server_config)
+                logger.debug(f"Registered MCP server config: {server_name}")
+
     def _load_mcp_tools(self):
-        """Load tools from configured MCP servers."""
+        """Load tools from configured MCP servers (from config file and YAML files)."""
         try:
             # Import MCP modules
             from .mcp_client_manager import get_mcp_client_manager
             from .mcp_tool_adapter import get_mcp_tool_adapter
 
-            # Get config data
-            config_data = self.config_manager.config if hasattr(self.config_manager, 'config') else {}
+            # Collect all MCP server configs from both sources
+            all_server_configs = []
 
-            # Check if MCP servers are configured
-            if 'mcp_servers' not in config_data:
+            # 1. Get config data from config file
+            config_data = self.config_manager.config if hasattr(self.config_manager, 'config') else {}
+            if 'mcp_servers' in config_data:
+                all_server_configs.extend(config_data['mcp_servers'])
+
+            # 2. Add server configs from YAML files
+            if self.mcp_server_configs:
+                all_server_configs.extend(self.mcp_server_configs)
+
+            # Check if any MCP servers are configured
+            if not all_server_configs:
                 logger.debug("No MCP servers configured")
                 return
 
-            # Initialize MCP manager and load server configs
+            # Initialize MCP manager
             mcp_manager = get_mcp_client_manager()
-            mcp_manager.load_from_config(config_data)
+
+            # Load all server configs (both from config file and YAML)
+            temp_config = {"mcp_servers": all_server_configs}
+            mcp_manager.load_from_config(temp_config)
 
             # Connect to all servers
-            logger.info(f"Connecting to {len(config_data['mcp_servers'])} MCP server(s)...")
+            logger.info(f"Connecting to {len(all_server_configs)} MCP server(s)...")
             mcp_manager.connect_all_sync()
 
             # Load tools from all connected servers

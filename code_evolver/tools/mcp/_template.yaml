@@ -1,0 +1,288 @@
+# MCP Tool Template
+# Copy this file and fill in the details for your MCP server
+# Rename to: <server_name>_mcp.yaml
+
+name: "Your Tool Name MCP"  # Display name for the tool
+type: "mcp"  # Must be "mcp" for MCP tools
+description: "Brief description of what this MCP tool provides"
+
+# Performance characteristics (adjust based on your tool)
+cost_tier: "free"  # free, low, medium, high
+speed_tier: "fast"  # instant, fast, medium, slow
+quality_tier: "excellent"  # good, excellent, premium
+max_output_length: "medium"  # short, medium, long, very_long
+
+# MCP server configuration
+mcp:
+  server_name: "your_server"  # Unique identifier for this server
+  command: "npx"  # Command to run (npx, node, python, etc.)
+  args:
+    - "-y"
+    - "@modelcontextprotocol/server-yourserver"  # npm package or path to server
+    # Add any additional arguments needed by your server
+    # Example for server that needs a path:
+    # - "/path/to/workspace"
+
+  # Optional: Environment variables for the server
+  env:
+    # Example: API keys, tokens, configuration
+    # API_KEY: "${YOUR_API_KEY}"
+    # DEBUG: "true"
+
+  description: "Short description of the server"
+  enabled: true  # Set to false to disable by default
+  auto_start: true  # Set to false to require manual start
+
+# Tool capabilities provided by this MCP server
+# List all tools/functions that this server provides
+capabilities:
+  - name: "tool_name_1"
+    description: "What this tool does"
+  - name: "tool_name_2"
+    description: "What this other tool does"
+  # Add more capabilities as needed
+
+# Tags for tool discovery
+# Add relevant tags to make your tool discoverable
+tags:
+  - mcp
+  - mcp-tool
+  # Add domain-specific tags:
+  # - api
+  # - data
+  # - search
+  # - web
+  # - etc.
+
+# Setup instructions
+setup:
+  # Optional: List required environment variables
+  required_env:
+    # - YOUR_API_KEY
+    # - YOUR_CONFIG_VALUE
+
+  # Optional: List required configuration values
+  required_config:
+    # - setting_name
+
+  # Installation instructions (markdown format)
+  installation: |
+    # Install your MCP server
+
+    ## Via npx (recommended):
+    npx -y @modelcontextprotocol/server-yourserver
+
+    ## Or install globally:
+    npm install -g @modelcontextprotocol/server-yourserver
+
+    ## Configuration:
+    # Set any required environment variables:
+    export YOUR_API_KEY="your_key_here"
+
+    # Or add to .env file:
+    echo "YOUR_API_KEY=your_key_here" >> .env
+
+# Usage examples
+# Provide at least 2-3 examples showing how to use the tools
+examples:
+  - description: "Example 1: Basic usage"
+    tool_name: "tool_name_1"
+    input:
+      param1: "value1"
+      param2: "value2"
+
+  - description: "Example 2: Advanced usage"
+    tool_name: "tool_name_2"
+    input:
+      param1: "value1"
+      param2: "value2"
+      param3: 123
+
+# Detailed usage notes (markdown format)
+usage_notes: |
+  ## Your Tool Name MCP
+
+  Comprehensive description of what this tool provides and how to use it.
+
+  ## Features
+
+  - [OK] Feature 1 description
+  - [OK] Feature 2 description
+  - [OK] Feature 3 description
+
+  ## Available Tools
+
+  | Tool | Description | Parameters |
+  |------|-------------|------------|
+  | tool_name_1 | What it does | param1, param2 |
+  | tool_name_2 | What it does | param1, param2, param3 |
+
+  ## Usage Patterns
+
+  ### Pattern 1: Common Use Case
+
+  ```python
+  from node_runtime import call_mcp_tool
+  import json
+
+  # Example of calling the tool
+  result = call_mcp_tool("your_server", "tool_name_1", json.dumps({
+      "param1": "value1",
+      "param2": "value2"
+  }))
+
+  data = json.loads(result)
+  # Process the result...
+  ```
+
+  ### Pattern 2: Another Use Case
+
+  ```python
+  # Another example showing a different usage pattern
+  result = call_mcp_tool("your_server", "tool_name_2", json.dumps({
+      "param1": "value1",
+      "param2": "value2",
+      "param3": 123
+  }))
+
+  data = json.loads(result)
+  # Process the result...
+  ```
+
+  ## Best Practices
+
+  1. **Practice 1**: Description of best practice
+  2. **Practice 2**: Description of another best practice
+  3. **Practice 3**: And another best practice
+
+  ## Error Handling
+
+  ```python
+  try:
+      result = call_mcp_tool("your_server", "tool_name_1", json.dumps({
+          "param1": "value1"
+      }))
+
+      data = json.loads(result)
+
+      if data.get('error'):
+          print(f"Error: {data['error']}")
+      else:
+          # Process successful result
+          print(data)
+
+  except Exception as e:
+      print(f"Error calling tool: {e}")
+  ```
+
+  ## Integration Examples
+
+  ### With Other Tools
+
+  Show how this tool can be combined with other MCP tools or system tools.
+
+  ### With Workflows
+
+  Show how to use this tool in automated workflows.
+
+  ## Limitations
+
+  - Limitation 1
+  - Limitation 2
+  - Limitation 3
+
+  ## Authentication
+
+  If your tool requires authentication, explain how to set it up:
+
+  ```bash
+  export YOUR_API_KEY="your_key_here"
+  ```
+
+  Or in config.yaml:
+
+  ```yaml
+  your_tool:
+    api_key: "${YOUR_API_KEY}"
+  ```
+
+  ## Additional Resources
+
+  - Official documentation: https://...
+  - GitHub repository: https://...
+  - Example projects: https://...
+
+# ============================================================================
+# QUICK START GUIDE
+# ============================================================================
+#
+# To create a new MCP tool from this template:
+#
+# 1. Copy this file:
+#    cp _template.yaml my_new_tool_mcp.yaml
+#
+# 2. Edit the file and fill in all the fields:
+#    - name: Your tool's display name
+#    - mcp.server_name: Unique identifier (lowercase, no spaces)
+#    - mcp.command and mcp.args: How to start your MCP server
+#    - capabilities: List all tools your server provides
+#    - tags: Add relevant discovery tags
+#    - examples: Provide usage examples
+#
+# 3. Test your tool:
+#    python -m code_evolver.src.tools_manager --test-mcp my_new_tool
+#
+# 4. Add to index:
+#    python -m code_evolver.src.tools_manager --rebuild-index
+#
+# ============================================================================
+# FINDING MCP SERVERS
+# ============================================================================
+#
+# Official MCP servers (npm):
+# - @modelcontextprotocol/server-fetch - Web fetching
+# - @modelcontextprotocol/server-filesystem - File operations
+# - @modelcontextprotocol/server-github - GitHub integration
+# - @modelcontextprotocol/server-memory - Knowledge graph
+# - @modelcontextprotocol/server-time - Time/timezone utilities
+#
+# Community MCP servers:
+# - Search npm: https://www.npmjs.com/search?q=mcp-server
+# - GitHub: https://github.com/topics/mcp-server
+# - MCP registry: https://github.com/modelcontextprotocol/servers
+#
+# Custom MCP servers:
+# - Python: Use mcp package to build your own
+# - Node.js: Use @modelcontextprotocol/sdk
+# - Any language: Implement MCP protocol (stdio-based)
+#
+# ============================================================================
+# POINTING AT CUSTOM ENDPOINTS
+# ============================================================================
+#
+# For HTTP-based MCP servers or custom endpoints:
+#
+# mcp:
+#   server_name: "custom_api"
+#   command: "python"  # or "node", etc.
+#   args:
+#     - "-m"
+#     - "your.custom.mcp_server"
+#     - "--endpoint"
+#     - "https://your-api.com/mcp"
+#   env:
+#     API_URL: "https://your-api.com"
+#     API_KEY: "${YOUR_API_KEY}"
+#
+# For local development:
+#
+# mcp:
+#   server_name: "local_dev"
+#   command: "node"
+#   args:
+#     - "/path/to/your/mcp-server/index.js"
+#   env:
+#     DEBUG: "true"
+#     PORT: "3000"
+#
+# ============================================================================
