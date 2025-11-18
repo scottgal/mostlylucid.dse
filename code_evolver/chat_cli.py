@@ -6777,8 +6777,16 @@ Return ONLY the JSON object, nothing else."""
                             # Check if code imports node_runtime
                             if 'from node_runtime import' in fixed_code or 'import node_runtime' in fixed_code:
                                 console.print(f"[cyan]-> Auto-applying: Add sys.path setup before node_runtime import[/cyan]")
-                                # Add path setup at the beginning
-                                path_setup = "from pathlib import Path\nimport sys\nsys.path.insert(0, str(Path(__file__).parent.parent.parent))\n"
+                                # Add path setup that dynamically finds code_evolver directory
+                                path_setup = """from pathlib import Path
+import sys
+# Add code_evolver directory to path
+current = Path(__file__).resolve()
+while current.name != 'code_evolver' and current.parent != current:
+    current = current.parent
+if current.name == 'code_evolver':
+    sys.path.insert(0, str(current))
+"""
 
                                 # Insert after any existing imports from pathlib/sys, or at the start
                                 lines = fixed_code.split('\n')
