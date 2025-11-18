@@ -2834,7 +2834,9 @@ import sys
 from pathlib import Path
 
 # CRITICAL: Add code_evolver root to path BEFORE importing node_runtime
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+# Only add if not using local mock (for testing)
+if not (Path(__file__).parent / "node_runtime.py").exists():
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 # Now you can import from node_runtime (only if you need to call LLM tools):
 from node_runtime import call_tool
@@ -2859,9 +2861,10 @@ Every file that imports from node_runtime MUST include:
 ```python
 from pathlib import Path
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+if not (Path(__file__).parent / "node_runtime.py").exists():
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 ```
-BEFORE the import statement
+BEFORE the import statement (the check allows using local mocks for testing)
 """
 
         code_prompt = f"""You are implementing code based on this DETAILED SPECIFICATION:
@@ -3346,7 +3349,11 @@ Return ONLY the JSON object, nothing else."""
                 stripped = line.strip()
                 if 'from node_runtime import' in stripped or 'import node_runtime' in stripped:
                     node_runtime_line_idx = i
+                # Check for path setup (could be direct or within an if statement)
                 if 'sys.path.insert(0, str(Path(__file__).parent.parent.parent))' in stripped:
+                    path_setup_line_idx = i
+                # Also check for the if statement that wraps it
+                if 'if not (Path(__file__).parent / "node_runtime.py").exists():' in stripped:
                     path_setup_line_idx = i
 
             # Case 1: node_runtime import exists but NO path setup - ADD path setup before import
@@ -3370,9 +3377,11 @@ Return ONLY the JSON object, nothing else."""
                 if 'import sys' not in code:
                     path_setup_lines.append('import sys')
 
-                # Add the path setup line
+                # Add the path setup line with local mock check
                 path_setup_lines.append('')  # Blank line for readability
-                path_setup_lines.append('sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
+                path_setup_lines.append('# Add code_evolver to path (only if not using local mock)')
+                path_setup_lines.append('if not (Path(__file__).parent / "node_runtime.py").exists():')
+                path_setup_lines.append('    sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
 
                 # Add the node_runtime import
                 path_setup_lines.append(node_runtime_import)
@@ -3437,7 +3446,9 @@ Return ONLY the JSON object, nothing else."""
                 if 'import sys' not in code:
                     setup_lines.append('import sys')
                 setup_lines.append('')
-                setup_lines.append('sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
+                setup_lines.append('# Add code_evolver to path (only if not using local mock)')
+                setup_lines.append('if not (Path(__file__).parent / "node_runtime.py").exists():')
+                setup_lines.append('    sys.path.insert(0, str(Path(__file__).parent.parent.parent))')
                 setup_lines.append('from node_runtime import call_tool')
                 setup_lines.append('')
 
