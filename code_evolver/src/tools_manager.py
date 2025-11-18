@@ -348,73 +348,54 @@ class ToolsManager:
             logger.warning(f"Could not initialize interaction logger: {e}")
             self.interaction_logger = None
 
-        self._load_tools()
+        # Start tool loading in background thread
+        import threading
+        self._loading_complete = threading.Event()
+        self._loading_thread = threading.Thread(target=self._load_all_tools_background, daemon=True)
+        self._loading_thread.start()
 
-        # Load tools from config if available
-        if config_manager:
-            self._load_tools_from_config()
+    def _load_all_tools_background(self):
+        """Load all tools in background thread"""
+        try:
+            self._load_tools()
 
-        # Load tools from YAML files in tools/ directory
-        self._load_tools_from_yaml_files()
+            # Load tools from config if available
+            if self.config_manager:
+                self._load_tools_from_config()
 
-        # Preload code fixes from RAG at startup
-        if rag_memory:
-            self.preload_code_fixes()
+            # Load tools from YAML files in tools/ directory
+            self._load_tools_from_yaml_files()
 
-        # Load tools from RAG memory
-        if rag_memory:
-            self._load_tools_from_rag()
+            # Preload code fixes from RAG at startup
+            if self.rag_memory:
+                self.preload_code_fixes()
 
-        # Index tools in RAG if available
-        if rag_memory:
-            self._index_tools_in_rag()
+            # Load tools from RAG memory
+            if self.rag_memory:
+                self._load_tools_from_rag()
 
-        # Load MCP tools if configured
-        if config_manager:
-            self._load_mcp_tools()
+            # Index tools in RAG if available
+            if self.rag_memory:
+                self._index_tools_in_rag()
+
+            # Load MCP tools if configured
+            if self.config_manager:
+                self._load_mcp_tools()
+        finally:
+            self._loading_complete.set()
 
     def _load_tools(self):
         """Load tools from disk into memory."""
-        if not self.index_path.exists():
-            self._save_index()
-            return
-
-        try:
-            with open(self.index_path, 'r', encoding='utf-8') as f:
-                index = json.load(f)
-
-            for tool_id, tool_data in index.items():
-                # Load implementation if it's a file reference
-                implementation = None
-                if "implementation_file" in tool_data.get("metadata", {}):
-                    impl_file = self.tools_path / tool_data["metadata"]["implementation_file"]
-                    if impl_file.exists():
-                        with open(impl_file, 'r', encoding='utf-8') as f:
-                            implementation = f.read()
-
-                tool = Tool.from_dict(tool_data, implementation)
-
-                # Mark as loaded from index if not already marked from other source
-                if "from_config" not in tool.metadata and "from_yaml" not in tool.metadata and "from_rag" not in tool.metadata:
-                    tool.metadata["from_index"] = True
-
-                self.tools[tool_id] = tool
-
-            logger.info(f"✓ Loaded {len(self.tools)} tools")
-
-        except Exception as e:
-            logger.error(f"Error loading tools: {e}")
+        # DEPRECATED: index.json is no longer used
+        # Tools are loaded directly from YAML files instead
+        # This improves maintainability and ensures YAML is the source of truth
+        pass
 
     def _save_index(self):
         """Save tools index to disk."""
-        try:
-            index = {tool_id: tool.to_dict() for tool_id, tool in self.tools.items()}
-
-            with open(self.index_path, 'w', encoding='utf-8') as f:
-                json.dump(index, f, indent=2, ensure_ascii=False)
-
-        except Exception as e:
-            logger.error(f"Error saving tools index: {e}")
+        # DEPRECATED: index.json is no longer generated
+        # YAML files are the source of truth and are loaded directly
+        pass
 
     def _load_tools_from_yaml_files(self):
         """Load tools from YAML files in the tools/ directory."""
@@ -427,46 +408,47 @@ class ToolsManager:
             logger.debug("No YAML tool files found in tools/ directory")
             return
 
-        # Log loading message (don't print to console to keep output clean)
+        # Log loading message
         logger.info(f"Loading {len(yaml_files)} tool(s) from YAML files...")
+        tool_count = 0
 
         for yaml_file in yaml_files:
             try:
                 with open(yaml_file, 'r', encoding='utf-8') as f:
                     tool_def = yaml.safe_load(f)
 
-                # Generate tool_id from filename (without extension)
-                tool_id = yaml_file.stem
+                    # Generate tool_id from filename (without extension)
+                    tool_id = yaml_file.stem
 
-                # Calculate hash of tool definition for change detection
-                new_hash = calculate_tool_hash(tool_def)
+                    # Calculate hash of tool definition for change detection
+                    new_hash = calculate_tool_hash(tool_def)
 
-                # Check if tool exists and handle versioning
-                version = tool_def.get("version", "1.0.0")
-                breaking_changes = tool_def.get("breaking_changes", [])
+                    # Check if tool exists and handle versioning
+                    version = tool_def.get("version", "1.0.0")
+                    breaking_changes = tool_def.get("breaking_changes", [])
 
-                if tool_id in self.tools:
-                    existing_tool = self.tools[tool_id]
-                    old_hash = existing_tool.definition_hash
-
-                    # If hash changed, this is an update
-                    if old_hash and old_hash != new_hash:
-                        # Determine change type from YAML or auto-detect
-                        change_type = tool_def.get("change_type", "patch")
-                        version = bump_version(existing_tool.version, change_type)
-
-                        console.print(f"  [yellow]↻ Updated {tool_id} v{existing_tool.version} → v{version} ({change_type})[/yellow]")
-
-                        if change_type == "major" and breaking_changes:
-                            console.print(f"    [red]! Breaking changes:[/red]")
-                            for change in breaking_changes:
-                                console.print(f"      - {change}")
-                    else:
-                        # No changes, skip reload but ensure it's in RAG
-                        logger.debug(f"Tool {tool_id} unchanged, ensuring RAG entry exists")
+                    if tool_id in self.tools:
                         existing_tool = self.tools[tool_id]
-                        self._store_yaml_tool_in_rag(existing_tool, tool_def, str(yaml_file))
-                        continue
+                        old_hash = existing_tool.definition_hash
+
+                        # If hash changed, this is an update
+                        if old_hash and old_hash != new_hash:
+                            # Determine change type from YAML or auto-detect
+                            change_type = tool_def.get("change_type", "patch")
+                            version = bump_version(existing_tool.version, change_type)
+
+                            console.print(f"  [yellow]> Updated {tool_id} v{existing_tool.version} -> v{version} ({change_type})[/yellow]")
+
+                            if change_type == "major" and breaking_changes:
+                                console.print(f"    [red]! Breaking changes:[/red]")
+                                for change in breaking_changes:
+                                    console.print(f"      - {change}")
+                        else:
+                            # No changes, skip reload but ensure it's in RAG
+                            logger.debug(f"Tool {tool_id} unchanged, ensuring RAG entry exists")
+                            existing_tool = self.tools[tool_id]
+                            self._store_yaml_tool_in_rag(existing_tool, tool_def, str(yaml_file))
+                            continue
 
                 # Parse tool type
                 tool_type_str = tool_def.get("type", "custom")
@@ -505,8 +487,8 @@ class ToolsManager:
                         metadata=metadata
                     )
                     self.tools[tool_id] = tool
-                    logger.info(f"✓ Loaded LLM tool from YAML: {tool_id}")
-                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan](llm)[/dim cyan]")
+                    tool_count += 1
+                    logger.info(f"OK Loaded LLM tool from YAML: {tool_id} ({tool_count}/{len(yaml_files)})")
 
                     # Store YAML tool in RAG for semantic search
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
@@ -538,8 +520,8 @@ class ToolsManager:
                         }
                     )
                     self.tools[tool_id] = tool
-                    logger.info(f"✓ Loaded executable tool from YAML: {tool_id}")
-                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim green](executable)[/dim green]")
+                    tool_count += 1
+                    logger.info(f"OK Loaded executable tool from YAML: {tool_id} ({tool_count}/{len(yaml_files)})")
 
                     # Store YAML tool in RAG for semantic search
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
@@ -602,8 +584,8 @@ class ToolsManager:
                         }
                     )
                     self.tools[tool_id] = tool
-                    logger.info(f"✓ Loaded {tool_type.value} tool from YAML: {tool_id}")
-                    console.print(f"  [dim]→ {tool_def.get('name', tool_id)}[/dim] [dim cyan]({tool_type.value})[/dim cyan]")
+                    tool_count += 1
+                    logger.info(f"OK Loaded {tool_type.value} tool from YAML: {tool_id} ({tool_count}/{len(yaml_files)})")
 
                     # Store YAML tool in RAG for semantic search
                     self._store_yaml_tool_in_rag(tool, tool_def, str(yaml_file))
@@ -618,14 +600,14 @@ class ToolsManager:
                     # Ultimate fallback - just log that there was an error
                     logger.error(f"Error loading tool from YAML file (filename contains special characters)")
 
-        logger.info(f"✓ Loaded {len(yaml_files)} tool(s) from YAML files")
+        logger.info(f"OK Loaded {len(yaml_files)} tool(s) from YAML files")
 
         # Save index after loading tools from YAML
         self._save_index()
 
         # Log RAG storage summary
         if self.rag_memory:
-            logger.info(f"✓ Stored {len(yaml_files)} YAML tool(s) in RAG memory for semantic search")
+            logger.info(f"OK Stored {len(yaml_files)} YAML tool(s) in RAG memory for semantic search")
 
     def _load_tools_from_rag(self):
         """Load tools stored in RAG memory."""
@@ -680,9 +662,9 @@ class ToolsManager:
                 tool.usage_count = artifact.usage_count
 
                 self.tools[tool_id] = tool
-                logger.info(f"✓ Loaded tool from RAG: {tool_id} (quality: {artifact.quality_score:.2f})")
+                logger.info(f"OK Loaded tool from RAG: {tool_id} (quality: {artifact.quality_score:.2f})")
 
-            logger.info(f"✓ Checked RAG memory for tools")
+            logger.info(f"OK Checked RAG memory for tools")
 
         except Exception as e:
             logger.error(f"Error loading tools from RAG: {e}")
@@ -737,7 +719,7 @@ class ToolsManager:
                         }
                     )
                     self.tools[tool_id] = tool
-                    logger.info(f"✓ Loaded OpenAPI tool from config: {tool_id} ({len(openapi_tool.operations)} operations)")
+                    logger.info(f"OK Loaded OpenAPI tool from config: {tool_id} ({len(openapi_tool.operations)} operations)")
                 except Exception as e:
                     logger.error(f"Failed to load OpenAPI tool {tool_id}: {e}")
                 continue
@@ -760,7 +742,7 @@ class ToolsManager:
                     }
                 )
                 self.tools[tool_id] = tool
-                logger.info(f"✓ Loaded executable tool from config: {tool_id} ({executable_config.get('command')})")
+                logger.info(f"OK Loaded executable tool from config: {tool_id} ({executable_config.get('command')})")
                 continue
 
             # Extract LLM configuration if present
@@ -791,7 +773,7 @@ class ToolsManager:
             )
 
             self.tools[tool_id] = tool
-            logger.info(f"✓ Loaded tool from config: {tool_id}")
+            logger.info(f"OK Loaded tool from config: {tool_id}")
 
     def _store_yaml_tool_in_rag(self, tool: Tool, tool_def: dict, yaml_path: str):
         """
@@ -925,7 +907,7 @@ Tags: {', '.join(tool.tags)}
                     auto_embed=True  # Enable embeddings for Qdrant
                 )
 
-            logger.info(f"✓ Indexed {len(self.tools)} tools in RAG memory")
+            logger.info(f"OK Indexed {len(self.tools)} tools in RAG memory")
 
         except Exception as e:
             logger.error(f"Error indexing tools in RAG: {e}")
@@ -1001,7 +983,7 @@ Tags: {', '.join(tool.tags)}
                     logger.debug(f"MCP tool {tool.tool_id} already exists, skipping")
 
             if mcp_tools:
-                logger.info(f"✓ Loaded {len(mcp_tools)} tool(s) from MCP servers")
+                logger.info(f"OK Loaded {len(mcp_tools)} tool(s) from MCP servers")
             else:
                 logger.debug("No tools loaded from MCP servers")
 
@@ -1109,7 +1091,7 @@ Tags: {', '.join(tool.tags)}
                         cached_result = cached_result.split("RESPONSE:\n", 1)[1]
 
                     logger.info(
-                        f"✓ CACHE HIT: Reusing result for '{tool.name}' "
+                        f"OK CACHE HIT: Reusing result for '{tool.name}' "
                         f"(version {best_match['version']}, fitness {best_match['fitness']:.2f}) "
                         f"- saved LLM call"
                     )
@@ -1625,7 +1607,7 @@ Tags: {', '.join(tool.tags)}
         """
         self.tools[tool.tool_id] = tool
         self._save_index()
-        logger.info(f"✓ Registered tool: {tool.tool_id} ({tool.tool_type.value})")
+        logger.info(f"OK Registered tool: {tool.tool_id} ({tool.tool_type.value})")
         return tool
 
     def register_function(
@@ -1676,7 +1658,7 @@ Tags: {', '.join(tool.tags)}
         self.tools[tool_id] = tool
         self._save_index()
 
-        logger.info(f"✓ Registered function tool: {tool_id}")
+        logger.info(f"OK Registered function tool: {tool_id}")
         return tool
 
     def register_llm(
@@ -1715,7 +1697,7 @@ Tags: {', '.join(tool.tags)}
         self.tools[tool_id] = tool
         self._save_index()
 
-        logger.info(f"✓ Registered LLM tool: {tool_id}")
+        logger.info(f"OK Registered LLM tool: {tool_id}")
         return tool
 
     def register_workflow(
@@ -1759,7 +1741,7 @@ Tags: {', '.join(tool.tags)}
         self.tools[tool_id] = tool
         self._save_index()
 
-        logger.info(f"✓ Registered workflow tool: {tool_id}")
+        logger.info(f"OK Registered workflow tool: {tool_id}")
         return tool
 
     def register_community(
@@ -1801,7 +1783,7 @@ Tags: {', '.join(tool.tags)}
         self.tools[tool_id] = tool
         self._save_index()
 
-        logger.info(f"✓ Registered community tool: {tool_id}")
+        logger.info(f"OK Registered community tool: {tool_id}")
         return tool
 
     def _get_evolved_tool(self, tool_id: str) -> Optional[Tool]:
@@ -2566,7 +2548,7 @@ Tags: {', '.join(tool.tags)}
                 "Translation workflow: Fast translator + quality validation"
             )
 
-        logger.info(f"✓ Composed novel workflow with {len(selected_tools)} tools for: {task_description[:50]}...")
+        logger.info(f"OK Composed novel workflow with {len(selected_tools)} tools for: {task_description[:50]}...")
         return workflow_plan
 
     def increment_usage(self, tool_id: str):
@@ -2636,7 +2618,7 @@ Tags: {', '.join(tool.tags)}
         del self.tools[tool_id]
         self._save_index()
 
-        logger.info(f"✓ Deleted tool: {tool_id}")
+        logger.info(f"OK Deleted tool: {tool_id}")
         return True
 
     def _update_adaptive_timeout(

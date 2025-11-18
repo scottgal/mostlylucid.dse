@@ -159,7 +159,7 @@ class RAGMemory:
         self._load_memory()
 
     def _load_memory(self):
-        """Load artifacts and embeddings from disk."""
+        """Load artifacts and embeddings from disk with auto-recovery."""
         # Load index
         if self.index_path.exists():
             try:
@@ -172,8 +172,58 @@ class RAGMemory:
 
                 logger.info(f"✓ Loaded {len(self.artifacts)} artifacts")
 
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON corruption detected in index.json at line {e.lineno}, col {e.colno}")
+                logger.warning("Attempting auto-recovery...")
+
+                # Create backup of corrupted file
+                import shutil
+                from datetime import datetime
+                backup_path = self.index_path.with_suffix(f'.backup.{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
+                shutil.copy(self.index_path, backup_path)
+                logger.info(f"Backed up corrupted index to: {backup_path}")
+
+                # Try to recover by loading line-by-line and skipping bad entries
+                recovered_artifacts = {}
+                try:
+                    with open(self.index_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+
+                    # Try to fix common JSON issues
+                    # Remove trailing commas before closing braces/brackets
+                    content = content.replace(',\n}', '\n}').replace(',\n]', '\n]')
+                    content = content.replace(', }', ' }').replace(', ]', ' ]')
+
+                    # Try parsing again
+                    index = json.loads(content)
+                    for artifact_id, artifact_data in index.items():
+                        try:
+                            artifact = Artifact.from_dict(artifact_data)
+                            recovered_artifacts[artifact_id] = artifact
+                        except Exception as artifact_error:
+                            logger.warning(f"Skipping corrupted artifact {artifact_id}: {artifact_error}")
+
+                    self.artifacts = recovered_artifacts
+                    logger.info(f"✓ Recovered {len(self.artifacts)} artifacts (auto-fixed JSON)")
+
+                    # Save the fixed version
+                    self._save_index()
+                    logger.info("✓ Saved repaired index.json")
+
+                except Exception as recovery_error:
+                    logger.error(f"Auto-recovery failed: {recovery_error}")
+                    logger.warning("Creating fresh index.json - previous data backed up")
+
+                    # Last resort: start fresh
+                    self.artifacts = {}
+                    self._save_index()
+                    logger.info("✓ Created new index.json")
+
             except Exception as e:
                 logger.error(f"Error loading artifacts index: {e}")
+                logger.warning("Creating fresh index.json")
+                self.artifacts = {}
+                self._save_index()
 
         # Load embeddings matrix
         if self.embeddings_path.exists():

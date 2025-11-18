@@ -16,14 +16,17 @@ from rich.table import Table
 from rich import box
 from rich.live import Live
 from rich.spinner import Spinner
+from rich.layout import Layout
+from rich.text import Text
 from datetime import datetime
 import re
 import unicodedata
 import threading
 import queue
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from collections import deque
 
 # Disable all debug/info logging for clean chat experience
 # Use force=True to override any previous logging configurations from imported modules
@@ -261,24 +264,76 @@ log_panel = LogPanel(console, max_lines=4)
 
 
 class WorkflowDisplay:
-    """Clean, minimal workflow stage display."""
+    """Enhanced workflow stage display with live status panel."""
+
+    # Define standard tool building stages
+    STAGES = [
+        ("defining", "Defining Tool"),
+        ("interface", "Building Interface"),
+        ("building", "Generating Code"),
+        ("static_analysis", "Static Analysis"),
+        ("unit_tests", "Building Tests"),
+        ("testing", "Running Tests"),
+        ("documenting", "Documenting"),
+        ("verifying", "Verifying"),
+        ("done", "Complete")
+    ]
 
     def __init__(self, console: Console):
         self.console = console
         self.current_stage = None
         self.stages = []
-        self.last_stage = None  # Track last displayed stage to avoid duplicates
+        self.last_stage = None
+        self.tool_name = None
+        self.stage_status = {}  # Track status of each stage
+        self.test_count = 0
+        self.live_display = None
+        self.show_live_panel = True  # Can be toggled
 
-    def start_workflow(self, description: str):
-        """Start a new workflow."""
+    def start_workflow(self, description: str, tool_name: str = None):
+        """Start a new workflow with optional tool name."""
         self.console.print(f"\n[bold cyan]{description}[/bold cyan]")
         self.stages = []
         self.last_stage = None
+        self.tool_name = tool_name or "Tool"
+        self.stage_status = {}
+        self.test_count = 0
 
     def add_stage(self, stage_name: str):
         """Add a stage to the workflow (silently)."""
         if stage_name not in self.stages:
             self.stages.append(stage_name)
+
+    def _create_status_panel(self) -> Panel:
+        """Create a panel showing current build status."""
+        lines = []
+        lines.append(f"[bold cyan]{self.tool_name}[/bold cyan]")
+        lines.append("")
+
+        for stage_id, stage_label in self.STAGES:
+            status = self.stage_status.get(stage_id, "pending")
+
+            if status == "active":
+                icon = "[yellow]●[/yellow]"
+                text = f"[bold yellow]{stage_label}[/bold yellow]"
+                if stage_id == "testing" and self.test_count > 0:
+                    text += f" [dim]({self.test_count} tests)[/dim]"
+            elif status == "complete":
+                icon = "[green]✓[/green]"
+                text = f"[dim]{stage_label}[/dim]"
+                if stage_id == "testing" and self.test_count > 0:
+                    text += f" [dim]({self.test_count})[/dim]"
+            elif status == "failed":
+                icon = "[red]✗[/red]"
+                text = f"[red]{stage_label}[/red]"
+            else:  # pending
+                icon = "[dim]○[/dim]"
+                text = f"[dim]{stage_label}[/dim]"
+
+            lines.append(f"{icon} {text}")
+
+        content = "\n".join(lines)
+        return Panel(content, title="[cyan]Build Progress[/cyan]", box=box.ROUNDED, padding=(1, 2))
 
     def show_stages(self):
         """Show workflow stages as a simple pipeline (called once at start)."""
@@ -288,7 +343,23 @@ class WorkflowDisplay:
         self.console.print(f"[dim]{pipeline}[/dim]")
 
     def start_stage(self, stage_name: str, status_text: str = None):
-        """Only show stage if it's different from the last one (minimal, friendly)."""
+        """Mark a stage as active and update display."""
+        # Map common stage names to our standard stages
+        stage_map = {
+            "overseer_specification": "defining",
+            "tdd_interface": "interface",
+            "code_generation": "building",
+            "static_analysis": "static_analysis",
+            "testing": "testing",
+            "documentation": "documenting",
+            "verification": "verifying"
+        }
+
+        mapped_stage = stage_map.get(stage_name, stage_name)
+
+        # Update stage status
+        self.stage_status[mapped_stage] = "active"
+
         # Only display if this is a new stage
         if self.last_stage != stage_name:
             self.current_stage = stage_name
@@ -305,9 +376,45 @@ class WorkflowDisplay:
         return DummyContext()
 
     def complete_stage(self, stage_name: str, result: str = None):
-        """Mark a stage as complete (silent unless there's a result to show)."""
+        """Mark a stage as complete."""
+        # Map stage name
+        stage_map = {
+            "overseer_specification": "defining",
+            "tdd_interface": "interface",
+            "code_generation": "building",
+            "static_analysis": "static_analysis",
+            "testing": "testing",
+            "documentation": "documenting",
+            "verification": "verifying"
+        }
+
+        mapped_stage = stage_map.get(stage_name, stage_name)
+        self.stage_status[mapped_stage] = "complete"
+
         if result:
             self.console.print(f"  [dim]{result}[/dim]")
+
+    def fail_stage(self, stage_name: str, reason: str = None):
+        """Mark a stage as failed."""
+        stage_map = {
+            "overseer_specification": "defining",
+            "tdd_interface": "interface",
+            "code_generation": "building",
+            "static_analysis": "static_analysis",
+            "testing": "testing",
+            "documentation": "documenting",
+            "verification": "verifying"
+        }
+
+        mapped_stage = stage_map.get(stage_name, stage_name)
+        self.stage_status[mapped_stage] = "failed"
+
+        if reason:
+            self.console.print(f"  [red]{reason}[/red]")
+
+    def set_test_count(self, count: int):
+        """Set the number of tests being run."""
+        self.test_count = count
 
     def show_tool_call(self, tool_name: str, model: str = None, endpoint: str = None, tool_type: str = None):
         """Show a tool being called (minimal - only show tool name)."""
@@ -321,6 +428,227 @@ class WorkflowDisplay:
             self.console.print(Panel(syntax_obj, title=f"[cyan]{title}[/cyan]", box=box.ROUNDED))
         else:
             self.console.print(Panel(content, title=f"[cyan]{title}[/cyan]", box=box.ROUNDED))
+
+    def show_live_status(self):
+        """Display the live status panel (call periodically or on updates)."""
+        if self.show_live_panel and self.tool_name:
+            panel = self._create_status_panel()
+            self.console.print(panel)
+
+
+class WorkflowEvent(Enum):
+    """Types of workflow events."""
+    STARTED = "started"
+    STAGE_BEGIN = "stage_begin"
+    STAGE_PROGRESS = "stage_progress"
+    STAGE_COMPLETE = "stage_complete"
+    STAGE_FAILED = "stage_failed"
+    TEST_COUNT_UPDATE = "test_count_update"
+    SENTINEL_INTERRUPT = "sentinel_interrupt"
+    PARALLEL_SPAWN = "parallel_spawn"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+@dataclass
+class WorkflowEventData:
+    """Data for workflow events."""
+    event_type: WorkflowEvent
+    workflow_id: str
+    tool_name: str
+    stage: Optional[str] = None
+    status: Optional[str] = None
+    message: Optional[str] = None
+    test_count: Optional[int] = None
+    timestamp: float = field(default_factory=time.time)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class LiveWorkflowDisplay:
+    """
+    Event-driven live workflow display that updates in real-time.
+    Runs in a background thread and displays active workflows.
+    Allows sentinel to interrupt and spawn parallel workflows.
+    """
+
+    def __init__(self, console: Console):
+        self.console = console
+        self.event_queue = queue.Queue()
+        self.active_workflows = {}  # workflow_id -> workflow state
+        self.lock = threading.Lock()
+        self.running = False
+        self.display_thread = None
+        self.live_display = None
+        self.refresh_interval = 0.1  # 100ms refresh rate
+
+    def start(self):
+        """Start the live display thread."""
+        if self.running:
+            return
+
+        self.running = True
+        self.display_thread = threading.Thread(target=self._display_loop, daemon=True)
+        self.display_thread.start()
+
+    def stop(self):
+        """Stop the live display thread."""
+        self.running = False
+        if self.display_thread:
+            self.display_thread.join(timeout=1.0)
+
+    def emit_event(self, event: WorkflowEventData):
+        """Emit a workflow event (thread-safe)."""
+        self.event_queue.put(event)
+
+    def _display_loop(self):
+        """Background thread that updates the live display."""
+        try:
+            with Live(self._generate_display(), console=self.console, refresh_per_second=10) as live:
+                self.live_display = live
+                while self.running:
+                    # Process events from queue
+                    try:
+                        while True:
+                            event = self.event_queue.get_nowait()
+                            self._handle_event(event)
+                    except queue.Empty:
+                        pass
+
+                    # Update display
+                    live.update(self._generate_display())
+                    time.sleep(self.refresh_interval)
+        except Exception as e:
+            self.console.print(f"[red]Live display error: {e}[/red]")
+
+    def _handle_event(self, event: WorkflowEventData):
+        """Handle a workflow event and update state."""
+        with self.lock:
+            workflow_id = event.workflow_id
+
+            if event.event_type == WorkflowEvent.STARTED:
+                self.active_workflows[workflow_id] = {
+                    "tool_name": event.tool_name,
+                    "stages": {},
+                    "current_stage": None,
+                    "test_count": 0,
+                    "status": "running",
+                    "start_time": event.timestamp,
+                    "messages": deque(maxlen=3)  # Keep last 3 messages
+                }
+
+            elif workflow_id in self.active_workflows:
+                workflow = self.active_workflows[workflow_id]
+
+                if event.event_type == WorkflowEvent.STAGE_BEGIN:
+                    workflow["current_stage"] = event.stage
+                    workflow["stages"][event.stage] = "active"
+                    if event.message:
+                        workflow["messages"].append(event.message)
+
+                elif event.event_type == WorkflowEvent.STAGE_PROGRESS:
+                    if event.message:
+                        workflow["messages"].append(event.message)
+
+                elif event.event_type == WorkflowEvent.STAGE_COMPLETE:
+                    workflow["stages"][event.stage] = "complete"
+                    if event.message:
+                        workflow["messages"].append(f"✓ {event.message}")
+
+                elif event.event_type == WorkflowEvent.STAGE_FAILED:
+                    workflow["stages"][event.stage] = "failed"
+                    if event.message:
+                        workflow["messages"].append(f"✗ {event.message}")
+
+                elif event.event_type == WorkflowEvent.TEST_COUNT_UPDATE:
+                    workflow["test_count"] = event.test_count or 0
+
+                elif event.event_type == WorkflowEvent.SENTINEL_INTERRUPT:
+                    workflow["messages"].append(f"⚡ Sentinel: {event.message}")
+
+                elif event.event_type == WorkflowEvent.PARALLEL_SPAWN:
+                    workflow["messages"].append(f"🔀 Spawned: {event.message}")
+
+                elif event.event_type == WorkflowEvent.COMPLETED:
+                    workflow["status"] = "completed"
+                    workflow["current_stage"] = None
+                    # Remove from active after a delay
+                    threading.Timer(2.0, lambda: self._remove_workflow(workflow_id)).start()
+
+                elif event.event_type == WorkflowEvent.FAILED:
+                    workflow["status"] = "failed"
+                    workflow["current_stage"] = None
+
+    def _remove_workflow(self, workflow_id: str):
+        """Remove a workflow from active display."""
+        with self.lock:
+            if workflow_id in self.active_workflows:
+                del self.active_workflows[workflow_id]
+
+    def _generate_display(self) -> Panel:
+        """Generate the current display panel."""
+        with self.lock:
+            if not self.active_workflows:
+                return Panel("[dim]No active workflows[/dim]", title="[cyan]Workflow Status[/cyan]", box=box.ROUNDED)
+
+            lines = []
+            for workflow_id, workflow in self.active_workflows.items():
+                tool_name = workflow["tool_name"]
+                status = workflow["status"]
+                elapsed = time.time() - workflow["start_time"]
+
+                # Header
+                if status == "completed":
+                    header = f"[green]✓ {tool_name}[/green] [dim]({elapsed:.1f}s)[/dim]"
+                elif status == "failed":
+                    header = f"[red]✗ {tool_name}[/red] [dim]({elapsed:.1f}s)[/dim]"
+                else:
+                    header = f"[bold cyan]{tool_name}[/bold cyan] [dim]({elapsed:.0f}s)[/dim]"
+
+                lines.append(header)
+
+                # Stages
+                standard_stages = [
+                    ("defining", "Define"),
+                    ("interface", "Interface"),
+                    ("building", "Build"),
+                    ("static_analysis", "Analysis"),
+                    ("unit_tests", "Gen Tests"),
+                    ("testing", "Test"),
+                    ("documenting", "Docs"),
+                    ("verifying", "Verify"),
+                ]
+
+                stage_icons = []
+                for stage_id, stage_label in standard_stages:
+                    stage_status = workflow["stages"].get(stage_id, "pending")
+                    if stage_status == "active":
+                        icon = "[yellow]●[/yellow]"
+                    elif stage_status == "complete":
+                        icon = "[green]✓[/green]"
+                    elif stage_status == "failed":
+                        icon = "[red]✗[/red]"
+                    else:
+                        icon = "[dim]○[/dim]"
+
+                    stage_icons.append(f"{icon} {stage_label}")
+
+                # Display in rows of 4
+                for i in range(0, len(stage_icons), 4):
+                    row = stage_icons[i:i+4]
+                    lines.append("  " + " │ ".join(row))
+
+                # Test count if applicable
+                if workflow["test_count"] > 0 and workflow["stages"].get("testing") == "active":
+                    lines.append(f"  [dim]Running {workflow['test_count']} tests...[/dim]")
+
+                # Recent messages
+                for msg in workflow["messages"]:
+                    lines.append(f"  [dim]{msg}[/dim]")
+
+                lines.append("")  # Spacing between workflows
+
+            content = "\n".join(lines)
+            return Panel(content, title="[cyan]Live Workflow Status[/cyan]", box=box.ROUNDED, padding=(1, 2))
 
 
 class WorkflowStatus(Enum):
@@ -507,6 +835,38 @@ Name (short, descriptive, lowercase with dashes):"""
             console.print(table)
 
 
+def ensure_utf8_declaration(code: str) -> str:
+    """
+    Ensures Python code starts with UTF-8 encoding declaration.
+
+    This prevents SyntaxError: Non-UTF-8 code errors when generated code
+    contains non-ASCII characters (e.g., é, ñ, ö, etc.)
+
+    Args:
+        code: Python source code
+
+    Returns:
+        Code with UTF-8 declaration at the top
+    """
+    if not code.strip():
+        return code
+
+    # Check if already has encoding declaration in first 3 lines
+    first_lines = code.split('\n')[:3]
+    for line in first_lines:
+        if 'coding' in line and 'utf-8' in line:
+            return code  # Already has UTF-8 declaration
+
+    # Add UTF-8 declaration at the top
+    if code.startswith('#!'):
+        # Has shebang, add encoding declaration after it
+        lines = code.split('\n', 1)
+        return lines[0] + '\n# -*- coding: utf-8 -*-\n' + (lines[1] if len(lines) > 1 else '')
+    else:
+        # No shebang, add encoding declaration at very top
+        return '# -*- coding: utf-8 -*-\n' + code
+
+
 class ChatCLI:
     """Interactive chat interface for mostlylucid DiSE."""
 
@@ -649,6 +1009,10 @@ class ChatCLI:
         self.context = {}
         self.history = []
         self.display = WorkflowDisplay(console)
+        self.live_display = LiveWorkflowDisplay(console)
+        # TODO: Start live display when events are integrated
+        # self.live_display.start()  # Start the live display thread
+        self._current_workflow_id = None  # Track current workflow for events
 
         # Initialize conversation memory (enabled by default)
         # Uses single persistent Qdrant collection: "mostlylucid-dse-interactive"
@@ -1380,7 +1744,10 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
                 if node_task and step.tool_name and node_task.lower().replace('_', '') == step.tool_name.lower().replace('_', ''):
                     node_task = step.description
 
-                console.print(f"\n[bold]Step: {step.description}[/bold]")
+                # Use Rich status instead of print to avoid blocking
+                from rich.status import Status
+                status = console.status(f"[bold]Step: {step.description}[/bold]", spinner="dots")
+                status.start()
                 log_panel.log(f"Generating node for: {node_task}")
 
                 # Save current context and set workflow mode flag
@@ -1403,6 +1770,9 @@ NOW OUTPUT THE JSON (no markdown fences, no explanations):"""
 
                 # Restore context
                 self.context = old_context
+
+                # Stop the status spinner
+                status.stop()
 
                 if not success:
                     console.print(f"[red]Failed to generate step: {step.step_id}[/red]")
@@ -3630,6 +4000,78 @@ logger = _DummyLogger()
             lines = len(code.split('\n'))
             console.print(f"[green]✓ Generated code ({lines} lines)[/green]")
 
+        # Step 6.5: ALWAYS Generate Documentation (before tests, so docs are created even if tests fail)
+        workflow.add_step("documenting", "docs", "Generate documentation")
+        workflow.start_step("documenting")
+        console.print(f"\n[cyan]Generating documentation...[/cyan]")
+
+        # Save specification
+        spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
+        try:
+            # Basic spec always saved
+            basic_spec = f"""# {code_description}
+
+## Task
+{description}
+
+## Implementation
+{specification[:500]}...
+
+Generated: {datetime.now().isoformat()}
+"""
+            spec_path.write_text(basic_spec, encoding='utf-8')
+
+            # Save detailed spec if requested via config
+            if self.config.get("generation.save_specification", False):
+                detailed_spec = f"""# Specification for {node_id}
+
+## Description
+{description}
+
+## Detailed Specification
+{specification}
+
+## Tools Used
+{available_tools if "No specific tools" not in available_tools else "general"}
+
+## Code Summary
+{code_description}
+
+## Tags
+{', '.join(code_tags)}
+
+## Generated
+{datetime.now().isoformat()}
+"""
+                spec_path.write_text(detailed_spec, encoding='utf-8')
+                console.print(f"[dim]✓ Saved detailed specification[/dim]")
+        except Exception as e:
+            console.print(f"[dim yellow]Could not save specification: {e}[/dim yellow]")
+
+        # Save the overseer's plan/specification
+        try:
+            self._save_overseer_plan(node_id, specification)
+            console.print(f"[dim]✓ Saved overseer plan[/dim]")
+        except Exception as e:
+            console.print(f"[dim yellow]Could not save overseer plan: {e}[/dim yellow]")
+
+        # Generate Behave .feature file for BDD testing
+        try:
+            self._generate_behave_feature(node_id, description, specification, code)
+            console.print(f"[dim]✓ Generated BDD feature file[/dim]")
+        except Exception as e:
+            console.print(f"[dim yellow]Could not generate BDD feature: {e}[/dim yellow]")
+
+        # Generate Locust load test script
+        try:
+            self._generate_locust_load_test(node_id, description, code)
+            console.print(f"[dim]✓ Generated load test script[/dim]")
+        except Exception as e:
+            console.print(f"[dim yellow]Could not generate load test: {e}[/dim yellow]")
+
+        console.print(f"[green]✓ Documentation generation complete[/green]")
+        workflow.complete_step("documenting", "All documentation generated")
+
         # Step 7: Run unit tests (already generated in TDD mode, or generate now)
         test_success = True
         if self.config.get("testing.enabled", True):
@@ -3835,57 +4277,8 @@ logger = _DummyLogger()
                     except Exception as e:
                         console.print(f"[dim yellow]Could not store conversation history: {e}[/dim yellow]")
 
-                # Always save a basic specification
-                spec_path = self.runner.get_node_path(node_id).parent / "specification.md"
-                try:
-                    # Basic spec always saved
-                    basic_spec = f"""# {code_description}
-
-## Task
-{description}
-
-## Implementation
-{specification[:500]}...
-
-Generated: {datetime.now().isoformat()}
-"""
-                    spec_path.write_text(basic_spec, encoding='utf-8')
-
-                    # Save detailed spec if requested via config
-                    if self.config.get("generation.save_specification", False):
-                        detailed_spec = f"""# Specification for {node_id}
-
-## Description
-{description}
-
-## Detailed Specification
-{specification}
-
-## Tools Used
-{available_tools if "No specific tools" not in available_tools else "general"}
-
-## Code Summary
-{code_description}
-
-## Tags
-{', '.join(code_tags)}
-
-## Generated
-{datetime.now().isoformat()}
-"""
-                        spec_path.write_text(detailed_spec, encoding='utf-8')
-                        console.print(f"[dim]Saved detailed specification[/dim]")
-                except Exception as e:
-                    console.print(f"[dim yellow]Could not save specification: {e}[/dim yellow]")
-
-                # Save the overseer's plan/specification
-                self._save_overseer_plan(node_id, specification)
-
-                # Generate Behave .feature file for BDD testing
-                self._generate_behave_feature(node_id, description, specification, code)
-
-                # Generate Locust load test script
-                self._generate_locust_load_test(node_id, description, code)
+                # NOTE: Documentation (spec, BDD, load tests) is now generated EARLIER (before tests)
+                # so it's always created even if tests fail. See Step 6.5 above.
 
                 # Store complete workflow for future reuse with embedded specification
                 workflow_content = {
@@ -5511,6 +5904,52 @@ Generate comprehensive tests now:"""
                 test_code = '\n'.join(clean_lines)
                 if len(clean_lines) < len(lines):
                     console.print(f"[yellow]Cleaned test code: removed {len(lines) - len(clean_lines)} explanatory lines[/yellow]")
+
+            # CRITICAL FIX: Ensure test code imports main() if it calls it
+            # Check if test code calls main() function
+            if 'main(' in test_code:
+                # Check if main is already imported
+                has_main_import = (
+                    'from main import main' in test_code or
+                    'from main import *' in test_code or
+                    'import main' in test_code
+                )
+
+                if not has_main_import:
+                    console.print("[yellow]⚠ Test calls main() but doesn't import it - injecting import...[/yellow]")
+
+                    # Find the right place to inject the import
+                    # It should go after any existing imports but before the first function definition
+                    lines = test_code.split('\n')
+                    import_lines = []
+                    other_lines = []
+                    found_first_def = False
+
+                    for line in lines:
+                        stripped = line.strip()
+                        if not found_first_def and (stripped.startswith('def ') or stripped.startswith('class ')):
+                            found_first_def = True
+                            # Inject import before first def/class
+                            if not import_lines:
+                                # No imports yet, add both node_runtime and main imports
+                                import_lines.append('from main import main')
+                            else:
+                                # Add main import after existing imports
+                                import_lines.append('from main import main')
+                            other_lines.append(line)
+                        elif not found_first_def and (stripped.startswith('import ') or stripped.startswith('from ')):
+                            import_lines.append(line)
+                        else:
+                            other_lines.append(line)
+
+                    # Reconstruct with injected import
+                    if import_lines:
+                        test_code = '\n'.join(import_lines) + '\n' + '\n'.join(other_lines)
+                    else:
+                        # No imports found at all, add at the very top
+                        test_code = 'from main import main\n' + test_code
+
+                    console.print("[green]✓ Injected 'from main import main'[/green]")
 
             # Save test code
             test_path = self.runner.get_node_path(node_id).parent / "test_main.py"
@@ -8150,14 +8589,42 @@ Return ONLY the JSON, no other text."""
 
         if confirm_nodes == 'yes':
             import shutil
+            import os
+
+            # Windows reserved names that cannot be deleted
+            WINDOWS_RESERVED = {'con', 'prn', 'aux', 'nul', 'com1', 'com2', 'com3', 'com4',
+                               'com5', 'com6', 'com7', 'com8', 'com9', 'lpt1', 'lpt2',
+                               'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9'}
 
             # Clear nodes directory
             nodes_path = Path(self.config.nodes_path)
             if nodes_path.exists():
                 try:
-                    shutil.rmtree(nodes_path)
-                    nodes_path.mkdir(parents=True, exist_ok=True)
-                    console.print(f"[green]OK Cleared nodes directory: {nodes_path}[/green]")
+                    # Delete contents but skip Windows reserved names
+                    deleted_count = 0
+                    skipped = []
+
+                    for item in nodes_path.iterdir():
+                        item_name = item.name.lower()
+                        # Skip Windows reserved names
+                        if item_name in WINDOWS_RESERVED or item_name.split('.')[0] in WINDOWS_RESERVED:
+                            skipped.append(item.name)
+                            console.print(f"[yellow]Skipping Windows reserved name: {item.name}[/yellow]")
+                            continue
+
+                        try:
+                            if item.is_file():
+                                item.unlink()
+                                deleted_count += 1
+                            elif item.is_dir():
+                                shutil.rmtree(item)
+                                deleted_count += 1
+                        except Exception as e:
+                            console.print(f"[yellow]Could not delete {item.name}: {e}[/yellow]")
+
+                    console.print(f"[green]OK Cleared {deleted_count} items from nodes directory[/green]")
+                    if skipped:
+                        console.print(f"[dim]Skipped {len(skipped)} reserved names: {', '.join(skipped)}[/dim]")
                 except Exception as e:
                     console.print(f"[red]Error clearing nodes: {e}[/red]")
 
@@ -8491,14 +8958,16 @@ def call_tools_parallel(tool_calls: list) -> list:
             generated_tests = test_file.read_text(encoding='utf-8')
 
             # Add header comment
-            header = f"""# Auto-generated tests by Pynguin
+            header = f"""# -*- coding: utf-8 -*-
+# Auto-generated tests by Pynguin
 # Generated in {timeout} seconds using evolutionary algorithm
 # These tests provide baseline coverage and should be reviewed/refined
 
 """
             final_tests = header + generated_tests
 
-            # Save to test.py
+            # Save to test.py (with UTF-8 declaration to prevent encoding errors)
+            final_tests = ensure_utf8_declaration(final_tests)
             dest_test_file.write_text(final_tests, encoding='utf-8')
 
             # Clean up pynguin directory
@@ -8548,7 +9017,8 @@ def call_tools_parallel(tool_calls: list) -> list:
                 )
 
                 if improved_tests:
-                    # Save improved tests
+                    # Save improved tests (with UTF-8 declaration)
+                    improved_tests = ensure_utf8_declaration(improved_tests)
                     dest_test_file.write_text(improved_tests, encoding='utf-8')
 
                     # Re-run coverage
@@ -9281,7 +9751,8 @@ Return ONLY the Python test code, no explanations."""
             )
 
             if test_code:
-                # Save the test file
+                # Save the test file (with UTF-8 declaration)
+                test_code = ensure_utf8_declaration(test_code)
                 test_file_path = self.runner.nodes_dir / production_tool_id / "test.py"
                 test_file_path.parent.mkdir(parents=True, exist_ok=True)
                 test_file_path.write_text(test_code, encoding='utf-8')
@@ -9556,6 +10027,12 @@ Return ONLY the Python test code, no explanations."""
                 console.print(f"[red]Error: {e}[/red]")
 
         self._save_history()
+
+    def _save_history(self):
+        """Save command history (currently a no-op, history is managed in-memory)."""
+        # History is already tracked in self.history and self.pt_history
+        # This method is here for future persistence features
+        pass
 
     def _auto_fix_static_issues(self, node_id: str, analysis_results: Dict[str, Any]) -> bool:
         """

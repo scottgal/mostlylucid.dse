@@ -3,7 +3,7 @@
 
 name: "Save to Disk"
 type: "executable"
-description: "Saves content to a file in the ./output/ directory. For safety, only saves to ./output/ to prevent accidental overwrites."
+description: "Saves content to a file in the tool_content/<datetime>/ directory. For safety and organization, ALL content is saved to timestamped directories under tool_content/. This ensures outputs are organized, safe from overwrites, and easy to find."
 
 cost_tier: "free"
 speed_tier: "very-fast"
@@ -14,15 +14,16 @@ executable:
   command: "python"
   args:
     - "-c"
-    - "import sys, json, pathlib; data=json.load(sys.stdin); path=pathlib.Path('output')/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path)})))"
+    - "import sys, json, pathlib, datetime; data=json.load(sys.stdin); timestamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S'); path=pathlib.Path('tool_content')/timestamp/data['filename']; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data['content']); print(json.dumps({'status': 'saved', 'path': str(path.absolute()), 'directory': str(path.parent.absolute())}))"
 
 input_schema:
-  filename: "str - Name of file to save (will be saved in ./output/)"
+  filename: "str - Name of file to save (will be saved in tool_content/<datetime>/filename)"
   content: "str - Content to write to file"
 
 output_schema:
   status: "str - 'saved' if successful"
-  path: "str - Full path where file was saved"
+  path: "str - Full absolute path where file was saved"
+  directory: "str - Directory containing the saved file (tool_content/<datetime>/)"
 
 tags:
   - file-io

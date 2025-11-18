@@ -1,0 +1,156 @@
+# Questions About Me Tool
+# LLM tool that answers questions about the system using platform_info
+
+name: "Questions About Me"
+type: "llm"
+description: "Answers questions about the current system (memory, CPU, GPU, OS, disk, etc.) by gathering platform information and providing natural language responses. Handles questions like 'what memory do you have?', 'is the GPU busy?', 'what OS am I running?', etc."
+
+llm:
+  model: "llama3"
+  endpoint: null
+  system_prompt: |
+    You are a system information assistant. Your job is to answer questions about the current computer system.
+
+    When you receive a question about the system, you should:
+    1. First call the platform_info tool to gather relevant system information
+    2. Parse the response to find the specific information requested
+    3. Provide a clear, concise answer in natural language
+
+    Available information types:
+    - Memory (RAM): total, available, used, usage percentage
+    - CPU: cores, frequency, usage, architecture
+    - GPU: availability, model, memory, utilization, temperature
+    - Operating System: platform, release, version
+    - Disk: partitions, total space, free space, usage
+    - Processes: running processes, CPU/memory usage
+    - Network: interfaces, addresses
+
+    Examples:
+
+    Question: "What memory do I have?"
+    Action: Call platform_info with detail_level="standard"
+    Response: "You have 16GB of total RAM, with 8.5GB currently available (46.88% used)."
+
+    Question: "Is the GPU busy?"
+    Action: Call platform_info with detail_level="detailed"
+    Response: "Your NVIDIA GeForce RTX 3080 is currently at 15% utilization with a temperature of 45°C. It's not very busy right now."
+
+    Question: "What OS am I running?"
+    Action: Call platform_info with detail_level="basic"
+    Response: "You're running Linux (Ubuntu 22.04) on an x86_64 architecture."
+
+    Question: "How much free disk space do I have?"
+    Action: Call platform_info with detail_level="standard"
+    Response: "Your main partition has 247GB free out of 500GB total (50.6% used)."
+
+    Question: "Is the system running slow?"
+    Action: Call platform_info with detail_level="full"
+    Response: "The system is running with 92% CPU usage, primarily due to 'video_encoder' using 85% CPU. Memory usage is also high at 76%."
+
+    IMPORTANT:
+    - Always use the platform_info tool first before answering
+    - Choose appropriate detail_level: "basic" for simple questions, "standard" for most questions, "detailed" for GPU/performance questions, "full" for diagnostic questions
+    - Provide human-friendly numbers (e.g., "16GB" instead of "17179869184 bytes")
+    - Be conversational and helpful
+    - If information is not available, say so clearly
+
+input_schema:
+  question:
+    type: "string"
+    description: "The question about the system (e.g., 'what memory do you have?', 'is the GPU busy?')"
+    required: true
+
+output_schema:
+  answer:
+    type: "string"
+    description: "Natural language answer to the question"
+  platform_data:
+    type: "object"
+    description: "Raw platform data from platform_info tool"
+    required: false
+
+tags: ["system", "platform", "info", "diagnostic", "conversational", "qa", "memory", "cpu", "gpu"]
+cost_tier: "cheap"
+speed_tier: "fast"
+quality_tier: "good"
+priority: 80
+
+examples:
+  - description: "Answer memory question"
+    input:
+      question: "What memory do I have?"
+    output:
+      answer: "You have 16GB of total RAM, with 8.5GB currently available (46.88% used)."
+
+  - description: "Answer GPU question"
+    input:
+      question: "Is the GPU busy?"
+    output:
+      answer: "Your NVIDIA GeForce RTX 3080 is currently at 15% utilization with a temperature of 45°C. It's not very busy right now."
+
+  - description: "Answer OS question"
+    input:
+      question: "What operating system am I running?"
+    output:
+      answer: "You're running Linux (Ubuntu 22.04) on an x86_64 architecture."
+
+  - description: "Answer disk space question"
+    input:
+      question: "How much disk space is free?"
+    output:
+      answer: "Your main partition has 247GB free out of 500GB total (50.6% used)."
+
+  - description: "Answer CPU question"
+    input:
+      question: "How many CPU cores do I have?"
+    output:
+      answer: "Your system has 8 CPU cores."
+
+  - description: "Diagnostic question"
+    input:
+      question: "Why is my system slow?"
+    output:
+      answer: "The system is running with 92% CPU usage, primarily due to 'video_encoder' using 85% CPU. Memory usage is also high at 76%. You might want to close or reduce priority of the video encoding process."
+
+conversational_examples:
+  - user_message: "What memory do you have?"
+    assistant_action: "Uses platform_info tool with detail_level='standard'"
+    assistant_response: "I have 16GB of total RAM installed, with 8.5GB currently available (53% free). The system is using about 7.5GB right now."
+
+  - user_message: "Is the GPU being used?"
+    assistant_action: "Uses platform_info tool with detail_level='detailed'"
+    assistant_response: "The NVIDIA GeForce RTX 3080 is currently at 15% utilization with 2.3GB of VRAM in use out of 10GB total. It's running at 45°C, so it's not heavily loaded right now."
+
+  - user_message: "What OS are you running on?"
+    assistant_action: "Uses platform_info tool with detail_level='basic'"
+    assistant_response: "I'm running on Linux (Ubuntu 22.04 LTS) with an x86_64 architecture and Python 3.10.12."
+
+  - user_message: "The computer seems slow, what's happening?"
+    assistant_action: "Uses platform_info tool with detail_level='full' (includes processes)"
+    assistant_response: "I can see why! The CPU is at 92% usage because the 'video_encoder' process is using 85% of the CPU. Memory is also high at 76% (only 3.8GB free). You might want to pause or reduce the priority of that video encoding task."
+
+usage_notes: |
+  This tool bridges the gap between system queries and natural language responses.
+
+  **When to use:**
+  - User asks about system specifications
+  - User wants to know resource usage
+  - User is troubleshooting performance
+  - User asks "what memory/CPU/GPU do you have?"
+
+  **How it works:**
+  1. Receives natural language question
+  2. Calls platform_info tool with appropriate detail_level
+  3. Parses the structured data
+  4. Returns human-friendly answer
+
+  **Detail level selection:**
+  - Simple specs (OS, cores, total memory): "basic"
+  - Resource availability (memory free, disk space): "standard"
+  - Performance/GPU questions: "detailed"
+  - Troubleshooting/diagnostics: "full"
+
+  **Integration with sentinel:**
+  The task_evaluator already classifies these as SYSTEM_INFO type and routes to
+  executable.platform_info. This tool provides an LLM wrapper for more conversational
+  responses when the user expects a natural language answer rather than raw JSON.

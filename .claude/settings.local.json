@@ -4,7 +4,12 @@
       "Bash(for file in code_evolver/tools/llm/*.yaml code_evolver/tools/executable/*.yaml code_evolver/tools/debug/*.yaml code_evolver/tools/fixer/*.yaml code_evolver/tools/perf/*.yaml)",
       "Bash(for file in .claude/commands/*.md)",
       "Bash(curl:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git log:*)",
+      "Bash(cat:*)",
+      "Bash(timeout 30 python:*)",
+      "Bash(timeout 10 python:*)",
+      "Bash(timeout 15 python:*)"
     ],
     "deny": [],
     "ask": []

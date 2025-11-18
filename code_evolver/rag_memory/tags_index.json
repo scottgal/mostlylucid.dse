@@ -750,7 +750,35 @@
     "interaction_c0ebe92e5b88",
     "interaction_f9c7140eb165",
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_adaptive_chunker",
+    "tool_document_store",
+    "tool_extract_text_content",
+    "tool_incremental_summarizer",
+    "tool_load_document",
+    "tool_summarize_document",
+    "tool_validate_contract",
+    "interaction_a124fb2a58ec",
+    "interaction_9e373c8b7e4a",
+    "interaction_e553011729ba",
+    "interaction_41fca0c96808",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine",
+    "tool_loading_tools_1763428939",
+    "tool_what_memory_does_this_machine_1763429046",
+    "tool_what_memory_does_this_machine_1763429111",
+    "interaction_73f31a56a306",
+    "interaction_75b0a9756db1",
+    "interaction_400f2bdac591",
+    "tool_loading_tools_1763429210",
+    "tool_questions_about_me",
+    "tool_fetch_mcp",
+    "tool_filesystem_mcp",
+    "tool_github_mcp",
+    "tool_memory_mcp",
+    "tool_time_mcp",
+    "tool__template"
   ],
   "custom": [
     "tool_http_server",
@@ -760,14 +788,22 @@
     "tool_stream_processor",
     "tool_ask_user",
     "tool_git",
-    "tool_github"
+    "tool_github",
+    "tool_write_a_haiku_about_puppies",
+    "tool_what_memory_does_this_machine",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine_1763429111",
+    "tool_loading_tools_1763429210",
+    "tool_what_memory_does_this_machine_1763429046",
+    "tool_loading_tools_1763428939"
   ],
   "http": [
     "tool_http_server",
     "tool_http_content_fetcher",
     "tool_sse_stream",
     "tool_http_raw_client",
-    "tool_http_rest_client"
+    "tool_http_rest_client",
+    "tool_fetch_mcp"
   ],
   "server": [
     "tool_http_server"
@@ -779,12 +815,14 @@
     "tool_nmt_translate",
     "tool_workflow_documenter",
     "tool_api_wrapper_generator",
-    "tool_http_rest_client"
+    "tool_http_rest_client",
+    "tool_github_mcp"
   ],
   "web": [
     "tool_http_server",
     "tool_http_content_fetcher",
-    "tool_http_rest_client"
+    "tool_http_rest_client",
+    "tool_fetch_mcp"
   ],
   "rest": [
     "tool_http_server",
@@ -803,7 +841,11 @@
     "tool_http_raw_client",
     "func_figure_out_how_to_get_html",
     "conv_figure_out_how_to_get_html_v1",
-    "workflow_figure_out_how_to_get_html"
+    "workflow_figure_out_how_to_get_html",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine",
+    "tool_fetch_mcp"
   ],
   "json": [
     "tool_http_server",
@@ -913,7 +955,17 @@
     "tool_timeit_optimizer",
     "tool_signalr_websocket_stream",
     "tool_sse_stream",
-    "tool_stream_processor"
+    "tool_stream_processor",
+    "tool_adaptive_chunker",
+    "tool_document_store",
+    "tool_extract_text_content",
+    "tool_incremental_summarizer",
+    "tool_load_document",
+    "tool_summarize_document",
+    "tool_validate_contract",
+    "feedback_positive_conversation_manager_9f88a5a89f50660d",
+    "feedback_positive_platform_info_b8c9feb15a7d7942",
+    "feedback_positive_timeit_optimizer_d4048ebdd191b818"
   ],
   "python": [
     "tool_bandit_security",
@@ -1276,7 +1328,13 @@
     "exec_invocation_python_syntax_validator_1763415540972",
     "exec_invocation_node_runtime_import_validator_1763415545745",
     "exec_invocation_python_syntax_validator_1763415795924",
-    "exec_invocation_node_runtime_import_validator_1763415800214"
+    "exec_invocation_node_runtime_import_validator_1763415800214",
+    "exec_invocation_random_data_generator_1763424897120",
+    "exec_invocation_nmt_translate_1763424994564",
+    "exec_invocation_random_data_generator_1763425450512",
+    "exec_invocation_random_data_generator_1763426345931",
+    "exec_invocation_python_syntax_validator_1763429195118",
+    "exec_invocation_node_runtime_import_validator_1763429195948"
   ],
   "security": [
     "tool_bandit_security",
@@ -1387,7 +1445,18 @@
     "spec_write_code_which_calculates_a",
     "spec_write_a_workflow_for_paralell",
     "spec_build_a_fractal_displayer_appl",
-    "spec_write_a_haiku_about_coding_c"
+    "spec_write_a_haiku_about_coding_c",
+    "spec_go_to_www",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_implement_an_advanced_string_s"
   ],
   "calculator": [
     "tool_basic_calculator",
@@ -1453,7 +1522,8 @@
     "tool_translation_quality_checker",
     "tool_review_this_code_usr_bin_en",
     "tool_random_data_generator",
-    "tool_internal_test_validator"
+    "tool_internal_test_validator",
+    "tool_validate_contract"
   ],
   "call_tool": [
     "tool_call_tool_validator"
@@ -1499,13 +1569,16 @@
   ],
   "file-io": [
     "tool_load_from_disk",
-    "tool_save_to_disk"
+    "tool_save_to_disk",
+    "tool_load_document"
   ],
   "load": [
-    "tool_load_from_disk"
+    "tool_load_from_disk",
+    "tool_load_document"
   ],
   "read": [
-    "tool_load_from_disk"
+    "tool_load_from_disk",
+    "tool_filesystem_mcp"
   ],
   "disk": [
     "tool_load_from_disk",
@@ -1600,7 +1673,8 @@
     "timeout_stats_llama3",
     "tool_comprehensive_tool_profiler",
     "tool_performance_regression_evaluator",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "timeout_stats_codellama"
   ],
   "optimization": [
     "tool_pyinstrument_profiler",
@@ -1696,7 +1770,8 @@
     "tool_flake8_linter",
     "tool_pylint_checker",
     "workflow_1763372767",
-    "tool_performance_regression_evaluator"
+    "tool_performance_regression_evaluator",
+    "tool_validate_contract"
   ],
   "comprehensive": [
     "tool_run_static_analysis",
@@ -1710,11 +1785,15 @@
     "workflow_1763387640",
     "workflow_1763393832",
     "workflow_1763395490",
-    "workflow_1763396560"
+    "workflow_1763396560",
+    "tool_filesystem_mcp"
   ],
   "storage": [
     "tool_save_to_disk",
-    "tool_workflow_datastore"
+    "tool_workflow_datastore",
+    "tool_document_store",
+    "tool_filesystem_mcp",
+    "tool_memory_mcp"
   ],
   "stdin": [
     "tool_stdin_usage_validator"
@@ -1967,7 +2046,21 @@
     "interaction_2e7c27d970d4",
     "tool_model_selector",
     "interaction_66b4cd12e31a",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "interaction_c9e66422c74f",
+    "interaction_6897ef285fe5",
+    "interaction_29d4484037b7",
+    "interaction_7104fc97b167",
+    "interaction_da282b1f3d17",
+    "feedback_positive_long_form_writer_965b0e5754aaba4f",
+    "interaction_b6767b38652b",
+    "interaction_7980b23809e2",
+    "interaction_d8e702918866",
+    "interaction_f28cdf86106c",
+    "interaction_a56aa60db32f",
+    "interaction_8df13c8b10fe",
+    "tool_questions_about_me",
+    "interaction_a7a42e67ca21"
   ],
   "analysis": [
     "tool_article_analyzer",
@@ -2082,7 +2175,20 @@
     "spec_write_code_which_calculates_a",
     "spec_write_a_workflow_for_paralell",
     "spec_build_a_fractal_displayer_appl",
-    "spec_write_a_haiku_about_coding_c"
+    "spec_write_a_haiku_about_coding_c",
+    "spec_get_the_english_product_label",
+    "spec_translate_the_product_label_te",
+    "spec_go_to_www",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_implement_an_advanced_string_s"
   ],
   "articles": [
     "tool_content_generator"
@@ -2342,7 +2448,25 @@
     "invocation_general_1763415673004",
     "interaction_2e7c27d970d4",
     "invocation_general_1763423039139",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "invocation_general_1763424764470",
+    "interaction_c9e66422c74f",
+    "invocation_general_1763424926248",
+    "interaction_6897ef285fe5",
+    "invocation_general_1763425221219",
+    "interaction_29d4484037b7",
+    "invocation_general_1763426260332",
+    "interaction_7104fc97b167",
+    "invocation_general_1763426573220",
+    "interaction_da282b1f3d17",
+    "invocation_general_1763428230117",
+    "interaction_b6767b38652b",
+    "invocation_general_1763429052825",
+    "interaction_d8e702918866",
+    "invocation_general_1763429117927",
+    "interaction_f28cdf86106c",
+    "invocation_general_1763429192366",
+    "interaction_a56aa60db32f"
   ],
   "fallback": [
     "tool_general",
@@ -2437,7 +2561,13 @@
     "tool_summarizer_fast",
     "tool_summarizer_large",
     "tool_summarizer_medium",
-    "tool_duplicate_style"
+    "tool_duplicate_style",
+    "tool_adaptive_chunker",
+    "tool_document_store",
+    "tool_extract_text_content",
+    "tool_incremental_summarizer",
+    "tool_load_document",
+    "tool_summarize_document"
   ],
   "condensing": [
     "tool_summarizer"
@@ -2786,7 +2916,21 @@
     "tool_take_a_screenshot",
     "workflow_save_screenshot_to_file",
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_document_store",
+    "tool_incremental_summarizer",
+    "tool_load_document",
+    "tool_summarize_document",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine",
+    "tool_loading_tools_1763428939",
+    "tool_what_memory_does_this_machine_1763429046",
+    "tool_what_memory_does_this_machine_1763429111",
+    "feedback_positive_what_memory_does_this_machine_1763429046_f0ce6d68a33161be",
+    "workflow_go_get_a_screenshot_of_www_1763429178",
+    "tool_loading_tools_1763429210",
+    "workflow_1763429304"
   ],
   "jokes": [
     "tool_tell_a_joke"
@@ -2945,7 +3089,14 @@
     "tool_open_bbc_website",
     "tool_take_a_screenshot",
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine",
+    "tool_loading_tools_1763428939",
+    "tool_what_memory_does_this_machine_1763429046",
+    "tool_what_memory_does_this_machine_1763429111",
+    "tool_loading_tools_1763429210"
   ],
   "generated": [
     "tool_save_input_to_database",
@@ -3503,7 +3654,31 @@
     "spec_build_a_fractal_displayer_appl",
     "tool_build_a_fractal_displayer_appl",
     "spec_write_a_haiku_about_coding_c",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "spec_get_the_english_product_label",
+    "spec_translate_the_product_label_te",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "tool_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_loading_tools_1763428939",
+    "spec_what_memory_does_this_machine_1763429046",
+    "tool_what_memory_does_this_machine_1763429046",
+    "spec_what_memory_does_this_machine_1763429111",
+    "tool_what_memory_does_this_machine_1763429111",
+    "spec_go_get_a_screenshot_of_www_1763429178",
+    "func_go_get_a_screenshot_of_www_1763429178",
+    "conv_go_get_a_screenshot_of_www_1763429178_v1",
+    "workflow_go_get_a_screenshot_of_www_1763429178",
+    "spec_loading_tools_1763429210",
+    "tool_loading_tools_1763429210",
+    "spec_implement_an_advanced_string_s"
   ],
   "chat": [
     "tool_save_input_to_database",
@@ -3895,7 +4070,14 @@
     "conv_save_screenshot_to_file_v1",
     "workflow_save_screenshot_to_file",
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_write_a_haiku_about_puppies",
+    "tool_what_memory_does_this_machine_1763429046",
+    "tool_what_memory_does_this_machine_1763429111",
+    "func_go_get_a_screenshot_of_www_1763429178",
+    "conv_go_get_a_screenshot_of_www_1763429178_v1",
+    "workflow_go_get_a_screenshot_of_www_1763429178",
+    "tool_loading_tools_1763429210"
   ],
   "addition": [
     "tool_add_10_and_20_1763173231",
@@ -3937,7 +4119,8 @@
     "tool_http_content_fetcher"
   ],
   "fetch": [
-    "tool_http_content_fetcher"
+    "tool_http_content_fetcher",
+    "tool_fetch_mcp"
   ],
   "content-fetching": [
     "tool_http_content_fetcher"
@@ -4020,7 +4203,8 @@
     "tool_write_me_a_poem_1763255171",
     "tool_write_me_a_joke_1763182563",
     "tool_write_me_a_poem",
-    "tool_signalr_connection_parser"
+    "tool_signalr_connection_parser",
+    "tool_extract_text_content"
   ],
   "content_creation": [
     "tool_write_a_joke_1763181926"
@@ -4077,7 +4261,8 @@
   ],
   "natural language processing": [
     "tool_write_a_poem_1763277263",
-    "tool_translate_the_work_boob_to_f"
+    "tool_translate_the_work_boob_to_f",
+    "tool_loading_tools_1763428939"
   ],
   "machine learning": [
     "tool_write_a_poem_1763277263",
@@ -4100,7 +4285,8 @@
     "tool_workflow_datastore"
   ],
   "persistence": [
-    "tool_workflow_datastore"
+    "tool_workflow_datastore",
+    "tool_memory_mcp"
   ],
   "state": [
     "tool_workflow_datastore"
@@ -4258,7 +4444,8 @@
   ],
   "routing": [
     "tool_task_to_workflow_router",
-    "tool_semantic_comparator"
+    "tool_semantic_comparator",
+    "tool_model_selector"
   ],
   "task": [
     "tool_task_to_workflow_router"
@@ -4454,7 +4641,24 @@
     "spec_take_a_screenshot",
     "spec_save_screenshot_to_file",
     "spec_build_a_fractal_displayer_appl",
-    "spec_write_a_haiku_about_coding_c"
+    "spec_write_a_haiku_about_coding_c",
+    "spec_get_the_english_product_label",
+    "spec_translate_the_product_label_te",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_loading_tools_1763428939",
+    "spec_what_memory_does_this_machine_1763429046",
+    "spec_what_memory_does_this_machine_1763429111",
+    "spec_go_get_a_screenshot_of_www_1763429178",
+    "spec_loading_tools_1763429210",
+    "spec_implement_an_advanced_string_s"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -4540,7 +4744,9 @@
   ],
   "orchestration": [
     "tool_docker_compose_generator",
-    "tool_comprehensive_tool_profiler"
+    "tool_comprehensive_tool_profiler",
+    "tool_incremental_summarizer",
+    "tool_summarize_document"
   ],
   "containerization": [
     "tool_docker_compose_generator",
@@ -4649,7 +4855,8 @@
   "version-control": [
     "tool_pin_tool_version",
     "tool_trim_tool_versions",
-    "tool_git"
+    "tool_git",
+    "tool_github_mcp"
   ],
   "maintenance": [
     "tool_trim_tool_versions"
@@ -4705,7 +4912,8 @@
     "tool_http_raw_client"
   ],
   "scraping": [
-    "tool_http_raw_client"
+    "tool_http_raw_client",
+    "tool_fetch_mcp"
   ],
   "binary": [
     "tool_http_raw_client"
@@ -4778,7 +4986,8 @@
     "workflow_generate_python_script_to_pars_1763400370",
     "func_write_a_workflow_for_paralell",
     "conv_write_a_workflow_for_paralell_v1",
-    "workflow_write_a_workflow_for_paralell"
+    "workflow_write_a_workflow_for_paralell",
+    "tool_extract_text_content"
   ],
   "quality-metrics": [
     "tool_parse_static_analysis"
@@ -4787,29 +4996,39 @@
     "tool_parse_static_analysis"
   ],
   "platform": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "system": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "info": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "monitoring": [
     "tool_platform_info"
   ],
   "cpu": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "gpu": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "memory": [
     "tool_platform_info",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_document_store",
+    "workflow_1763429304",
+    "tool_questions_about_me",
+    "tool_memory_mcp"
   ],
   "diagnostic": [
-    "tool_platform_info"
+    "tool_platform_info",
+    "tool_questions_about_me"
   ],
   "conditional": [
     "tool_platform_info"
@@ -4980,7 +5199,24 @@
     "spec_take_a_screenshot",
     "spec_save_screenshot_to_file",
     "spec_build_a_fractal_displayer_appl",
-    "spec_write_a_haiku_about_coding_c"
+    "spec_write_a_haiku_about_coding_c",
+    "spec_get_the_english_product_label",
+    "spec_translate_the_product_label_te",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_loading_tools_1763428939",
+    "spec_what_memory_does_this_machine_1763429046",
+    "spec_what_memory_does_this_machine_1763429111",
+    "spec_go_get_a_screenshot_of_www_1763429178",
+    "spec_loading_tools_1763429210",
+    "spec_implement_an_advanced_string_s"
   ],
   "plan": [
     "spec_convert_the_product_label_from",
@@ -5148,13 +5384,33 @@
     "spec_take_a_screenshot",
     "spec_save_screenshot_to_file",
     "spec_build_a_fractal_displayer_appl",
-    "spec_write_a_haiku_about_coding_c"
+    "spec_write_a_haiku_about_coding_c",
+    "spec_get_the_english_product_label",
+    "spec_translate_the_product_label_te",
+    "spec_loading_tools",
+    "spec_logs_conversation_context",
+    "spec_processing_configuration",
+    "spec_write_a_haiku_about_puppies",
+    "spec_go_get_a_screenshot_of_www",
+    "spec_go_to_www_1763426855",
+    "spec_go_to_www_1763427707",
+    "spec_what_memory_does_this_machine",
+    "spec_write_a_haiku_conversation_c",
+    "spec_loading_tools_1763428939",
+    "spec_what_memory_does_this_machine_1763429046",
+    "spec_what_memory_does_this_machine_1763429111",
+    "spec_go_get_a_screenshot_of_www_1763429178",
+    "spec_loading_tools_1763429210",
+    "spec_implement_an_advanced_string_s"
   ],
   "timeout_stats": [
-    "timeout_stats_llama3"
+    "timeout_stats_llama3",
+    "timeout_stats_codellama"
   ],
   "adaptive": [
-    "timeout_stats_llama3"
+    "timeout_stats_llama3",
+    "tool_adaptive_chunker",
+    "timeout_stats_codellama"
   ],
   "llama3": [
     "timeout_stats_llama3",
@@ -5334,7 +5590,17 @@
     "invocation_general_1763415091417",
     "invocation_general_1763415673004",
     "invocation_prompt_generator_1763417521885",
-    "invocation_general_1763423039139"
+    "invocation_general_1763423039139",
+    "invocation_general_1763424764470",
+    "invocation_general_1763424926248",
+    "invocation_general_1763425221219",
+    "invocation_general_1763426260332",
+    "invocation_general_1763426573220",
+    "invocation_general_1763428230117",
+    "invocation_general_1763429052825",
+    "invocation_general_1763429117927",
+    "invocation_general_1763429192366",
+    "invocation_prompt_generator_1763430561363"
   ],
   "tool_invocation": [
     "invocation_general_1763344287224",
@@ -5513,7 +5779,19 @@
     "invocation_general_1763415091417",
     "invocation_general_1763415673004",
     "invocation_prompt_generator_1763417521885",
-    "invocation_general_1763423039139"
+    "invocation_general_1763423039139",
+    "invocation_general_1763424764470",
+    "invocation_general_1763424926248",
+    "invocation_general_1763425221219",
+    "invocation_general_1763426260332",
+    "invocation_general_1763426573220",
+    "invocation_general_1763428230117",
+    "invocation_performance_optimizer_1763428949715",
+    "invocation_general_1763429052825",
+    "invocation_general_1763429117927",
+    "invocation_general_1763429192366",
+    "invocation_performance_optimizer_1763429220714",
+    "invocation_prompt_generator_1763430561363"
   ],
   "prompt": [
     "invocation_general_1763344287224",
@@ -5693,7 +5971,19 @@
     "invocation_general_1763415091417",
     "invocation_general_1763415673004",
     "invocation_prompt_generator_1763417521885",
-    "invocation_general_1763423039139"
+    "invocation_general_1763423039139",
+    "invocation_general_1763424764470",
+    "invocation_general_1763424926248",
+    "invocation_general_1763425221219",
+    "invocation_general_1763426260332",
+    "invocation_general_1763426573220",
+    "invocation_general_1763428230117",
+    "invocation_performance_optimizer_1763428949715",
+    "invocation_general_1763429052825",
+    "invocation_general_1763429117927",
+    "invocation_general_1763429192366",
+    "invocation_performance_optimizer_1763429220714",
+    "invocation_prompt_generator_1763430561363"
   ],
   "interaction": [
     "interaction_6f999b12d01d",
@@ -6333,7 +6623,34 @@
     "interaction_f9c7140eb165",
     "interaction_66b4cd12e31a",
     "interaction_1763418023922",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "interaction_c9e66422c74f",
+    "interaction_a124fb2a58ec",
+    "interaction_6897ef285fe5",
+    "interaction_9e373c8b7e4a",
+    "interaction_29d4484037b7",
+    "interaction_e553011729ba",
+    "interaction_1763425451143",
+    "interaction_1763425941295",
+    "interaction_1763426087373",
+    "interaction_7104fc97b167",
+    "interaction_41fca0c96808",
+    "interaction_1763426348627",
+    "interaction_da282b1f3d17",
+    "interaction_1763426697852",
+    "interaction_1763427850963",
+    "interaction_1763427963715",
+    "interaction_b6767b38652b",
+    "interaction_7980b23809e2",
+    "interaction_d8e702918866",
+    "interaction_f28cdf86106c",
+    "interaction_a56aa60db32f",
+    "interaction_73f31a56a306",
+    "interaction_75b0a9756db1",
+    "interaction_400f2bdac591",
+    "interaction_8df13c8b10fe",
+    "interaction_1763429304395",
+    "interaction_a7a42e67ca21"
   ],
   "success:True": [
     "interaction_6f999b12d01d",
@@ -6810,7 +7127,26 @@
     "interaction_c0ebe92e5b88",
     "interaction_f9c7140eb165",
     "interaction_66b4cd12e31a",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "interaction_c9e66422c74f",
+    "interaction_a124fb2a58ec",
+    "interaction_6897ef285fe5",
+    "interaction_9e373c8b7e4a",
+    "interaction_29d4484037b7",
+    "interaction_e553011729ba",
+    "interaction_7104fc97b167",
+    "interaction_41fca0c96808",
+    "interaction_da282b1f3d17",
+    "interaction_b6767b38652b",
+    "interaction_7980b23809e2",
+    "interaction_d8e702918866",
+    "interaction_f28cdf86106c",
+    "interaction_a56aa60db32f",
+    "interaction_73f31a56a306",
+    "interaction_75b0a9756db1",
+    "interaction_400f2bdac591",
+    "interaction_8df13c8b10fe",
+    "interaction_a7a42e67ca21"
   ],
   "type:llm": [
     "interaction_6f999b12d01d",
@@ -6989,7 +7325,19 @@
     "interaction_70995af45f50",
     "interaction_2e7c27d970d4",
     "interaction_66b4cd12e31a",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "interaction_c9e66422c74f",
+    "interaction_6897ef285fe5",
+    "interaction_29d4484037b7",
+    "interaction_7104fc97b167",
+    "interaction_da282b1f3d17",
+    "interaction_b6767b38652b",
+    "interaction_7980b23809e2",
+    "interaction_d8e702918866",
+    "interaction_f28cdf86106c",
+    "interaction_a56aa60db32f",
+    "interaction_8df13c8b10fe",
+    "interaction_a7a42e67ca21"
   ],
   "cacheable:False": [
     "interaction_6f999b12d01d",
@@ -7160,7 +7508,19 @@
     "interaction_70995af45f50",
     "interaction_2e7c27d970d4",
     "interaction_66b4cd12e31a",
-    "interaction_f67581db1952"
+    "interaction_f67581db1952",
+    "interaction_c9e66422c74f",
+    "interaction_6897ef285fe5",
+    "interaction_29d4484037b7",
+    "interaction_7104fc97b167",
+    "interaction_da282b1f3d17",
+    "interaction_b6767b38652b",
+    "interaction_7980b23809e2",
+    "interaction_d8e702918866",
+    "interaction_f28cdf86106c",
+    "interaction_a56aa60db32f",
+    "interaction_8df13c8b10fe",
+    "interaction_a7a42e67ca21"
   ],
   "executable_invocation": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -7615,7 +7975,14 @@
     "exec_invocation_node_runtime_import_validator_1763415545745",
     "exec_invocation_python_syntax_validator_1763415795924",
     "exec_invocation_undefined_name_checker_1763415799813",
-    "exec_invocation_node_runtime_import_validator_1763415800214"
+    "exec_invocation_node_runtime_import_validator_1763415800214",
+    "exec_invocation_random_data_generator_1763424897120",
+    "exec_invocation_nmt_translate_1763424994564",
+    "exec_invocation_random_data_generator_1763425450512",
+    "exec_invocation_random_data_generator_1763426345931",
+    "exec_invocation_python_syntax_validator_1763429195118",
+    "exec_invocation_undefined_name_checker_1763429195589",
+    "exec_invocation_node_runtime_import_validator_1763429195948"
   ],
   "tool_execution": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -8070,7 +8437,14 @@
     "exec_invocation_node_runtime_import_validator_1763415545745",
     "exec_invocation_python_syntax_validator_1763415795924",
     "exec_invocation_undefined_name_checker_1763415799813",
-    "exec_invocation_node_runtime_import_validator_1763415800214"
+    "exec_invocation_node_runtime_import_validator_1763415800214",
+    "exec_invocation_random_data_generator_1763424897120",
+    "exec_invocation_nmt_translate_1763424994564",
+    "exec_invocation_random_data_generator_1763425450512",
+    "exec_invocation_random_data_generator_1763426345931",
+    "exec_invocation_python_syntax_validator_1763429195118",
+    "exec_invocation_undefined_name_checker_1763429195589",
+    "exec_invocation_node_runtime_import_validator_1763429195948"
   ],
   "python_syntax_validator": [
     "exec_invocation_python_syntax_validator_1763344298904",
@@ -8340,7 +8714,9 @@
     "exec_invocation_python_syntax_validator_1763415540972",
     "interaction_a868299b0f19",
     "exec_invocation_python_syntax_validator_1763415795924",
-    "interaction_ba1aa1026d52"
+    "interaction_ba1aa1026d52",
+    "exec_invocation_python_syntax_validator_1763429195118",
+    "interaction_73f31a56a306"
   ],
   "type:tool": [
     "interaction_cede09dd960d",
@@ -8795,7 +9171,14 @@
     "interaction_a51536e703eb",
     "interaction_ba1aa1026d52",
     "interaction_c0ebe92e5b88",
-    "interaction_f9c7140eb165"
+    "interaction_f9c7140eb165",
+    "interaction_a124fb2a58ec",
+    "interaction_9e373c8b7e4a",
+    "interaction_e553011729ba",
+    "interaction_41fca0c96808",
+    "interaction_73f31a56a306",
+    "interaction_75b0a9756db1",
+    "interaction_400f2bdac591"
   ],
   "cacheable:True": [
     "interaction_cede09dd960d",
@@ -9258,7 +9641,14 @@
     "interaction_a51536e703eb",
     "interaction_ba1aa1026d52",
     "interaction_c0ebe92e5b88",
-    "interaction_f9c7140eb165"
+    "interaction_f9c7140eb165",
+    "interaction_a124fb2a58ec",
+    "interaction_9e373c8b7e4a",
+    "interaction_e553011729ba",
+    "interaction_41fca0c96808",
+    "interaction_73f31a56a306",
+    "interaction_75b0a9756db1",
+    "interaction_400f2bdac591"
   ],
   "undefined_name_checker": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9528,7 +9918,9 @@
     "exec_invocation_undefined_name_checker_1763415545281",
     "interaction_3a711be84ea0",
     "exec_invocation_undefined_name_checker_1763415799813",
-    "interaction_c0ebe92e5b88"
+    "interaction_c0ebe92e5b88",
+    "exec_invocation_undefined_name_checker_1763429195589",
+    "interaction_75b0a9756db1"
   ],
   "flake8": [
     "exec_invocation_undefined_name_checker_1763344299449",
@@ -9664,7 +10056,8 @@
     "exec_invocation_undefined_name_checker_1763410200707",
     "exec_invocation_undefined_name_checker_1763413170838",
     "exec_invocation_undefined_name_checker_1763415545281",
-    "exec_invocation_undefined_name_checker_1763415799813"
+    "exec_invocation_undefined_name_checker_1763415799813",
+    "exec_invocation_undefined_name_checker_1763429195589"
   ],
   "node_runtime_import_validator": [
     "exec_invocation_node_runtime_import_validator_1763344299881",
@@ -9934,7 +10327,9 @@
     "exec_invocation_node_runtime_import_validator_1763415545745",
     "interaction_a51536e703eb",
     "exec_invocation_node_runtime_import_validator_1763415800214",
-    "interaction_f9c7140eb165"
+    "interaction_f9c7140eb165",
+    "exec_invocation_node_runtime_import_validator_1763429195948",
+    "interaction_400f2bdac591"
   ],
   "complete": [
     "workflow_convert_the_product_label_from",
@@ -10064,7 +10459,8 @@
     "workflow_process_production_metrics_fro_1763401885",
     "workflow_write_a_workflow_for_paralell",
     "workflow_take_a_screenshot",
-    "workflow_save_screenshot_to_file"
+    "workflow_save_screenshot_to_file",
+    "workflow_go_get_a_screenshot_of_www_1763429178"
   ],
   "tested": [
     "workflow_convert_the_product_label_from",
@@ -10194,7 +10590,8 @@
     "workflow_process_production_metrics_fro_1763401885",
     "workflow_write_a_workflow_for_paralell",
     "workflow_take_a_screenshot",
-    "workflow_save_screenshot_to_file"
+    "workflow_save_screenshot_to_file",
+    "workflow_go_get_a_screenshot_of_www_1763429178"
   ],
   "random_data_generator": [
     "exec_invocation_random_data_generator_1763344871874",
@@ -10296,7 +10693,13 @@
     "exec_invocation_random_data_generator_1763377217048",
     "interaction_d733a6854156",
     "exec_invocation_random_data_generator_1763393831680",
-    "interaction_30d8ba6cfcf3"
+    "interaction_30d8ba6cfcf3",
+    "exec_invocation_random_data_generator_1763424897120",
+    "interaction_a124fb2a58ec",
+    "exec_invocation_random_data_generator_1763425450512",
+    "interaction_e553011729ba",
+    "exec_invocation_random_data_generator_1763426345931",
+    "interaction_41fca0c96808"
   ],
   "conversation": [
     "tool_conversation_manager",
@@ -10316,7 +10719,16 @@
     "interaction_1763413172104",
     "conv_take_a_screenshot_v1",
     "conv_save_screenshot_to_file_v1",
-    "interaction_1763418023922"
+    "interaction_1763418023922",
+    "interaction_1763425451143",
+    "interaction_1763425941295",
+    "interaction_1763426087373",
+    "interaction_1763426348627",
+    "interaction_1763426697852",
+    "interaction_1763427850963",
+    "interaction_1763427963715",
+    "conv_go_get_a_screenshot_of_www_1763429178_v1",
+    "interaction_1763429304395"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -10528,7 +10940,8 @@
     "workflow_1763393832",
     "workflow_1763395490",
     "workflow_1763396560",
-    "workflow_1763403799"
+    "workflow_1763403799",
+    "workflow_1763429304"
   ],
   "aggregate": [
     "workflow_1763345313",
@@ -10809,7 +11222,21 @@
     "tool_technical_writer",
     "tool_translation_quality_checker",
     "tool_workflow_documenter",
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_adaptive_chunker",
+    "tool_document_store",
+    "tool_extract_text_content",
+    "tool_incremental_summarizer",
+    "tool_load_document",
+    "tool_summarize_document",
+    "tool_validate_contract",
+    "tool_questions_about_me",
+    "tool_fetch_mcp",
+    "tool_filesystem_mcp",
+    "tool_github_mcp",
+    "tool_memory_mcp",
+    "tool_time_mcp",
+    "tool__template"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -10826,7 +11253,9 @@
   ],
   "nmt_translate": [
     "exec_invocation_nmt_translate_1763350326506",
-    "interaction_f28800ee893d"
+    "interaction_f28800ee893d",
+    "exec_invocation_nmt_translate_1763424994564",
+    "interaction_9e373c8b7e4a"
   ],
   "convert": [
     "workflow_1763356760",
@@ -10956,7 +11385,8 @@
     "tool_content_splitter"
   ],
   "chunking": [
-    "tool_content_splitter"
+    "tool_content_splitter",
+    "tool_adaptive_chunker"
   ],
   "utility": [
     "tool_content_splitter"
@@ -10980,7 +11410,8 @@
     "tool_prompt_generator"
   ],
   "model-selection": [
-    "tool_prompt_generator"
+    "tool_prompt_generator",
+    "tool_model_selector"
   ],
   "small_context": [
     "tool_summarizer_fast"
@@ -11026,7 +11457,8 @@
   ],
   "git": [
     "tool_git",
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "vcs": [
     "tool_git",
@@ -11034,7 +11466,8 @@
   ],
   "repository": [
     "tool_git",
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "source-control": [
     "tool_git"
@@ -11043,16 +11476,20 @@
     "tool_git"
   ],
   "github": [
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "pr": [
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "pull-request": [
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "issue": [
-    "tool_github"
+    "tool_github",
+    "tool_github_mcp"
   ],
   "code-review": [
     "tool_github"
@@ -11121,7 +11558,8 @@
     "tool_duplicate_style"
   ],
   "markdown": [
-    "tool_write_markdown_doc"
+    "tool_write_markdown_doc",
+    "tool_fetch_mcp"
   ],
   "content-generation": [
     "tool_write_markdown_doc"
@@ -11140,7 +11578,15 @@
     "interaction_1763403799591",
     "interaction_1763410201613",
     "interaction_1763413172104",
-    "interaction_1763418023922"
+    "interaction_1763418023922",
+    "interaction_1763425451143",
+    "interaction_1763425941295",
+    "interaction_1763426087373",
+    "interaction_1763426348627",
+    "interaction_1763426697852",
+    "interaction_1763427850963",
+    "interaction_1763427963715",
+    "interaction_1763429304395"
   ],
   "tool_history": [
     "conv_write_me_a_poem_conversation_v1",
@@ -11151,7 +11597,8 @@
     "conv_process_production_metrics_fro_1763401885_v1",
     "conv_write_a_workflow_for_paralell_v1",
     "conv_take_a_screenshot_v1",
-    "conv_save_screenshot_to_file_v1"
+    "conv_save_screenshot_to_file_v1",
+    "conv_go_get_a_screenshot_of_www_1763429178_v1"
   ],
   "write_me_a_poem_conversation": [
     "conv_write_me_a_poem_conversation_v1"
@@ -11174,7 +11621,10 @@
   "data_format": [
     "func_figure_out_how_to_get_html",
     "conv_figure_out_how_to_get_html_v1",
-    "workflow_figure_out_how_to_get_html"
+    "workflow_figure_out_how_to_get_html",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707",
+    "tool_what_memory_does_this_machine"
   ],
   "figure_out_how_to_get_html": [
     "conv_figure_out_how_to_get_html_v1"
@@ -11301,15 +11751,21 @@
   ],
   "prompt_generator": [
     "invocation_prompt_generator_1763417521885",
-    "interaction_66b4cd12e31a"
+    "interaction_66b4cd12e31a",
+    "invocation_prompt_generator_1763430561363",
+    "interaction_a7a42e67ca21"
   ],
   "searching": [
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707"
   ],
   "finding": [
     "tool_build_a_fractal_displayer_appl",
-    "tool_write_a_haiku_about_coding_c"
+    "tool_write_a_haiku_about_coding_c",
+    "tool_write_a_haiku_about_puppies",
+    "tool_go_to_www_1763427707"
   ],
   "code_fix": [
     "static_tool_dependency_autopep8"
@@ -11322,5 +11778,187 @@
   ],
   "autopep8": [
     "static_tool_dependency_autopep8"
+  ],
+  "document-processing": [
+    "tool_adaptive_chunker",
+    "tool_extract_text_content",
+    "tool_incremental_summarizer",
+    "tool_summarize_document"
+  ],
+  "context-aware": [
+    "tool_adaptive_chunker"
+  ],
+  "document-management": [
+    "tool_document_store"
+  ],
+  "text-extraction": [
+    "tool_extract_text_content"
+  ],
+  "incremental": [
+    "tool_incremental_summarizer"
+  ],
+  "document-loading": [
+    "tool_load_document"
+  ],
+  "end-to-end": [
+    "tool_summarize_document"
+  ],
+  "contracts": [
+    "tool_validate_contract"
+  ],
+  "compliance": [
+    "tool_validate_contract"
+  ],
+  "backend-selection": [
+    "tool_model_selector"
+  ],
+  "intelligent-routing": [
+    "tool_model_selector"
+  ],
+  "tool_feedback": [
+    "feedback_positive_conversation_manager_9f88a5a89f50660d",
+    "feedback_positive_long_form_writer_965b0e5754aaba4f",
+    "feedback_positive_platform_info_b8c9feb15a7d7942",
+    "feedback_positive_what_memory_does_this_machine_1763429046_f0ce6d68a33161be",
+    "feedback_positive_timeit_optimizer_d4048ebdd191b818"
+  ],
+  "positive": [
+    "feedback_positive_conversation_manager_9f88a5a89f50660d",
+    "feedback_positive_long_form_writer_965b0e5754aaba4f",
+    "feedback_positive_platform_info_b8c9feb15a7d7942",
+    "feedback_positive_what_memory_does_this_machine_1763429046_f0ce6d68a33161be",
+    "feedback_positive_timeit_optimizer_d4048ebdd191b818"
+  ],
+  "conversation_manager": [
+    "feedback_positive_conversation_manager_9f88a5a89f50660d"
+  ],
+  "requests": [
+    "tool_go_to_www_1763427707"
+  ],
+  "beautifulsoup": [
+    "tool_go_to_www_1763427707"
+  ],
+  "transformers": [
+    "tool_go_to_www_1763427707"
+  ],
+  "long_form_writer": [
+    "feedback_positive_long_form_writer_965b0e5754aaba4f"
+  ],
+  "puppies": [
+    "tool_what_memory_does_this_machine"
+  ],
+  "haiku": [
+    "tool_what_memory_does_this_machine"
+  ],
+  "codellama": [
+    "timeout_stats_codellama",
+    "invocation_performance_optimizer_1763428949715",
+    "invocation_performance_optimizer_1763429220714"
+  ],
+  "performance_optimizer": [
+    "invocation_performance_optimizer_1763428949715",
+    "interaction_7980b23809e2",
+    "invocation_performance_optimizer_1763429220714",
+    "interaction_8df13c8b10fe"
+  ],
+  "code-evolver": [
+    "tool_loading_tools_1763428939"
+  ],
+  "LLM": [
+    "tool_loading_tools_1763428939"
+  ],
+  "creative writing": [
+    "tool_loading_tools_1763428939"
+  ],
+  "platform_info": [
+    "feedback_positive_platform_info_b8c9feb15a7d7942"
+  ],
+  "what_memory_does_this_machine_1763429046": [
+    "feedback_positive_what_memory_does_this_machine_1763429046_f0ce6d68a33161be"
+  ],
+  "go_get_a_screenshot_of_www_1763429178": [
+    "conv_go_get_a_screenshot_of_www_1763429178_v1"
+  ],
+  "timeit_optimizer": [
+    "feedback_positive_timeit_optimizer_d4048ebdd191b818"
+  ],
+  "what": [
+    "workflow_1763429304"
+  ],
+  "do": [
+    "workflow_1763429304"
+  ],
+  "conversational": [
+    "tool_questions_about_me"
+  ],
+  "qa": [
+    "tool_questions_about_me"
+  ],
+  "mcp": [
+    "tool_fetch_mcp",
+    "tool_filesystem_mcp",
+    "tool_github_mcp",
+    "tool_memory_mcp",
+    "tool_time_mcp",
+    "tool__template"
+  ],
+  "mcp-tool": [
+    "tool_fetch_mcp",
+    "tool_filesystem_mcp",
+    "tool_github_mcp",
+    "tool_memory_mcp",
+    "tool_time_mcp",
+    "tool__template"
+  ],
+  "internet": [
+    "tool_fetch_mcp"
+  ],
+  "url": [
+    "tool_fetch_mcp"
+  ],
+  "filesystem": [
+    "tool_filesystem_mcp"
+  ],
+  "files": [
+    "tool_filesystem_mcp"
+  ],
+  "io": [
+    "tool_filesystem_mcp"
+  ],
+  "directory": [
+    "tool_filesystem_mcp"
+  ],
+  "code-hosting": [
+    "tool_github_mcp"
+  ],
+  "knowledge-graph": [
+    "tool_memory_mcp"
+  ],
+  "entities": [
+    "tool_memory_mcp"
+  ],
+  "relations": [
+    "tool_memory_mcp"
+  ],
+  "context": [
+    "tool_memory_mcp"
+  ],
+  "time": [
+    "tool_time_mcp"
+  ],
+  "timezone": [
+    "tool_time_mcp"
+  ],
+  "date": [
+    "tool_time_mcp"
+  ],
+  "datetime": [
+    "tool_time_mcp"
+  ],
+  "utilities": [
+    "tool_time_mcp"
+  ],
+  "clock": [
+    "tool_time_mcp"
   ]
 }

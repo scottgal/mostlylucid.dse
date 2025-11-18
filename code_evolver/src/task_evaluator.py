@@ -20,6 +20,7 @@ class TaskType(Enum):
     QUESTION_ANSWERING = "question_answering"  # Answer questions → needs LLM
     FORMATTING = "formatting"                  # Text formatting → can use tools
     CONVERSION = "conversion"                  # Unit/format conversion → can use tools
+    SYSTEM_INFO = "system_info"                # System/machine info queries → use platform_info tool
     ACCIDENTAL = "accidental"                  # Nonsense/accidental input → ask for clarification
     UNKNOWN = "unknown"                        # Needs LLM analysis
 
@@ -82,6 +83,25 @@ class TaskEvaluator:
                 "evaluation_model": "rule-based"
             }
 
+        # Quick check for system info queries (keyword-based)
+        desc_lower = description.lower()
+        system_info_keywords = ['how much memory', 'what memory', 'how much ram', 'what ram',
+                                'what os', 'which os', 'operating system', 'system specs',
+                                'machine specs', 'cpu info', 'what cpu', 'which cpu',
+                                'platform info', 'hardware info', 'system information']
+        if any(keyword in desc_lower for keyword in system_info_keywords):
+            logger.info(f"Detected system info query via keywords")
+            routing = self._determine_routing(TaskType.SYSTEM_INFO, description, "simple")
+            return {
+                "task_type": TaskType.SYSTEM_INFO,
+                "complexity": "simple",
+                "understanding": "System information query",
+                "key_aspects": "hardware, specs, platform",
+                "input_length": input_length,
+                "evaluation_model": "keyword-match",
+                **routing
+            }
+
         # Choose model based on input length
         if input_length < self.SHORT_INPUT:
             model = "gemma3:1b"
@@ -109,12 +129,20 @@ Classify as ONE:
 - question_answering: answering questions, explaining concepts
 - formatting: changing text format/case
 - conversion: converting between formats
+- system_info: queries about machine specs, hardware, OS, memory, CPU, GPU (use Questions About Me tool)
 - unknown: unclear tasks
 
 IMPORTANT:
 - "generate data", "create sample data", "random data" → creative_content (needs LLM)
 - "filter data", "sort data" → data_processing (can use code)
 - "fetch", "download", "get from URL", "save to disk" → code_generation (needs code to fetch/save)
+- "what memory", "what OS", "CPU info", "how much RAM", "system specs", "is GPU busy" → system_info (use Questions About Me tool)
+
+EXAMPLES:
+- "how much memory does this machine have?" → system_info
+- "what OS am I running?" → system_info
+- "show me system specs" → system_info
+- "what CPU does this have?" → system_info
 
 Also rate COMPLEXITY:
 simple, moderate, complex
@@ -167,6 +195,8 @@ COMPLEXITY: [pick one]"""
                         category = 'code_generation'
                     elif any(word in response_lower for word in ['question', 'answer', 'explain']):
                         category = 'question_answering'
+                    elif any(word in response_lower for word in ['system', 'machine', 'hardware', 'memory', 'ram', 'cpu', 'platform', 'os', 'operating']):
+                        category = 'system_info'
                     # Removed aggressive 'accidental' keyword check - let unknown tasks route to LLM
                     # Don't reject tasks just because tinyllama is confused
                     else:
@@ -319,6 +349,8 @@ COMPLEXITY: [pick one]"""
                 return TaskType.FORMATTING
             elif "convert" in category or "conversion" in category:
                 return TaskType.CONVERSION
+            elif "system" in category or "info" in category or "platform" in category or "machine" in category:
+                return TaskType.SYSTEM_INFO
             else:
                 return TaskType.UNKNOWN
 
@@ -444,6 +476,17 @@ COMPLEXITY: [pick one]"""
                 "can_use_tools": True,
                 "recommended_tier": "code.fast",  # Updated from coding.tier_1
                 "reason": "Data processing can use generated code"
+            }
+
+        # System info queries use Questions About Me LLM tool
+        # which internally calls platform_info but provides conversational responses
+        elif task_type == TaskType.SYSTEM_INFO:
+            return {
+                "requires_llm": True,
+                "requires_content_llm": False,
+                "can_use_tools": True,
+                "recommended_tier": "llm.questions_about_me",
+                "reason": "System information queries use Questions About Me tool (calls platform_info, provides natural language response)"
             }
 
         # Unknown - safe default to LLM
