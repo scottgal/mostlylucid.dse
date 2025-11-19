@@ -28,6 +28,30 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def parse_env_var(env_var_name: str, default_value: str) -> str:
+    """
+    Parse environment variable, handling ${VAR:-default} bash syntax.
+
+    Args:
+        env_var_name: Name of the environment variable
+        default_value: Default value if not set
+
+    Returns:
+        Parsed value
+    """
+    value = os.getenv(env_var_name, default_value)
+
+    # Handle ${VAR:-default} syntax
+    if value.startswith("${") and value.endswith("}"):
+        # Extract default value from ${VAR:-default}
+        if ":-" in value:
+            value = value.split(":-")[1].rstrip("}")
+        else:
+            value = default_value
+
+    return value
+
+
 class PostgresClient:
     """PostgreSQL client with connection pooling."""
 
@@ -38,12 +62,19 @@ class PostgresClient:
         """Get or create connection pool."""
         if cls._connection_pool is None:
             # Get connection info from environment variables
+            # Parse all env vars to handle ${VAR:-default} syntax
+            host = parse_env_var("POSTGRES_HOST", "localhost")
+            port_str = parse_env_var("POSTGRES_PORT", "5432")
+            database = parse_env_var("POSTGRES_DB", "dise")
+            user = parse_env_var("POSTGRES_USER", "postgres")
+            password = parse_env_var("POSTGRES_PASSWORD", "")
+
             db_config = {
-                "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": int(os.getenv("POSTGRES_PORT", "5432")),
-                "database": os.getenv("POSTGRES_DB", "dise"),
-                "user": os.getenv("POSTGRES_USER", "postgres"),
-                "password": os.getenv("POSTGRES_PASSWORD", ""),
+                "host": host,
+                "port": int(port_str),
+                "database": database,
+                "user": user,
+                "password": password,
             }
 
             try:
@@ -53,6 +84,37 @@ class PostgresClient:
                     **db_config
                 )
                 logger.info("PostgreSQL connection pool created")
+            except psycopg2.OperationalError as e:
+                # Check if database doesn't exist
+                if "does not exist" in str(e):
+                    logger.info(f"Database '{database}' does not exist, creating it...")
+                    try:
+                        # Connect to default 'postgres' database to create our database
+                        admin_config = db_config.copy()
+                        admin_config['database'] = 'postgres'
+
+                        admin_conn = psycopg2.connect(**admin_config)
+                        admin_conn.autocommit = True
+                        cursor = admin_conn.cursor()
+                        cursor.execute(f"CREATE DATABASE {database}")
+                        cursor.close()
+                        admin_conn.close()
+
+                        logger.info(f"✓ Created database '{database}'")
+
+                        # Now create the connection pool with the new database
+                        cls._connection_pool = pool.SimpleConnectionPool(
+                            minconn=1,
+                            maxconn=10,
+                            **db_config
+                        )
+                        logger.info("PostgreSQL connection pool created")
+                    except Exception as create_error:
+                        logger.error(f"Failed to create database: {create_error}")
+                        raise
+                else:
+                    logger.error(f"Failed to create connection pool: {e}")
+                    raise
             except Exception as e:
                 logger.error(f"Failed to create connection pool: {e}")
                 raise

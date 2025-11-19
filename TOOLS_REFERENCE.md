@@ -1,28 +1,30 @@
 # Code Evolver - Complete Tools Reference
 
-**Total Tools: 205**
+**Total Tools: 240**
 **Last Updated: 2025-11-18**
 
-This document provides a comprehensive reference of all 205 preconfigured tools available in the Code Evolver system, organized by category.
+This document provides a comprehensive reference of all 240 preconfigured tools available in the Code Evolver system, organized by category.
 
 ## Table of Contents
 
-- [CUSTOM](#custom) (6 tools)
-- [DEBUG](#debug) (14 tools)
-- [EXECUTABLE](#executable) (108 tools)
+- [CUSTOM](#custom) (18 tools)
+- [DEBUG](#debug) (15 tools)
+- [EXECUTABLE](#executable) (109 tools)
 - [FIXER](#fixer) (4 tools)
-- [LLM](#llm) (41 tools)
+- [LLM](#llm) (42 tools)
 - [MCP](#mcp) (6 tools)
 - [NETWORKING](#networking) (12 tools)
-- [OPENAPI](#openapi) (1 tools)
+- [OPENAPI](#openapi) (16 tools)
 - [OPTIMIZATION](#optimization) (4 tools)
-- [PERF](#perf) (9 tools)
+- [PERF](#perf) (11 tools)
+- [STATS](#stats) (1 tools)
+- [VISUALIZATION](#visualization) (2 tools)
 
 ---
 
 ## CUSTOM
 
-**6 tools** - Custom integrations and external service tools
+**18 tools** - Custom integrations and external service tools
 
 ### Ask User
 
@@ -32,6 +34,39 @@ This document provides a comprehensive reference of all 205 preconfigured tools 
 Interactive user input tool for CLI workflows. Prompts the user for input when running in interactive mode, otherwise asks the overseer LLM to make decisions. Enables workflows to get feedback and confirmation without blocking non-interactive execution. Supports yes/no questions, text input, and multiple choice.
 
 **Tags:** `user-input`, `interactive`, `confirmation`, `prompt`, `cli`, `decision`, `feedback`
+
+---
+
+### Bible API
+
+**File:** `bible_api.yaml`  
+**Type:** `custom`  
+
+Access Bible verses, passages, books, and chapters from multiple translations (KJV, NIV, ESV, etc.). Search by book, chapter, verse, or keyword. No authentication required.
+
+**Tags:** `bible`, `scripture`, `religion`, `christian`, `verses`, `free`, `no-auth`
+
+---
+
+### Frankfurter Currency Exchange
+
+**File:** `frankfurter_currency.yaml`  
+**Type:** `custom`  
+
+Free currency exchange rates and conversion. Get latest rates, historical rates, time series data, and convert between 30+ currencies. Data from European Central Bank. No authentication required.
+
+**Tags:** `currency`, `exchange`, `conversion`, `finance`, `rates`, `free`, `no-auth`, `forex`
+
+---
+
+### Free Dictionary API
+
+**File:** `free_dictionary_api.yaml`  
+**Type:** `custom`  
+
+Get comprehensive word definitions, phonetics, pronunciations, meanings, synonyms, antonyms, and usage examples. Supports multiple languages. No authentication required. Perfect for language learning, writing assistance, and vocabulary building.
+
+**Tags:** `dictionary`, `language`, `definitions`, `vocabulary`, `education`, `free`, `no-auth`
 
 ---
 
@@ -90,9 +125,108 @@ HTTP server that allows workflows to serve content via HTTP. Supports both HTML 
 
 ---
 
+### IP Geolocation API
+
+**File:** `ip_geolocation_api.yaml`  
+**Type:** `custom`  
+
+Get geolocation information for any IP address including country, region, city, coordinates, timezone, currency, ISP, and more. No authentication required for basic usage.
+
+**Tags:** `ip`, `geolocation`, `location`, `network`, `free`, `no-auth`
+
+---
+
+### Jokes API
+
+**File:** `jokes_api.yaml`  
+**Type:** `custom`  
+
+Get random jokes from various categories including programming, dad jokes, puns, knock-knock jokes, and more. Filter by type, search for specific jokes, or get joke of the day. No authentication required.
+
+**Tags:** `jokes`, `humor`, `entertainment`, `fun`, `free`, `no-auth`
+
+---
+
+### LanguageTool Grammar Checker
+
+**File:** `languagetool_api.yaml`  
+**Type:** `custom`  
+
+Free grammar, spelling, and style checker supporting 30+ languages. Detect typos, grammar errors, punctuation mistakes, and get suggestions for improvement. No authentication required for basic usage.
+
+**Tags:** `grammar`, `spelling`, `proofreading`, `writing`, `language`, `free`, `no-auth`
+
+---
+
+### Lorem Picsum Images
+
+**File:** `lorem_picsum_api.yaml`  
+**Type:** `custom`  
+
+Get random placeholder images for mockups, prototypes, and testing. Specify size, filters (grayscale, blur), and get specific images by ID. No authentication required.
+
+**Tags:** `images`, `placeholder`, `mockup`, `design`, `free`, `no-auth`
+
+---
+
+### Nominatim Geocoding
+
+**File:** `nominatim_geocoding.yaml`  
+**Type:** `custom`  
+
+Free geocoding and reverse geocoding using OpenStreetMap data. Convert addresses to coordinates (geocoding) or coordinates to addresses (reverse geocoding). Search for places, cities, landmarks, and more. No authentication required.
+
+**Tags:** `geocoding`, `maps`, `location`, `address`, `coordinates`, `free`, `no-auth`, `openstreetmap`
+
+---
+
+### Public APIs Discovery
+
+**File:** `public_apis_discovery.yaml`  
+**Type:** `custom`  
+
+Discover and search free public APIs from the public-apis/public-apis repository. Search by category, authentication type, HTTPS support, or CORS. Categories include: Animals, Art & Design, Books, Business, Calendar, Currency, Development, Finance, Geocoding, Health, Jobs, News, Sports, Weather, and many more.
+
+**Tags:** `apis`, `discovery`, `public`, `free`, `reference`, `development`
+
+---
+
+### Quran API
+
+**File:** `quran_api.yaml`  
+**Type:** `custom`  
+
+Access Quran verses, chapters (Surahs), and translations in multiple languages. Get Arabic text, transliterations, and translations. Search by Surah, Ayah, or Juz. No authentication required.
+
+**Tags:** `quran`, `islam`, `religion`, `arabic`, `verses`, `free`, `no-auth`
+
+---
+
+### REST Countries API
+
+**File:** `rest_countries_api.yaml`  
+**Type:** `custom`  
+
+Get comprehensive information about any country including name, capital, population, area, languages, currencies, flags, borders, timezones, and more. No authentication required. Search by name, code, capital, currency, or language.
+
+**Tags:** `countries`, `geography`, `reference`, `free`, `no-auth`, `data`
+
+---
+
+### Random Data API
+
+**File:** `random_data_api.yaml`  
+**Type:** `custom`  
+
+Get random quotes, facts, advice, cat facts, dog facts, Chuck Norris facts, and more. Perfect for adding interesting content to applications. No authentication required.
+
+**Tags:** `random`, `quotes`, `facts`, `fun`, `content`, `free`, `no-auth`
+
+---
+
 ## DEBUG
 
-**14 tools** - Debugging, validation, and code analysis tools
+**15 tools** - Debugging, validation, and code analysis tools
 
 ### BugCatcher Exception Monitor
 
@@ -111,6 +245,52 @@ Global exception monitoring tool that watches for exceptions and logs them to Lo
 Analyzes tool dependencies using RAG and metadata for tree shaking. Recursively resolves all required tools, files, and packages to create minimal deployments.
 
 **Tags:** `dependencies`, `tree-shaking`, `optimization`, `analysis`, `packaging`, `deployment`
+
+---
+
+### Intelligent Fuzzer
+
+**File:** `intelligent_fuzzer.yaml`  
+**Type:** `executable`  
+
+Advanced fuzzing tool that finds edge cases and breaks functions by feeding them
+malformed, adversarial, and edge-case inputs. Inspired by Hypothesis and Atheris.
+
+Features:
+- Type-aware fuzzing based on function signatures
+- Mutation-based fuzzing from valid inputs
+- Grammar-based fuzzing for structured data
+- Adversarial fuzzing (SQL injection, XSS, path traversal, command injection)
+- Boundary value analysis
+- Coverage-guided fuzzing
+- Crash detection and reproduction
+- Automatic test case generation from failures
+
+Strategies:
+- Random: Pure random data generation
+- Type-aware: Based on type hints
+- Mutation: Mutate valid inputs
+- Grammar: Grammar-based structured data
+- Boundary: Test boundary values (0, max, min, inf, nan, etc.)
+- Adversarial: Known attack patterns
+
+Use for:
+- Finding edge cases in tools
+- Security testing (injection vulnerabilities)
+- Mutation testing optimization
+- Generating comprehensive unit tests
+- Regression testing
+- Property-based testing
+
+Outputs:
+- Crash reports with stack traces
+- Unique crash categorization
+- Input reproduction cases
+- Auto-generated pytest test cases
+- Coverage analysis
+
+
+**Tags:** `fuzzing`, `testing`, `security`, `edge-cases`, `mutation`, `property-testing`, `crash-detection`, `test-generation`, `vulnerability-scanning`
 
 ---
 
@@ -248,7 +428,7 @@ Validates that call_tool() is used correctly with proper arguments (tool_name, p
 
 ## EXECUTABLE
 
-**108 tools** - General-purpose executable tools for code generation and manipulation
+**109 tools** - General-purpose executable tools for code generation and manipulation
 
 ### API Wrapper Generator
 
@@ -621,6 +801,15 @@ Standard REST API client with automatic JSON parsing. Supports GET, POST, PUT, P
 Raw HTTP client that returns content as string without parsing. Perfect for HTML, text files, binary data, or any non-JSON content.
 
 **Tags:** `http`, `raw`, `html`, `scraping`, `binary`, `text`, `client`
+
+---
+
+### Image Converter
+
+**File:** `image_converter.yaml`  
+**Type:** `executable`  
+
+Comprehensive image format converter supporting PNG, JPEG, GIF, BMP, TIFF, WEBP, and more. Load from paths, convert formats, resize, and save to disk for workflow integration.
 
 ---
 
@@ -1761,7 +1950,18 @@ for semantic search. The data store scope determines visibility:
 
 ## LLM
 
-**41 tools** - LLM-powered tools for intelligent code generation and analysis
+**42 tools** - LLM-powered tools for intelligent code generation and analysis
+
+### API Content Router
+
+**File:** `api_content_router.yaml`  
+**Type:** `llm`  
+
+Intelligent routing system that analyzes user requests and automatically routes them to the most appropriate public API tool. Uses a small, fast sentinel LLM (1B model) to understand intent and select the best API: country data → REST Countries, addresses → Nominatim, currency → Frankfurter, definitions → Dictionary, grammar → LanguageTool, jokes → Jokes API, quotes → Random Data, images → Lorem Picsum, Bible/Quran verses → respective APIs, etc. Returns both the recommended API and ready-to-use parameters.
+
+**Tags:** `routing`, `ai`, `intelligent`, `dispatcher`, `llm`, `sentinel`
+
+---
 
 ### Article Content Analyzer
 
@@ -2460,7 +2660,106 @@ Send UDP datagrams to a remote host. Supports automatic binary encoding, broadca
 
 ## OPENAPI
 
-**1 tools** - OpenAPI/Swagger specification tools
+**16 tools** - OpenAPI/Swagger specification tools
+
+### Agify.io
+
+**File:** `agify.yaml`  
+**Type:** `openapi`  
+
+Estimates the age from a first name using statistical data. Free API with no authentication required. Returns age prediction and count (sample size). Useful for data enrichment and demographic analysis.
+
+**Tags:** `demographics`, `age-prediction`, `data-enrichment`, `api`, `free`, `development`
+
+---
+
+### Bored API
+
+**File:** `bored_api.yaml`  
+**Type:** `openapi`  
+
+Find random activities to fight boredom. Free API with no authentication required. Returns activity suggestions with type, participants, and accessibility info. Great for generating ideas and testing randomization.
+
+**Tags:** `activities`, `random`, `entertainment`, `ideas`, `api`, `free`, `development`
+
+---
+
+### CountAPI
+
+**File:** `countapi.yaml`  
+**Type:** `openapi`  
+
+Free and simple counting service. Create counters, increment, decrement, and track values. No authentication required. Great for analytics, visitor tracking, and simple statistics.
+
+**Tags:** `counting`, `analytics`, `tracking`, `statistics`, `api`, `free`, `development`
+
+---
+
+### Genderize.io
+
+**File:** `genderize.yaml`  
+**Type:** `openapi`  
+
+Estimates gender from a first name using statistical data. Free API with no authentication required. Returns gender prediction, probability, and count (sample size). Useful for data enrichment and demographic analysis.
+
+**Tags:** `demographics`, `gender-prediction`, `data-enrichment`, `api`, `free`, `development`
+
+---
+
+### Httpbin
+
+**File:** `httpbin.yaml`  
+**Type:** `openapi`  
+
+Simple HTTP Request & Response Service for testing HTTP methods, headers, cookies, and redirects. Free API with no authentication required. Essential tool for API development and debugging.
+
+**Tags:** `http`, `testing`, `debugging`, `api`, `free`, `development`, `requests`
+
+---
+
+### IPify
+
+**File:** `ipify.yaml`  
+**Type:** `openapi`  
+
+Simple IP Address API to get your public IP address. Free API with no authentication required. Returns IP in plain text or JSON format. Useful for networking tests and IP detection.
+
+**Tags:** `ip-address`, `networking`, `detection`, `api`, `free`, `development`
+
+---
+
+### JSONPlaceholder
+
+**File:** `jsonplaceholder.yaml`  
+**Type:** `openapi`  
+
+Free fake REST API for testing and prototyping. Provides fake posts, comments, albums, photos, todos, and users. No authentication required. Perfect for testing CRUD operations and learning REST APIs.
+
+**Tags:** `mock-api`, `testing`, `prototyping`, `rest`, `api`, `free`, `development`, `fake-data`
+
+---
+
+### Kroki
+
+**File:** `kroki.yaml`  
+**Type:** `openapi`  
+
+Creates diagrams from textual descriptions. Supports PlantUML, Mermaid, GraphViz, BlockDiag, and many more. Free API with no authentication required. Returns diagrams as SVG, PNG, or PDF.
+
+**Tags:** `diagrams`, `visualization`, `plantuml`, `mermaid`, `graphviz`, `api`, `free`, `development`
+
+---
+
+### Lorem Ipsum Generator
+
+**File:** `ipsum_generator.yaml`  
+**Type:** `openapi`  
+
+Generate Lorem Ipsum placeholder text. Free API with no authentication required. Supports paragraphs, words, and bytes. Perfect for testing layouts and mockups with realistic-length content.
+
+**Tags:** `lorem-ipsum`, `placeholder`, `text-generation`, `api`, `free`, `development`, `testing`, `mockup`
+
+---
 
 ### NMT Translation Service
 
@@ -2470,6 +2769,72 @@ Send UDP datagrams to a remote host. Supports automatic binary encoding, broadca
 Neural Machine Translation service for translating text between languages using GET requests. VERY FAST but can be inaccurate - MUST validate output with translation_quality_checker for repeated characters and garbled text. Uses ISO 639 two-letter language codes (e.g., 'en', 'es', 'fr', 'de'). Get supported languages from GET /languages endpoint. API returns 'translations' array. Uses OpenAPI spec from http://localhost:8000/openapi.json.
 
 **Tags:** `translation`, `nmt`, `neural`, `languages`, `openapi`, `api`
+
+---
+
+### Nationalize.io
+
+**File:** `nationalize.yaml`  
+**Type:** `openapi`  
+
+Estimates nationality from a first name using statistical data. Free API with no authentication required. Returns list of countries with probabilities. Useful for data enrichment and demographic analysis.
+
+**Tags:** `demographics`, `nationality-prediction`, `data-enrichment`, `api`, `free`, `development`
+
+---
+
+### Placeholder Images
+
+**File:** `placeholder_images.yaml`  
+**Type:** `openapi`  
+
+Generate placeholder images for mockups and testing. Free service with no authentication required. Supports custom sizes, colors, text, and formats. Perfect for UI/UX development and prototyping.
+
+**Tags:** `placeholder`, `images`, `mockup`, `testing`, `api`, `free`, `development`, `ui`, `prototyping`
+
+---
+
+### QR Code Generator
+
+**File:** `qrcode_generator.yaml`  
+**Type:** `openapi`  
+
+Generate QR codes via API. Free service with no authentication required. Supports custom sizes, colors, and formats. Returns QR code images directly. Perfect for testing and prototyping.
+
+**Tags:** `qrcode`, `generation`, `images`, `api`, `free`, `development`, `testing`, `barcode`
+
+---
+
+### Random User API
+
+**File:** `randomuser.yaml`  
+**Type:** `openapi`  
+
+Generate random user data including names, emails, addresses, and photos. Free API with no authentication required. Perfect for testing, mockups, and prototyping with realistic user data.
+
+**Tags:** `random-data`, `users`, `testing`, `mockups`, `api`, `free`, `development`, `fake-data`
+
+---
+
+### ReqRes
+
+**File:** `reqres.yaml`  
+**Type:** `openapi`  
+
+Hosted REST-API ready to respond to your AJAX requests. Mock user data API for testing and prototyping. Free API with no authentication required. Returns realistic user data, supports CRUD operations.
+
+**Tags:** `mock-api`, `testing`, `prototyping`, `rest`, `api`, `free`, `development`, `users`
+
+---
+
+### UUID Generator
+
+**File:** `uuid_generator.yaml`  
+**Type:** `openapi`  
+
+Generate UUIDs (Universally Unique Identifiers) via API. Free service with no authentication required. Supports multiple UUID versions (v1, v4). Useful for testing, databases, and distributed systems.
+
+**Tags:** `uuid`, `identifier`, `generation`, `api`, `free`, `development`, `testing`
 
 ---
 
@@ -2521,7 +2886,7 @@ Iterative self-optimization loop for artifact clusters. Explores variants, gener
 
 ## PERF
 
-**9 tools** - Performance monitoring and profiling tools
+**11 tools** - Performance monitoring and profiling tools
 
 ### Behave BDD Test Generator
 
@@ -2584,6 +2949,33 @@ Generate and execute Locust performance/load tests from API specs, OpenAPI defin
 
 ---
 
+### Performance Comparer
+
+**File:** `performance_comparer.yaml`  
+**Type:** `executable`  
+
+Universal comparison tool for performance testing, content analysis, and quality assessment.
+
+Features:
+- Performance comparison with multiple strategies (sequential, interleaved, parallel, warmup, sustained)
+- 0-infinity scoring scale (0=dead stop, 100=identical, >100=faster)
+- Text similarity and diff analysis
+- Quality comparison with custom metrics
+- Telemetry integration for tracking
+- Automatic test case generation from results
+
+Use for:
+- Comparing two endpoint/function implementations
+- A/B performance testing
+- Regression detection
+- Content similarity analysis
+- Quality scoring with custom metrics
+
+
+**Tags:** `performance`, `comparison`, `testing`, `benchmarking`, `analysis`, `a-b-testing`, `telemetry`
+
+---
+
 ### Performance Profiler
 
 **File:** `performance_profiler.yaml`  
@@ -2612,6 +3004,43 @@ false positives in performance regression testing during feature evolution.
 
 ---
 
+### Performance Weaver
+
+**File:** `perf_weaver.yaml`  
+**Type:** `executable`  
+
+Automatic OpenTelemetry instrumentation via AST transformation. Weaves telemetry tracking
+into Python code without manual instrumentation.
+
+Features:
+- AST-based code transformation
+- Automatic function instrumentation
+- Class method instrumentation
+- Decorator-based usage (@weave_function, @weave_class)
+- File-based batch instrumentation
+- Configurable sampling and filtering
+- Preserves code functionality
+- Generates .instrumented.py files
+
+Use for:
+- Adding telemetry to existing code
+- Performance profiling without code changes
+- Automatic metric collection
+- Hot-path detection
+- Production monitoring setup
+
+Configuration:
+- Enable/disable functions vs methods
+- Include/exclude private methods
+- Trace arguments and return values
+- Configurable exclusion patterns
+- Sampling rate control
+
+
+**Tags:** `performance`, `telemetry`, `instrumentation`, `opentelemetry`, `ast`, `transformation`, `monitoring`, `profiling`, `aot`
+
+---
+
 ### PyInstrument Profiler
 
 **File:** `pyinstrument_profiler.yaml`  
@@ -2635,6 +3064,60 @@ with performance data. Essential for optimization workflows and performance trac
 
 
 **Tags:** `performance`, `optimization`, `benchmarking`, `timeit`, `profiling`, `testing`, `metrics`, `memory`, `mocking`
+
+---
+
+## STATS
+
+**1 tools** - Miscellaneous tools
+
+### Statistical Analysis
+
+**File:** `statistical_analysis.yaml`  
+**Type:** `executable`  
+
+Comprehensive statistical analysis tool using scikit-learn, scipy, and numpy.
+
+Performs a wide range of statistical analyses including:
+- Descriptive statistics (mean, median, mode, variance, percentiles, etc.)
+- Hypothesis testing (t-tests, ANOVA, Mann-Whitney, Wilcoxon, etc.)
+- Correlation analysis (Pearson, Spearman, Kendall)
+- Regression analysis (linear, polynomial)
+- Outlier detection (IQR, Z-score, Isolation Forest)
+- Clustering analysis (K-Means, DBSCAN, Hierarchical)
+- Comparative analysis between multiple datasets
+
+Complements the pattern recognition tool by providing statistical insights into
+patterns, trends, and relationships in data.
+
+
+**Tags:** `stats`, `statistics`, `analysis`, `data-science`, `scikit-learn`, `hypothesis-testing`, `correlation`, `regression`, `clustering`, `outliers`
+
+---
+
+## VISUALIZATION
+
+**2 tools** - Miscellaneous tools
+
+### Mermaid Diagram Builder
+
+**File:** `mermaid_builder.yaml`  
+**Type:** `executable`  
+
+Generates Mermaid diagram syntax from structured data, conversations, or tool execution flows. Supports flowcharts, sequence diagrams, state diagrams, class diagrams, and more.
+
+**Tags:** `visualization`, `diagram`, `mermaid`, `flowchart`, `sequence`, `documentation`
+
+---
+
+### Mermaid Renderer
+
+**File:** `mermaid_renderer.yaml`  
+**Type:** `executable`  
+
+Renders Mermaid diagram syntax to image files (SVG, PNG, PDF). Converts text-based Mermaid diagrams into visual outputs.
+
+**Tags:** `visualization`, `diagram`, `mermaid`, `rendering`, `image`, `svg`, `png`
 
 ---
 

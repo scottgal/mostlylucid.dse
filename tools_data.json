@@ -16,6 +16,52 @@
       ]
     },
     {
+      "file": "bible_api.yaml",
+      "name": "Bible API",
+      "type": "custom",
+      "description": "Access Bible verses, passages, books, and chapters from multiple translations (KJV, NIV, ESV, etc.). Search by book, chapter, verse, or keyword. No authentication required.",
+      "tags": [
+        "bible",
+        "scripture",
+        "religion",
+        "christian",
+        "verses",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "frankfurter_currency.yaml",
+      "name": "Frankfurter Currency Exchange",
+      "type": "custom",
+      "description": "Free currency exchange rates and conversion. Get latest rates, historical rates, time series data, and convert between 30+ currencies. Data from European Central Bank. No authentication required.",
+      "tags": [
+        "currency",
+        "exchange",
+        "conversion",
+        "finance",
+        "rates",
+        "free",
+        "no-auth",
+        "forex"
+      ]
+    },
+    {
+      "file": "free_dictionary_api.yaml",
+      "name": "Free Dictionary API",
+      "type": "custom",
+      "description": "Get comprehensive word definitions, phonetics, pronunciations, meanings, synonyms, antonyms, and usage examples. Supports multiple languages. No authentication required. Perfect for language learning, writing assistance, and vocabulary building.",
+      "tags": [
+        "dictionary",
+        "language",
+        "definitions",
+        "vocabulary",
+        "education",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
       "file": "git.yaml",
       "name": "Git",
       "type": "custom",
@@ -91,6 +137,137 @@
         "html",
         "json"
       ]
+    },
+    {
+      "file": "ip_geolocation_api.yaml",
+      "name": "IP Geolocation API",
+      "type": "custom",
+      "description": "Get geolocation information for any IP address including country, region, city, coordinates, timezone, currency, ISP, and more. No authentication required for basic usage.",
+      "tags": [
+        "ip",
+        "geolocation",
+        "location",
+        "network",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "jokes_api.yaml",
+      "name": "Jokes API",
+      "type": "custom",
+      "description": "Get random jokes from various categories including programming, dad jokes, puns, knock-knock jokes, and more. Filter by type, search for specific jokes, or get joke of the day. No authentication required.",
+      "tags": [
+        "jokes",
+        "humor",
+        "entertainment",
+        "fun",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "languagetool_api.yaml",
+      "name": "LanguageTool Grammar Checker",
+      "type": "custom",
+      "description": "Free grammar, spelling, and style checker supporting 30+ languages. Detect typos, grammar errors, punctuation mistakes, and get suggestions for improvement. No authentication required for basic usage.",
+      "tags": [
+        "grammar",
+        "spelling",
+        "proofreading",
+        "writing",
+        "language",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "lorem_picsum_api.yaml",
+      "name": "Lorem Picsum Images",
+      "type": "custom",
+      "description": "Get random placeholder images for mockups, prototypes, and testing. Specify size, filters (grayscale, blur), and get specific images by ID. No authentication required.",
+      "tags": [
+        "images",
+        "placeholder",
+        "mockup",
+        "design",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "nominatim_geocoding.yaml",
+      "name": "Nominatim Geocoding",
+      "type": "custom",
+      "description": "Free geocoding and reverse geocoding using OpenStreetMap data. Convert addresses to coordinates (geocoding) or coordinates to addresses (reverse geocoding). Search for places, cities, landmarks, and more. No authentication required.",
+      "tags": [
+        "geocoding",
+        "maps",
+        "location",
+        "address",
+        "coordinates",
+        "free",
+        "no-auth",
+        "openstreetmap"
+      ]
+    },
+    {
+      "file": "public_apis_discovery.yaml",
+      "name": "Public APIs Discovery",
+      "type": "custom",
+      "description": "Discover and search free public APIs from the public-apis/public-apis repository. Search by category, authentication type, HTTPS support, or CORS. Categories include: Animals, Art & Design, Books, Business, Calendar, Currency, Development, Finance, Geocoding, Health, Jobs, News, Sports, Weather, and many more.",
+      "tags": [
+        "apis",
+        "discovery",
+        "public",
+        "free",
+        "reference",
+        "development"
+      ]
+    },
+    {
+      "file": "quran_api.yaml",
+      "name": "Quran API",
+      "type": "custom",
+      "description": "Access Quran verses, chapters (Surahs), and translations in multiple languages. Get Arabic text, transliterations, and translations. Search by Surah, Ayah, or Juz. No authentication required.",
+      "tags": [
+        "quran",
+        "islam",
+        "religion",
+        "arabic",
+        "verses",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "random_data_api.yaml",
+      "name": "Random Data API",
+      "type": "custom",
+      "description": "Get random quotes, facts, advice, cat facts, dog facts, Chuck Norris facts, and more. Perfect for adding interesting content to applications. No authentication required.",
+      "tags": [
+        "random",
+        "quotes",
+        "facts",
+        "fun",
+        "content",
+        "free",
+        "no-auth"
+      ]
+    },
+    {
+      "file": "rest_countries_api.yaml",
+      "name": "REST Countries API",
+      "type": "custom",
+      "description": "Get comprehensive information about any country including name, capital, population, area, languages, currencies, flags, borders, timezones, and more. No authentication required. Search by name, code, capital, currency, or language.",
+      "tags": [
+        "countries",
+        "geography",
+        "reference",
+        "free",
+        "no-auth",
+        "data"
+      ]
     }
   ],
   "debug": [
@@ -126,6 +303,23 @@
         "analysis",
         "packaging",
         "deployment"
+      ]
+    },
+    {
+      "file": "intelligent_fuzzer.yaml",
+      "name": "Intelligent Fuzzer",
+      "type": "executable",
+      "description": "Advanced fuzzing tool that finds edge cases and breaks functions by feeding them\nmalformed, adversarial, and edge-case inputs. Inspired by Hypothesis and Atheris.\n\nFeatures:\n- Type-aware fuzzing based on function signatures\n- Mutation-based fuzzing from valid inputs\n- Grammar-based fuzzing for structured data\n- Adversarial fuzzing (SQL injection, XSS, path traversal, command injection)\n- Boundary value analysis\n- Coverage-guided fuzzing\n- Crash detection and reproduction\n- Automatic test case generation from failures\n\nStrategies:\n- Random: Pure random data generation\n- Type-aware: Based on type hints\n- Mutation: Mutate valid inputs\n- Grammar: Grammar-based structured data\n- Boundary: Test boundary values (0, max, min, inf, nan, etc.)\n- Adversarial: Known attack patterns\n\nUse for:\n- Finding edge cases in tools\n- Security testing (injection vulnerabilities)\n- Mutation testing optimization\n- Generating comprehensive unit tests\n- Regression testing\n- Property-based testing\n\nOutputs:\n- Crash reports with stack traces\n- Unique crash categorization\n- Input reproduction cases\n- Auto-generated pytest test cases\n- Coverage analysis\n",
+      "tags": [
+        "fuzzing",
+        "testing",
+        "security",
+        "edge-cases",
+        "mutation",
+        "property-testing",
+        "crash-detection",
+        "test-generation",
+        "vulnerability-scanning"
       ]
     },
     {
@@ -829,6 +1023,13 @@
         "client",
         "request"
       ]
+    },
+    {
+      "file": "image_converter.yaml",
+      "name": "Image Converter",
+      "type": "executable",
+      "description": "Comprehensive image format converter supporting PNG, JPEG, GIF, BMP, TIFF, WEBP, and more. Load from paths, convert formats, resize, and save to disk for workflow integration.",
+      "tags": []
     },
     {
       "file": "incremental_summarizer.yaml",
@@ -1761,6 +1962,20 @@
   ],
   "llm": [
     {
+      "file": "api_content_router.yaml",
+      "name": "API Content Router",
+      "type": "llm",
+      "description": "Intelligent routing system that analyzes user requests and automatically routes them to the most appropriate public API tool. Uses a small, fast sentinel LLM (1B model) to understand intent and select the best API: country data \u2192 REST Countries, addresses \u2192 Nominatim, currency \u2192 Frankfurter, definitions \u2192 Dictionary, grammar \u2192 LanguageTool, jokes \u2192 Jokes API, quotes \u2192 Random Data, images \u2192 Lorem Picsum, Bible/Quran verses \u2192 respective APIs, etc. Returns both the recommended API and ready-to-use parameters.",
+      "tags": [
+        "routing",
+        "ai",
+        "intelligent",
+        "dispatcher",
+        "llm",
+        "sentinel"
+      ]
+    },
+    {
       "file": "article_analyzer.yaml",
       "name": "Article Content Analyzer",
       "type": "llm",
@@ -2565,6 +2780,155 @@
   ],
   "openapi": [
     {
+      "file": "agify.yaml",
+      "name": "Agify.io",
+      "type": "openapi",
+      "description": "Estimates the age from a first name using statistical data. Free API with no authentication required. Returns age prediction and count (sample size). Useful for data enrichment and demographic analysis.",
+      "tags": [
+        "demographics",
+        "age-prediction",
+        "data-enrichment",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "bored_api.yaml",
+      "name": "Bored API",
+      "type": "openapi",
+      "description": "Find random activities to fight boredom. Free API with no authentication required. Returns activity suggestions with type, participants, and accessibility info. Great for generating ideas and testing randomization.",
+      "tags": [
+        "activities",
+        "random",
+        "entertainment",
+        "ideas",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "countapi.yaml",
+      "name": "CountAPI",
+      "type": "openapi",
+      "description": "Free and simple counting service. Create counters, increment, decrement, and track values. No authentication required. Great for analytics, visitor tracking, and simple statistics.",
+      "tags": [
+        "counting",
+        "analytics",
+        "tracking",
+        "statistics",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "genderize.yaml",
+      "name": "Genderize.io",
+      "type": "openapi",
+      "description": "Estimates gender from a first name using statistical data. Free API with no authentication required. Returns gender prediction, probability, and count (sample size). Useful for data enrichment and demographic analysis.",
+      "tags": [
+        "demographics",
+        "gender-prediction",
+        "data-enrichment",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "httpbin.yaml",
+      "name": "Httpbin",
+      "type": "openapi",
+      "description": "Simple HTTP Request & Response Service for testing HTTP methods, headers, cookies, and redirects. Free API with no authentication required. Essential tool for API development and debugging.",
+      "tags": [
+        "http",
+        "testing",
+        "debugging",
+        "api",
+        "free",
+        "development",
+        "requests"
+      ]
+    },
+    {
+      "file": "ipify.yaml",
+      "name": "IPify",
+      "type": "openapi",
+      "description": "Simple IP Address API to get your public IP address. Free API with no authentication required. Returns IP in plain text or JSON format. Useful for networking tests and IP detection.",
+      "tags": [
+        "ip-address",
+        "networking",
+        "detection",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "ipsum_generator.yaml",
+      "name": "Lorem Ipsum Generator",
+      "type": "openapi",
+      "description": "Generate Lorem Ipsum placeholder text. Free API with no authentication required. Supports paragraphs, words, and bytes. Perfect for testing layouts and mockups with realistic-length content.",
+      "tags": [
+        "lorem-ipsum",
+        "placeholder",
+        "text-generation",
+        "api",
+        "free",
+        "development",
+        "testing",
+        "mockup"
+      ]
+    },
+    {
+      "file": "jsonplaceholder.yaml",
+      "name": "JSONPlaceholder",
+      "type": "openapi",
+      "description": "Free fake REST API for testing and prototyping. Provides fake posts, comments, albums, photos, todos, and users. No authentication required. Perfect for testing CRUD operations and learning REST APIs.",
+      "tags": [
+        "mock-api",
+        "testing",
+        "prototyping",
+        "rest",
+        "api",
+        "free",
+        "development",
+        "fake-data"
+      ]
+    },
+    {
+      "file": "kroki.yaml",
+      "name": "Kroki",
+      "type": "openapi",
+      "description": "Creates diagrams from textual descriptions. Supports PlantUML, Mermaid, GraphViz, BlockDiag, and many more. Free API with no authentication required. Returns diagrams as SVG, PNG, or PDF.",
+      "tags": [
+        "diagrams",
+        "visualization",
+        "plantuml",
+        "mermaid",
+        "graphviz",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
+      "file": "nationalize.yaml",
+      "name": "Nationalize.io",
+      "type": "openapi",
+      "description": "Estimates nationality from a first name using statistical data. Free API with no authentication required. Returns list of countries with probabilities. Useful for data enrichment and demographic analysis.",
+      "tags": [
+        "demographics",
+        "nationality-prediction",
+        "data-enrichment",
+        "api",
+        "free",
+        "development"
+      ]
+    },
+    {
       "file": "nmt_translator.yaml",
       "name": "NMT Translation Service",
       "type": "openapi",
@@ -2576,6 +2940,86 @@
         "languages",
         "openapi",
         "api"
+      ]
+    },
+    {
+      "file": "placeholder_images.yaml",
+      "name": "Placeholder Images",
+      "type": "openapi",
+      "description": "Generate placeholder images for mockups and testing. Free service with no authentication required. Supports custom sizes, colors, text, and formats. Perfect for UI/UX development and prototyping.",
+      "tags": [
+        "placeholder",
+        "images",
+        "mockup",
+        "testing",
+        "api",
+        "free",
+        "development",
+        "ui",
+        "prototyping"
+      ]
+    },
+    {
+      "file": "qrcode_generator.yaml",
+      "name": "QR Code Generator",
+      "type": "openapi",
+      "description": "Generate QR codes via API. Free service with no authentication required. Supports custom sizes, colors, and formats. Returns QR code images directly. Perfect for testing and prototyping.",
+      "tags": [
+        "qrcode",
+        "generation",
+        "images",
+        "api",
+        "free",
+        "development",
+        "testing",
+        "barcode"
+      ]
+    },
+    {
+      "file": "randomuser.yaml",
+      "name": "Random User API",
+      "type": "openapi",
+      "description": "Generate random user data including names, emails, addresses, and photos. Free API with no authentication required. Perfect for testing, mockups, and prototyping with realistic user data.",
+      "tags": [
+        "random-data",
+        "users",
+        "testing",
+        "mockups",
+        "api",
+        "free",
+        "development",
+        "fake-data"
+      ]
+    },
+    {
+      "file": "reqres.yaml",
+      "name": "ReqRes",
+      "type": "openapi",
+      "description": "Hosted REST-API ready to respond to your AJAX requests. Mock user data API for testing and prototyping. Free API with no authentication required. Returns realistic user data, supports CRUD operations.",
+      "tags": [
+        "mock-api",
+        "testing",
+        "prototyping",
+        "rest",
+        "api",
+        "free",
+        "development",
+        "users"
+      ]
+    },
+    {
+      "file": "uuid_generator.yaml",
+      "name": "UUID Generator",
+      "type": "openapi",
+      "description": "Generate UUIDs (Universally Unique Identifiers) via API. Free service with no authentication required. Supports multiple UUID versions (v1, v4). Useful for testing, databases, and distributed systems.",
+      "tags": [
+        "uuid",
+        "identifier",
+        "generation",
+        "api",
+        "free",
+        "development",
+        "testing"
       ]
     }
   ],
@@ -2702,6 +3146,38 @@
       ]
     },
     {
+      "file": "perf_weaver.yaml",
+      "name": "Performance Weaver",
+      "type": "executable",
+      "description": "Automatic OpenTelemetry instrumentation via AST transformation. Weaves telemetry tracking\ninto Python code without manual instrumentation.\n\nFeatures:\n- AST-based code transformation\n- Automatic function instrumentation\n- Class method instrumentation\n- Decorator-based usage (@weave_function, @weave_class)\n- File-based batch instrumentation\n- Configurable sampling and filtering\n- Preserves code functionality\n- Generates .instrumented.py files\n\nUse for:\n- Adding telemetry to existing code\n- Performance profiling without code changes\n- Automatic metric collection\n- Hot-path detection\n- Production monitoring setup\n\nConfiguration:\n- Enable/disable functions vs methods\n- Include/exclude private methods\n- Trace arguments and return values\n- Configurable exclusion patterns\n- Sampling rate control\n",
+      "tags": [
+        "performance",
+        "telemetry",
+        "instrumentation",
+        "opentelemetry",
+        "ast",
+        "transformation",
+        "monitoring",
+        "profiling",
+        "aot"
+      ]
+    },
+    {
+      "file": "performance_comparer.yaml",
+      "name": "Performance Comparer",
+      "type": "executable",
+      "description": "Universal comparison tool for performance testing, content analysis, and quality assessment.\n\nFeatures:\n- Performance comparison with multiple strategies (sequential, interleaved, parallel, warmup, sustained)\n- 0-infinity scoring scale (0=dead stop, 100=identical, >100=faster)\n- Text similarity and diff analysis\n- Quality comparison with custom metrics\n- Telemetry integration for tracking\n- Automatic test case generation from results\n\nUse for:\n- Comparing two endpoint/function implementations\n- A/B performance testing\n- Regression detection\n- Content similarity analysis\n- Quality scoring with custom metrics\n",
+      "tags": [
+        "performance",
+        "comparison",
+        "testing",
+        "benchmarking",
+        "analysis",
+        "a-b-testing",
+        "telemetry"
+      ]
+    },
+    {
       "file": "performance_profiler.yaml",
       "name": "Performance Profiler",
       "type": "llm",
@@ -2758,6 +3234,57 @@
         "metrics",
         "memory",
         "mocking"
+      ]
+    }
+  ],
+  "stats": [
+    {
+      "file": "statistical_analysis.yaml",
+      "name": "Statistical Analysis",
+      "type": "executable",
+      "description": "Comprehensive statistical analysis tool using scikit-learn, scipy, and numpy.\n\nPerforms a wide range of statistical analyses including:\n- Descriptive statistics (mean, median, mode, variance, percentiles, etc.)\n- Hypothesis testing (t-tests, ANOVA, Mann-Whitney, Wilcoxon, etc.)\n- Correlation analysis (Pearson, Spearman, Kendall)\n- Regression analysis (linear, polynomial)\n- Outlier detection (IQR, Z-score, Isolation Forest)\n- Clustering analysis (K-Means, DBSCAN, Hierarchical)\n- Comparative analysis between multiple datasets\n\nComplements the pattern recognition tool by providing statistical insights into\npatterns, trends, and relationships in data.\n",
+      "tags": [
+        "stats",
+        "statistics",
+        "analysis",
+        "data-science",
+        "scikit-learn",
+        "hypothesis-testing",
+        "correlation",
+        "regression",
+        "clustering",
+        "outliers"
+      ]
+    }
+  ],
+  "visualization": [
+    {
+      "file": "mermaid_builder.yaml",
+      "name": "Mermaid Diagram Builder",
+      "type": "executable",
+      "description": "Generates Mermaid diagram syntax from structured data, conversations, or tool execution flows. Supports flowcharts, sequence diagrams, state diagrams, class diagrams, and more.",
+      "tags": [
+        "visualization",
+        "diagram",
+        "mermaid",
+        "flowchart",
+        "sequence",
+        "documentation"
+      ]
+    },
+    {
+      "file": "mermaid_renderer.yaml",
+      "name": "Mermaid Renderer",
+      "type": "executable",
+      "description": "Renders Mermaid diagram syntax to image files (SVG, PNG, PDF). Converts text-based Mermaid diagrams into visual outputs.",
+      "tags": [
+        "visualization",
+        "diagram",
+        "mermaid",
+        "rendering",
+        "image",
+        "svg",
+        "png"
       ]
     }
   ]

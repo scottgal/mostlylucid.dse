@@ -47,6 +47,15 @@ llm:
       quality: "good"
       timeout: 60
 
+    qwen25_3b:
+        name: "qwen2.5:3b"
+        backend: "ollama"
+        context_window: 32768
+        cost: "low"
+        speed: "very-fast"
+        quality: "good"
+        timeout: 60
+
     qwen_3b:
       name: "qwen2.5-coder:3b"
       backend: "ollama"
@@ -153,8 +162,8 @@ llm:
   defaults:
     god: deepseek_16b          # Most powerful local model
     escalation: qwen_14b       # Strong model for complex issues
-    general: llama3            # General purpose model
-    fast: gemma3_1b            # Fast for simple tasks (changed from 4b to 1b)
+    general: gemma3_4b           # General purpose model
+    fast: qwen25_3b            # Fast for simple tasks (changed from 4b to 1b)
     veryfast: gemma3_1b        # Extremely fast for triage (sentinel)
 
   # ==========================================================================
@@ -266,7 +275,7 @@ rag_memory:
 # Complements RAG by storing detailed bulk data (logs, bugs, ancestry, etc.)
 # while RAG handles semantic search
 database:
-  enabled: true
+  enabled: true  # Re-enabled with auto-create DB support
   type: "postgres"
   host: "${POSTGRES_HOST:-localhost}"
   port: "${POSTGRES_PORT:-5432}"

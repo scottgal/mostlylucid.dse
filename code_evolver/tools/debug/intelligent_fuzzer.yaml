@@ -1,0 +1,64 @@
+name: "Intelligent Fuzzer"
+type: "executable"
+description: |
+  Advanced fuzzing tool that finds edge cases and breaks functions by feeding them
+  malformed, adversarial, and edge-case inputs. Inspired by Hypothesis and Atheris.
+
+  Features:
+  - Type-aware fuzzing based on function signatures
+  - Mutation-based fuzzing from valid inputs
+  - Grammar-based fuzzing for structured data
+  - Adversarial fuzzing (SQL injection, XSS, path traversal, command injection)
+  - Boundary value analysis
+  - Coverage-guided fuzzing
+  - Crash detection and reproduction
+  - Automatic test case generation from failures
+
+  Strategies:
+  - Random: Pure random data generation
+  - Type-aware: Based on type hints
+  - Mutation: Mutate valid inputs
+  - Grammar: Grammar-based structured data
+  - Boundary: Test boundary values (0, max, min, inf, nan, etc.)
+  - Adversarial: Known attack patterns
+
+  Use for:
+  - Finding edge cases in tools
+  - Security testing (injection vulnerabilities)
+  - Mutation testing optimization
+  - Generating comprehensive unit tests
+  - Regression testing
+  - Property-based testing
+
+  Outputs:
+  - Crash reports with stack traces
+  - Unique crash categorization
+  - Input reproduction cases
+  - Auto-generated pytest test cases
+  - Coverage analysis
+
+tags:
+  - fuzzing
+  - testing
+  - security
+  - edge-cases
+  - mutation
+  - property-testing
+  - crash-detection
+  - test-generation
+  - vulnerability-scanning
+
+python_module: "src.intelligent_fuzzer"
+entry_point: "IntelligentFuzzer"
+
+attack_patterns:
+  - sql_injection
+  - xss
+  - path_traversal
+  - command_injection
+
+supports:
+  - type_hints
+  - valid_examples
+  - custom_strategies
+  - deterministic_seed

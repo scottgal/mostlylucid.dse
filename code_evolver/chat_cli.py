@@ -2085,6 +2085,41 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
         # Start clean workflow display with user's original input
         self.display.start_workflow(display_description)
 
+        # Wait for tools to load before starting workflow generation
+        if not self._tools_loader.is_ready_sync():
+            # Get current tool count
+            if self._tools_loader.tools_manager:
+                total_tools = len(self._tools_loader.tools_manager.tools)
+            else:
+                total_tools = "?"
+
+            console.print(f"[cyan]⏳ Waiting for tools to load... ({total_tools} loaded so far)[/cyan]")
+
+            # Wait with periodic status updates
+            import time
+            wait_start = time.time()
+            last_count = 0
+            while not self._tools_loader.is_ready_sync():
+                time.sleep(0.5)
+                elapsed = time.time() - wait_start
+
+                # Update status every second
+                if elapsed - int(elapsed) < 0.5:
+                    if self._tools_loader.tools_manager:
+                        current_count = len(self._tools_loader.tools_manager.tools)
+                        if current_count != last_count:
+                            console.print(f"[dim cyan]  {current_count} tools loaded...[/dim cyan]")
+                            last_count = current_count
+
+                # Timeout after 60 seconds
+                if elapsed > 60:
+                    console.print("[yellow]⚠  Tool loading timeout, proceeding anyway...[/yellow]")
+                    break
+
+            if self._tools_loader.is_ready_sync():
+                final_count = len(self._tools_loader.tools_manager.tools) if self._tools_loader.tools_manager else 0
+                console.print(f"[green]✓ All tools loaded ({final_count} total)[/green]\n")
+
         # Step 0: Evaluate task type using tinyllama (fast preprocessing)
         # NOTE: This is ONLY for routing hints - the original description is ALWAYS
         # passed to overseer and code generators. task_evaluation just helps us
@@ -2118,12 +2153,8 @@ Press [bold]Ctrl-C[/bold] to cancel current task and return to prompt.
 
             console.print(f"[cyan]-> Direct tool routing: {tool_name}[/cyan]")
 
-            # Try to get the tool - wait for tools to fully load first
-            try:
-                self.tools_manager._loading_complete.wait(timeout=5)  # Wait up to 5 seconds
-            except Exception as e:
-                logger.debug(f"Error waiting for tools: {e}")
-
+            # Wait for tools to fully load first (tools_manager property handles this)
+            # The tools_manager property automatically waits for loading if needed
             tool = self.tools_manager.get_tool(tool_name)
 
             # DEBUG: Log all available tools if not found

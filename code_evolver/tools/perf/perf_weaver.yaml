@@ -1,0 +1,48 @@
+name: "Performance Weaver"
+type: "executable"
+description: |
+  Automatic OpenTelemetry instrumentation via AST transformation. Weaves telemetry tracking
+  into Python code without manual instrumentation.
+
+  Features:
+  - AST-based code transformation
+  - Automatic function instrumentation
+  - Class method instrumentation
+  - Decorator-based usage (@weave_function, @weave_class)
+  - File-based batch instrumentation
+  - Configurable sampling and filtering
+  - Preserves code functionality
+  - Generates .instrumented.py files
+
+  Use for:
+  - Adding telemetry to existing code
+  - Performance profiling without code changes
+  - Automatic metric collection
+  - Hot-path detection
+  - Production monitoring setup
+
+  Configuration:
+  - Enable/disable functions vs methods
+  - Include/exclude private methods
+  - Trace arguments and return values
+  - Configurable exclusion patterns
+  - Sampling rate control
+
+tags:
+  - performance
+  - telemetry
+  - instrumentation
+  - opentelemetry
+  - ast
+  - transformation
+  - monitoring
+  - profiling
+  - aot
+
+python_module: "src.perf_weaver"
+entry_point: "PerfWeaver"
+
+usage_examples:
+  decorator_function: "@weave_function"
+  decorator_class: "@weave_class"
+  file_based: "weaver.weave_file('script.py')"

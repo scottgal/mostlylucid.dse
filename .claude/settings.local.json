@@ -23,7 +23,8 @@
       "Bash(nul)",
       "Bash(xcopy:*)",
       "Bash(robocopy:*)",
-      "Bash(tools_data.json)"
+      "Bash(tools_data.json)",
+      "Bash(timeout 90 bash:*)"
     ],
     "deny": [],
     "ask": []

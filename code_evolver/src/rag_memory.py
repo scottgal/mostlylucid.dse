@@ -532,7 +532,7 @@ class RAGMemory:
 
             endpoint = self.ollama_client.base_url
             response = requests.post(
-                f"{endpoint}/api/embeddings",
+                f"{endpoint}/api/embed",
                 json={
                     "model": self.embedding_model,
                     "prompt": text

@@ -396,7 +396,43 @@
     "interaction_2bb4e746e973",
     "interaction_df186abca0ac",
     "interaction_60e5d3682ebf",
-    "tool_task_automatically_genera_1763492162"
+    "tool_task_automatically_genera_1763492162",
+    "tool_bible_api",
+    "tool_frankfurter_currency",
+    "tool_free_dictionary_api",
+    "tool_ip_geolocation_api",
+    "tool_jokes_api",
+    "tool_languagetool_api",
+    "tool_lorem_picsum_api",
+    "tool_nominatim_geocoding",
+    "tool_public_apis_discovery",
+    "tool_quran_api",
+    "tool_random_data_api",
+    "tool_rest_countries_api",
+    "tool_intelligent_fuzzer",
+    "tool_image_converter",
+    "tool_api_content_router",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator",
+    "tool_performance_comparer",
+    "tool_perf_weaver",
+    "tool_statistical_analysis",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "yaml-defined": [
     "tool_ask_user",
@@ -576,7 +612,42 @@
     "tool_nmt_translator",
     "tool_comprehensive_tool_profiler",
     "tool_performance_regression_evaluator",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_bible_api",
+    "tool_frankfurter_currency",
+    "tool_free_dictionary_api",
+    "tool_ip_geolocation_api",
+    "tool_jokes_api",
+    "tool_languagetool_api",
+    "tool_lorem_picsum_api",
+    "tool_nominatim_geocoding",
+    "tool_public_apis_discovery",
+    "tool_quran_api",
+    "tool_random_data_api",
+    "tool_rest_countries_api",
+    "tool_intelligent_fuzzer",
+    "tool_image_converter",
+    "tool_api_content_router",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator",
+    "tool_performance_comparer",
+    "tool_perf_weaver",
+    "tool_statistical_analysis",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer"
   ],
   "custom": [
     "tool_ask_user",
@@ -600,7 +671,21 @@
     "tool_tcp_client",
     "tool_tcp_server",
     "tool_udp_listener",
-    "tool_udp_sender"
+    "tool_udp_sender",
+    "tool_bible_api",
+    "tool_frankfurter_currency",
+    "tool_free_dictionary_api",
+    "tool_ip_geolocation_api",
+    "tool_jokes_api",
+    "tool_languagetool_api",
+    "tool_lorem_picsum_api",
+    "tool_nominatim_geocoding",
+    "tool_public_apis_discovery",
+    "tool_quran_api",
+    "tool_random_data_api",
+    "tool_rest_countries_api",
+    "tool_task_automatically_genera_1763492162",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "user-input": [
     "tool_ask_user"
@@ -613,7 +698,8 @@
   ],
   "prompt": [
     "tool_ask_user",
-    "invocation_general_1763484767279"
+    "invocation_general_1763484767279",
+    "invocation_general_1763508490273"
   ],
   "cli": [
     "tool_ask_user",
@@ -684,7 +770,22 @@
     "tool_nmt_translate",
     "tool_workflow_documenter",
     "tool_github_mcp",
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator"
   ],
   "fact-check": [
     "tool_google_factcheck"
@@ -723,7 +824,8 @@
     "tool_http_raw_client",
     "tool_http_rest_client",
     "tool_sse_stream",
-    "tool_fetch_mcp"
+    "tool_fetch_mcp",
+    "tool_httpbin"
   ],
   "server": [
     "tool_http_server",
@@ -733,7 +835,9 @@
   "rest": [
     "tool_http_server",
     "tool_api_wrapper_generator",
-    "tool_http_rest_client"
+    "tool_http_rest_client",
+    "tool_jsonplaceholder",
+    "tool_reqres"
   ],
   "endpoint": [
     "tool_http_server"
@@ -864,7 +968,14 @@
     "tool_write_markdown_doc",
     "tool_comprehensive_tool_profiler",
     "tool_performance_regression_evaluator",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_intelligent_fuzzer",
+    "tool_image_converter",
+    "tool_performance_comparer",
+    "tool_perf_weaver",
+    "tool_statistical_analysis",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer"
   ],
   "debug": [
     "tool_bugcatcher",
@@ -880,7 +991,8 @@
     "tool_parse_static_analysis",
     "tool_python_syntax_validator",
     "tool_run_static_analysis",
-    "tool_stdin_usage_validator"
+    "tool_stdin_usage_validator",
+    "tool_intelligent_fuzzer"
   ],
   "python": [
     "tool_call_tool_validator",
@@ -1123,7 +1235,8 @@
     "exec_invocation_store_code_fix_pattern_1763491852421",
     "exec_invocation_store_code_fix_pattern_1763491940740",
     "exec_invocation_store_code_fix_pattern_1763491956284",
-    "exec_invocation_store_code_fix_pattern_1763492005794"
+    "exec_invocation_store_code_fix_pattern_1763492005794",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "validation": [
     "tool_call_tool_validator",
@@ -1203,7 +1316,9 @@
     "tool_article_analyzer",
     "tool_performance_profiler",
     "tool_style_extraction_evaluator",
-    "tool_summarizer"
+    "tool_summarizer",
+    "tool_performance_comparer",
+    "tool_statistical_analysis"
   ],
   "packaging": [
     "tool_dependency_analyzer",
@@ -1239,7 +1354,17 @@
     "tool_code_optimizer",
     "tool_llm_fake_data_generator",
     "tool_performance_regression_evaluator",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_intelligent_fuzzer",
+    "tool_httpbin",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator",
+    "tool_performance_comparer"
   ],
   "no-tracking": [
     "tool_internal_test_validator"
@@ -1410,7 +1535,8 @@
   "security": [
     "tool_bandit_security",
     "tool_security_auditor",
-    "tool_port_scanner"
+    "tool_port_scanner",
+    "tool_intelligent_fuzzer"
   ],
   "vulnerability": [
     "tool_bandit_security",
@@ -1425,7 +1551,11 @@
   ],
   "arithmetic": [
     "tool_basic_calculator",
-    "spec_task_automatically_genera_1763492162"
+    "spec_task_automatically_genera_1763492162",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "calculator": [
     "tool_basic_calculator"
@@ -1441,7 +1571,8 @@
   "test-generation": [
     "tool_behave_test_generator",
     "tool_pynguin_config",
-    "tool_pynguin_test_generator"
+    "tool_pynguin_test_generator",
+    "tool_intelligent_fuzzer"
   ],
   "gherkin": [
     "tool_behave_test_generator"
@@ -1587,7 +1718,8 @@
     "tool_doc_generator",
     "tool_explainer",
     "tool_technical_writer",
-    "tool_workflow_documenter"
+    "tool_workflow_documenter",
+    "tool_mermaid_builder"
   ],
   "signalr": [
     "tool_connect_signalr",
@@ -1634,7 +1766,12 @@
     "tool_content_splitter"
   ],
   "conversation": [
-    "tool_conversation_manager"
+    "tool_conversation_manager",
+    "interaction_1763507407543",
+    "interaction_1763507441441",
+    "interaction_1763508247048",
+    "interaction_1763508295369",
+    "interaction_1763510404202"
   ],
   "context-memory": [
     "tool_conversation_manager"
@@ -1674,7 +1811,9 @@
     "tool_comprehensive_tool_profiler",
     "tool_performance_regression_evaluator",
     "tool_timeit_optimizer",
-    "timeout_stats_llama3"
+    "timeout_stats_llama3",
+    "tool_performance_comparer",
+    "tool_perf_weaver"
   ],
   "docker": [
     "tool_docker_compose_generator",
@@ -1737,7 +1876,8 @@
     "tool_task_to_workflow_router",
     "tool_workflow_documenter",
     "tool_comprehensive_tool_profiler",
-    "tool_task_automatically_genera_1763492162"
+    "tool_task_automatically_genera_1763492162",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "readme": [
     "tool_document_workflow"
@@ -1792,7 +1932,11 @@
     "tool_extract_spec_from_file",
     "spec_generate_customer_service_resp_1763484756",
     "spec_task_automatically_genera_1763492052",
-    "spec_task_automatically_genera_1763492162"
+    "spec_task_automatically_genera_1763492162",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "planning": [
     "tool_extract_spec_from_file",
@@ -1908,7 +2052,8 @@
     "tool_signalr_connection_parser"
   ],
   "ast": [
-    "tool_fix_syntax_error"
+    "tool_fix_syntax_error",
+    "tool_perf_weaver"
   ],
   "type-error": [
     "tool_fix_type_error"
@@ -1960,10 +2105,13 @@
   ],
   "language": [
     "tool_language_detector",
-    "tool_style_extractor"
+    "tool_style_extractor",
+    "tool_free_dictionary_api",
+    "tool_languagetool_api"
   ],
   "detection": [
-    "tool_language_detector"
+    "tool_language_detector",
+    "tool_ipify"
   ],
   "i18n": [
     "tool_language_detector"
@@ -2016,7 +2164,8 @@
   ],
   "benchmarking": [
     "tool_locust_load_tester",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_performance_comparer"
   ],
   "failure-tracking": [
     "tool_mark_tool_failure"
@@ -2035,7 +2184,8 @@
   ],
   "mutation": [
     "tool_mutate_tool",
-    "tool_prompt_mutator"
+    "tool_prompt_mutator",
+    "tool_intelligent_fuzzer"
   ],
   "prompt-engineering": [
     "tool_mutate_tool",
@@ -2107,7 +2257,8 @@
   ],
   "monitoring": [
     "tool_platform_info",
-    "tool_network_diagnostics"
+    "tool_network_diagnostics",
+    "tool_perf_weaver"
   ],
   "cpu": [
     "tool_platform_info",
@@ -2132,7 +2283,8 @@
   ],
   "data": [
     "tool_postgres_client",
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_rest_countries_api"
   ],
   "docstrings": [
     "tool_pydocstyle_checker"
@@ -2145,7 +2297,8 @@
     "tool_code_optimizer",
     "tool_performance_profiler",
     "tool_comprehensive_tool_profiler",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_perf_weaver"
   ],
   "pyinstrument": [
     "tool_pyinstrument_profiler",
@@ -2198,7 +2351,9 @@
     "tool_radon_complexity"
   ],
   "random": [
-    "tool_random_data_generator"
+    "tool_random_data_generator",
+    "tool_random_data_api",
+    "tool_bored_api"
   ],
   "code-cleanup": [
     "tool_remove_unused_node_runtime_import"
@@ -2279,7 +2434,22 @@
   ],
   "openapi": [
     "tool_smart_api_parser",
-    "tool_nmt_translator"
+    "tool_nmt_translator",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator"
   ],
   "swagger": [
     "tool_smart_api_parser"
@@ -2331,7 +2501,11 @@
     "tool_translation_quality_checker",
     "tool_workflow_documenter",
     "tool_performance_regression_evaluator",
-    "interaction_08507638bddc"
+    "interaction_08507638bddc",
+    "tool_api_content_router",
+    "interaction_8f50a43dc075",
+    "tool_what_is_my_location_from_my_ip",
+    "feedback_positive_long_form_writer_0b6229fb3a0f255a"
   ],
   "flexible": [
     "tool_smart_faker"
@@ -2379,7 +2553,12 @@
   "writing": [
     "tool_style_extractor",
     "tool_content_generator",
-    "tool_technical_writer"
+    "tool_technical_writer",
+    "tool_languagetool_api",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "web-scraping": [
     "tool_style_extractor"
@@ -2401,7 +2580,8 @@
     "tool_trim_tool_versions"
   ],
   "conversion": [
-    "tool_unit_converter"
+    "tool_unit_converter",
+    "tool_frankfurter_currency"
   ],
   "units": [
     "tool_unit_converter"
@@ -2429,13 +2609,21 @@
     "tool_workflow_datastore"
   ],
   "visualization": [
-    "tool_workflow_diagram"
+    "tool_workflow_diagram",
+    "tool_kroki",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer"
   ],
   "diagram": [
-    "tool_workflow_diagram"
+    "tool_workflow_diagram",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer"
   ],
   "mermaid": [
-    "tool_workflow_diagram"
+    "tool_workflow_diagram",
+    "tool_kroki",
+    "tool_mermaid_builder",
+    "tool_mermaid_renderer"
   ],
   "ascii": [
     "tool_workflow_diagram"
@@ -2475,7 +2663,8 @@
   ],
   "content": [
     "tool_article_analyzer",
-    "tool_content_generator"
+    "tool_content_generator",
+    "tool_random_data_api"
   ],
   "review": [
     "tool_article_analyzer",
@@ -2512,13 +2701,16 @@
     "tool_code_reviewer"
   ],
   "code": [
-    "tool_code_translation_validator"
+    "tool_code_translation_validator",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "syntax-check": [
     "tool_code_translation_validator"
   ],
   "generation": [
-    "tool_content_generator"
+    "tool_content_generator",
+    "tool_qrcode_generator",
+    "tool_uuid_generator"
   ],
   "creative": [
     "tool_content_generator"
@@ -2565,7 +2757,9 @@
   "general": [
     "tool_general",
     "invocation_general_1763484767279",
-    "interaction_08507638bddc"
+    "interaction_08507638bddc",
+    "invocation_general_1763508490273",
+    "interaction_8f50a43dc075"
   ],
   "any-task": [
     "tool_general"
@@ -2632,11 +2826,13 @@
   ],
   "proofreading": [
     "tool_proofreader",
-    "tool_quick_feedback"
+    "tool_quick_feedback",
+    "tool_languagetool_api"
   ],
   "grammar": [
     "tool_proofreader",
-    "tool_quick_feedback"
+    "tool_quick_feedback",
+    "tool_languagetool_api"
   ],
   "editing": [
     "tool_proofreader"
@@ -2663,7 +2859,8 @@
     "tool_quick_translator"
   ],
   "clustering": [
-    "tool_rag_cluster_optimizer"
+    "tool_rag_cluster_optimizer",
+    "tool_statistical_analysis"
   ],
   "fitness": [
     "tool_rag_cluster_optimizer"
@@ -2678,7 +2875,8 @@
     "tool_security_auditor"
   ],
   "comparison": [
-    "tool_semantic_comparator"
+    "tool_semantic_comparator",
+    "tool_performance_comparer"
   ],
   "semantic": [
     "tool_semantic_comparator"
@@ -2686,7 +2884,8 @@
   "routing": [
     "tool_semantic_comparator",
     "tool_task_to_workflow_router",
-    "tool_model_selector"
+    "tool_model_selector",
+    "tool_api_content_router"
   ],
   "cache-decision": [
     "tool_semantic_comparator"
@@ -2837,7 +3036,8 @@
     "tool_tcp_client",
     "tool_tcp_server",
     "tool_udp_listener",
-    "tool_udp_sender"
+    "tool_udp_sender",
+    "tool_ipify"
   ],
   "decoding": [
     "tool_binary_decoder"
@@ -2889,7 +3089,8 @@
     "tool_port_scanner"
   ],
   "discovery": [
-    "tool_port_scanner"
+    "tool_port_scanner",
+    "tool_public_apis_discovery"
   ],
   "tcp": [
     "tool_port_scanner",
@@ -2950,11 +3151,14 @@
     "tool_performance_profiler",
     "tool_performance_regression_evaluator",
     "tool_pyinstrument_profiler",
-    "tool_timeit_optimizer"
+    "tool_timeit_optimizer",
+    "tool_performance_comparer",
+    "tool_perf_weaver"
   ],
   "regression": [
     "tool_comprehensive_tool_profiler",
-    "tool_performance_regression_evaluator"
+    "tool_performance_regression_evaluator",
+    "tool_statistical_analysis"
   ],
   "timeit": [
     "tool_timeit_optimizer"
@@ -2965,28 +3169,42 @@
   "specification": [
     "spec_generate_customer_service_resp_1763484756",
     "spec_task_automatically_genera_1763492052",
-    "spec_task_automatically_genera_1763492162"
+    "spec_task_automatically_genera_1763492162",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "plan": [
     "spec_generate_customer_service_resp_1763484756",
     "spec_task_automatically_genera_1763492052",
-    "spec_task_automatically_genera_1763492162"
+    "spec_task_automatically_genera_1763492162",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "generated": [
     "spec_generate_customer_service_resp_1763484756",
     "spec_task_automatically_genera_1763492052",
     "spec_task_automatically_genera_1763492162",
-    "tool_task_automatically_genera_1763492162"
+    "tool_task_automatically_genera_1763492162",
+    "spec_what_is_my_geolocation_previ",
+    "spec_previous_conversation_hist",
+    "spec_what_is_my_location_from_my_ip",
+    "spec_use_the_api_to_find_the_geoloc"
   ],
   "timeout_stats": [
     "timeout_stats_llama3"
   ],
   "llama3": [
     "timeout_stats_llama3",
-    "invocation_general_1763484767279"
+    "invocation_general_1763484767279",
+    "invocation_general_1763508490273"
   ],
   "tool_invocation": [
-    "invocation_general_1763484767279"
+    "invocation_general_1763484767279",
+    "invocation_general_1763508490273"
   ],
   "interaction": [
     "interaction_08507638bddc",
@@ -3207,7 +3425,13 @@
     "interaction_09fcbf2a8b29",
     "interaction_2bb4e746e973",
     "interaction_df186abca0ac",
-    "interaction_60e5d3682ebf"
+    "interaction_60e5d3682ebf",
+    "interaction_1763507407543",
+    "interaction_1763507441441",
+    "interaction_1763508247048",
+    "interaction_1763508295369",
+    "interaction_8f50a43dc075",
+    "interaction_1763510404202"
   ],
   "success:True": [
     "interaction_08507638bddc",
@@ -3248,13 +3472,16 @@
     "interaction_b8cf372cdc7b",
     "interaction_ea93b24bd17c",
     "interaction_f1d3d4a55bda",
-    "interaction_222e287c1736"
+    "interaction_222e287c1736",
+    "interaction_8f50a43dc075"
   ],
   "type:llm": [
-    "interaction_08507638bddc"
+    "interaction_08507638bddc",
+    "interaction_8f50a43dc075"
   ],
   "cacheable:False": [
-    "interaction_08507638bddc"
+    "interaction_08507638bddc",
+    "interaction_8f50a43dc075"
   ],
   "backend-selection": [
     "tool_model_selector"
@@ -4767,7 +4994,8 @@
     "interaction_c6b76162f7bd"
   ],
   "auto-generated": [
-    "tool_task_automatically_genera_1763492162"
+    "tool_task_automatically_genera_1763492162",
+    "tool_what_is_my_location_from_my_ip"
   ],
   "chat": [
     "tool_task_automatically_genera_1763492162"
@@ -4783,5 +5011,407 @@
   ],
   "calculation": [
     "tool_task_automatically_genera_1763492162"
+  ],
+  "bible": [
+    "tool_bible_api"
+  ],
+  "scripture": [
+    "tool_bible_api"
+  ],
+  "religion": [
+    "tool_bible_api",
+    "tool_quran_api"
+  ],
+  "christian": [
+    "tool_bible_api"
+  ],
+  "verses": [
+    "tool_bible_api",
+    "tool_quran_api"
+  ],
+  "free": [
+    "tool_bible_api",
+    "tool_frankfurter_currency",
+    "tool_free_dictionary_api",
+    "tool_ip_geolocation_api",
+    "tool_jokes_api",
+    "tool_languagetool_api",
+    "tool_lorem_picsum_api",
+    "tool_nominatim_geocoding",
+    "tool_public_apis_discovery",
+    "tool_quran_api",
+    "tool_random_data_api",
+    "tool_rest_countries_api",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator"
+  ],
+  "no-auth": [
+    "tool_bible_api",
+    "tool_frankfurter_currency",
+    "tool_free_dictionary_api",
+    "tool_ip_geolocation_api",
+    "tool_jokes_api",
+    "tool_languagetool_api",
+    "tool_lorem_picsum_api",
+    "tool_nominatim_geocoding",
+    "tool_quran_api",
+    "tool_random_data_api",
+    "tool_rest_countries_api"
+  ],
+  "currency": [
+    "tool_frankfurter_currency"
+  ],
+  "exchange": [
+    "tool_frankfurter_currency"
+  ],
+  "finance": [
+    "tool_frankfurter_currency"
+  ],
+  "rates": [
+    "tool_frankfurter_currency"
+  ],
+  "forex": [
+    "tool_frankfurter_currency"
+  ],
+  "dictionary": [
+    "tool_free_dictionary_api"
+  ],
+  "definitions": [
+    "tool_free_dictionary_api"
+  ],
+  "vocabulary": [
+    "tool_free_dictionary_api"
+  ],
+  "education": [
+    "tool_free_dictionary_api"
+  ],
+  "ip": [
+    "tool_ip_geolocation_api"
+  ],
+  "geolocation": [
+    "tool_ip_geolocation_api"
+  ],
+  "location": [
+    "tool_ip_geolocation_api",
+    "tool_nominatim_geocoding"
+  ],
+  "network": [
+    "tool_ip_geolocation_api"
+  ],
+  "jokes": [
+    "tool_jokes_api"
+  ],
+  "humor": [
+    "tool_jokes_api"
+  ],
+  "entertainment": [
+    "tool_jokes_api",
+    "tool_bored_api"
+  ],
+  "fun": [
+    "tool_jokes_api",
+    "tool_random_data_api"
+  ],
+  "spelling": [
+    "tool_languagetool_api"
+  ],
+  "images": [
+    "tool_lorem_picsum_api",
+    "tool_placeholder_images",
+    "tool_qrcode_generator"
+  ],
+  "placeholder": [
+    "tool_lorem_picsum_api",
+    "tool_ipsum_generator",
+    "tool_placeholder_images"
+  ],
+  "mockup": [
+    "tool_lorem_picsum_api",
+    "tool_ipsum_generator",
+    "tool_placeholder_images"
+  ],
+  "design": [
+    "tool_lorem_picsum_api"
+  ],
+  "geocoding": [
+    "tool_nominatim_geocoding"
+  ],
+  "maps": [
+    "tool_nominatim_geocoding"
+  ],
+  "address": [
+    "tool_nominatim_geocoding"
+  ],
+  "coordinates": [
+    "tool_nominatim_geocoding"
+  ],
+  "openstreetmap": [
+    "tool_nominatim_geocoding"
+  ],
+  "apis": [
+    "tool_public_apis_discovery"
+  ],
+  "public": [
+    "tool_public_apis_discovery"
+  ],
+  "reference": [
+    "tool_public_apis_discovery",
+    "tool_rest_countries_api"
+  ],
+  "development": [
+    "tool_public_apis_discovery",
+    "tool_agify",
+    "tool_bored_api",
+    "tool_countapi",
+    "tool_genderize",
+    "tool_httpbin",
+    "tool_ipify",
+    "tool_ipsum_generator",
+    "tool_jsonplaceholder",
+    "tool_kroki",
+    "tool_nationalize",
+    "tool_placeholder_images",
+    "tool_qrcode_generator",
+    "tool_randomuser",
+    "tool_reqres",
+    "tool_uuid_generator"
+  ],
+  "quran": [
+    "tool_quran_api"
+  ],
+  "islam": [
+    "tool_quran_api"
+  ],
+  "arabic": [
+    "tool_quran_api"
+  ],
+  "quotes": [
+    "tool_random_data_api"
+  ],
+  "facts": [
+    "tool_random_data_api"
+  ],
+  "countries": [
+    "tool_rest_countries_api"
+  ],
+  "geography": [
+    "tool_rest_countries_api"
+  ],
+  "fuzzing": [
+    "tool_intelligent_fuzzer"
+  ],
+  "edge-cases": [
+    "tool_intelligent_fuzzer"
+  ],
+  "property-testing": [
+    "tool_intelligent_fuzzer"
+  ],
+  "crash-detection": [
+    "tool_intelligent_fuzzer"
+  ],
+  "vulnerability-scanning": [
+    "tool_intelligent_fuzzer"
+  ],
+  "user-query": [
+    "interaction_1763507407543",
+    "interaction_1763507441441",
+    "interaction_1763508247048",
+    "interaction_1763508295369",
+    "interaction_1763510404202"
+  ],
+  "ai": [
+    "tool_api_content_router"
+  ],
+  "intelligent": [
+    "tool_api_content_router"
+  ],
+  "dispatcher": [
+    "tool_api_content_router"
+  ],
+  "sentinel": [
+    "tool_api_content_router"
+  ],
+  "demographics": [
+    "tool_agify",
+    "tool_genderize",
+    "tool_nationalize"
+  ],
+  "age-prediction": [
+    "tool_agify"
+  ],
+  "data-enrichment": [
+    "tool_agify",
+    "tool_genderize",
+    "tool_nationalize"
+  ],
+  "activities": [
+    "tool_bored_api"
+  ],
+  "ideas": [
+    "tool_bored_api"
+  ],
+  "counting": [
+    "tool_countapi"
+  ],
+  "analytics": [
+    "tool_countapi"
+  ],
+  "tracking": [
+    "tool_countapi"
+  ],
+  "statistics": [
+    "tool_countapi",
+    "tool_statistical_analysis"
+  ],
+  "gender-prediction": [
+    "tool_genderize"
+  ],
+  "debugging": [
+    "tool_httpbin"
+  ],
+  "requests": [
+    "tool_httpbin"
+  ],
+  "ip-address": [
+    "tool_ipify"
+  ],
+  "lorem-ipsum": [
+    "tool_ipsum_generator"
+  ],
+  "text-generation": [
+    "tool_ipsum_generator"
+  ],
+  "mock-api": [
+    "tool_jsonplaceholder",
+    "tool_reqres"
+  ],
+  "prototyping": [
+    "tool_jsonplaceholder",
+    "tool_placeholder_images",
+    "tool_reqres"
+  ],
+  "fake-data": [
+    "tool_jsonplaceholder",
+    "tool_randomuser"
+  ],
+  "diagrams": [
+    "tool_kroki"
+  ],
+  "plantuml": [
+    "tool_kroki"
+  ],
+  "graphviz": [
+    "tool_kroki"
+  ],
+  "nationality-prediction": [
+    "tool_nationalize"
+  ],
+  "ui": [
+    "tool_placeholder_images"
+  ],
+  "qrcode": [
+    "tool_qrcode_generator"
+  ],
+  "barcode": [
+    "tool_qrcode_generator"
+  ],
+  "random-data": [
+    "tool_randomuser"
+  ],
+  "users": [
+    "tool_randomuser",
+    "tool_reqres"
+  ],
+  "mockups": [
+    "tool_randomuser"
+  ],
+  "uuid": [
+    "tool_uuid_generator"
+  ],
+  "identifier": [
+    "tool_uuid_generator"
+  ],
+  "a-b-testing": [
+    "tool_performance_comparer"
+  ],
+  "telemetry": [
+    "tool_performance_comparer",
+    "tool_perf_weaver"
+  ],
+  "instrumentation": [
+    "tool_perf_weaver"
+  ],
+  "opentelemetry": [
+    "tool_perf_weaver"
+  ],
+  "transformation": [
+    "tool_perf_weaver"
+  ],
+  "aot": [
+    "tool_perf_weaver"
+  ],
+  "stats": [
+    "tool_statistical_analysis"
+  ],
+  "data-science": [
+    "tool_statistical_analysis"
+  ],
+  "scikit-learn": [
+    "tool_statistical_analysis"
+  ],
+  "hypothesis-testing": [
+    "tool_statistical_analysis"
+  ],
+  "correlation": [
+    "tool_statistical_analysis"
+  ],
+  "outliers": [
+    "tool_statistical_analysis"
+  ],
+  "flowchart": [
+    "tool_mermaid_builder"
+  ],
+  "sequence": [
+    "tool_mermaid_builder"
+  ],
+  "rendering": [
+    "tool_mermaid_renderer"
+  ],
+  "image": [
+    "tool_mermaid_renderer"
+  ],
+  "svg": [
+    "tool_mermaid_renderer"
+  ],
+  "png": [
+    "tool_mermaid_renderer"
+  ],
+  "searching": [
+    "tool_what_is_my_location_from_my_ip"
+  ],
+  "finding": [
+    "tool_what_is_my_location_from_my_ip"
+  ],
+  "tool_feedback": [
+    "feedback_positive_long_form_writer_0b6229fb3a0f255a"
+  ],
+  "positive": [
+    "feedback_positive_long_form_writer_0b6229fb3a0f255a"
+  ],
+  "long_form_writer": [
+    "feedback_positive_long_form_writer_0b6229fb3a0f255a"
   ]
 }

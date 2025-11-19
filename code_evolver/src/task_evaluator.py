@@ -4,7 +4,7 @@ Task Type Evaluator - Uses tinyllama to classify tasks and determine routing.
 Prevents over-optimization by ensuring creative/content tasks use appropriate LLMs.
 """
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -36,14 +36,62 @@ class TaskEvaluator:
     MEDIUM_INPUT = 1000  # < 1000 chars → use phi3 or gemma
     LONG_INPUT = 5000    # < 5000 chars → use llama3
 
-    def __init__(self, ollama_client):
+    def __init__(self, ollama_client, rag_memory=None):
         """
         Initialize task evaluator.
 
         Args:
             ollama_client: OllamaClient for LLM inference
+            rag_memory: Optional RAGMemory for querying available tools
         """
         self.client = ollama_client
+        self.rag_memory = rag_memory
+        self._api_tools_cache = None  # Cache of available API tools
+
+    def _get_relevant_api_tools(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """
+        Query RAG to find relevant API tools based on query.
+
+        Args:
+            query: User's query
+            limit: Maximum number of tools to return
+
+        Returns:
+            List of relevant API tool metadata
+        """
+        if not self.rag_memory:
+            return []
+
+        try:
+            # Search for tools with API-related tags
+            from .rag_memory import ArtifactType
+
+            # Query RAG for similar tools
+            results = self.rag_memory.find_similar(
+                query=query,
+                artifact_type=ArtifactType.TOOL,
+                top_k=limit
+            )
+
+            # Filter to only API tools (openapi, custom API tools)
+            api_tools = []
+            for artifact, similarity in results:
+                # Check if this is an API tool based on tags or metadata
+                if artifact.tags:
+                    api_tags = {'api', 'openapi', 'rest', 'geolocation', 'ip', 'weather',
+                               'currency', 'translation', 'dictionary', 'jokes', 'quotes'}
+                    if any(tag in api_tags for tag in artifact.tags):
+                        api_tools.append({
+                            'name': artifact.name,
+                            'description': artifact.description[:200],
+                            'tags': artifact.tags[:5],  # Limit tags for smaller context
+                            'similarity': similarity
+                        })
+
+            return api_tools[:limit]
+        except Exception as e:
+            logger.warning(f"Failed to query RAG for API tools: {e}")
+            return []
 
     def evaluate_task_type(self, description: str) -> Dict[str, Any]:
         """
@@ -83,70 +131,219 @@ class TaskEvaluator:
                 "evaluation_model": "rule-based"
             }
 
-        # Quick check for system info queries (keyword-based)
-        # IMPORTANT: Use VERY strict matching to avoid false positives
-        # Only match when it's CLEARLY a question about system information
+        # CRITICAL: Fast RAG lookup for exact tool matches FIRST
+        # If we have a 100% match with an existing tool, use it directly
         desc_lower = description.lower()
 
-        # FIRST: Check for action indicators that immediately disqualify system_info
-        # These are tasks that DO something, not query system info
-        action_indicators = [
-            'http://', 'https://',  # URLs indicate external actions
-            'call ', 'ping ', 'download ', 'fetch ', 'upload ',
-            'run ', 'execute ', 'implement ', 'create ', 'build ',
-            'write ', 'develop ', 'make ', 'generate ',
-            'send ', 'post ', 'get ', 'put ', 'delete ',  # HTTP verbs
-        ]
+        # FIRST: Query RAG to find relevant tools (not just APIs, ALL tools)
+        relevant_tools = []
+        if self.rag_memory:
+            try:
+                from .rag_memory import ArtifactType
 
-        if any(indicator in desc_lower for indicator in action_indicators):
-            logger.debug(f"Task contains action indicators - not system_info")
-            # Skip system_info classification entirely - this is an action task
-        else:
-            # Only NOW check if it might be a system info query
-            # Check for explicit system info queries (require question words AT START)
-            is_real_question = any(desc_lower.startswith(q) for q in ['what', 'which', 'how much', 'how many', 'tell me', 'show me'])
-            system_info_keywords = ['memory', 'ram', 'os', 'operating system', 'system specs',
-                                    'machine specs', 'cpu', 'gpu', 'platform', 'hardware']
+                # Fast semantic search for ANY tool matching the query
+                results = self.rag_memory.find_similar(
+                    query=description,
+                    artifact_type=ArtifactType.TOOL,
+                    top_k=3
+                )
 
-            # Only match if it STARTS with question word AND contains system keywords
-            if is_real_question and any(keyword in desc_lower for keyword in system_info_keywords):
-                # When in doubt, verify with LLM sentinel
-                # Use sentinel to confirm this is REALLY a system info question
-                logger.info(f"Potential system info query detected, verifying with sentinel LLM...")
+                if results:
+                    top_match = results[0]
+                    artifact, similarity = top_match
 
-                verification_prompt = f"""Is this task asking for information ABOUT the current system/machine (hardware, OS, specs)?
+                    # If we have a very high similarity match (>95%), this is likely an exact tool match
+                    if similarity > 0.95:
+                        logger.info(f"100% RAG tool match: {artifact.name} (similarity: {similarity:.0%})")
+
+                        # Verify with sentinel LLM (fast check)
+                        verification_prompt = f"""Does this query exactly match this tool?
+
+Query: "{description}"
+Tool: {artifact.name}
+Description: {artifact.description[:200]}
+
+Answer ONLY 'yes' or 'no':"""
+
+                        verification = self.client.generate(
+                            model="gemma3:1b",
+                            prompt=verification_prompt,
+                            max_tokens=5,
+                            temperature=0.0
+                        )
+
+                        if 'yes' in verification.lower().strip():
+                            logger.info(f"Sentinel confirmed 100% match - routing directly to {artifact.name}")
+
+                            # Return with direct tool routing (NO code generation needed)
+                            return {
+                                "task_type": TaskType.CODE_GENERATION,
+                                "complexity": "simple",
+                                "understanding": f"Direct tool execution: {artifact.name}",
+                                "key_aspects": "100% RAG match, exact tool found",
+                                "requires_llm": False,
+                                "requires_content_llm": False,
+                                "can_use_tools": True,
+                                "recommended_tier": "executable",
+                                "recommended_tool": artifact.name,
+                                "exact_match": True,
+                                "reason": f"100% RAG match with existing tool (no code generation needed)",
+                                "input_length": input_length,
+                                "evaluation_model": "rag-exact-match"
+                            }
+
+                    # Store relevant tools for later API routing
+                    relevant_tools = [(artifact, similarity) for artifact, similarity in results[:5]]
+
+            except Exception as e:
+                logger.warning(f"RAG exact match lookup failed: {e}")
+
+        # SECOND: If no exact match, check for API tools specifically
+        relevant_apis = self._get_relevant_api_tools(description, limit=5)
+
+        if relevant_apis:
+            logger.info(f"Found {len(relevant_apis)} relevant API tools in RAG")
+
+            try:
+                # Build a tight, focused prompt with ONLY relevant APIs from RAG
+                import json
+
+                # Create minimal API context from RAG results
+                api_context = []
+                for api in relevant_apis:
+                    api_context.append({
+                        'name': api['name'],
+                        'desc': api['description'][:100],
+                        'tags': api['tags'][:3]
+                    })
+
+                # Use the 1B LLM to route with tight context
+                routing_prompt = f"""Task: "{description}"
+
+Available APIs (from RAG search):
+{json.dumps(api_context, indent=2)}
+
+If this task needs an API, respond with JSON:
+{{"api": "api_name", "confidence": 0.95}}
+
+If NOT an API task, respond:
+{{"api": null, "confidence": 0}}"""
+
+                route_response = self.client.generate(
+                    model="gemma3:1b",
+                    prompt=routing_prompt,
+                    max_tokens=100,
+                    temperature=0.1
+                )
+
+                # Parse response
+                import re
+                json_match = re.search(r'\{[^}]+\}', route_response)
+                if json_match:
+                    route_data = json.loads(json_match.group(0))
+
+                    # If the LLM has high confidence, this is an API call
+                    if route_data.get('api') and route_data.get('confidence', 0) > 0.7:
+                        logger.info(f"RAG+LLM routing: {route_data['api']} (confidence: {route_data['confidence']:.0%})")
+
+                        # Return early with API routing
+                        return {
+                            "task_type": TaskType.CODE_GENERATION,
+                            "complexity": "simple",
+                            "understanding": f"API call to {route_data['api']}",
+                            "key_aspects": f"Routed via RAG semantic search",
+                            "requires_llm": False,
+                            "requires_content_llm": False,
+                            "can_use_tools": True,
+                            "recommended_tier": "executable",
+                            "recommended_api": route_data['api'],
+                            "reason": f"API request routed to {route_data['api']} via RAG",
+                            "input_length": input_length,
+                            "evaluation_model": "rag+gemma3:1b"
+                        }
+                    else:
+                        logger.info(f"LLM rejected API routing: confidence too low ({route_data.get('confidence', 0):.0%})")
+            except Exception as e:
+                logger.warning(f"RAG-based API routing failed: {e}, continuing with standard classification")
+
+        # NOW check for system info queries
+        # Only after we've ruled out API calls
+
+        # CRITICAL: Exclude IP/geolocation queries from system_info
+        # These should ALWAYS go to API, never to platform_info
+        ip_exclusions = ['my ip', 'external ip', 'public ip', 'ip address',
+                        'where am i', 'my geolocation', 'my location',
+                        'geolocation', 'geolocate', 'find the geolocation',
+                        'get the geolocation', 'location of this machine',
+                        'what country', 'what city']
+
+        # Also check for explicit API usage requests
+        api_usage_indicators = ['use the api', 'call the api', 'use api to', 'call api to']
+
+        is_ip_query = any(exclusion in desc_lower for exclusion in ip_exclusions)
+        is_explicit_api = any(indicator in desc_lower for indicator in api_usage_indicators)
+
+        if is_ip_query or is_explicit_api:
+            # This is an IP/geolocation query OR explicit API request - force API routing
+            reason = "IP/geolocation query" if is_ip_query else "Explicit API usage request"
+            logger.info(f"{reason} detected - forcing API routing")
+            return {
+                "task_type": TaskType.CODE_GENERATION,
+                "complexity": "simple",
+                "understanding": "IP address or geolocation lookup via API",
+                "key_aspects": "external IP, geolocation, API call",
+                "requires_llm": False,
+                "requires_content_llm": False,
+                "can_use_tools": True,
+                "recommended_tier": "executable",
+                "recommended_api": "ip_geolocation_api",
+                "reason": f"{reason} requires external API call (never use platform_info for IP)",
+                "input_length": input_length,
+                "evaluation_model": "keyword-based-api-detection"
+            }
+
+        is_real_question = any(desc_lower.startswith(q) for q in ['what', 'which', 'how much', 'how many', 'tell me', 'show me'])
+        system_info_keywords = ['memory', 'ram', 'os', 'operating system', 'system specs',
+                                'machine specs', 'cpu', 'gpu', 'platform', 'hardware']
+
+        # Only match if it STARTS with question word AND contains system keywords
+        if is_real_question and any(keyword in desc_lower for keyword in system_info_keywords):
+            # Use sentinel to confirm this is REALLY a system info question
+            logger.info(f"Potential system info query detected, verifying with sentinel LLM...")
+
+            verification_prompt = f"""Is this task asking for information ABOUT the current system/machine (hardware, OS, specs)?
 
 Task: "{description}"
 
 Answer ONLY 'yes' if it's asking for information about the system itself (like 'what is my RAM', 'show me CPU specs').
-Answer 'no' if it's asking to DO something (like 'ping X', 'download Y', 'call URL', 'run command').
+Answer 'no' if it's asking to DO something (like 'ping X', 'download Y', 'call URL', 'run command', 'use API').
 
 Answer (yes/no):"""
 
-                try:
-                    verification = self.client.generate(
-                        model="gemma3:1b",  # Fast verification
-                        prompt=verification_prompt,
-                        max_tokens=10,
-                        temperature=0.0  # Deterministic
-                    )
+            try:
+                verification = self.client.generate(
+                    model="gemma3:1b",  # Fast verification
+                    prompt=verification_prompt,
+                    max_tokens=10,
+                    temperature=0.0  # Deterministic
+                )
 
-                    if 'yes' in verification.lower().strip():
-                        logger.info(f"Sentinel confirmed: system info query")
-                        routing = self._determine_routing(TaskType.SYSTEM_INFO, description, "simple")
-                        return {
-                            "task_type": TaskType.SYSTEM_INFO,
-                            "complexity": "simple",
-                            "understanding": "System information query",
-                            "key_aspects": "hardware, specs, platform",
-                            "input_length": input_length,
-                            "evaluation_model": "sentinel-verified",
-                            **routing
-                        }
-                    else:
-                        logger.info(f"Sentinel rejected: not a system info query - '{verification.strip()}'")
-                except Exception as e:
-                    logger.warning(f"Sentinel verification failed: {e}, skipping system_info classification")
+                if 'yes' in verification.lower().strip():
+                    logger.info(f"Sentinel confirmed: system info query")
+                    routing = self._determine_routing(TaskType.SYSTEM_INFO, description, "simple")
+                    return {
+                        "task_type": TaskType.SYSTEM_INFO,
+                        "complexity": "simple",
+                        "understanding": "System information query",
+                        "key_aspects": "hardware, specs, platform",
+                        "input_length": input_length,
+                        "evaluation_model": "sentinel-verified",
+                        **routing
+                    }
+                else:
+                    logger.info(f"Sentinel rejected: not a system info query - '{verification.strip()}'")
+            except Exception as e:
+                logger.warning(f"Sentinel verification failed: {e}, skipping system_info classification")
 
         # Choose model based on input length
         if input_length < self.SHORT_INPUT:
@@ -222,13 +419,15 @@ COMPLEXITY: [pick one]"""
                 logger.info(f"Detected data generation request - overriding to creative_content")
                 category = 'creative_content'
 
-            # CRITICAL: Override system_info for ACTION tasks
-            # If task contains URLs or action verbs, it's NOT a system info query
-            action_indicators = ['http://', 'https://', 'call ', 'ping ', 'download ', 'fetch ',
-                                'upload ', 'send ', 'post ', 'get ', 'put ', 'delete ']
-            if category == 'system_info' and any(indicator in desc_lower for indicator in action_indicators):
-                logger.info(f"Task contains action indicators - overriding system_info to code_generation")
-                category = 'code_generation'  # Action tasks need code execution
+            # CRITICAL: Override system_info for API/ACTION tasks
+            # Use RAG to check if this is actually an API call
+            if category == 'system_info':
+                # Check if RAG found relevant APIs (reuse the earlier check)
+                relevant_apis = self._get_relevant_api_tools(description, limit=3)
+
+                if relevant_apis:
+                    logger.info(f"Overriding system_info - found {len(relevant_apis)} relevant APIs in RAG")
+                    category = 'code_generation'  # API calls need code execution
 
             # Don't try to parse understanding or key_aspects - tinyllama is too unreliable
             understanding = ""
@@ -335,7 +534,16 @@ COMPLEXITY: [pick one]"""
             # Generate helpful suggestions based on what we detected
             suggestions = []
 
-            if desc_lower in ['test', 'testing']:
+            # Single punctuation character
+            if len(description) == 1 and not description.isalnum():
+                suggestions = [
+                    "Describe what you want to create in words",
+                    "Example: 'write a function to calculate fibonacci'",
+                    "Example: 'create a program to sort a list'"
+                ]
+                understanding = "Input is just a punctuation character - needs a description in words"
+
+            elif desc_lower in ['test', 'testing']:
                 suggestions = [
                     "Try: 'write a function to add two numbers'",
                     "Try: 'create a fibonacci sequence generator'",

@@ -1,0 +1,44 @@
+name: "Performance Comparer"
+type: "executable"
+description: |
+  Universal comparison tool for performance testing, content analysis, and quality assessment.
+
+  Features:
+  - Performance comparison with multiple strategies (sequential, interleaved, parallel, warmup, sustained)
+  - 0-infinity scoring scale (0=dead stop, 100=identical, >100=faster)
+  - Text similarity and diff analysis
+  - Quality comparison with custom metrics
+  - Telemetry integration for tracking
+  - Automatic test case generation from results
+
+  Use for:
+  - Comparing two endpoint/function implementations
+  - A/B performance testing
+  - Regression detection
+  - Content similarity analysis
+  - Quality scoring with custom metrics
+
+tags:
+  - performance
+  - comparison
+  - testing
+  - benchmarking
+  - analysis
+  - a-b-testing
+  - telemetry
+
+python_module: "src.comparer_tool"
+entry_point: "compare_performance"
+
+strategies:
+  - sequential
+  - interleaved
+  - parallel
+  - warmup
+  - sustained
+
+outputs:
+  - performance_score
+  - comparison_report
+  - detailed_metrics
+  - winner_determination

@@ -7,6 +7,17 @@ import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+# Load .env file if it exists
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent.parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+        logging.info(f"✓ Loaded environment variables from {env_path}")
+except ImportError:
+    # dotenv not available, will use system environment variables
+    pass
+
 # Import PyInstaller utilities for resource paths
 try:
     from .pyinstaller_utils import get_config_path

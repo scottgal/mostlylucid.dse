@@ -8,7 +8,7 @@ import json
 import sys
 import os
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 # Import the postgres client
@@ -137,7 +137,7 @@ class BulkDataStore:
             "log_level": log_level.lower(),
             "message": message,
             "details": json.dumps(details) if details else None,
-            "created_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc)
         }
 
         rows = PostgresClient.insert("tool_logs", data)
@@ -162,11 +162,11 @@ class BulkDataStore:
             "stack_trace": stack_trace,
             "details": json.dumps(details) if details else None,
             "resolved": resolved,
-            "created_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc)
         }
 
         if resolved:
-            data["resolved_at"] = datetime.utcnow()
+            data["resolved_at"] = datetime.now(timezone.utc)
 
         rows = PostgresClient.insert("tool_bugs", data)
         return {"success": True, "count": rows}
@@ -184,7 +184,7 @@ class BulkDataStore:
             "child_tool_id": child_tool_id,
             "relationship_type": relationship_type,
             "details": json.dumps(details) if details else None,
-            "created_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc)
         }
 
         rows = PostgresClient.insert("tool_ancestry", data)
@@ -205,7 +205,7 @@ class BulkDataStore:
             "metric_value": metric_value,
             "unit": unit,
             "details": json.dumps(details) if details else None,
-            "created_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc)
         }
 
         rows = PostgresClient.insert("tool_performance", data)
@@ -228,8 +228,8 @@ class BulkDataStore:
             "tool_yaml": tool_yaml,
             "tool_code": tool_code,
             "metadata": json.dumps(metadata) if metadata else None,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
         }
 
         # Try insert, if tool exists, update it

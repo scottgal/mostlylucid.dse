@@ -257,7 +257,7 @@ class QdrantRAGMemory:
             # Use explicit embedding endpoint (not ollama_client.base_url)
             # This ensures embeddings always use local Ollama even when LLM uses cloud API
             response = requests.post(
-                f"{self.embedding_endpoint}/api/embeddings",
+                f"{self.embedding_endpoint}/api/embed",
                 json={
                     "model": self.embedding_model,
                     "prompt": text

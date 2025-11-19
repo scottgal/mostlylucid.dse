@@ -97,7 +97,7 @@ class ConversationEmbedder:
         """
         try:
             response = requests.post(
-                f"{self.embedding_endpoint}/api/embeddings",
+                f"{self.embedding_endpoint}/api/embed",
                 json={
                     "model": self.embedding_model,
                     "prompt": text
