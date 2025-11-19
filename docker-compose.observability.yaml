@@ -5,25 +5,25 @@ version: '3.8'
 
 services:
   # PostgreSQL - Primary database
-  postgres:
-    image: postgres:16-alpine
-    container_name: code-evolver-postgres
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-code_evolver}
-      POSTGRES_USER: ${POSTGRES_USER:-codeevolver}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-codeevolver}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - code-evolver-network
+#  postgres:
+#    image: postgres:16-alpine
+#    container_name: code-evolver-postgres
+#    environment:
+#      POSTGRES_DB: ${POSTGRES_DB:-code_evolver}
+#      POSTGRES_USER: ${POSTGRES_USER:-codeevolver}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+#    ports:
+#      - "${POSTGRES_PORT:-5432}:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-codeevolver}"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - code-evolver-network
 
   # Qdrant - Vector database for embeddings
   qdrant:

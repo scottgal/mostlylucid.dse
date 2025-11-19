@@ -24,7 +24,7 @@ except ImportError:
     # dotenv not available, will use system environment variables
     pass
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)  # Only show warnings and errors
 logger = logging.getLogger(__name__)
 
 

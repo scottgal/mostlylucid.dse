@@ -303,20 +303,34 @@ If NOT an API task, respond:
             }
 
         is_real_question = any(desc_lower.startswith(q) for q in ['what', 'which', 'how much', 'how many', 'tell me', 'show me'])
-        system_info_keywords = ['memory', 'ram', 'os', 'operating system', 'system specs',
-                                'machine specs', 'cpu', 'gpu', 'platform', 'hardware']
 
-        # Only match if it STARTS with question word AND contains system keywords
+        # VERY RESTRICTIVE: Only these EXACT phrases indicate system info queries
+        system_info_keywords = [
+            'my ram', 'my memory', 'my cpu', 'my gpu',
+            'my os', 'my operating system', 'my platform',
+            'this machine', 'this computer', 'this system',
+            'system specs', 'hardware specs', 'machine specs',
+            'available memory', 'available ram', 'total memory', 'total ram',
+            'gpu memory', 'gpu usage', 'cpu usage', 'disk space',
+            'what os', 'which os', 'what cpu', 'what gpu',
+            'how much ram', 'how much memory', 'how much disk'
+        ]
+
+        # Only match if it STARTS with question word AND contains EXACT system keyword phrase
         if is_real_question and any(keyword in desc_lower for keyword in system_info_keywords):
             # Use sentinel to confirm this is REALLY a system info question
             logger.info(f"Potential system info query detected, verifying with sentinel LLM...")
 
-            verification_prompt = f"""Is this task asking for information ABOUT the current system/machine (hardware, OS, specs)?
+            verification_prompt = f"""Is this task asking for information ABOUT THIS COMPUTER/MACHINE's hardware (RAM, CPU, GPU, OS, disk space)?
 
 Task: "{description}"
 
-Answer ONLY 'yes' if it's asking for information about the system itself (like 'what is my RAM', 'show me CPU specs').
-Answer 'no' if it's asking to DO something (like 'ping X', 'download Y', 'call URL', 'run command', 'use API').
+Answer ONLY 'yes' if asking about THIS MACHINE'S hardware/system specs (examples: 'what is my RAM', 'show me CPU specs', 'how much memory do I have').
+Answer 'no' for EVERYTHING ELSE including:
+- Business data ('inventory', 'demand', 'sales', 'orders')
+- External data ('get data from URL', 'fetch from API')
+- File operations ('read file', 'save to disk')
+- ANY task that is NOT about this computer's hardware specs
 
 Answer (yes/no):"""
 
@@ -611,7 +625,7 @@ COMPLEXITY: [pick one]"""
                 return TaskType.FORMATTING
             elif "convert" in category or "conversion" in category:
                 return TaskType.CONVERSION
-            elif "system" in category or "info" in category or "platform" in category or "machine" in category:
+            elif "system_info" in category:  # Must be exact match, not just "info"
                 return TaskType.SYSTEM_INFO
             else:
                 return TaskType.UNKNOWN

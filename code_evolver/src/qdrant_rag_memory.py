@@ -170,8 +170,8 @@ class QdrantRAGMemory:
                     self._save_metadata()
 
                 except Exception as repair_error:
-                    logger.error(f"Could not repair metadata: {repair_error}")
-                    logger.warning("Backing up corrupted file and starting fresh...")
+                    logger.warning(f"Metadata file corrupted, creating fresh copy")
+                    logger.debug(f"Repair error details: {repair_error}")  # Only show details in debug mode
 
                     # Backup corrupted file
                     import shutil

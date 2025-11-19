@@ -11062,11 +11062,9 @@ Return ONLY the Python test code, no explanations."""
                     import time
                     start_time = time.time()
 
-                    # Add context summary to description if available (for internal use only)
-                    # IMPORTANT: Mark context clearly so workflow decomposer doesn't treat it as part of current task
+                    # Don't add conversation history to prompts - it's confusing and rarely useful
+                    # The LLM should focus on the current task only
                     final_description = user_input
-                    if context_summary:
-                        final_description = f"{user_input}\n\n[PREVIOUS CONVERSATION HISTORY (for reference only, NOT part of current task):\n{context_summary}]"
 
                     success = self.handle_generate(final_description, display_description=user_input)
                     duration = time.time() - start_time

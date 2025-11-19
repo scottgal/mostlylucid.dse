@@ -1,5 +1,5 @@
 """
-Step definitions for: Generate the customer profile data based on extracted information and assign a unique customer ID.
+Step definitions for: **Task:** Automatically generate a daily summary report of patient visit details (appointment time, duration, provider, diagnosis, and billing code) for the Electronic Health Record (EHR) system, flagging any potential coding discrepancies and sending it to the billing department via email.**
 Auto-generated Behave step definitions
 """
 from behave import given, when, then, step

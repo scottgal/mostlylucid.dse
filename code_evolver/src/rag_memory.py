@@ -477,15 +477,33 @@ class RAGMemory:
                 self.tags_index = {}
 
     def _save_index(self):
-        """Save artifacts index to disk."""
-        try:
-            index = {aid: artifact.to_dict() for aid, artifact in self.artifacts.items()}
+        """Save artifacts index to disk with retry logic for file locking."""
+        import time
+        max_retries = 5
+        retry_delay = 0.1  # 100ms
 
-            with open(self.index_path, 'w', encoding='utf-8') as f:
-                json.dump(index, f, indent=2)
+        for attempt in range(max_retries):
+            try:
+                index = {aid: artifact.to_dict() for aid, artifact in self.artifacts.items()}
 
-        except Exception as e:
-            logger.error(f"Error saving index: {e}")
+                # Write to temp file first, then atomic rename
+                temp_path = self.index_path.with_suffix('.json.tmp')
+                with open(temp_path, 'w', encoding='utf-8') as f:
+                    json.dump(index, f, indent=2)
+
+                # Atomic rename (Windows handles this better than direct write)
+                temp_path.replace(self.index_path)
+                return  # Success!
+
+            except PermissionError as e:
+                # File is locked by another process
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+                else:
+                    logger.warning(f"Could not save index after {max_retries} attempts (file locked)")
+            except Exception as e:
+                logger.error(f"Error saving index: {e}")
+                break
 
     def _save_embeddings(self):
         """Save embeddings matrix to disk."""
@@ -496,12 +514,31 @@ class RAGMemory:
                 logger.error(f"Error saving embeddings: {e}")
 
     def _save_tags_index(self):
-        """Save tags index to disk."""
-        try:
-            with open(self.tags_index_path, 'w', encoding='utf-8') as f:
-                json.dump(self.tags_index, f, indent=2)
-        except Exception as e:
-            logger.error(f"Error saving tags index: {e}")
+        """Save tags index to disk with retry logic for file locking."""
+        import time
+        max_retries = 5
+        retry_delay = 0.1  # 100ms
+
+        for attempt in range(max_retries):
+            try:
+                # Write to temp file first, then atomic rename
+                temp_path = self.tags_index_path.with_suffix('.json.tmp')
+                with open(temp_path, 'w', encoding='utf-8') as f:
+                    json.dump(self.tags_index, f, indent=2)
+
+                # Atomic rename
+                temp_path.replace(self.tags_index_path)
+                return  # Success!
+
+            except PermissionError as e:
+                # File is locked by another process
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+                else:
+                    logger.warning(f"Could not save tags_index after {max_retries} attempts (file locked)")
+            except Exception as e:
+                logger.error(f"Error saving tags index: {e}")
+                break
 
     def _update_tags_index(self, artifact_id: str, tags: List[str]):
         """Update tags index with artifact."""

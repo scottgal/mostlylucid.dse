@@ -25,7 +25,7 @@ except ImportError:
 # Import the postgres client
 from postgres_client import PostgresClient
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)  # Only show warnings and errors, not info
 logger = logging.getLogger(__name__)
 
 
@@ -435,11 +435,28 @@ def main():
         print(json.dumps(result))
 
     except Exception as e:
-        logger.error(f"Error in bulk_data_store: {e}", exc_info=True)
-        print(json.dumps({
-            "success": False,
-            "error": str(e)
-        }))
+        # Simplify PostgreSQL connection errors
+        error_msg = str(e)
+
+        if "password authentication failed" in error_msg or "connection refused" in error_msg or "could not connect" in error_msg.lower():
+            simple_msg = "Could not connect to PostgreSQL. Please check your database configuration in .env file."
+            print(json.dumps({
+                "success": False,
+                "error": simple_msg
+            }))
+        elif "does not exist" in error_msg and "database" in error_msg.lower():
+            simple_msg = "Database does not exist. Please create it or check POSTGRES_DB in .env file."
+            print(json.dumps({
+                "success": False,
+                "error": simple_msg
+            }))
+        else:
+            # Other errors - show simplified message
+            logger.debug(f"Full error: {e}", exc_info=True)  # Log full error for debugging
+            print(json.dumps({
+                "success": False,
+                "error": f"Database error: {error_msg.split(':')[0] if ':' in error_msg else error_msg}"
+            }))
         sys.exit(1)
 
 

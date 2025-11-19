@@ -25,7 +25,8 @@
       "Bash(robocopy:*)",
       "Bash(tools_data.json)",
       "Bash(timeout 90 bash:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(pip uninstall:*)"
     ],
     "deny": [],
     "ask": []
