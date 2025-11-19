@@ -1,5 +1,5 @@
 """
-Step definitions for: **Task:** Automatically generate daily delivery route updates based on real-time traffic conditions and vehicle availability using a cloud-based platform like Google Maps Platform, updating the route plan with dynamically calculated delays and optimal vehicle assignments.**
+Step definitions for: Generate the customer profile data based on extracted information and assign a unique customer ID.
 Auto-generated Behave step definitions
 """
 from behave import given, when, then, step

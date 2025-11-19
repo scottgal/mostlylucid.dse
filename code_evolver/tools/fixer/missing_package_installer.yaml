@@ -1,0 +1,101 @@
+name: "Missing Package Auto-Installer"
+type: "executable"
+description: |
+  Automatically detects and installs missing Python packages when ModuleNotFoundError occurs.
+
+  This tool:
+  - Detects missing packages from error messages
+  - Maps common module names to package names (e.g., bs4 -> beautifulsoup4)
+  - Automatically installs packages using pip
+  - Validates installation was successful
+
+  Common mappings:
+  - bs4 -> beautifulsoup4
+  - PIL -> Pillow
+  - cv2 -> opencv-python
+  - sklearn -> scikit-learn
+
+command: "python"
+args:
+  - "tools/executable/missing_package_installer.py"
+
+input_format: "json"
+output_format: "json"
+
+input_schema:
+  type: object
+  properties:
+    error_message:
+      type: string
+      description: "The ModuleNotFoundError message"
+    module_name:
+      type: string
+      description: "Optional: explicit module name to install"
+  required:
+    - error_message
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+    package_installed:
+      type: string
+    message:
+      type: string
+    pip_command:
+      type: string
+
+tags:
+  - "fix"
+  - "error_handler"
+  - "module_error"
+  - "import_error"
+  - "auto_fix"
+  - "dependency"
+  - "pip"
+  - "package_installer"
+
+metadata:
+  error_pattern: "ModuleNotFoundError.*No module named '([^']+)'"
+  applies_to: "*.py"
+  category: "dependency_fixer"
+  priority: "critical"  # Run before other fixers
+  auto_apply: true
+
+# Common module -> package mappings
+package_mappings:
+  bs4: beautifulsoup4
+  PIL: Pillow
+  cv2: opencv-python
+  sklearn: scikit-learn
+  yaml: PyYAML
+  dotenv: python-dotenv
+  requests: requests
+  numpy: numpy
+  pandas: pandas
+  matplotlib: matplotlib
+  seaborn: seaborn
+  flask: Flask
+  django: Django
+  fastapi: fastapi
+  pydantic: pydantic
+
+examples:
+  - name: "Install beautifulsoup4 for bs4"
+    input:
+      error_message: "ModuleNotFoundError: No module named 'bs4'"
+    output:
+      success: true
+      package_installed: "beautifulsoup4"
+      message: "Successfully installed beautifulsoup4"
+      pip_command: "pip install beautifulsoup4"
+
+  - name: "Install Pillow for PIL"
+    input:
+      error_message: "ModuleNotFoundError: No module named 'PIL'"
+    output:
+      success: true
+      package_installed: "Pillow"
+      message: "Successfully installed Pillow"
+      pip_command: "pip install Pillow"

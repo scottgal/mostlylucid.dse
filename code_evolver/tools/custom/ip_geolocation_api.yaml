@@ -1,6 +1,6 @@
 name: "IP Geolocation API"
 type: "custom"
-description: "Get geolocation information for any IP address including country, region, city, coordinates, timezone, currency, ISP, and more. No authentication required for basic usage."
+description: "Get geolocation information for any IP address or find your own location from your IP. Returns country, region, city, coordinates, timezone, ISP, and more. Works with external IP, public IP, or current machine IP. No authentication required for basic usage."
 cost_tier: "free"
 speed_tier: "very-fast"
 quality_tier: "excellent"
@@ -76,7 +76,7 @@ output_schema:
       type: string
       description: "Error message if failed"
 
-tags: ["ip", "geolocation", "location", "network", "free", "no-auth"]
+tags: ["ip", "geolocation", "location", "network", "free", "no-auth", "my-location", "my-ip", "external-ip", "public-ip", "where-am-i", "geolocate", "coordinates", "find-location"]
 
 examples:
   - description: "Lookup IP location"

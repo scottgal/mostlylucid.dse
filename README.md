@@ -19,6 +19,11 @@ Like the [Exocomp](https://memory-alpha.fandom.com/wiki/Exocomp) of Star Trek â€
 
 **This is an experimental research project and proof-of-concept.** It is **NOT suitable for production environments** or scenarios involving untrusted code execution.
 
+### Current Status
+Still working on the core and changing a LOT as I go. This will likely <p style="color:red">**BE BROKEN MORE OFTEN THAN NOT**</p>.
+
+Medium term the plan is to make a 'product' out of this but the core takes a BUNCH of tuning to work as intended. So it'll be an 'when it's ready' project. It's novel, there's no good books to read on doing this so I'm going to have to do some research and experimentation.
+
 ### Security Limitations
 
 - **No sandboxing**: Generated code executes as Python subprocesses with full system access

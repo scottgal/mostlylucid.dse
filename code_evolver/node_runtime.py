@@ -171,6 +171,12 @@ class NodeRuntime:
         """
         from src.tools_manager import ToolType
 
+        # Wait for tools to finish loading (if still loading)
+        if hasattr(self.tools, '_loading_complete'):
+            # Wait up to 30 seconds for tools to load
+            if not self.tools._loading_complete.wait(timeout=30):
+                logging.warning("Tools still loading after 30s, proceeding anyway...")
+
         # Find tool
         tool = self.tools.get_tool(tool_name)
         if not tool:

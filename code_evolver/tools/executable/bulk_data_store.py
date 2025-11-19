@@ -10,6 +10,17 @@ import os
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 import logging
+from pathlib import Path
+
+# Load .env file if it exists
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent.parent.parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+except ImportError:
+    # dotenv not available, will use system environment variables
+    pass
 
 # Import the postgres client
 from postgres_client import PostgresClient

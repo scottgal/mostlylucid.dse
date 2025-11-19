@@ -32,7 +32,13 @@ class WorkflowStep:
     ):
         self.step_id = step_id
         self.tool_name = tool_name
-        self.description = description
+        # Truncate long descriptions for display (keep full version in metadata)
+        if len(description) > 100:
+            self.description = description[:97] + "..."
+            self.full_description = description
+        else:
+            self.description = description
+            self.full_description = description
         self.inputs = inputs or {}
         self.status = StepStatus.PENDING
         self.start_time: Optional[float] = None
