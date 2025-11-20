@@ -1,0 +1,232 @@
+name: "Language Converter"
+type: "executable"
+description: "Converts tools and workflows between programming languages. Supports Python to JavaScript conversion with intelligent code transformation, test conversion, and dependency mapping."
+tool_id: "language_converter_v1"
+version: "1.0.0"
+cost_tier: "variable"  # Free for AST-based, variable for LLM-based
+speed_tier: "medium"    # Depends on conversion complexity
+quality_tier: "excellent"
+
+tags:
+  - "conversion"
+  - "code-generation"
+  - "multi-language"
+  - "javascript"
+  - "python"
+  - "translation"
+
+executable:
+  command: "python"
+  args:
+    - "code_evolver/scripts/convert_language.py"
+  timeout_ms: 300000  # 5 minutes for complex conversions
+
+input_schema:
+  type: "object"
+  properties:
+    command:
+      type: "string"
+      enum: ["tool", "workflow"]
+      description: "Conversion command: 'tool' for single tool, 'workflow' for entire workflow"
+    tool_definition:
+      type: "string"
+      description: "Path to tool YAML definition (for 'tool' command)"
+    source_code:
+      type: "string"
+      description: "Path to source code file (for 'tool' command)"
+    workflow_path:
+      type: "string"
+      description: "Path to workflow JSON definition (for 'workflow' command)"
+    output_directory:
+      type: "string"
+      description: "Output directory for converted files"
+    target_language:
+      type: "string"
+      enum: ["javascript", "typescript"]
+      default: "javascript"
+      description: "Target programming language"
+    test_path:
+      type: "string"
+      description: "Optional path to test file (for 'tool' command)"
+    conversion_strategy:
+      type: "string"
+      enum: ["ast", "llm", "hybrid", "template"]
+      default: "hybrid"
+      description: "Conversion strategy: ast (fast), llm (intelligent), hybrid (best), template (pattern-based)"
+    use_llm:
+      type: "boolean"
+      default: false
+      description: "Use LLM for intelligent conversion (slower but more accurate)"
+  required:
+    - "command"
+    - "output_directory"
+  oneOf:
+    - required: ["tool_definition", "source_code"]  # For tool command
+    - required: ["workflow_path"]  # For workflow command
+
+output_schema:
+  type: "object"
+  properties:
+    success:
+      type: "boolean"
+      description: "Whether conversion succeeded"
+    converted_code:
+      type: "string"
+      description: "Path to converted code file"
+    converted_tests:
+      type: "string"
+      description: "Path to converted test file (if available)"
+    tool_definition:
+      type: "string"
+      description: "Path to converted tool definition"
+    package_config:
+      type: "string"
+      description: "Path to package.json (for JavaScript)"
+    metadata:
+      type: "object"
+      description: "Conversion metadata (warnings, errors, statistics)"
+    workflow_summary:
+      type: "object"
+      description: "Workflow conversion summary (for workflow command)"
+      properties:
+        total_steps:
+          type: "integer"
+        converted_steps:
+          type: "integer"
+        failed_steps:
+          type: "integer"
+
+examples:
+  - name: "Convert Python tool to JavaScript"
+    input:
+      command: "tool"
+      tool_definition: "code_evolver/tools/executable/example_tool.yaml"
+      source_code: "code_evolver/scripts/example_tool.py"
+      output_directory: "converted/example_tool"
+      target_language: "javascript"
+      conversion_strategy: "hybrid"
+      use_llm: true
+    expected_output:
+      success: true
+      converted_code: "converted/example_tool/example_tool.js"
+      converted_tests: "converted/example_tool/example_tool.test.js"
+      package_config: "converted/example_tool/package.json"
+
+  - name: "Convert workflow to JavaScript"
+    input:
+      command: "workflow"
+      workflow_path: "code_evolver/workflows/data_analysis_workflow.json"
+      output_directory: "converted/workflows/data_analysis"
+      target_language: "javascript"
+      use_llm: false
+    expected_output:
+      success: true
+      workflow_summary:
+        total_steps: 5
+        converted_steps: 5
+        failed_steps: 0
+
+  - name: "Convert tool with tests"
+    input:
+      command: "tool"
+      tool_definition: "code_evolver/tools/executable/unit_converter.yaml"
+      source_code: "code_evolver/scripts/unit_converter.py"
+      test_path: "code_evolver/tests/test_unit_converter.py"
+      output_directory: "converted/unit_converter"
+      target_language: "javascript"
+      conversion_strategy: "ast"
+      use_llm: false
+    expected_output:
+      success: true
+      converted_code: "converted/unit_converter/unit_converter.js"
+      converted_tests: "converted/unit_converter/unit_converter.test.js"
+
+capabilities:
+  - "Python to JavaScript code conversion"
+  - "AST-based structural transformation"
+  - "LLM-guided intelligent conversion for complex patterns"
+  - "Test conversion (pytest to Jest)"
+  - "Dependency mapping (requirements.txt to package.json)"
+  - "Tool definition conversion"
+  - "Workflow batch conversion"
+  - "Type mapping and annotation"
+  - "Error handling preservation"
+  - "Contract-aware conversion"
+
+conversion_features:
+  python_to_javascript:
+    - "Function and class conversion"
+    - "Async/await transformation"
+    - "List comprehension to map/filter"
+    - "Exception handling (try/except to try/catch)"
+    - "String formatting (f-strings to template literals)"
+    - "Import statement conversion"
+    - "Type hint to JSDoc conversion"
+    - "Decorator pattern conversion"
+    - "Context manager conversion"
+    - "Generator function conversion"
+
+  test_conversion:
+    - "pytest to Jest migration"
+    - "Fixture to beforeEach/afterEach"
+    - "Assertion conversion"
+    - "Mock and patch conversion"
+    - "Parametrized test conversion"
+
+  dependency_mapping:
+    requests: "axios"
+    numpy: "mathjs"
+    pandas: "danfojs"
+    beautifulsoup4: "cheerio"
+    pyyaml: "js-yaml"
+    python-dotenv: "dotenv"
+    aiohttp: "axios"
+    fastapi: "express"
+    pydantic: "joi"
+    sqlalchemy: "sequelize"
+
+limitations:
+  - "Some Python-specific features may not have direct JavaScript equivalents"
+  - "Complex decorators may require manual refinement"
+  - "Type annotations are converted to JSDoc (TypeScript target recommended for full type safety)"
+  - "Some third-party library APIs may differ significantly"
+  - "LLM-based conversion requires Ollama or cloud LLM access"
+
+preconditions:
+  - "Source code must be valid Python"
+  - "Tool definition must follow DiSE YAML schema"
+  - "Output directory must be writable"
+  - "For LLM conversion: LLM service must be available"
+
+postconditions:
+  - "Generated JavaScript code is syntactically valid"
+  - "Input/output contracts are preserved"
+  - "All files are saved to output directory"
+  - "Conversion metadata is generated"
+
+performance:
+  typical_conversion_time:
+    small_tool: "1-5 seconds (AST-based)"
+    medium_tool: "5-15 seconds (hybrid)"
+    large_tool: "15-60 seconds (LLM-based)"
+    workflow: "30-300 seconds (depends on tool count)"
+
+dependencies:
+  - "PyYAML"
+  - "ast (built-in)"
+  - "json (built-in)"
+  - "pathlib (built-in)"
+
+integration:
+  - "Works with existing tool ecosystem"
+  - "Integrates with RAG for learning from conversions"
+  - "Compatible with code evolution cycle"
+  - "Supports workflow orchestrator"
+
+future_enhancements:
+  - "Python to TypeScript conversion"
+  - "JavaScript to Python conversion (reverse)"
+  - "Support for Go, Rust, and other languages"
+  - "Semantic similarity-based conversion"
+  - "Automatic optimization of converted code"
+  - "A/B testing of conversion strategies"
