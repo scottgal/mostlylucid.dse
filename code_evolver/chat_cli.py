@@ -9110,6 +9110,8 @@ Return ONLY the JSON, no other text."""
             /workflow info <id>    - Show workflow details
             /workflow run <id>     - Run a workflow
             /workflow compile ...  - Compile workflow (see compile options)
+            /workflow generate <id> --language <lang> [--output <dir>]
+                                   - Generate workflow in target language
             /workflow <id>         - Show workflow details (legacy)
         """
         # Parse subcommand
@@ -9141,6 +9143,13 @@ Return ONLY the JSON, no other text."""
 
         elif subcommand == "compile":
             return self.handle_workflow_compile(sub_args)
+
+        elif subcommand == "generate":
+            if not sub_args:
+                console.print("[red]Error: Workflow ID and language required[/red]")
+                console.print("[dim]Usage: /workflow generate <workflow_id> --language <javascript|typescript> [--output <dir>] [--use-llm][/dim]")
+                return False
+            return self.handle_workflow_generate(sub_args)
 
         else:
             # Legacy behavior: treat as workflow ID
@@ -9320,6 +9329,137 @@ Return ONLY the JSON, no other text."""
         console.print()
 
         return True
+
+    def handle_workflow_generate(self, args: str) -> bool:
+        """
+        Generate a workflow in a target programming language.
+
+        Usage:
+            /workflow generate <workflow_id> --language <javascript|typescript> [--output <dir>] [--use-llm]
+
+        Args:
+            args: Workflow ID and generation options
+
+        Returns:
+            True if successful, False otherwise
+        """
+        from pathlib import Path
+        import json
+        import re
+        import subprocess
+
+        # Parse arguments
+        arg_parts = args.split()
+        if not arg_parts:
+            console.print("[red]Error: Workflow ID required[/red]")
+            return False
+
+        workflow_id = arg_parts[0]
+
+        # Parse options
+        target_language = "javascript"
+        output_dir = None
+        use_llm = False
+
+        i = 1
+        while i < len(arg_parts):
+            if arg_parts[i] == "--language" and i + 1 < len(arg_parts):
+                target_language = arg_parts[i + 1].lower()
+                i += 2
+            elif arg_parts[i] == "--output" and i + 1 < len(arg_parts):
+                output_dir = arg_parts[i + 1]
+                i += 2
+            elif arg_parts[i] == "--use-llm":
+                use_llm = True
+                i += 1
+            else:
+                i += 1
+
+        # Validate target language
+        if target_language not in ["javascript", "typescript"]:
+            console.print(f"[red]Error: Unsupported target language: {target_language}[/red]")
+            console.print("[dim]Supported languages: javascript, typescript[/dim]")
+            return False
+
+        # Find workflow file
+        workflows_dir = Path("code_evolver/workflows")
+        workflow_file = workflows_dir / f"{workflow_id}.json"
+
+        if not workflow_file.exists():
+            console.print(f"[red]Error: Workflow not found: {workflow_id}[/red]")
+            console.print(f"[dim]Searched in: {workflow_file}[/dim]")
+            return False
+
+        # Set default output directory
+        if not output_dir:
+            output_dir = f"converted/workflows/{workflow_id}_{target_language}"
+
+        console.print(f"\n[bold cyan]Converting workflow '{workflow_id}' to {target_language}[/bold cyan]\n")
+        console.print(f"[dim]Output directory: {output_dir}[/dim]\n")
+
+        # Call the language converter tool
+        converter_script = Path("code_evolver/scripts/convert_language.py")
+
+        if not converter_script.exists():
+            console.print(f"[red]Error: Language converter not found: {converter_script}[/red]")
+            return False
+
+        # Build command
+        cmd = [
+            "python",
+            str(converter_script),
+            "workflow",
+            "--workflow", str(workflow_file),
+            "--output", output_dir,
+            "--target", target_language
+        ]
+
+        if use_llm:
+            cmd.append("--use-llm")
+
+        # Execute conversion
+        try:
+            console.print("[dim]Running language converter...[/dim]\n")
+
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minute timeout
+            )
+
+            # Display output
+            if result.stdout:
+                console.print(result.stdout)
+
+            if result.stderr:
+                console.print(f"[yellow]{result.stderr}[/yellow]")
+
+            if result.returncode == 0:
+                console.print(f"\n[bold green]✓ Workflow converted successfully![/bold green]")
+                console.print(f"[dim]Converted files saved to: {output_dir}[/dim]\n")
+
+                # Show summary of converted files
+                output_path = Path(output_dir)
+                if output_path.exists():
+                    console.print("[bold]Generated files:[/bold]")
+                    for file in sorted(output_path.rglob("*")):
+                        if file.is_file():
+                            rel_path = file.relative_to(output_path)
+                            file_size = file.stat().st_size
+                            console.print(f"  • {rel_path} ({file_size:,} bytes)")
+
+                return True
+            else:
+                console.print(f"\n[red]✗ Workflow conversion failed (exit code: {result.returncode})[/red]")
+                return False
+
+        except subprocess.TimeoutExpired:
+            console.print("\n[red]✗ Conversion timed out after 5 minutes[/red]")
+            return False
+        except Exception as e:
+            console.print(f"\n[red]✗ Error during conversion: {e}[/red]")
+            return False
 
     def handle_workflow_run(self, args: str) -> bool:
         """
