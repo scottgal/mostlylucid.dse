@@ -268,6 +268,84 @@ def build_executable(platform_name: str, app_name: str = "CodeEvolver"):
 
 **Error Handling**: The build system uses exceptions for error handling. `subprocess.run` with `check=True` will raise `CalledProcessError` if PyInstaller fails, allowing us to catch and report the error gracefully.
 
+### Build Packaging Process
+
+After building the executable, the system creates a complete distribution package:
+
+```mermaid
+flowchart LR
+    subgraph "Build Output"
+        EXE[CodeEvolver.exe<br/>Single executable]
+    end
+
+    subgraph "Create Distribution"
+        DIST_DIR[Create dist directory]
+        COPY_EXE[Copy executable]
+        COPY_FILES[Copy additional files:<br/>- config.yaml<br/>- README.md<br/>- LICENSE<br/>- prompts/]
+    end
+
+    subgraph "Platform Installers"
+        WIN_INST[Windows:<br/>install.bat]
+        LINUX_INST[Linux:<br/>install.sh]
+        MAC_INST[macOS:<br/>install.sh]
+    end
+
+    subgraph "Archive"
+        ZIP[CodeEvolver-windows.zip]
+    end
+
+    EXE --> DIST_DIR
+    DIST_DIR --> COPY_EXE
+    COPY_EXE --> COPY_FILES
+
+    COPY_FILES --> CREATE_INST{Platform?}
+    CREATE_INST -->|Windows| WIN_INST
+    CREATE_INST -->|Linux| LINUX_INST
+    CREATE_INST -->|macOS| MAC_INST
+
+    WIN_INST --> ZIP_CREATE[Create ZIP Archive]
+    LINUX_INST --> ZIP_CREATE
+    MAC_INST --> ZIP_CREATE
+
+    ZIP_CREATE --> ZIP
+
+    style EXE fill:#4caf50,color:#fff
+    style ZIP fill:#4caf50,color:#fff
+    style CREATE_INST fill:#ff9800,color:#fff
+```
+
+**Package Contents**:
+- **Executable**: Single-file application (no dependencies)
+- **Configuration**: `config.yaml` with default settings
+- **Documentation**: README, LICENSE, manuals
+- **Prompts**: System prompt templates
+- **Installer**: Platform-specific install script
+- **Archive**: ZIP file for distribution
+
+**Installer Scripts**:
+
+Windows (`install.bat`):
+```batch
+@echo off
+echo Installing CodeEvolver...
+mkdir "%APPDATA%\CodeEvolver"
+copy CodeEvolver.exe "%APPDATA%\CodeEvolver\"
+copy config.yaml "%APPDATA%\CodeEvolver\"
+echo Installation complete!
+```
+
+Linux/macOS (`install.sh`):
+```bash
+#!/bin/bash
+echo "Installing CodeEvolver..."
+mkdir -p ~/.local/bin
+mkdir -p ~/.config/code_evolver
+cp CodeEvolver ~/.local/bin/
+cp config.yaml ~/.config/code_evolver/
+chmod +x ~/.local/bin/CodeEvolver
+echo "Installation complete!"
+```
+
 ---
 
 ## Workflow Construction
@@ -479,6 +557,52 @@ input_mapping={"topic": "inputs.topic"}
 #              Target: variable name in the template
 ```
 
+Here's how data flows through a multi-step workflow:
+
+```mermaid
+graph LR
+    subgraph "Workflow Inputs"
+        IN1[topic: 'Python']
+        IN2[target_length: 2000]
+    end
+
+    subgraph "Step 1: Create Outline"
+        S1_IN["{topic}"]
+        S1_PROC[LLM: content_generator]
+        S1_OUT[outline]
+    end
+
+    subgraph "Step 2: Write Article"
+        S2_IN["{outline}"]
+        S2_PROC[LLM: content_generator]
+        S2_OUT[article]
+    end
+
+    subgraph "Workflow Output"
+        OUT[final_article]
+    end
+
+    IN1 -->|inputs.topic| S1_IN
+    S1_IN --> S1_PROC
+    S1_PROC --> S1_OUT
+    S1_OUT -->|steps.create_outline.outline| S2_IN
+    S2_IN --> S2_PROC
+    S2_PROC --> S2_OUT
+    S2_OUT -->|steps.write_article.article| OUT
+
+    style IN1 fill:#e3f2fd
+    style IN2 fill:#e3f2fd
+    style S1_OUT fill:#fff3e0
+    style S2_OUT fill:#fff3e0
+    style OUT fill:#e8f5e9
+```
+
+**Data Flow Explained**:
+1. **Workflow inputs** (blue) are provided by the user
+2. **Step outputs** (orange) are stored and can be referenced by later steps
+3. **Final output** (green) is extracted from the last step
+4. **References** use dot notation: `inputs.X` or `steps.Y.Z`
+
 ### Workflow JSON Format
 
 When you call `workflow.to_json()`, it produces a JSON specification like this:
@@ -546,6 +670,73 @@ When you call `workflow.to_json()`, it produces a JSON specification like this:
 - **Non-portable** (default): Lists tool dependencies but doesn't include the actual tool code
 - **Portable**: Embeds complete tool definitions, making the workflow self-contained
 
+### Workflow Validation Process
+
+Before a workflow can execute, it must pass validation:
+
+```mermaid
+flowchart TD
+    START[workflow.validate] --> CHECK1{Has<br/>workflow_id?}
+    CHECK1 -->|No| ERR1[❌ Error: workflow_id required]
+    CHECK1 -->|Yes| CHECK2{Has at least<br/>one step?}
+
+    CHECK2 -->|No| ERR2[❌ Error: Must have steps]
+    CHECK2 -->|Yes| CHECK3[Collect step IDs]
+
+    CHECK3 --> CHECK4{Step IDs<br/>unique?}
+    CHECK4 -->|No| ERR3[❌ Error: Duplicate step IDs]
+    CHECK4 -->|Yes| COLLECT[Collect valid references]
+
+    COLLECT --> BUILD_REFS[Build reference set:<br/>- steps.X.Y<br/>- inputs.Z]
+
+    BUILD_REFS --> LOOP[For each step...]
+
+    LOOP --> CHECK_MAP{Check<br/>input_mapping}
+
+    CHECK_MAP --> VALIDATE_REF{All refs<br/>valid?}
+    VALIDATE_REF -->|No| ERR4[❌ Error: Invalid reference]
+    VALIDATE_REF -->|Yes| NEXT{More<br/>steps?}
+
+    NEXT -->|Yes| LOOP
+    NEXT -->|No| CHECK_CYCLE[Check for cycles]
+
+    CHECK_CYCLE --> CYCLE{Has<br/>circular<br/>dependency?}
+    CYCLE -->|Yes| ERR5[❌ Error: Circular dependency]
+    CYCLE -->|No| CHECK_DEPS[Validate depends_on]
+
+    CHECK_DEPS --> DEPS{All deps<br/>exist?}
+    DEPS -->|No| ERR6[❌ Error: Missing dependency]
+    DEPS -->|Yes| SUCCESS[✅ Validation passed]
+
+    ERR1 --> RETURN_ERR[Return: False, message]
+    ERR2 --> RETURN_ERR
+    ERR3 --> RETURN_ERR
+    ERR4 --> RETURN_ERR
+    ERR5 --> RETURN_ERR
+    ERR6 --> RETURN_ERR
+
+    SUCCESS --> RETURN_OK[Return: True, 'Valid']
+
+    style START fill:#4caf50,color:#fff
+    style SUCCESS fill:#4caf50,color:#fff
+    style ERR1 fill:#f44336,color:#fff
+    style ERR2 fill:#f44336,color:#fff
+    style ERR3 fill:#f44336,color:#fff
+    style ERR4 fill:#f44336,color:#fff
+    style ERR5 fill:#f44336,color:#fff
+    style ERR6 fill:#f44336,color:#fff
+    style RETURN_OK fill:#4caf50,color:#fff
+    style RETURN_ERR fill:#f44336,color:#fff
+```
+
+**Validation Checks**:
+1. **Workflow ID**: Must be present and non-empty
+2. **Steps**: Must have at least one step defined
+3. **Unique IDs**: All step IDs must be unique
+4. **Valid References**: All input mappings must reference existing inputs or steps
+5. **No Cycles**: Dependencies must form a DAG (Directed Acyclic Graph)
+6. **Dependencies Exist**: All `depends_on` steps must exist
+
 ---
 
 ## Tool Management
@@ -554,24 +745,64 @@ The Tools Manager (`tools_manager.py`) is responsible for discovering, loading, 
 
 ### Tool Types
 
-The system supports multiple tool types:
+The system supports multiple tool types organized in a hierarchy:
+
+```mermaid
+graph TD
+    ROOT[Tool Types]
+
+    ROOT --> EXEC_GROUP[Execution Tools]
+    ROOT --> DATA_GROUP[Data & Storage Tools]
+    ROOT --> AI_GROUP[AI/ML Tools]
+    ROOT --> INT_GROUP[Integration Tools]
+
+    EXEC_GROUP --> FUNC[Function<br/>Python functions]
+    EXEC_GROUP --> EXEC[Executable<br/>CLI tools]
+    EXEC_GROUP --> WF[Workflow<br/>Multi-step processes]
+
+    DATA_GROUP --> DB[Database<br/>SQL/NoSQL]
+    DATA_GROUP --> FS[File System<br/>Persistent storage]
+    DATA_GROUP --> VS[Vector Store<br/>RAG/embeddings]
+    DATA_GROUP --> CACHE[Cache<br/>Redis/memory]
+
+    AI_GROUP --> LLM[LLM<br/>Language models]
+    AI_GROUP --> FINE[Fine-tuned LLM<br/>Specialized models]
+    AI_GROUP --> OPT[Optimizer<br/>Code optimization]
+
+    INT_GROUP --> API[OpenAPI<br/>REST APIs]
+    INT_GROUP --> MCP[MCP<br/>Model Context Protocol]
+    INT_GROUP --> MQ[Message Queue<br/>Kafka/RabbitMQ]
+
+    style ROOT fill:#9c27b0,color:#fff
+    style EXEC_GROUP fill:#2196f3,color:#fff
+    style DATA_GROUP fill:#4caf50,color:#fff
+    style AI_GROUP fill:#ff9800,color:#fff
+    style INT_GROUP fill:#f44336,color:#fff
+```
+
+The full enumeration in code:
 
 ```python
 class ToolType(Enum):
     """Types of tools that can be registered."""
+    # Execution Tools
     FUNCTION = "function"              # Python function
-    LLM = "llm"                       # Specialized LLM model
-    WORKFLOW = "workflow"             # Complete workflow
-    OPENAPI = "openapi"               # OpenAPI/REST API tool
     EXECUTABLE = "executable"         # Command-line tool
-    MCP = "mcp"                       # Model Context Protocol tool
+    WORKFLOW = "workflow"             # Complete workflow
 
-    # Storage & Data
+    # Integration Tools
+    OPENAPI = "openapi"               # OpenAPI/REST API tool
+    MCP = "mcp"                       # Model Context Protocol tool
+    MESSAGE_QUEUE = "message_queue"   # Kafka/RabbitMQ
+
+    # Data & Storage Tools
     DATABASE = "database"             # Database connections
     FILE_SYSTEM = "file_system"       # File storage
     VECTOR_STORE = "vector_store"     # RAG/embeddings
+    CACHE = "cache"                   # In-memory/Redis cache
 
-    # Optimization
+    # AI/ML Tools
+    LLM = "llm"                       # Specialized LLM model
     FINE_TUNED_LLM = "fine_tuned_llm" # Fine-tuned models
     OPTIMIZER = "optimizer"           # Code optimizers
 ```
@@ -748,6 +979,55 @@ def bump_version(current_version: str, change_type: str = "patch") -> str:
 
 **Why automatic versioning?** When you modify a tool's YAML definition, the system automatically detects the change via hash comparison and bumps the version. This creates a complete history of tool evolution without manual intervention.
 
+### Tool Versioning Decision Flow
+
+```mermaid
+flowchart TD
+    START[Load Tool YAML] --> HASH[Calculate SHA256 Hash]
+    HASH --> CHECK{Tool Exists<br/>in Registry?}
+
+    CHECK -->|No| NEW[Create New Tool]
+    NEW --> VER1[Set version: 1.0.0]
+    VER1 --> STORE[Store in Registry]
+
+    CHECK -->|Yes| COMPARE{Hash<br/>Changed?}
+
+    COMPARE -->|No| SKIP[Use Existing Version]
+    SKIP --> DONE[Tool Ready]
+
+    COMPARE -->|Yes| ANALYZE[Analyze Changes]
+    ANALYZE --> BREAKING{Breaking<br/>Changes?}
+
+    BREAKING -->|Yes| MAJOR[Bump Major Version<br/>X.0.0]
+    BREAKING -->|No| FEATURE{New<br/>Features?}
+
+    FEATURE -->|Yes| MINOR[Bump Minor Version<br/>X.Y.0]
+    FEATURE -->|No| PATCH[Bump Patch Version<br/>X.Y.Z]
+
+    MAJOR --> NEWVER[Create New Version]
+    MINOR --> NEWVER
+    PATCH --> NEWVER
+
+    NEWVER --> HISTORY[Preserve Old Version<br/>in History]
+    HISTORY --> STORE
+
+    STORE --> INDEX[Index in RAG]
+    INDEX --> DONE
+
+    style START fill:#4caf50,color:#fff
+    style DONE fill:#4caf50,color:#fff
+    style BREAKING fill:#ff9800,color:#fff
+    style FEATURE fill:#2196f3,color:#fff
+    style MAJOR fill:#f44336,color:#fff
+    style MINOR fill:#ff9800,color:#fff
+    style PATCH fill:#4caf50,color:#fff
+```
+
+**Versioning Rules**:
+- **Major** (X.0.0): Breaking changes that affect existing workflows
+- **Minor** (X.Y.0): New features that are backward-compatible
+- **Patch** (X.Y.Z): Bug fixes and improvements
+
 ---
 
 ## Runtime Execution
@@ -876,7 +1156,58 @@ The singleton pattern ensures these expensive operations happen only once.
 
 ### Tool Calling Mechanism
 
-The `call_tool` function is the primary interface for executing tools:
+The `call_tool` function is the primary interface for executing tools. Here's how it routes requests to different tool types:
+
+```mermaid
+flowchart TD
+    START[call_tool<br/>tool_name, prompt] --> WAIT[Wait for Tools<br/>to Load]
+    WAIT --> FIND[Find Tool by Name]
+
+    FIND --> FOUND{Tool<br/>Found?}
+    FOUND -->|No| FALLBACK[Try Best LLM<br/>for Task]
+    FALLBACK --> CHECK{Found<br/>Match?}
+    CHECK -->|No| ERROR[Raise ValueError]
+    CHECK -->|Yes| TRACK
+
+    FOUND -->|Yes| TRACK[Track Usage<br/>in RAG]
+
+    TRACK --> ROUTE{Tool Type?}
+
+    ROUTE -->|LLM| LLM_EXEC[invoke_llm_tool]
+    LLM_EXEC --> LLM_CALL[Call Ollama Server]
+    LLM_CALL --> LLM_RET[Return Generated Text]
+    LLM_RET --> RETURN
+
+    ROUTE -->|EXECUTABLE| EXEC_EXEC[invoke_executable_tool]
+    EXEC_EXEC --> EXEC_RUN[Run Python Script]
+    EXEC_RUN --> EXEC_CAP[Capture stdout/stderr]
+    EXEC_CAP --> EXEC_RET[Return stdout]
+    EXEC_RET --> RETURN
+
+    ROUTE -->|WORKFLOW| WF_EXEC[Load Workflow]
+    WF_EXEC --> WF_RUN[Execute as Subprocess]
+    WF_RUN --> WF_CAP[Capture Output]
+    WF_CAP --> WF_RET[Return stdout]
+    WF_RET --> RETURN
+
+    ROUTE -->|OPENAPI| API_EXEC[Load API Spec]
+    API_EXEC --> API_CALL[Make HTTP Request]
+    API_CALL --> API_RET[Return Response]
+    API_RET --> RETURN
+
+    RETURN[Return Result to Caller]
+
+    style START fill:#4caf50,color:#fff
+    style RETURN fill:#4caf50,color:#fff
+    style ERROR fill:#f44336,color:#fff
+    style ROUTE fill:#ff9800,color:#fff
+    style LLM_CALL fill:#2196f3,color:#fff
+    style EXEC_RUN fill:#2196f3,color:#fff
+    style WF_RUN fill:#2196f3,color:#fff
+    style API_CALL fill:#2196f3,color:#fff
+```
+
+The complete `call_tool` function implementation:
 
 ```python
 def call_tool(self, tool_name: str, prompt: str, **kwargs) -> str:
@@ -1051,6 +1382,56 @@ def _track_tool_usage(self, tool_id: str, tool_metadata: dict = None):
 1. **Tool level**: Set `track_usage: false` in the YAML
 2. **Workflow level**: Set `DISABLE_USAGE_TRACKING=true` environment variable
 3. **Call level**: Pass `disable_tracking=True` to `call_tool`
+
+### RAG Integration for Semantic Tool Discovery
+
+The system uses RAG (Retrieval-Augmented Generation) to enable semantic tool discovery. Instead of just searching by exact name, you can describe what you want to do:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Runtime
+    participant TM as Tools Manager
+    participant RAG as RAG Memory
+    participant Qdrant as Vector DB
+    participant Ollama
+
+    User->>Runtime: call_tool("translate", prompt)
+    Runtime->>TM: get_tool("translate")
+    TM-->>Runtime: None (not found)
+
+    Runtime->>TM: get_best_llm_for_task(prompt)
+
+    TM->>Ollama: Generate embedding<br/>for "translate"
+    Ollama-->>TM: [0.23, 0.45, ...]
+
+    TM->>RAG: semantic_search(embedding)
+    RAG->>Qdrant: Search vectors
+    Qdrant-->>RAG: Top matches:<br/>1. nmt_translator (0.95)<br/>2. language_detector (0.73)
+
+    RAG->>RAG: Filter by constraints<br/>- tool_type<br/>- tags<br/>- min_score
+
+    RAG-->>TM: Best match: nmt_translator
+
+    TM-->>Runtime: Tool: nmt_translator
+
+    Runtime->>Runtime: Execute tool
+
+    Runtime-->>User: Translation result
+
+    style User fill:#e3f2fd
+    style Qdrant fill:#4caf50,color:#fff
+    style Ollama fill:#ff9800,color:#fff
+    style RAG fill:#2196f3,color:#fff
+```
+
+**How It Works**:
+1. **Embedding Generation**: Convert tool descriptions to vectors using Ollama
+2. **Vector Storage**: Store embeddings in Qdrant vector database
+3. **Semantic Search**: Find tools by meaning, not just exact name match
+4. **Ranking**: Sort results by similarity score (0-1)
+5. **Filtering**: Apply constraints (type, tags, min score)
+6. **Fallback**: If no exact match, return semantically similar tool
 
 ---
 
@@ -1431,7 +1812,58 @@ sequenceDiagram
 
 ### Tool Evolution
 
-The system includes a sophisticated tool evolution mechanism. When a tool fails, it can automatically evolve to fix the issue:
+The system includes a sophisticated tool evolution mechanism. When a tool fails, it can automatically evolve to fix the issue.
+
+#### Tool Evolution Process Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Runtime
+    participant Tool as CSV Parser v1.0
+    participant Evolver as Evolve Tool
+    participant LLM as Code Generator
+    participant Registry
+    participant NewTool as CSV Parser v1.1
+
+    User->>Runtime: call_tool("csv_parser", data)
+    Runtime->>Tool: Execute
+    Tool-->>Runtime: ❌ Error: Invalid format
+    Runtime-->>User: Exception thrown
+
+    User->>Runtime: call_tool("evolve_tool", {...})
+    Runtime->>Evolver: Start evolution
+
+    Evolver->>Tool: Read source code
+    Tool-->>Evolver: Source code
+
+    Evolver->>LLM: Generate evolved version<br/>+ Original code<br/>+ Error message<br/>+ Mutation hint
+    LLM-->>Evolver: Evolved code
+
+    Evolver->>Evolver: Increment version<br/>1.0.0 → 1.1.0
+
+    Evolver->>Registry: Save evolved tool
+    Registry-->>Evolver: Saved
+
+    Evolver->>Registry: Create promotion entry
+    Note over Registry: .tool_promotions.json<br/>csv_parser → v1.1.0
+
+    Evolver-->>Runtime: Success: v1.1.0
+    Runtime-->>User: Evolution complete
+
+    User->>Runtime: call_tool("csv_parser", data)
+    Runtime->>Registry: Get tool
+    Registry-->>Runtime: Use promoted v1.1.0
+    Runtime->>NewTool: Execute
+    NewTool-->>Runtime: ✅ Success
+    Runtime-->>User: Parsed data
+
+    style Tool fill:#f44336,color:#fff
+    style NewTool fill:#4caf50,color:#fff
+    style LLM fill:#2196f3,color:#fff
+```
+
+#### Evolution Example Code
 
 ```python
 """
@@ -1470,6 +1902,12 @@ except Exception as e:
         print("✓ Tool now works!")
 ```
 
+**Key Points**:
+- Original tool remains unchanged (safe evolution)
+- New version is created with incremented version number
+- Promotion system routes calls to evolved version
+- Can be reverted by deleting `.tool_promotions.json`
+
 ### Tool Inlining for Enterprise Deployment
 
 For enterprise environments, tools can be "inlined" into workflows for complete reproducibility:
@@ -1507,10 +1945,35 @@ This creates a workflow file that contains all tool code embedded inline, making
 
 ### Parallel Execution
 
-Workflows support parallel execution of independent steps:
+Workflows support parallel execution of independent steps, dramatically improving performance:
+
+```mermaid
+gantt
+    title Workflow Execution: Sequential vs Parallel
+    dateFormat X
+    axisFormat %s
+
+    section Sequential
+    Research Tech     :seq1, 0, 10s
+    Research Business :seq2, after seq1, 10s
+    Research Market   :seq3, after seq2, 10s
+    Combine Results   :seq4, after seq3, 5s
+    Total: 35 seconds :milestone, after seq4, 0s
+
+    section Parallel
+    Research Tech     :par1, 0, 10s
+    Research Business :par2, 0, 10s
+    Research Market   :par3, 0, 10s
+    Combine Results   :par4, after par3, 5s
+    Total: 15 seconds :milestone, after par4, 0s
+```
+
+**Performance Gain**: Sequential execution takes 35 seconds, parallel execution takes only 15 seconds - a 2.3x speedup!
+
+#### Parallel Execution Configuration
 
 ```python
-# These two steps can run in parallel
+# These three steps can run in parallel
 workflow.add_step(WorkflowStep(
     step_id="research_tech",
     step_type=StepType.LLM_CALL,
@@ -1519,7 +1982,7 @@ workflow.add_step(WorkflowStep(
     prompt_template="Research technical aspects of {topic}",
     input_mapping={"topic": "inputs.topic"},
     output_name="tech_research",
-    parallel_group=1  # Group 1: can run in parallel with group 1
+    parallel_group=1  # Group 1: can run in parallel
 ))
 
 workflow.add_step(WorkflowStep(
@@ -1533,7 +1996,18 @@ workflow.add_step(WorkflowStep(
     parallel_group=1  # Group 1: runs in parallel with research_tech
 ))
 
-# This step depends on both research steps completing
+workflow.add_step(WorkflowStep(
+    step_id="research_market",
+    step_type=StepType.LLM_CALL,
+    description="Research market trends",
+    tool_name="researcher",
+    prompt_template="Research market trends for {topic}",
+    input_mapping={"topic": "inputs.topic"},
+    output_name="market_research",
+    parallel_group=1  # Group 1: runs in parallel with others
+))
+
+# This step depends on all research steps completing
 workflow.add_step(WorkflowStep(
     step_id="combine_research",
     step_type=StepType.PYTHON_TOOL,
@@ -1541,12 +2015,52 @@ workflow.add_step(WorkflowStep(
     tool_path="tools/executable/research_combiner.py",
     input_mapping={
         "tech": "steps.research_tech.tech_research",
-        "business": "steps.research_business.business_research"
+        "business": "steps.research_business.business_research",
+        "market": "steps.research_market.market_research"
     },
     output_name="combined_research",
-    depends_on=["research_tech", "research_business"]  # Wait for both
+    depends_on=["research_tech", "research_business", "research_market"]
 ))
 ```
+
+#### Execution Flow with Dependencies
+
+```mermaid
+graph TD
+    INPUT[Workflow Input:<br/>topic='AI']
+
+    subgraph "Parallel Group 1"
+        P1[Research Tech]
+        P2[Research Business]
+        P3[Research Market]
+    end
+
+    COMBINE[Combine Results]
+    OUTPUT[Workflow Output]
+
+    INPUT --> P1
+    INPUT --> P2
+    INPUT --> P3
+
+    P1 -.->|depends_on| COMBINE
+    P2 -.->|depends_on| COMBINE
+    P3 -.->|depends_on| COMBINE
+
+    COMBINE --> OUTPUT
+
+    style INPUT fill:#e3f2fd
+    style P1 fill:#fff3e0
+    style P2 fill:#fff3e0
+    style P3 fill:#fff3e0
+    style COMBINE fill:#e8f5e9
+    style OUTPUT fill:#c8e6c9
+```
+
+**Key Concepts**:
+- **parallel_group**: Steps with the same group number run concurrently
+- **depends_on**: Explicitly declares dependencies between steps
+- **Automatic sync**: Runtime waits for all dependencies before executing a step
+- **Resource optimization**: System manages thread/process pools automatically
 
 ---
 
