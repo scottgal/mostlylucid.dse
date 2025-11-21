@@ -385,7 +385,267 @@ echo.mcpkg
 
 ---
 
-## 10. DiSE Integration
+## 10. Multi-Platform Support with Implementations (v0.2+)
+
+### 10.1 The Problem: Platform-Specific Tool Variants
+
+A single **logical tool** (e.g., `tools.pdf.read_local`) may have multiple **physical implementations** for different:
+
+* Languages (JavaScript, .NET, Python)
+* Runtimes (Node.js, browser, .NET 8, Python 3.11)
+* Platforms (Linux x64, Windows x64, macOS ARM64)
+* Hardware (CPU-only, GPU-accelerated)
+
+The LLM should only see the logical tool, while the host selects the best implementation for the current environment.
+
+### 10.2 Implementations Array
+
+Add an optional `implementations` array to `manifest.json`:
+
+```jsonc
+{
+  "toolId": "tools.pdf.read_local",
+  "name": "Read PDFs Locally",
+  "version": "1.0.0",
+  "description": "Read and extract text/structure from PDFs on the local machine.",
+  "capabilities": ["pdf", "local", "fs"],
+
+  "implementations": [
+    {
+      "id": "node-pdfjs",
+      "language": "javascript",
+      "runtime": "node",
+      "platforms": ["linux-x64", "win-x64", "darwin-arm64"],
+      "endpoint": {
+        "type": "local",
+        "command": "node ./sdk/javascript/pdf-read.js"
+      },
+      "requirements": {
+        "minNodeVersion": "18.0.0"
+      }
+    },
+    {
+      "id": "dotnet-itext",
+      "language": "dotnet",
+      "runtime": "net8.0",
+      "platforms": ["win-x64", "linux-x64"],
+      "endpoint": {
+        "type": "local",
+        "command": "dotnet ./sdk/dotnet/PdfReader.dll"
+      }
+    },
+    {
+      "id": "python-pymupdf",
+      "language": "python",
+      "runtime": "python3.11",
+      "platforms": ["linux-x64", "darwin-arm64"],
+      "endpoint": {
+        "type": "local",
+        "command": "python ./sdk/python/pdf_reader.py"
+      },
+      "requirements": {
+        "packages": ["PyMuPDF>=1.23.0"]
+      }
+    }
+  ],
+
+  "input_schema": { /* same for all implementations */ },
+  "output_schema": { /* same for all implementations */ }
+}
+```
+
+### 10.3 Implementation Selection
+
+**Discovery Flow:**
+
+1. **LLM asks**: "I need a tool to read PDFs locally for JavaScript."
+2. **Registry RAG** filters by:
+   * `capabilities` contains `["pdf", "local"]`
+   * `implementations[].language == "javascript"`
+3. **Host** installs the package and selects the best implementation:
+   * Match `runtime` (Node.js vs browser)
+   * Match `platforms` (current OS + architecture)
+   * Check `requirements` (versions, dependencies)
+4. **Host exposes** the logical tool to the LLM:
+   ```json
+   {
+     "tool": "tools.pdf.read_local",
+     "description": "Read PDFs locally",
+     "input_schema": { ... }
+   }
+   ```
+5. **LLM calls** the tool (implementation-agnostic):
+   ```json
+   {
+     "tool": "tools.pdf.read_local",
+     "arguments": { "path": "/tmp/file.pdf" }
+   }
+   ```
+6. **Host executes** the selected implementation:
+   ```bash
+   node ./sdk/javascript/pdf-read.js '{"path":"/tmp/file.pdf"}'
+   ```
+
+### 10.4 Key Benefits
+
+* **LLM simplicity**: LLM only sees logical tools, not platform details
+* **Registry semantics**: "Give me a PDF reader for JavaScript" → precise matches
+* **Host flexibility**: Automatically picks the best variant for the environment
+* **Graceful fallbacks**: Can rank implementations by performance/compatibility
+
+---
+
+## 11. Composite Tools with Chains (v0.2+)
+
+### 11.1 The Problem: Multi-Step Workflows
+
+Some tools are **pipelines** composed of multiple steps:
+
+* PDF → clean text → embeddings
+* Audio → transcribe → translate → summarize
+* Image → OCR → extract tables → to CSV
+
+Instead of the LLM orchestrating each step, the **host** can execute a predefined chain.
+
+### 11.2 Chain Definition
+
+Add an optional `chain` array to `manifest.json`:
+
+```jsonc
+{
+  "toolId": "tools.pdf.pipeline.embed",
+  "name": "PDF to Embeddings Pipeline",
+  "version": "1.0.0",
+  "description": "Extracts text from PDF, cleans it, and generates embeddings.",
+  "capabilities": ["pdf", "embeddings", "pipeline"],
+
+  "chain": [
+    {
+      "step": "read_pdf",
+      "tool": "tools.pdf.read_local",
+      "inputMapping": {
+        "path": "$.input.pdfPath"
+      },
+      "outputKey": "raw_text"
+    },
+    {
+      "step": "clean_text",
+      "tool": "tools.text.clean",
+      "inputMapping": {
+        "text": "$.raw_text.content"
+      },
+      "outputKey": "cleaned_text"
+    },
+    {
+      "step": "generate_embeddings",
+      "tool": "tools.embeddings.generate",
+      "inputMapping": {
+        "text": "$.cleaned_text.result",
+        "model": "$.input.embeddingModel"
+      },
+      "outputKey": "embeddings"
+    }
+  ],
+
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "pdfPath": { "type": "string" },
+      "embeddingModel": { "type": "string", "default": "text-embedding-3-small" }
+    },
+    "required": ["pdfPath"]
+  },
+
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "embeddings": {
+        "type": "array",
+        "items": { "type": "number" }
+      }
+    }
+  }
+}
+```
+
+### 11.3 Chain Execution
+
+**Execution Flow:**
+
+1. **LLM calls** the pipeline tool:
+   ```json
+   {
+     "tool": "tools.pdf.pipeline.embed",
+     "arguments": {
+       "pdfPath": "/docs/report.pdf",
+       "embeddingModel": "text-embedding-3-small"
+     }
+   }
+   ```
+
+2. **Host executes** the chain:
+   ```
+   Step 1: read_pdf
+     Input: { "path": "/docs/report.pdf" }
+     Output → raw_text: { "content": "..." }
+
+   Step 2: clean_text
+     Input: { "text": raw_text.content }
+     Output → cleaned_text: { "result": "..." }
+
+   Step 3: generate_embeddings
+     Input: { "text": cleaned_text.result, "model": "text-embedding-3-small" }
+     Output → embeddings: { "embeddings": [...] }
+   ```
+
+3. **Host returns** final output:
+   ```json
+   {
+     "embeddings": [0.1, 0.2, -0.3, ...]
+   }
+   ```
+
+### 11.4 JSONPath Input Mapping
+
+Each step's `inputMapping` uses JSONPath to extract values from:
+
+* `$.input.*` - Original tool input
+* `$.step_name.*` - Output from a previous step (referenced by `outputKey`)
+
+Example:
+```jsonc
+"inputMapping": {
+  "text": "$.cleaned_text.result",  // From previous step
+  "model": "$.input.embeddingModel" // From original input
+}
+```
+
+### 11.5 Chain Benefits
+
+* **Reduces LLM orchestration complexity**: Single tool call instead of 3+
+* **Optimises latency**: Host can execute steps locally without LLM round-trips
+* **Enables DiSE evolution**: DiSE can assemble/optimise chains based on metrics
+* **Cacheable pipelines**: Registry can store evolved chains as versioned tools
+
+### 11.6 DiSE Integration with Chains
+
+DiSE can:
+
+1. **Generate chains** by analysing workflow patterns:
+   * "Users who call PDF read + text clean + embeddings → bundle as pipeline"
+2. **Optimise chains** based on metrics:
+   * Replace slow step implementations with faster variants
+   * Reorder steps for better caching
+3. **Version chains** as new tools:
+   * `tools.pdf.pipeline.embed:v1` → original chain
+   * `tools.pdf.pipeline.embed:v2` → DiSE-optimised chain
+4. **Rank chains** for selection:
+   * Fastest for CPU-only environments
+   * Most accurate for GPU-accelerated setups
+
+---
+
+## 12. DiSE Integration
 
 The mcpkg format is designed to integrate seamlessly with DiSE (Dynamic Intelligence Selection Engine):
 
@@ -397,10 +657,14 @@ The mcpkg format is designed to integrate seamlessly with DiSE (Dynamic Intellig
   * Test pass rate
   * Historical performance metrics
   * Capability matching
-* **RAG Context**: DiSE can use `examples/` and `tests/` as context for tool selection decisions
+  * Implementation suitability for the current environment
+* **RAG Context**: DiSE can use `examples/`, `tests/`, and `implementations` as context for tool selection decisions
 * **Regression Detection**: By continuously running tests, DiSE can detect when a tool's behavior changes
+* **Chain Evolution**: DiSE can generate and optimise composite tools by analysing usage patterns and performance metrics
 
 ---
+
+## 13. Summary
 
 If you give Claude this spec and say:
 
@@ -412,3 +676,8 @@ If you give Claude this spec and say:
 > – emit a tools.json ready to feed into an LLM runtime"
 
 …it should have plenty to work with.
+
+For v0.2+ features (implementations, chains), you can extend the manifest models and add:
+* Implementation selector based on runtime/platform detection
+* Chain executor that pipes outputs between tools
+* Registry RAG filtering by language/platform/capabilities
