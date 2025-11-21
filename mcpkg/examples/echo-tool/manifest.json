@@ -1,0 +1,52 @@
+{
+  "toolId": "demo.echo",
+  "name": "Echo Tool",
+  "version": "0.1.0",
+  "description": "Echos back whatever input it receives.",
+  "capabilities": ["demo", "echo"],
+  "endpoint": {
+    "type": "http",
+    "method": "POST",
+    "url": "https://postman-echo.com/post",
+    "timeoutMs": 5000
+  },
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "The message to echo back"
+      }
+    },
+    "required": ["message"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tests": [
+    "tests/echo.test.json"
+  ],
+  "examples": [
+    "examples/basic_usage.md"
+  ],
+  "meta": {
+    "publisher": {
+      "id": "mostlylucid",
+      "name": "Mostly Lucid",
+      "website": "https://mostlylucid.net"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/scottgal/mostlylucid.dse",
+    "tags": ["demo", "example", "echo"]
+  }
+}

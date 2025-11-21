@@ -1,0 +1,18 @@
+{
+  "name": "simple_echo",
+  "description": "Echos back the same message.",
+  "input": {
+    "message": "hello"
+  },
+  "expected": {
+    "data": {
+      "message": "hello"
+    }
+  },
+  "assertions": [
+    {
+      "path": "$.data.message",
+      "equals": "hello"
+    }
+  ]
+}
