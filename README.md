@@ -19,6 +19,19 @@ Like the [Exocomp](https://memory-alpha.fandom.com/wiki/Exocomp) of Star Trek �
 
 **This is an experimental research project and proof-of-concept.** It is **NOT suitable for production environments** or scenarios involving untrusted code execution.
 
+## Why DiSE?
+
+Most LLM systems stop at **inference**: one model, one prompt, one answer.
+
+DiSE treats models as **replaceable organs**, not the “mind”. The intelligence lives in:
+
+- **Executable ground truth** – code is always validated by tests, benchmarks, and specs, not LLM opinions.
+- **Multi-LLM heterogeneity** – different models with different blind spots generate, critique, and refine.
+- **Directed synthetic evolution** – strategies, tools, and workflows are mutated and selected over time based on real performance.
+
+It’s not another “agent framework”. It’s an experiment in **post-inference intelligence**: a system that keeps getting better *after* deployment.
+
+
 ### Current Status
 Still working on the core and changing a LOT as I go. This will likely <p style="color:red">**BE BROKEN MORE OFTEN THAN NOT**</p>.
 
